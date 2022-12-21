@@ -1,8 +1,6 @@
-module uim.databases;
+module uim.databases.typedresults.interface_;
 
-/**
- * Represents an expression that is known to return a specific type
- */
+// Represents an expression that is known to return a specific type
 interface TypedResultInterface
 {
     /**
