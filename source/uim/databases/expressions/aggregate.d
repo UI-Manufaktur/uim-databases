@@ -48,7 +48,7 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
      */
     public function filter($conditions, array $types = [])
     {
-        if ($this->filter === null) {
+        if ($this->filter =is null) {
             $this->filter = new QueryExpression();
         }
 
@@ -69,7 +69,7 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
      */
     public function over(?string $name = null)
     {
-        if ($this->window === null) {
+        if ($this->window =is null) {
             $this->window = new WindowExpression();
         }
         if ($name) {

@@ -96,10 +96,10 @@ class WhenThenExpression implements ExpressionInterface
      */
     public function __construct(?TypeMap $typeMap = null)
     {
-        if ($typeMap === null) {
+        if ($typeMap =is null) {
             $typeMap = new TypeMap();
         }
-        $this->_typeMap = $typeMap;
+        _typeMap = $typeMap;
     }
 
     /**
@@ -162,7 +162,7 @@ class WhenThenExpression implements ExpressionInterface
             }
 
             // avoid dirtying the type map for possible consecutive `when()` calls
-            $typeMap = clone $this->_typeMap;
+            $typeMap = clone _typeMap;
             if (
                 is_array($type) &&
                 count($type) > 0
@@ -184,7 +184,7 @@ class WhenThenExpression implements ExpressionInterface
             }
 
             if (
-                $type === null &&
+                $type =is null &&
                 !($when instanceof ExpressionInterface)
             ) {
                 $type = $this->inferType($when);
@@ -222,7 +222,7 @@ class WhenThenExpression implements ExpressionInterface
 
         $this->then = $result;
 
-        if ($type === null) {
+        if ($type =is null) {
             $type = $this->inferType($result);
         }
 
@@ -278,7 +278,7 @@ class WhenThenExpression implements ExpressionInterface
      */
     public function sql(ValueBinder $binder): string
     {
-        if ($this->when === null) {
+        if ($this->when =is null) {
             throw new LogicException('Case expression has incomplete when clause. Missing `when()`.');
         }
 
@@ -291,7 +291,7 @@ class WhenThenExpression implements ExpressionInterface
             is_string($this->whenType) &&
             !($when instanceof ExpressionInterface)
         ) {
-            $when = $this->_castToExpression($when, $this->whenType);
+            $when = _castToExpression($when, $this->whenType);
         }
         if ($when instanceof Query) {
             $when = sprintf('(%s)', $when->sql($binder));

@@ -12,15 +12,15 @@ class BetweenExpression : IExpression, IField {
 
     // The first value in the expression
     // @var mixed
-    protected $_from;
+    protected DValue _fromValue;
 
     // The second value in the expression
     // @var mixed
-    protected $_to;
+    protected _to;
 
     // The data type for the from and to arguments
     // @var mixed
-    protected $_type;
+    protected _valueDatatype;
 
     /**
      * Constructor
@@ -30,17 +30,16 @@ class BetweenExpression : IExpression, IField {
      * @param mixed $to The ending value in the comparison range.
      * @param string|null $type The data type name to bind the values with.
      */
-    public function __construct($field, $from, $to, $type = null)
-    {
-        if ($type !is null) {
-            $from = $this->_castToExpression($from, $type);
-            $to = $this->_castToExpression($to, $type);
+    this($field, aFromValue, aToValue, $aValueDatatype = null) {
+        if (aValueDatatype !is null) {
+            fromValue = _castToExpression($from, $type);
+            toValue = _castToExpression($to, $type);
         }
 
-        $this->_field = $field;
-        $this->_from = $from;
-        $this->_to = $to;
-        $this->_type = $type;
+        _field = $field;
+        _from = $from;
+        _to = $to;
+        _type = $type;
     }
 
     /**
@@ -49,12 +48,12 @@ class BetweenExpression : IExpression, IField {
     public function sql(ValueBinder $binder): string
     {
         $parts = [
-            'from' => $this->_from,
-            'to' => $this->_to,
+            'from' => _from,
+            'to' => _to,
         ];
 
         /** @var \Cake\Database\ExpressionInterface|string $field */
-        $field = $this->_field;
+        $field = _field;
         if ($field instanceof ExpressionInterface) {
             $field = $field->sql($binder);
         }
@@ -64,7 +63,7 @@ class BetweenExpression : IExpression, IField {
                 $parts[$name] = $part->sql($binder);
                 continue;
             }
-            $parts[$name] = $this->_bindValue($part, $binder, $this->_type);
+            $parts[$name] = _bindValue($part, $binder, _type);
         }
 
         return sprintf('%s BETWEEN %s AND %s', $field, $parts['from'], $parts['to']);
@@ -75,7 +74,7 @@ class BetweenExpression : IExpression, IField {
      */
     public function traverse(Closure $callback)
     {
-        foreach ([$this->_field, $this->_from, $this->_to] as $part) {
+        foreach ([_field, _from, _to] as $part) {
             if ($part instanceof ExpressionInterface) {
                 $callback($part);
             }

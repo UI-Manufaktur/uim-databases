@@ -142,7 +142,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
 
             if (
                 $value !is null &&
-                $type === null &&
+                $type =is null &&
                 !($value instanceof ExpressionInterface)
             ) {
                 $type = $this->inferType($value);
@@ -375,7 +375,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      */
     public function then($result, ?string $type = null)
     {
-        if ($this->whenBuffer === null) {
+        if ($this->whenBuffer =is null) {
             throw new LogicException('Cannot call `then()` before `when()`.');
         }
 
@@ -420,7 +420,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
             ));
         }
 
-        if ($type === null) {
+        if ($type =is null) {
             $type = $this->inferType($result);
         }
 
