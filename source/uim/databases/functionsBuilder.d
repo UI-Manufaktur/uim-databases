@@ -1,7 +1,7 @@
 module uim.databases;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 /**
  * Contains methods related to generating FunctionExpression objects

@@ -6,7 +6,7 @@
 module uim.databases.postgrescompiler;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 /**
  * Responsible for compiling a Query object into its SQL representation

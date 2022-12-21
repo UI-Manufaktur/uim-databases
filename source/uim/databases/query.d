@@ -6,7 +6,7 @@
 module uim.databases;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 /**
  * This class represents a Relational database SQL Query. A query can be of

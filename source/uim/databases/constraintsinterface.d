@@ -6,7 +6,7 @@
 module uim.databases;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 /**
  * Defines the interface for a fixture that needs to manage constraints.
