@@ -1,4 +1,4 @@
-module uim.databases;
+module uim.databases.compilers.sqlserver.compiler;
 
 @safe:
 import uim.databases;
