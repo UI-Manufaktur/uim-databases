@@ -191,13 +191,13 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
     {
         $sql = parent::sql($binder);
         if ($this->filter !is null) {
-            $sql .= ' FILTER (WHERE ' . $this->filter->sql($binder) . ')';
+            $sql .=" FILTER (WHERE" . $this->filter->sql($binder) .")";
         }
         if ($this->window !is null) {
             if ($this->window->isNamedOnly()) {
-                $sql .= ' OVER ' . $this->window->sql($binder);
+                $sql .=" OVER" . $this->window->sql($binder);
             } else {
-                $sql .= ' OVER (' . $this->window->sql($binder) . ')';
+                $sql .=" OVER (" . $this->window->sql($binder) .")";
             }
         }
 

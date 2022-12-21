@@ -85,10 +85,10 @@ class UnaryExpression implements ExpressionInterface
         }
 
         if ($this->position === self::POSTFIX) {
-            return '(' . $operand . ') ' . _operator;
+            return"(" . $operand .")" . _operator;
         }
 
-        return _operator . ' (' . $operand . ')';
+        return _operator ." (" . $operand .")";
     }
 
     /**

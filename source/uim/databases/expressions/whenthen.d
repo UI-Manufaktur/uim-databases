@@ -40,8 +40,8 @@ class WhenThenExpression implements ExpressionInterface
      * @var array<string>
      */
     protected $validClauseNames = [
-        'when',
-        'then',
+       "when",
+       "then",
     ];
 
     /**
@@ -131,10 +131,10 @@ class WhenThenExpression implements ExpressionInterface
             !is_object($when)
         ) {
             throw new InvalidArgumentException(sprintf(
-                'The `$when` argument must be either a non-empty array, a scalar value, an object, ' .
-                'or an instance of `\%s`, `%s` given.',
+               "The `$when` argument must be either a non-empty array, a scalar value, an object," .
+               "or an instance of `\%s`, `%s` given.",
                 ExpressionInterface::class,
-                is_array($when) ? '[]' : getTypeName($when) // @phpstan-ignore-line
+                is_array($when) ?"[]" : getTypeName($when) // @phpstan-ignore-line
             ));
         }
 
@@ -144,7 +144,7 @@ class WhenThenExpression implements ExpressionInterface
             !is_string($type)
         ) {
             throw new InvalidArgumentException(sprintf(
-                'The `$type` argument must be either an array, a string, or `null`, `%s` given.',
+               "The `$type` argument must be either an array, a string, or `null`, `%s` given.",
                 getTypeName($type)
             ));
         }
@@ -155,8 +155,8 @@ class WhenThenExpression implements ExpressionInterface
                 !is_array($type)
             ) {
                 throw new InvalidArgumentException(sprintf(
-                    'When using an array for the `$when` argument, the `$type` argument must be an ' .
-                    'array too, `%s` given.',
+                   "When using an array for the `$when` argument, the `$type` argument must be an" .
+                   "array too, `%s` given.",
                     getTypeName($type)
                 ));
             }
@@ -177,8 +177,8 @@ class WhenThenExpression implements ExpressionInterface
                 !is_string($type)
             ) {
                 throw new InvalidArgumentException(sprintf(
-                    'When using a non-array value for the `$when` argument, the `$type` argument must ' .
-                    'be a string, `%s` given.',
+                   "When using a non-array value for the `$when` argument, the `$type` argument must" .
+                   "be a string, `%s` given.",
                     getTypeName($type)
                 ));
             }
@@ -213,8 +213,8 @@ class WhenThenExpression implements ExpressionInterface
             !(is_object($result) && !($result instanceof Closure))
         ) {
             throw new InvalidArgumentException(sprintf(
-                'The `$result` argument must be either `null`, a scalar value, an object, ' .
-                'or an instance of `\%s`, `%s` given.',
+               "The `$result` argument must be either `null`, a scalar value, an object," .
+               "or an instance of `\%s`, `%s` given.",
                 ExpressionInterface::class,
                 getTypeName($result)
             ));
@@ -234,7 +234,7 @@ class WhenThenExpression implements ExpressionInterface
     }
 
     /**
-     * Returns the expression's result value type.
+     * Returns the expression"s result value type.
      *
      * @return string|null
      * @see WhenThenExpression::then()
@@ -263,8 +263,8 @@ class WhenThenExpression implements ExpressionInterface
         if (!in_array($clause, $this->validClauseNames, true)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'The `$clause` argument must be one of `%s`, the given value `%s` is invalid.',
-                    implode('`, `', $this->validClauseNames),
+                   "The `$clause` argument must be one of `%s`, the given value `%s` is invalid.",
+                    implode("`, `", $this->validClauseNames),
                     $clause
                 )
             );
@@ -279,11 +279,11 @@ class WhenThenExpression implements ExpressionInterface
     function sql(ValueBinder $binder): string
     {
         if ($this->when =is null) {
-            throw new LogicException('Case expression has incomplete when clause. Missing `when()`.');
+            throw new LogicException("Case expression has incomplete when clause. Missing `when()`.");
         }
 
         if (!$this->hasThenBeenDefined) {
-            throw new LogicException('Case expression has incomplete when clause. Missing `then()` after `when()`.');
+            throw new LogicException("Case expression has incomplete when clause. Missing `then()` after `when()`.");
         }
 
         $when = $this->when;
@@ -294,11 +294,11 @@ class WhenThenExpression implements ExpressionInterface
             $when = _castToExpression($when, $this->whenType);
         }
         if ($when instanceof Query) {
-            $when = sprintf('(%s)', $when->sql($binder));
+            $when = sprintf("(%s)", $when->sql($binder));
         } elseif ($when instanceof ExpressionInterface) {
             $when = $when->sql($binder);
         } else {
-            $placeholder = $binder->placeholder('c');
+            $placeholder = $binder->placeholder("c");
             if (is_string($this->whenType)) {
                 $whenType = $this->whenType;
             } else {

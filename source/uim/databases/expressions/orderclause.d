@@ -44,7 +44,7 @@ class OrderClauseExpression implements ExpressionInterface, FieldInterface
     function __construct($field, $direction)
     {
         _field = $field;
-        _direction = strtolower($direction) === 'asc' ? 'ASC' : 'DESC';
+        _direction = strtolower($direction) ==="asc" ?"ASC" :"DESC";
     }
 
     /**
@@ -55,12 +55,12 @@ class OrderClauseExpression implements ExpressionInterface, FieldInterface
         /** @var \Cake\Database\ExpressionInterface|string $field */
         $field = _field;
         if ($field instanceof Query) {
-            $field = sprintf('(%s)', $field->sql($binder));
+            $field = sprintf("(%s)", $field->sql($binder));
         } elseif ($field instanceof ExpressionInterface) {
             $field = $field->sql($binder);
         }
 
-        return sprintf('%s %s', $field, _direction);
+        return sprintf("%s %s", $field, _direction);
     }
 
     /**

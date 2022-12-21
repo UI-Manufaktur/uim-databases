@@ -47,8 +47,8 @@ class BetweenExpression : IExpression, IField {
 
     string sql(ValueBinder aBinder) {
       $parts = [
-        'from': _fromValue,
-        'to': _toValue,
+       "from": _fromValue,
+       "to": _toValue,
       ];
 
         /** @var \Cake\Database\ExpressionInterface|string $field */
@@ -66,7 +66,7 @@ class BetweenExpression : IExpression, IField {
           $parts[$name] = _bindValue($part, $binder, _type);
         }
 
-        return sprintf('%s BETWEEN %s AND %s', $field, $parts['from'], $parts['to']);
+        return sprintf("%s BETWEEN %s AND %s", $field, $parts["from"], $parts["to"]);
     }
 
     /**
@@ -93,7 +93,7 @@ class BetweenExpression : IExpression, IField {
      */
     protected function _bindValue($value, $binder, $type): string
     {
-        $placeholder = $binder->placeholder('c');
+        $placeholder = $binder->placeholder("c");
         $binder->bind($placeholder, $value, $type);
 
         return $placeholder;
@@ -106,7 +106,7 @@ class BetweenExpression : IExpression, IField {
      */
     function __clone()
     {
-        foreach (['_field', '_from', '_toValue'] as $part) {
+        foreach (["_field","_from","_toValue"] as $part) {
             if ($this->{$part} instanceof ExpressionInterface) {
                 $this->{$part} = clone $this->{$part};
             }
