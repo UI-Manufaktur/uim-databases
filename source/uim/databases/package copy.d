@@ -1,1 +1,1 @@
-module uim.cake.databases;
+module uim.databases;

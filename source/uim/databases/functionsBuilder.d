@@ -1,8 +1,7 @@
-module uim.cake.databases;
+module uim.databases;
 
-import uim.cake.databases.Expression\AggregateExpression;
-import uim.cake.databases.Expression\FunctionExpression;
-use InvalidArgumentException;
+@safe:
+import uim.cake;
 
 /**
  * Contains methods related to generating FunctionExpression objects
