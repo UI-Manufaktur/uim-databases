@@ -645,7 +645,7 @@ class QueryExpression implements ExpressionInterface, Countable
         foreach ($this->_conditions as $k => $c) {
             $key = &$k;
             $part = $callback($c, $key);
-            if ($part !== null) {
+            if ($part !is null) {
                 $parts[$key] = $part;
             }
         }
@@ -832,11 +832,11 @@ class QueryExpression implements ExpressionInterface, Countable
             );
         }
 
-        if ($operator === 'is' && $value !== null) {
+        if ($operator === 'is' && $value !is null) {
             $operator = '=';
         }
 
-        if ($operator === 'is not' && $value !== null) {
+        if ($operator === 'is not' && $value !is null) {
             $operator = '!=';
         }
 

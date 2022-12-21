@@ -32,7 +32,7 @@ class BetweenExpression : IExpression, IField {
      */
     public function __construct($field, $from, $to, $type = null)
     {
-        if ($type !== null) {
+        if ($type !is null) {
             $from = $this->_castToExpression($from, $type);
             $to = $this->_castToExpression($to, $type);
         }

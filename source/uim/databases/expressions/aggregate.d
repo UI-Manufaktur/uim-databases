@@ -190,10 +190,10 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
     public function sql(ValueBinder $binder): string
     {
         $sql = parent::sql($binder);
-        if ($this->filter !== null) {
+        if ($this->filter !is null) {
             $sql .= ' FILTER (WHERE ' . $this->filter->sql($binder) . ')';
         }
-        if ($this->window !== null) {
+        if ($this->window !is null) {
             if ($this->window->isNamedOnly()) {
                 $sql .= ' OVER ' . $this->window->sql($binder);
             } else {
@@ -210,11 +210,11 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
     public function traverse(Closure $callback)
     {
         parent::traverse($callback);
-        if ($this->filter !== null) {
+        if ($this->filter !is null) {
             $callback($this->filter);
             $this->filter->traverse($callback);
         }
-        if ($this->window !== null) {
+        if ($this->window !is null) {
             $callback($this->window);
             $this->window->traverse($callback);
         }
@@ -228,7 +228,7 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
     public function count(): int
     {
         $count = parent::count();
-        if ($this->window !== null) {
+        if ($this->window !is null) {
             $count = $count + 1;
         }
 
@@ -243,10 +243,10 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
     public function __clone()
     {
         parent::__clone();
-        if ($this->filter !== null) {
+        if ($this->filter !is null) {
             $this->filter = clone $this->filter;
         }
-        if ($this->window !== null) {
+        if ($this->window !is null) {
             $this->window = clone $this->window;
         }
     }

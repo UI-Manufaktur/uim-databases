@@ -216,7 +216,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
         if ($this->_isMultiple) {
             $template .= '%s (%s)';
             $type = $this->_type;
-            if ($type !== null) {
+            if ($type !is null) {
                 $type = str_replace('[]', '', $type);
             }
             $value = $this->_flattenValue($this->_value, $binder, $type);
