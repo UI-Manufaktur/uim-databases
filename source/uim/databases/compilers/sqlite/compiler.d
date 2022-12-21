@@ -1,4 +1,4 @@
-module uim.databases;
+module uim.databases.compilers.sqlite.compiler;
 
 @safe:
 import uim.databases;
