@@ -87,20 +87,15 @@ class BetweenExpression : IExpression, IField {
      * @param string $type The type of $value
      * @return string generated placeholder
      */
-    protected string _bindValue($value, $binder, $type) {
-        $placeholder = $binder.placeholder("c");
-        $binder.bind($placeholder, $value, $type);
+    protected string _bindValue(aValue, DDTBValueBinder aBinder, $type) {
+      auto myPlaceholder = aBinder.placeholder("c");
+      aBinder.bind(myPlaceholder, $value, $type);
 
-        return $placeholder;
+      return myPlaceholder;
     }
 
-    /**
-     * Do a deep clone of this expression.
-     *
-     * @return void
-     */
-    function __clone()
-    {
+    // Do a deep clone of this expression.
+    void __clone() {
         foreach (["_field","_from","_toValue"] as $part) {
             if ($this.{$part} instanceof ExpressionInterface) {
                 $this.{$part} = clone $this.{$part};
