@@ -117,7 +117,7 @@ class CaseExpression implements ExpressionInterface
         $rawValues = array_values($values);
         $keyValues = array_keys($values);
 
-        foreach ($conditions as $k => $c) {
+        foreach ($conditions as $k: $c) {
             $numericKey = is_numeric($k);
 
             if ($numericKey && empty($c)) {
@@ -156,7 +156,7 @@ class CaseExpression implements ExpressionInterface
                 continue;
             }
 
-            _values[] = ['value' => $value, 'type' => $type];
+            _values[] = ['value': $value, 'type': $type];
         }
     }
 
@@ -179,7 +179,7 @@ class CaseExpression implements ExpressionInterface
         }
 
         if (!$value instanceof ExpressionInterface) {
-            $value = ['value' => $value, 'type' => $type];
+            $value = ['value': $value, 'type': $type];
         }
 
         _elseValue = $value;
@@ -215,7 +215,7 @@ class CaseExpression implements ExpressionInterface
     {
         $parts = [];
         $parts[] = 'CASE';
-        foreach (_conditions as $k => $part) {
+        foreach (_conditions as $k: $part) {
             $value = _values[$k];
             $parts[] = 'WHEN ' . _compile($part, $binder) . ' THEN ' . _compile($value, $binder);
         }

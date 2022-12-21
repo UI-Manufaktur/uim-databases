@@ -548,7 +548,7 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     function not($conditions, $types = [])
     {
-        return $this->add(['NOT' => $conditions], $types);
+        return $this->add(['NOT': $conditions], $types);
     }
 
     /**
@@ -642,7 +642,7 @@ class QueryExpression implements ExpressionInterface, Countable
     function iterateParts(callable $callback)
     {
         $parts = [];
-        foreach (_conditions as $k => $c) {
+        foreach (_conditions as $k: $c) {
             $key = &$k;
             $part = $callback($c, $key);
             if ($part !is null) {
@@ -711,7 +711,7 @@ class QueryExpression implements ExpressionInterface, Countable
 
         $typeMap = $this->getTypeMap()->setTypes($types);
 
-        foreach ($conditions as $k => $c) {
+        foreach ($conditions as $k: $c) {
             $numericKey = is_numeric($k);
 
             if ($c instanceof Closure) {
@@ -872,7 +872,7 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     function __clone()
     {
-        foreach (_conditions as $i => $condition) {
+        foreach (_conditions as $i: $condition) {
             if ($condition instanceof ExpressionInterface) {
                 _conditions[$i] = clone $condition;
             }

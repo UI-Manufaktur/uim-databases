@@ -127,7 +127,7 @@ class TupleComparison extends ComparisonExpression
             return $parts->sql($binder);
         }
 
-        foreach ($parts as $i => $value) {
+        foreach ($parts as $i: $value) {
             if ($value instanceof ExpressionInterface) {
                 $values[] = $value->sql($binder);
                 continue;
@@ -141,7 +141,7 @@ class TupleComparison extends ComparisonExpression
 
             if ($isMultiOperation) {
                 $bound = [];
-                foreach ($value as $k => $val) {
+                foreach ($value as $k: $val) {
                     /** @var string $valType */
                     $valType = $type && isset($type[$k]) ? $type[$k] : $type;
                     $bound[] = _bindValue($val, $binder, $valType);

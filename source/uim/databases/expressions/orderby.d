@@ -43,7 +43,7 @@ class OrderByExpression extends QueryExpression
     function sql(ValueBinder $binder): string
     {
         $order = [];
-        foreach (_conditions as $k => $direction) {
+        foreach (_conditions as $k: $direction) {
             if ($direction instanceof ExpressionInterface) {
                 $direction = $direction->sql($binder);
             }
@@ -65,7 +65,7 @@ class OrderByExpression extends QueryExpression
      */
     protected function _addConditions(array $conditions, array $types): void
     {
-        foreach ($conditions as $key => $val) {
+        foreach ($conditions as $key: $val) {
             if (
                 is_string($key) &&
                 is_string($val) &&
@@ -73,7 +73,7 @@ class OrderByExpression extends QueryExpression
             ) {
                 throw new RuntimeException(
                     sprintf(
-                        'Passing extra expressions by associative array (`\'%s\' => \'%s\'`) ' .
+                        'Passing extra expressions by associative array (`\'%s\': \'%s\'`) ' .
                         'is not allowed to avoid potential SQL injection. ' .
                         'Use QueryExpression or numeric array instead.',
                         $key,

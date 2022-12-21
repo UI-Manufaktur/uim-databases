@@ -267,7 +267,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
     {
         $parts = [];
         if (is_array($value)) {
-            foreach (_valueExpressions as $k => $v) {
+            foreach (_valueExpressions as $k: $v) {
                 $parts[$k] = $v->sql($binder);
                 unset($value[$k]);
             }
@@ -302,7 +302,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
             $result = $values;
         }
 
-        foreach ($values as $k => $v) {
+        foreach ($values as $k: $v) {
             if ($v instanceof ExpressionInterface) {
                 $expressions[$k] = $v;
             }

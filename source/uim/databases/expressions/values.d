@@ -227,7 +227,7 @@ class ValuesExpression implements ExpressionInterface
 
         $types = [];
         $typeMap = $this->getTypeMap();
-        foreach ($defaults as $col => $v) {
+        foreach ($defaults as $col: $v) {
             $types[$col] = $typeMap->type($col);
         }
 
@@ -314,8 +314,8 @@ class ValuesExpression implements ExpressionInterface
             return;
         }
 
-        foreach (_values as $row => $values) {
-            foreach ($types as $col => $type) {
+        foreach (_values as $row: $values) {
+            foreach ($types as $col: $type) {
                 /** @var \Cake\Database\Type\ExpressionTypeInterface $type */
                 _values[$row][$col] = $type->toExpression($values[$col]);
             }

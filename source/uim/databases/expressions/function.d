@@ -55,7 +55,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      *
      * Previous line will generate `CONCAT('CakePHP', ' rules')`
      *
-     * `$f = new FunctionExpression('CONCAT', ['name' => 'literal', ' rules']);`
+     * `$f = new FunctionExpression('CONCAT', ['name': 'literal', ' rules']);`
      *
      * Will produce `CONCAT(name, ' rules')`
      *
@@ -112,7 +112,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
     {
         $put = $prepend ? 'array_unshift' : 'array_push';
         $typeMap = $this->getTypeMap()->setTypes($types);
-        foreach ($conditions as $k => $p) {
+        foreach ($conditions as $k: $p) {
             if ($p === 'literal') {
                 $put(_conditions, $k);
                 continue;
@@ -134,7 +134,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
                 continue;
             }
 
-            $put(_conditions, ['value' => $p, 'type' => $type]);
+            $put(_conditions, ['value': $p, 'type': $type]);
         }
 
         return $this;

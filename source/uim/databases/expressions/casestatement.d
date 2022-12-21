@@ -192,12 +192,12 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      *     ->case()
      *     ->when(function (\Cake\Database\Expression\WhenThenExpression $whenThen) {
      *         return $whenThen
-     *             ->when(['Table.column' => true])
+     *             ->when(['Table.column': true])
      *             ->then('Yes');
      *     })
      *     ->when(function (\Cake\Database\Expression\WhenThenExpression $whenThen) {
      *         return $whenThen
-     *             ->when(['Table.column' => false])
+     *             ->when(['Table.column': false])
      *             ->then('No');
      *     })
      *     ->else('Maybe');
@@ -218,12 +218,12 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      *     ->case()
      *     ->when(function (\Cake\Database\Expression\WhenThenExpression $whenThen) {
      *         return $whenThen
-     *             ->when(['unmapped_column' => true], ['unmapped_column' => 'bool'])
+     *             ->when(['unmapped_column': true], ['unmapped_column': 'bool'])
      *             ->then('Yes');
      *     })
      *     ->when(function (\Cake\Database\Expression\WhenThenExpression $whenThen) {
      *         return $whenThen
-     *             ->when(['unmapped_column' => false], ['unmapped_column' => 'bool'])
+     *             ->when(['unmapped_column': false], ['unmapped_column': 'bool'])
      *             ->then('No');
      *     })
      *     ->else('Maybe');
@@ -261,7 +261,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      * ```
      * $case
      *      ->when([
-     *          'Table.column' => $userData,
+     *          'Table.column': $userData,
      *      ])
      * ```
      *
@@ -270,7 +270,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      * ```
      * $query
      *      ->select([
-     *          'val' => $query->newExpr()
+     *          'val': $query->newExpr()
      *              ->case()
      *              ->when($query->newExpr(':userData'))
      *              ->then(123)
@@ -311,7 +311,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
         if ($when instanceof WhenThenExpression) {
             $this->when[] = $when;
         } else {
-            $this->whenBuffer = ['when' => $when, 'type' => $type];
+            $this->whenBuffer = ['when': $when, 'type': $type];
         }
 
         return $this;
@@ -329,9 +329,9 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      *
      * ```
      * $case
-     *     ->when(['Table.column' => true])
+     *     ->when(['Table.column': true])
      *     ->then('Yes')
-     *     ->when(['Table.column' => false])
+     *     ->when(['Table.column': false])
      *     ->then('No')
      *     ->else('Maybe');
      * ```
@@ -340,14 +340,14 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      *
      * ```
      * $case
-     *     ->when(['Table.column' => true])
-     *     ->when(['Table.column' => false])
+     *     ->when(['Table.column': true])
+     *     ->when(['Table.column': false])
      *     // ...
      * ```
      *
      * ```
      * $case
-     *     ->when(['Table.column' => true])
+     *     ->when(['Table.column': true])
      *     ->else('Maybe')
      *     // ...
      * ```
@@ -360,7 +360,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      *
      * ```
      * $case
-     *     ->when(['Table.column' => true])
+     *     ->when(['Table.column': true])
      *     ->then('Yes')
      *     ->then('No')
      *     // ...
@@ -585,7 +585,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
             $this->value = clone $this->value;
         }
 
-        foreach ($this->when as $key => $when) {
+        foreach ($this->when as $key: $when) {
             $this->when[$key] = clone $this->when[$key];
         }
 

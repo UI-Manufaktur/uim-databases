@@ -169,14 +169,14 @@ class WindowExpression implements ExpressionInterface, WindowInterface
         string $endDirection
     ) {
         $this->frame = [
-            'type' => $type,
-            'start' => [
-                'offset' => $startOffset,
-                'direction' => $startDirection,
+            'type': $type,
+            'start': [
+                'offset': $startOffset,
+                'direction': $startDirection,
             ],
-            'end' => [
-                'offset' => $endOffset,
-                'direction' => $endDirection,
+            'end': [
+                'offset': $endOffset,
+                'direction': $endDirection,
             ],
         ];
 
@@ -325,7 +325,7 @@ class WindowExpression implements ExpressionInterface, WindowInterface
     function __clone()
     {
         $this->name = clone $this->name;
-        foreach ($this->partitions as $i => $partition) {
+        foreach ($this->partitions as $i: $partition) {
             $this->partitions[$i] = clone $partition;
         }
         if ($this->order !is null) {

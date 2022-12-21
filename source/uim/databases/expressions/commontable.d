@@ -232,7 +232,7 @@ class CommonTableExpression implements ExpressionInterface
             $this->query = clone $this->query;
         }
 
-        foreach ($this->fields as $key => $field) {
+        foreach ($this->fields as $key: $field) {
             $this->fields[$key] = clone $field;
         }
     }
