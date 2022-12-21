@@ -44,7 +44,7 @@ class TupleComparison extends ComparisonExpression
      * one type per position in the value array in needed
      * @param string $conjunction the operator used for comparing field and value
      */
-    public function __construct($fields, $values, array $types = [], string $conjunction = '=')
+    function __construct($fields, $values, array $types = [], string $conjunction = '=')
     {
         _type = $types;
         $this->setField($fields);
@@ -57,7 +57,7 @@ class TupleComparison extends ComparisonExpression
      *
      * @return array<string|null>
      */
-    public function getType(): array
+    function getType(): array
     {
         return _type;
     }
@@ -68,7 +68,7 @@ class TupleComparison extends ComparisonExpression
      * @param mixed $value The value to compare
      * @return void
      */
-    public function setValue($value): void
+    function setValue($value): void
     {
         if ($this->isMulti()) {
             if (is_array($value) && !is_array(current($value))) {
@@ -90,7 +90,7 @@ class TupleComparison extends ComparisonExpression
     /**
      * @inheritDoc
      */
-    public function sql(ValueBinder $binder): string
+    function sql(ValueBinder $binder): string
     {
         $template = '(%s) %s (%s)';
         $fields = [];
@@ -173,7 +173,7 @@ class TupleComparison extends ComparisonExpression
     /**
      * @inheritDoc
      */
-    public function traverse(Closure $callback)
+    function traverse(Closure $callback)
     {
         /** @var array<string> $fields */
         $fields = $this->getField();
@@ -224,7 +224,7 @@ class TupleComparison extends ComparisonExpression
      *
      * @return bool
      */
-    public function isMulti(): bool
+    function isMulti(): bool
     {
         return in_array(strtolower(_operator), ['in', 'not in']);
     }

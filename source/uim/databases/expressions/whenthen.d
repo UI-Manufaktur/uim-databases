@@ -94,7 +94,7 @@ class WhenThenExpression implements ExpressionInterface
      * @param \Cake\Database\TypeMap|null $typeMap The type map to use when using an array of conditions for the `WHEN`
      *  value.
      */
-    public function __construct(?TypeMap $typeMap = null)
+    function __construct(?TypeMap $typeMap = null)
     {
         if ($typeMap =is null) {
             $typeMap = new TypeMap();
@@ -123,7 +123,7 @@ class WhenThenExpression implements ExpressionInterface
      * neither a string, nor null.
      * @see CaseStatementExpression::when() for a more detailed usage explanation.
      */
-    public function when($when, $type = null)
+    function when($when, $type = null)
     {
         if (
             !(is_array($when) && !empty($when)) &&
@@ -205,7 +205,7 @@ class WhenThenExpression implements ExpressionInterface
      *  result value.
      * @return $this
      */
-    public function then($result, ?string $type = null)
+    function then($result, ?string $type = null)
     {
         if (
             $result !is null &&
@@ -239,7 +239,7 @@ class WhenThenExpression implements ExpressionInterface
      * @return string|null
      * @see WhenThenExpression::then()
      */
-    public function getResultType(): ?string
+    function getResultType(): ?string
     {
         return $this->thenType;
     }
@@ -258,7 +258,7 @@ class WhenThenExpression implements ExpressionInterface
      * @return \Cake\Database\ExpressionInterface|object|scalar|null
      * @throws \InvalidArgumentException In case the given clause name is invalid.
      */
-    public function clause(string $clause)
+    function clause(string $clause)
     {
         if (!in_array($clause, $this->validClauseNames, true)) {
             throw new InvalidArgumentException(
@@ -276,7 +276,7 @@ class WhenThenExpression implements ExpressionInterface
     /**
      * @inheritDoc
      */
-    public function sql(ValueBinder $binder): string
+    function sql(ValueBinder $binder): string
     {
         if ($this->when =is null) {
             throw new LogicException('Case expression has incomplete when clause. Missing `when()`.');
@@ -316,7 +316,7 @@ class WhenThenExpression implements ExpressionInterface
     /**
      * @inheritDoc
      */
-    public function traverse(Closure $callback)
+    function traverse(Closure $callback)
     {
         if ($this->when instanceof ExpressionInterface) {
             $callback($this->when);
@@ -336,7 +336,7 @@ class WhenThenExpression implements ExpressionInterface
      *
      * @return void
      */
-    public function __clone()
+    function __clone()
     {
         if ($this->when instanceof ExpressionInterface) {
             $this->when = clone $this->when;

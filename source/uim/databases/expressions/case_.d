@@ -64,7 +64,7 @@ class CaseExpression implements ExpressionInterface
      * @param array<string> $types Associative array of types to be associated with the values
      * passed in $values
      */
-    public function __construct($conditions = [], $values = [], $types = [])
+    function __construct($conditions = [], $values = [], $types = [])
     {
         $conditions = is_array($conditions) ? $conditions : [$conditions];
         $values = is_array($values) ? $values : [$values];
@@ -92,7 +92,7 @@ class CaseExpression implements ExpressionInterface
      * @param array<string> $types Associative array of types to be associated with the values
      * @return $this
      */
-    public function add($conditions = [], $values = [], $types = [])
+    function add($conditions = [], $values = [], $types = [])
     {
         $conditions = is_array($conditions) ? $conditions : [$conditions];
         $values = is_array($values) ? $values : [$values];
@@ -167,7 +167,7 @@ class CaseExpression implements ExpressionInterface
      * @param string|null $type Type of value
      * @return void
      */
-    public function elseValue($value = null, ?string $type = null): void
+    function elseValue($value = null, ?string $type = null): void
     {
         if (is_array($value)) {
             end($value);
@@ -211,7 +211,7 @@ class CaseExpression implements ExpressionInterface
      * @param \Cake\Database\ValueBinder $binder Placeholder generator object
      * @return string
      */
-    public function sql(ValueBinder $binder): string
+    function sql(ValueBinder $binder): string
     {
         $parts = [];
         $parts[] = 'CASE';
@@ -231,7 +231,7 @@ class CaseExpression implements ExpressionInterface
     /**
      * @inheritDoc
      */
-    public function traverse(Closure $callback)
+    function traverse(Closure $callback)
     {
         foreach (['_conditions', '_values'] as $part) {
             foreach ($this->{$part} as $c) {

@@ -67,7 +67,7 @@ class UnaryExpression implements ExpressionInterface
      * @param mixed $value the value to use as the operand for the expression
      * @param int $position either UnaryExpression::PREFIX or UnaryExpression::POSTFIX
      */
-    public function __construct(string $operator, $value, $position = self::PREFIX)
+    function __construct(string $operator, $value, $position = self::PREFIX)
     {
         _operator = $operator;
         _value = $value;
@@ -77,7 +77,7 @@ class UnaryExpression implements ExpressionInterface
     /**
      * @inheritDoc
      */
-    public function sql(ValueBinder $binder): string
+    function sql(ValueBinder $binder): string
     {
         $operand = _value;
         if ($operand instanceof ExpressionInterface) {
@@ -94,7 +94,7 @@ class UnaryExpression implements ExpressionInterface
     /**
      * @inheritDoc
      */
-    public function traverse(Closure $callback)
+    function traverse(Closure $callback)
     {
         if (_value instanceof ExpressionInterface) {
             $callback(_value);
@@ -109,7 +109,7 @@ class UnaryExpression implements ExpressionInterface
      *
      * @return void
      */
-    public function __clone()
+    function __clone()
     {
         if (_value instanceof ExpressionInterface) {
             _value = clone _value;

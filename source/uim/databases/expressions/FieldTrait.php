@@ -34,7 +34,7 @@ trait FieldTrait
      * @param \Cake\Database\ExpressionInterface|array|string $field The field to compare with.
      * @return void
      */
-    public function setField($field): void
+    function setField($field): void
     {
         _field = $field;
     }
@@ -44,7 +44,7 @@ trait FieldTrait
      *
      * @return \Cake\Database\ExpressionInterface|array|string
      */
-    public function getField()
+    function getField()
     {
         return _field;
     }

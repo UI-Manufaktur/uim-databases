@@ -71,7 +71,7 @@ class ValuesExpression implements ExpressionInterface
      * @param array $columns The list of columns that are going to be part of the values.
      * @param \Cake\Database\TypeMap $typeMap A dictionary of column -> type names
      */
-    public function __construct(array $columns, TypeMap $typeMap)
+    function __construct(array $columns, TypeMap $typeMap)
     {
         _columns = $columns;
         $this->setTypeMap($typeMap);
@@ -85,7 +85,7 @@ class ValuesExpression implements ExpressionInterface
      * @return void
      * @throws \Cake\Database\Exception\DatabaseException When mixing array + Query data types.
      */
-    public function add($values): void
+    function add($values): void
     {
         if (
             (
@@ -116,7 +116,7 @@ class ValuesExpression implements ExpressionInterface
      * @param array $columns Array with columns to be inserted.
      * @return $this
      */
-    public function setColumns(array $columns)
+    function setColumns(array $columns)
     {
         _columns = $columns;
         _castedExpressions = false;
@@ -129,7 +129,7 @@ class ValuesExpression implements ExpressionInterface
      *
      * @return array
      */
-    public function getColumns(): array
+    function getColumns(): array
     {
         return _columns;
     }
@@ -161,7 +161,7 @@ class ValuesExpression implements ExpressionInterface
      * @param array $values Array with values to be inserted.
      * @return $this
      */
-    public function setValues(array $values)
+    function setValues(array $values)
     {
         _values = $values;
         _castedExpressions = false;
@@ -174,7 +174,7 @@ class ValuesExpression implements ExpressionInterface
      *
      * @return array
      */
-    public function getValues(): array
+    function getValues(): array
     {
         if (!_castedExpressions) {
             _processExpressions();
@@ -190,7 +190,7 @@ class ValuesExpression implements ExpressionInterface
      * @param \Cake\Database\Query $query The query to set
      * @return $this
      */
-    public function setQuery(Query $query)
+    function setQuery(Query $query)
     {
         _query = $query;
 
@@ -203,7 +203,7 @@ class ValuesExpression implements ExpressionInterface
      *
      * @return \Cake\Database\Query|null
      */
-    public function getQuery(): ?Query
+    function getQuery(): ?Query
     {
         return _query;
     }
@@ -211,7 +211,7 @@ class ValuesExpression implements ExpressionInterface
     /**
      * @inheritDoc
      */
-    public function sql(ValueBinder $binder): string
+    function sql(ValueBinder $binder): string
     {
         if (empty(_values) && empty(_query)) {
             return '';
@@ -262,7 +262,7 @@ class ValuesExpression implements ExpressionInterface
     /**
      * @inheritDoc
      */
-    public function traverse(Closure $callback)
+    function traverse(Closure $callback)
     {
         if (_query) {
             return $this;

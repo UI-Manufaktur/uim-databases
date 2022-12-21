@@ -66,7 +66,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      * passed arguments
      * @param string $returnType The return type of this expression
      */
-    public function __construct(string $name, array $params = [], array $types = [], string $returnType = 'string')
+    function __construct(string $name, array $params = [], array $types = [], string $returnType = 'string')
     {
         _name = $name;
         _returnType = $returnType;
@@ -79,7 +79,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      * @param string $name The name of the function
      * @return $this
      */
-    public function setName(string $name)
+    function setName(string $name)
     {
         _name = $name;
 
@@ -91,7 +91,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      *
      * @return string
      */
-    public function getName(): string
+    function getName(): string
     {
         return _name;
     }
@@ -108,7 +108,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      * @return $this
      * @psalm-suppress MoreSpecificImplementedParamType
      */
-    public function add($conditions, array $types = [], bool $prepend = false)
+    function add($conditions, array $types = [], bool $prepend = false)
     {
         $put = $prepend ? 'array_unshift' : 'array_push';
         $typeMap = $this->getTypeMap()->setTypes($types);
@@ -143,7 +143,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
     /**
      * @inheritDoc
      */
-    public function sql(ValueBinder $binder): string
+    function sql(ValueBinder $binder): string
     {
         $parts = [];
         foreach (_conditions as $condition) {
@@ -171,7 +171,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      *
      * @return int
      */
-    public function count(): int
+    function count(): int
     {
         return 1 + count(_conditions);
     }

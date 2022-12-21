@@ -42,11 +42,7 @@ class BetweenExpression : IExpression, IField {
         _type = $type;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function sql(ValueBinder $binder): string
-    {
+    function sql(ValueBinder $binder): string {
         $parts = [
             'from' => _from,
             'to' => _to,
@@ -72,7 +68,7 @@ class BetweenExpression : IExpression, IField {
     /**
      * @inheritDoc
      */
-    public function traverse(Closure $callback)
+    function traverse(Closure $callback)
     {
         foreach ([_field, _from, _to] as $part) {
             if ($part instanceof ExpressionInterface) {
@@ -104,7 +100,7 @@ class BetweenExpression : IExpression, IField {
      *
      * @return void
      */
-    public function __clone()
+    function __clone()
     {
         foreach (['_field', '_from', '_to'] as $part) {
             if ($this->{$part} instanceof ExpressionInterface) {

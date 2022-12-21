@@ -76,7 +76,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
      * @param string|null $type the type name used to cast the value
      * @param string $operator the operator used for comparing field and value
      */
-    public function __construct($field, $value, ?string $type = null, string $operator = '=')
+    function __construct($field, $value, ?string $type = null, string $operator = '=')
     {
         _type = $type;
         $this->setField($field);
@@ -90,7 +90,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
      * @param mixed $value The value to compare
      * @return void
      */
-    public function setValue($value): void
+    function setValue($value): void
     {
         $value = _castToExpression($value, _type);
 
@@ -108,7 +108,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
      *
      * @return mixed
      */
-    public function getValue()
+    function getValue()
     {
         return _value;
     }
@@ -119,7 +119,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
      * @param string $operator The operator to be used for the comparison.
      * @return void
      */
-    public function setOperator(string $operator): void
+    function setOperator(string $operator): void
     {
         _operator = $operator;
     }
@@ -129,7 +129,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
      *
      * @return string
      */
-    public function getOperator(): string
+    function getOperator(): string
     {
         return _operator;
     }
@@ -137,7 +137,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
     /**
      * @inheritDoc
      */
-    public function sql(ValueBinder $binder): string
+    function sql(ValueBinder $binder): string
     {
         /** @var \Cake\Database\ExpressionInterface|string $field */
         $field = _field;
@@ -162,7 +162,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
     /**
      * @inheritDoc
      */
-    public function traverse(Closure $callback)
+    function traverse(Closure $callback)
     {
         if (_field instanceof ExpressionInterface) {
             $callback(_field);
@@ -189,7 +189,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
      *
      * @return void
      */
-    public function __clone()
+    function __clone()
     {
         foreach (['_value', '_field'] as $prop) {
             if ($this->{$prop} instanceof ExpressionInterface) {
