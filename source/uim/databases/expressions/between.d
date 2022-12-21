@@ -1,53 +1,25 @@
-<?php
-declare(strict_types=1);
+module uim.databases.expressions.expression;
 
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         3.0.0
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
-namespace Cake\Database\Expression;
-
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Type\ExpressionTypeCasterTrait;
-use Cake\Database\ValueBinder;
-use Closure;
+@safe:
+import uim.databases;
 
 /**
  * An expression object that represents a SQL BETWEEN snippet
  */
-class BetweenExpression implements ExpressionInterface, FieldInterface
-{
+class BetweenExpression : IExpression, IField {
     use ExpressionTypeCasterTrait;
     use FieldTrait;
 
-    /**
-     * The first value in the expression
-     *
-     * @var mixed
-     */
+    // The first value in the expression
+    // @var mixed
     protected $_from;
 
-    /**
-     * The second value in the expression
-     *
-     * @var mixed
-     */
+    // The second value in the expression
+    // @var mixed
     protected $_to;
 
-    /**
-     * The data type for the from and to arguments
-     *
-     * @var mixed
-     */
+    // The data type for the from and to arguments
+    // @var mixed
     protected $_type;
 
     /**
