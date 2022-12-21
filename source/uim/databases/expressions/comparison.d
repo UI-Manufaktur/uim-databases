@@ -79,8 +79,8 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
     function __construct($field, $value, ?string $type = null, string $operator ="=")
     {
         _type = $type;
-        $this->setField($field);
-        $this->setValue($value);
+        $this.setField($field);
+        $this.setValue($value);
         _operator = $operator;
     }
 
@@ -143,15 +143,15 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
         $field = _field;
 
         if ($field instanceof ExpressionInterface) {
-            $field = $field->sql($binder);
+            $field = $field.sql($binder);
         }
 
         if (_value instanceof IdentifierExpression) {
             $template ="%s %s %s";
-            $value = _value->sql($binder);
+            $value = _value.sql($binder);
         } elseif (_value instanceof ExpressionInterface) {
             $template ="%s %s (%s)";
-            $value = _value->sql($binder);
+            $value = _value.sql($binder);
         } else {
             [$template, $value] = _stringExpression($binder);
         }
@@ -166,17 +166,17 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
     {
         if (_field instanceof ExpressionInterface) {
             $callback(_field);
-            _field->traverse($callback);
+            _field.traverse($callback);
         }
 
         if (_value instanceof ExpressionInterface) {
             $callback(_value);
-            _value->traverse($callback);
+            _value.traverse($callback);
         }
 
         foreach (_valueExpressions as $v) {
             $callback($v);
-            $v->traverse($callback);
+            $v.traverse($callback);
         }
 
         return $this;
@@ -192,8 +192,8 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
     function __clone()
     {
         foreach (["_value","_field"] as $prop) {
-            if ($this->{$prop} instanceof ExpressionInterface) {
-                $this->{$prop} = clone $this->{$prop};
+            if ($this.{$prop} instanceof ExpressionInterface) {
+                $this.{$prop} = clone $this.{$prop};
             }
         }
     }
@@ -224,7 +224,7 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
             // To avoid SQL errors when comparing a field to a list of empty values,
             // better just throw an exception here
             if ($value ==="") {
-                $field = _field instanceof ExpressionInterface ? _field->sql($binder) : _field;
+                $field = _field instanceof ExpressionInterface ? _field.sql($binder) : _field;
                 /** @psalm-suppress PossiblyInvalidCast */
                 throw new DatabaseException(
                     "Impossible to generate condition with empty list of values for field ($field)"
@@ -248,8 +248,8 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
      */
     protected function _bindValue($value, ValueBinder $binder, ?string $type = null): string
     {
-        $placeholder = $binder->placeholder("c");
-        $binder->bind($placeholder, $value, $type);
+        $placeholder = $binder.placeholder("c");
+        $binder.bind($placeholder, $value, $type);
 
         return $placeholder;
     }
@@ -268,13 +268,13 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
         $parts = [];
         if (is_array($value)) {
             foreach (_valueExpressions as $k: $v) {
-                $parts[$k] = $v->sql($binder);
+                $parts[$k] = $v.sql($binder);
                 unset($value[$k]);
             }
         }
 
         if (!empty($value)) {
-            $parts += $binder->generateManyNamed($value, $type);
+            $parts += $binder.generateManyNamed($value, $type);
         }
 
         return implode(",", $parts);

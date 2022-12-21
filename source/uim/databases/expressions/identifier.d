@@ -51,7 +51,7 @@ class IdentifierExpression implements ExpressionInterface
     function __construct(string $identifier, ?string $collation = null)
     {
         _identifier = $identifier;
-        $this->collation = $collation;
+        $this.collation = $collation;
     }
 
     /**
@@ -83,7 +83,7 @@ class IdentifierExpression implements ExpressionInterface
      */
     function setCollation(string $collation): void
     {
-        $this->collation = $collation;
+        $this.collation = $collation;
     }
 
     /**
@@ -93,7 +93,7 @@ class IdentifierExpression implements ExpressionInterface
      */
     function getCollation(): ?string
     {
-        return $this->collation;
+        return $this.collation;
     }
 
     /**
@@ -102,8 +102,8 @@ class IdentifierExpression implements ExpressionInterface
     function sql(ValueBinder $binder): string
     {
         $sql = _identifier;
-        if ($this->collation) {
-            $sql .=" COLLATE" . $this->collation;
+        if ($this.collation) {
+            $sql .=" COLLATE" . $this.collation;
         }
 
         return $sql;

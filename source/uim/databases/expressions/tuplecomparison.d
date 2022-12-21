@@ -47,9 +47,9 @@ class TupleComparison extends ComparisonExpression
     function __construct($fields, $values, array $types = [], string $conjunction ="=")
     {
         _type = $types;
-        $this->setField($fields);
+        $this.setField($fields);
         _operator = $conjunction;
-        $this->setValue($values);
+        $this.setValue($values);
     }
 
     /**
@@ -70,7 +70,7 @@ class TupleComparison extends ComparisonExpression
      */
     function setValue($value): void
     {
-        if ($this->isMulti()) {
+        if ($this.isMulti()) {
             if (is_array($value) && !is_array(current($value))) {
                 throw new InvalidArgumentException(
                    "Multi-tuple comparisons require a multi-tuple value, single-tuple given."
@@ -94,14 +94,14 @@ class TupleComparison extends ComparisonExpression
     {
         $template ="(%s) %s (%s)";
         $fields = [];
-        $originalFields = $this->getField();
+        $originalFields = $this.getField();
 
         if (!is_array($originalFields)) {
             $originalFields = [$originalFields];
         }
 
         foreach ($originalFields as $field) {
-            $fields[] = $field instanceof ExpressionInterface ? $field->sql($binder) : $field;
+            $fields[] = $field instanceof ExpressionInterface ? $field.sql($binder) : $field;
         }
 
         $values = _stringifyValues($binder);
@@ -121,20 +121,20 @@ class TupleComparison extends ComparisonExpression
     protected function _stringifyValues(ValueBinder $binder): string
     {
         $values = [];
-        $parts = $this->getValue();
+        $parts = $this.getValue();
 
         if ($parts instanceof ExpressionInterface) {
-            return $parts->sql($binder);
+            return $parts.sql($binder);
         }
 
         foreach ($parts as $i: $value) {
             if ($value instanceof ExpressionInterface) {
-                $values[] = $value->sql($binder);
+                $values[] = $value.sql($binder);
                 continue;
             }
 
             $type = _type;
-            $isMultiOperation = $this->isMulti();
+            $isMultiOperation = $this.isMulti();
             if (empty($type)) {
                 $type = null;
             }
@@ -164,8 +164,8 @@ class TupleComparison extends ComparisonExpression
      */
     protected function _bindValue($value, ValueBinder $binder, ?string $type = null): string
     {
-        $placeholder = $binder->placeholder("tuple");
-        $binder->bind($placeholder, $value, $type);
+        $placeholder = $binder.placeholder("tuple");
+        $binder.bind($placeholder, $value, $type);
 
         return $placeholder;
     }
@@ -176,21 +176,21 @@ class TupleComparison extends ComparisonExpression
     function traverse(Closure $callback)
     {
         /** @var array<string> $fields */
-        $fields = $this->getField();
+        $fields = $this.getField();
         foreach ($fields as $field) {
             _traverseValue($field, $callback);
         }
 
-        $value = $this->getValue();
+        $value = $this.getValue();
         if ($value instanceof ExpressionInterface) {
             $callback($value);
-            $value->traverse($callback);
+            $value.traverse($callback);
 
             return $this;
         }
 
         foreach ($value as $val) {
-            if ($this->isMulti()) {
+            if ($this.isMulti()) {
                 foreach ($val as $v) {
                     _traverseValue($v, $callback);
                 }
@@ -214,7 +214,7 @@ class TupleComparison extends ComparisonExpression
     {
         if ($value instanceof ExpressionInterface) {
             $callback($value);
-            $value->traverse($callback);
+            $value.traverse($callback);
         }
     }
 

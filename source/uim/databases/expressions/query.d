@@ -66,10 +66,10 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     function __construct($conditions = [], $types = [], $conjunction ="AND")
     {
-        $this->setTypeMap($types);
-        $this->setConjunction(strtoupper($conjunction));
+        $this.setTypeMap($types);
+        $this.setConjunction(strtoupper($conjunction));
         if (!empty($conditions)) {
-            $this->add($conditions, $this->getTypeMap()->getTypes());
+            $this.add($conditions, $this.getTypeMap().getTypes());
         }
     }
 
@@ -151,7 +151,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $type = _calculateType($field);
         }
 
-        return $this->add(new ComparisonExpression($field, $value, $type,"="));
+        return $this.add(new ComparisonExpression($field, $value, $type,"="));
     }
 
     /**
@@ -170,7 +170,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $type = _calculateType($field);
         }
 
-        return $this->add(new ComparisonExpression($field, $value, $type,"!="));
+        return $this.add(new ComparisonExpression($field, $value, $type,"!="));
     }
 
     /**
@@ -187,7 +187,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $type = _calculateType($field);
         }
 
-        return $this->add(new ComparisonExpression($field, $value, $type,">"));
+        return $this.add(new ComparisonExpression($field, $value, $type,">"));
     }
 
     /**
@@ -204,7 +204,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $type = _calculateType($field);
         }
 
-        return $this->add(new ComparisonExpression($field, $value, $type,"<"));
+        return $this.add(new ComparisonExpression($field, $value, $type,"<"));
     }
 
     /**
@@ -221,7 +221,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $type = _calculateType($field);
         }
 
-        return $this->add(new ComparisonExpression($field, $value, $type,">="));
+        return $this.add(new ComparisonExpression($field, $value, $type,">="));
     }
 
     /**
@@ -238,7 +238,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $type = _calculateType($field);
         }
 
-        return $this->add(new ComparisonExpression($field, $value, $type,"<="));
+        return $this.add(new ComparisonExpression($field, $value, $type,"<="));
     }
 
     /**
@@ -254,7 +254,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $field = new IdentifierExpression($field);
         }
 
-        return $this->add(new UnaryExpression("IS NULL", $field, UnaryExpression::POSTFIX));
+        return $this.add(new UnaryExpression("IS NULL", $field, UnaryExpression::POSTFIX));
     }
 
     /**
@@ -270,7 +270,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $field = new IdentifierExpression($field);
         }
 
-        return $this->add(new UnaryExpression("IS NOT NULL", $field, UnaryExpression::POSTFIX));
+        return $this.add(new UnaryExpression("IS NOT NULL", $field, UnaryExpression::POSTFIX));
     }
 
     /**
@@ -287,7 +287,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $type = _calculateType($field);
         }
 
-        return $this->add(new ComparisonExpression($field, $value, $type,"LIKE"));
+        return $this.add(new ComparisonExpression($field, $value, $type,"LIKE"));
     }
 
     /**
@@ -304,7 +304,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $type = _calculateType($field);
         }
 
-        return $this->add(new ComparisonExpression($field, $value, $type,"NOT LIKE"));
+        return $this.add(new ComparisonExpression($field, $value, $type,"NOT LIKE"));
     }
 
     /**
@@ -325,7 +325,7 @@ class QueryExpression implements ExpressionInterface, Countable
         $type .="[]";
         $values = $values instanceof ExpressionInterface ? $values : (array)$values;
 
-        return $this->add(new ComparisonExpression($field, $values, $type,"IN"));
+        return $this.add(new ComparisonExpression($field, $values, $type,"IN"));
     }
 
     /**
@@ -345,7 +345,7 @@ class QueryExpression implements ExpressionInterface, Countable
     {
         deprecationWarning("QueryExpression::addCase() is deprecated, use case() instead.");
 
-        return $this->add(new CaseExpression($conditions, $values, $types));
+        return $this.add(new CaseExpression($conditions, $values, $types));
     }
 
     /**
@@ -377,7 +377,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $expression = new CaseStatementExpression();
         }
 
-        return $expression->setTypeMap($this->getTypeMap());
+        return $expression.setTypeMap($this.getTypeMap());
     }
 
     /**
@@ -398,7 +398,7 @@ class QueryExpression implements ExpressionInterface, Countable
         $type .="[]";
         $values = $values instanceof ExpressionInterface ? $values : (array)$values;
 
-        return $this->add(new ComparisonExpression($field, $values, $type,"NOT IN"));
+        return $this.add(new ComparisonExpression($field, $values, $type,"NOT IN"));
     }
 
     /**
@@ -414,10 +414,10 @@ class QueryExpression implements ExpressionInterface, Countable
     {
         $or = new static([], [],"OR");
         $or
-            ->notIn($field, $values, $type)
-            ->isNull($field);
+            .notIn($field, $values, $type)
+            .isNull($field);
 
-        return $this->add($or);
+        return $this.add($or);
     }
 
     /**
@@ -428,7 +428,7 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     function exists(ExpressionInterface $expression)
     {
-        return $this->add(new UnaryExpression("EXISTS", $expression, UnaryExpression::PREFIX));
+        return $this.add(new UnaryExpression("EXISTS", $expression, UnaryExpression::PREFIX));
     }
 
     /**
@@ -439,7 +439,7 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     function notExists(ExpressionInterface $expression)
     {
-        return $this->add(new UnaryExpression("NOT EXISTS", $expression, UnaryExpression::PREFIX));
+        return $this.add(new UnaryExpression("NOT EXISTS", $expression, UnaryExpression::PREFIX));
     }
 
     /**
@@ -458,7 +458,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $type = _calculateType($field);
         }
 
-        return $this->add(new BetweenExpression($field, $from, $to, $type));
+        return $this.add(new BetweenExpression($field, $from, $to, $type));
     }
 
     /**
@@ -473,10 +473,10 @@ class QueryExpression implements ExpressionInterface, Countable
     function and($conditions, $types = [])
     {
         if ($conditions instanceof Closure) {
-            return $conditions(new static([], $this->getTypeMap()->setTypes($types)));
+            return $conditions(new static([], $this.getTypeMap().setTypes($types)));
         }
 
-        return new static($conditions, $this->getTypeMap()->setTypes($types));
+        return new static($conditions, $this.getTypeMap().setTypes($types));
     }
 
     /**
@@ -491,10 +491,10 @@ class QueryExpression implements ExpressionInterface, Countable
     function or($conditions, $types = [])
     {
         if ($conditions instanceof Closure) {
-            return $conditions(new static([], $this->getTypeMap()->setTypes($types),"OR"));
+            return $conditions(new static([], $this.getTypeMap().setTypes($types),"OR"));
         }
 
-        return new static($conditions, $this->getTypeMap()->setTypes($types),"OR");
+        return new static($conditions, $this.getTypeMap().setTypes($types),"OR");
     }
 
     // phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -513,7 +513,7 @@ class QueryExpression implements ExpressionInterface, Countable
     {
         deprecationWarning("QueryExpression::and_() is deprecated use and() instead.");
 
-        return $this->and($conditions, $types);
+        return $this.and($conditions, $types);
     }
 
     /**
@@ -530,7 +530,7 @@ class QueryExpression implements ExpressionInterface, Countable
     {
         deprecationWarning("QueryExpression::or_() is deprecated use or() instead.");
 
-        return $this->or($conditions, $types);
+        return $this.or($conditions, $types);
     }
 
     // phpcs:enable
@@ -548,7 +548,7 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     function not($conditions, $types = [])
     {
-        return $this->add(["NOT": $conditions], $types);
+        return $this.add(["NOT": $conditions], $types);
     }
 
     /**
@@ -580,7 +580,7 @@ class QueryExpression implements ExpressionInterface, Countable
             return new IdentifierExpression($field);
         };
 
-        return $this->eq($wrapIdentifier($leftField), $wrapIdentifier($rightField));
+        return $this.eq($wrapIdentifier($leftField), $wrapIdentifier($rightField));
     }
 
     /**
@@ -588,7 +588,7 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     function sql(ValueBinder $binder): string
     {
-        $len = $this->count();
+        $len = $this.count();
         if ($len === 0) {
             return"";
         }
@@ -597,9 +597,9 @@ class QueryExpression implements ExpressionInterface, Countable
         $parts = [];
         foreach (_conditions as $part) {
             if ($part instanceof Query) {
-                $part ="(" . $part->sql($binder) .")";
+                $part ="(" . $part.sql($binder) .")";
             } elseif ($part instanceof ExpressionInterface) {
-                $part = $part->sql($binder);
+                $part = $part.sql($binder);
             }
             if ($part !=="") {
                 $parts[] = $part;
@@ -617,7 +617,7 @@ class QueryExpression implements ExpressionInterface, Countable
         foreach (_conditions as $c) {
             if ($c instanceof ExpressionInterface) {
                 $callback($c);
-                $c->traverse($callback);
+                $c.traverse($callback);
             }
         }
 
@@ -709,7 +709,7 @@ class QueryExpression implements ExpressionInterface, Countable
     {
         $operators = ["and","or","xor"];
 
-        $typeMap = $this->getTypeMap()->setTypes($types);
+        $typeMap = $this.getTypeMap().setTypes($types);
 
         foreach ($conditions as $k: $c) {
             $numericKey = is_numeric($k);
@@ -799,7 +799,7 @@ class QueryExpression implements ExpressionInterface, Countable
             [$expression, $operator] = $parts;
         }
         $operator = strtolower(trim($operator));
-        $type = $this->getTypeMap()->type($expression);
+        $type = $this.getTypeMap().type($expression);
 
         $typeMultiple = (is_string($type) && strpos($type,"[]") !== false);
         if (in_array($operator, ["in","not in"]) || $typeMultiple) {
@@ -857,9 +857,9 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     protected function _calculateType($field): ?string
     {
-        $field = $field instanceof IdentifierExpression ? $field->getIdentifier() : $field;
+        $field = $field instanceof IdentifierExpression ? $field.getIdentifier() : $field;
         if (is_string($field)) {
-            return $this->getTypeMap()->type($field);
+            return $this.getTypeMap().type($field);
         }
 
         return null;

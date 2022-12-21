@@ -69,12 +69,12 @@ class ValuesExpression implements ExpressionInterface
      * Constructor
      *
      * @param array $columns The list of columns that are going to be part of the values.
-     * @param \Cake\Database\TypeMap $typeMap A dictionary of column -> type names
+     * @param \Cake\Database\TypeMap $typeMap A dictionary of column . type names
      */
     function __construct(array $columns, TypeMap $typeMap)
     {
         _columns = $columns;
-        $this->setTypeMap($typeMap);
+        $this.setTypeMap($typeMap);
     }
 
     /**
@@ -102,7 +102,7 @@ class ValuesExpression implements ExpressionInterface
             );
         }
         if ($values instanceof Query) {
-            $this->setQuery($values);
+            $this.setQuery($values);
 
             return;
         }
@@ -226,9 +226,9 @@ class ValuesExpression implements ExpressionInterface
         $placeholders = [];
 
         $types = [];
-        $typeMap = $this->getTypeMap();
+        $typeMap = $this.getTypeMap();
         foreach ($defaults as $col: $v) {
-            $types[$col] = $typeMap->type($col);
+            $types[$col] = $typeMap.type($col);
         }
 
         foreach (_values as $row) {
@@ -239,21 +239,21 @@ class ValuesExpression implements ExpressionInterface
                 $value = $row[$column];
 
                 if ($value instanceof ExpressionInterface) {
-                    $rowPlaceholders[] ="(" . $value->sql($binder) .")";
+                    $rowPlaceholders[] ="(" . $value.sql($binder) .")";
                     continue;
                 }
 
-                $placeholder = $binder->placeholder("c");
+                $placeholder = $binder.placeholder("c");
                 $rowPlaceholders[] = $placeholder;
-                $binder->bind($placeholder, $value, $types[$column]);
+                $binder.bind($placeholder, $value, $types[$column]);
             }
 
             $placeholders[] = implode(",", $rowPlaceholders);
         }
 
-        $query = $this->getQuery();
+        $query = $this.getQuery();
         if ($query) {
-            return"" . $query->sql($binder);
+            return"" . $query.sql($binder);
         }
 
         return sprintf(" VALUES (%s)", implode("), (", $placeholders));
@@ -274,7 +274,7 @@ class ValuesExpression implements ExpressionInterface
 
         foreach (_values as $v) {
             if ($v instanceof ExpressionInterface) {
-                $v->traverse($callback);
+                $v.traverse($callback);
             }
             if (!is_array($v)) {
                 continue;
@@ -282,7 +282,7 @@ class ValuesExpression implements ExpressionInterface
             foreach ($v as $field) {
                 if ($field instanceof ExpressionInterface) {
                     $callback($field);
-                    $field->traverse($callback);
+                    $field.traverse($callback);
                 }
             }
         }
@@ -298,14 +298,14 @@ class ValuesExpression implements ExpressionInterface
     protected function _processExpressions(): void
     {
         $types = [];
-        $typeMap = $this->getTypeMap();
+        $typeMap = $this.getTypeMap();
 
         $columns = _columnNames();
         foreach ($columns as $c) {
             if (!is_string($c) && !is_int($c)) {
                 continue;
             }
-            $types[$c] = $typeMap->type($c);
+            $types[$c] = $typeMap.type($c);
         }
 
         $types = _requiresToExpressionCasting($types);
@@ -317,7 +317,7 @@ class ValuesExpression implements ExpressionInterface
         foreach (_values as $row: $values) {
             foreach ($types as $col: $type) {
                 /** @var \Cake\Database\Type\ExpressionTypeInterface $type */
-                _values[$row][$col] = $type->toExpression($values[$col]);
+                _values[$row][$col] = $type.toExpression($values[$col]);
             }
         }
         _castedExpressions = true;

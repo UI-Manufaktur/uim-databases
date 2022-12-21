@@ -54,12 +54,12 @@ class BetweenExpression : IExpression, IField {
         /** @var \Cake\Database\ExpressionInterface|string $field */
         myFieldName = _fieldName;
 /*         if ($field instanceof ExpressionInterface) {
-            $field = $field->sql($binder);
+            $field = $field.sql($binder);
         }
  */
         foreach ($name: $part; $parts) {
 /*             if ($part instanceof ExpressionInterface) {
-                $parts[$name] = $part->sql($binder);
+                $parts[$name] = $part.sql($binder);
                 continue;
             }
  */            
@@ -69,11 +69,7 @@ class BetweenExpression : IExpression, IField {
         return sprintf("%s BETWEEN %s AND %s", $field, $parts["from"], $parts["to"]);
     }
 
-    /**
-     * @inheritDoc
-     */
-    function traverse(Closure $callback)
-    {
+    function traverse(Closure $callback) {
         foreach ([_field, _from, _toValue] as $part) {
             if ($part instanceof ExpressionInterface) {
                 $callback($part);
@@ -91,10 +87,9 @@ class BetweenExpression : IExpression, IField {
      * @param string $type The type of $value
      * @return string generated placeholder
      */
-    protected function _bindValue($value, $binder, $type): string
-    {
-        $placeholder = $binder->placeholder("c");
-        $binder->bind($placeholder, $value, $type);
+    protected string _bindValue($value, $binder, $type) {
+        $placeholder = $binder.placeholder("c");
+        $binder.bind($placeholder, $value, $type);
 
         return $placeholder;
     }
@@ -107,8 +102,8 @@ class BetweenExpression : IExpression, IField {
     function __clone()
     {
         foreach (["_field","_from","_toValue"] as $part) {
-            if ($this->{$part} instanceof ExpressionInterface) {
-                $this->{$part} = clone $this->{$part};
+            if ($this.{$part} instanceof ExpressionInterface) {
+                $this.{$part} = clone $this.{$part};
             }
         }
     }

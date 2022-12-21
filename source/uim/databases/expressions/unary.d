@@ -71,7 +71,7 @@ class UnaryExpression implements ExpressionInterface
     {
         _operator = $operator;
         _value = $value;
-        $this->position = $position;
+        $this.position = $position;
     }
 
     /**
@@ -81,10 +81,10 @@ class UnaryExpression implements ExpressionInterface
     {
         $operand = _value;
         if ($operand instanceof ExpressionInterface) {
-            $operand = $operand->sql($binder);
+            $operand = $operand.sql($binder);
         }
 
-        if ($this->position === self::POSTFIX) {
+        if ($this.position === self::POSTFIX) {
             return"(" . $operand .")" . _operator;
         }
 
@@ -98,7 +98,7 @@ class UnaryExpression implements ExpressionInterface
     {
         if (_value instanceof ExpressionInterface) {
             $callback(_value);
-            _value->traverse($callback);
+            _value.traverse($callback);
         }
 
         return $this;

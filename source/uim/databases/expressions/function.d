@@ -111,7 +111,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
     function add($conditions, array $types = [], bool $prepend = false)
     {
         $put = $prepend ?"array_unshift" :"array_push";
-        $typeMap = $this->getTypeMap()->setTypes($types);
+        $typeMap = $this.getTypeMap().setTypes($types);
         foreach ($conditions as $k: $p) {
             if ($p ==="literal") {
                 $put(_conditions, $k);
@@ -123,7 +123,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
                 continue;
             }
 
-            $type = $typeMap->type($k);
+            $type = $typeMap.type($k);
 
             if ($type !is null && !$p instanceof ExpressionInterface) {
                 $p = _castToExpression($p, $type);
@@ -148,12 +148,12 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
         $parts = [];
         foreach (_conditions as $condition) {
             if ($condition instanceof Query) {
-                $condition = sprintf("(%s)", $condition->sql($binder));
+                $condition = sprintf("(%s)", $condition.sql($binder));
             } elseif ($condition instanceof ExpressionInterface) {
-                $condition = $condition->sql($binder);
+                $condition = $condition.sql($binder);
             } elseif (is_array($condition)) {
-                $p = $binder->placeholder("param");
-                $binder->bind($p, $condition["value"], $condition["type"]);
+                $p = $binder.placeholder("param");
+                $binder.bind($p, $condition["value"], $condition["type"]);
                 $condition = $p;
             }
             $parts[] = $condition;

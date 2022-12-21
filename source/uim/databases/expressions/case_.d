@@ -71,13 +71,13 @@ class CaseExpression implements ExpressionInterface
         $types = is_array($types) ? $types : [$types];
 
         if (!empty($conditions)) {
-            $this->add($conditions, $values, $types);
+            $this.add($conditions, $values, $types);
         }
 
         if (count($values) > count($conditions)) {
             end($values);
             $key = key($values);
-            $this->elseValue($values[$key], $types[$key] ?? null);
+            $this.elseValue($values[$key], $types[$key] ?? null);
         }
     }
 
@@ -195,10 +195,10 @@ class CaseExpression implements ExpressionInterface
     protected function _compile($part, ValueBinder $binder): string
     {
         if ($part instanceof ExpressionInterface) {
-            $part = $part->sql($binder);
+            $part = $part.sql($binder);
         } elseif (is_array($part)) {
-            $placeholder = $binder->placeholder("param");
-            $binder->bind($placeholder, $part["value"], $part["type"]);
+            $placeholder = $binder.placeholder("param");
+            $binder.bind($placeholder, $part["value"], $part["type"]);
             $part = $placeholder;
         }
 
@@ -234,16 +234,16 @@ class CaseExpression implements ExpressionInterface
     function traverse(Closure $callback)
     {
         foreach (["_conditions","_values"] as $part) {
-            foreach ($this->{$part} as $c) {
+            foreach ($this.{$part} as $c) {
                 if ($c instanceof ExpressionInterface) {
                     $callback($c);
-                    $c->traverse($callback);
+                    $c.traverse($callback);
                 }
             }
         }
         if (_elseValue instanceof ExpressionInterface) {
             $callback(_elseValue);
-            _elseValue->traverse($callback);
+            _elseValue.traverse($callback);
         }
 
         return $this;

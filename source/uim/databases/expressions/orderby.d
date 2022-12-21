@@ -45,7 +45,7 @@ class OrderByExpression extends QueryExpression
         $order = [];
         foreach (_conditions as $k: $direction) {
             if ($direction instanceof ExpressionInterface) {
-                $direction = $direction->sql($binder);
+                $direction = $direction.sql($binder);
             }
             $order[] = is_numeric($k) ? $direction : sprintf("%s %s", $k, $direction);
         }
