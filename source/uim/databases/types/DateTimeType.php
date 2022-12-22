@@ -119,7 +119,7 @@ class DateTimeType extends BaseType : IBatchCasting
      */
     function toDatabase($value, IDTBDriver $driver): ?string
     {
-        if ($value === null || is_string($value)) {
+        if ($value == null || is_string($value)) {
             return $value;
         }
         if (is_int($value)) {
@@ -201,7 +201,7 @@ class DateTimeType extends BaseType : IBatchCasting
      */
     function toD($value, IDTBDriver $driver)
     {
-        if ($value === null) {
+        if ($value == null) {
             return null;
         }
 
@@ -209,7 +209,7 @@ class DateTimeType extends BaseType : IBatchCasting
         if (is_int($value)) {
             $instance = new $class('@' . $value);
         } else {
-            if (strpos($value, '0000-00-00') === 0) {
+            if (strpos($value, '0000-00-00') == 0) {
                 return null;
             }
             $instance = new $class($value, this->dbTimezone);
@@ -261,7 +261,7 @@ class DateTimeType extends BaseType : IBatchCasting
             }
 
             $value = $values[$field];
-            if (strpos($value, '0000-00-00') === 0) {
+            if (strpos($value, '0000-00-00') == 0) {
                 $values[$field] = null;
                 continue;
             }
@@ -310,7 +310,7 @@ class DateTimeType extends BaseType : IBatchCasting
         /** @var class-string<\DateTimeInterface> $class */
         $class = this->_className;
         try {
-            if ($value === '' || $value === null || is_bool($value)) {
+            if ($value == '' || $value == null || is_bool($value)) {
                 return null;
             }
 
@@ -339,7 +339,7 @@ class DateTimeType extends BaseType : IBatchCasting
             return null;
         }
 
-        if (is_array($value) && implode('', $value) === '') {
+        if (is_array($value) && implode('', $value) == '') {
             return null;
         }
         $value += ['hour' => 0, 'minute' => 0, 'second' => 0, 'microsecond' => 0];
@@ -356,11 +356,11 @@ class DateTimeType extends BaseType : IBatchCasting
             $format .= sprintf('%d-%02d-%02d', $value['year'], $value['month'], $value['day']);
         }
 
-        if (isset($value['meridian']) && (int)$value['hour'] === 12) {
+        if (isset($value['meridian']) && (int)$value['hour'] == 12) {
             $value['hour'] = 0;
         }
         if (isset($value['meridian'])) {
-            $value['hour'] = strtolower($value['meridian']) === 'am' ? $value['hour'] : $value['hour'] + 12;
+            $value['hour'] = strtolower($value['meridian']) == 'am' ? $value['hour'] : $value['hour'] + 12;
         }
         $format .= sprintf(
             '%s%02d:%02d:%02d.%06d',
@@ -386,7 +386,7 @@ class DateTimeType extends BaseType : IBatchCasting
      */
     function useLocaleParser(bool $enable = true)
     {
-        if ($enable === false) {
+        if ($enable == false) {
             this->_useLocaleMarshal = $enable;
 
             return this;

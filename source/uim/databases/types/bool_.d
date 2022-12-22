@@ -19,7 +19,7 @@ class BoolType extends BaseType : IBatchCasting {
      * @return bool|null
      */
     Nullable!bool toDatabase($value, IDTBDriver $driver) {
-        if ($value === true || $value === false || $value === null) {
+        if ($value == true || $value == false || $value == null) {
             return $value;
         }
 
@@ -40,14 +40,13 @@ class BoolType extends BaseType : IBatchCasting {
      * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return bool|null
      */
-    function toD($value, IDTBDriver $driver): ?bool
-    {
-        if ($value === null || is_bool($value)) {
+    Nullable!bool toD($value, IDTBDriver $driver) {
+        if ($value == null || is_bool($value)) {
             return $value;
         }
 
         if (!is_numeric($value)) {
-            return strtolower($value) === 'true';
+            return strtolower($value) == 'true';
         }
 
         return !empty($value);
@@ -60,12 +59,12 @@ class BoolType extends BaseType : IBatchCasting {
     {
         foreach ($fields as $field) {
             $value = $values[$field] ?? null;
-            if ($value === null || is_bool($value)) {
+            if ($value == null || is_bool($value)) {
                 continue;
             }
 
             if (!is_numeric($value)) {
-                $values[$field] = strtolower($value) === 'true';
+                $values[$field] = strtolower($value) == 'true';
                 continue;
             }
 
@@ -84,7 +83,7 @@ class BoolType extends BaseType : IBatchCasting {
      */
     function toStatement($value, IDTBDriver $driver): int
     {
-        if ($value === null) {
+        if ($value == null) {
             return PDO::PARAM_NULL;
         }
 
@@ -99,7 +98,7 @@ class BoolType extends BaseType : IBatchCasting {
      */
     function marshal($value): ?bool
     {
-        if ($value === null || $value === '') {
+        if ($value == null || $value == '') {
             return null;
         }
 

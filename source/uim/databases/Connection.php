@@ -209,7 +209,7 @@ class Connection : ConnectionInterface
         if (is_string($driver)) {
             /** @psalm-var class-string<\Cake\Database\IDTBDriver>|null $className */
             $className = App.className($driver, "Database/Driver");
-            if ($className === null) {
+            if ($className == null) {
                 throw new MissingDriverException(["driver": $driver, "connection": this.configName()]);
             }
             $driver = new $className($config);
@@ -515,7 +515,7 @@ class Connection : ConnectionInterface
             return false;
         }
 
-        if (_transactionLevel === 0) {
+        if (_transactionLevel == 0) {
             if (this.wasNestedTransactionRolledback()) {
                 /** @var \Cake\Database\Exception\NestedTransactionRollbackException $e */
                 $e = this.nestedTransactionRollbackException;
@@ -554,10 +554,10 @@ class Connection : ConnectionInterface
         }
 
         $useSavePoint = this.isSavePointsEnabled();
-        if ($toBeginning === null) {
+        if ($toBeginning == null) {
             $toBeginning = !$useSavePoint;
         }
-        if (_transactionLevel === 0 || $toBeginning) {
+        if (_transactionLevel == 0 || $toBeginning) {
             _transactionLevel = 0;
             _transactionStarted = false;
             this.nestedTransactionRollbackException = null;
@@ -572,7 +572,7 @@ class Connection : ConnectionInterface
         $savePoint = _transactionLevel--;
         if ($useSavePoint) {
             this.rollbackSavepoint($savePoint);
-        } elseif (this.nestedTransactionRollbackException === null) {
+        } elseif (this.nestedTransactionRollbackException == null) {
             this.nestedTransactionRollbackException = new NestedTransactionRollbackException();
         }
 
@@ -590,7 +590,7 @@ class Connection : ConnectionInterface
      */
     function enableSavePoints(bool $enable = true)
     {
-        if ($enable === false) {
+        if ($enable == false) {
             _useSavePoints = false;
         } else {
             _useSavePoints = _driver->supports(IDTBDriver.FEATURE_SAVEPOINT);
@@ -705,7 +705,7 @@ class Connection : ConnectionInterface
             throw $e;
         }
 
-        if ($result === false) {
+        if ($result == false) {
             this.rollback(false);
 
             return false;

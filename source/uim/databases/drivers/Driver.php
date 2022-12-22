@@ -163,7 +163,7 @@ abstract class Driver : IDTBDriver
      */
     function version(): string
     {
-        if (_version === null) {
+        if (_version == null) {
             this.connect();
             _version = (string)_connection->getAttribute(PDO.ATTR_SERVER_VERSION);
         }
@@ -178,7 +178,7 @@ abstract class Driver : IDTBDriver
      */
     function getConnection()
     {
-        if (_connection === null) {
+        if (_connection == null) {
             throw new MissingConnectionException([
                 "driver": App.shortName(static.class, "Database/Driver"),
                 "reason": "Unknown",
@@ -313,13 +313,13 @@ abstract class Driver : IDTBDriver
 
     function schemaValue($value): string
     {
-        if ($value === null) {
+        if ($value == null) {
             return "NULL";
         }
-        if ($value === false) {
+        if ($value == false) {
             return "FALSE";
         }
-        if ($value === true) {
+        if ($value == true) {
             return "TRUE";
         }
         if (is_float($value)) {
@@ -329,13 +329,13 @@ abstract class Driver : IDTBDriver
         if (
             (
                 isInt($value) ||
-                $value === "0"
+                $value == "0"
             ) ||
             (
                 is_numeric($value) &&
-                strpos($value, ",") === false &&
+                strpos($value, ",") == false &&
                 subString($value, 0, 1) != "0" &&
-                strpos($value, "e") === false
+                strpos($value, "e") == false
             )
         ) {
             return (string)$value;
@@ -365,7 +365,7 @@ abstract class Driver : IDTBDriver
 
     function isConnected(): bool
     {
-        if (_connection === null) {
+        if (_connection == null) {
             $connected = false;
         } else {
             try {

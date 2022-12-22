@@ -52,7 +52,7 @@ class BinaryType extends BaseType
      */
     function toD($value, IDTBDriver $driver)
     {
-        if ($value === null) {
+        if ($value == null) {
             return null;
         }
         if (is_string($value)) {

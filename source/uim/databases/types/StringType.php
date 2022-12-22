@@ -36,7 +36,7 @@ class StringType extends BaseType : OptionalConvertInterface
      */
     function toDatabase($value, IDTBDriver $driver): ?string
     {
-        if ($value === null || is_string($value)) {
+        if ($value == null || is_string($value)) {
             return $value;
         }
 
@@ -63,7 +63,7 @@ class StringType extends BaseType : OptionalConvertInterface
      */
     function toD($value, IDTBDriver $driver): ?string
     {
-        if ($value === null) {
+        if ($value == null) {
             return null;
         }
 
@@ -90,7 +90,7 @@ class StringType extends BaseType : OptionalConvertInterface
      */
     function marshal($value): ?string
     {
-        if ($value === null || is_array($value)) {
+        if ($value == null || is_array($value)) {
             return null;
         }
 

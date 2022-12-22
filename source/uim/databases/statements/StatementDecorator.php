@@ -80,7 +80,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      */
     function __get(string $property)
     {
-        if ($property === 'queryString') {
+        if ($property == 'queryString') {
             /** @psalm-suppress NoInterfaceProperties */
             return this->_statement->queryString;
         }

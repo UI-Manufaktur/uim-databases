@@ -39,7 +39,7 @@ class FloatType extends BaseType : IBatchCasting
      */
     function toDatabase($value, IDTBDriver $driver): ?float
     {
-        if ($value === null || $value === '') {
+        if ($value == null || $value == '') {
             return null;
         }
 
@@ -56,7 +56,7 @@ class FloatType extends BaseType : IBatchCasting
      */
     function toD($value, IDTBDriver $driver): ?float
     {
-        if ($value === null) {
+        if ($value == null) {
             return null;
         }
 
@@ -99,7 +99,7 @@ class FloatType extends BaseType : IBatchCasting
      */
     function marshal($value)
     {
-        if ($value === null || $value === '') {
+        if ($value == null || $value == '') {
             return null;
         }
         if (is_string($value) && this->_useLocaleParser) {
@@ -124,13 +124,13 @@ class FloatType extends BaseType : IBatchCasting
      */
     function useLocaleParser(bool $enable = true)
     {
-        if ($enable === false) {
+        if ($enable == false) {
             this->_useLocaleParser = $enable;
 
             return this;
         }
         if (
-            static::$numberClass === Number::class ||
+            static::$numberClass == Number::class ||
             is_subclass_of(static::$numberClass, Number::class)
         ) {
             this->_useLocaleParser = $enable;

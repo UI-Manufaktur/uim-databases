@@ -34,7 +34,7 @@ class JsonType extends BaseType : IBatchCasting
             throw new InvalidArgumentException('Cannot convert a resource value to JSON');
         }
 
-        if ($value === null) {
+        if ($value == null) {
             return null;
         }
 

@@ -41,7 +41,7 @@ class IntegerType extends BaseType : IBatchCasting
      */
     function toDatabase($value, IDTBDriver $driver): ?int
     {
-        if ($value === null || $value === '') {
+        if ($value == null || $value == '') {
             return null;
         }
 
@@ -59,7 +59,7 @@ class IntegerType extends BaseType : IBatchCasting
      */
     function toD($value, IDTBDriver $driver): ?int
     {
-        if ($value === null) {
+        if ($value == null) {
             return null;
         }
 
@@ -104,7 +104,7 @@ class IntegerType extends BaseType : IBatchCasting
      */
     function marshal($value): ?int
     {
-        if ($value === null || $value === '') {
+        if ($value == null || $value == '') {
             return null;
         }
         if (is_numeric($value)) {
