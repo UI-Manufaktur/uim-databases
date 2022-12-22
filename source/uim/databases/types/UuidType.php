@@ -27,17 +27,17 @@ class UuidType : StringType
     /**
      * Casts given value from a PHP type to one acceptable by database
      *
-     * @param mixed $value value to be converted to database equivalent
+     * @param mixed aValue value to be converted to database equivalent
      * @param \Cake\Database\IDTBDriver aDriver object from which database preferences and configuration will be extracted
      * @return string|null
      */
-    function toDatabase($value, IDTBDriver aDriver): ?string
+    function toDatabase(aValue, IDTBDriver aDriver): ?string
     {
-        if ($value == null || $value == "" || $value == false) {
+        if (aValue == null || aValue == "" || aValue == false) {
             return null;
         }
 
-        return parent::toDatabase($value, $driver);
+        return parent::toDatabase(aValue, $driver);
     }
 
     /**
@@ -53,15 +53,15 @@ class UuidType : StringType
     /**
      * Marshals request data into a PHP string
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @return string|null Converted value.
      */
-    function marshal($value): ?string
+    function marshal(aValue): ?string
     {
-        if ($value == null || $value == "" || is_array($value)) {
+        if (aValue == null || aValue == "" || is_array(aValue)) {
             return null;
         }
 
-        return (string)$value;
+        return (string)aValue;
     }
 }

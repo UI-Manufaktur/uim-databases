@@ -13,7 +13,7 @@ import uim.databases;
  *
  * Use to convert JSON data between PHP and the database types.
  */
-class JsonType : BaseType : IBatchCasting
+class JsonType : BaseType, IBatchCasting
 {
     /**
      * @var int
@@ -23,38 +23,38 @@ class JsonType : BaseType : IBatchCasting
     /**
      * Convert a value data into a JSON string
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      * @throws \InvalidArgumentException
      */
-    function toDatabase($value, IDTBDriver aDriver): ?string
+    function toDatabase(aValue, IDTBDriver aDriver): ?string
     {
-        if (is_resource($value)) {
+        if (is_resource(aValue)) {
             throw new InvalidArgumentException("Cannot convert a resource value to JSON");
         }
 
-        if ($value == null) {
+        if (aValue == null) {
             return null;
         }
 
-        return json_encode($value, this._encodingOptions);
+        return json_encode(aValue, this._encodingOptions);
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return array|string|null
      */
-    function toD($value, IDTBDriver aDriver)
+    function toD(aValue, IDTBDriver aDriver)
     {
-        if (!is_string($value)) {
+        if (!is_string(aValue)) {
             return null;
         }
 
-        return json_decode($value, true);
+        return json_decode(aValue, true);
     }
 
 
@@ -74,11 +74,11 @@ class JsonType : BaseType : IBatchCasting
     /**
      * Get the correct PDO binding type for string data.
      *
-     * @param mixed $value The value being bound.
+     * @param mixed aValue The value being bound.
      * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement($value, IDTBDriver aDriver): int
+    function toStatement(aValue, IDTBDriver aDriver): int
     {
         return PDO::PARAM_STR;
     }
@@ -86,12 +86,12 @@ class JsonType : BaseType : IBatchCasting
     /**
      * Marshals request data into a JSON compatible structure.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @return mixed Converted value.
      */
-    function marshal($value)
+    function marshal(aValue)
     {
-        return $value;
+        return aValue;
     }
 
     /**

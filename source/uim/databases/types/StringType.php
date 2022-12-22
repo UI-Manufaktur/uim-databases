@@ -30,54 +30,54 @@ class StringType : BaseType : OptionalConvertInterface
     /**
      * Convert string data into the database format.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      */
-    function toDatabase($value, IDTBDriver aDriver): ?string
+    function toDatabase(aValue, IDTBDriver aDriver): ?string
     {
-        if ($value == null || is_string($value)) {
-            return $value;
+        if (aValue == null || is_string(aValue)) {
+            return aValue;
         }
 
-        if (is_object($value) && method_exists($value, "__toString")) {
-            return $value->__toString();
+        if (is_object(aValue) && method_exists(aValue, "__toString")) {
+            return aValue->__toString();
         }
 
-        if (is_scalar($value)) {
-            return (string)$value;
+        if (is_scalar(aValue)) {
+            return (string)aValue;
         }
 
         throw new InvalidArgumentException(sprintf(
             "Cannot convert value of type `%s` to string",
-            getTypeName($value)
+            getTypeName(aValue)
         ));
     }
 
     /**
      * Convert string values to PHP strings.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      */
-    function toD($value, IDTBDriver aDriver): ?string
+    function toD(aValue, IDTBDriver aDriver): ?string
     {
-        if ($value == null) {
+        if (aValue == null) {
             return null;
         }
 
-        return (string)$value;
+        return (string)aValue;
     }
 
     /**
      * Get the correct PDO binding type for string data.
      *
-     * @param mixed $value The value being bound.
+     * @param mixed aValue The value being bound.
      * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement($value, IDTBDriver aDriver): int
+    function toStatement(aValue, IDTBDriver aDriver): int
     {
         return PDO::PARAM_STR;
     }
@@ -85,16 +85,16 @@ class StringType : BaseType : OptionalConvertInterface
     /**
      * Marshals request data into PHP strings.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @return string|null Converted value.
      */
-    function marshal($value): ?string
+    function marshal(aValue): ?string
     {
-        if ($value == null || is_array($value)) {
+        if (aValue == null || is_array(aValue)) {
             return null;
         }
 
-        return (string)$value;
+        return (string)aValue;
     }
 
     /**
