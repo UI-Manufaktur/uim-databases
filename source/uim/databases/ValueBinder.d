@@ -1,28 +1,19 @@
-<?php
-declare(strict_types=1);
+/*********************************************************************************************************
+*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
+*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
+*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
+**********************************************************************************************************/
+module uim.cake;
 
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         3.0.0
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
-namespace Cake\Database;
+@safe:
+import uim.cake;
 
 /**
  * Value binder class manages list of values bound to conditions.
  *
  * @internal
  */
-class ValueBinder
-{
+class ValueBinder {
     /**
      * Array containing a list of bound values to the conditions on this
      * object. Each array entry is another array structure containing the actual
@@ -37,7 +28,7 @@ class ValueBinder
      *
      * @var int
      */
-    protected $_bindingsCount = 0;
+    protected int _bindingsCount = 0;
 
     /**
      * Associates a query placeholder to a value and a type
@@ -49,8 +40,7 @@ class ValueBinder
      * to database
      * @return void
      */
-    public function bind($param, $value, $type = null): void
-    {
+    void bind($param, $value, $type = null) {
         this->_bindings[$param] = compact('value', 'type') + [
             'placeholder' => is_int($param) ? $param : substr($param, 1),
         ];
@@ -65,7 +55,7 @@ class ValueBinder
      * if it starts with a colon, then the same string is returned
      * @return string to be used as a placeholder in a query expression
      */
-    public function placeholder(string $token): string
+    string placeholder(string $token): string
     {
         $number = this->_bindingsCount++;
         if ($token[0] !== ':' && $token !== '?') {
@@ -83,7 +73,7 @@ class ValueBinder
      * @param string|int|null $type The type with which all values will be bound
      * @return array with the placeholders to insert in the query
      */
-    public function generateManyNamed(iterable $values, $type = null): array
+    function generateManyNamed(iterable $values, $type = null): array
     {
         $placeholders = [];
         foreach ($values as $k => $value) {
@@ -105,7 +95,7 @@ class ValueBinder
      *
      * @return array
      */
-    public function bindings(): array
+    function bindings(): array
     {
         return this->_bindings;
     }
@@ -115,7 +105,7 @@ class ValueBinder
      *
      * @return void
      */
-    public function reset(): void
+    function reset(): void
     {
         this->_bindings = [];
         this->_bindingsCount = 0;
@@ -126,7 +116,7 @@ class ValueBinder
      *
      * @return void
      */
-    public function resetCount(): void
+    function resetCount(): void
     {
         this->_bindingsCount = 0;
     }
@@ -137,7 +127,7 @@ class ValueBinder
      * @param \Cake\Database\StatementInterface $statement The statement to add parameters to.
      * @return void
      */
-    public function attachTo(StatementInterface $statement): void
+    function attachTo(StatementInterface $statement): void
     {
         $bindings = this->bindings();
         if (empty($bindings)) {
