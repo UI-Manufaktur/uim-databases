@@ -98,12 +98,12 @@ class FunctionExpression extends QueryExpression : TypedResultInterface
         $put = $prepend ?"array_unshift" :"array_push";
         $typeMap = $this.getTypeMap().setTypes($types);
         foreach ($conditions as $k: $p) {
-            if ($p ==="literal") {
+            if ($p =="literal") {
                 $put(_conditions, $k);
                 continue;
             }
 
-            if ($p ==="identifier") {
+            if ($p =="identifier") {
                 $put(_conditions, new IdentifierExpression($k));
                 continue;
             }

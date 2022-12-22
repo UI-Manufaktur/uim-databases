@@ -443,7 +443,7 @@ class CaseStatementExpression : ExpressionInterface, TypedResultInterface
         }
 
         $types = array_unique($types);
-        if (count($types) === 1) {
+        if (count($types) == 1) {
             return $types[0];
         }
 

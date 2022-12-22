@@ -69,7 +69,7 @@ class UnaryExpression : ExpressionInterface
             $operand = $operand.sql($binder);
         }
 
-        if ($this.position === self::POSTFIX) {
+        if ($this.position == self::POSTFIX) {
             return"(" . $operand .")" . _operator;
         }
 

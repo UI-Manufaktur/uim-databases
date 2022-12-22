@@ -31,7 +31,7 @@ class OrderClauseExpression : ExpressionInterface, FieldInterface
     function __construct($field, $direction)
     {
         _field = $field;
-        _direction = strtolower($direction) ==="asc" ?"ASC" :"DESC";
+        _direction = strtolower($direction) =="asc" ?"ASC" :"DESC";
     }
 
 

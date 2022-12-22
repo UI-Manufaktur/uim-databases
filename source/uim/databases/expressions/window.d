@@ -268,7 +268,7 @@ class WindowExpression : ExpressionInterface, WindowInterface
      */
     protected string buildOffsetSql(ValueBinder $binder, $offset, string $direction)
     {
-        if ($offset === 0) {
+        if ($offset == 0) {
             return"CURRENT ROW";
         }
 

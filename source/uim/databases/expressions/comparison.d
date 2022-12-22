@@ -205,7 +205,7 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
 
             // To avoid SQL errors when comparing a field to a list of empty values,
             // better just throw an exception here
-            if ($value ==="") {
+            if ($value =="") {
                 $field = _field instanceof ExpressionInterface ? _field.sql($binder) : _field;
                 /** @psalm-suppress PossiblyInvalidCast */
                 throw new DatabaseException(

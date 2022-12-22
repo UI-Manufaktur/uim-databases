@@ -131,13 +131,13 @@ class CaseExpression : ExpressionInterface
             _conditions[] = $c;
             $value = $rawValues[$k] ?? 1;
 
-            if ($value ==="literal") {
+            if ($value =="literal") {
                 $value = $keyValues[$k];
                 _values[] = $value;
                 continue;
             }
 
-            if ($value ==="identifier") {
+            if ($value =="identifier") {
                 /** @var string $identifier */
                 $identifier = $keyValues[$k];
                 $value = new IdentifierExpression($identifier);

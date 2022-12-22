@@ -571,11 +571,11 @@ class QueryExpression : ExpressionInterface, Countable
     string sql(ValueBinder $binder)
     {
         $len = $this.count();
-        if ($len === 0) {
+        if ($len == 0) {
             return"";
         }
         $conjunction = _conjunction;
-        $template = $len === 1 ?"%s" :"(%s)";
+        $template = $len == 1 ?"%s" :"(%s)";
         $parts = [];
         foreach (_conditions as $part) {
             if ($part instanceof Query) {
@@ -708,10 +708,10 @@ class QueryExpression : ExpressionInterface, Countable
             if (!$numericKey) {
                 $normalizedKey = strtolower($k);
                 $isOperator = in_array($normalizedKey, $operators);
-                $isNot = $normalizedKey ==="not";
+                $isNot = $normalizedKey =="not";
             }
 
-            if (($isOperator || $isNot) && ($isArray || $c instanceof Countable) && count($c) === 0) {
+            if (($isOperator || $isNot) && ($isArray || $c instanceof Countable) && count($c) == 0) {
                 continue;
             }
 
@@ -787,8 +787,8 @@ class QueryExpression : ExpressionInterface, Countable
             if (!$typeMultiple) {
                 $type .="[]";
             }
-            $operator = $operator ==="=" ?"IN" : $operator;
-            $operator = $operator ==="!=" ?"NOT IN" : $operator;
+            $operator = $operator =="=" ?"IN" : $operator;
+            $operator = $operator =="!=" ?"NOT IN" : $operator;
             $typeMultiple = true;
         }
 
@@ -796,7 +796,7 @@ class QueryExpression : ExpressionInterface, Countable
             $value = $value instanceof ExpressionInterface ? $value : (array)$value;
         }
 
-        if ($operator ==="is" && $value =is null) {
+        if ($operator =="is" && $value =is null) {
             return new UnaryExpression(
                "IS NULL",
                 new IdentifierExpression($expression),
@@ -804,7 +804,7 @@ class QueryExpression : ExpressionInterface, Countable
             );
         }
 
-        if ($operator ==="is not" && $value =is null) {
+        if ($operator =="is not" && $value =is null) {
             return new UnaryExpression(
                "IS NOT NULL",
                 new IdentifierExpression($expression),
@@ -812,11 +812,11 @@ class QueryExpression : ExpressionInterface, Countable
             );
         }
 
-        if ($operator ==="is" && $value !is null) {
+        if ($operator =="is" && $value !is null) {
             $operator ="=";
         }
 
-        if ($operator ==="is not" && $value !is null) {
+        if ($operator =="is not" && $value !is null) {
             $operator ="!=";
         }
 
