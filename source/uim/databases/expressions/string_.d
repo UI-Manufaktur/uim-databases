@@ -8,64 +8,30 @@ module uim.cake.expressions.string_;
 @safe:
 import uim.cake;
 
-/**
- * String expression with collation.
- */
-class StringExpression : IDTBExpression
-{
-    /**
-     * @var string
-     */
-    protected $string;
+// String expression with collation.
+class StringExpression : IDTBExpression {
+  protected string _string;
 
-    /**
-     * @var string
-     */
-    protected $collation;
+  /**
+    * @param string $string String value
+    * @param string _collation String collation
+    */
+  this(string aString, string aCollation) {
+      _string = aString;
+      _collation = aCollation;
+  }
 
-    /**
-     * @param string $string String value
-     * @param string $collation String collation
-     */
-    this(string $string, string $collation)
-    {
-        $this.string = $string;
-        $this.collation = $collation;
-    }
+  mixin(OProperty!("string", "collation"));
 
-    /**
-     * Sets the string collation.
-     *
-     * @param string $collation String collation
-     * @return void
-     */
-    function setCollation(string $collation): void
-    {
-        $this.collation = $collation;
-    }
+  string sql(ValueBinder aValueBinder) {
+      $placeholder = $binder.placeholder("c");
+      $binder.bind($placeholder, $this.string,"string");
 
-    /**
-     * Returns the string collation.
-     *
-     * @return string
-     */
-    string getCollation()
-    {
-        return $this.collation;
-    }
+      return $placeholder ." COLLATE" . $this.collation;
+  }
 
-
-    string sql(ValueBinder aValueBinder)
-    {
-        $placeholder = $binder.placeholder("c");
-        $binder.bind($placeholder, $this.string,"string");
-
-        return $placeholder ." COLLATE" . $this.collation;
-    }
-
-
-    function traverse(Closure $callback)
-    {
-        return $this;
-    }
+  O traverse(this O)(Closure $callback)
+  {
+      return $this;
+  }
 }

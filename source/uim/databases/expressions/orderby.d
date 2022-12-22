@@ -3,16 +3,13 @@
 *	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
 *	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
 **********************************************************************************************************/
-module uim.cake;
+module uim.cake.expressions.orderby;
 
 @safe:
 import uim.cake;
 
-/**
- * An expression object for ORDER BY clauses
- */
-class OrderByExpression extends QueryExpression
-{
+// An expression object for ORDER BY clauses
+class OrderByExpression : QueryExpression {
     /**
      * Constructor
      *
@@ -20,23 +17,20 @@ class OrderByExpression extends QueryExpression
      * @param uim.databases\TypeMap|array<string, string> $types The types for each column.
      * @param string $conjunction The glue used to join conditions together.
      */
-    this($conditions = [], $types = [], $conjunction ="")
-    {
-        parent::__construct($conditions, $types, $conjunction);
+    this($conditions = [], $types = [], string aConjunction = "") {
+        super($conditions, $types, aConjunction);
     }
 
-
-    string sql(ValueBinder aValueBinder)
-    {
+    override string sql(ValueBinder aValueBinder) {
         $order = [];
         foreach (_conditions as $k: $direction) {
-            if ($direction instanceof IDTBExpression) {
+            if (cast(IDTBExpression)$direction) {
                 $direction = $direction.sql($binder);
             }
-            $order[] = is_numeric($k) ? $direction : sprintf("%s %s", $k, $direction);
+            $order[] = is_numeric($k) ? $direction : "%s %s".format($k, $direction);
         }
 
-        return sprintf("ORDER BY %s", implode(",", $order));
+        return "ORDER BY %s".format(implode(",", $order));
     }
 
     /**

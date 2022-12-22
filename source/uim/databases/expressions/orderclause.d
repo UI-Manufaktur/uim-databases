@@ -49,7 +49,7 @@ class OrderClauseExpression : IDTBExpression, FieldInterface
     }
 
 
-    function traverse(Closure $callback)
+    O traverse(this O)(Closure $callback)
     {
         if (_field instanceof IDTBExpression) {
             $callback(_field);

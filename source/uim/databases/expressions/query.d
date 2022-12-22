@@ -575,7 +575,7 @@ class QueryExpression : IDTBExpression, Countable {
     }
 
 
-    function traverse(Closure $callback)
+    O traverse(this O)(Closure $callback)
     {
         foreach (_conditions as $c) {
             if ($c instanceof IDTBExpression) {

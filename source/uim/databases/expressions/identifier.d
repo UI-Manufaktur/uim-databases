@@ -13,77 +13,32 @@ import uim.cake;
  *
  * Identifier values are unsafe with user supplied data.
  * Values will be quoted when identifier quoting is enabled.
- *
- * @see \Cake\Database\Query::identifier()
  */
-class IdentifierExpression : IDTBExpression
-{
-    // Holds the identifier string
-    protected string _identifier;
+class DDTBIdentifierExpression : IDTBExpression {
+  // anIdentifier - The identifier this expression represents
+  // aCollation   - The identifier collation
+  this(string anIdentifier, string aCollation = null) {
+    identifier(anIdentifier);
+    collation(aCollation);
+  }
 
-    protected Nullable!string collation;
+  mixin(OProperty!("string", "identifier"));
+  mixin(OProperty!("string", "collation"));
 
-    /**
-     * Constructor
-     *
-     * @param string $identifier The identifier this expression represents
-     * @param string|null $collation The identifier collation
-     */
-    this(string $identifier, ?string $collation = null) {
-        _identifier = $identifier;
-        $this.collation = $collation;
-    }
+  string sql(DDTBValueBinder aValueBinder) {
+    auto result = this.identifier;
+    result ~= this.collation ? " COLLATE "~this.collation : "";
 
-    // Sets the identifier this expression represents
-    void setIdentifier(string newIdentifier) {
-        _identifier = newIdentifier;
-    }
+    return result;
+  }
 
-    /**
-     * Returns the identifier this expression represents
-     *
-     * @return string
-     */
-    string getIdentifier()
-    {
-        return _identifier;
-    }
-
-    /**
-     * Sets the collation.
-     *
-     * @param string $collation Identifier collation
-     * @return void
-     */
-    function setCollation(string $collation): void
-    {
-        $this.collation = $collation;
-    }
-
-    /**
-     * Returns the collation.
-     *
-     * @return string|null
-     */
-    function getCollation(): ?string
-    {
-        return $this.collation;
-    }
-
-
-    string sql(ValueBinder aValueBinder)
-    {
-        $sql = _identifier;
-        if ($this.collation) {
-            $sql .=" COLLATE" . $this.collation;
-        }
-
-        return $sql;
-    }
-
-
-    function traverse(Closure $callback)
-    {
-        return $this;
-    }
+  O traverse(this O)(Closure aCallback) {
+    return cast(O)this;
+  }
 }
+auto DTBIdentifierExpression(string anIdentifier, string aCollation = null) { return DDTBIdentifierExpression(anIdentifier, aCollation); }
+
+version(test_uim_databases) { unittest {
+  auto expression = DTBIdentifierExpression("test");
+  assert(DTBIdentifierExpression("test").sql(DTBValueBinder) == "test")
+}}

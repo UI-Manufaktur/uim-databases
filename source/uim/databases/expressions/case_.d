@@ -518,7 +518,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
     }
 
 
-    function traverse(Closure $callback)
+    O traverse(this O)(Closure $callback)
     {
         if ($this.whenBuffer !is null) {
             throw new LogicException("Case expression has incomplete when clause. Missing `then()` after `when()`.");

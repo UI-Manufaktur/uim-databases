@@ -8,42 +8,32 @@ module uim.cake;
 @safe:
 import uim.cake;
 
-/**
- * This represents a SQL window expression used by aggregate and window functions.
- */
-class WindowExpression : IDTBExpression, WindowInterface
-{
+// This represents a SQL window expression used by aggregate and window functions.
+class WindowExpression : IDTBExpression, IDTBWindow {
     /**
      * @var \Cake\Database\Expression\IdentifierExpression
      */
     protected $name;
 
-    /**
-     * @var array<\Cake\Database\IDTBExpression>
-     */
-    protected $partitions = [];
+    protected IDTBExpression[] _partitions;
 
     /**
-     * @var \Cake\Database\Expression\OrderByExpression|null
+     * @var \Cake\Database\Expression\|null
      */
-    protected $order;
+    protected DDTBOrderByExpression _order;
 
     /**
      * @var array|null
      */
     protected $frame;
 
-    /**
-     * @var string|null
-     */
-    protected $exclusion;
+    protected string exclusion;
 
     /**
      * @param string $name Window name
      */
-    this(string $name ="")
-    {
-        $this.name = new IdentifierExpression($name);
+    this(string aName ="") {
+      _name = new IdentifierExpression(aName);
     }
 
     /**
@@ -51,12 +41,10 @@ class WindowExpression : IDTBExpression, WindowInterface
      *
      * These window expressions only specify a named window and do not
      * specify their own partitions, frame or order.
-     *
-     * @return bool
      */
-    function isNamedOnly(): bool
+    bool isNamedOnly()
     {
-        return $this.name.getIdentifier() && (!$this.partitions && !$this.frame && !$this.order);
+      return this.name.getIdentifier() && (!$this.partitions && !$this.frame && !$this.order);
     }
 
     /**
@@ -65,35 +53,33 @@ class WindowExpression : IDTBExpression, WindowInterface
      * @param string $name Window name
      * @return $this
      */
-    function name(string $name)
-    {
-        $this.name = new IdentifierExpression($name);
-
-        return $this;
+    O name(string newName) {
+      $this.name = new IdentifierExpression($name);
+      return $this;
     }
 
 
-    function partition($partitions)
+    function partition(_partitions)
     {
-        if (!$partitions) {
+        if (!_partitions) {
             return $this;
         }
 
-        if ($partitions instanceof Closure) {
-            $partitions = $partitions(new QueryExpression([], [],""));
+        if (_partitions instanceof Closure) {
+            _partitions = _partitions(new QueryExpression([], [],""));
         }
 
-        if (!is_array($partitions)) {
-            $partitions = [$partitions];
+        if (!is_array(_partitions)) {
+            _partitions = [_partitions];
         }
 
-        foreach ($partitions as &$partition) {
+        foreach (_partitions as &$partition) {
             if (is_string($partition)) {
                 $partition = new IdentifierExpression($partition);
             }
         }
 
-        $this.partitions = array_merge($this.partitions, $partitions);
+        $this.partitions = array_merge($this.partitions, _partitions);
 
         return $this;
     }
@@ -229,7 +215,7 @@ class WindowExpression : IDTBExpression, WindowInterface
     }
 
 
-    function traverse(Closure $callback)
+    O traverse(this O)(Closure $callback)
     {
         $callback($this.name);
         foreach ($this.partitions as $partition) {

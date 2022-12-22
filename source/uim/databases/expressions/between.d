@@ -69,7 +69,7 @@ class BetweenExpression : IExpression, IField {
         return sprintf("%s BETWEEN %s AND %s", $field, $parts["from"], $parts["to"]);
     }
 
-    function traverse(Closure $callback) {
+    O traverse(this O)(Closure $callback) {
         foreach ([_field, _from, _toValue] as $part) {
             if ($part instanceof IDTBExpression) {
                 $callback($part);

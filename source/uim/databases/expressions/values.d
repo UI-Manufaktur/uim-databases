@@ -241,7 +241,7 @@ class ValuesExpression : IDTBExpression
     }
 
 
-    function traverse(Closure $callback)
+    O traverse(this O)(Closure $callback)
     {
         if (_query) {
             return $this;

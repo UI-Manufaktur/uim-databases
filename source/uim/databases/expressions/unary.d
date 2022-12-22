@@ -77,7 +77,7 @@ class UnaryExpression : IDTBExpression
     }
 
 
-    function traverse(Closure $callback)
+    O traverse(this O)(Closure $callback)
     {
         if (_value instanceof IDTBExpression) {
             $callback(_value);

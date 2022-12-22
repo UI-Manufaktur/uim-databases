@@ -187,7 +187,7 @@ class CommonTableExpression : IDTBExpression
     }
 
 
-    function traverse(Closure $callback)
+    O traverse(this O)(Closure $callback)
     {
         $callback($this.name);
         foreach ($this.fields as $field) {

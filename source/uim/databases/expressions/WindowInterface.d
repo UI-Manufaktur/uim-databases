@@ -1,66 +1,41 @@
 <?php
 declare(strict_types=1);
 
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         4.1.0
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
-namespace Cake\Database\Expression;
+/*********************************************************************************************************
+*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
+*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
+*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
+**********************************************************************************************************/
+module uim.cake;
 
-/**
- * This defines the functions used for building window expressions.
- */
-interface WindowInterface
-{
-    /**
-     * @var string
-     */
-    public const PRECEDING ="PRECEDING";
+@safe:
+import uim.cake;
 
-    /**
-     * @var string
-     */
-    public const FOLLOWING ="FOLLOWING";
+// This defines the functions used for building window expressions.
+interface IWindow {
+    public const string PRECEDING ="PRECEDING";
 
-    /**
-     * @var string
-     */
-    public const RANGE ="RANGE";
+    public const string FOLLOWING ="FOLLOWING";
 
-    /**
-     * @var string
-     */
-    public const ROWS ="ROWS";
+    public const string RANGE ="RANGE";
 
-    /**
-     * @var string
-     */
-    public const GROUPS ="GROUPS";
+    public const string ROWS ="ROWS";
+
+    public const string GROUPS ="GROUPS";
 
     /**
      * Adds one or more partition expressions to the window.
      *
      * @param uim.databases\IDTBExpression|\Closure|array<\Cake\Database\IDTBExpression|string>|string $partitions Partition expressions
-     * @return $this
      */
-    function partition($partitions);
+    O partition(this O)($partitions);
 
     /**
      * Adds one or more order clauses to the window.
      *
      * @param uim.databases\IDTBExpression|\Closure|array<\Cake\Database\IDTBExpression|string>|string $fields Order expressions
-     * @return $this
      */
-    function order($fields);
+    O order(this O)($fields);
 
     /**
      * Adds a simple range frame to the window.
@@ -81,9 +56,8 @@ interface WindowInterface
      * @param uim.databases\IDTBExpression|string|int|null $start Frame start
      * @param uim.databases\IDTBExpression|string|int|null $end Frame end
      *  If not passed in, only frame start SQL will be generated.
-     * @return $this
      */
-    function range($start, $end = 0);
+    O range(this O)($start, $end = 0);
 
     /**
      * Adds a simple rows frame to the window.
@@ -95,7 +69,7 @@ interface WindowInterface
      *  If not passed in, only frame start SQL will be generated.
      * @return $this
      */
-    function rows(?int $start, ?int $end = 0);
+    O rows(this O)(?int $start, ?int $end = 0);
 
     /**
      * Adds a simple groups frame to the window.
@@ -107,7 +81,7 @@ interface WindowInterface
      *  If not passed in, only frame start SQL will be generated.
      * @return $this
      */
-    function groups(?int $start, ?int $end = 0);
+    O groups(this O)(?int $start, ?int $end = 0);
 
     /**
      * Adds a frame to the window.
@@ -132,7 +106,7 @@ interface WindowInterface
      * @psalm-param self::PRECEDING|self::FOLLOWING $startDirection
      * @psalm-param self::PRECEDING|self::FOLLOWING $endDirection
      */
-    function frame(
+    O frame(this O)(
         string $type,
         $startOffset,
         string $startDirection,
@@ -140,24 +114,12 @@ interface WindowInterface
         string $endDirection
     );
 
-    /**
-     * Adds current row frame exclusion.
-     *
-     * @return $this
-     */
-    function excludeCurrent();
+    // Adds current row frame exclusion.
+    O excludeCurrent(this O)();
 
-    /**
-     * Adds group frame exclusion.
-     *
-     * @return $this
-     */
-    function excludeGroup();
+    // Adds group frame exclusion.
+    O excludeGroup(this O)();
 
-    /**
-     * Adds ties frame exclusion.
-     *
-     * @return $this
-     */
-    function excludeTies();
+    // Adds ties frame exclusion.
+    O excludeTies(this O)();
 }

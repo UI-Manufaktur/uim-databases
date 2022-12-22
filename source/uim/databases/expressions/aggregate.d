@@ -14,7 +14,7 @@ import uim.cake;
  * For security reasons, all params passed are quoted by default unless
  * explicitly told otherwise.
  */
-class AggregateExpression extends FunctionExpression : WindowInterface
+class AggregateExpression extends FunctionExpression : IWindow
 {
     /**
      * @var \Cake\Database\Expression\QueryExpression
@@ -174,7 +174,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
     }
 
 
-    function traverse(Closure $callback)
+    O traverse(this O)(Closure $callback)
     {
         parent::traverse($callback);
         if ($this.filter !is null) {

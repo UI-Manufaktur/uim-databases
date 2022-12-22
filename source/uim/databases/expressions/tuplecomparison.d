@@ -167,7 +167,7 @@ class TupleComparison extends ComparisonExpression
     }
 
 
-    function traverse(Closure $callback)
+    O traverse(this O)(Closure $callback)
     {
         /** @var array<string> $fields */
         $fields = $this.getField();

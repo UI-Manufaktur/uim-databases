@@ -7,7 +7,7 @@ import uim.databases;
 interface IExpression {
   // Converts the Node into a SQL string fragment.
   // \Cake\Database\ValueBinder aValueBinder Parameter binder
-  string sql(DDTBValueBinder newBinder);
+  string sql(DDTBValueBinder newValueBinder);
 
   /**
     * Iterates over each part of the expression recursively for every
@@ -18,5 +18,5 @@ interface IExpression {
     * @param \Closure $callback The callable to apply to all nodes.
     * @return this
     */
-  // function traverse(Closure $callback);
+  // O traverse(this O)(Closure $callback);
 }

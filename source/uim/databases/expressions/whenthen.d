@@ -295,7 +295,7 @@ class WhenThenExpression : IDTBExpression
     }
 
 
-    function traverse(Closure $callback)
+    O traverse(this O)(Closure $callback)
     {
         if ($this.when instanceof IDTBExpression) {
             $callback($this.when);
