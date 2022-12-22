@@ -250,9 +250,7 @@ class DateTimeType extends BaseType : IBatchCasting
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function manytoD(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {

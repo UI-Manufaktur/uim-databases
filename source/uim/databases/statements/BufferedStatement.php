@@ -101,49 +101,37 @@ class BufferedStatement : Iterator, StatementInterface
         return null;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function bindValue($column, $value, $type = 'string'): void
     {
         this->statement->bindValue($column, $value, $type);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function closeCursor(): void
     {
         this->statement->closeCursor();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function columnCount(): int
     {
         return this->statement->columnCount();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function errorCode()
     {
         return this->statement->errorCode();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function errorInfo(): array
     {
         return this->statement->errorInfo();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function execute(?array $params = null): bool
     {
         this->_reset();
@@ -152,9 +140,7 @@ class BufferedStatement : Iterator, StatementInterface
         return this->statement->execute($params);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function fetchColumn(int $position)
     {
         $result = this->fetch(static::FETCH_TYPE_NUM);
@@ -176,17 +162,13 @@ class BufferedStatement : Iterator, StatementInterface
         return this->rowCount();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function bind(array $params, array $types): void
     {
         this->statement->bind($params, $types);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function lastInsertId(?string $table = null, ?string $column = null)
     {
         return this->statement->lastInsertId($table, $column);
@@ -236,9 +218,7 @@ class BufferedStatement : Iterator, StatementInterface
         return $result ?: [];
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function fetchAll($type = self::FETCH_TYPE_NUM)
     {
         if (this->_allFetched) {
@@ -254,9 +234,7 @@ class BufferedStatement : Iterator, StatementInterface
         return this->buffer;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function rowCount(): int
     {
         if (!this->_allFetched) {

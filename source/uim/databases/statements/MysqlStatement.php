@@ -27,9 +27,7 @@ class MysqlStatement extends PDOStatement
 {
     use BufferResultsTrait;
 
-    /**
-     * @inheritDoc
-     */
+
     function execute(?array $params = null): bool
     {
         $connection = this->_driver->getConnection();

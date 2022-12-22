@@ -57,9 +57,7 @@ class JsonType extends BaseType : IBatchCasting
         return json_decode($value, true);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function manytoD(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {

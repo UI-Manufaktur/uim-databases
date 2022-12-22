@@ -63,9 +63,7 @@ class FloatType extends BaseType : IBatchCasting
         return (float)$value;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function manytoD(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {

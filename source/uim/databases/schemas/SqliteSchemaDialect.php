@@ -184,9 +184,7 @@ class SqliteSchemaDialect extends SchemaDialect
         ];
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function describeColumnSql(string $tableName, array $config): array
     {
         $sql = sprintf(
@@ -197,9 +195,7 @@ class SqliteSchemaDialect extends SchemaDialect
         return [$sql, []];
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function convertColumnDescription(TableSchema $schema, array $row): void
     {
         $field = this->_convertColumn($row['type']);
@@ -255,9 +251,7 @@ class SqliteSchemaDialect extends SchemaDialect
         return $default;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function describeIndexSql(string $tableName, array $config): array
     {
         $sql = sprintf(
@@ -308,9 +302,7 @@ class SqliteSchemaDialect extends SchemaDialect
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function describeForeignKeySql(string $tableName, array $config): array
     {
         $sql = sprintf('PRAGMA foreign_key_list(%s)', this->_driver->quoteIdentifier($tableName));
@@ -318,9 +310,7 @@ class SqliteSchemaDialect extends SchemaDialect
         return [$sql, []];
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function convertForeignKeyDescription(TableSchema $schema, array $row): void
     {
         $name = $row['from'] . '_fk';
@@ -569,9 +559,7 @@ class SqliteSchemaDialect extends SchemaDialect
         return [];
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function indexSql(TableSchema $schema, string $name): string
     {
         /** @var array $data */
@@ -589,9 +577,7 @@ class SqliteSchemaDialect extends SchemaDialect
         );
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function createTableSql(TableSchema $schema, array $columns, array $constraints, array $indexes): array
     {
         $lines = array_merge($columns, $constraints);
@@ -606,9 +592,7 @@ class SqliteSchemaDialect extends SchemaDialect
         return $out;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function truncateTableSql(TableSchema $schema): array
     {
         $name = $schema->name();

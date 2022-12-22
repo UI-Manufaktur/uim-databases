@@ -40,9 +40,7 @@ class QueryLogger extends BaseLog
         parent::__construct($config);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function log($level, $message, array $context = [])
     {
         $context['scope'] = this->scopes() ?: ['queriesLog'];

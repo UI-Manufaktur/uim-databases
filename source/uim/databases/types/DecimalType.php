@@ -78,9 +78,7 @@ class DecimalType extends BaseType : IBatchCasting
         return (string)$value;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function manytoD(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {

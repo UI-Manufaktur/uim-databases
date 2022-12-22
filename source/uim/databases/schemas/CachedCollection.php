@@ -58,25 +58,19 @@ class CachedCollection : CollectionInterface
         this->cacher = $cacher;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function listTablesWithoutViews(): array
     {
         return this->collection->listTablesWithoutViews();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function listTables(): array
     {
         return this->collection->listTables();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function describe(string $name, array $options = []): TableSchemaInterface
     {
         $options += ['forceRefresh' => false];

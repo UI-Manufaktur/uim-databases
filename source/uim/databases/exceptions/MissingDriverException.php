@@ -23,8 +23,6 @@ use Cake\Core\Exception\CakeException;
  */
 class MissingDriverException extends CakeException
 {
-    /**
-     * @inheritDoc
-     */
+
     protected $_messageTemplate = 'Could not find driver `%s` for connection `%s`.';
 }

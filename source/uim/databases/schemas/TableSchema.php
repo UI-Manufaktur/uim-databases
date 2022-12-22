@@ -300,17 +300,13 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function name(): string
     {
         return this->_table;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function addColumn(string $name, $attrs)
     {
         if (is_string($attrs)) {
@@ -327,9 +323,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function removeColumn(string $name)
     {
         unset(this->_columns[$name], this->_typeMap[$name]);
@@ -337,17 +331,13 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function columns(): array
     {
         return array_keys(this->_columns);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function getColumn(string $name): ?array
     {
         if (!isset(this->_columns[$name])) {
@@ -359,9 +349,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return $column;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function getColumnType(string $name): ?string
     {
         if (!isset(this->_columns[$name])) {
@@ -371,9 +359,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return this->_columns[$name]['type'];
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function setColumnType(string $name, string $type)
     {
         if (!isset(this->_columns[$name])) {
@@ -386,17 +372,13 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function hasColumn(string $name): bool
     {
         return isset(this->_columns[$name]);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function baseColumnType(string $column): ?string
     {
         if (isset(this->_columns[$column]['baseType'])) {
@@ -416,17 +398,13 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return this->_columns[$column]['baseType'] = $type;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function typeMap(): array
     {
         return this->_typeMap;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function isNullable(string $name): bool
     {
         if (!isset(this->_columns[$name])) {
@@ -436,9 +414,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return this->_columns[$name]['null'] == true;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function defaultValues(): array
     {
         $defaults = [];
@@ -455,9 +431,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return $defaults;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function addIndex(string $name, $attrs)
     {
         if (is_string($attrs)) {
@@ -500,17 +474,13 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function indexes(): array
     {
         return array_keys(this->_indexes);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function getIndex(string $name): ?array
     {
         if (!isset(this->_indexes[$name])) {
@@ -534,9 +504,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return this->getPrimarykey();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function getPrimaryKey(): array
     {
         foreach (this->_constraints as $data) {
@@ -548,9 +516,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return [];
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function addConstraint(string $name, $attrs)
     {
         if (is_string($attrs)) {
@@ -611,9 +577,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function dropConstraint(string $name)
     {
         if (isset(this->_constraints[$name])) {
@@ -667,25 +631,19 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return $attrs;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function constraints(): array
     {
         return array_keys(this->_constraints);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function getConstraint(string $name): ?array
     {
         return this->_constraints[$name] ?? null;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function setOptions(array $options)
     {
         this->_options = $options + this->_options;
@@ -693,17 +651,13 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function getOptions(): array
     {
         return this->_options;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function setTemporary(bool $temporary)
     {
         this->_temporary = $temporary;
@@ -711,17 +665,13 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function isTemporary(): bool
     {
         return this->_temporary;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function createSql(Connection $connection): array
     {
         $dialect = $connection->getDriver()->schemaDialect();
@@ -739,9 +689,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return $dialect->createTableSql(this, $columns, $constraints, $indexes);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function dropSql(Connection $connection): array
     {
         $dialect = $connection->getDriver()->schemaDialect();
@@ -749,9 +697,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return $dialect->dropTableSql(this);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function truncateSql(Connection $connection): array
     {
         $dialect = $connection->getDriver()->schemaDialect();
@@ -759,9 +705,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return $dialect->truncateTableSql(this);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function addConstraintSql(Connection $connection): array
     {
         $dialect = $connection->getDriver()->schemaDialect();
@@ -769,9 +713,7 @@ class TableSchema : TableSchemaInterface, SqlGeneratorInterface
         return $dialect->addConstraintSql(this);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function dropConstraintSql(Connection $connection): array
     {
         $dialect = $connection->getDriver()->schemaDialect();

@@ -21,14 +21,10 @@ namespace Cake\Database\Type;
  */
 class DateTimeTimezoneType extends DateTimeType
 {
-    /**
-     * @inheritDoc
-     */
+
     protected $_format = 'Y-m-d H:i:s.uP';
 
-    /**
-     * @inheritDoc
-     */
+
     protected $_marshalFormats = [
         'Y-m-d H:i',
         'Y-m-d H:i:s',

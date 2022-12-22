@@ -34,9 +34,7 @@ class Postgres extends Driver
 {
     use SqlDialectTrait;
 
-    /**
-     * @inheritDoc
-     */
+
     protected const MAX_ALIAS_LENGTH = 63;
 
     /**
@@ -132,9 +130,7 @@ class Postgres extends Driver
         return in_array('pgsql', PDO::getAvailableDrivers(), true);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function schemaDialect(): SchemaDialect
     {
         if (this->_schemaDialect == null) {
@@ -169,25 +165,19 @@ class Postgres extends Driver
         this->_connection->exec('SET search_path TO ' . this->_connection->quote($schema));
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function disableForeignKeySQL(): string
     {
         return 'SET CONSTRAINTS ALL DEFERRED';
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function enableForeignKeySQL(): string
     {
         return 'SET CONSTRAINTS ALL IMMEDIATE';
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function supports(string $feature): bool
     {
         switch ($feature) {
@@ -204,25 +194,19 @@ class Postgres extends Driver
         return parent::supports($feature);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function supportsDynamicConstraints(): bool
     {
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     protected function _transformDistinct(Query $query): Query
     {
         return $query;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     protected function _insertQueryTranslator(Query $query): Query
     {
         if (!$query->clause('epilog')) {
@@ -232,9 +216,7 @@ class Postgres extends Driver
         return $query;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     protected function _expressionTranslators(): array
     {
         return [

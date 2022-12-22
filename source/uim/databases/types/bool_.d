@@ -52,9 +52,6 @@ class BoolType extends BaseType : IBatchCasting {
         return !empty($value);
     }
 
-    /**
-     * @inheritDoc
-     */
     function manytoD(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {
@@ -81,8 +78,7 @@ class BoolType extends BaseType : IBatchCasting {
      * @param \Cake\Database\IDTBDriver $driver The driver.
      * @return int
      */
-    function toStatement($value, IDTBDriver $driver): int
-    {
+    int toStatement($value, IDTBDriver $driver) {
         if ($value == null) {
             return PDO::PARAM_NULL;
         }

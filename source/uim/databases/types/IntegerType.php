@@ -66,9 +66,7 @@ class IntegerType extends BaseType : IBatchCasting
         return (int)$value;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function manytoD(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {
