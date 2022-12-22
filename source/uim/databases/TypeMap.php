@@ -48,7 +48,7 @@ class TypeMap
      */
     public this(array $defaults = [])
     {
-        this->setDefaults($defaults);
+        this.setDefaults($defaults);
     }
 
     /**

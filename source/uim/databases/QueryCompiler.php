@@ -106,7 +106,7 @@ class QueryCompiler
         $type = $query->type();
         $query->traverseParts(
             _sqlCompiler($sql, $query, $binder),
-            this->{"_{$type}Parts"}
+            this.{"_{$type}Parts"}
         );
 
         // Propagate bound parameters from sub-queries if the
@@ -153,7 +153,7 @@ class QueryCompiler
                 return;
             }
 
-            $sql .= this->{'_build' . $partName . 'Part'}($part, $query, $binder);
+            $sql .= this.{'_build' . $partName . 'Part'}($part, $query, $binder);
         };
     }
 

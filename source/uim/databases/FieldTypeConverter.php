@@ -108,9 +108,9 @@ class FieldTypeConverter
             unset($batchingResult[$type]);
         }
 
-        this->types = $types;
+        this.types = $types;
         _typeMap = $simpleResult;
-        this->batchingTypeMap = $batchingResult;
+        this.batchingTypeMap = $batchingResult;
     }
 
     /**
@@ -128,10 +128,10 @@ class FieldTypeConverter
             }
         }
 
-        if (!empty(this->batchingTypeMap)) {
-            foreach (this->batchingTypeMap as $t => $fields) {
+        if (!empty(this.batchingTypeMap)) {
+            foreach (this.batchingTypeMap as $t => $fields) {
                 /** @psalm-suppress PossiblyUndefinedMethod */
-                $row = this->types[$t]->manyToPHP($row, $fields, _driver);
+                $row = this.types[$t]->manyToPHP($row, $fields, _driver);
             }
         }
 

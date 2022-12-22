@@ -44,7 +44,7 @@ class SchemaCache
      */
     public this(Connection $connection)
     {
-        _schema = this->getSchema($connection);
+        _schema = this.getSchema($connection);
     }
 
     /**

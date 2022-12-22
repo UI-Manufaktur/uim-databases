@@ -225,7 +225,7 @@ class IdentifierQuoter
             }
             $expression->setField($quoted);
         } elseif ($field instanceof ExpressionInterface) {
-            this->quoteExpression($field);
+            this.quoteExpression($field);
         }
     }
 

@@ -76,7 +76,7 @@ class ValueBinder {
     {
         $placeholders = [];
         foreach ($values as $k => $value) {
-            $param = this->placeholder('c');
+            $param = this.placeholder('c');
             _bindings[$param] = [
                 'value' => $value,
                 'type' => $type,
@@ -116,7 +116,7 @@ class ValueBinder {
      * @param \Cake\Database\IStatement aStatement The statement to add parameters to.
      */
     void attachTo(IStatement aStatement) {
-      $bindings = this->bindings();
+      $bindings = this.bindings();
       if (empty($bindings)) {
           return;
       }

@@ -143,10 +143,10 @@ class Connection implements ConnectionInterface
             'cacheMetaData',
             'cacheKeyPrefix',
         ]));
-        _driver = this->createDriver($config['driver'] ?? '', $driverConfig);
+        _driver = this.createDriver($config['driver'] ?? '', $driverConfig);
 
         if (!empty($config['log'])) {
-            this->enableQueryLogging((bool)$config['log']);
+            this.enableQueryLogging((bool)$config['log']);
         }
     }
 
@@ -193,7 +193,7 @@ class Connection implements ConnectionInterface
     {
         deprecationWarning('Setting the driver is deprecated. Use the connection config instead.');
 
-        _driver = this->createDriver($driver, $config);
+        _driver = this.createDriver($driver, $config);
 
         return this;
     }
@@ -214,13 +214,13 @@ class Connection implements ConnectionInterface
             /** @psalm-var class-string<\Cake\Database\DriverInterface>|null $className */
             $className = App::className($driver, 'Database/Driver');
             if ($className === null) {
-                throw new MissingDriverException(['driver' => $driver, 'connection' => this->configName()]);
+                throw new MissingDriverException(['driver' => $driver, 'connection' => this.configName()]);
             }
             $driver = new $className($config);
         }
 
         if (!$driver->enabled()) {
-            throw new MissingExtensionException(['driver' => get_class($driver), 'name' => this->configName()]);
+            throw new MissingExtensionException(['driver' => get_class($driver), 'name' => this.configName()]);
         }
 
         return $driver;
@@ -299,7 +299,7 @@ class Connection implements ConnectionInterface
      */
     function prepare($query): IStatement
     {
-        return this->getDisconnectRetry()->run(function () use ($query) {
+        return this.getDisconnectRetry()->run(function () use ($query) {
             $statement = _driver->prepare($query);
 
             if (_logQueries) {
@@ -321,8 +321,8 @@ class Connection implements ConnectionInterface
      */
     function execute(string $sql, array $params = [], array $types = []): IStatement
     {
-        return this->getDisconnectRetry()->run(function () use ($sql, $params, $types) {
-            $statement = this->prepare($sql);
+        return this.getDisconnectRetry()->run(function () use ($sql, $params, $types) {
+            $statement = this.prepare($sql);
             if (!empty($params)) {
                 $statement->bind($params, $types);
             }
@@ -342,7 +342,7 @@ class Connection implements ConnectionInterface
      */
     function compileQuery(Query $query, ValueBinder $binder): string
     {
-        return this->getDriver()->compileQuery($query, $binder)[1];
+        return this.getDriver()->compileQuery($query, $binder)[1];
     }
 
     /**
@@ -354,8 +354,8 @@ class Connection implements ConnectionInterface
      */
     function run(Query $query): IStatement
     {
-        return this->getDisconnectRetry()->run(function () use ($query) {
-            $statement = this->prepare($query);
+        return this.getDisconnectRetry()->run(function () use ($query) {
+            $statement = this.prepare($query);
             $query->getValueBinder()->attachTo($statement);
             $statement->execute();
 
@@ -371,8 +371,8 @@ class Connection implements ConnectionInterface
      */
     function query(string $sql): IStatement
     {
-        return this->getDisconnectRetry()->run(function () use ($sql) {
-            $statement = this->prepare($sql);
+        return this.getDisconnectRetry()->run(function () use ($sql) {
+            $statement = this.prepare($sql);
             $statement->execute();
 
             return $statement;
@@ -416,8 +416,8 @@ class Connection implements ConnectionInterface
         if (!empty(_config['cacheMetadata'])) {
             return _schemaCollection = new CachedCollection(
                 new SchemaCollection(this),
-                empty(_config['cacheKeyPrefix']) ? this->configName() : _config['cacheKeyPrefix'],
-                this->getCacher()
+                empty(_config['cacheKeyPrefix']) ? this.configName() : _config['cacheKeyPrefix'],
+                this.getCacher()
             );
         }
 
@@ -434,10 +434,10 @@ class Connection implements ConnectionInterface
      */
     function insert(string $table, array $values, array $types = []): IStatement
     {
-        return this->getDisconnectRetry()->run(function () use ($table, $values, $types) {
+        return this.getDisconnectRetry()->run(function () use ($table, $values, $types) {
             $columns = array_keys($values);
 
-            return this->newQuery()->insert($columns, $types)
+            return this.newQuery()->insert($columns, $types)
                 ->into($table)
                 ->values($values)
                 ->execute();
@@ -455,8 +455,8 @@ class Connection implements ConnectionInterface
      */
     function update(string $table, array $values, array $conditions = [], array $types = []): IStatement
     {
-        return this->getDisconnectRetry()->run(function () use ($table, $values, $conditions, $types) {
-            return this->newQuery()->update($table)
+        return this.getDisconnectRetry()->run(function () use ($table, $values, $conditions, $types) {
+            return this.newQuery()->update($table)
                 ->set($values, $types)
                 ->where($conditions, $types)
                 ->execute();
@@ -473,8 +473,8 @@ class Connection implements ConnectionInterface
      */
     function delete(string $table, array $conditions = [], array $types = []): IStatement
     {
-        return this->getDisconnectRetry()->run(function () use ($table, $conditions, $types) {
-            return this->newQuery()->delete($table)
+        return this.getDisconnectRetry()->run(function () use ($table, $conditions, $types) {
+            return this.newQuery()->delete($table)
                 ->where($conditions, $types)
                 ->execute();
         });
@@ -489,23 +489,23 @@ class Connection implements ConnectionInterface
     {
         if (!_transactionStarted) {
             if (_logQueries) {
-                this->log('BEGIN');
+                this.log('BEGIN');
             }
 
-            this->getDisconnectRetry()->run(function (): void {
+            this.getDisconnectRetry()->run(function (): void {
                 _driver->beginTransaction();
             });
 
             _transactionLevel = 0;
             _transactionStarted = true;
-            this->nestedTransactionRollbackException = null;
+            this.nestedTransactionRollbackException = null;
 
             return;
         }
 
         _transactionLevel++;
-        if (this->isSavePointsEnabled()) {
-            this->createSavePoint((string)_transactionLevel);
+        if (this.isSavePointsEnabled()) {
+            this.createSavePoint((string)_transactionLevel);
         }
     }
 
@@ -521,23 +521,23 @@ class Connection implements ConnectionInterface
         }
 
         if (_transactionLevel === 0) {
-            if (this->wasNestedTransactionRolledback()) {
+            if (this.wasNestedTransactionRolledback()) {
                 /** @var \Cake\Database\Exception\NestedTransactionRollbackException $e */
-                $e = this->nestedTransactionRollbackException;
-                this->nestedTransactionRollbackException = null;
+                $e = this.nestedTransactionRollbackException;
+                this.nestedTransactionRollbackException = null;
                 throw $e;
             }
 
             _transactionStarted = false;
-            this->nestedTransactionRollbackException = null;
+            this.nestedTransactionRollbackException = null;
             if (_logQueries) {
-                this->log('COMMIT');
+                this.log('COMMIT');
             }
 
             return _driver->commitTransaction();
         }
-        if (this->isSavePointsEnabled()) {
-            this->releaseSavePoint((string)_transactionLevel);
+        if (this.isSavePointsEnabled()) {
+            this.releaseSavePoint((string)_transactionLevel);
         }
 
         _transactionLevel--;
@@ -558,16 +558,16 @@ class Connection implements ConnectionInterface
             return false;
         }
 
-        $useSavePoint = this->isSavePointsEnabled();
+        $useSavePoint = this.isSavePointsEnabled();
         if ($toBeginning === null) {
             $toBeginning = !$useSavePoint;
         }
         if (_transactionLevel === 0 || $toBeginning) {
             _transactionLevel = 0;
             _transactionStarted = false;
-            this->nestedTransactionRollbackException = null;
+            this.nestedTransactionRollbackException = null;
             if (_logQueries) {
-                this->log('ROLLBACK');
+                this.log('ROLLBACK');
             }
             _driver->rollbackTransaction();
 
@@ -576,9 +576,9 @@ class Connection implements ConnectionInterface
 
         $savePoint = _transactionLevel--;
         if ($useSavePoint) {
-            this->rollbackSavepoint($savePoint);
-        } elseif (this->nestedTransactionRollbackException === null) {
-            this->nestedTransactionRollbackException = new NestedTransactionRollbackException();
+            this.rollbackSavepoint($savePoint);
+        } elseif (this.nestedTransactionRollbackException === null) {
+            this.nestedTransactionRollbackException = new NestedTransactionRollbackException();
         }
 
         return true;
@@ -634,7 +634,7 @@ class Connection implements ConnectionInterface
      */
     function createSavePoint($name): void
     {
-        this->execute(_driver->savePointSQL($name))->closeCursor();
+        this.execute(_driver->savePointSQL($name))->closeCursor();
     }
 
     /**
@@ -647,7 +647,7 @@ class Connection implements ConnectionInterface
     {
         $sql = _driver->releaseSavePointSQL($name);
         if ($sql) {
-            this->execute($sql)->closeCursor();
+            this.execute($sql)->closeCursor();
         }
     }
 
@@ -659,7 +659,7 @@ class Connection implements ConnectionInterface
      */
     function rollbackSavepoint($name): void
     {
-        this->execute(_driver->rollbackSavePointSQL($name))->closeCursor();
+        this.execute(_driver->rollbackSavePointSQL($name))->closeCursor();
     }
 
     /**
@@ -669,8 +669,8 @@ class Connection implements ConnectionInterface
      */
     function disableForeignKeys(): void
     {
-        this->getDisconnectRetry()->run(function (): void {
-            this->execute(_driver->disableForeignKeySQL())->closeCursor();
+        this.getDisconnectRetry()->run(function (): void {
+            this.execute(_driver->disableForeignKeySQL())->closeCursor();
         });
     }
 
@@ -681,8 +681,8 @@ class Connection implements ConnectionInterface
      */
     function enableForeignKeys(): void
     {
-        this->getDisconnectRetry()->run(function (): void {
-            this->execute(_driver->enableForeignKeySQL())->closeCursor();
+        this.getDisconnectRetry()->run(function (): void {
+            this.execute(_driver->enableForeignKeySQL())->closeCursor();
         });
     }
 
@@ -703,25 +703,25 @@ class Connection implements ConnectionInterface
      */
     function transactional(callable $callback)
     {
-        this->begin();
+        this.begin();
 
         try {
             $result = $callback(this);
         } catch (Throwable $e) {
-            this->rollback(false);
+            this.rollback(false);
             throw $e;
         }
 
         if ($result === false) {
-            this->rollback(false);
+            this.rollback(false);
 
             return false;
         }
 
         try {
-            this->commit();
+            this.commit();
         } catch (NestedTransactionRollbackException $e) {
-            this->rollback(false);
+            this.rollback(false);
             throw $e;
         }
 
@@ -735,7 +735,7 @@ class Connection implements ConnectionInterface
      */
     protected function wasNestedTransactionRolledback(): bool
     {
-        return this->nestedTransactionRollbackException instanceof NestedTransactionRollbackException;
+        return this.nestedTransactionRollbackException instanceof NestedTransactionRollbackException;
     }
 
     /**
@@ -743,13 +743,13 @@ class Connection implements ConnectionInterface
      */
     function disableConstraints(callable $callback)
     {
-        return this->getDisconnectRetry()->run(function () use ($callback) {
-            this->disableForeignKeys();
+        return this.getDisconnectRetry()->run(function () use ($callback) {
+            this.disableForeignKeys();
 
             try {
                 $result = $callback(this);
             } finally {
-                this->enableForeignKeys();
+                this.enableForeignKeys();
             }
 
             return $result;
@@ -777,7 +777,7 @@ class Connection implements ConnectionInterface
      */
     function quote($value, $type = 'string'): string
     {
-        [$value, $type] = this->cast($value, $type);
+        [$value, $type] = this.cast($value, $type);
 
         return _driver->quote($value, $type);
     }
@@ -822,7 +822,7 @@ class Connection implements ConnectionInterface
         _schemaCollection = null;
         _config['cacheMetadata'] = $cache;
         if (is_string($cache)) {
-            this->cacher = null;
+            this.cacher = null;
         }
     }
 
@@ -831,7 +831,7 @@ class Connection implements ConnectionInterface
      */
     function setCacher(CacheInterface $cacher)
     {
-        this->cacher = $cacher;
+        this.cacher = $cacher;
 
         return this;
     }
@@ -841,8 +841,8 @@ class Connection implements ConnectionInterface
      */
     function getCacher(): CacheInterface
     {
-        if (this->cacher != null) {
-            return this->cacher;
+        if (this.cacher != null) {
+            return this.cacher;
         }
 
         $configName = _config['cacheMetadata'] ?? '_cake_model_';
@@ -857,7 +857,7 @@ class Connection implements ConnectionInterface
             );
         }
 
-        return this->cacher = Cache::pool($configName);
+        return this.cacher = Cache::pool($configName);
     }
 
     /**
@@ -927,7 +927,7 @@ class Connection implements ConnectionInterface
             );
         }
 
-        return _logger = new QueryLogger(['connection' => this->configName()]);
+        return _logger = new QueryLogger(['connection' => this.configName()]);
     }
 
     /**
@@ -940,7 +940,7 @@ class Connection implements ConnectionInterface
     {
         $query = new LoggedQuery();
         $query->query = $sql;
-        this->getLogger()->debug((string)$query, ['query' => $query]);
+        this.getLogger()->debug((string)$query, ['query' => $query]);
     }
 
     /**
@@ -953,7 +953,7 @@ class Connection implements ConnectionInterface
     protected function _newLogger(IStatement aStatement): LoggingStatement
     {
         $log = new LoggingStatement($statement, _driver);
-        $log->setLogger(this->getLogger());
+        $log->setLogger(this.getLogger());
 
         return $log;
     }

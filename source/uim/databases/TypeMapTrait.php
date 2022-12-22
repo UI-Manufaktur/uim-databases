@@ -72,7 +72,7 @@ trait TypeMapTrait
      */
     function setDefaultTypes(array $types)
     {
-        this->getTypeMap()->setDefaults($types);
+        this.getTypeMap()->setDefaults($types);
 
         return this;
     }
@@ -84,6 +84,6 @@ trait TypeMapTrait
      */
     function getDefaultTypes(): array
     {
-        return this->getTypeMap()->getDefaults();
+        return this.getTypeMap()->getDefaults();
     }
 }

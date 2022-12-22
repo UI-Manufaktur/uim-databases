@@ -104,7 +104,7 @@ abstract class Driver implements DriverInterface
         $config += _baseConfig;
         _config = $config;
         if (!empty($config['quoteIdentifiers'])) {
-            this->enableAutoQuoting();
+            this.enableAutoQuoting();
         }
     }
 
@@ -118,7 +118,7 @@ abstract class Driver implements DriverInterface
     protected function _connect(string $dsn, array $config): bool
     {
         $action = function () use ($dsn, $config) {
-            this->setConnection(new PDO(
+            this.setConnection(new PDO(
                 $dsn,
                 $config['username'] ?: null,
                 $config['password'] ?: null,
@@ -139,7 +139,7 @@ abstract class Driver implements DriverInterface
                 $e
             );
         } finally {
-            this->connectRetries = $retry->getRetries();
+            this.connectRetries = $retry->getRetries();
         }
 
         return true;
@@ -168,7 +168,7 @@ abstract class Driver implements DriverInterface
     function version(): string
     {
         if (_version === null) {
-            this->connect();
+            this.connect();
             _version = (string)_connection->getAttribute(PDO::ATTR_SERVER_VERSION);
         }
 
@@ -216,7 +216,7 @@ abstract class Driver implements DriverInterface
      */
     function prepare($query): IStatement
     {
-        this->connect();
+        this.connect();
         $statement = _connection->prepare($query instanceof Query ? $query->sql() : $query);
 
         return new PDOStatement($statement, this);
@@ -227,7 +227,7 @@ abstract class Driver implements DriverInterface
      */
     function beginTransaction(): bool
     {
-        this->connect();
+        this.connect();
         if (_connection->inTransaction()) {
             return true;
         }
@@ -240,7 +240,7 @@ abstract class Driver implements DriverInterface
      */
     function commitTransaction(): bool
     {
-        this->connect();
+        this.connect();
         if (!_connection->inTransaction()) {
             return false;
         }
@@ -253,7 +253,7 @@ abstract class Driver implements DriverInterface
      */
     function rollbackTransaction(): bool
     {
-        this->connect();
+        this.connect();
         if (!_connection->inTransaction()) {
             return false;
         }
@@ -268,7 +268,7 @@ abstract class Driver implements DriverInterface
      */
     function inTransaction(): bool
     {
-        this->connect();
+        this.connect();
 
         return _connection->inTransaction();
     }
@@ -280,7 +280,7 @@ abstract class Driver implements DriverInterface
     {
         deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
 
-        return this->supports(static::FEATURE_SAVEPOINT);
+        return this.supports(static::FEATURE_SAVEPOINT);
     }
 
     /**
@@ -293,7 +293,7 @@ abstract class Driver implements DriverInterface
     {
         deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
 
-        return this->supports(static::FEATURE_CTE);
+        return this.supports(static::FEATURE_CTE);
     }
 
     /**
@@ -301,7 +301,7 @@ abstract class Driver implements DriverInterface
      */
     function quote($value, $type = PDO::PARAM_STR): string
     {
-        this->connect();
+        this.connect();
 
         return _connection->quote((string)$value, $type);
     }
@@ -316,7 +316,7 @@ abstract class Driver implements DriverInterface
     {
         deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
 
-        return this->supports(static::FEATURE_QUOTE);
+        return this.supports(static::FEATURE_QUOTE);
     }
 
     /**
@@ -383,7 +383,7 @@ abstract class Driver implements DriverInterface
      */
     function lastInsertId(?string $table = null, ?string $column = null)
     {
-        this->connect();
+        this.connect();
 
         if (_connection instanceof PDO) {
             return _connection->lastInsertId($table);
@@ -463,8 +463,8 @@ abstract class Driver implements DriverInterface
      */
     function compileQuery(Query $query, ValueBinder $binder): array
     {
-        $processor = this->newCompiler();
-        $translator = this->queryTranslator($query->type());
+        $processor = this.newCompiler();
+        $translator = this.queryTranslator($query->type());
         $query = $translator($query);
 
         return [$query, $processor->compile($query, $binder)];
@@ -510,7 +510,7 @@ abstract class Driver implements DriverInterface
      */
     function getConnectRetries(): int
     {
-        return this->connectRetries;
+        return this.connectRetries;
     }
 
     /**
