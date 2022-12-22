@@ -34,23 +34,23 @@ class StringType : BaseType : OptionalConvertInterface
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      */
-    function toDatabase(aValue, IDTBDriver aDriver): ?string
+    function toDatabase(DValue aValue, IDTBDriver aDriver): ?string
     {
-        if (aValue == null || is_string(aValue)) {
+        if (DValue aValue == null || is_string(DValue aValue)) {
             return aValue;
         }
 
-        if (is_object(aValue) && method_exists(aValue, "__toString")) {
+        if (is_object(DValue aValue) && method_exists(DValue aValue, "__toString")) {
             return aValue.__toString();
         }
 
-        if (is_scalar(aValue)) {
+        if (is_scalar(DValue aValue)) {
             return (string)aValue;
         }
 
         throw new InvalidArgumentException(sprintf(
             "Cannot convert value of type `%s` to string",
-            getTypeName(aValue)
+            getTypeName(DValue aValue)
         ));
     }
 
@@ -61,9 +61,9 @@ class StringType : BaseType : OptionalConvertInterface
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      */
-    function toD(aValue, IDTBDriver aDriver): ?string
+    function toD(DValue aValue, IDTBDriver aDriver): ?string
     {
-        if (aValue == null) {
+        if (DValue aValue == null) {
             return null;
         }
 
@@ -77,7 +77,7 @@ class StringType : BaseType : OptionalConvertInterface
      * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement(aValue, IDTBDriver aDriver): int
+    function toStatement(DValue aValue, IDTBDriver aDriver): int
     {
         return PDO::PARAM_STR;
     }
@@ -88,9 +88,9 @@ class StringType : BaseType : OptionalConvertInterface
      * @param mixed aValue The value to convert.
      * @return string|null Converted value.
      */
-    function marshal(aValue): ?string
+    function marshal(DValue aValue): ?string
     {
-        if (aValue == null || is_array(aValue)) {
+        if (DValue aValue == null || is_array(DValue aValue)) {
             return null;
         }
 

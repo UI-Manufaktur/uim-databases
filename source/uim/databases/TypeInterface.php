@@ -29,7 +29,7 @@ interface TypeInterface
      * @param \Cake\Database\IDTBDriver aDriver Object from which database preferences and configuration will be extracted.
      * @return mixed Given PHP type casted to one acceptable by a database.
      */
-    function toDatabase(aValue, IDTBDriver aDriver);
+    function toDatabase(DValue aValue, IDTBDriver aDriver);
 
     /**
      * Casts given value from a database type to a PHP equivalent.
@@ -38,7 +38,7 @@ interface TypeInterface
      * @param \Cake\Database\IDTBDriver aDriver Object from which database preferences and configuration will be extracted
      * @return mixed Given value casted from a database to a PHP equivalent.
      */
-    function toD(aValue, IDTBDriver aDriver);
+    function toD(DValue aValue, IDTBDriver aDriver);
 
     /**
      * Casts given value to its Statement equivalent.
@@ -47,7 +47,7 @@ interface TypeInterface
      * @param \Cake\Database\IDTBDriver aDriver Object from which database preferences and configuration will be extracted.
      * @return mixed Given value casted to its Statement equivalent.
      */
-    function toStatement(aValue, IDTBDriver aDriver);
+    function toStatement(DValue aValue, IDTBDriver aDriver);
 
     /**
      * Marshals flat data into PHP objects.
@@ -58,7 +58,7 @@ interface TypeInterface
      * @param mixed aValue The value to convert.
      * @return mixed Converted value.
      */
-    function marshal(aValue);
+    function marshal(DValue aValue);
 
     /**
      * Returns the base type name that this class is inheriting.

@@ -66,7 +66,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
     {
         _type = $type;
         $this.setField($field);
-        $this.setValue(aValue);
+        $this.setValue(DValue aValue);
         _operator = $operator;
     }
 
@@ -78,11 +78,11 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      */
     function setValue(DValue aValue): void
     {
-        aValue = _castToExpression(aValue, _type);
+        aValue = _castToExpression(DValue aValue, _type);
 
         $isMultiple = _type && strpos(_type,"[]") != false;
         if ($isMultiple) {
-            [aValue, _valueExpressions] = _collectExpressions(aValue);
+            [aValue, _valueExpressions] = _collectExpressions(DValue aValue);
         }
 
         _isMultiple = $isMultiple;
@@ -204,7 +204,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
 
             // To avoid SQL errors when comparing a field to a list of empty values,
             // better just throw an exception here
-            if (aValue =="") {
+            if (DValue aValue =="") {
                 $field = _field instanceof IDTBExpression ? _field.sql($binder) : _field;
                 /** @psalm-suppress PossiblyInvalidCast */
                 throw new DatabaseException(
@@ -227,7 +227,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      * @param string|null $type The type of aValue
      * @return string generated placeholder
      */
-    protected string _bindValue(aValue, ValueBinder aValueBinder, ?string $type = null) {
+    protected string _bindValue(DValue aValue, ValueBinder aValueBinder, ?string $type = null) {
         $placeholder = aValueBinder.placeholder("c");
         aValueBinder.bind($placeholder, DValue aValue, $type);
 
@@ -244,15 +244,15 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      */
     protected string _flattenValue(iterable aValue, ValueBinder aValueBinder, ?string $type = null) {
         $parts = [];
-        if (is_array(aValue)) {
+        if (is_array(DValue aValue)) {
             foreach (_valueExpressions as $k: $v) {
-                $parts[$k] = $v.sql(aValueBinder);
-                unset(aValue[$k]);
+                $parts[$k] = $v.sql(DValue aValueBinder);
+                unset(DValue aValue[$k]);
             }
         }
 
-        if (!empty(aValue)) {
-            $parts += $binder.generateManyNamed(aValue, $type);
+        if (!empty(DValue aValue)) {
+            $parts += $binder.generateManyNamed(DValue aValue, $type);
         }
 
         return implode(",", $parts);

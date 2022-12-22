@@ -93,7 +93,7 @@ class PDOStatement : StatementDecorator
             $type = "string";
         }
         if (!is_int($type)) {
-            [aValue, $type] = this.cast(aValue, $type);
+            [aValue, $type] = this.cast(DValue aValue, $type);
         }
         this._statement.bindValue($column, DValue aValue, $type);
     }

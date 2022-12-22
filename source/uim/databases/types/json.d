@@ -28,17 +28,17 @@ class JsonType : BaseType, IBatchCasting
      * @return string|null
      * @throws \InvalidArgumentException
      */
-    function toDatabase(aValue, IDTBDriver aDriver): ?string
+    function toDatabase(DValue aValue, IDTBDriver aDriver): ?string
     {
-        if (is_resource(aValue)) {
+        if (is_resource(DValue aValue)) {
             throw new InvalidArgumentException("Cannot convert a resource value to JSON");
         }
 
-        if (aValue == null) {
+        if (DValue aValue == null) {
             return null;
         }
 
-        return json_encode(aValue, this._encodingOptions);
+        return json_encode(DValue aValue, this._encodingOptions);
     }
 
     /**
@@ -48,13 +48,13 @@ class JsonType : BaseType, IBatchCasting
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return array|string|null
      */
-    function toD(aValue, IDTBDriver aDriver)
+    function toD(DValue aValue, IDTBDriver aDriver)
     {
-        if (!is_string(aValue)) {
+        if (!is_string(DValue aValue)) {
             return null;
         }
 
-        return json_decode(aValue, true);
+        return json_decode(DValue aValue, true);
     }
 
 
@@ -78,7 +78,7 @@ class JsonType : BaseType, IBatchCasting
      * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement(aValue, IDTBDriver aDriver): int
+    function toStatement(DValue aValue, IDTBDriver aDriver): int
     {
         return PDO::PARAM_STR;
     }
@@ -89,7 +89,7 @@ class JsonType : BaseType, IBatchCasting
      * @param mixed aValue The value to convert.
      * @return mixed Converted value.
      */
-    function marshal(aValue)
+    function marshal(DValue aValue)
     {
         return aValue;
     }

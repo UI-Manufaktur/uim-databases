@@ -37,7 +37,7 @@ class BinaryType : BaseType
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return resource|string
      */
-    function toDatabase(aValue, IDTBDriver aDriver)
+    function toDatabase(DValue aValue, IDTBDriver aDriver)
     {
         return aValue;
     }
@@ -50,18 +50,18 @@ class BinaryType : BaseType
      * @return resource|null
      * @throws \Cake\Core\Exception\CakeException
      */
-    function toD(aValue, IDTBDriver aDriver)
+    function toD(DValue aValue, IDTBDriver aDriver)
     {
-        if (aValue == null) {
+        if (DValue aValue == null) {
             return null;
         }
-        if (is_string(aValue)) {
-            return fopen("data:text/plain;base64," . base64_encode(aValue), "rb");
+        if (is_string(DValue aValue)) {
+            return fopen("data:text/plain;base64," . base64_encode(DValue aValue), "rb");
         }
-        if (is_resource(aValue)) {
+        if (is_resource(DValue aValue)) {
             return aValue;
         }
-        throw new CakeException(sprintf("Unable to convert %s into binary.", gettype(aValue)));
+        throw new CakeException(sprintf("Unable to convert %s into binary.", gettype(DValue aValue)));
     }
 
     /**
@@ -71,7 +71,7 @@ class BinaryType : BaseType
      * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement(aValue, IDTBDriver aDriver): int
+    function toStatement(DValue aValue, IDTBDriver aDriver): int
     {
         return PDO::PARAM_LOB;
     }
@@ -85,7 +85,7 @@ class BinaryType : BaseType
      * @param mixed aValue The value to convert.
      * @return mixed Converted value.
      */
-    function marshal(aValue)
+    function marshal(DValue aValue)
     {
         return aValue;
     }

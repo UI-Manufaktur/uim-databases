@@ -98,19 +98,19 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
      * @param string|null $type The case value type. If no type is provided, the type will be tried to be inferred
      *  from the value.
      */
-    this(aValue = null, ?string $type = null)
+    this(DValue aValue = null, ?string $type = null)
     {
         if (func_num_args() > 0) {
             if (
                 aValue !is null &&
-                !is_scalar(aValue) &&
-                !(is_object(aValue) && !(aValue instanceof Closure))
+                !is_scalar(DValue aValue) &&
+                !(is_object(DValue aValue) && !(DValue aValue instanceof Closure))
             ) {
                 throw new InvalidArgumentException(sprintf(
                    "The `aValue` argument must be either `null`, a scalar value, an object," .
                    "or an instance of `\%s`, `%s` given.",
                     IDTBExpression.class,
-                    getTypeName(aValue)
+                    getTypeName(DValue aValue)
                 ));
             }
 
@@ -119,9 +119,9 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
             if (
                 aValue !is null &&
                 $type =is null &&
-                !(aValue instanceof IDTBExpression)
+                !(DValue aValue instanceof IDTBExpression)
             ) {
-                $type = $this.inferType(aValue);
+                $type = $this.inferType(DValue aValue);
             }
             $this.valueType = $type;
 

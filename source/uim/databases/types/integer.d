@@ -20,11 +20,11 @@ class IntegerType : BaseType, IBatchCasting {
     * @param mixed aValue Value to check
     * @return void
     */
-  protected void checkNumeric(aValue) {
-    if (!is_numeric(aValue)) {
+  protected void checkNumeric(DValue aValue) {
+    if (!is_numeric(DValue aValue)) {
         throw new InvalidArgumentException(sprintf(
             "Cannot convert value of type `%s` to integer",
-            getTypeName(aValue)
+            getTypeName(DValue aValue)
         ));
     }
   }
@@ -36,13 +36,13 @@ class IntegerType : BaseType, IBatchCasting {
     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
     * @return int|null
     */
-  function toDatabase(aValue, IDTBDriver aDriver): ?int
+  function toDatabase(DValue aValue, IDTBDriver aDriver): ?int
   {
-      if (aValue == null || aValue == "") {
+      if (DValue aValue == null || aValue == "") {
           return null;
       }
 
-      this.checkNumeric(aValue);
+      this.checkNumeric(DValue aValue);
 
       return (int)aValue;
   }
@@ -54,9 +54,9 @@ class IntegerType : BaseType, IBatchCasting {
     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
     * @return int|null
     */
-  function toD(aValue, IDTBDriver aDriver): ?int
+  function toD(DValue aValue, IDTBDriver aDriver): ?int
   {
-      if (aValue == null) {
+      if (DValue aValue == null) {
           return null;
       }
 
@@ -86,7 +86,7 @@ class IntegerType : BaseType, IBatchCasting {
     * @param \Cake\Database\IDTBDriver aDriver The driver.
     * @return int
     */
-  function toStatement(aValue, IDTBDriver aDriver): int
+  function toStatement(DValue aValue, IDTBDriver aDriver): int
   {
       return PDO::PARAM_INT;
   }
@@ -97,12 +97,12 @@ class IntegerType : BaseType, IBatchCasting {
     * @param mixed aValue The value to convert.
     * @return int|null Converted value.
     */
-  Nullable!int marshal(aValue) {
+  Nullable!int marshal(DValue aValue) {
     Nullable!int result;
-    if (aValue == null || aValue == "") {
+    if (DValue aValue == null || aValue == "") {
       return result;
     }
-    if (is_numeric(aValue)) {
+    if (is_numeric(DValue aValue)) {
         return (int)aValue;
     }
 

@@ -38,27 +38,27 @@ class DecimalType : BaseType, IBatchCasting
      * @return string|float|int|null
      * @throws \InvalidArgumentException
      */
-    function toDatabase(aValue, IDTBDriver aDriver)
+    function toDatabase(DValue aValue, IDTBDriver aDriver)
     {
-        if (aValue == null || aValue == "") {
+        if (DValue aValue == null || aValue == "") {
             return null;
         }
 
-        if (is_numeric(aValue)) {
+        if (is_numeric(DValue aValue)) {
             return aValue;
         }
 
         if (
-            is_object(aValue)
-            && method_exists(aValue, "__toString")
-            && is_numeric(strval(aValue))
+            is_object(DValue aValue)
+            && method_exists(DValue aValue, "__toString")
+            && is_numeric(strval(DValue aValue))
         ) {
-            return strval(aValue);
+            return strval(DValue aValue);
         }
 
         throw new InvalidArgumentException(sprintf(
             "Cannot convert value of type `%s` to a decimal",
-            getTypeName(aValue)
+            getTypeName(DValue aValue)
         ));
     }
 
@@ -69,9 +69,9 @@ class DecimalType : BaseType, IBatchCasting
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      */
-    function toD(aValue, IDTBDriver aDriver): ?string
+    function toD(DValue aValue, IDTBDriver aDriver): ?string
     {
-        if (aValue == null) {
+        if (DValue aValue == null) {
             return null;
         }
 
@@ -99,7 +99,7 @@ class DecimalType : BaseType, IBatchCasting
      * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement(aValue, IDTBDriver aDriver): int
+    function toStatement(DValue aValue, IDTBDriver aDriver): int
     {
         return PDO::PARAM_STR;
     }
@@ -110,18 +110,18 @@ class DecimalType : BaseType, IBatchCasting
      * @param mixed aValue The value to convert.
      * @return string|null Converted value.
      */
-    function marshal(aValue): ?string
+    function marshal(DValue aValue): ?string
     {
-        if (aValue == null || aValue == "") {
+        if (DValue aValue == null || aValue == "") {
             return null;
         }
-        if (is_string(aValue) && this._useLocaleParser) {
-            return this._parseValue(aValue);
+        if (is_string(DValue aValue) && this._useLocaleParser) {
+            return this._parseValue(DValue aValue);
         }
-        if (is_numeric(aValue)) {
+        if (is_numeric(DValue aValue)) {
             return (string)aValue;
         }
-        if (is_string(aValue) && preg_match("/^[0-9,. ]+$/", DValue aValue)) {
+        if (is_string(DValue aValue) && preg_match("/^[0-9,. ]+$/", DValue aValue)) {
             return aValue;
         }
 
@@ -168,6 +168,6 @@ class DecimalType : BaseType, IBatchCasting
         /** @var \Cake\I18n\Number $class */
         $class = static::$numberClass;
 
-        return (string)$class::parseFloat(aValue);
+        return (string)$class::parseFloat(DValue aValue);
     }
 }

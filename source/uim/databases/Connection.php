@@ -767,9 +767,9 @@ class Connection : ConnectionInterface
      * @return string Quoted value
      */
     string quote(DValue aValue, $type = "string") {
-      [aValue, $type] = this.cast(aValue, $type);
+      [aValue, $type] = this.cast(DValue aValue, $type);
 
-      return _driver.quote(aValue, $type);
+      return _driver.quote(DValue aValue, $type);
     }
 
     /**

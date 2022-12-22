@@ -42,7 +42,7 @@ class SqlserverStatement : PDOStatement
             $type = "string";
         }
         if (!is_int($type)) {
-            [aValue, $type] = this.cast(aValue, $type);
+            [aValue, $type] = this.cast(DValue aValue, $type);
         }
         if ($type == PDO::PARAM_LOB) {
             /** @psalm-suppress UndefinedConstant */

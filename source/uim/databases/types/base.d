@@ -55,9 +55,9 @@ abstract class BaseType : TypeInterface
     }
 
 
-    function toStatement(aValue, IDTBDriver aDriver)
+    function toStatement(DValue aValue, IDTBDriver aDriver)
     {
-        if (aValue == null) {
+        if (DValue aValue == null) {
             return PDO::PARAM_NULL;
         }
 

@@ -161,7 +161,7 @@ class LoggingStatement : StatementDecorator
             $type = "string";
         }
         if (!ctype_digit($type)) {
-            aValue = this.cast(aValue, $type)[0];
+            aValue = this.cast(DValue aValue, $type)[0];
         }
         this._compiledParams[$column] = aValue;
     }

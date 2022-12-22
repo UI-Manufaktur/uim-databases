@@ -34,7 +34,7 @@ class BetweenExpression : IExpression, IField {
     // this(IIDTBExpression field, DValue aFromValue, DValue aToValue, string $aValueDatatype = null) {
 
     this(string aFieldName, DValue aFromValue, DValue aToValue, string aBindDatatype = null) {
-        if (aValueDatatype !is null) {
+        if (DValue aValueDatatype !is null) {
             fromValue = _castToExpression($from, $type);
             toValue = _castToExpression($to, $type);
         }

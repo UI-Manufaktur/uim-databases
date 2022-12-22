@@ -210,7 +210,7 @@ class FunctionsBuilder
      */
     function dateAdd($expression, DValue aValue, string $unit, array $types = []): FunctionExpression
     {
-        if (!is_numeric(aValue)) {
+        if (!is_numeric(DValue aValue)) {
             aValue = 0;
         }
         $interval = aValue . " " . $unit;

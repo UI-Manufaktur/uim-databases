@@ -25,7 +25,7 @@ class FloatType : BaseType, IBatchCasting {
     * @return float|null
     */
   float toDatabase(string aValue, IDTBDriver aDriver) {
-    if (aValue == null || aValue == "") {
+    if (DValue aValue == null || aValue == "") {
         return null;
     }
 
@@ -42,7 +42,7 @@ class FloatType : BaseType, IBatchCasting {
     if (!aValue.isNumeric) {
       return 0.0;
     }
-    return to!float(aValue);
+    return to!float(DValue aValue);
   }
 
 
@@ -66,7 +66,7 @@ class FloatType : BaseType, IBatchCasting {
     * @param \Cake\Database\IDTBDriver aDriver The driver.
     * @return int
     */
-  function toStatement(aValue, IDTBDriver aDriver): int
+  function toStatement(DValue aValue, IDTBDriver aDriver): int
   {
       return PDO::PARAM_STR;
   }
@@ -77,18 +77,18 @@ class FloatType : BaseType, IBatchCasting {
     * @param mixed aValue The value to convert.
     * @return string|float|null Converted value.
     */
-  function marshal(aValue)
+  function marshal(DValue aValue)
   {
-      if (aValue == null || aValue == "") {
+      if (DValue aValue == null || aValue == "") {
           return null;
       }
-      if (is_string(aValue) && this._useLocaleParser) {
-          return this._parseValue(aValue);
+      if (is_string(DValue aValue) && this._useLocaleParser) {
+          return this._parseValue(DValue aValue);
       }
-      if (isNumeric(aValue)) {
+      if (isNumeric(DValue aValue)) {
           return (float)aValue;
       }
-      if (is_string(aValue) && preg_match("/^[0-9,. ]+$/", DValue aValue)) {
+      if (is_string(DValue aValue) && preg_match("/^[0-9,. ]+$/", DValue aValue)) {
           return aValue;
       }
 
@@ -133,6 +133,6 @@ class FloatType : BaseType, IBatchCasting {
   protected float _parseValue(string aValue) {
       $class = static::_numberClass;
 
-      return $class::parseFloat(aValue);
+      return $class::parseFloat(DValue aValue);
   }
 }

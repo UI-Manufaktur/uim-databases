@@ -117,12 +117,12 @@ class DateTimeType : BaseType, IBatchCasting
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      */
-    function toDatabase(aValue, IDTBDriver aDriver): ?string
+    function toDatabase(DValue aValue, IDTBDriver aDriver): ?string
     {
-        if (aValue == null || is_string(aValue)) {
+        if (DValue aValue == null || is_string(DValue aValue)) {
             return aValue;
         }
-        if (is_int(aValue)) {
+        if (is_int(DValue aValue)) {
             $class = this._className;
             aValue = new $class("@" . aValue);
         }
@@ -199,20 +199,20 @@ class DateTimeType : BaseType, IBatchCasting
      * @param \Cake\Database\IDTBDriver aDriver Object from which database preferences and configuration will be extracted
      * @return \DateTimeInterface|null
      */
-    function toD(aValue, IDTBDriver aDriver)
+    function toD(DValue aValue, IDTBDriver aDriver)
     {
-        if (aValue == null) {
+        if (DValue aValue == null) {
             return null;
         }
 
         $class = this._className;
-        if (is_int(aValue)) {
+        if (is_int(DValue aValue)) {
             $instance = new $class("@" . aValue);
         } else {
-            if (strpos(aValue, "0000-00-00") == 0) {
+            if (strpos(DValue aValue, "0000-00-00") == 0) {
                 return null;
             }
-            $instance = new $class(aValue, this.dbTimezone);
+            $instance = new $class(DValue aValue, this.dbTimezone);
         }
 
         if (
@@ -259,16 +259,16 @@ class DateTimeType : BaseType, IBatchCasting
             }
 
             aValue = someValues[$field];
-            if (strpos(aValue, "0000-00-00") == 0) {
+            if (strpos(DValue aValue, "0000-00-00") == 0) {
                 someValues[$field] = null;
                 continue;
             }
 
             $class = this._className;
-            if (is_int(aValue)) {
+            if (is_int(DValue aValue)) {
                 $instance = new $class("@" . aValue);
             } else {
-                $instance = new $class(aValue, this.dbTimezone);
+                $instance = new $class(DValue aValue, this.dbTimezone);
             }
 
             if (
@@ -294,10 +294,10 @@ class DateTimeType : BaseType, IBatchCasting
      * @param mixed aValue Request data
      * @return \DateTimeInterface|null
      */
-    function marshal(aValue): ?DateTimeInterface
+    function marshal(DValue aValue): ?DateTimeInterface
     {
-        if (aValue instanceof DateTimeInterface) {
-            if (aValue instanceof DateTime) {
+        if (DValue aValue instanceof DateTimeInterface) {
+            if (DValue aValue instanceof DateTime) {
                 aValue = clone aValue;
             }
 
@@ -308,22 +308,22 @@ class DateTimeType : BaseType, IBatchCasting
         /** @var class-string<\DateTimeInterface> $class */
         $class = this._className;
         try {
-            if (aValue == "" || aValue == null || is_bool(aValue)) {
+            if (DValue aValue == "" || aValue == null || is_bool(DValue aValue)) {
                 return null;
             }
 
-            if (is_int(aValue) || (is_string(aValue) && ctype_digit(aValue))) {
+            if (is_int(DValue aValue) || (is_string(DValue aValue) && ctype_digit(DValue aValue))) {
                 /** @var \DateTime|\DateTimeImmutable $dateTime */
                 $dateTime = new $class("@" . aValue);
 
                 return $dateTime.setTimezone(this.defaultTimezone);
             }
 
-            if (is_string(aValue)) {
+            if (is_string(DValue aValue)) {
                 if (this._useLocaleMarshal) {
-                    $dateTime = this._parseLocaleValue(aValue);
+                    $dateTime = this._parseLocaleValue(DValue aValue);
                 } else {
-                    $dateTime = this._parseValue(aValue);
+                    $dateTime = this._parseValue(DValue aValue);
                 }
 
                 /** @var \DateTime|\DateTimeImmutable $dateTime */
@@ -337,28 +337,28 @@ class DateTimeType : BaseType, IBatchCasting
             return null;
         }
 
-        if (is_array(aValue) && implode("", DValue aValue) == "") {
+        if (is_array(DValue aValue) && implode("", DValue aValue) == "") {
             return null;
         }
         aValue += ["hour" : 0, "minute" : 0, "second" : 0, "microsecond" : 0];
 
         $format = "";
         if (
-            isset(aValue["year"], DValue aValue["month"], DValue aValue["day"]) &&
+            isset(DValue aValue["year"], DValue aValue["month"], DValue aValue["day"]) &&
             (
-                is_numeric(aValue["year"]) &&
-                is_numeric(aValue["month"]) &&
-                is_numeric(aValue["day"])
+                is_numeric(DValue aValue["year"]) &&
+                is_numeric(DValue aValue["month"]) &&
+                is_numeric(DValue aValue["day"])
             )
         ) {
             $format .= sprintf("%d-%02d-%02d", DValue aValue["year"], DValue aValue["month"], DValue aValue["day"]);
         }
 
-        if (isset(aValue["meridian"]) && (int)aValue["hour"] == 12) {
+        if (isset(DValue aValue["meridian"]) && (int)aValue["hour"] == 12) {
             aValue["hour"] = 0;
         }
-        if (isset(aValue["meridian"])) {
-            aValue["hour"] = strtolower(aValue["meridian"]) == "am" ? aValue["hour"] : aValue["hour"] + 12;
+        if (isset(DValue aValue["meridian"])) {
+            aValue["hour"] = strtolower(DValue aValue["meridian"]) == "am" ? aValue["hour"] : aValue["hour"] + 12;
         }
         $format .= sprintf(
             "%s%02d:%02d:%02d.%06d",
@@ -491,7 +491,7 @@ class DateTimeType : BaseType, IBatchCasting
         /** @psalm-var class-string<\Cake\I18n\I18nDateTimeInterface> $class */
         $class = this._className;
 
-        return $class::parseDateTime(aValue, this._localeMarshalFormat, this.userTimezone);
+        return $class::parseDateTime(DValue aValue, this._localeMarshalFormat, this.userTimezone);
     }
 
     /**
@@ -529,7 +529,7 @@ class DateTimeType : BaseType, IBatchCasting
      * @param \Cake\Database\IDTBDriver aDriver object from which database preferences and configuration will be extracted
      * @return mixed
      */
-    function toStatement(aValue, IDTBDriver aDriver)
+    function toStatement(DValue aValue, IDTBDriver aDriver)
     {
         return PDO::PARAM_STR;
     }

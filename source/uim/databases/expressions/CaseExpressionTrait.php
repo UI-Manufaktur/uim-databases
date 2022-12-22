@@ -39,36 +39,36 @@ trait CaseExpressionTrait
      * @param mixed aValue The value for which to infer the type.
      * @return string|null The abstract type, or `null` if it could not be inferred.
      */
-    protected function inferType(aValue): ?string
+    protected function inferType(DValue aValue): ?string
     {
         $type = null;
 
-        if (is_string(aValue)) {
+        if (is_string(DValue aValue)) {
             $type ="string";
-        } elseif (isInt(aValue)) {
+        } elseif (isInt(DValue aValue)) {
             $type ="integer";
-        } elseif (is_float(aValue)) {
+        } elseif (is_float(DValue aValue)) {
             $type ="float";
-        } elseif (is_bool(aValue)) {
+        } elseif (is_bool(DValue aValue)) {
             $type ="boolean";
         } elseif (
             aValue instanceof Date ||
             aValue instanceof MutableDate
         ) {
             $type ="date";
-        } elseif (aValue instanceof DateTimeInterface) {
+        } elseif (DValue aValue instanceof DateTimeInterface) {
             $type ="datetime";
         } elseif (
-            is_object(aValue) &&
-            method_exists(aValue,"__toString")
+            is_object(DValue aValue) &&
+            method_exists(DValue aValue,"__toString")
         ) {
             $type ="string";
         } elseif (
             _typeMap !is null &&
             aValue instanceof IdentifierExpression
         ) {
-            $type = _typeMap.type(aValue.getIdentifier());
-        } elseif (aValue instanceof IDTBTypedResult) {
+            $type = _typeMap.type(DValue aValue.getIdentifier());
+        } elseif (DValue aValue instanceof IDTBTypedResult) {
             $type = aValue.getReturnType();
         }
 
@@ -87,16 +87,16 @@ trait CaseExpressionTrait
     {
         if (
             $type !is null &&
-            !(aValue instanceof IDTBExpression)
+            !(DValue aValue instanceof IDTBExpression)
         ) {
-            aValue = _castToExpression(aValue, $type);
+            aValue = _castToExpression(DValue aValue, $type);
         }
 
-        if (aValue =is null) {
+        if (DValue aValue =is null) {
             aValue ="NULL";
-        } elseif (aValue instanceof Query) {
+        } elseif (DValue aValue instanceof Query) {
             aValue = sprintf("(%s)", DValue aValue.sql($binder));
-        } elseif (aValue instanceof IDTBExpression) {
+        } elseif (DValue aValue instanceof IDTBExpression) {
             aValue = aValue.sql($binder);
         } else {
             $placeholder = $binder.placeholder("c");

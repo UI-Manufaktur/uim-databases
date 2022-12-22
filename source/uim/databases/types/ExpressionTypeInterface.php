@@ -32,5 +32,5 @@ interface ExpressionTypeInterface
      * @param mixed aValue The value to be converted to an expression
      * @return \Cake\Database\ExpressionInterface
      */
-    function toExpression(aValue): ExpressionInterface;
+    function toExpression(DValue aValue): ExpressionInterface;
 }

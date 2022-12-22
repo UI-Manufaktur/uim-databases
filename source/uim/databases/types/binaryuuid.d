@@ -38,18 +38,18 @@ class BinaryUuidType : BaseType
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return resource|string|null
      */
-    function toDatabase(aValue, IDTBDriver aDriver)
+    function toDatabase(DValue aValue, IDTBDriver aDriver)
     {
-        if (!is_string(aValue)) {
+        if (!is_string(DValue aValue)) {
             return aValue;
         }
 
-        $length = strlen(aValue);
+        $length = strlen(DValue aValue);
         if ($length != 36 && $length != 32) {
             return null;
         }
 
-        return this.convertStringToBinaryUuid(aValue);
+        return this.convertStringToBinaryUuid(DValue aValue);
     }
 
     /**
@@ -70,19 +70,19 @@ class BinaryUuidType : BaseType
      * @return resource|string|null
      * @throws \Cake\Core\Exception\CakeException
      */
-    function toD(aValue, IDTBDriver aDriver)
+    function toD(DValue aValue, IDTBDriver aDriver)
     {
-        if (aValue == null) {
+        if (DValue aValue == null) {
             return null;
         }
-        if (is_string(aValue)) {
-            return this.convertBinaryUuidToString(aValue);
+        if (is_string(DValue aValue)) {
+            return this.convertBinaryUuidToString(DValue aValue);
         }
-        if (is_resource(aValue)) {
+        if (is_resource(DValue aValue)) {
             return aValue;
         }
 
-        throw new CakeException(sprintf("Unable to convert %s into binary uuid.", gettype(aValue)));
+        throw new CakeException(sprintf("Unable to convert %s into binary uuid.", gettype(DValue aValue)));
     }
 
     /**
@@ -92,7 +92,7 @@ class BinaryUuidType : BaseType
      * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement(aValue, IDTBDriver aDriver): int
+    function toStatement(DValue aValue, IDTBDriver aDriver): int
     {
         return PDO::PARAM_LOB;
     }
@@ -106,7 +106,7 @@ class BinaryUuidType : BaseType
      * @param mixed aValue The value to convert.
      * @return mixed Converted value.
      */
-    function marshal(aValue)
+    function marshal(DValue aValue)
     {
         return aValue;
     }

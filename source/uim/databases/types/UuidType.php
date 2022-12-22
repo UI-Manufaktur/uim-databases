@@ -31,13 +31,13 @@ class UuidType : StringType
      * @param \Cake\Database\IDTBDriver aDriver object from which database preferences and configuration will be extracted
      * @return string|null
      */
-    function toDatabase(aValue, IDTBDriver aDriver): ?string
+    function toDatabase(DValue aValue, IDTBDriver aDriver): ?string
     {
-        if (aValue == null || aValue == "" || aValue == false) {
+        if (DValue aValue == null || aValue == "" || aValue == false) {
             return null;
         }
 
-        return parent::toDatabase(aValue, $driver);
+        return parent::toDatabase(DValue aValue, $driver);
     }
 
     /**
@@ -56,9 +56,9 @@ class UuidType : StringType
      * @param mixed aValue The value to convert.
      * @return string|null Converted value.
      */
-    function marshal(aValue): ?string
+    function marshal(DValue aValue): ?string
     {
-        if (aValue == null || aValue == "" || is_array(aValue)) {
+        if (DValue aValue == null || aValue == "" || is_array(DValue aValue)) {
             return null;
         }
 

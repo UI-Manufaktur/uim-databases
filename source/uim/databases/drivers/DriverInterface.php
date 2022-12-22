@@ -207,7 +207,7 @@ interface IDTBDriver
      * @param int $type Must be one of the \PDO.PARAM_* constants
      * @return string
      */
-    function quote(aValue, $type): string;
+    function quote(DValue aValue, $type): string;
 
     /**
      * Checks if the driver supports quoting.
@@ -256,7 +256,7 @@ interface IDTBDriver
      * @param mixed aValue The value to escape.
      * @return string String for use in schema definitions.
      */
-    function schemaValue(aValue): string;
+    function schemaValue(DValue aValue): string;
 
     /**
      * Returns the schema name that"s being used.

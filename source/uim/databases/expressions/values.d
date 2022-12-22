@@ -219,7 +219,7 @@ class ValuesExpression : IDTBExpression
             foreach ($columns as $column) {
                 aValue = $row[$column];
 
-                if (aValue instanceof IDTBExpression) {
+                if (DValue aValue instanceof IDTBExpression) {
                     $rowPlaceholders[] ="(" . aValue.sql($binder) .")";
                     continue;
                 }

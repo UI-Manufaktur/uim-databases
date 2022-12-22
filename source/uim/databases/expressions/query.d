@@ -335,10 +335,10 @@ class QueryExpression : IDTBExpression, Countable {
      *  from the value.
      * @return \Cake\Database\Expression\CaseStatementExpression
      */
-    function case(aValue = null, ?string $type = null): CaseStatementExpression
+    function case(DValue aValue = null, ?string $type = null): CaseStatementExpression
     {
         if (func_num_args() > 0) {
-            $expression = new CaseStatementExpression(aValue, $type);
+            $expression = new CaseStatementExpression(DValue aValue, $type);
         } else {
             $expression = new CaseStatementExpression();
         }
@@ -802,7 +802,7 @@ class QueryExpression : IDTBExpression, Countable {
             $operator ="!=";
         }
 
-        if (aValue =is null && _conjunction !=",") {
+        if (DValue aValue =is null && _conjunction !=",") {
             throw new InvalidArgumentException(
                 sprintf("Expression `%s` is missing operator (IS, IS NOT) with `null` value.", $expression)
             );

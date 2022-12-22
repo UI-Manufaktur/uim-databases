@@ -69,8 +69,8 @@ trait TupleComparisonTranslatorTrait
         aValue = $expression.getValue();
         $true = new QueryExpression("1");
 
-        if (aValue instanceof Query) {
-            $selected = array_values(aValue.clause("select"));
+        if (DValue aValue instanceof Query) {
+            $selected = array_values(DValue aValue.clause("select"));
             foreach ($fields as $i : $field) {
                 aValue.andWhere([$field : new IdentifierExpression($selected[$i])]);
             }
@@ -93,12 +93,12 @@ trait TupleComparisonTranslatorTrait
             .newQuery()
             .select($true);
 
-        if (!is_array(current(aValue))) {
+        if (!is_array(current(DValue aValue))) {
             aValue = [aValue];
         }
 
         $conditions = ["OR" : []];
-        foreach (aValue as $tuple) {
+        foreach (DValue aValue as $tuple) {
             $item = [];
             foreach (array_values($tuple) as $i : aValue2) {
                 $item[] = [$fields[$i] : aValue2];

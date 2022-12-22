@@ -61,13 +61,13 @@ class TupleComparison : ComparisonExpression
     // aValue - The value to compare
     void setValue(DValue aValue) {
       if ($this.isMulti()) {
-        if (is_array(aValue) && !is_array(current(aValue))) {
+        if (is_array(DValue aValue) && !is_array(current(DValue aValue))) {
           throw new InvalidArgumentException(
             "Multi-tuple comparisons require a multi-tuple value, single-tuple given."
           );
         }
       } else {
-        if (is_array(aValue) && is_array(current(aValue))) {
+        if (is_array(DValue aValue) && is_array(current(DValue aValue))) {
           throw new InvalidArgumentException(
             "Single-tuple comparisons require a single-tuple value, multi-tuple given."
           );
@@ -115,7 +115,7 @@ class TupleComparison : ComparisonExpression
         }
 
         foreach ($parts as $i: aValue) {
-            if (aValue instanceof IDTBExpression) {
+            if (DValue aValue instanceof IDTBExpression) {
                 someValues[] = aValue.sql($binder);
                 continue;
             }
@@ -128,7 +128,7 @@ class TupleComparison : ComparisonExpression
 
             if ($isMultiOperation) {
                 $bound = [];
-                foreach (aValue as $k: $val) {
+                foreach (DValue aValue as $k: $val) {
                     /** @var string $valType */
                     $valType = $type && isset($type[$k]) ? $type[$k] : $type;
                     $bound[] = _bindValue($val, $binder, $valType);
@@ -140,14 +140,14 @@ class TupleComparison : ComparisonExpression
 
             /** @var string $valType */
             $valType = $type && isset($type[$i]) ? $type[$i] : $type;
-            someValues[] = _bindValue(aValue, $binder, $valType);
+            someValues[] = _bindValue(DValue aValue, $binder, $valType);
         }
 
         return implode(",", someValues);
     }
 
 
-    protected string _bindValue(aValue, ValueBinder aValueBinder, ?string $type = null)
+    protected string _bindValue(DValue aValue, ValueBinder aValueBinder, ?string $type = null)
     {
         $placeholder = $binder.placeholder("tuple");
         $binder.bind($placeholder, DValue aValue, $type);
@@ -165,14 +165,14 @@ class TupleComparison : ComparisonExpression
         }
 
         aValue = $this.getValue();
-        if (aValue instanceof IDTBExpression) {
-            $callback(aValue);
+        if (DValue aValue instanceof IDTBExpression) {
+            $callback(DValue aValue);
             aValue.traverse($callback);
 
             return $this;
         }
 
-        foreach (aValue as $val) {
+        foreach (DValue aValue as $val) {
             if ($this.isMulti()) {
                 foreach ($val as $v) {
                     _traverseValue($v, $callback);
@@ -195,8 +195,8 @@ class TupleComparison : ComparisonExpression
      */
     protected function _traverseValue(DValue aValue, Closure $callback): void
     {
-        if (aValue instanceof IDTBExpression) {
-            $callback(aValue);
+        if (DValue aValue instanceof IDTBExpression) {
+            $callback(DValue aValue);
             aValue.traverse($callback);
         }
     }

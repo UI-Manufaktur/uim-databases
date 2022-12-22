@@ -281,7 +281,7 @@ abstract class Driver : IDTBDriver
     }
 
 
-    function quote(aValue, $type = PDO.PARAM_STR): string
+    function quote(DValue aValue, $type = PDO.PARAM_STR): string
     {
         this.connect();
 
@@ -311,31 +311,31 @@ abstract class Driver : IDTBDriver
     abstract function quoteIdentifier(string $identifier): string;
 
 
-    function schemaValue(aValue): string
+    function schemaValue(DValue aValue): string
     {
-        if (aValue == null) {
+        if (DValue aValue == null) {
             return "NULL";
         }
-        if (aValue == false) {
+        if (DValue aValue == false) {
             return "FALSE";
         }
-        if (aValue == true) {
+        if (DValue aValue == true) {
             return "TRUE";
         }
-        if (is_float(aValue)) {
+        if (is_float(DValue aValue)) {
             return str_replace(",", ".", (string)aValue);
         }
         /** @psalm-suppress InvalidArgument */
         if (
             (
-                isInt(aValue) ||
+                isInt(DValue aValue) ||
                 aValue == "0"
             ) ||
             (
-                is_numeric(aValue) &&
-                strpos(aValue, ",") == false &&
-                subString(aValue, 0, 1) != "0" &&
-                strpos(aValue, "e") == false
+                is_numeric(DValue aValue) &&
+                strpos(DValue aValue, ",") == false &&
+                subString(DValue aValue, 0, 1) != "0" &&
+                strpos(DValue aValue, "e") == false
             )
         ) {
             return (string)aValue;

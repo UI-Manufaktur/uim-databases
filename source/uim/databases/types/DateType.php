@@ -94,9 +94,9 @@ class DateType : DateTimeType
      * @param mixed aValue Request data
      * @return \DateTimeInterface|null
      */
-    function marshal(aValue): ?DateTimeInterface
+    function marshal(DValue aValue): ?DateTimeInterface
     {
-        $date = parent::marshal(aValue);
+        $date = parent::marshal(DValue aValue);
         /** @psalm-var \DateTime|\DateTimeImmutable|null $date */
         if ($date && !$date instanceof I18nDateTimeInterface) {
             // Clear time manually when I18n types aren"t available and raw DateTime used
@@ -112,6 +112,6 @@ class DateType : DateTimeType
         /** @psalm-var class-string<\Cake\I18n\I18nDateTimeInterface> $class */
         $class = this._className;
 
-        return $class::parseDate(aValue, this._localeMarshalFormat);
+        return $class::parseDate(DValue aValue, this._localeMarshalFormat);
     }
 }

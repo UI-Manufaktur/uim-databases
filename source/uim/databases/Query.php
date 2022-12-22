@@ -325,9 +325,9 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ### Example
      * ```
-     * $query.select(["title"]).from("articles").traverse(function (aValue, $clause) {
+     * $query.select(["title"]).from("articles").traverse(function (DValue aValue, $clause) {
      *     if ($clause == "select") {
-     *         var_dump(aValue);
+     *         var_dump(DValue aValue);
      *     }
      * });
      * ```
@@ -357,9 +357,9 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Example
      *
      * ```
-     * $query.select(["title"]).from("articles").traverse(function (aValue, $clause) {
+     * $query.select(["title"]).from("articles").traverse(function (DValue aValue, $clause) {
      *     if ($clause == "select") {
-     *         var_dump(aValue);
+     *         var_dump(DValue aValue);
      *     }
      * }, ["select", "from"]);
      * ```
@@ -2392,7 +2392,7 @@ class Query : ExpressionInterface, IteratorAggregate
                 foreach ($part as $i: $piece) {
                     if (is_array($piece)) {
                         foreach ($piece as $j: aValue) {
-                            if (aValue instanceof ExpressionInterface) {
+                            if (DValue aValue instanceof ExpressionInterface) {
                                 /** @psalm-suppress PossiblyUndefinedMethod */
                                 _parts[$name][$i][$j] = clone aValue;
                             }

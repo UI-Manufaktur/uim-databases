@@ -469,8 +469,8 @@ class Sqlserver : Driver
             case "DATEDIFF":
                 /** @var bool $hasDay */
                 $hasDay = false;
-                $visitor = function (aValue) use (&$hasDay) {
-                    if (aValue == "day") {
+                $visitor = function (DValue aValue) use (&$hasDay) {
+                    if (DValue aValue == "day") {
                         $hasDay = true;
                     }
 
@@ -503,7 +503,7 @@ class Sqlserver : Driver
                         $params[2] = $p;
                     } else {
                         aValueUnit = explode(" ", $p);
-                        $params[0] = rtrim(aValueUnit[1], "s");
+                        $params[0] = rtrim(DValue aValueUnit[1], "s");
                         $params[1] = aValueUnit[0];
                     }
 

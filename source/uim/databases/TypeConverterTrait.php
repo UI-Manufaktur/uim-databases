@@ -30,14 +30,14 @@ trait TypeConverterTrait
      * @return array list containing converted value and internal type
      * @pslam-return array{mixed, int}
      */
-    function cast(aValue, $type = "string"): array
+    function cast(DValue aValue, $type = "string"): array
     {
         if (is_string($type)) {
             $type = TypeFactory.build($type);
         }
         if ($type instanceof TypeInterface) {
-            aValue = $type.toDatabase(aValue, _driver);
-            $type = $type.toStatement(aValue, _driver);
+            aValue = $type.toDatabase(DValue aValue, _driver);
+            $type = $type.toStatement(DValue aValue, _driver);
         }
 
         return [aValue, $type];

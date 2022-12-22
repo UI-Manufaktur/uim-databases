@@ -135,7 +135,7 @@ class IdentifierQuoter
     {
         $result = [];
         foreach ($part as $alias: aValue) {
-            aValue = !is_string(aValue) ? aValue : _driver.quoteIdentifier(aValue);
+            aValue = !is_string(DValue aValue) ? aValue : _driver.quoteIdentifier(DValue aValue);
             $alias = is_numeric($alias) ? $alias : _driver.quoteIdentifier($alias);
             $result[$alias] = aValue;
         }
@@ -155,13 +155,13 @@ class IdentifierQuoter
         $result = [];
         foreach ($joins as aValue) {
             $alias = "";
-            if (!empty(aValue["alias"])) {
-                $alias = _driver.quoteIdentifier(aValue["alias"]);
+            if (!empty(DValue aValue["alias"])) {
+                $alias = _driver.quoteIdentifier(DValue aValue["alias"]);
                 aValue["alias"] = $alias;
             }
 
-            if (is_string(aValue["table"])) {
-                aValue["table"] = _driver.quoteIdentifier(aValue["table"]);
+            if (is_string(DValue aValue["table"])) {
+                aValue["table"] = _driver.quoteIdentifier(DValue aValue["table"]);
             }
 
             $result[$alias] = aValue;

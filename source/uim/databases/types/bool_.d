@@ -18,12 +18,12 @@ class BoolType : BaseType, IBatchCasting {
     
     // Convert int data into the database format.
     bool toDatabase(int aValue, IDTBDriver aDriver) {
-      return (aValue > 0);
+      return (DValue aValue > 0);
     }
 
     // Convert string data into the database format.
     bool toDatabase(string aValue, IDTBDriver aDriver) {
-      return (aValue == "1" || aValue.toLower == "true");
+      return (DValue aValue == "1" || aValue.toLower == "true");
     }
 
     bool toD(bool aValue, IDTBDriver aDriver) {
@@ -31,26 +31,26 @@ class BoolType : BaseType, IBatchCasting {
     }
 
     bool toD(int aValue, IDTBDriver aDriver) {
-      return (aValue > 0);
+      return (DValue aValue > 0);
     }
 
     bool toD(string aValue, IDTBDriver aDriver) {
-      return (aValue == "1" || aValue.toLower == "true");
+      return (DValue aValue == "1" || aValue.toLower == "true");
     }
 
     bool[string] manyToD(bool[string] someValues, string[] someFields, IDTBDriver aDriver) {
       foreach (myField; someFields) {
           auto aValue = someValues.get(myField, null);
-          if (aValue == null || is_bool(aValue)) {
+          if (DValue aValue == null || is_bool(DValue aValue)) {
             continue;
           }
 
-          if (!is_numeric(aValue)) {
-              someValues[$field] = strtolower(aValue) == "true";
+          if (!is_numeric(DValue aValue)) {
+              someValues[$field] = strtolower(DValue aValue) == "true";
               continue;
           }
 
-          someValues[myField] = !empty(aValue);
+          someValues[myField] = !empty(DValue aValue);
       }
 
       return someValues;
@@ -63,8 +63,8 @@ class BoolType : BaseType, IBatchCasting {
      * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    int toStatement(aValue, IDTBDriver aDriver) {
-        if (aValue == null) {
+    int toStatement(DValue aValue, IDTBDriver aDriver) {
+        if (DValue aValue == null) {
             return PDO::PARAM_NULL;
         }
 
@@ -77,11 +77,11 @@ class BoolType : BaseType, IBatchCasting {
      * @param mixed aValue The value to convert.
      * @return bool|null Converted value.
      */
-    Nullable!bool marshal(aValue) {
-        if (aValue == null || aValue == "") {
+    Nullable!bool marshal(DValue aValue) {
+        if (DValue aValue == null || aValue == "") {
             return null;
         }
 
-        return filter_var(aValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        return filter_var(DValue aValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }

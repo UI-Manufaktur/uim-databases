@@ -33,7 +33,7 @@ trait ExpressionTypeCasterTrait
      * @param string|null $type The type name
      * @return mixed
      */
-    protected function _castToExpression(aValue, ?string $type = null)
+    protected function _castToExpression(DValue aValue, ?string $type = null)
     {
         if ($type == null) {
             return aValue;
@@ -53,7 +53,7 @@ trait ExpressionTypeCasterTrait
             return array_map([$converter, "toExpression"], DValue aValue);
         }
 
-        return $converter.toExpression(aValue);
+        return $converter.toExpression(DValue aValue);
     }
 
     /**

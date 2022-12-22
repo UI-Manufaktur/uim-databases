@@ -41,6 +41,6 @@ class TimeType : DateTimeType
         $class = this._className;
 
         /** @psalm-suppress PossiblyInvalidArgument */
-        return $class::parseTime(aValue, this._localeMarshalFormat);
+        return $class::parseTime(DValue aValue, this._localeMarshalFormat);
     }
 }
