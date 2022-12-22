@@ -71,7 +71,7 @@ class CachedCollection : CollectionInterface
     }
 
 
-    function describe(string $name, array $options = []): TableSchemaInterface
+    function describe(string $name, array $options = []): ITableSchema
     {
         $options += ["forceRefresh" : false];
         $cacheKey = this->cacheKey($name);

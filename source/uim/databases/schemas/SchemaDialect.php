@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Cake\Database\Schema;
 
 use Cake\Database\IDTBDriver;
-use Cake\Database\Type\ColumnSchemaAwareInterface;
+use Cake\Database\Type\IDTBColumnSchemaAware;
 use Cake\Database\TypeFactory;
 use InvalidArgumentException;
 
@@ -121,14 +121,14 @@ abstract class SchemaDialect
      * fragment for a single column in a table.
      *
      * @param string $columnType The column type.
-     * @param \Cake\Database\Schema\TableSchemaInterface $schema The table schema instance the column is in.
+     * @param \Cake\Database\Schema\ITableSchema $schema The table schema instance the column is in.
      * @param string $column The name of the column.
      * @return string|null An SQL fragment, or `null` in case no corresponding type was found or the type didn"t provide
      *  custom column SQL.
      */
     protected function _getTypeSpecificColumnSql(
         string $columnType,
-        TableSchemaInterface $schema,
+        ITableSchema $schema,
         string $column
     ): ?string {
         if (!TypeFactory::getMap($columnType)) {
@@ -136,7 +136,7 @@ abstract class SchemaDialect
         }
 
         $type = TypeFactory::build($columnType);
-        if (!($type instanceof ColumnSchemaAwareInterface)) {
+        if (!($type instanceof IDTBColumnSchemaAware)) {
             return null;
         }
 
@@ -159,7 +159,7 @@ abstract class SchemaDialect
         }
 
         $type = TypeFactory::build($columnType);
-        if (!($type instanceof ColumnSchemaAwareInterface)) {
+        if (!($type instanceof IDTBColumnSchemaAware)) {
             return null;
         }
 

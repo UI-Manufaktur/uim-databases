@@ -21,7 +21,7 @@ use Cake\Datasource\SchemaInterface;
 /**
  * An interface used by database TableSchema objects.
  */
-interface TableSchemaInterface : SchemaInterface
+interface ITableSchema : SchemaInterface
 {
     /**
      * Binary column type

@@ -107,7 +107,7 @@ class Collection : CollectionInterface
      * @return \Cake\Database\Schema\TableSchema Object with column metadata.
      * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
      */
-    function describe(string $name, array $options = []): TableSchemaInterface
+    function describe(string $name, array $options = []): ITableSchema
     {
         $config = this->_connection->config();
         if (strpos($name, ".")) {
