@@ -1,37 +1,23 @@
-<?php
-declare(strict_types=1);
+/*********************************************************************************************************
+* Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
+* License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
+* Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
+**********************************************************************************************************/
+module uim.databases.types.batchcastinginterface;
 
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         3.6.0
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
-namespace Cake\Database\Type;
-
-use Cake\Database\IDTBDriver;
-
+@safe:
+import uim.databases;
 /**
  * Denotes type objects capable of converting many values from their original
  * database representation to php values.
  */
-interface IBatchCasting
-{
+interface IBatchCasting {
     /**
-     * Returns an array of the values converted to the PHP representation of
-     * this type.
+     * Returns an array of the values converted to the UIM representation of this type.
      *
-     * @param array $values The original array of values containing the fields to be casted
-     * @param array<string> $fields The field keys to cast
-     * @param \Cake\Database\IDTBDriver aDriver Object from which database preferences and configuration will be extracted.
-     * @return array<string, mixed>
+     * @param array someValues The original array of values containing the fields to be casted
+     * someFields - The field keys to cast
+     * aDriver - Object from which database preferences and configuration will be extracted.
      */
-    function manytoD(array $values, array $fields, IDTBDriver aDriver): array;
+    DValue[string] manytoD(DValue[] someValues, string[] someFields, IDTBDriver aDriver);
 }

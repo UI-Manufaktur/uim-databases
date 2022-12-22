@@ -39,17 +39,17 @@ class TupleComparison : ComparisonExpression
      * Constructor
      *
      * @param uim.databases\IDTBExpression|array|string $fields the fields to use to form a tuple
-     * @param uim.databases\IDTBExpression|array $values the values to use to form a tuple
+     * @param uim.databases\IDTBExpression|array someValues the values to use to form a tuple
      * @param array<string|null> $types the types names to use for casting each of the values, only
      * one type per position in the value array in needed
      * @param string $conjunction the operator used for comparing field and value
      */
-    this($fields, $values, array $types = [], string $conjunction ="=")
+    this($fields, someValues, array $types = [], string $conjunction ="=")
     {
         _type = $types;
         $this.setField($fields);
         _operator = $conjunction;
-        $this.setValue($values);
+        $this.setValue(someValues);
     }
 
     /**
@@ -102,11 +102,11 @@ class TupleComparison : ComparisonExpression
             $fields[] = $field instanceof IDTBExpression ? $field.sql($binder) : $field;
         }
 
-        $values = _stringifyValues($binder);
+        someValues = _stringifyValues($binder);
 
         $field = implode(",", $fields);
 
-        return sprintf($template, $field, _operator, $values);
+        return sprintf($template, $field, _operator, someValues);
     }
 
     /**
@@ -118,7 +118,7 @@ class TupleComparison : ComparisonExpression
      */
     protected string _stringifyValues(ValueBinder aValueBinder)
     {
-        $values = [];
+        someValues = [];
         $parts = $this.getValue();
 
         if ($parts instanceof IDTBExpression) {
@@ -127,7 +127,7 @@ class TupleComparison : ComparisonExpression
 
         foreach ($parts as $i: $value) {
             if ($value instanceof IDTBExpression) {
-                $values[] = $value.sql($binder);
+                someValues[] = $value.sql($binder);
                 continue;
             }
 
@@ -145,16 +145,16 @@ class TupleComparison : ComparisonExpression
                     $bound[] = _bindValue($val, $binder, $valType);
                 }
 
-                $values[] = sprintf("(%s)", implode(",", $bound));
+                someValues[] = sprintf("(%s)", implode(",", $bound));
                 continue;
             }
 
             /** @var string $valType */
             $valType = $type && isset($type[$i]) ? $type[$i] : $type;
-            $values[] = _bindValue($value, $binder, $valType);
+            someValues[] = _bindValue($value, $binder, $valType);
         }
 
-        return implode(",", $values);
+        return implode(",", someValues);
     }
 
 

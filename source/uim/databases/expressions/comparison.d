@@ -260,25 +260,25 @@ class ComparisonExpression : IDTBExpression, FieldInterface
     }
 
     /**
-     * Returns an array with the original $values in the first position
+     * Returns an array with the original someValues in the first position
      * and all IDTBExpression objects that could be found in the second
      * position.
      *
-     * @param uim.databases\IDTBExpression|iterable $values The rows to insert
+     * @param uim.databases\IDTBExpression|iterable someValues The rows to insert
      * @return array
      */
     protected array _collectExpressions(IDTBExpression[] someValues...) {
       return _collectExpressions(someValues);
     }
     protected array _collectExpressions(IDTBExpression[] someValues) {
-      if ($values instanceof IDTBExpression) {
-          return [$values, []];
+      if (someValues instanceof IDTBExpression) {
+          return [someValues, []];
       }
 
       $expressions = $result = [];
-      $result = $values;
+      $result = someValues;
 
-      foreach ($values as $k: $v) {
+      foreach (someValues as $k: $v) {
           if ($v instanceof IDTBExpression) {
               $expressions[$k] = $v;
           }

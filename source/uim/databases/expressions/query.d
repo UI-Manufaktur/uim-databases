@@ -279,20 +279,20 @@ class QueryExpression : IDTBExpression, Countable {
      * "field IN (value1, value2)".
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
-     * @param uim.databases\IDTBExpression|array|string $values the value to be bound to $field for comparison
+     * @param uim.databases\IDTBExpression|array|string someValues the value to be bound to $field for comparison
      * @param string|null $type the type name for $value as configured using the Type map.
      * @return $this
      */
-    function in($field, $values, $type = null)
+    function in($field, someValues, $type = null)
     {
         if ($type =is null) {
             $type = _calculateType($field);
         }
         $type = $type ?:"string";
         $type .="[]";
-        $values = $values instanceof IDTBExpression ? $values : (array)$values;
+        someValues = someValues instanceof IDTBExpression ? someValues : (array)someValues;
 
-        return $this.add(new ComparisonExpression($field, $values, $type,"IN"));
+        return $this.add(new ComparisonExpression($field, someValues, $type,"IN"));
     }
 
     /**
@@ -300,19 +300,19 @@ class QueryExpression : IDTBExpression, Countable {
      *
      * @param uim.databases\IDTBExpression|array $conditions The conditions to test. Must be a IDTBExpression
      * instance, or an array of IDTBExpression instances.
-     * @param uim.databases\IDTBExpression|array $values Associative array of values to be associated with the
-     * conditions passed in $conditions. If there are more $values than $conditions,
+     * @param uim.databases\IDTBExpression|array someValues Associative array of values to be associated with the
+     * conditions passed in $conditions. If there are more someValues than $conditions,
      * the last $value is used as the `ELSE` value.
      * @param array<string> $types Associative array of types to be associated with the values
-     * passed in $values
+     * passed in someValues
      * @return $this
      * @deprecated 4.3.0 Use QueryExpression.case() or CaseStatementExpression instead
      */
-    function addCase($conditions, $values = [], $types = [])
+    function addCase($conditions, someValues = [], $types = [])
     {
         deprecationWarning("QueryExpression.addCase() is deprecated, use case() instead.");
 
-        return $this.add(new CaseExpression($conditions, $values, $types));
+        return $this.add(new CaseExpression($conditions, someValues, $types));
     }
 
     /**
@@ -352,20 +352,20 @@ class QueryExpression : IDTBExpression, Countable {
      * "field NOT IN (value1, value2)".
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
-     * @param uim.databases\IDTBExpression|array|string $values the value to be bound to $field for comparison
+     * @param uim.databases\IDTBExpression|array|string someValues the value to be bound to $field for comparison
      * @param string|null $type the type name for $value as configured using the Type map.
      * @return $this
      */
-    function notIn($field, $values, $type = null)
+    function notIn($field, someValues, $type = null)
     {
         if ($type =is null) {
             $type = _calculateType($field);
         }
         $type = $type ?:"string";
         $type .="[]";
-        $values = $values instanceof IDTBExpression ? $values : (array)$values;
+        someValues = someValues instanceof IDTBExpression ? someValues : (array)someValues;
 
-        return $this.add(new ComparisonExpression($field, $values, $type,"NOT IN"));
+        return $this.add(new ComparisonExpression($field, someValues, $type,"NOT IN"));
     }
 
     /**
@@ -373,15 +373,15 @@ class QueryExpression : IDTBExpression, Countable {
      * "(field NOT IN (value1, value2) OR field IS NULL".
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
-     * @param uim.databases\IDTBExpression|array|string $values the value to be bound to $field for comparison
+     * @param uim.databases\IDTBExpression|array|string someValues the value to be bound to $field for comparison
      * @param string|null $type the type name for $value as configured using the Type map.
      * @return $this
      */
-    function notInOrNull($field, $values, ?string $type = null)
+    function notInOrNull($field, someValues, ?string $type = null)
     {
         $or = new static([], [],"OR");
         $or
-            .notIn($field, $values, $type)
+            .notIn($field, someValues, $type)
             .isNull($field);
 
         return $this.add($or);

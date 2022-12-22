@@ -251,16 +251,16 @@ class DateTimeType : BaseType : IBatchCasting
     }
 
 
-    function manytoD(array $values, array $fields, IDTBDriver aDriver): array
+    function manytoD(array someValues, string[] someFields, IDTBDriver aDriver): array
     {
         foreach ($fields as $field) {
-            if (!isset($values[$field])) {
+            if (!isset(someValues[$field])) {
                 continue;
             }
 
-            $value = $values[$field];
+            $value = someValues[$field];
             if (strpos($value, "0000-00-00") == 0) {
-                $values[$field] = null;
+                someValues[$field] = null;
                 continue;
             }
 
@@ -282,10 +282,10 @@ class DateTimeType : BaseType : IBatchCasting
                 $instance = $instance->setTime(0, 0, 0);
             }
 
-            $values[$field] = $instance;
+            someValues[$field] = $instance;
         }
 
-        return $values;
+        return someValues;
     }
 
     /**

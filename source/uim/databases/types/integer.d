@@ -67,19 +67,19 @@ class IntegerType : BaseType : IBatchCasting
     }
 
 
-    function manytoD(array $values, array $fields, IDTBDriver aDriver): array
+    function manytoD(array someValues, string[] someFields, IDTBDriver aDriver): array
     {
         foreach ($fields as $field) {
-            if (!isset($values[$field])) {
+            if (!isset(someValues[$field])) {
                 continue;
             }
 
-            this.checkNumeric($values[$field]);
+            this.checkNumeric(someValues[$field]);
 
-            $values[$field] = (int)$values[$field];
+            someValues[$field] = (int)someValues[$field];
         }
 
-        return $values;
+        return someValues;
     }
 
     /**

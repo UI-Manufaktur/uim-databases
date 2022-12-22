@@ -1075,22 +1075,22 @@ class Query : ExpressionInterface, IteratorAggregate
      * - `allowEmpty` - Allow empty array.
      *
      * @param string $field Field
-     * @param array $values Array of values
+     * @param array someValues Array of values
      * @param array<string, mixed> $options Options
      * @return this
      */
-    function whereInList(string $field, array $values, array $options = [])
+    function whereInList(string $field, array someValues, array $options = [])
     {
         $options += [
             "types": [],
             "allowEmpty": false,
         ];
 
-        if ($options["allowEmpty"] && !$values) {
+        if ($options["allowEmpty"] && !someValues) {
             return this.where("1=0");
         }
 
-        return this.where([$field . " IN": $values], $options["types"]);
+        return this.where([$field . " IN": someValues], $options["types"]);
     }
 
     /**
@@ -1102,22 +1102,22 @@ class Query : ExpressionInterface, IteratorAggregate
      * Be careful about using it without proper sanity checks.
      *
      * @param string $field Field
-     * @param array $values Array of values
+     * @param array someValues Array of values
      * @param array<string, mixed> $options Options
      * @return this
      */
-    function whereNotInList(string $field, array $values, array $options = [])
+    function whereNotInList(string $field, array someValues, array $options = [])
     {
         $options += [
             "types": [],
             "allowEmpty": false,
         ];
 
-        if ($options["allowEmpty"] && !$values) {
+        if ($options["allowEmpty"] && !someValues) {
             return this.where([$field . " IS NOT": null]);
         }
 
-        return this.where([$field . " NOT IN": $values], $options["types"]);
+        return this.where([$field . " NOT IN": someValues], $options["types"]);
     }
 
     /**
@@ -1130,24 +1130,24 @@ class Query : ExpressionInterface, IteratorAggregate
      * Be careful about using it without proper sanity checks.
      *
      * @param string $field Field
-     * @param array $values Array of values
+     * @param array someValues Array of values
      * @param array<string, mixed> $options Options
      * @return this
      */
-    function whereNotInListOrNull(string $field, array $values, array $options = [])
+    function whereNotInListOrNull(string $field, array someValues, array $options = [])
     {
         $options += [
             "types": [],
             "allowEmpty": false,
         ];
 
-        if ($options["allowEmpty"] && !$values) {
+        if ($options["allowEmpty"] && !someValues) {
             return this.where([$field . " IS NOT": null]);
         }
 
         return this.where(
             [
-                "OR": [$field . " NOT IN": $values, $field . " IS": null],
+                "OR": [$field . " NOT IN": someValues, $field . " IS": null],
             ],
             $options["types"]
         );

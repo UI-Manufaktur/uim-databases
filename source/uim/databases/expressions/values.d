@@ -63,33 +63,33 @@ class ValuesExpression : IDTBExpression
     /**
      * Add a row of data to be inserted.
      *
-     * @param uim.databases\Query|array $values Array of data to append into the insert, or
+     * @param uim.databases\Query|array someValues Array of data to append into the insert, or
      *   a query for doing INSERT INTO .. SELECT style commands
      * @return void
      * @throws \Cake\Database\Exception\DatabaseException When mixing array + Query data types.
      */
-    function add($values): void
+    function add(someValues): void
     {
         if (
             (
                 count(_values) &&
-                $values instanceof Query
+                someValues instanceof Query
             ) ||
             (
                 _query &&
-                is_array($values)
+                is_array(someValues)
             )
         ) {
             throw new DatabaseException(
                "You cannot mix subqueries and array values in inserts."
             );
         }
-        if ($values instanceof Query) {
-            $this.setQuery($values);
+        if (someValues instanceof Query) {
+            $this.setQuery(someValues);
 
             return;
         }
-        _values[] = $values;
+        _values[] = someValues;
         _castedExpressions = false;
     }
 
@@ -141,12 +141,12 @@ class ValuesExpression : IDTBExpression
     /**
      * Sets the values to be inserted.
      *
-     * @param array $values Array with values to be inserted.
+     * @param array someValues Array with values to be inserted.
      * @return $this
      */
-    function setValues(array $values)
+    function setValues(array someValues)
     {
-        _values = $values;
+        _values = someValues;
         _castedExpressions = false;
 
         return $this;
@@ -293,10 +293,10 @@ class ValuesExpression : IDTBExpression
             return;
         }
 
-        foreach (_values as $row: $values) {
+        foreach (_values as $row: someValues) {
             foreach ($types as $col: $type) {
                 /** @var \Cake\Database\Type\ExpressionTypeInterface $type */
-                _values[$row][$col] = $type.toExpression($values[$col]);
+                _values[$row][$col] = $type.toExpression(someValues[$col]);
             }
         }
         _castedExpressions = true;

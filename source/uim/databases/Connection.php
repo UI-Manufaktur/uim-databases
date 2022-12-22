@@ -423,18 +423,18 @@ class Connection : ConnectionInterface
      * Executes an INSERT query on the specified table.
      *
      * @param string $table the table to insert values in
-     * @param array $values values to be inserted
+     * @param array someValues values to be inserted
      * @param array<int|string, string> $types Array containing the types to be used for casting
      * @return \Cake\Database\IStatement
      */
-    function insert(string $table, array $values, array $types = []): IStatement
+    function insert(string $table, array someValues, array $types = []): IStatement
     {
-        return this.getDisconnectRetry()->run(function () use ($table, $values, $types) {
-            $columns = array_keys($values);
+        return this.getDisconnectRetry()->run(function () use ($table, someValues, $types) {
+            $columns = array_keys(someValues);
 
             return this.newQuery()->insert($columns, $types)
                 ->into($table)
-                ->values($values)
+                ->values(someValues)
                 ->execute();
         });
     }
@@ -443,16 +443,16 @@ class Connection : ConnectionInterface
      * Executes an UPDATE statement on the specified table.
      *
      * @param string $table the table to update rows from
-     * @param array $values values to be updated
+     * @param array someValues values to be updated
      * @param array $conditions conditions to be set for update statement
      * @param array<string> $types list of associative array containing the types to be used for casting
      * @return \Cake\Database\IStatement
      */
-    function update(string $table, array $values, array $conditions = [], array $types = []): IStatement
+    function update(string $table, array someValues, array $conditions = [], array $types = []): IStatement
     {
-        return this.getDisconnectRetry()->run(function () use ($table, $values, $conditions, $types) {
+        return this.getDisconnectRetry()->run(function () use ($table, someValues, $conditions, $types) {
             return this.newQuery()->update($table)
-                ->set($values, $types)
+                ->set(someValues, $types)
                 ->where($conditions, $types)
                 ->execute();
         });

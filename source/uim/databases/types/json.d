@@ -58,17 +58,17 @@ class JsonType : BaseType : IBatchCasting
     }
 
 
-    function manytoD(array $values, array $fields, IDTBDriver aDriver): array
+    function manytoD(array someValues, string[] someFields, IDTBDriver aDriver): array
     {
         foreach ($fields as $field) {
-            if (!isset($values[$field])) {
+            if (!isset(someValues[$field])) {
                 continue;
             }
 
-            $values[$field] = json_decode($values[$field], true);
+            someValues[$field] = json_decode(someValues[$field], true);
         }
 
-        return $values;
+        return someValues;
     }
 
     /**
