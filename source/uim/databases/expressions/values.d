@@ -212,24 +212,24 @@ class ValuesExpression : IDTBExpression
             $types[$col] = $typeMap.type($col);
         }
 
-        foreach (_values as $row) {
-            $row += $defaults;
-            $rowPlaceholders = [];
+        foreach (_values as aRow) {
+            aRow += $defaults;
+            aRowPlaceholders = [];
 
             foreach ($columns as $column) {
-                aValue = $row[$column];
+                aValue = aRow[$column];
 
                 if (DValue aValue instanceof IDTBExpression) {
-                    $rowPlaceholders[] ="(" . aValue.sql($binder) .")";
+                    aRowPlaceholders[] ="(" . aValue.sql($binder) .")";
                     continue;
                 }
 
                 $placeholder = $binder.placeholder("c");
-                $rowPlaceholders[] = $placeholder;
+                aRowPlaceholders[] = $placeholder;
                 $binder.bind($placeholder, DValue aValue, someTypes[$column]);
             }
 
-            $placeholders[] = implode(",", $rowPlaceholders);
+            $placeholders[] = implode(",", aRowPlaceholders);
         }
 
         $query = $this.getQuery();
@@ -293,10 +293,10 @@ class ValuesExpression : IDTBExpression
             return;
         }
 
-        foreach (_values as $row: someValues) {
+        foreach (_values as aRow: someValues) {
             foreach ($types as $col: $type) {
                 /** @var \Cake\Database\Type\ExpressionTypeInterface $type */
-                _values[$row][$col] = $type.toExpression(someValues[$col]);
+                _values[aRow][$col] = $type.toExpression(someValues[$col]);
             }
         }
         _castedExpressions = true;

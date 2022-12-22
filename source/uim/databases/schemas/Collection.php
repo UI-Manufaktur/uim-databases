@@ -63,8 +63,8 @@ class Collection : CollectionInterface
         [mySql, $params] = this._dialect.listTablesWithoutViewsSql(this._connection.config());
         $result = [];
         $statement = this._connection.execute(mySql, $params);
-        while ($row = $statement.fetch()) {
-            $result[] = $row[0];
+        while (aRow = $statement.fetch()) {
+            $result[] = aRow[0];
         }
         $statement.closeCursor();
 
@@ -81,8 +81,8 @@ class Collection : CollectionInterface
         [mySql, $params] = this._dialect.listTablesSql(this._connection.config());
         $result = [];
         $statement = this._connection.execute(mySql, $params);
-        while ($row = $statement.fetch()) {
-            $result[] = $row[0];
+        while (aRow = $statement.fetch()) {
+            $result[] = aRow[0];
         }
         $statement.closeCursor();
 
@@ -133,7 +133,7 @@ class Collection : CollectionInterface
      * @param string $stage The stage name.
      * @param string $name The table name.
      * @param array<string, mixed> $config The config data.
-     * @param \Cake\Database\Schema\TableSchema $schema The table schema instance.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table schema instance.
      * @return void
      * @throws \Cake\Database\Exception\DatabaseException on query failure.
      * @uses \Cake\Database\Schema\SchemaDialect::describeColumnSql
@@ -145,7 +145,7 @@ class Collection : CollectionInterface
      * @uses \Cake\Database\Schema\SchemaDialect::convertForeignKeyDescription
      * @uses \Cake\Database\Schema\SchemaDialect::convertOptionsDescription
      */
-    protected function _reflect(string $stage, string $name, array $config, TableSchema $schema): void
+    protected function _reflect(string $stage, string $name, array $config, TableSchema aSchema): void
     {
         $describeMethod = "describe{$stage}Sql";
         $convertMethod = "convert{$stage}Description";
@@ -160,8 +160,8 @@ class Collection : CollectionInterface
             throw new DatabaseException($e.getMessage(), 500, $e);
         }
         /** @psalm-suppress PossiblyFalseIterator */
-        foreach ($statement.fetchAll("assoc") as $row) {
-            this._dialect.{$convertMethod}($schema, $row);
+        foreach ($statement.fetchAll("assoc") as aRow) {
+            this._dialect.{$convertMethod}($schema, aRow);
         }
         $statement.closeCursor();
     }

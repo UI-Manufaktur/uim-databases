@@ -181,47 +181,47 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function convertColumnDescription(TableSchema $schema, array $row): void
+    function convertColumnDescription(TableSchema aSchema, array aRow): void
     {
-        $field = this._convertColumn($row["type"]);
+        $field = this._convertColumn(aRow["type"]);
 
         if ($field["type"] == TableSchema::TYPE_BOOLEAN) {
-            if ($row["default"] == "true") {
-                $row["default"] = 1;
+            if (aRow["default"] == "true") {
+                aRow["default"] = 1;
             }
-            if ($row["default"] == "false") {
-                $row["default"] = 0;
+            if (aRow["default"] == "false") {
+                aRow["default"] = 0;
             }
         }
-        if (!empty($row["has_serial"])) {
+        if (!empty(aRow["has_serial"])) {
             $field["autoIncrement"] = true;
         }
 
         $field += [
-            "default" : this._defaultValue($row["default"]),
-            "null" : $row["null"] == "YES",
-            "collate" : $row["collation_name"],
-            "comment" : $row["comment"],
+            "default" : this._defaultValue(aRow["default"]),
+            "null" : aRow["null"] == "YES",
+            "collate" : aRow["collation_name"],
+            "comment" : aRow["comment"],
         ];
-        $field["length"] = $row["char_length"] ?: $field["length"];
+        $field["length"] = aRow["char_length"] ?: $field["length"];
 
         if ($field["type"] == "numeric" || $field["type"] == "decimal") {
-            $field["length"] = $row["column_precision"];
-            $field["precision"] = $row["column_scale"] ?: null;
+            $field["length"] = aRow["column_precision"];
+            $field["precision"] = aRow["column_scale"] ?: null;
         }
 
         if ($field["type"] == TableSchema::TYPE_TIMESTAMP_FRACTIONAL) {
-            $field["precision"] = $row["datetime_precision"];
+            $field["precision"] = aRow["datetime_precision"];
             if ($field["precision"] == 0) {
                 $field["type"] = TableSchema::TYPE_TIMESTAMP;
             }
         }
 
         if ($field["type"] == TableSchema::TYPE_TIMESTAMP_TIMEZONE) {
-            $field["precision"] = $row["datetime_precision"];
+            $field["precision"] = aRow["datetime_precision"];
         }
 
-        $schema.addColumn($row["name"], $field);
+        $schema.addColumn(aRow["name"], $field);
     }
 
     /**
@@ -282,18 +282,18 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function convertIndexDescription(TableSchema $schema, array $row): void
+    function convertIndexDescription(TableSchema aSchema, array aRow): void
     {
         $type = TableSchema::INDEX_INDEX;
-        $name = $row["relname"];
-        if ($row["indisprimary"]) {
+        $name = aRow["relname"];
+        if (aRow["indisprimary"]) {
             $name = $type = TableSchema::CONSTRAINT_PRIMARY;
         }
-        if ($row["indisunique"] && $type == TableSchema::INDEX_INDEX) {
+        if (aRow["indisunique"] && $type == TableSchema::INDEX_INDEX) {
             $type = TableSchema::CONSTRAINT_UNIQUE;
         }
         if ($type == TableSchema::CONSTRAINT_PRIMARY || $type == TableSchema::CONSTRAINT_UNIQUE) {
-            this._convertConstraint($schema, $name, $type, $row);
+            this._convertConstraint($schema, $name, $type, aRow);
 
             return;
         }
@@ -304,20 +304,20 @@ class PostgresSchemaDialect : SchemaDialect
                 "columns" : [],
             ];
         }
-        $index["columns"][] = $row["attname"];
+        $index["columns"][] = aRow["attname"];
         $schema.addIndex($name, $index);
     }
 
     /**
      * Add/update a constraint into the schema object.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table to update.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table to update.
      * @param string $name The index name.
      * @param string $type The index type.
-     * @param array $row The metadata record to update with.
+     * @param array aRow The metadata record to update with.
      * @return void
      */
-    protected function _convertConstraint(TableSchema $schema, string $name, string $type, array $row): void
+    protected function _convertConstraint(TableSchema aSchema, string $name, string $type, array aRow): void
     {
         $constraint = $schema.getConstraint($name);
         if (!$constraint) {
@@ -326,7 +326,7 @@ class PostgresSchemaDialect : SchemaDialect
                 "columns" : [],
             ];
         }
-        $constraint["columns"][] = $row["attname"];
+        $constraint["columns"][] = aRow["attname"];
         $schema.addConstraint($name, $constraint);
     }
 
@@ -359,16 +359,16 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function convertForeignKeyDescription(TableSchema $schema, array $row): void
+    function convertForeignKeyDescription(TableSchema aSchema, array aRow): void
     {
         $data = [
             "type" : TableSchema::CONSTRAINT_FOREIGN,
-            "columns" : $row["column_name"],
-            "references" : [$row["references_table"], $row["references_field"]],
-            "update" : this._convertOnClause($row["on_update"]),
-            "delete" : this._convertOnClause($row["on_delete"]),
+            "columns" : aRow["column_name"],
+            "references" : [aRow["references_table"], aRow["references_field"]],
+            "update" : this._convertOnClause(aRow["on_update"]),
+            "delete" : this._convertOnClause(aRow["on_delete"]),
         ];
-        $schema.addConstraint($row["name"], $data);
+        $schema.addConstraint(aRow["name"], $data);
     }
 
 
@@ -388,7 +388,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function columnSql(TableSchema $schema, string $name): string
+    function columnSql(TableSchema aSchema, string $name): string
     {
         /** @var array $data */
         $data = $schema.getColumn($name);
@@ -513,7 +513,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function addConstraintSql(TableSchema $schema): array
+    function addConstraintSql(TableSchema aSchema): array
     {
         mySqlPattern = "ALTER TABLE %s ADD %s;";
         mySql = [];
@@ -531,7 +531,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function dropConstraintSql(TableSchema $schema): array
+    function dropConstraintSql(TableSchema aSchema): array
     {
         mySqlPattern = "ALTER TABLE %s DROP CONSTRAINT %s;";
         mySql = [];
@@ -550,7 +550,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function indexSql(TableSchema $schema, string $name): string
+    function indexSql(TableSchema aSchema, string $name): string
     {
         /** @var array $data */
         $data = $schema.getIndex($name);
@@ -568,7 +568,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function constraintSql(TableSchema $schema, string $name): string
+    function constraintSql(TableSchema aSchema, string $name): string
     {
         /** @var array<string, mixed> $data */
         $data = $schema.getConstraint($name);
@@ -611,7 +611,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function createTableSql(TableSchema $schema, array $columns, array $constraints, array $indexes): array
+    function createTableSql(TableSchema aSchema, array $columns, array $constraints, array $indexes): array
     {
         $content = array_merge($columns, $constraints);
         $content = implode(",\n", array_filter($content));
@@ -638,7 +638,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function truncateTableSql(TableSchema $schema): array
+    function truncateTableSql(TableSchema aSchema): array
     {
         $name = this._driver.quoteIdentifier($schema.name());
 
@@ -650,10 +650,10 @@ class PostgresSchemaDialect : SchemaDialect
     /**
      * Generate the SQL to drop a table.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema Table instance
+     * @param \Cake\Database\Schema\TableSchema aSchema Table instance
      * @return array SQL statements to drop a table.
      */
-    function dropTableSql(TableSchema $schema): array
+    function dropTableSql(TableSchema aSchema): array
     {
         mySql = sprintf(
             "DROP TABLE %s CASCADE",

@@ -276,7 +276,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      *
      * ```
      * $statement = $connection.prepare("SELECT id, title from articles");
-     * foreach ($statement as $row) {
+     * foreach ($statement as aRow) {
      *   //do stuff
      * }
      * ```
@@ -341,10 +341,10 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     function lastInsertId(?string $table = null, ?string $column = null)
     {
         if ($column && this.columnCount()) {
-            $row = this.fetch(static::FETCH_TYPE_ASSOC);
+            aRow = this.fetch(static::FETCH_TYPE_ASSOC);
 
-            if ($row && isset($row[$column])) {
-                return $row[$column];
+            if (aRow && isset(aRow[$column])) {
+                return aRow[$column];
             }
         }
 

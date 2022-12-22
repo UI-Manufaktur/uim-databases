@@ -79,11 +79,11 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    void convertOptionsDescription(TableSchema $schema, array $row)
+    void convertOptionsDescription(TableSchema aSchema, array aRow)
     {
         $schema.setOptions([
-            "engine" : $row["Engine"],
-            "collation" : $row["Collation"],
+            "engine" : aRow["Engine"],
+            "collation" : aRow["Collation"],
         ]);
     }
 
@@ -200,46 +200,46 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    void convertColumnDescription(TableSchema $schema, array $row)
+    void convertColumnDescription(TableSchema aSchema, array aRow)
     {
-        $field = this._convertColumn($row["Type"]);
+        $field = this._convertColumn(aRow["Type"]);
         $field += [
-            "null" : $row["Null"] == "YES",
-            "default" : $row["Default"],
-            "collate" : $row["Collation"],
-            "comment" : $row["Comment"],
+            "null" : aRow["Null"] == "YES",
+            "default" : aRow["Default"],
+            "collate" : aRow["Collation"],
+            "comment" : aRow["Comment"],
         ];
-        if (isset($row["Extra"]) && $row["Extra"] == "auto_increment") {
+        if (isset(aRow["Extra"]) && aRow["Extra"] == "auto_increment") {
             $field["autoIncrement"] = true;
         }
-        $schema.addColumn($row["Field"], $field);
+        $schema.addColumn(aRow["Field"], $field);
     }
 
 
-    void convertIndexDescription(TableSchema $schema, array $row)
+    void convertIndexDescription(TableSchema aSchema, array aRow)
     {
         $type = null;
         $columns = $length = [];
 
-        $name = $row["Key_name"];
+        $name = aRow["Key_name"];
         if ($name == "PRIMARY") {
             $name = $type = TableSchema::CONSTRAINT_PRIMARY;
         }
 
-        if (!empty($row["Column_name"])) {
-            $columns[] = $row["Column_name"];
+        if (!empty(aRow["Column_name"])) {
+            $columns[] = aRow["Column_name"];
         }
 
-        if ($row["Index_type"] == "FULLTEXT") {
+        if (aRow["Index_type"] == "FULLTEXT") {
             $type = TableSchema::INDEX_FULLTEXT;
-        } elseif ((int)$row["Non_unique"] == 0 && $type != "primary") {
+        } elseif ((int)aRow["Non_unique"] == 0 && $type != "primary") {
             $type = TableSchema::CONSTRAINT_UNIQUE;
         } elseif ($type != "primary") {
             $type = TableSchema::INDEX_INDEX;
         }
 
-        if (!empty($row["Sub_part"])) {
-            $length[$row["Column_name"]] = $row["Sub_part"];
+        if (!empty(aRow["Sub_part"])) {
+            $length[aRow["Column_name"]] = aRow["Sub_part"];
         }
         $isIndex = (
             $type == TableSchema::INDEX_INDEX ||
@@ -287,27 +287,27 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    void convertForeignKeyDescription(TableSchema $schema, array $row)
+    void convertForeignKeyDescription(TableSchema aSchema, array aRow)
     {
         $data = [
             "type" : TableSchema::CONSTRAINT_FOREIGN,
-            "columns" : [$row["COLUMN_NAME"]],
-            "references" : [$row["REFERENCED_TABLE_NAME"], $row["REFERENCED_COLUMN_NAME"]],
-            "update" : this._convertOnClause($row["UPDATE_RULE"]),
-            "delete" : this._convertOnClause($row["DELETE_RULE"]),
+            "columns" : [aRow["COLUMN_NAME"]],
+            "references" : [aRow["REFERENCED_TABLE_NAME"], aRow["REFERENCED_COLUMN_NAME"]],
+            "update" : this._convertOnClause(aRow["UPDATE_RULE"]),
+            "delete" : this._convertOnClause(aRow["DELETE_RULE"]),
         ];
-        $name = $row["CONSTRAINT_NAME"];
+        $name = aRow["CONSTRAINT_NAME"];
         $schema.addConstraint($name, $data);
     }
 
 
-    function truncateTableSql(TableSchema $schema): array
+    function truncateTableSql(TableSchema aSchema): array
     {
         return [sprintf("TRUNCATE TABLE `%s`", $schema.name())];
     }
 
 
-    function createTableSql(TableSchema $schema, array $columns, array $constraints, array $indexes): array
+    function createTableSql(TableSchema aSchema, array $columns, array $constraints, array $indexes): array
     {
         $content = implode(",\n", array_merge($columns, $constraints, $indexes));
         $temporary = $schema.isTemporary() ? " TEMPORARY " : " ";
@@ -327,7 +327,7 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    function columnSql(TableSchema $schema, string $name): string
+    function columnSql(TableSchema aSchema, string $name): string
     {
         /** @var array $data */
         $data = $schema.getColumn($name);
@@ -519,7 +519,7 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    function constraintSql(TableSchema $schema, string $name): string
+    function constraintSql(TableSchema aSchema, string $name): string
     {
         /** @var array $data */
         $data = $schema.getConstraint($name);
@@ -545,7 +545,7 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    function addConstraintSql(TableSchema $schema): array
+    function addConstraintSql(TableSchema aSchema): array
     {
         mySqlPattern = "ALTER TABLE %s ADD %s;";
         mySql = [];
@@ -563,7 +563,7 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    function dropConstraintSql(TableSchema $schema): array
+    function dropConstraintSql(TableSchema aSchema): array
     {
         mySqlPattern = "ALTER TABLE %s DROP FOREIGN KEY %s;";
         mySql = [];
@@ -582,7 +582,7 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    function indexSql(TableSchema $schema, string $name): string
+    function indexSql(TableSchema aSchema, string $name): string
     {
         /** @var array $data */
         $data = $schema.getIndex($name);

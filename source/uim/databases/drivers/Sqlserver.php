@@ -383,12 +383,12 @@ class Sqlserver : Driver
 
         // Decorate the original query as that is what the
         // end developer will be calling execute() on originally.
-        $original.decorateResults(function ($row) {
-            if (isset($row["_cake_page_rownum_"])) {
-                unset($row["_cake_page_rownum_"]);
+        $original.decorateResults(function (aRow) {
+            if (isset(aRow["_cake_page_rownum_"])) {
+                unset(aRow["_cake_page_rownum_"]);
             }
 
-            return $row;
+            return aRow;
         });
 
         return $outer;
@@ -432,12 +432,12 @@ class Sqlserver : Driver
 
         // Decorate the original query as that is what the
         // end developer will be calling execute() on originally.
-        $original.decorateResults(function ($row) {
-            if (isset($row["_cake_distinct_pivot_"])) {
-                unset($row["_cake_distinct_pivot_"]);
+        $original.decorateResults(function (aRow) {
+            if (isset(aRow["_cake_distinct_pivot_"])) {
+                unset(aRow["_cake_distinct_pivot_"]);
             }
 
-            return $row;
+            return aRow;
         });
 
         return $outer;

@@ -58,9 +58,9 @@ class CallbackStatement : StatementDecorator
     function fetch($type = parent::FETCH_TYPE_NUM)
     {
         $callback = this._callback;
-        $row = this._statement.fetch($type);
+        aRow = this._statement.fetch($type);
 
-        return $row == false ? $row : $callback($row);
+        return aRow == false ? aRow : $callback(aRow);
     }
 
     /**

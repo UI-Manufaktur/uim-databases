@@ -100,22 +100,22 @@ class FieldTypeConverter {
      * Converts each of the fields in the array that are present in the type map
      * using the corresponding Type class.
      *
-     * @param array $row The array with the fields to be casted
+     * @param array aRow The array with the fields to be casted
      */
-    array __invoke(array $row) {
+    array __invoke(array aRow) {
         if (!empty(_typeMap)) {
             foreach (_typeMap as myField: myType) {
-                $row[myField] = myType.toD($row[myField], _driver);
+                aRow[myField] = myType.toD(aRow[myField], _driver);
             }
         }
 
         if (!empty(this.batchingTypeMap)) {
             foreach (this.batchingTypeMap as $t: myFields) {
                 /** @psalm-suppress PossiblyUndefinedMethod */
-                $row = this.types[$t].manytoD($row, myFields, _driver);
+                aRow = this.types[$t].manytoD(aRow, myFields, _driver);
             }
         }
 
-        return $row;
+        return aRow;
     }
 }

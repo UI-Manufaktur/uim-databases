@@ -84,8 +84,8 @@ The easiest way of executing queries is by using the `execute()` method, it will
 ```php
 $statement = myConnection.execute("SELECT * FROM articles");
 
-while($row = $statement.fetch("assoc")) {
-	echo $row["title"] . PHP_EOL;
+while(aRow = $statement.fetch("assoc")) {
+	echo aRow["title"] . PHP_EOL;
 }
 ```
 Binding values to parametrized arguments is also possible with the execute function:
@@ -350,7 +350,7 @@ Once you’ve made your query, you’ll want to retrieve rows from it. There are
 
 ```php
 // Iterate the query
-foreach (myQuery as $row) {
+foreach (myQuery as aRow) {
     // Do stuff.
 }
 

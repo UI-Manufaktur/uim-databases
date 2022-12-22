@@ -121,14 +121,14 @@ abstract class SchemaDialect
      * fragment for a single column in a table.
      *
      * @param string $columnType The column type.
-     * @param \Cake\Database\Schema\ITableSchema $schema The table schema instance the column is in.
+     * @param \Cake\Database\Schema\ITableSchema aSchema The table schema instance the column is in.
      * @param string $column The name of the column.
      * @return string|null An SQL fragment, or `null` in case no corresponding type was found or the type didn"t provide
      *  custom column SQL.
      */
     protected function _getTypeSpecificColumnSql(
         string $columnType,
-        ITableSchema $schema,
+        ITableSchema aSchema,
         string $column
     ): ?string {
         if (!TypeFactory::getMap($columnType)) {
@@ -169,10 +169,10 @@ abstract class SchemaDialect
     /**
      * Generate the SQL to drop a table.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema Schema instance
+     * @param \Cake\Database\Schema\TableSchema aSchema Schema instance
      * @return array SQL statements to drop a table.
      */
-    function dropTableSql(TableSchema $schema): array
+    function dropTableSql(TableSchema aSchema): array
     {
         mySql = sprintf(
             "DROP TABLE %s",
@@ -233,54 +233,54 @@ abstract class SchemaDialect
     /**
      * Convert field description results into abstract schema fields.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table object to append fields to.
-     * @param array $row The row data from `describeColumnSql`.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table object to append fields to.
+     * @param array aRow The row data from `describeColumnSql`.
      * @return void
      */
-    abstract void convertColumnDescription(TableSchema $schema, array $row);
+    abstract void convertColumnDescription(TableSchema aSchema, array aRow);
 
     /**
      * Convert an index description results into abstract schema indexes or constraints.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table object to append
+     * @param \Cake\Database\Schema\TableSchema aSchema The table object to append
      *    an index or constraint to.
-     * @param array $row The row data from `describeIndexSql`.
+     * @param array aRow The row data from `describeIndexSql`.
      * @return void
      */
-    abstract void convertIndexDescription(TableSchema $schema, array $row);
+    abstract void convertIndexDescription(TableSchema aSchema, array aRow);
 
     /**
      * Convert a foreign key description into constraints on the Table object.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table object to append
+     * @param \Cake\Database\Schema\TableSchema aSchema The table object to append
      *    a constraint to.
-     * @param array $row The row data from `describeForeignKeySql`.
+     * @param array aRow The row data from `describeForeignKeySql`.
      * @return void
      */
-    abstract void convertForeignKeyDescription(TableSchema $schema, array $row);
+    abstract void convertForeignKeyDescription(TableSchema aSchema, array aRow);
 
     /**
      * Convert options data into table options.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema Table instance.
-     * @param array $row The row of data.
+     * @param \Cake\Database\Schema\TableSchema aSchema Table instance.
+     * @param array aRow The row of data.
      * @return void
      */
-    function convertOptionsDescription(TableSchema $schema, array $row): void
+    function convertOptionsDescription(TableSchema aSchema, array aRow): void
     {
     }
 
     /**
      * Generate the SQL to create a table.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema Table instance.
+     * @param \Cake\Database\Schema\TableSchema aSchema Table instance.
      * @param array<string> $columns The columns to go inside the table.
      * @param array<string> $constraints The constraints for the table.
      * @param array<string> $indexes The indexes for the table.
      * @return array<string> SQL statements to create a table.
      */
     abstract function createTableSql(
-        TableSchema $schema,
+        TableSchema aSchema,
         array $columns,
         array $constraints,
         array $indexes
@@ -289,53 +289,53 @@ abstract class SchemaDialect
     /**
      * Generate the SQL fragment for a single column in a table.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table instance the column is in.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table instance the column is in.
      * @param string $name The name of the column.
      * @return string SQL fragment.
      */
-    abstract function columnSql(TableSchema $schema, string $name): string;
+    abstract function columnSql(TableSchema aSchema, string $name): string;
 
     /**
      * Generate the SQL queries needed to add foreign key constraints to the table
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table instance the foreign key constraints are.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table instance the foreign key constraints are.
      * @return array SQL fragment.
      */
-    abstract function addConstraintSql(TableSchema $schema): array;
+    abstract function addConstraintSql(TableSchema aSchema): array;
 
     /**
      * Generate the SQL queries needed to drop foreign key constraints from the table
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table instance the foreign key constraints are.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table instance the foreign key constraints are.
      * @return array SQL fragment.
      */
-    abstract function dropConstraintSql(TableSchema $schema): array;
+    abstract function dropConstraintSql(TableSchema aSchema): array;
 
     /**
      * Generate the SQL fragments for defining table constraints.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table instance the column is in.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table instance the column is in.
      * @param string $name The name of the column.
      * @return string SQL fragment.
      */
-    abstract function constraintSql(TableSchema $schema, string $name): string;
+    abstract function constraintSql(TableSchema aSchema, string $name): string;
 
     /**
      * Generate the SQL fragment for a single index in a table.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table object the column is in.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table object the column is in.
      * @param string $name The name of the column.
      * @return string SQL fragment.
      */
-    abstract function indexSql(TableSchema $schema, string $name): string;
+    abstract function indexSql(TableSchema aSchema, string $name): string;
 
     /**
      * Generate the SQL to truncate a table.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema Table instance.
+     * @param \Cake\Database\Schema\TableSchema aSchema Table instance.
      * @return array SQL statements to truncate a table.
      */
-    abstract function truncateTableSql(TableSchema $schema): array;
+    abstract function truncateTableSql(TableSchema aSchema): array;
 }
 
 // phpcs:disable

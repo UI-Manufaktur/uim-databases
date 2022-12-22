@@ -206,25 +206,25 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    void convertColumnDescription(TableSchema $schema, array $row)
+    void convertColumnDescription(TableSchema aSchema, array aRow)
     {
         $field = this._convertColumn(
-            $row["type"],
-            $row["char_length"] != null ? (int)$row["char_length"] : null,
-            $row["precision"] != null ? (int)$row["precision"] : null,
-            $row["scale"] != null ? (int)$row["scale"] : null
+            aRow["type"],
+            aRow["char_length"] != null ? (int)aRow["char_length"] : null,
+            aRow["precision"] != null ? (int)aRow["precision"] : null,
+            aRow["scale"] != null ? (int)aRow["scale"] : null
         );
 
-        if (!empty($row["autoincrement"])) {
+        if (!empty(aRow["autoincrement"])) {
             $field["autoIncrement"] = true;
         }
 
         $field += [
-            "null" : $row["null"] == "1",
-            "default" : this._defaultValue($field["type"], $row["default"]),
-            "collate" : $row["collation_name"],
+            "null" : aRow["null"] == "1",
+            "default" : this._defaultValue($field["type"], aRow["default"]),
+            "collate" : aRow["collation_name"],
         ];
-        $schema.addColumn($row["name"], $field);
+        $schema.addColumn(aRow["name"], $field);
     }
 
     /**
@@ -288,14 +288,14 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function convertIndexDescription(TableSchema $schema, array $row)
+    function convertIndexDescription(TableSchema aSchema, array aRow)
     {
         $type = TableSchema::INDEX_INDEX;
-        $name = $row["index_name"];
-        if ($row["is_primary_key"]) {
+        $name = aRow["index_name"];
+        if (aRow["is_primary_key"]) {
             $name = $type = TableSchema::CONSTRAINT_PRIMARY;
         }
-        if ($row["is_unique_constraint"] && $type == TableSchema::INDEX_INDEX) {
+        if (aRow["is_unique_constraint"] && $type == TableSchema::INDEX_INDEX) {
             $type = TableSchema::CONSTRAINT_UNIQUE;
         }
 
@@ -305,7 +305,7 @@ class SqlserverSchemaDialect : SchemaDialect
             $existing = $schema.getConstraint($name);
         }
 
-        $columns = [$row["column_name"]];
+        $columns = [aRow["column_name"]];
         if (!empty($existing)) {
             $columns = array_merge($existing["columns"], $columns);
         }
@@ -348,16 +348,16 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    void convertForeignKeyDescription(TableSchema $schema, array $row)
+    void convertForeignKeyDescription(TableSchema aSchema, array aRow)
     {
         $data = [
             "type" : TableSchema::CONSTRAINT_FOREIGN,
-            "columns" : [$row["column"]],
-            "references" : [$row["reference_table"], $row["reference_column"]],
-            "update" : this._convertOnClause($row["update_type"]),
-            "delete" : this._convertOnClause($row["delete_type"]),
+            "columns" : [aRow["column"]],
+            "references" : [aRow["reference_table"], aRow["reference_column"]],
+            "update" : this._convertOnClause(aRow["update_type"]),
+            "delete" : this._convertOnClause(aRow["delete_type"]),
         ];
-        $name = $row["foreign_key_name"];
+        $name = aRow["foreign_key_name"];
         $schema.addConstraint($name, $data);
     }
 
@@ -387,7 +387,7 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function columnSql(TableSchema $schema, string $name): string
+    function columnSql(TableSchema aSchema, string $name): string
     {
         /** @var array $data */
         $data = $schema.getColumn($name);
@@ -530,7 +530,7 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function addConstraintSql(TableSchema $schema): array
+    function addConstraintSql(TableSchema aSchema): array
     {
         mySqlPattern = "ALTER TABLE %s ADD %s;";
         mySql = [];
@@ -548,7 +548,7 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function dropConstraintSql(TableSchema $schema): array
+    function dropConstraintSql(TableSchema aSchema): array
     {
         mySqlPattern = "ALTER TABLE %s DROP CONSTRAINT %s;";
         mySql = [];
@@ -567,7 +567,7 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function indexSql(TableSchema $schema, string $name): string
+    function indexSql(TableSchema aSchema, string $name): string
     {
         /** @var array $data */
         $data = $schema.getIndex($name);
@@ -585,7 +585,7 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function constraintSql(TableSchema $schema, string $name): string
+    function constraintSql(TableSchema aSchema, string $name): string
     {
         /** @var array $data */
         $data = $schema.getConstraint($name);
@@ -628,7 +628,7 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function createTableSql(TableSchema $schema, array $columns, array $constraints, array $indexes): array
+    function createTableSql(TableSchema aSchema, array $columns, array $constraints, array $indexes): array
     {
         $content = array_merge($columns, $constraints);
         $content = implode(",\n", array_filter($content));
@@ -643,7 +643,7 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function truncateTableSql(TableSchema $schema): array
+    function truncateTableSql(TableSchema aSchema): array
     {
         $name = this._driver.quoteIdentifier($schema.name());
         $queries = [

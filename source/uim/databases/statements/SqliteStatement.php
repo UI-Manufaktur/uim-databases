@@ -53,14 +53,14 @@ class SqliteStatement : StatementDecorator
         ) {
             $changes = this._driver.prepare("SELECT CHANGES()");
             $changes.execute();
-            $row = $changes.fetch();
+            aRow = $changes.fetch();
             $changes.closeCursor();
 
-            if (!$row) {
+            if (!aRow) {
                 return 0;
             }
 
-            return (int)$row[0];
+            return (int)aRow[0];
         }
 
         return parent::rowCount();

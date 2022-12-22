@@ -268,7 +268,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * ## Example
      *
      * ```
-     * $rowCount = $query.update("articles")
+     * aRowCount = $query.update("articles")
      *                 .set(["published"=>true])
      *                 .where(["published"=>false])
      *                 .rowCountAndClose();
@@ -2027,9 +2027,9 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Example
      *
      * ```
-     * $query.decorateResults(function ($row) {
-     *   $row["order_total"] = $row["subtotal"] + ($row["subtotal"] * $row["tax"]);
-     *    return $row;
+     * $query.decorateResults(function (aRow) {
+     *   aRow["order_total"] = aRow["subtotal"] + (aRow["subtotal"] * aRow["tax"]);
+     *    return aRow;
      * });
      * ```
      *

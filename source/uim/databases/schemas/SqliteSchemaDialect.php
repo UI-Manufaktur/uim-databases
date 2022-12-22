@@ -192,34 +192,34 @@ class SqliteSchemaDialect : SchemaDialect
     }
 
 
-    function convertColumnDescription(TableSchema $schema, array $row): void
+    function convertColumnDescription(TableSchema aSchema, array aRow): void
     {
-        $field = this._convertColumn($row["type"]);
+        $field = this._convertColumn(aRow["type"]);
         $field += [
-            "null" : !$row["notnull"],
-            "default" : this._defaultValue($row["dflt_value"]),
+            "null" : !aRow["notnull"],
+            "default" : this._defaultValue(aRow["dflt_value"]),
         ];
         $primary = $schema.getConstraint("primary");
 
-        if ($row["pk"] && empty($primary)) {
+        if (aRow["pk"] && empty($primary)) {
             $field["null"] = false;
             $field["autoIncrement"] = true;
         }
 
         // SQLite does not support autoincrement on composite keys.
-        if ($row["pk"] && !empty($primary)) {
+        if (aRow["pk"] && !empty($primary)) {
             $existingColumn = $primary["columns"][0];
             /** @psalm-suppress PossiblyNullOperand */
             $schema.addColumn($existingColumn, ["autoIncrement" : null] + $schema.getColumn($existingColumn));
         }
 
-        $schema.addColumn($row["name"], $field);
-        if ($row["pk"]) {
+        $schema.addColumn(aRow["name"], $field);
+        if (aRow["pk"]) {
             $constraint = (array)$schema.getConstraint("primary") + [
                 "type" : TableSchema::CONSTRAINT_PRIMARY,
                 "columns" : [],
             ];
-            $constraint["columns"] = array_merge($constraint["columns"], [$row["name"]]);
+            $constraint["columns"] = array_merge($constraint["columns"], [aRow["name"]]);
             $schema.addConstraint("primary", $constraint);
         }
     }
@@ -266,16 +266,16 @@ class SqliteSchemaDialect : SchemaDialect
      * stable, and the names for constraints will not match those used to create
      * the table. This is a limitation in Sqlite"s metadata features.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table object to append
+     * @param \Cake\Database\Schema\TableSchema aSchema The table object to append
      *    an index or constraint to.
-     * @param array $row The row data from `describeIndexSql`.
+     * @param array aRow The row data from `describeIndexSql`.
      * @return void
      */
-    function convertIndexDescription(TableSchema $schema, array $row): void
+    function convertIndexDescription(TableSchema aSchema, array aRow): void
     {
         mySql = sprintf(
             "PRAGMA index_info(%s)",
-            this._driver.quoteIdentifier($row["name"])
+            this._driver.quoteIdentifier(aRow["name"])
         );
         $statement = this._driver.prepare(mySql);
         $statement.execute();
@@ -285,13 +285,13 @@ class SqliteSchemaDialect : SchemaDialect
             $columns[] = $column["name"];
         }
         $statement.closeCursor();
-        if ($row["unique"]) {
-            $schema.addConstraint($row["name"], [
+        if (aRow["unique"]) {
+            $schema.addConstraint(aRow["name"], [
                 "type" : TableSchema::CONSTRAINT_UNIQUE,
                 "columns" : $columns,
             ]);
         } else {
-            $schema.addIndex($row["name"], [
+            $schema.addIndex(aRow["name"], [
                 "type" : TableSchema::INDEX_INDEX,
                 "columns" : $columns,
             ]);
@@ -307,24 +307,24 @@ class SqliteSchemaDialect : SchemaDialect
     }
 
 
-    void convertForeignKeyDescription(TableSchema $schema, array $row)
+    void convertForeignKeyDescription(TableSchema aSchema, array aRow)
     {
-        $name = $row["from"] . "_fk";
+        $name = aRow["from"] . "_fk";
 
-        $update = $row["on_update"] ?? "";
-        $delete = $row["on_delete"] ?? "";
+        $update = aRow["on_update"] ?? "";
+        $delete = aRow["on_delete"] ?? "";
         $data = [
             "type" : TableSchema::CONSTRAINT_FOREIGN,
-            "columns" : [$row["from"]],
-            "references" : [$row["table"], $row["to"]],
+            "columns" : [aRow["from"]],
+            "references" : [aRow["table"], aRow["to"]],
             "update" : this._convertOnClause($update),
             "delete" : this._convertOnClause($delete),
         ];
 
-        if (isset(this._constraintsIdMap[$schema.name()][$row["id"]])) {
-            $name = this._constraintsIdMap[$schema.name()][$row["id"]];
+        if (isset(this._constraintsIdMap[$schema.name()][aRow["id"]])) {
+            $name = this._constraintsIdMap[$schema.name()][aRow["id"]];
         } else {
-            this._constraintsIdMap[$schema.name()][$row["id"]] = $name;
+            this._constraintsIdMap[$schema.name()][aRow["id"]] = $name;
         }
 
         $schema.addConstraint($name, $data);
@@ -333,12 +333,12 @@ class SqliteSchemaDialect : SchemaDialect
     /**
      * {@inheritDoc}
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table instance the column is in.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table instance the column is in.
      * @param string $name The name of the column.
      * @return string SQL fragment.
      * @throws \Cake\Database\Exception\DatabaseException when the column type is unknown
      */
-    function columnSql(TableSchema $schema, string $name): string
+    function columnSql(TableSchema aSchema, string $name): string
     {
         /** @var array $data */
         $data = $schema.getColumn($name);
@@ -478,11 +478,11 @@ class SqliteSchemaDialect : SchemaDialect
      * Note integer primary keys will return "". This is intentional as Sqlite requires
      * that integer primary keys be defined in the column definition.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table instance the column is in.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table instance the column is in.
      * @param string $name The name of the column.
      * @return string SQL fragment.
      */
-    function constraintSql(TableSchema $schema, string $name): string
+    function constraintSql(TableSchema aSchema, string $name): string
     {
         /** @var array $data */
         $data = $schema.getConstraint($name);
@@ -533,10 +533,10 @@ class SqliteSchemaDialect : SchemaDialect
      * SQLite can not properly handle adding a constraint to an existing table.
      * This method is no-op
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table instance the foreign key constraints are.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table instance the foreign key constraints are.
      * @return array SQL fragment.
      */
-    function addConstraintSql(TableSchema $schema): array
+    function addConstraintSql(TableSchema aSchema): array
     {
         return [];
     }
@@ -547,16 +547,16 @@ class SqliteSchemaDialect : SchemaDialect
      * SQLite can not properly handle dropping a constraint to an existing table.
      * This method is no-op
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table instance the foreign key constraints are.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table instance the foreign key constraints are.
      * @return array SQL fragment.
      */
-    function dropConstraintSql(TableSchema $schema): array
+    function dropConstraintSql(TableSchema aSchema): array
     {
         return [];
     }
 
 
-    function indexSql(TableSchema $schema, string $name): string
+    function indexSql(TableSchema aSchema, string $name): string
     {
         /** @var array $data */
         $data = $schema.getIndex($name);
@@ -574,7 +574,7 @@ class SqliteSchemaDialect : SchemaDialect
     }
 
 
-    function createTableSql(TableSchema $schema, array $columns, array $constraints, array $indexes): array
+    function createTableSql(TableSchema aSchema, array $columns, array $constraints, array $indexes): array
     {
         $lines = array_merge($columns, $constraints);
         $content = implode(",\n", array_filter($lines));
@@ -589,7 +589,7 @@ class SqliteSchemaDialect : SchemaDialect
     }
 
 
-    function truncateTableSql(TableSchema $schema): array
+    function truncateTableSql(TableSchema aSchema): array
     {
         $name = $schema.name();
         mySql = [];

@@ -183,17 +183,17 @@ class BufferedStatement : Iterator, StatementInterface
     function fetch($type = self::FETCH_TYPE_NUM)
     {
         if (this._allFetched) {
-            $row = false;
+            aRow = false;
             if (isset(this.buffer[this.index])) {
-                $row = this.buffer[this.index];
+                aRow = this.buffer[this.index];
             }
             this.index += 1;
 
-            if ($row && $type == static::FETCH_TYPE_NUM) {
-                return array_values($row);
+            if (aRow && $type == static::FETCH_TYPE_NUM) {
+                return array_values(aRow);
             }
 
-            return $row;
+            return aRow;
         }
 
         $record = this.statement.fetch($type);
@@ -296,13 +296,13 @@ class BufferedStatement : Iterator, StatementInterface
     function valid(): bool
     {
         $old = this.index;
-        $row = this.fetch(self::FETCH_TYPE_ASSOC);
+        aRow = this.fetch(self::FETCH_TYPE_ASSOC);
 
         // Restore the index as fetch() increments during
         // the cache scenario.
         this.index = $old;
 
-        return $row != false;
+        return aRow != false;
     }
 
     /**
