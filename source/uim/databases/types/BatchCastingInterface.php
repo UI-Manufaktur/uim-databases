@@ -22,7 +22,7 @@ use Cake\Database\DriverInterface;
  * Denotes type objects capable of converting many values from their original
  * database representation to php values.
  */
-interface BatchCastingInterface
+interface IBatchCasting
 {
     /**
      * Returns an array of the values converted to the PHP representation of

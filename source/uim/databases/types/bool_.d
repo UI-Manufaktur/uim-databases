@@ -1,7 +1,7 @@
 /*********************************************************************************************************
-*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
+* Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
+* License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
+* Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
 **********************************************************************************************************/
 module uim.databases.types.bool_;
 
@@ -10,8 +10,7 @@ import uim.databases;
 
 // Bool type converter.
 // Use to convert bool data between D and the database types.
-class BoolType extends BaseType : BatchCastingInterface
-{
+class BoolType extends BaseType : IBatchCasting {
     /**
      * Convert bool data into the database format.
      *

@@ -1,31 +1,19 @@
-<?php
-declare(strict_types=1);
+/*********************************************************************************************************
+* Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
+* License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
+* Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
+**********************************************************************************************************/
+module uim.databases.types.integer;
 
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         3.0.0
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
-namespace Cake\Database\Type;
-
-use Cake\Database\DriverInterface;
-use InvalidArgumentException;
-use PDO;
+@safe:
+import uim.databases;
 
 /**
  * Integer type converter.
  *
  * Use to convert integer data between PHP and the database types.
  */
-class IntegerType extends BaseType : BatchCastingInterface
+class IntegerType extends BaseType : IBatchCasting
 {
     /**
      * Checks if the value is not a numeric value

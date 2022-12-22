@@ -1,40 +1,19 @@
-<?php
-declare(strict_types=1);
+/*********************************************************************************************************
+* Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
+* License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
+* Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
+**********************************************************************************************************/
+module uim.databases.types.base;
 
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         3.0.0
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
-namespace Cake\Database\Type;
-
-use Cake\Database\DriverInterface;
-use Cake\I18n\FrozenTime;
-use Cake\I18n\I18nDateTimeInterface;
-use Cake\I18n\Time;
-use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
-use DateTimeZone;
-use Exception;
-use InvalidArgumentException;
-use PDO;
-use RuntimeException;
+@safe:
+import uim.databases;
 
 /**
  * Datetime type converter.
  *
  * Use to convert datetime instances to strings & back.
  */
-class DateTimeType extends BaseType : BatchCastingInterface
+class DateTimeType extends BaseType : IBatchCasting
 {
     /**
      * Whether we want to override the time of the converted Time objects

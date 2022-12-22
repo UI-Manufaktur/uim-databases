@@ -1,7 +1,12 @@
-module uim.databases;
+/*********************************************************************************************************
+* Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
+* License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
+* Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
+**********************************************************************************************************/
+module uim.databases.types.fieldtypeconverter;
 
-import uim.databases.Type\BatchCastingInterface;
-import uim.databases.Type\IOptionalConvert;
+@safe:
+import uim.databases;
 
 /**
  * A callable class to be used for processing each of the rows in a statement
@@ -30,7 +35,7 @@ class FieldTypeConverter
      * at the moment this object is created. Used so that the types list
      * is not fetched on each single row of the results.
      *
-     * @var array<\Cake\Database\IType|\Cake\Database\Type\BatchCastingInterface>
+     * @var array<\Cake\Database\IType|\Cake\Database\Type\IBatchCasting>
      */
     protected myTypes;
 
@@ -60,7 +65,7 @@ class FieldTypeConverter
                 continue;
             }
 
-            if (myType instanceof BatchCastingInterface) {
+            if (myType instanceof IBatchCasting) {
                 $batchingMap[$k] = myType;
                 continue;
             }

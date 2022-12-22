@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database;
 
-use Cake\Database\Type\BatchCastingInterface;
+use Cake\Database\Type\IBatchCasting;
 use Cake\Database\Type\OptionalConvertInterface;
 
 /**
@@ -46,7 +46,7 @@ class FieldTypeConverter
      * at the moment this object is created. Used so that the types list
      * is not fetched on each single row of the results.
      *
-     * @var array<\Cake\Database\TypeInterface|\Cake\Database\Type\BatchCastingInterface>
+     * @var array<\Cake\Database\TypeInterface|\Cake\Database\Type\IBatchCasting>
      */
     protected $types;
 
@@ -77,7 +77,7 @@ class FieldTypeConverter
                 continue;
             }
 
-            if ($type instanceof BatchCastingInterface) {
+            if ($type instanceof IBatchCasting) {
                 $batchingMap[$k] = $type;
                 continue;
             }
