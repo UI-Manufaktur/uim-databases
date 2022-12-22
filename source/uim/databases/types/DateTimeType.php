@@ -199,7 +199,7 @@ class DateTimeType extends BaseType : IBatchCasting
      * @param \Cake\Database\IDTBDriver $driver Object from which database preferences and configuration will be extracted
      * @return \DateTimeInterface|null
      */
-    function toPHP($value, IDTBDriver $driver)
+    function toD($value, IDTBDriver $driver)
     {
         if ($value === null) {
             return null;
@@ -253,7 +253,7 @@ class DateTimeType extends BaseType : IBatchCasting
     /**
      * @inheritDoc
      */
-    function manyToPHP(array $values, array $fields, IDTBDriver $driver): array
+    function manytoD(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {
             if (!isset($values[$field])) {

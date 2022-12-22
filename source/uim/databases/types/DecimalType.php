@@ -69,7 +69,7 @@ class DecimalType extends BaseType : IBatchCasting
      * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return string|null
      */
-    function toPHP($value, IDTBDriver $driver): ?string
+    function toD($value, IDTBDriver $driver): ?string
     {
         if ($value === null) {
             return null;
@@ -81,7 +81,7 @@ class DecimalType extends BaseType : IBatchCasting
     /**
      * @inheritDoc
      */
-    function manyToPHP(array $values, array $fields, IDTBDriver $driver): array
+    function manytoD(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {
             if (!isset($values[$field])) {

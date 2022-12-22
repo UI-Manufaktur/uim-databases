@@ -54,7 +54,7 @@ class FloatType extends BaseType : IBatchCasting
      * @return float|null
      * @throws \Cake\Core\Exception\CakeException
      */
-    function toPHP($value, IDTBDriver $driver): ?float
+    function toD($value, IDTBDriver $driver): ?float
     {
         if ($value === null) {
             return null;
@@ -66,7 +66,7 @@ class FloatType extends BaseType : IBatchCasting
     /**
      * @inheritDoc
      */
-    function manyToPHP(array $values, array $fields, IDTBDriver $driver): array
+    function manytoD(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {
             if (!isset($values[$field])) {

@@ -57,7 +57,7 @@ class IntegerType extends BaseType : IBatchCasting
      * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return int|null
      */
-    function toPHP($value, IDTBDriver $driver): ?int
+    function toD($value, IDTBDriver $driver): ?int
     {
         if ($value === null) {
             return null;
@@ -69,7 +69,7 @@ class IntegerType extends BaseType : IBatchCasting
     /**
      * @inheritDoc
      */
-    function manyToPHP(array $values, array $fields, IDTBDriver $driver): array
+    function manytoD(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {
             if (!isset($values[$field])) {

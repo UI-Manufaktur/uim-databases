@@ -40,7 +40,7 @@ class BoolType extends BaseType : IBatchCasting {
      * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return bool|null
      */
-    function toPHP($value, IDTBDriver $driver): ?bool
+    function toD($value, IDTBDriver $driver): ?bool
     {
         if ($value === null || is_bool($value)) {
             return $value;
@@ -56,7 +56,7 @@ class BoolType extends BaseType : IBatchCasting {
     /**
      * @inheritDoc
      */
-    function manyToPHP(array $values, array $fields, IDTBDriver $driver): array
+    function manytoD(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {
             $value = $values[$field] ?? null;

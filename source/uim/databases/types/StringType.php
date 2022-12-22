@@ -61,7 +61,7 @@ class StringType extends BaseType : OptionalConvertInterface
      * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return string|null
      */
-    function toPHP($value, IDTBDriver $driver): ?string
+    function toD($value, IDTBDriver $driver): ?string
     {
         if ($value === null) {
             return null;
@@ -102,7 +102,7 @@ class StringType extends BaseType : OptionalConvertInterface
      *
      * @return bool False as database results are returned already as strings
      */
-    function requiresToPhpCast(): bool
+    function requirestoDCast(): bool
     {
         return false;
     }

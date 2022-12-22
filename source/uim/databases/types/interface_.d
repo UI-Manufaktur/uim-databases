@@ -17,7 +17,7 @@ interface IType {
   // mixed myValue Value to be converted to PHP equivalent
   // \Cake\Database\IDTBDriver myDriver Object from which database preferences and configuration will be extracted
   // @return mixed Given value casted from a database to a PHP equivalent.
-  function toPHP(myValue, IDTBDriver myDriver);
+  function toD(myValue, IDTBDriver myDriver);
 
   // Casts given value to its Statement equivalent.
   // mixed myValue Value to be converted to PDO statement.

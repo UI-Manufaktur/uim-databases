@@ -33,5 +33,5 @@ interface IBatchCasting
      * @param \Cake\Database\IDTBDriver $driver Object from which database preferences and configuration will be extracted.
      * @return array<string, mixed>
      */
-    function manyToPHP(array $values, array $fields, IDTBDriver $driver): array;
+    function manytoD(array $values, array $fields, IDTBDriver $driver): array;
 }

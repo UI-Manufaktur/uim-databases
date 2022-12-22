@@ -28,5 +28,5 @@ interface OptionalConvertInterface
      *
      * @return bool
      */
-    function requiresToPhpCast(): bool;
+    function requirestoDCast(): bool;
 }

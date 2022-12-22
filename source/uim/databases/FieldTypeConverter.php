@@ -73,7 +73,7 @@ class FieldTypeConverter
         $simpleResult = $batchingResult = [];
 
         foreach ($types as $k: $type) {
-            if ($type instanceof OptionalConvertInterface && !$type->requiresToPhpCast()) {
+            if ($type instanceof OptionalConvertInterface && !$type->requirestoDCast()) {
                 continue;
             }
 
@@ -124,14 +124,14 @@ class FieldTypeConverter
     {
         if (!empty(_typeMap)) {
             foreach (_typeMap as $field: $type) {
-                $row[$field] = $type->toPHP($row[$field], _driver);
+                $row[$field] = $type->toD($row[$field], _driver);
             }
         }
 
         if (!empty(this.batchingTypeMap)) {
             foreach (this.batchingTypeMap as $t: $fields) {
                 /** @psalm-suppress PossiblyUndefinedMethod */
-                $row = this.types[$t]->manyToPHP($row, $fields, _driver);
+                $row = this.types[$t]->manytoD($row, $fields, _driver);
             }
         }
 

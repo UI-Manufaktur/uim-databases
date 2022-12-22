@@ -38,7 +38,7 @@ interface TypeInterface
      * @param \Cake\Database\IDTBDriver $driver Object from which database preferences and configuration will be extracted
      * @return mixed Given value casted from a database to a PHP equivalent.
      */
-    function toPHP($value, IDTBDriver $driver);
+    function toD($value, IDTBDriver $driver);
 
     /**
      * Casts given value to its Statement equivalent.

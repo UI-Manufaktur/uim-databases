@@ -50,7 +50,7 @@ class BinaryType extends BaseType
      * @return resource|null
      * @throws \Cake\Core\Exception\CakeException
      */
-    function toPHP($value, IDTBDriver $driver)
+    function toD($value, IDTBDriver $driver)
     {
         if ($value === null) {
             return null;
