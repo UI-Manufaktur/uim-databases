@@ -43,21 +43,21 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      *
      * @var \Cake\Database\StatementInterface
      */
-    protected $_statement;
+    protected _statement;
 
     /**
      * Reference to the driver object associated to this statement.
      *
      * @var \Cake\Database\IDTBDriver
      */
-    protected $_driver;
+    protected _driver;
 
     /**
      * Whether this statement has already been executed
      *
      * @var bool
      */
-    protected $_hasExecuted = false;
+    protected _hasExecuted = false;
 
     /**
      * Constructor

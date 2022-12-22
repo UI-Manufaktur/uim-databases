@@ -32,7 +32,7 @@ class CallbackStatement : StatementDecorator
      *
      * @var callable
      */
-    protected $_callback;
+    protected _callback;
 
     /**
      * Constructor

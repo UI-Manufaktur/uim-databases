@@ -31,7 +31,7 @@ class MysqlSchemaDialect : SchemaDialect
      *
      * @var \Cake\Database\Driver\Mysql
      */
-    protected $_driver;
+    protected _driver;
 
     /**
      * Generate the SQL to list the tables and views.
@@ -40,7 +40,7 @@ class MysqlSchemaDialect : SchemaDialect
      *    getting tables from.
      * @return array<mixed> An array of (sql, params) to execute.
      */
-    function listTablesSql(array $config): array
+    function listTablesSql(array aConfig): array
     {
         return ["SHOW FULL TABLES FROM " . this._driver.quoteIdentifier($config["database"]), []];
     }
@@ -52,7 +52,7 @@ class MysqlSchemaDialect : SchemaDialect
      *    getting tables from.
      * @return array<mixed> An array of (sql, params) to execute.
      */
-    function listTablesWithoutViewsSql(array $config): array
+    function listTablesWithoutViewsSql(array aConfig): array
     {
         return [
             "SHOW FULL TABLES FROM " . this._driver.quoteIdentifier($config["database"])
@@ -61,19 +61,19 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    function describeColumnSql(string $tableName, array $config): array
+    function describeColumnSql(string $tableName, array aConfig): array
     {
         return ["SHOW FULL COLUMNS FROM " . this._driver.quoteIdentifier($tableName), []];
     }
 
 
-    function describeIndexSql(string $tableName, array $config): array
+    function describeIndexSql(string $tableName, array aConfig): array
     {
         return ["SHOW INDEXES FROM " . this._driver.quoteIdentifier($tableName), []];
     }
 
 
-    function describeOptionsSql(string $tableName, array $config): array
+    function describeOptionsSql(string $tableName, array aConfig): array
     {
         return ["SHOW TABLE STATUS WHERE Name = ?", [$tableName]];
     }
@@ -272,7 +272,7 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    function describeForeignKeySql(string $tableName, array $config): array
+    function describeForeignKeySql(string $tableName, array aConfig): array
     {
         mySql = "SELECT * FROM information_schema.key_column_usage AS kcu
             INNER JOIN information_schema.referential_constraints AS rc

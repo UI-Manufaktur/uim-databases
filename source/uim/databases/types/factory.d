@@ -38,21 +38,21 @@ class DDBSTypeFactory {
     // myName type identifier
     // @throws \InvalidArgumentException If type identifier is unknown
     static IType build(string myName) {
-        if (isset(static.$_builtTypes[myName])) {
-            return static.$_builtTypes[myName];
+        if (isset(static._builtTypes[myName])) {
+            return static._builtTypes[myName];
         }
-        if (!isset(static.$_types[myName])) {
+        if (!isset(static._types[myName])) {
             throw new InvalidArgumentException(sprintf("Unknown type "%s"", myName));
         }
 
-        return static.$_builtTypes[myName] = new static.$_types[myName](myName);
+        return static._builtTypes[myName] = new static._types[myName](myName);
     }
 
     // Returns an arrays with all the mapped type objects, indexed by name.
     static IType[] buildAll() {
         myResult = [];
-        foreach (static.$_types as myName: myType) {
-          myResult[myName] = static.$_builtTypes[myName] ?? static.build(myName);
+        foreach (static._types as myName: myType) {
+          myResult[myName] = static._builtTypes[myName] ?? static.build(myName);
         }
 
         return myResult;
@@ -62,8 +62,8 @@ class DDBSTypeFactory {
     // myName The type identifier you want to set.
     // \Cake\Database\IType $instance The type instance you want to set.
     static void set(string myName, IType typeInstance) {
-        static.$_builtTypes[myName] = typeInstance;
-        static.$_types[myName] = get_class(typeInstance);
+        static._builtTypes[myName] = typeInstance;
+        static._types[myName] = get_class(typeInstance);
     }
 
     /**
@@ -74,8 +74,8 @@ class DDBSTypeFactory {
      * @psalm-param class-string<\Cake\Database\IType> myClassName
      */
     static void map(string myType, string myClassName) {
-        static.$_types[myType] = myClassName;
-        unset(static.$_builtTypes[myType]);
+        static._types[myType] = myClassName;
+        unset(static._builtTypes[myType]);
     }
 
     /**
@@ -85,8 +85,8 @@ class DDBSTypeFactory {
      * @psalm-param array<string, class-string<\Cake\Database\IType>> $map
      */
     static void setMap(string[] $map) {
-        static.$_types = $map;
-        static.$_builtTypes = [];
+        static._types = $map;
+        static._builtTypes = [];
     }
 
     /**
@@ -97,17 +97,17 @@ class DDBSTypeFactory {
      */
     static string[] getMap(Nullable!string myType = null) {
         if (myType is null) {
-            return static.$_types;
+            return static._types;
         }
 
-        return static.$_types[myType] ?? null;
+        return static._types[myType] ?? null;
     }
 
     /**
      * Clears out all created instances and mapped types classes, useful for testing
      */
     static void clear() {
-        static.$_types = [];
-        static.$_builtTypes = [];
+        static._types = [];
+        static._builtTypes = [];
     }
 }

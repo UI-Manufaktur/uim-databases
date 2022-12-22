@@ -36,7 +36,7 @@ class BufferedStatement : Iterator, StatementInterface
      *
      * @var bool
      */
-    protected $_allFetched = false;
+    protected _allFetched = false;
 
     /**
      * The decorated statement
@@ -50,7 +50,7 @@ class BufferedStatement : Iterator, StatementInterface
      *
      * @var \Cake\Database\IDTBDriver
      */
-    protected $_driver;
+    protected _driver;
 
     /**
      * The in-memory cache containing results from previous iterators
@@ -64,7 +64,7 @@ class BufferedStatement : Iterator, StatementInterface
      *
      * @var bool
      */
-    protected $_hasExecuted = false;
+    protected _hasExecuted = false;
 
     /**
      * The current iterator index.

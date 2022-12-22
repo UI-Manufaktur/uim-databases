@@ -28,7 +28,7 @@ class DecimalType : BaseType, IBatchCasting
      *
      * @var bool
      */
-    protected $_useLocaleParser = false;
+    protected _useLocaleParser = false;
 
     /**
      * Convert decimal strings into the database format.

@@ -18,7 +18,7 @@ class JsonType : BaseType, IBatchCasting
     /**
      * @var int
      */
-    protected $_encodingOptions = 0;
+    protected _encodingOptions = 0;
 
     /**
      * Convert a value data into a JSON string

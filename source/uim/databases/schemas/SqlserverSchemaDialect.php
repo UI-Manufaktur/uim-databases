@@ -35,7 +35,7 @@ class SqlserverSchemaDialect : SchemaDialect
      *    getting tables from.
      * @return array An array of (sql, params) to execute.
      */
-    function listTablesSql(array $config): array
+    function listTablesSql(array aConfig): array
     {
         mySql = "SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
@@ -54,7 +54,7 @@ class SqlserverSchemaDialect : SchemaDialect
      *    getting tables from.
      * @return array<mixed> An array of (sql, params) to execute.
      */
-    function listTablesWithoutViewsSql(array $config): array
+    function listTablesWithoutViewsSql(array aConfig): array
     {
         mySql = "SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
@@ -67,7 +67,7 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function describeColumnSql(string $tableName, array $config): array
+    function describeColumnSql(string $tableName, array aConfig): array
     {
         mySql = "SELECT DISTINCT
             AC.column_id AS [column_id],
@@ -266,7 +266,7 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function describeIndexSql(string $tableName, array $config): array
+    function describeIndexSql(string $tableName, array aConfig): array
     {
         mySql = "SELECT
                 I.[name] AS [index_name],
@@ -325,7 +325,7 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function describeForeignKeySql(string $tableName, array $config): array
+    function describeForeignKeySql(string $tableName, array aConfig): array
     {
         // phpcs:disable Generic.Files.LineLength
         mySql = "SELECT FK.[name] AS [foreign_key_name], FK.[delete_referential_action_desc] AS [delete_type],

@@ -31,14 +31,14 @@ class SqliteSchemaDialect : SchemaDialect
      *
      * @var array<string, mixed>
      */
-    protected $_constraintsIdMap = [];
+    protected _constraintsIdMap = [];
 
     /**
      * Whether there is any table in this connection to SQLite containing sequences.
      *
      * @var bool
      */
-    protected $_hasSequences;
+    protected _hasSequences;
 
     /**
      * Convert a column definition to the abstract types.
@@ -158,7 +158,7 @@ class SqliteSchemaDialect : SchemaDialect
      *    getting tables from.
      * @return array An array of (sql, params) to execute.
      */
-    function listTablesSql(array $config): array
+    function listTablesSql(array aConfig): array
     {
         return [
             "SELECT name FROM sqlite_master " .
@@ -175,7 +175,7 @@ class SqliteSchemaDialect : SchemaDialect
      *    getting tables from.
      * @return array<mixed> An array of (sql, params) to execute.
      */
-    function listTablesWithoutViewsSql(array $config): array
+    function listTablesWithoutViewsSql(array aConfig): array
     {
         return [
             "SELECT name FROM sqlite_master WHERE type="table" " .
@@ -185,7 +185,7 @@ class SqliteSchemaDialect : SchemaDialect
     }
 
 
-    function describeColumnSql(string $tableName, array $config): array {
+    function describeColumnSql(string $tableName, array aConfig): array {
         mySql = "PRAGMA table_info(%s)".format(this._driver.quoteIdentifier($tableName));
 
         return [mySql, []];
@@ -248,7 +248,7 @@ class SqliteSchemaDialect : SchemaDialect
     }
 
 
-    function describeIndexSql(string $tableName, array $config): array
+    function describeIndexSql(string $tableName, array aConfig): array
     {
         mySql = sprintf(
             "PRAGMA index_list(%s)",
@@ -299,7 +299,7 @@ class SqliteSchemaDialect : SchemaDialect
     }
 
 
-    function describeForeignKeySql(string $tableName, array $config): array
+    function describeForeignKeySql(string $tableName, array aConfig): array
     {
         mySql = sprintf("PRAGMA foreign_key_list(%s)", this._driver.quoteIdentifier($tableName));
 

@@ -28,7 +28,7 @@ trait BufferResultsTrait
      *
      * @var bool
      */
-    protected $_bufferResults = true;
+    protected _bufferResults = true;
 
     /**
      * Whether to buffer results in php

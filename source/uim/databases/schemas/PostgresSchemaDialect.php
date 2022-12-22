@@ -32,7 +32,7 @@ class PostgresSchemaDialect : SchemaDialect
      *    getting tables from.
      * @return array An array of (sql, params) to execute.
      */
-    function listTablesSql(array $config): array
+    function listTablesSql(array aConfig): array
     {
         mySql = "SELECT table_name as name FROM information_schema.tables
                 WHERE table_schema = ? ORDER BY name";
@@ -48,7 +48,7 @@ class PostgresSchemaDialect : SchemaDialect
      *    getting tables from.
      * @return array<mixed> An array of (sql, params) to execute.
      */
-    function listTablesWithoutViewsSql(array $config): array
+    function listTablesWithoutViewsSql(array aConfig): array
     {
         mySql = "SELECT table_name as name FROM information_schema.tables
                 WHERE table_schema = ? AND table_type = \"BASE TABLE\" ORDER BY name";
@@ -58,7 +58,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function describeColumnSql(string $tableName, array $config): array
+    function describeColumnSql(string $tableName, array aConfig): array
     {
         mySql = "SELECT DISTINCT table_schema AS schema,
             column_name AS name,
@@ -256,7 +256,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function describeIndexSql(string $tableName, array $config): array
+    function describeIndexSql(string $tableName, array aConfig): array
     {
         mySql = "SELECT
         c2.relname,
@@ -331,7 +331,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function describeForeignKeySql(string $tableName, array $config): array
+    function describeForeignKeySql(string $tableName, array aConfig): array
     {
         // phpcs:disable Generic.Files.LineLength
         mySql = "SELECT

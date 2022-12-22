@@ -22,10 +22,10 @@ namespace Cake\Database\Type;
 class DateTimeTimezoneType : DateTimeType
 {
 
-    protected $_format = "Y-m-d H:i:s.uP";
+    protected _format = "Y-m-d H:i:s.uP";
 
 
-    protected $_marshalFormats = [
+    protected _marshalFormats = [
         "Y-m-d H:i",
         "Y-m-d H:i:s",
         "Y-m-d H:i:sP",

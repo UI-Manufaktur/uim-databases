@@ -26,10 +26,10 @@ use Cake\I18n\I18nDateTimeInterface;
 class TimeType : DateTimeType
 {
 
-    protected $_format = "H:i:s";
+    protected _format = "H:i:s";
 
 
-    protected $_marshalFormats = [
+    protected _marshalFormats = [
         "H:i:s",
         "H:i",
     ];

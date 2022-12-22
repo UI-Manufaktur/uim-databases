@@ -27,7 +27,7 @@ use InvalidArgumentException;
  * This class contains methods that are common across
  * the various SQL dialects.
  *
- * @method array<mixed> listTablesWithoutViewsSql(array $config) Generate the SQL to list the tables, excluding all views.
+ * @method array<mixed> listTablesWithoutViewsSql(array aConfig) Generate the SQL to list the tables, excluding all views.
  */
 abstract class SchemaDialect
 {
@@ -36,7 +36,7 @@ abstract class SchemaDialect
      *
      * @var \Cake\Database\IDTBDriver
      */
-    protected $_driver;
+    protected _driver;
 
     /**
      * Constructor
@@ -189,7 +189,7 @@ abstract class SchemaDialect
      *    getting tables from.
      * @return array An array of (sql, params) to execute.
      */
-    abstract function listTablesSql(array $config): array;
+    abstract function listTablesSql(array aConfig): array;
 
     /**
      * Generate the SQL to describe a table.
@@ -198,7 +198,7 @@ abstract class SchemaDialect
      * @param array<string, mixed> $config The connection configuration.
      * @return array An array of (sql, params) to execute.
      */
-    abstract function describeColumnSql(string $tableName, array $config): array;
+    abstract function describeColumnSql(string $tableName, array aConfig): array;
 
     /**
      * Generate the SQL to describe the indexes in a table.
@@ -207,7 +207,7 @@ abstract class SchemaDialect
      * @param array<string, mixed> $config The connection configuration.
      * @return array An array of (sql, params) to execute.
      */
-    abstract function describeIndexSql(string $tableName, array $config): array;
+    abstract function describeIndexSql(string $tableName, array aConfig): array;
 
     /**
      * Generate the SQL to describe the foreign keys in a table.
@@ -216,7 +216,7 @@ abstract class SchemaDialect
      * @param array<string, mixed> $config The connection configuration.
      * @return array An array of (sql, params) to execute.
      */
-    abstract function describeForeignKeySql(string $tableName, array $config): array;
+    abstract function describeForeignKeySql(string $tableName, array aConfig): array;
 
     /**
      * Generate the SQL to describe table options
@@ -225,7 +225,7 @@ abstract class SchemaDialect
      * @param array<string, mixed> $config The connection configuration.
      * @return array SQL statements to get options for a table.
      */
-    function describeOptionsSql(string $tableName, array $config): array
+    function describeOptionsSql(string $tableName, array aConfig): array
     {
         return ["", ""];
     }

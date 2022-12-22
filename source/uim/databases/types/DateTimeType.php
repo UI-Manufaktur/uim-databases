@@ -30,14 +30,14 @@ class DateTimeType : BaseType, IBatchCasting
      *
      * @var string
      */
-    protected $_format = "Y-m-d H:i:s";
+    protected _format = "Y-m-d H:i:s";
 
     /**
      * The DateTime formats allowed by `marshal()`.
      *
      * @var array<string>
      */
-    protected $_marshalFormats = [
+    protected _marshalFormats = [
         "Y-m-d H:i",
         "Y-m-d H:i:s",
         "Y-m-d\TH:i",
@@ -50,7 +50,7 @@ class DateTimeType : BaseType, IBatchCasting
      *
      * @var bool
      */
-    protected $_useLocaleMarshal = false;
+    protected _useLocaleMarshal = false;
 
     /**
      * The locale-aware format `marshal()` uses when `_useLocaleParser` is true.
@@ -59,7 +59,7 @@ class DateTimeType : BaseType, IBatchCasting
      *
      * @var array|string|int
      */
-    protected $_localeMarshalFormat;
+    protected _localeMarshalFormat;
 
     /**
      * The classname to use when creating objects.
@@ -67,7 +67,7 @@ class DateTimeType : BaseType, IBatchCasting
      * @var string
      * @psalm-var class-string<\DateTime>|class-string<\DateTimeImmutable>
      */
-    protected $_className;
+    protected _className;
 
     /**
      * Database time zone.
