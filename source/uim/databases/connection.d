@@ -102,13 +102,10 @@ class Connection : IConnection {
      * @throws \Cake\Database\Exception\MissingExtensionException When a driver"s PHP extension is missing.
      */
     O setDriver(this O)(string aDriver, aConfig = []) {
-      auto myClassName = App.className(aDriver, "Database/Driver");
-      if (myClassName is null) {
-          throw new MissingDriverException(["driver":aDriver]);
+      if (auto myClassName = App.className(aDriver, "Database/Driver")) {
+        auto myDriver = new myClassName(aConfig);
+        setDriver(myDriver, aConfig);
       }
-      auto myDriver = new myClassName(aConfig);
-
-      setDriver(myDriver, aConfig);
       return cast(O)this;
     }
     O setDriver(this O)(IDriver aDriver, aConfig = []) {
