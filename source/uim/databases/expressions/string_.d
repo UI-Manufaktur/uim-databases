@@ -55,7 +55,7 @@ class StringExpression : IDTBExpression
     }
 
 
-    string sql(ValueBinder $binder)
+    string sql(ValueBinder aValueBinder)
     {
         $placeholder = $binder.placeholder("c");
         $binder.bind($placeholder, $this.string,"string");

@@ -25,7 +25,7 @@ class OrderClauseExpression : IDTBExpression, FieldInterface
     /**
      * Constructor
      *
-     * @param \Cake\Database\IDTBExpression|string $field The field to order on.
+     * @param uim.databases\IDTBExpression|string $field The field to order on.
      * @param string $direction The direction to sort on.
      */
     this($field, $direction)
@@ -35,7 +35,7 @@ class OrderClauseExpression : IDTBExpression, FieldInterface
     }
 
 
-    string sql(ValueBinder $binder)
+    string sql(ValueBinder aValueBinder)
     {
         /** @var \Cake\Database\IDTBExpression|string $field */
         $field = _field;

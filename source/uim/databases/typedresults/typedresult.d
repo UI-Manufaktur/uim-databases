@@ -16,6 +16,6 @@ class DDTBTypedResult {
   // string myType The name of the type that is to be returned
   auto returnType(string newType) {
     _returnType = newType;
-    return this;
+    return cast(O)this;
   }
 }

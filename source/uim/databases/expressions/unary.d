@@ -62,7 +62,7 @@ class UnaryExpression : IDTBExpression
     }
 
 
-    string sql(ValueBinder $binder)
+    string sql(ValueBinder aValueBinder)
     {
         $operand = _value;
         if ($operand instanceof IDTBExpression) {

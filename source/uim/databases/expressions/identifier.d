@@ -71,7 +71,7 @@ class IdentifierExpression : IDTBExpression
     }
 
 
-    string sql(ValueBinder $binder)
+    string sql(ValueBinder aValueBinder)
     {
         $sql = _identifier;
         if ($this.collation) {

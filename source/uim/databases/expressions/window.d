@@ -184,7 +184,7 @@ class WindowExpression : IDTBExpression, WindowInterface
     }
 
 
-    string sql(ValueBinder $binder)
+    string sql(ValueBinder aValueBinder)
     {
         $clauses = [];
         if ($this.name.getIdentifier()) {
@@ -261,12 +261,12 @@ class WindowExpression : IDTBExpression, WindowInterface
     /**
      * Builds frame offset sql.
      *
-     * @param \Cake\Database\ValueBinder $binder Value binder
-     * @param \Cake\Database\IDTBExpression|string|int|null $offset Frame offset
+     * @param uim.databases\ValueBinder aValueBinder Value binder
+     * @param uim.databases\IDTBExpression|string|int|null $offset Frame offset
      * @param string $direction Frame offset direction
      * @return string
      */
-    protected string buildOffsetSql(ValueBinder $binder, $offset, string $direction)
+    protected string buildOffsetSql(ValueBinder aValueBinder, $offset, string $direction)
     {
         if ($offset == 0) {
             return"CURRENT ROW";

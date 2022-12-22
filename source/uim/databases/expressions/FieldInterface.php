@@ -25,7 +25,7 @@ interface FieldInterface
     /**
      * Sets the field name
      *
-     * @param \Cake\Database\IDTBExpression|array|string $field The field to compare with.
+     * @param uim.databases\IDTBExpression|array|string $field The field to compare with.
      * @return void
      */
     function setField($field): void;

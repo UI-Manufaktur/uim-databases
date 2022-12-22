@@ -126,7 +126,7 @@ class FunctionExpression extends QueryExpression : IDTBTypedResult
     }
 
 
-    string sql(ValueBinder $binder) {
+    string sql(ValueBinder aValueBinder) {
         $parts = [];
         foreach (_conditions as $condition) {
             if ($condition instanceof Query) {
