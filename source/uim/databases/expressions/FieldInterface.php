@@ -25,7 +25,7 @@ interface FieldInterface
     /**
      * Sets the field name
      *
-     * @param \Cake\Database\ExpressionInterface|array|string $field The field to compare with.
+     * @param \Cake\Database\IDTBExpression|array|string $field The field to compare with.
      * @return void
      */
     function setField($field): void;
@@ -33,7 +33,7 @@ interface FieldInterface
     /**
      * Returns the field name
      *
-     * @return \Cake\Database\ExpressionInterface|array|string
+     * @return \Cake\Database\IDTBExpression|array|string
      */
     function getField();
 }

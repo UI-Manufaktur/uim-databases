@@ -11,7 +11,7 @@ import uim.cake;
 /**
  * An expression that represents a common table expression definition.
  */
-class CommonTableExpression : ExpressionInterface
+class CommonTableExpression : IDTBExpression
 {
     /**
      * The CTE name.
@@ -30,7 +30,7 @@ class CommonTableExpression : ExpressionInterface
     /**
      * The CTE query definition.
      *
-     * @var \Cake\Database\ExpressionInterface|null
+     * @var \Cake\Database\IDTBExpression|null
      */
     protected $query;
 
@@ -52,7 +52,7 @@ class CommonTableExpression : ExpressionInterface
      * Constructor.
      *
      * @param string $name The CTE name.
-     * @param \Cake\Database\ExpressionInterface|\Closure $query CTE query
+     * @param \Cake\Database\IDTBExpression|\Closure $query CTE query
      */
     function __construct(string $name ="", $query = null)
     {
@@ -81,16 +81,16 @@ class CommonTableExpression : ExpressionInterface
     /**
      * Sets the query for this CTE.
      *
-     * @param \Cake\Database\ExpressionInterface|\Closure $query CTE query
+     * @param \Cake\Database\IDTBExpression|\Closure $query CTE query
      * @return $this
      */
     function query($query)
     {
         if ($query instanceof Closure) {
             $query = $query();
-            if (!($query instanceof ExpressionInterface)) {
+            if (!($query instanceof IDTBExpression)) {
                 throw new RuntimeException(
-                   "You must return an `ExpressionInterface` from a Closure passed to `query()`."
+                   "You must return an `IDTBExpression` from a Closure passed to `query()`."
                 );
             }
         }

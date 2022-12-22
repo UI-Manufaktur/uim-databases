@@ -11,7 +11,7 @@ import uim.cake;
 /**
  * Represents a SQL when/then clause with a fluid API
  */
-class WhenThenExpression : ExpressionInterface
+class WhenThenExpression : IDTBExpression
 {
     use CaseExpressionTrait;
     use ExpressionTypeCasterTrait;
@@ -38,7 +38,7 @@ class WhenThenExpression : ExpressionInterface
     /**
      * Then `WHEN` value.
      *
-     * @var \Cake\Database\ExpressionInterface|object|scalar|null
+     * @var \Cake\Database\IDTBExpression|object|scalar|null
      */
     protected $when = null;
 
@@ -52,7 +52,7 @@ class WhenThenExpression : ExpressionInterface
     /**
      * The `THEN` value.
      *
-     * @var \Cake\Database\ExpressionInterface|object|scalar|null
+     * @var \Cake\Database\IDTBExpression|object|scalar|null
      */
     protected $then = null;
 
@@ -88,7 +88,7 @@ class WhenThenExpression : ExpressionInterface
     /**
      * Sets the `WHEN` value.
      *
-     * @param \Cake\Database\ExpressionInterface|object|array|scalar $when The `WHEN` value. When using an array of
+     * @param \Cake\Database\IDTBExpression|object|array|scalar $when The `WHEN` value. When using an array of
      *  conditions, it must be compatible with `\Cake\Database\Query::where()`. Note that this argument is _not_
      *  completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in! If you
      *  plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to be
@@ -98,7 +98,7 @@ class WhenThenExpression : ExpressionInterface
      *  conditions, or else a string. If no type is provided, the type will be tried to be inferred from the value.
      * @return $this
      * @throws \InvalidArgumentException In case the `$when` argument is neither a non-empty array, nor a scalar value,
-     *  an object, or an instance of `\Cake\Database\ExpressionInterface`.
+     *  an object, or an instance of `\Cake\Database\IDTBExpression`.
      * @throws \InvalidArgumentException In case the `$type` argument is neither an array, a string, nor null.
      * @throws \InvalidArgumentException In case the `$when` argument is an array, and the `$type` argument is neither
      * an array, nor null.
@@ -116,7 +116,7 @@ class WhenThenExpression : ExpressionInterface
             throw new InvalidArgumentException(sprintf(
                "The `$when` argument must be either a non-empty array, a scalar value, an object," .
                "or an instance of `\%s`, `%s` given.",
-                ExpressionInterface::class,
+                IDTBExpression::class,
                 is_array($when) ?"[]" : getTypeName($when) // @phpstan-ignore-line
             ));
         }
@@ -168,7 +168,7 @@ class WhenThenExpression : ExpressionInterface
 
             if (
                 $type =is null &&
-                !($when instanceof ExpressionInterface)
+                !($when instanceof IDTBExpression)
             ) {
                 $type = $this.inferType($when);
             }
@@ -183,7 +183,7 @@ class WhenThenExpression : ExpressionInterface
     /**
      * Sets the `THEN` result value.
      *
-     * @param \Cake\Database\ExpressionInterface|object|scalar|null $result The result value.
+     * @param \Cake\Database\IDTBExpression|object|scalar|null $result The result value.
      * @param string|null $type The result type. If no type is provided, the type will be inferred from the given
      *  result value.
      * @return $this
@@ -198,7 +198,7 @@ class WhenThenExpression : ExpressionInterface
             throw new InvalidArgumentException(sprintf(
                "The `$result` argument must be either `null`, a scalar value, an object," .
                "or an instance of `\%s`, `%s` given.",
-                ExpressionInterface::class,
+                IDTBExpression::class,
                 getTypeName($result)
             ));
         }
@@ -238,7 +238,7 @@ class WhenThenExpression : ExpressionInterface
      * * `then`: The `THEN` result value.
      *
      * @param string $clause The name of the clause to obtain.
-     * @return \Cake\Database\ExpressionInterface|object|scalar|null
+     * @return \Cake\Database\IDTBExpression|object|scalar|null
      * @throws \InvalidArgumentException In case the given clause name is invalid.
      */
     function clause(string $clause)
@@ -270,13 +270,13 @@ class WhenThenExpression : ExpressionInterface
         $when = $this.when;
         if (
             is_string($this.whenType) &&
-            !($when instanceof ExpressionInterface)
+            !($when instanceof IDTBExpression)
         ) {
             $when = _castToExpression($when, $this.whenType);
         }
         if ($when instanceof Query) {
             $when = sprintf("(%s)", $when.sql($binder));
-        } elseif ($when instanceof ExpressionInterface) {
+        } elseif ($when instanceof IDTBExpression) {
             $when = $when.sql($binder);
         } else {
             $placeholder = $binder.placeholder("c");
@@ -297,12 +297,12 @@ class WhenThenExpression : ExpressionInterface
 
     function traverse(Closure $callback)
     {
-        if ($this.when instanceof ExpressionInterface) {
+        if ($this.when instanceof IDTBExpression) {
             $callback($this.when);
             $this.when.traverse($callback);
         }
 
-        if ($this.then instanceof ExpressionInterface) {
+        if ($this.then instanceof IDTBExpression) {
             $callback($this.then);
             $this.then.traverse($callback);
         }
@@ -317,11 +317,11 @@ class WhenThenExpression : ExpressionInterface
      */
     function __clone()
     {
-        if ($this.when instanceof ExpressionInterface) {
+        if ($this.when instanceof IDTBExpression) {
             $this.when = clone $this.when;
         }
 
-        if ($this.then instanceof ExpressionInterface) {
+        if ($this.then instanceof IDTBExpression) {
             $this.then = clone $this.then;
         }
     }

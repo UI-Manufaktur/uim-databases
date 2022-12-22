@@ -14,7 +14,7 @@ import uim.cake;
  * Helps generate SQL with the correct number of placeholders and bind
  * values correctly into the statement.
  */
-class ValuesExpression : ExpressionInterface
+class ValuesExpression : IDTBExpression
 {
     use ExpressionTypeCasterTrait;
     use TypeMapTrait;
@@ -219,7 +219,7 @@ class ValuesExpression : ExpressionInterface
             foreach ($columns as $column) {
                 $value = $row[$column];
 
-                if ($value instanceof ExpressionInterface) {
+                if ($value instanceof IDTBExpression) {
                     $rowPlaceholders[] ="(" . $value.sql($binder) .")";
                     continue;
                 }
@@ -252,14 +252,14 @@ class ValuesExpression : ExpressionInterface
         }
 
         foreach (_values as $v) {
-            if ($v instanceof ExpressionInterface) {
+            if ($v instanceof IDTBExpression) {
                 $v.traverse($callback);
             }
             if (!is_array($v)) {
                 continue;
             }
             foreach ($v as $field) {
-                if ($field instanceof ExpressionInterface) {
+                if ($field instanceof IDTBExpression) {
                     $callback($field);
                     $field.traverse($callback);
                 }

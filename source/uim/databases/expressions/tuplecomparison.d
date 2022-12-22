@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
+use Cake\Database\IDTBExpression;
 use Cake\Database\ValueBinder;
 use Closure;
 use InvalidArgumentException;
@@ -38,8 +38,8 @@ class TupleComparison extends ComparisonExpression
     /**
      * Constructor
      *
-     * @param \Cake\Database\ExpressionInterface|array|string $fields the fields to use to form a tuple
-     * @param \Cake\Database\ExpressionInterface|array $values the values to use to form a tuple
+     * @param \Cake\Database\IDTBExpression|array|string $fields the fields to use to form a tuple
+     * @param \Cake\Database\IDTBExpression|array $values the values to use to form a tuple
      * @param array<string|null> $types the types names to use for casting each of the values, only
      * one type per position in the value array in needed
      * @param string $conjunction the operator used for comparing field and value
@@ -99,7 +99,7 @@ class TupleComparison extends ComparisonExpression
         }
 
         foreach ($originalFields as $field) {
-            $fields[] = $field instanceof ExpressionInterface ? $field.sql($binder) : $field;
+            $fields[] = $field instanceof IDTBExpression ? $field.sql($binder) : $field;
         }
 
         $values = _stringifyValues($binder);
@@ -121,12 +121,12 @@ class TupleComparison extends ComparisonExpression
         $values = [];
         $parts = $this.getValue();
 
-        if ($parts instanceof ExpressionInterface) {
+        if ($parts instanceof IDTBExpression) {
             return $parts.sql($binder);
         }
 
         foreach ($parts as $i: $value) {
-            if ($value instanceof ExpressionInterface) {
+            if ($value instanceof IDTBExpression) {
                 $values[] = $value.sql($binder);
                 continue;
             }
@@ -176,7 +176,7 @@ class TupleComparison extends ComparisonExpression
         }
 
         $value = $this.getValue();
-        if ($value instanceof ExpressionInterface) {
+        if ($value instanceof IDTBExpression) {
             $callback($value);
             $value.traverse($callback);
 
@@ -198,7 +198,7 @@ class TupleComparison extends ComparisonExpression
 
     /**
      * Conditionally executes the callback for the passed value if
-     * it is an ExpressionInterface
+     * it is an IDTBExpression
      *
      * @param mixed $value The value to traverse
      * @param \Closure $callback The callable to use when traversing
@@ -206,7 +206,7 @@ class TupleComparison extends ComparisonExpression
      */
     protected function _traverseValue($value, Closure $callback): void
     {
-        if ($value instanceof ExpressionInterface) {
+        if ($value instanceof IDTBExpression) {
             $callback($value);
             $value.traverse($callback);
         }

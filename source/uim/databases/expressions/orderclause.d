@@ -11,7 +11,7 @@ import uim.cake;
 /**
  * An expression object for complex ORDER BY clauses
  */
-class OrderClauseExpression : ExpressionInterface, FieldInterface
+class OrderClauseExpression : IDTBExpression, FieldInterface
 {
     use FieldTrait;
 
@@ -25,7 +25,7 @@ class OrderClauseExpression : ExpressionInterface, FieldInterface
     /**
      * Constructor
      *
-     * @param \Cake\Database\ExpressionInterface|string $field The field to order on.
+     * @param \Cake\Database\IDTBExpression|string $field The field to order on.
      * @param string $direction The direction to sort on.
      */
     function __construct($field, $direction)
@@ -37,11 +37,11 @@ class OrderClauseExpression : ExpressionInterface, FieldInterface
 
     string sql(ValueBinder $binder)
     {
-        /** @var \Cake\Database\ExpressionInterface|string $field */
+        /** @var \Cake\Database\IDTBExpression|string $field */
         $field = _field;
         if ($field instanceof Query) {
             $field = sprintf("(%s)", $field.sql($binder));
-        } elseif ($field instanceof ExpressionInterface) {
+        } elseif ($field instanceof IDTBExpression) {
             $field = $field.sql($binder);
         }
 
@@ -51,7 +51,7 @@ class OrderClauseExpression : ExpressionInterface, FieldInterface
 
     function traverse(Closure $callback)
     {
-        if (_field instanceof ExpressionInterface) {
+        if (_field instanceof IDTBExpression) {
             $callback(_field);
             _field.traverse($callback);
         }
@@ -66,7 +66,7 @@ class OrderClauseExpression : ExpressionInterface, FieldInterface
      */
     function __clone()
     {
-        if (_field instanceof ExpressionInterface) {
+        if (_field instanceof IDTBExpression) {
             _field = clone _field;
         }
     }

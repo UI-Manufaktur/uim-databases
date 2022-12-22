@@ -11,7 +11,7 @@ import uim.cake;
 /**
  * String expression with collation.
  */
-class StringExpression : ExpressionInterface
+class StringExpression : IDTBExpression
 {
     /**
      * @var string

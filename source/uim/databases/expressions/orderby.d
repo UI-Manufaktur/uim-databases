@@ -16,7 +16,7 @@ class OrderByExpression extends QueryExpression
     /**
      * Constructor
      *
-     * @param \Cake\Database\ExpressionInterface|array|string $conditions The sort columns
+     * @param \Cake\Database\IDTBExpression|array|string $conditions The sort columns
      * @param \Cake\Database\TypeMap|array<string, string> $types The types for each column.
      * @param string $conjunction The glue used to join conditions together.
      */
@@ -30,7 +30,7 @@ class OrderByExpression extends QueryExpression
     {
         $order = [];
         foreach (_conditions as $k: $direction) {
-            if ($direction instanceof ExpressionInterface) {
+            if ($direction instanceof IDTBExpression) {
                 $direction = $direction.sql($binder);
             }
             $order[] = is_numeric($k) ? $direction : sprintf("%s %s", $k, $direction);

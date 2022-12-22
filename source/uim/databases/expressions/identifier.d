@@ -16,7 +16,7 @@ import uim.cake;
  *
  * @see \Cake\Database\Query::identifier()
  */
-class IdentifierExpression : ExpressionInterface
+class IdentifierExpression : IDTBExpression
 {
     // Holds the identifier string
     protected string _identifier;

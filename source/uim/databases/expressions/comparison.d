@@ -13,7 +13,7 @@ import uim.cake;
  * involving a field an operator and a value. In its most common form the
  * string representation of a comparison is `field = value`
  */
-class ComparisonExpression : ExpressionInterface, FieldInterface
+class ComparisonExpression : IDTBExpression, FieldInterface
 {
     use ExpressionTypeCasterTrait;
     use FieldTrait;
@@ -47,17 +47,17 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
     protected $_isMultiple = false;
 
     /**
-     * A cached list of ExpressionInterface objects that were
+     * A cached list of IDTBExpression objects that were
      * found in the value for this expression.
      *
-     * @var array<\Cake\Database\ExpressionInterface>
+     * @var array<\Cake\Database\IDTBExpression>
      */
     protected $_valueExpressions = [];
 
     /**
      * Constructor
      *
-     * @param \Cake\Database\ExpressionInterface|string $field the field name to compare to a value
+     * @param \Cake\Database\IDTBExpression|string $field the field name to compare to a value
      * @param mixed $value The value to be used in comparison
      * @param string|null $type the type name used to cast the value
      * @param string $operator the operator used for comparing field and value
@@ -123,17 +123,17 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
 
     string sql(ValueBinder $binder)
     {
-        /** @var \Cake\Database\ExpressionInterface|string $field */
+        /** @var \Cake\Database\IDTBExpression|string $field */
         $field = _field;
 
-        if ($field instanceof ExpressionInterface) {
+        if ($field instanceof IDTBExpression) {
             $field = $field.sql($binder);
         }
 
         if (_value instanceof IdentifierExpression) {
             $template ="%s %s %s";
             $value = _value.sql($binder);
-        } elseif (_value instanceof ExpressionInterface) {
+        } elseif (_value instanceof IDTBExpression) {
             $template ="%s %s (%s)";
             $value = _value.sql($binder);
         } else {
@@ -146,12 +146,12 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
 
     function traverse(Closure $callback)
     {
-        if (_field instanceof ExpressionInterface) {
+        if (_field instanceof IDTBExpression) {
             $callback(_field);
             _field.traverse($callback);
         }
 
-        if (_value instanceof ExpressionInterface) {
+        if (_value instanceof IDTBExpression) {
             $callback(_value);
             _value.traverse($callback);
         }
@@ -174,7 +174,7 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
     function __clone()
     {
         foreach (["_value","_field"] as $prop) {
-            if ($this.{$prop} instanceof ExpressionInterface) {
+            if ($this.{$prop} instanceof IDTBExpression) {
                 $this.{$prop} = clone $this.{$prop};
             }
         }
@@ -191,7 +191,7 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
     {
         $template ="%s";
 
-        if (_field instanceof ExpressionInterface && !_field instanceof IdentifierExpression) {
+        if (_field instanceof IDTBExpression && !_field instanceof IdentifierExpression) {
             $template ="(%s)";
         }
 
@@ -206,7 +206,7 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
             // To avoid SQL errors when comparing a field to a list of empty values,
             // better just throw an exception here
             if ($value =="") {
-                $field = _field instanceof ExpressionInterface ? _field.sql($binder) : _field;
+                $field = _field instanceof IDTBExpression ? _field.sql($binder) : _field;
                 /** @psalm-suppress PossiblyInvalidCast */
                 throw new DatabaseException(
                     "Impossible to generate condition with empty list of values for field ($field)"
@@ -264,15 +264,15 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
 
     /**
      * Returns an array with the original $values in the first position
-     * and all ExpressionInterface objects that could be found in the second
+     * and all IDTBExpression objects that could be found in the second
      * position.
      *
-     * @param \Cake\Database\ExpressionInterface|iterable $values The rows to insert
+     * @param \Cake\Database\IDTBExpression|iterable $values The rows to insert
      * @return array
      */
     protected function _collectExpressions($values): array
     {
-        if ($values instanceof ExpressionInterface) {
+        if ($values instanceof IDTBExpression) {
             return [$values, []];
         }
 
@@ -285,7 +285,7 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
         }
 
         foreach ($values as $k: $v) {
-            if ($v instanceof ExpressionInterface) {
+            if ($v instanceof IDTBExpression) {
                 $expressions[$k] = $v;
             }
 

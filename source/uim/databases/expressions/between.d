@@ -25,13 +25,13 @@ class BetweenExpression : IExpression, IField {
     /**
      * Constructor
      *
-     * @param \Cake\Database\ExpressionInterface|string $field The field name to compare for values inbetween the range.
+     * @param \Cake\Database\IDTBExpression|string $field The field name to compare for values inbetween the range.
      * @param mixed $from The initial value of the range.
      * @param mixed $to The ending value in the comparison range.
      * @param string|null aBindDatatype The data type name to bind the values with.
      */
 
-    // this(IExpressionInterface field, DValue aFromValue, DValue aToValue, string $aValueDatatype = null) {
+    // this(IIDTBExpression field, DValue aFromValue, DValue aToValue, string $aValueDatatype = null) {
 
     this(string aFieldName, DValue aFromValue, DValue aToValue, string aBindDatatype = null) {
         if (aValueDatatype !is null) {
@@ -51,14 +51,14 @@ class BetweenExpression : IExpression, IField {
        "to": _toValue,
       ];
 
-        /** @var \Cake\Database\ExpressionInterface|string $field */
+        /** @var \Cake\Database\IDTBExpression|string $field */
         myFieldName = _fieldName;
-/*         if ($field instanceof ExpressionInterface) {
+/*         if ($field instanceof IDTBExpression) {
             $field = $field.sql($binder);
         }
  */
         foreach ($name: $part; $parts) {
-/*             if ($part instanceof ExpressionInterface) {
+/*             if ($part instanceof IDTBExpression) {
                 $parts[$name] = $part.sql($binder);
                 continue;
             }
@@ -71,7 +71,7 @@ class BetweenExpression : IExpression, IField {
 
     function traverse(Closure $callback) {
         foreach ([_field, _from, _toValue] as $part) {
-            if ($part instanceof ExpressionInterface) {
+            if ($part instanceof IDTBExpression) {
                 $callback($part);
             }
         }
@@ -97,7 +97,7 @@ class BetweenExpression : IExpression, IField {
     // Do a deep clone of this expression.
     void __clone() {
         foreach (["_field","_from","_toValue"] as $part) {
-            if ($this.{$part} instanceof ExpressionInterface) {
+            if ($this.{$part} instanceof IDTBExpression) {
                 $this.{$part} = clone $this.{$part};
             }
         }

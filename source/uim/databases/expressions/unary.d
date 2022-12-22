@@ -10,7 +10,7 @@ import uim.cake;
 /**
  * An expression object that represents an expression with only a single operand.
  */
-class UnaryExpression : ExpressionInterface
+class UnaryExpression : IDTBExpression
 {
     /**
      * Indicates that the operation is in pre-order
@@ -65,7 +65,7 @@ class UnaryExpression : ExpressionInterface
     string sql(ValueBinder $binder)
     {
         $operand = _value;
-        if ($operand instanceof ExpressionInterface) {
+        if ($operand instanceof IDTBExpression) {
             $operand = $operand.sql($binder);
         }
 
@@ -79,7 +79,7 @@ class UnaryExpression : ExpressionInterface
 
     function traverse(Closure $callback)
     {
-        if (_value instanceof ExpressionInterface) {
+        if (_value instanceof IDTBExpression) {
             $callback(_value);
             _value.traverse($callback);
         }
@@ -94,7 +94,7 @@ class UnaryExpression : ExpressionInterface
      */
     function __clone()
     {
-        if (_value instanceof ExpressionInterface) {
+        if (_value instanceof IDTBExpression) {
             _value = clone _value;
         }
     }

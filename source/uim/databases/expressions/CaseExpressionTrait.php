@@ -18,9 +18,9 @@ namespace Cake\Database\Expression;
 
 use Cake\Chronos\Date;
 use Cake\Chronos\MutableDate;
-use Cake\Database\ExpressionInterface;
+use Cake\Database\IDTBExpression;
 use Cake\Database\Query;
-use Cake\Database\TypedResultInterface;
+use Cake\Database\IDTBTypedResult;
 use Cake\Database\ValueBinder;
 use DateTimeInterface;
 
@@ -68,7 +68,7 @@ trait CaseExpressionTrait
             $value instanceof IdentifierExpression
         ) {
             $type = _typeMap.type($value.getIdentifier());
-        } elseif ($value instanceof TypedResultInterface) {
+        } elseif ($value instanceof IDTBTypedResult) {
             $type = $value.getReturnType();
         }
 
@@ -79,7 +79,7 @@ trait CaseExpressionTrait
      * Compiles a nullable value to SQL.
      *
      * @param \Cake\Database\ValueBinder $binder The value binder to use.
-     * @param \Cake\Database\ExpressionInterface|object|scalar|null $value The value to compile.
+     * @param \Cake\Database\IDTBExpression|object|scalar|null $value The value to compile.
      * @param string|null $type The value type.
      * @return string
      */
@@ -87,7 +87,7 @@ trait CaseExpressionTrait
     {
         if (
             $type !is null &&
-            !($value instanceof ExpressionInterface)
+            !($value instanceof IDTBExpression)
         ) {
             $value = _castToExpression($value, $type);
         }
@@ -96,7 +96,7 @@ trait CaseExpressionTrait
             $value ="NULL";
         } elseif ($value instanceof Query) {
             $value = sprintf("(%s)", $value.sql($binder));
-        } elseif ($value instanceof ExpressionInterface) {
+        } elseif ($value instanceof IDTBExpression) {
             $value = $value.sql($binder);
         } else {
             $placeholder = $binder.placeholder("c");

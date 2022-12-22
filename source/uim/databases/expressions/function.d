@@ -14,7 +14,7 @@ import uim.cake;
  * For security reasons, all params passed are quoted by default unless
  * explicitly told otherwise.
  */
-class FunctionExpression extends QueryExpression : TypedResultInterface
+class FunctionExpression extends QueryExpression : IDTBTypedResult
 {
     use ExpressionTypeCasterTrait;
     use TypedResultTrait;
@@ -110,11 +110,11 @@ class FunctionExpression extends QueryExpression : TypedResultInterface
 
             $type = $typeMap.type($k);
 
-            if ($type !is null && !$p instanceof ExpressionInterface) {
+            if ($type !is null && !$p instanceof IDTBExpression) {
                 $p = _castToExpression($p, $type);
             }
 
-            if ($p instanceof ExpressionInterface) {
+            if ($p instanceof IDTBExpression) {
                 $put(_conditions, $p);
                 continue;
             }
@@ -132,7 +132,7 @@ class FunctionExpression extends QueryExpression : TypedResultInterface
         foreach (_conditions as $condition) {
             if ($condition instanceof Query) {
                 $condition = sprintf("(%s)", $condition.sql($binder));
-            } elseif ($condition instanceof ExpressionInterface) {
+            } elseif ($condition instanceof IDTBExpression) {
                 $condition = $condition.sql($binder);
             } elseif (is_array($condition)) {
                 $p = $binder.placeholder("param");
