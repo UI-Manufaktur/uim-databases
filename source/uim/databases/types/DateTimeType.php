@@ -13,7 +13,7 @@ import uim.databases;
  *
  * Use to convert datetime instances to strings & back.
  */
-class DateTimeType extends BaseType : IBatchCasting
+class DateTimeType : BaseType : IBatchCasting
 {
     /**
      * Whether we want to override the time of the converted Time objects

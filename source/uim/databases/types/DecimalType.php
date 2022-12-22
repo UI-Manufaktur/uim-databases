@@ -13,7 +13,7 @@ import uim.databases;
  *
  * Use to convert decimal data between PHP and the database types.
  */
-class DecimalType extends BaseType : IBatchCasting
+class DecimalType : BaseType : IBatchCasting
 {
     /**
      * The class to use for representing number objects

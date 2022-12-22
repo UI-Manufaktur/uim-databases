@@ -14,7 +14,7 @@ import uim.cake;
  * For security reasons, all params passed are quoted by default unless
  * explicitly told otherwise.
  */
-class AggregateExpression extends FunctionExpression : IWindow
+class AggregateExpression : FunctionExpression : IWindow
 {
     /**
      * @var \Cake\Database\Expression\QueryExpression

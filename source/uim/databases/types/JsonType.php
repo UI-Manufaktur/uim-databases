@@ -13,7 +13,7 @@ import uim.databases;
  *
  * Use to convert JSON data between PHP and the database types.
  */
-class JsonType extends BaseType : IBatchCasting
+class JsonType : BaseType : IBatchCasting
 {
     /**
      * @var int

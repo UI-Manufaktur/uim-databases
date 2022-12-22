@@ -13,7 +13,7 @@ import uim.databases;
  *
  * Use to convert integer data between PHP and the database types.
  */
-class IntegerType extends BaseType : IBatchCasting
+class IntegerType : BaseType : IBatchCasting
 {
     /**
      * Checks if the value is not a numeric value

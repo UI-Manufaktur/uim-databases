@@ -10,7 +10,7 @@ import uim.databases;
 
 // Bool type converter.
 // Use to convert bool data between D and the database types.
-class BoolType extends BaseType : IBatchCasting {
+class BoolType : BaseType : IBatchCasting {
     /**
      * Convert bool data into the database format.
      *

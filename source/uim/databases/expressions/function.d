@@ -14,7 +14,7 @@ import uim.cake;
  * For security reasons, all params passed are quoted by default unless
  * explicitly told otherwise.
  */
-class FunctionExpression extends QueryExpression : IDTBTypedResult
+class FunctionExpression : QueryExpression : IDTBTypedResult
 {
     use ExpressionTypeCasterTrait;
     use TypedResultTrait;

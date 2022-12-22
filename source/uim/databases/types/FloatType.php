@@ -13,7 +13,7 @@ import uim.databases;
  *
  * Use to convert float/decimal data between PHP and the database types.
  */
-class FloatType extends BaseType : IBatchCasting
+class FloatType : BaseType : IBatchCasting
 {
     /**
      * The class to use for representing number objects
