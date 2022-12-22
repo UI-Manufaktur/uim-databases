@@ -49,7 +49,7 @@ class StringExpression : ExpressionInterface
      *
      * @return string
      */
-    function getCollation(): string
+    string getCollation()
     {
         return $this.collation;
     }
@@ -57,7 +57,7 @@ class StringExpression : ExpressionInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         $placeholder = $binder.placeholder("c");
         $binder.bind($placeholder, $this.string,"string");

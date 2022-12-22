@@ -75,7 +75,7 @@ class QueryExpression : ExpressionInterface, Countable
      *
      * @return string
      */
-    function getConjunction(): string
+    string getConjunction()
     {
         return _conjunction;
     }
@@ -570,7 +570,7 @@ class QueryExpression : ExpressionInterface, Countable
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         $len = $this.count();
         if ($len === 0) {

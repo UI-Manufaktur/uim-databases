@@ -424,7 +424,7 @@ class CaseStatementExpression : ExpressionInterface, TypedResultInterface
      * @return string
      * @see CaseStatementExpression::then()
      */
-    function getReturnType(): string
+    string getReturnType()
     {
         if ($this.returnType !is null) {
             return $this.returnType;
@@ -500,7 +500,7 @@ class CaseStatementExpression : ExpressionInterface, TypedResultInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         if ($this.whenBuffer !is null) {
             throw new LogicException("Case expression has incomplete when clause. Missing `then()` after `when()`.");

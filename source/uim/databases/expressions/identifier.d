@@ -18,17 +18,10 @@ import uim.cake;
  */
 class IdentifierExpression : ExpressionInterface
 {
-    /**
-     * Holds the identifier string
-     *
-     * @var string
-     */
-    protected $_identifier;
+    // Holds the identifier string
+    protected string _identifier;
 
-    /**
-     * @var string|null
-     */
-    protected $collation;
+    protected Nullable!string collation;
 
     /**
      * Constructor
@@ -36,21 +29,14 @@ class IdentifierExpression : ExpressionInterface
      * @param string $identifier The identifier this expression represents
      * @param string|null $collation The identifier collation
      */
-    function __construct(string $identifier, ?string $collation = null)
-    {
+    function __construct(string $identifier, ?string $collation = null) {
         _identifier = $identifier;
         $this.collation = $collation;
     }
 
-    /**
-     * Sets the identifier this expression represents
-     *
-     * @param string $identifier The identifier
-     * @return void
-     */
-    function setIdentifier(string $identifier): void
-    {
-        _identifier = $identifier;
+    // Sets the identifier this expression represents
+    void setIdentifier(string newIdentifier) {
+        _identifier = newIdentifier;
     }
 
     /**
@@ -58,7 +44,7 @@ class IdentifierExpression : ExpressionInterface
      *
      * @return string
      */
-    function getIdentifier(): string
+    string getIdentifier()
     {
         return _identifier;
     }
@@ -87,7 +73,7 @@ class IdentifierExpression : ExpressionInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         $sql = _identifier;
         if ($this.collation) {

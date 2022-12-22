@@ -76,7 +76,7 @@ class FunctionExpression extends QueryExpression : TypedResultInterface
      *
      * @return string
      */
-    function getName(): string
+    string getName()
     {
         return _name;
     }
@@ -128,7 +128,7 @@ class FunctionExpression extends QueryExpression : TypedResultInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         $parts = [];
         foreach (_conditions as $condition) {

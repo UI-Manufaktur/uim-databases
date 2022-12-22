@@ -83,7 +83,7 @@ trait CaseExpressionTrait
      * @param string|null $type The value type.
      * @return string
      */
-    protected function compileNullableValue(ValueBinder $binder, $value, ?string $type = null): string
+    protected string compileNullableValue(ValueBinder $binder, $value, ?string $type = null)
     {
         if (
             $type !is null &&

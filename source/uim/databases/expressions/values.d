@@ -194,7 +194,7 @@ class ValuesExpression : ExpressionInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         if (empty(_values) && empty(_query)) {
             return"";

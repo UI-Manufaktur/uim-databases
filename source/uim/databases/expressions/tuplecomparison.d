@@ -90,7 +90,7 @@ class TupleComparison extends ComparisonExpression
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         $template ="(%s) %s (%s)";
         $fields = [];
@@ -118,7 +118,7 @@ class TupleComparison extends ComparisonExpression
      * @param \Cake\Database\ValueBinder $binder The value binder to convert expressions with.
      * @return string
      */
-    protected function _stringifyValues(ValueBinder $binder): string
+    protected string _stringifyValues(ValueBinder $binder)
     {
         $values = [];
         $parts = $this.getValue();
@@ -162,7 +162,7 @@ class TupleComparison extends ComparisonExpression
     /**
      * @inheritDoc
      */
-    protected function _bindValue($value, ValueBinder $binder, ?string $type = null): string
+    protected string _bindValue($value, ValueBinder $binder, ?string $type = null)
     {
         $placeholder = $binder.placeholder("tuple");
         $binder.bind($placeholder, $value, $type);

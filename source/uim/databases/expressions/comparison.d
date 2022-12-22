@@ -115,7 +115,7 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
      *
      * @return string
      */
-    function getOperator(): string
+    string getOperator()
     {
         return _operator;
     }
@@ -123,7 +123,7 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         /** @var \Cake\Database\ExpressionInterface|string $field */
         $field = _field;
@@ -232,7 +232,7 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
      * @param string|null $type The type of $value
      * @return string generated placeholder
      */
-    protected function _bindValue($value, ValueBinder $binder, ?string $type = null): string
+    protected string _bindValue($value, ValueBinder $binder, ?string $type = null)
     {
         $placeholder = $binder.placeholder("c");
         $binder.bind($placeholder, $value, $type);
@@ -249,7 +249,7 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
      * @param string|null $type the type to cast values to
      * @return string
      */
-    protected function _flattenValue(iterable $value, ValueBinder $binder, ?string $type = null): string
+    protected string _flattenValue(iterable $value, ValueBinder $binder, ?string $type = null)
     {
         $parts = [];
         if (is_array($value)) {

@@ -37,7 +37,7 @@ class OrderClauseExpression : ExpressionInterface, FieldInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         /** @var \Cake\Database\ExpressionInterface|string $field */
         $field = _field;

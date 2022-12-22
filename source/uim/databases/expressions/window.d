@@ -204,7 +204,7 @@ class WindowExpression : ExpressionInterface, WindowInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         $clauses = [];
         if ($this.name.getIdentifier()) {
@@ -288,7 +288,7 @@ class WindowExpression : ExpressionInterface, WindowInterface
      * @param string $direction Frame offset direction
      * @return string
      */
-    protected function buildOffsetSql(ValueBinder $binder, $offset, string $direction): string
+    protected string buildOffsetSql(ValueBinder $binder, $offset, string $direction)
     {
         if ($offset === 0) {
             return"CURRENT ROW";

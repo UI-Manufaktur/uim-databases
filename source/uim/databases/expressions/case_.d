@@ -192,7 +192,7 @@ class CaseExpression : ExpressionInterface
      * @param \Cake\Database\ValueBinder $binder Sql generator
      * @return string
      */
-    protected function _compile($part, ValueBinder $binder): string
+    protected string _compile($part, ValueBinder $binder)
     {
         if ($part instanceof ExpressionInterface) {
             $part = $part.sql($binder);
@@ -211,7 +211,7 @@ class CaseExpression : ExpressionInterface
      * @param \Cake\Database\ValueBinder $binder Placeholder generator object
      * @return string
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         $parts = [];
         $parts[] ="CASE";

@@ -64,7 +64,7 @@ class UnaryExpression : ExpressionInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         $operand = _value;
         if ($operand instanceof ExpressionInterface) {

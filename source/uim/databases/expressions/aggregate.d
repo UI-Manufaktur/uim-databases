@@ -187,7 +187,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         $sql = parent::sql($binder);
         if ($this.filter !is null) {

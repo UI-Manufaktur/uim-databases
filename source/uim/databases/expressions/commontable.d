@@ -167,7 +167,7 @@ class CommonTableExpression : ExpressionInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         $fields ="";
         if ($this.fields) {

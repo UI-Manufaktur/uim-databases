@@ -259,7 +259,7 @@ class WhenThenExpression : ExpressionInterface
     /**
      * @inheritDoc
      */
-    function sql(ValueBinder $binder): string
+    string sql(ValueBinder $binder)
     {
         if ($this.when =is null) {
             throw new LogicException("Case expression has incomplete when clause. Missing `when()`.");
