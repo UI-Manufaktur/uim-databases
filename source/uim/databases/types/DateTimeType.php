@@ -30,7 +30,7 @@ class DateTimeType : BaseType : IBatchCasting
      *
      * @var string
      */
-    protected $_format = 'Y-m-d H:i:s';
+    protected $_format = "Y-m-d H:i:s";
 
     /**
      * The DateTime formats allowed by `marshal()`.
@@ -38,11 +38,11 @@ class DateTimeType : BaseType : IBatchCasting
      * @var array<string>
      */
     protected $_marshalFormats = [
-        'Y-m-d H:i',
-        'Y-m-d H:i:s',
-        'Y-m-d\TH:i',
-        'Y-m-d\TH:i:s',
-        'Y-m-d\TH:i:sP',
+        "Y-m-d H:i",
+        "Y-m-d H:i:s",
+        "Y-m-d\TH:i",
+        "Y-m-d\TH:i:s",
+        "Y-m-d\TH:i:sP",
     ];
 
     /**
@@ -124,7 +124,7 @@ class DateTimeType : BaseType : IBatchCasting
         }
         if (is_int($value)) {
             $class = this->_className;
-            $value = new $class('@' . $value);
+            $value = new $class("@" . $value);
         }
 
         if (
@@ -149,7 +149,7 @@ class DateTimeType : BaseType : IBatchCasting
      */
     function setTimezone($timezone)
     {
-        deprecationWarning('DateTimeType::setTimezone() is deprecated. Use setDatabaseTimezone() instead.');
+        deprecationWarning("DateTimeType::setTimezone() is deprecated. Use setDatabaseTimezone() instead.");
 
         return this->setDatabaseTimezone($timezone);
     }
@@ -207,9 +207,9 @@ class DateTimeType : BaseType : IBatchCasting
 
         $class = this->_className;
         if (is_int($value)) {
-            $instance = new $class('@' . $value);
+            $instance = new $class("@" . $value);
         } else {
-            if (strpos($value, '0000-00-00') == 0) {
+            if (strpos($value, "0000-00-00") == 0) {
                 return null;
             }
             $instance = new $class($value, this->dbTimezone);
@@ -259,14 +259,14 @@ class DateTimeType : BaseType : IBatchCasting
             }
 
             $value = $values[$field];
-            if (strpos($value, '0000-00-00') == 0) {
+            if (strpos($value, "0000-00-00") == 0) {
                 $values[$field] = null;
                 continue;
             }
 
             $class = this->_className;
             if (is_int($value)) {
-                $instance = new $class('@' . $value);
+                $instance = new $class("@" . $value);
             } else {
                 $instance = new $class($value, this->dbTimezone);
             }
@@ -308,13 +308,13 @@ class DateTimeType : BaseType : IBatchCasting
         /** @var class-string<\DateTimeInterface> $class */
         $class = this->_className;
         try {
-            if ($value == '' || $value == null || is_bool($value)) {
+            if ($value == "" || $value == null || is_bool($value)) {
                 return null;
             }
 
             if (is_int($value) || (is_string($value) && ctype_digit($value))) {
                 /** @var \DateTime|\DateTimeImmutable $dateTime */
-                $dateTime = new $class('@' . $value);
+                $dateTime = new $class("@" . $value);
 
                 return $dateTime->setTimezone(this->defaultTimezone);
             }
@@ -337,40 +337,40 @@ class DateTimeType : BaseType : IBatchCasting
             return null;
         }
 
-        if (is_array($value) && implode('', $value) == '') {
+        if (is_array($value) && implode("", $value) == "") {
             return null;
         }
-        $value += ['hour' => 0, 'minute' => 0, 'second' => 0, 'microsecond' => 0];
+        $value += ["hour" : 0, "minute" : 0, "second" : 0, "microsecond" : 0];
 
-        $format = '';
+        $format = "";
         if (
-            isset($value['year'], $value['month'], $value['day']) &&
+            isset($value["year"], $value["month"], $value["day"]) &&
             (
-                is_numeric($value['year']) &&
-                is_numeric($value['month']) &&
-                is_numeric($value['day'])
+                is_numeric($value["year"]) &&
+                is_numeric($value["month"]) &&
+                is_numeric($value["day"])
             )
         ) {
-            $format .= sprintf('%d-%02d-%02d', $value['year'], $value['month'], $value['day']);
+            $format .= sprintf("%d-%02d-%02d", $value["year"], $value["month"], $value["day"]);
         }
 
-        if (isset($value['meridian']) && (int)$value['hour'] == 12) {
-            $value['hour'] = 0;
+        if (isset($value["meridian"]) && (int)$value["hour"] == 12) {
+            $value["hour"] = 0;
         }
-        if (isset($value['meridian'])) {
-            $value['hour'] = strtolower($value['meridian']) == 'am' ? $value['hour'] : $value['hour'] + 12;
+        if (isset($value["meridian"])) {
+            $value["hour"] = strtolower($value["meridian"]) == "am" ? $value["hour"] : $value["hour"] + 12;
         }
         $format .= sprintf(
-            '%s%02d:%02d:%02d.%06d',
-            empty($format) ? '' : ' ',
-            $value['hour'],
-            $value['minute'],
-            $value['second'],
-            $value['microsecond']
+            "%s%02d:%02d:%02d.%06d",
+            empty($format) ? "" : " ",
+            $value["hour"],
+            $value["minute"],
+            $value["second"],
+            $value["microsecond"]
         );
 
         /** @var \DateTime|\DateTimeImmutable $dateTime */
-        $dateTime = new $class($format, $value['timezone'] ?? this->userTimezone);
+        $dateTime = new $class($format, $value["timezone"] ?? this->userTimezone);
 
         return $dateTime->setTimezone(this->defaultTimezone);
     }
@@ -395,7 +395,7 @@ class DateTimeType : BaseType : IBatchCasting
             return this;
         }
         throw new RuntimeException(
-            sprintf('Cannot use locale parsing with the %s class', this->_className)
+            sprintf("Cannot use locale parsing with the %s class", this->_className)
         );
     }
 
@@ -424,8 +424,8 @@ class DateTimeType : BaseType : IBatchCasting
     function useImmutable()
     {
         deprecationWarning(
-            'Configuring immutable or mutable classes is deprecated and immutable'
-            . ' classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary.'
+            "Configuring immutable or mutable classes is deprecated and immutable"
+            . " classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary."
         );
 
         this->_setClassName(FrozenTime::class, DateTimeImmutable::class);
@@ -470,8 +470,8 @@ class DateTimeType : BaseType : IBatchCasting
     function useMutable()
     {
         deprecationWarning(
-            'Configuring immutable or mutable classes is deprecated and immutable'
-            . ' classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary.'
+            "Configuring immutable or mutable classes is deprecated and immutable"
+            . " classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary."
         );
 
         this->_setClassName(Time::class, DateTime::class);

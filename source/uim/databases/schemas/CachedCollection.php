@@ -73,10 +73,10 @@ class CachedCollection : CollectionInterface
 
     function describe(string $name, array $options = []): TableSchemaInterface
     {
-        $options += ['forceRefresh' => false];
+        $options += ["forceRefresh" : false];
         $cacheKey = this->cacheKey($name);
 
-        if (!$options['forceRefresh']) {
+        if (!$options["forceRefresh"]) {
             $cached = this->cacher->get($cacheKey);
             if ($cached != null) {
                 return $cached;
@@ -97,7 +97,7 @@ class CachedCollection : CollectionInterface
      */
     function cacheKey(string $name): string
     {
-        return this->prefix . '_' . $name;
+        return this->prefix . "_" . $name;
     }
 
     /**

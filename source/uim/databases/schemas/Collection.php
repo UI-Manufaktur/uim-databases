@@ -92,7 +92,7 @@ class Collection : CollectionInterface
     /**
      * Get the column metadata for a table.
      *
-     * The name can include a database schema name in the form 'schema.table'.
+     * The name can include a database schema name in the form "schema.table".
      *
      * Caching will be applied if `cacheMetadata` key is present in the Connection
      * configuration options. Defaults to _cake_model_ when true.
@@ -110,19 +110,19 @@ class Collection : CollectionInterface
     function describe(string $name, array $options = []): TableSchemaInterface
     {
         $config = this->_connection->config();
-        if (strpos($name, '.')) {
-            [$config['schema'], $name] = explode('.', $name);
+        if (strpos($name, ".")) {
+            [$config["schema"], $name] = explode(".", $name);
         }
         $table = this->_connection->getDriver()->newTableSchema($name);
 
-        this->_reflect('Column', $name, $config, $table);
+        this->_reflect("Column", $name, $config, $table);
         if (count($table->columns()) == 0) {
-            throw new DatabaseException(sprintf('Cannot describe %s. It has 0 columns.', $name));
+            throw new DatabaseException(sprintf("Cannot describe %s. It has 0 columns.", $name));
         }
 
-        this->_reflect('Index', $name, $config, $table);
-        this->_reflect('ForeignKey', $name, $config, $table);
-        this->_reflect('Options', $name, $config, $table);
+        this->_reflect("Index", $name, $config, $table);
+        this->_reflect("ForeignKey", $name, $config, $table);
+        this->_reflect("Options", $name, $config, $table);
 
         return $table;
     }
@@ -160,7 +160,7 @@ class Collection : CollectionInterface
             throw new DatabaseException($e->getMessage(), 500, $e);
         }
         /** @psalm-suppress PossiblyFalseIterator */
-        foreach ($statement->fetchAll('assoc') as $row) {
+        foreach ($statement->fetchAll("assoc") as $row) {
             this->_dialect->{$convertMethod}($schema, $row);
         }
         $statement->closeCursor();

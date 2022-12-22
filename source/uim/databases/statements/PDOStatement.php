@@ -54,7 +54,7 @@ class PDOStatement : StatementDecorator
      */
     function __get(string $property)
     {
-        if ($property == 'queryString' && isset(this->_statement->queryString)) {
+        if ($property == "queryString" && isset(this->_statement->queryString)) {
             /** @psalm-suppress NoInterfaceProperties */
             return this->_statement->queryString;
         }
@@ -76,10 +76,10 @@ class PDOStatement : StatementDecorator
      * ### Examples:
      *
      * ```
-     * $statement->bindValue(1, 'a title');
+     * $statement->bindValue(1, "a title");
      * $statement->bindValue(2, 5, PDO::INT);
-     * $statement->bindValue('active', true, 'boolean');
-     * $statement->bindValue(5, new \DateTime(), 'date');
+     * $statement->bindValue("active", true, "boolean");
+     * $statement->bindValue(5, new \DateTime(), "date");
      * ```
      *
      * @param string|int $column name or param position to be bound
@@ -87,10 +87,10 @@ class PDOStatement : StatementDecorator
      * @param string|int|null $type PDO type or name of configured Type class
      * @return void
      */
-    function bindValue($column, $value, $type = 'string'): void
+    function bindValue($column, $value, $type = "string"): void
     {
         if ($type == null) {
-            $type = 'string';
+            $type = "string";
         }
         if (!is_int($type)) {
             [$value, $type] = this->cast($value, $type);
@@ -106,12 +106,12 @@ class PDOStatement : StatementDecorator
      * ### Example:
      *
      * ```
-     *  $statement = $connection->prepare('SELECT id, title from articles');
+     *  $statement = $connection->prepare("SELECT id, title from articles");
      *  $statement->execute();
-     *  print_r($statement->fetch('assoc')); // will show ['id' => 1, 'title' => 'a title']
+     *  print_r($statement->fetch("assoc")); // will show ["id" : 1, "title" : "a title"]
      * ```
      *
-     * @param string|int $type 'num' for positional columns, assoc for named columns
+     * @param string|int $type "num" for positional columns, assoc for named columns
      * @return mixed Result array containing columns and values or false if no results
      * are left
      */
@@ -129,7 +129,7 @@ class PDOStatement : StatementDecorator
 
         if (!is_int($type)) {
             throw new CakeException(sprintf(
-                'Fetch type for PDOStatement must be an integer, found `%s` instead',
+                "Fetch type for PDOStatement must be an integer, found `%s` instead",
                 getTypeName($type)
             ));
         }
@@ -143,9 +143,9 @@ class PDOStatement : StatementDecorator
      * ### Example:
      *
      * ```
-     *  $statement = $connection->prepare('SELECT id, title from articles');
+     *  $statement = $connection->prepare("SELECT id, title from articles");
      *  $statement->execute();
-     *  print_r($statement->fetchAll('assoc')); // will show [0 => ['id' => 1, 'title' => 'a title']]
+     *  print_r($statement->fetchAll("assoc")); // will show [0 : ["id" : 1, "title" : "a title"]]
      * ```
      *
      * @param string|int $type num for fetching columns as positional keys or assoc for column names as keys
@@ -166,7 +166,7 @@ class PDOStatement : StatementDecorator
 
         if (!is_int($type)) {
             throw new CakeException(sprintf(
-                'Fetch type for PDOStatement must be an integer, found `%s` instead',
+                "Fetch type for PDOStatement must be an integer, found `%s` instead",
                 getTypeName($type)
             ));
         }

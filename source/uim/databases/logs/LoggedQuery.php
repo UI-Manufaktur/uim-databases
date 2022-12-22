@@ -39,7 +39,7 @@ class LoggedQuery : JsonSerializable
      *
      * @var string
      */
-    public $query = '';
+    public $query = "";
 
     /**
      * Number of milliseconds this query took to complete
@@ -79,33 +79,33 @@ class LoggedQuery : JsonSerializable
     {
         $params = array_map(function ($p) {
             if ($p == null) {
-                return 'NULL';
+                return "NULL";
             }
 
             if (is_bool($p)) {
                 if (this->driver instanceof Sqlserver) {
-                    return $p ? '1' : '0';
+                    return $p ? "1" : "0";
                 }
 
-                return $p ? 'TRUE' : 'FALSE';
+                return $p ? "TRUE" : "FALSE";
             }
 
             if (is_string($p)) {
                 // Likely binary data like a blob or binary uuid.
                 // pattern matches ascii control chars.
-                if (preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $p) != $p) {
+                if (preg_replace("/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u", "", $p) != $p) {
                     $p = bin2hex($p);
                 }
 
                 $replacements = [
-                    '$' => '\\$',
-                    '\\' => '\\\\\\\\',
-                    "'" => "''",
+                    "$" : "\\$",
+                    "\\" : "\\\\\\\\",
+                    """ : """",
                 ];
 
                 $p = strtr($p, $replacements);
 
-                return "'$p'";
+                return ""$p"";
             }
 
             return $p;
@@ -113,8 +113,8 @@ class LoggedQuery : JsonSerializable
 
         $keys = [];
         $limit = is_int(key($params)) ? 1 : -1;
-        foreach ($params as $key => $param) {
-            $keys[] = is_string($key) ? "/:$key\b/" : '/[?]/';
+        foreach ($params as $key : $param) {
+            $keys[] = is_string($key) ? "/:$key\b/" : "/[?]/";
         }
 
         return preg_replace($keys, $params, this->query, $limit);
@@ -128,8 +128,8 @@ class LoggedQuery : JsonSerializable
     function getContext(): array
     {
         return [
-            'numRows' => this->numRows,
-            'took' => this->took,
+            "numRows" : this->numRows,
+            "took" : this->took,
         ];
     }
 
@@ -143,18 +143,18 @@ class LoggedQuery : JsonSerializable
         $error = this->error;
         if ($error != null) {
             $error = [
-                'class' => get_class($error),
-                'message' => $error->getMessage(),
-                'code' => $error->getCode(),
+                "class" : get_class($error),
+                "message" : $error->getMessage(),
+                "code" : $error->getCode(),
             ];
         }
 
         return [
-            'query' => this->query,
-            'numRows' => this->numRows,
-            'params' => this->params,
-            'took' => this->took,
-            'error' => $error,
+            "query" : this->query,
+            "numRows" : this->numRows,
+            "params" : this->params,
+            "took" : this->took,
+            "error" : $error,
         ];
     }
 

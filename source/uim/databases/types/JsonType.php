@@ -31,7 +31,7 @@ class JsonType : BaseType : IBatchCasting
     function toDatabase($value, IDTBDriver $driver): ?string
     {
         if (is_resource($value)) {
-            throw new InvalidArgumentException('Cannot convert a resource value to JSON');
+            throw new InvalidArgumentException("Cannot convert a resource value to JSON");
         }
 
         if ($value == null) {

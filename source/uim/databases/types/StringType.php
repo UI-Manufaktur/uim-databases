@@ -40,7 +40,7 @@ class StringType : BaseType : OptionalConvertInterface
             return $value;
         }
 
-        if (is_object($value) && method_exists($value, '__toString')) {
+        if (is_object($value) && method_exists($value, "__toString")) {
             return $value->__toString();
         }
 
@@ -49,7 +49,7 @@ class StringType : BaseType : OptionalConvertInterface
         }
 
         throw new InvalidArgumentException(sprintf(
-            'Cannot convert value of type `%s` to string',
+            "Cannot convert value of type `%s` to string",
             getTypeName($value)
         ));
     }

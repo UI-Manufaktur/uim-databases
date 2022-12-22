@@ -49,9 +49,9 @@ class SqliteStatement : StatementDecorator
         /** @psalm-suppress NoInterfaceProperties */
         if (
             this->_statement->queryString &&
-            preg_match('/^(?:DELETE|UPDATE|INSERT)/i', this->_statement->queryString)
+            preg_match("/^(?:DELETE|UPDATE|INSERT)/i", this->_statement->queryString)
         ) {
-            $changes = this->_driver->prepare('SELECT CHANGES()');
+            $changes = this->_driver->prepare("SELECT CHANGES()");
             $changes->execute();
             $row = $changes->fetch();
             $changes->closeCursor();

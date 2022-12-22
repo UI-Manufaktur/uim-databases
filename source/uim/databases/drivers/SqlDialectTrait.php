@@ -41,46 +41,46 @@ trait SqlDialectTrait
     {
         $identifier = trim($identifier);
 
-        if ($identifier == '*' || $identifier == '') {
+        if ($identifier == "*" || $identifier == "") {
             return $identifier;
         }
 
         // string
-        if (preg_match('/^[\w-]+$/u', $identifier)) {
+        if (preg_match("/^[\w-]+$/u", $identifier)) {
             return this->_startQuote . $identifier . this->_endQuote;
         }
 
         // string.string
-        if (preg_match('/^[\w-]+\.[^ \*]*$/u', $identifier)) {
-            $items = explode('.', $identifier);
+        if (preg_match("/^[\w-]+\.[^ \*]*$/u", $identifier)) {
+            $items = explode(".", $identifier);
 
-            return this->_startQuote . implode(this->_endQuote . '.' . this->_startQuote, $items) . this->_endQuote;
+            return this->_startQuote . implode(this->_endQuote . "." . this->_startQuote, $items) . this->_endQuote;
         }
 
         // string.*
-        if (preg_match('/^[\w-]+\.\*$/u', $identifier)) {
-            return this->_startQuote . str_replace('.*', this->_endQuote . '.*', $identifier);
+        if (preg_match("/^[\w-]+\.\*$/u", $identifier)) {
+            return this->_startQuote . str_replace(".*", this->_endQuote . ".*", $identifier);
         }
 
         // Functions
-        if (preg_match('/^([\w-]+)\((.*)\)$/', $identifier, $matches)) {
-            return $matches[1] . '(' . this->quoteIdentifier($matches[2]) . ')';
+        if (preg_match("/^([\w-]+)\((.*)\)$/", $identifier, $matches)) {
+            return $matches[1] . "(" . this->quoteIdentifier($matches[2]) . ")";
         }
 
         // Alias.field AS thing
-        if (preg_match('/^([\w-]+(\.[\w\s-]+|\(.*\))*)\s+AS\s*([\w-]+)$/ui', $identifier, $matches)) {
-            return this->quoteIdentifier($matches[1]) . ' AS ' . this->quoteIdentifier($matches[3]);
+        if (preg_match("/^([\w-]+(\.[\w\s-]+|\(.*\))*)\s+AS\s*([\w-]+)$/ui", $identifier, $matches)) {
+            return this->quoteIdentifier($matches[1]) . " AS " . this->quoteIdentifier($matches[3]);
         }
 
         // string.string with spaces
-        if (preg_match('/^([\w-]+\.[\w][\w\s-]*[\w])(.*)/u', $identifier, $matches)) {
-            $items = explode('.', $matches[1]);
-            $field = implode(this->_endQuote . '.' . this->_startQuote, $items);
+        if (preg_match("/^([\w-]+\.[\w][\w\s-]*[\w])(.*)/u", $identifier, $matches)) {
+            $items = explode(".", $matches[1]);
+            $field = implode(this->_endQuote . "." . this->_startQuote, $items);
 
             return this->_startQuote . $field . this->_endQuote . $matches[2];
         }
 
-        if (preg_match('/^[\w\s-]*[\w-]+/u', $identifier)) {
+        if (preg_match("/^[\w\s-]*[\w-]+/u", $identifier)) {
             return this->_startQuote . $identifier . this->_endQuote;
         }
 
@@ -104,14 +104,14 @@ trait SqlDialectTrait
             }
 
             /** @var \Cake\ORM\Query $query */
-            $query = this->{'_' . $type . 'QueryTranslator'}($query);
+            $query = this->{"_" . $type . "QueryTranslator"}($query);
             $translators = this->_expressionTranslators();
             if (!$translators) {
                 return $query;
             }
 
             $query->traverseExpressions(function ($expression) use ($translators, $query): void {
-                foreach ($translators as $class => $method) {
+                foreach ($translators as $class : $method) {
                     if ($expression instanceof $class) {
                         this->{$method}($expression, $query);
                     }
@@ -155,8 +155,8 @@ trait SqlDialectTrait
      */
     protected function _transformDistinct(Query $query): Query
     {
-        if (is_array($query->clause('distinct'))) {
-            $query->group($query->clause('distinct'), true);
+        if (is_array($query->clause("distinct"))) {
+            $query->group($query->clause("distinct"), true);
             $query->distinct(false);
         }
 
@@ -168,7 +168,7 @@ trait SqlDialectTrait
      *
      * Chops out aliases on delete query conditions as most database dialects do not
      * support aliases in delete queries. This also removes aliases
-     * in table names as they frequently don't work either.
+     * in table names as they frequently don"t work either.
      *
      * We are intentionally not supporting deletes with joins as they have even poorer support.
      *
@@ -179,7 +179,7 @@ trait SqlDialectTrait
     {
         $hadAlias = false;
         $tables = [];
-        foreach ($query->clause('from') as $alias => $table) {
+        foreach ($query->clause("from") as $alias : $table) {
             if (is_string($alias)) {
                 $hadAlias = true;
             }
@@ -222,23 +222,23 @@ trait SqlDialectTrait
      */
     protected function _removeAliasesFromConditions(Query $query): Query
     {
-        if ($query->clause('join')) {
+        if ($query->clause("join")) {
             throw new RuntimeException(
-                'Aliases are being removed from conditions for UPDATE/DELETE queries, ' .
-                'this can break references to joined tables.'
+                "Aliases are being removed from conditions for UPDATE/DELETE queries, " .
+                "this can break references to joined tables."
             );
         }
 
-        $conditions = $query->clause('where');
+        $conditions = $query->clause("where");
         if ($conditions) {
             $conditions->traverse(function ($expression) {
                 if ($expression instanceof ComparisonExpression) {
                     $field = $expression->getField();
                     if (
                         is_string($field) &&
-                        strpos($field, '.') != false
+                        strpos($field, ".") != false
                     ) {
-                        [, $unaliasedField] = explode('.', $field, 2);
+                        [, $unaliasedField] = explode(".", $field, 2);
                         $expression->setField($unaliasedField);
                     }
 
@@ -247,8 +247,8 @@ trait SqlDialectTrait
 
                 if ($expression instanceof IdentifierExpression) {
                     $identifier = $expression->getIdentifier();
-                    if (strpos($identifier, '.') != false) {
-                        [, $unaliasedIdentifier] = explode('.', $identifier, 2);
+                    if (strpos($identifier, ".") != false) {
+                        [, $unaliasedIdentifier] = explode(".", $identifier, 2);
                         $expression->setIdentifier($unaliasedIdentifier);
                     }
 
@@ -281,7 +281,7 @@ trait SqlDialectTrait
      */
     function savePointSQL($name): string
     {
-        return 'SAVEPOINT LEVEL' . $name;
+        return "SAVEPOINT LEVEL" . $name;
     }
 
     /**
@@ -292,7 +292,7 @@ trait SqlDialectTrait
      */
     function releaseSavePointSQL($name): string
     {
-        return 'RELEASE SAVEPOINT LEVEL' . $name;
+        return "RELEASE SAVEPOINT LEVEL" . $name;
     }
 
     /**
@@ -303,6 +303,6 @@ trait SqlDialectTrait
      */
     function rollbackSavePointSQL($name): string
     {
-        return 'ROLLBACK TO SAVEPOINT LEVEL' . $name;
+        return "ROLLBACK TO SAVEPOINT LEVEL" . $name;
     }
 }

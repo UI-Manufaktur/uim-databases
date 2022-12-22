@@ -26,7 +26,7 @@ class IntegerType : BaseType : IBatchCasting
     {
         if (!is_numeric($value)) {
             throw new InvalidArgumentException(sprintf(
-                'Cannot convert value of type `%s` to integer',
+                "Cannot convert value of type `%s` to integer",
                 getTypeName($value)
             ));
         }
@@ -41,7 +41,7 @@ class IntegerType : BaseType : IBatchCasting
      */
     function toDatabase($value, IDTBDriver $driver): ?int
     {
-        if ($value == null || $value == '') {
+        if ($value == null || $value == "") {
             return null;
         }
 
@@ -102,7 +102,7 @@ class IntegerType : BaseType : IBatchCasting
      */
     function marshal($value): ?int
     {
-        if ($value == null || $value == '') {
+        if ($value == null || $value == "") {
             return null;
         }
         if (is_numeric($value)) {

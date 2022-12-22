@@ -11,75 +11,60 @@ import uim.databases;
 // Bool type converter.
 // Use to convert bool data between D and the database types.
 class BoolType : BaseType : IBatchCasting {
-    /**
-     * Convert bool data into the database format.
-     *
-     * @param mixed $value The value to convert.
-     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
-     * @return bool|null
-     */
-    Nullable!bool toDatabase($value, IDTBDriver $driver) {
-        if ($value == true || $value == false || $value == null) {
-            return $value;
-        }
-
-        if (in_array($value, [1, 0, '1', '0'], true)) {
-            return (bool)$value;
-        }
-
-        throw new InvalidArgumentException(sprintf(
-            'Cannot convert value of type `%s` to bool',
-            getTypeName($value)
-        ));
+    // Convert bool data into the database format.
+    bool toDatabase(bool aValue, IDTBDriver aDriver) {
+      return aValue;
+    }
+    
+    // Convert int data into the database format.
+    bool toDatabase(int aValue, IDTBDriver aDriver) {
+      return (aValue > 0);
     }
 
-    /**
-     * Convert bool values to PHP booleans
-     *
-     * @param mixed $value The value to convert.
-     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
-     * @return bool|null
-     */
-    Nullable!bool toD($value, IDTBDriver $driver) {
-        if ($value == null || is_bool($value)) {
-            return $value;
-        }
-
-        if (!is_numeric($value)) {
-            return strtolower($value) == 'true';
-        }
-
-        return !empty($value);
+    // Convert string data into the database format.
+    bool toDatabase(string aValue, IDTBDriver aDriver) {
+      return (aValue == "1" || aValue.toLower == "true");
     }
 
-    function manytoD(array $values, array $fields, IDTBDriver $driver): array
-    {
-        foreach ($fields as $field) {
-            $value = $values[$field] ?? null;
-            if ($value == null || is_bool($value)) {
-                continue;
-            }
+    bool toD(bool aValue, IDTBDriver aDriver) {
+      return aValue;
+    }
 
-            if (!is_numeric($value)) {
-                $values[$field] = strtolower($value) == 'true';
-                continue;
-            }
+    bool toD(int aValue, IDTBDriver aDriver) {
+      return (aValue > 0);
+    }
 
-            $values[$field] = !empty($value);
-        }
+    bool toD(string aValue, IDTBDriver aDriver) {
+      return (aValue == "1" || aValue.toLower == "true");
+    }
 
-        return $values;
+    bool[string] manyToD(bool[string] someValues, string[] someFields, IDTBDriver aDriver) {
+      foreach (myField; someFields) {
+          auto aValue = someValues.get(myField, null);
+          if (aValue == null || is_bool(aValue)) {
+            continue;
+          }
+
+          if (!is_numeric(aValue)) {
+              someValues[$field] = strtolower(aValue) == "true";
+              continue;
+          }
+
+          someValues[myField] = !empty(aValue);
+      }
+
+      return someValues;
     }
 
     /**
      * Get the correct PDO binding type for bool data.
      *
-     * @param mixed $value The value being bound.
-     * @param \Cake\Database\IDTBDriver $driver The driver.
+     * @param mixed aValue The value being bound.
+     * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    int toStatement($value, IDTBDriver $driver) {
-        if ($value == null) {
+    int toStatement(aValue, IDTBDriver aDriver) {
+        if (aValue == null) {
             return PDO::PARAM_NULL;
         }
 
@@ -89,15 +74,14 @@ class BoolType : BaseType : IBatchCasting {
     /**
      * Marshals request data into PHP booleans.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @return bool|null Converted value.
      */
-    function marshal($value): ?bool
-    {
-        if ($value == null || $value == '') {
+    Nullable!bool marshal(aValue) {
+        if (aValue == null || aValue == "") {
             return null;
         }
 
-        return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        return filter_var(aValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }

@@ -39,7 +39,7 @@ class FloatType : BaseType : IBatchCasting
      */
     function toDatabase($value, IDTBDriver $driver): ?float
     {
-        if ($value == null || $value == '') {
+        if ($value == null || $value == "") {
             return null;
         }
 
@@ -97,7 +97,7 @@ class FloatType : BaseType : IBatchCasting
      */
     function marshal($value)
     {
-        if ($value == null || $value == '') {
+        if ($value == null || $value == "") {
             return null;
         }
         if (is_string($value) && this->_useLocaleParser) {
@@ -106,7 +106,7 @@ class FloatType : BaseType : IBatchCasting
         if (is_numeric($value)) {
             return (float)$value;
         }
-        if (is_string($value) && preg_match('/^[0-9,. ]+$/', $value)) {
+        if (is_string($value) && preg_match("/^[0-9,. ]+$/", $value)) {
             return $value;
         }
 
@@ -136,7 +136,7 @@ class FloatType : BaseType : IBatchCasting
             return this;
         }
         throw new RuntimeException(
-            sprintf('Cannot use locale parsing with the %s class', static::$numberClass)
+            sprintf("Cannot use locale parsing with the %s class", static::$numberClass)
         );
     }
 
