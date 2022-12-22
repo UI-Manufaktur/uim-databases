@@ -53,7 +53,7 @@ class QueryExpression : IDTBExpression, Countable {
      * level of the expression tree. For example "AND", "OR", "XOR"...
      * @see \Cake\Database\Expression\QueryExpression.add() for more details on $conditions and $types
      */
-    this($conditions = [], $types = [], $conjunction ="AND") {
+    this($conditions = [], someTypes = [], $conjunction ="AND") {
         $this.setTypeMap($types);
         $this.setConjunction($conjunction.toUpper);
         if (!empty($conditions)) {
@@ -97,7 +97,7 @@ class QueryExpression : IDTBExpression, Countable {
             return $this;
         }
 
-        _addConditions($conditions, $types);
+        _addConditions($conditions, someTypes);
 
         return $this;
     }
@@ -307,11 +307,11 @@ class QueryExpression : IDTBExpression, Countable {
      * @return $this
      * @deprecated 4.3.0 Use QueryExpression.case() or CaseStatementExpression instead
      */
-    function addCase($conditions, someValues = [], $types = [])
+    function addCase($conditions, someValues = [], someTypes = [])
     {
         deprecationWarning("QueryExpression.addCase() is deprecated, use case() instead.");
 
-        return $this.add(new CaseExpression($conditions, someValues, $types));
+        return $this.add(new CaseExpression($conditions, someValues, someTypes));
     }
 
     /**
@@ -436,7 +436,7 @@ class QueryExpression : IDTBExpression, Countable {
      * values that are being passed. Used for correctly binding values to statements.
      * @return \Cake\Database\Expression\QueryExpression
      */
-    function and($conditions, $types = [])
+    function and($conditions, someTypes = [])
     {
         if ($conditions instanceof Closure) {
             return $conditions(new static([], $this.getTypeMap().setTypes($types)));
@@ -454,7 +454,7 @@ class QueryExpression : IDTBExpression, Countable {
      * values that are being passed. Used for correctly binding values to statements.
      * @return \Cake\Database\Expression\QueryExpression
      */
-    function or($conditions, $types = [])
+    function or($conditions, someTypes = [])
     {
         if ($conditions instanceof Closure) {
             return $conditions(new static([], $this.getTypeMap().setTypes($types),"OR"));
@@ -475,11 +475,11 @@ class QueryExpression : IDTBExpression, Countable {
      * @return \Cake\Database\Expression\QueryExpression
      * @deprecated 4.0.0 Use {@link and()} instead.
      */
-    function and_($conditions, $types = [])
+    function and_($conditions, someTypes = [])
     {
         deprecationWarning("QueryExpression.and_() is deprecated use and() instead.");
 
-        return $this.and($conditions, $types);
+        return $this.and($conditions, someTypes);
     }
 
     /**
@@ -492,11 +492,11 @@ class QueryExpression : IDTBExpression, Countable {
      * @return \Cake\Database\Expression\QueryExpression
      * @deprecated 4.0.0 Use {@link or()} instead.
      */
-    function or_($conditions, $types = [])
+    function or_($conditions, someTypes = [])
     {
         deprecationWarning("QueryExpression.or_() is deprecated use or() instead.");
 
-        return $this.or($conditions, $types);
+        return $this.or($conditions, someTypes);
     }
 
     // phpcs:enable
@@ -512,9 +512,9 @@ class QueryExpression : IDTBExpression, Countable {
      * values that are being passed. Used for correctly binding values to statements.
      * @return $this
      */
-    function not($conditions, $types = [])
+    function not($conditions, someTypes = [])
     {
-        return $this.add(["NOT": $conditions], $types);
+        return $this.add(["NOT": $conditions], someTypes);
     }
 
     /**

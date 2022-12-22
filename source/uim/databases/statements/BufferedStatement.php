@@ -165,7 +165,7 @@ class BufferedStatement : Iterator, StatementInterface
 
     function bind(array $params, array $types): void
     {
-        this.statement.bind($params, $types);
+        this.statement.bind($params, someTypes);
     }
 
 

@@ -45,7 +45,7 @@ class AggregateExpression : FunctionExpression : IWindow
             $conditions = $conditions(new QueryExpression());
         }
 
-        $this.filter.add($conditions, $types);
+        $this.filter.add($conditions, someTypes);
 
         return $this;
     }

@@ -316,10 +316,10 @@ class Connection : ConnectionInterface
      */
     function execute(string $sql, array $params = [], array $types = []): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($sql, $params, $types) {
+        return this.getDisconnectRetry().run(function () use ($sql, $params, someTypes) {
             $statement = this.prepare($sql);
             if (!empty($params)) {
-                $statement.bind($params, $types);
+                $statement.bind($params, someTypes);
             }
             $statement.execute();
 
@@ -429,10 +429,10 @@ class Connection : ConnectionInterface
      */
     function insert(string $table, array someValues, array $types = []): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($table, someValues, $types) {
+        return this.getDisconnectRetry().run(function () use ($table, someValues, someTypes) {
             $columns = array_keys(someValues);
 
-            return this.newQuery().insert($columns, $types)
+            return this.newQuery().insert($columns, someTypes)
                 .into($table)
                 .values(someValues)
                 .execute();
@@ -450,10 +450,10 @@ class Connection : ConnectionInterface
      */
     function update(string $table, array someValues, array $conditions = [], array $types = []): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($table, someValues, $conditions, $types) {
+        return this.getDisconnectRetry().run(function () use ($table, someValues, $conditions, someTypes) {
             return this.newQuery().update($table)
-                .set(someValues, $types)
-                .where($conditions, $types)
+                .set(someValues, someTypes)
+                .where($conditions, someTypes)
                 .execute();
         });
     }
@@ -468,9 +468,9 @@ class Connection : ConnectionInterface
      */
     function delete(string $table, array $conditions = [], array $types = []): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($table, $conditions, $types) {
+        return this.getDisconnectRetry().run(function () use ($table, $conditions, someTypes) {
             return this.newQuery().delete($table)
-                .where($conditions, $types)
+                .where($conditions, someTypes)
                 .execute();
         });
     }

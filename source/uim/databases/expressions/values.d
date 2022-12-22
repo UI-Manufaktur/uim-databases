@@ -226,7 +226,7 @@ class ValuesExpression : IDTBExpression
 
                 $placeholder = $binder.placeholder("c");
                 $rowPlaceholders[] = $placeholder;
-                $binder.bind($placeholder, DValue aValue, $types[$column]);
+                $binder.bind($placeholder, DValue aValue, someTypes[$column]);
             }
 
             $placeholders[] = implode(",", $rowPlaceholders);

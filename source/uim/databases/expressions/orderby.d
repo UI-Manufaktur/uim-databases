@@ -17,8 +17,8 @@ class OrderByExpression : QueryExpression {
      * @param uim.databases\TypeMap|array<string, string> $types The types for each column.
      * @param string $conjunction The glue used to join conditions together.
      */
-    this($conditions = [], $types = [], string aConjunction = "") {
-        super($conditions, $types, aConjunction);
+    this($conditions = [], someTypes = [], string aConjunction = "") {
+        super($conditions, someTypes, aConjunction);
     }
 
     override string sql(ValueBinder aValueBinder) {

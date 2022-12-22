@@ -55,7 +55,7 @@ class FunctionExpression : QueryExpression : IDTBTypedResult
     {
         _name = $name;
         _returnType = $returnType;
-        parent.__construct($params, $types,",");
+        parent.__construct($params, someTypes,",");
     }
 
     /**
