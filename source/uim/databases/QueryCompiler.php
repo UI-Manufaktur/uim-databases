@@ -35,14 +35,14 @@ class QueryCompiler
      * @var array<string, string>
      */
     protected $_templates = [
-        'delete' => 'DELETE',
-        'where' => ' WHERE %s',
-        'group' => ' GROUP BY %s ',
-        'having' => ' HAVING %s ',
-        'order' => ' %s',
-        'limit' => ' LIMIT %s',
-        'offset' => ' OFFSET %s',
-        'epilog' => ' %s',
+        "delete" => "DELETE",
+        "where" => " WHERE %s",
+        "group" => " GROUP BY %s ",
+        "having" => " HAVING %s ",
+        "order" => " %s",
+        "limit" => " LIMIT %s",
+        "offset" => " OFFSET %s",
+        "epilog" => " %s",
     ];
 
     /**
@@ -51,8 +51,8 @@ class QueryCompiler
      * @var array<string>
      */
     protected $_selectParts = [
-        'with', 'select', 'from', 'join', 'where', 'group', 'having', 'window', 'order',
-        'limit', 'offset', 'union', 'epilog',
+        "with", "select", "from", "join", "where", "group", "having", "window", "order",
+        "limit", "offset", "union", "epilog",
     ];
 
     /**
@@ -60,21 +60,21 @@ class QueryCompiler
      *
      * @var array<string>
      */
-    protected $_updateParts = ['with', 'update', 'set', 'where', 'epilog'];
+    protected $_updateParts = ["with", "update", "set", "where", "epilog"];
 
     /**
      * The list of query clauses to traverse for generating a DELETE statement
      *
      * @var array<string>
      */
-    protected $_deleteParts = ['with', 'delete', 'modifier', 'from', 'where', 'epilog'];
+    protected $_deleteParts = ["with", "delete", "modifier", "from", "where", "epilog"];
 
     /**
      * The list of query clauses to traverse for generating an INSERT statement
      *
      * @var array<string>
      */
-    protected $_insertParts = ['with', 'insert', 'values', 'epilog'];
+    protected $_insertParts = ["with", "insert", "values", "epilog"];
 
     /**
      * Indicate whether this query dialect supports ordered unions.
@@ -102,7 +102,7 @@ class QueryCompiler
      */
     function compile(Query $query, ValueBinder $binder): string
     {
-        $sql = '';
+        $sql = "";
         $type = $query->type();
         $query->traverseParts(
             _sqlCompiler($sql, $query, $binder),
@@ -113,9 +113,9 @@ class QueryCompiler
         // placeholders can be found in the SQL statement.
         if ($query->getValueBinder() != $binder) {
             foreach ($query->getValueBinder()->bindings() as $binding) {
-                $placeholder = ':' . $binding['placeholder'];
-                if (preg_match('/' . $placeholder . '(?:\W|$)/', $sql) > 0) {
-                    $binder->bind($placeholder, $binding['value'], $binding['type']);
+                $placeholder = ":" . $binding["placeholder"];
+                if (preg_match("/" . $placeholder . "(?:\W|$)/", $sql) > 0) {
+                    $binder->bind($placeholder, $binding["value"], $binding["type"]);
                 }
             }
         }
@@ -148,12 +148,12 @@ class QueryCompiler
             }
             if (isset(_templates[$partName])) {
                 $part = _stringifyExpressions((array)$part, $binder);
-                $sql .= sprintf(_templates[$partName], implode(', ', $part));
+                $sql .= sprintf(_templates[$partName], implode(", ", $part));
 
                 return;
             }
 
-            $sql .= this.{'_build' . $partName . 'Part'}($part, $query, $binder);
+            $sql .= this.{"_build" . $partName . "Part"}($part, $query, $binder);
         };
     }
 
@@ -176,9 +176,9 @@ class QueryCompiler
             $expressions[] = $cte->sql($binder);
         }
 
-        $recursive = $recursive ? 'RECURSIVE ' : '';
+        $recursive = $recursive ? "RECURSIVE " : "";
 
-        return sprintf('WITH %s%s ', $recursive, implode(', ', $expressions));
+        return sprintf("WITH %s%s ", $recursive, implode(", ", $expressions));
     }
 
     /**
@@ -194,12 +194,12 @@ class QueryCompiler
      */
     protected function _buildSelectPart(array $parts, Query $query, ValueBinder $binder): string
     {
-        $select = 'SELECT%s %s%s';
-        if (_orderedUnion && $query->clause('union')) {
-            $select = '(SELECT%s %s%s';
+        $select = "SELECT%s %s%s";
+        if (_orderedUnion && $query->clause("union")) {
+            $select = "(SELECT%s %s%s";
         }
-        $distinct = $query->clause('distinct');
-        $modifiers = _buildModifierPart($query->clause('modifier'), $query, $binder);
+        $distinct = $query->clause("distinct");
+        $modifiers = _buildModifierPart($query->clause("modifier"), $query, $binder);
 
         $driver = $query->getConnection()->getDriver();
         $quoteIdentifiers = $driver->isAutoQuotingEnabled() || _quotedSelectAliases;
@@ -207,7 +207,7 @@ class QueryCompiler
         $parts = _stringifyExpressions($parts, $binder);
         foreach ($parts as $k => $p) {
             if (!is_numeric($k)) {
-                $p = $p . ' AS ';
+                $p = $p . " AS ";
                 if ($quoteIdentifiers) {
                     $p .= $driver->quoteIdentifier($k);
                 } else {
@@ -218,15 +218,15 @@ class QueryCompiler
         }
 
         if ($distinct === true) {
-            $distinct = 'DISTINCT ';
+            $distinct = "DISTINCT ";
         }
 
         if (is_array($distinct)) {
             $distinct = _stringifyExpressions($distinct, $binder);
-            $distinct = sprintf('DISTINCT ON (%s) ', implode(', ', $distinct));
+            $distinct = sprintf("DISTINCT ON (%s) ", implode(", ", $distinct));
         }
 
-        return sprintf($select, $modifiers, $distinct, implode(', ', $normalized));
+        return sprintf($select, $modifiers, $distinct, implode(", ", $normalized));
     }
 
     /**
@@ -241,17 +241,17 @@ class QueryCompiler
      */
     protected function _buildFromPart(array $parts, Query $query, ValueBinder $binder): string
     {
-        $select = ' FROM %s';
+        $select = " FROM %s";
         $normalized = [];
         $parts = _stringifyExpressions($parts, $binder);
         foreach ($parts as $k => $p) {
             if (!is_numeric($k)) {
-                $p = $p . ' ' . $k;
+                $p = $p . " " . $k;
             }
             $normalized[] = $p;
         }
 
-        return sprintf($select, implode(', ', $normalized));
+        return sprintf($select, implode(", ", $normalized));
     }
 
     /**
@@ -267,27 +267,27 @@ class QueryCompiler
      */
     protected function _buildJoinPart(array $parts, Query $query, ValueBinder $binder): string
     {
-        $joins = '';
+        $joins = "";
         foreach ($parts as $join) {
-            if (!isset($join['table'])) {
+            if (!isset($join["table"])) {
                 throw new DatabaseException(sprintf(
-                    'Could not compile join clause for alias `%s`. No table was specified. ' .
-                    'Use the `table` key to define a table.',
-                    $join['alias']
+                    "Could not compile join clause for alias `%s`. No table was specified. " .
+                    "Use the `table` key to define a table.",
+                    $join["alias"]
                 ));
             }
-            if ($join['table'] instanceof ExpressionInterface) {
-                $join['table'] = '(' . $join['table']->sql($binder) . ')';
+            if ($join["table"] instanceof ExpressionInterface) {
+                $join["table"] = "(" . $join["table"]->sql($binder) . ")";
             }
 
-            $joins .= sprintf(' %s JOIN %s %s', $join['type'], $join['table'], $join['alias']);
+            $joins .= sprintf(" %s JOIN %s %s", $join["type"], $join["table"], $join["alias"]);
 
-            $condition = '';
-            if (isset($join['conditions']) && $join['conditions'] instanceof ExpressionInterface) {
-                $condition = $join['conditions']->sql($binder);
+            $condition = "";
+            if (isset($join["conditions"]) && $join["conditions"] instanceof ExpressionInterface) {
+                $condition = $join["conditions"]->sql($binder);
             }
-            if ($condition === '') {
-                $joins .= ' ON 1 = 1';
+            if ($condition === "") {
+                $joins .= " ON 1 = 1";
             } else {
                 $joins .= " ON {$condition}";
             }
@@ -308,10 +308,10 @@ class QueryCompiler
     {
         $windows = [];
         foreach ($parts as $window) {
-            $windows[] = $window['name']->sql($binder) . ' AS (' . $window['window']->sql($binder) . ')';
+            $windows[] = $window["name"]->sql($binder) . " AS (" . $window["window"]->sql($binder) . ")";
         }
 
-        return ' WINDOW ' . implode(', ', $windows);
+        return " WINDOW " . implode(", ", $windows);
     }
 
     /**
@@ -329,13 +329,13 @@ class QueryCompiler
             if ($part instanceof ExpressionInterface) {
                 $part = $part->sql($binder);
             }
-            if ($part[0] === '(') {
+            if ($part[0] === "(") {
                 $part = substr($part, 1, -1);
             }
             $set[] = $part;
         }
 
-        return ' SET ' . implode('', $set);
+        return " SET " . implode("", $set);
     }
 
     /**
@@ -351,14 +351,14 @@ class QueryCompiler
     protected function _buildUnionPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $parts = array_map(function ($p) use ($binder) {
-            $p['query'] = $p['query']->sql($binder);
-            $p['query'] = $p['query'][0] === '(' ? trim($p['query'], '()') : $p['query'];
-            $prefix = $p['all'] ? 'ALL ' : '';
+            $p["query"] = $p["query"]->sql($binder);
+            $p["query"] = $p["query"][0] === "(" ? trim($p["query"], "()") : $p["query"];
+            $prefix = $p["all"] ? "ALL " : "";
             if (_orderedUnion) {
-                return "{$prefix}({$p['query']})";
+                return "{$prefix}({$p["query"]})";
             }
 
-            return $prefix . $p['query'];
+            return $prefix . $p["query"];
         }, $parts);
 
         if (_orderedUnion) {
@@ -380,15 +380,15 @@ class QueryCompiler
     {
         if (!isset($parts[0])) {
             throw new DatabaseException(
-                'Could not compile insert query. No table was specified. ' .
-                'Use `into()` to define a table.'
+                "Could not compile insert query. No table was specified. " .
+                "Use `into()` to define a table."
             );
         }
         $table = $parts[0];
         $columns = _stringifyExpressions($parts[1], $binder);
-        $modifiers = _buildModifierPart($query->clause('modifier'), $query, $binder);
+        $modifiers = _buildModifierPart($query->clause("modifier"), $query, $binder);
 
-        return sprintf('INSERT%s INTO %s (%s)', $modifiers, $table, implode(', ', $columns));
+        return sprintf("INSERT%s INTO %s (%s)", $modifiers, $table, implode(", ", $columns));
     }
 
     /**
@@ -401,7 +401,7 @@ class QueryCompiler
      */
     protected function _buildValuesPart(array $parts, Query $query, ValueBinder $binder): string
     {
-        return implode('', _stringifyExpressions($parts, $binder));
+        return implode("", _stringifyExpressions($parts, $binder));
     }
 
     /**
@@ -415,9 +415,9 @@ class QueryCompiler
     protected function _buildUpdatePart(array $parts, Query $query, ValueBinder $binder): string
     {
         $table = _stringifyExpressions($parts, $binder);
-        $modifiers = _buildModifierPart($query->clause('modifier'), $query, $binder);
+        $modifiers = _buildModifierPart($query->clause("modifier"), $query, $binder);
 
-        return sprintf('UPDATE%s %s', $modifiers, implode(',', $table));
+        return sprintf("UPDATE%s %s", $modifiers, implode(",", $table));
     }
 
     /**
@@ -431,10 +431,10 @@ class QueryCompiler
     protected function _buildModifierPart(array $parts, Query $query, ValueBinder $binder): string
     {
         if ($parts === []) {
-            return '';
+            return "";
         }
 
-        return ' ' . implode(' ', _stringifyExpressions($parts, $binder, false));
+        return " " . implode(" ", _stringifyExpressions($parts, $binder, false));
     }
 
     /**
@@ -452,7 +452,7 @@ class QueryCompiler
         foreach ($expressions as $k => $expression) {
             if ($expression instanceof ExpressionInterface) {
                 $value = $expression->sql($binder);
-                $expression = $wrap ? '(' . $value . ')' : $value;
+                $expression = $wrap ? "(" . $value . ")" : $value;
             }
             $result[$k] = $expression;
         }

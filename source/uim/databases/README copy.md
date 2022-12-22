@@ -9,7 +9,7 @@ preventing SQL injections, inspecting and altering schemas, and with debugging a
 profiling queries sent to the database.
 
 It adopts the API from the native PDO extension in PHP for familiarity, but solves many of the
-inconsistencies PDO has, while also providing several features that extend PDO's capabilities.
+inconsistencies PDO has, while also providing several features that extend PDO"s capabilities.
 
 A distinguishing factor of this library when compared to similar database connection packages,
 is that it takes the concept of "data types" to its core. It lets you work with complex PHP objects
@@ -38,15 +38,15 @@ use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Sqlite;
 
 $connection = new Connection([
-	'driver' => Mysql::class,
-	'database' => 'test',
-	'username' => 'root',
-	'password' => 'secret',
+	"driver" => Mysql::class,
+	"database" => "test",
+	"username" => "root",
+	"password" => "secret",
 ]);
 
 $connection2 = new Connection([
-	'driver' => Sqlite::class,
-	'database' => '/path/to/file.db'
+	"driver" => Sqlite::class,
+	"database" => "/path/to/file.db"
 ]);
 ```
 
@@ -76,17 +76,17 @@ The easiest way of executing queries is by using the `execute()` method, it will
 `Cake\Database\IStatement` that you can use to get the data back:
 
 ```php
-$statement = $connection->execute('SELECT * FROM articles');
+$statement = $connection->execute("SELECT * FROM articles");
 
-while($row = $statement->fetch('assoc')) {
-	echo $row['title'] . PHP_EOL;
+while($row = $statement->fetch("assoc")) {
+	echo $row["title"] . PHP_EOL;
 }
 ```
 Binding values to parametrized arguments is also possible with the execute function:
 
 ```php
-$statement = $connection->execute('SELECT * FROM articles WHERE id = :id', ['id' => 1], ['id' => 'integer']);
-$results = $statement->fetch('assoc');
+$statement = $connection->execute("SELECT * FROM articles WHERE id = :id", ["id" => 1], ["id" => "integer"]);
+$results = $statement->fetch("assoc");
 ```
 
 The third parameter is the types the passed values should be converted to when passed to the database. If
@@ -95,9 +95,9 @@ no types are passed, all arguments will be interpreted as a string.
 Alternatively you can construct a statement manually and then fetch rows from it:
 
 ```php
-$statement = $connection->prepare('SELECT * from articles WHERE id != :id');
-$statement->bind(['id' => 1], ['id' => 'integer']);
-$results = $statement->fetchAll('assoc');
+$statement = $connection->prepare("SELECT * from articles WHERE id != :id");
+$statement->bind(["id" => 1], ["id" => "integer"]);
+$results = $statement->fetchAll("assoc");
 ```
 
 The default types that are understood by this library and can be passed to the `bind()` function or to `execute()`
@@ -119,12 +119,12 @@ More types can be added dynamically in a bit.
 Statements can be reused by binding new values to the parameters in the query:
 
 ```php
-$statement = $connection->prepare('SELECT * from articles WHERE id = :id');
-$statement->bind(['id' => 1], ['id' => 'integer']);
-$results = $statement->fetchAll('assoc');
+$statement = $connection->prepare("SELECT * from articles WHERE id = :id");
+$statement->bind(["id" => 1], ["id" => "integer"]);
+$results = $statement->fetchAll("assoc");
 
-$statement->bind(['id' => 1], ['id' => 'integer']);
-$results = $statement->fetchAll('assoc');
+$statement->bind(["id" => 1], ["id" => "integer"]);
+$results = $statement->fetchAll("assoc");
 ```
 
 ### Updating Rows
@@ -133,7 +133,7 @@ Updating can be done using the `update()` function in the connection object. In 
 example we will update the title of the article with id = 1:
 
 ```php
-$connection->update('articles', ['title' => 'New title'], ['id' => 1]);
+$connection->update("articles", ["title" => "New title"], ["id" => 1]);
 ```
 
 The concept of data types is central to this library, so you can use the last parameter of the function
@@ -141,17 +141,17 @@ to specify what types should be used:
 
 ```php
 $connection->update(
-	'articles',
-	['title' => 'New title'],
-	['created >=' => new DateTime('-3 day'), 'created <' => new DateTime('now')],
-	['created' => 'datetime']
+	"articles",
+	["title" => "New title"],
+	["created >=" => new DateTime("-3 day"), "created <" => new DateTime("now")],
+	["created" => "datetime"]
 );
 ```
 
 The example above will execute the following SQL:
 
 ```sql
-UPDATE articles SET title = 'New Title' WHERE created >= '2014-10-10 00:00:00' AND created < '2014-10-13 00:00:00';
+UPDATE articles SET title = "New Title" WHERE created >= "2014-10-10 00:00:00" AND created < "2014-10-13 00:00:00";
 ```
 
 More on creating complex where conditions or more complex update queries later.
@@ -161,13 +161,13 @@ More on creating complex where conditions or more complex update queries later.
 Similarly, the `delete()` method is used to delete rows from the database:
 
 ```php
-$connection->delete('articles', ['created <' => DateTime('now')], ['created' => 'date']);
+$connection->delete("articles", ["created <" => DateTime("now")], ["created" => "date"]);
 ```
 
 Will generate the following SQL
 
 ```sql
-DELETE FROM articles where created < '2014-10-10'
+DELETE FROM articles where created < "2014-10-10"
 ```
 
 ### Inserting Rows
@@ -176,9 +176,9 @@ Rows can be inserted using the `insert()` method:
 
 ```php
 $connection->insert(
-	'articles',
-	['title' => 'My Title', 'body' => 'Some paragraph', 'created' => new DateTime()],
-	['created' => 'datetime']
+	"articles",
+	["title" => "My Title", "body" => "Some paragraph", "created" => new DateTime()],
+	["created" => "datetime"]
 );
 ```
 
@@ -198,14 +198,14 @@ $query = $connection->newQuery();
 Adding fields to the `SELECT` clause:
 
 ```php
-$query->select(['id', 'title', 'body']);
+$query->select(["id", "title", "body"]);
 
 // Results in SELECT id AS pk, title AS aliased_title, body ...
-$query->select(['pk' => 'id', 'aliased_title' => 'title', 'body']);
+$query->select(["pk" => "id", "aliased_title" => "title", "body"]);
 
 // Use a closure
 $query->select(function ($query) {
-	return ['id', 'title', 'body'];
+	return ["id", "title", "body"];
 });
 ```
 
@@ -215,26 +215,26 @@ Generating conditions:
 
 ```php
 // WHERE id = 1
-$query->where(['id' => 1]);
+$query->where(["id" => 1]);
 
 // WHERE id > 2
-$query->where(['id >' => 1]);
+$query->where(["id >" => 1]);
 ```
 
 As you can see you can use any operator by placing it with a space after the field name.
 Adding multiple conditions is easy as well:
 
 ```php
-$query->where(['id >' => 1])->andWhere(['title' => 'My Title']);
+$query->where(["id >" => 1])->andWhere(["title" => "My Title"]);
 
 // Equivalent to
-$query->where(['id >' => 1, 'title' => 'My title']);
+$query->where(["id >" => 1, "title" => "My title"]);
 ```
 
 It is possible to generate `OR` conditions as well
 
 ```php
-$query->where(['OR' => ['id >' => 1, 'title' => 'My title']]);
+$query->where(["OR" => ["id >" => 1, "title" => "My title"]]);
 ```
 
 For even more complex conditions you can use closures and expression objects:
@@ -242,10 +242,10 @@ For even more complex conditions you can use closures and expression objects:
 ```php
 $query->where(function ($exp) {
         return $exp
-            ->eq('author_id', 2)
-            ->eq('published', true)
-            ->notEq('spam', true)
-            ->gt('view_count', 10);
+            ->eq("author_id", 2)
+            ->eq("published", true)
+            ->notEq("spam", true)
+            ->gt("view_count", 10);
     });
 ```
 
@@ -264,11 +264,11 @@ Combining expressions is also possible:
 
 ```php
 $query->where(function ($exp) {
-        $orConditions = $exp->or(['author_id' => 2])
-            ->eq('author_id', 5);
+        $orConditions = $exp->or(["author_id" => 2])
+            ->eq("author_id", 5);
         return $exp
             ->not($orConditions)
-            ->lte('view_count', 10);
+            ->lte("view_count", 10);
     });
 ```
 
@@ -301,7 +301,7 @@ When using the expression objects you can use the following methods to create co
 
 ```php
 // Results in SELECT COUNT(*) count FROM ...
-$query->select(['count' => $query->func()->count('*')]);
+$query->select(["count" => $query->func()->count("*")]);
 ```
 
 A number of commonly used functions can be created with the func() method:
@@ -314,7 +314,7 @@ A number of commonly used functions can be created with the func() method:
 * `concat()` Concatenate two values together. The arguments are treated as bound parameters unless marked as literal.
 * `coalesce()` Coalesce values. The arguments are treated as bound parameters unless marked as literal.
 * `dateDiff()` Get the difference between two dates/times. The arguments are treated as bound parameters unless marked as literal.
-* `now()` Take either 'time' or 'date' as an argument allowing you to get either the current time, or current date.
+* `now()` Take either "time" or "date" as an argument allowing you to get either the current time, or current date.
 
 When providing arguments for SQL functions, there are two kinds of parameters you can use, literal arguments and bound parameters. Literal
 parameters allow you to reference columns or other SQL literals. Bound parameters can be used to safely add user data to SQL functions.
@@ -322,10 +322,10 @@ For example:
 
 ```php
 $concat = $query->func()->concat([
-    'title' => 'literal',
-    ' NEW'
+    "title" => "literal",
+    " NEW"
 ]);
-$query->select(['title' => $concat]);
+$query->select(["title" => $concat]);
 ```
 
 The above generates:
@@ -349,7 +349,7 @@ foreach ($query as $row) {
 }
 
 // Get the statement and fetch all results
-$results = $query->execute()->fetchAll('assoc');
+$results = $query->execute()->fetchAll("assoc");
 ```
 
 ## Official API

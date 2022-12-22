@@ -96,14 +96,14 @@ abstract class Driver implements DriverInterface
      */
     public this(array $config = [])
     {
-        if (empty($config['username']) && !empty($config['login'])) {
+        if (empty($config["username"]) && !empty($config["login"])) {
             throw new InvalidArgumentException(
-                'Please pass "username" instead of "login" for connecting to the database'
+                "Please pass "username" instead of "login" for connecting to the database"
             );
         }
         $config += _baseConfig;
         _config = $config;
-        if (!empty($config['quoteIdentifiers'])) {
+        if (!empty($config["quoteIdentifiers"])) {
             this.enableAutoQuoting();
         }
     }
@@ -120,9 +120,9 @@ abstract class Driver implements DriverInterface
         $action = function () use ($dsn, $config) {
             this.setConnection(new PDO(
                 $dsn,
-                $config['username'] ?: null,
-                $config['password'] ?: null,
-                $config['flags']
+                $config["username"] ?: null,
+                $config["password"] ?: null,
+                $config["flags"]
             ));
         };
 
@@ -132,8 +132,8 @@ abstract class Driver implements DriverInterface
         } catch (PDOException $e) {
             throw new MissingConnectionException(
                 [
-                    'driver' => App::shortName(static::class, 'Database/Driver'),
-                    'reason' => $e->getMessage(),
+                    "driver" => App::shortName(static::class, "Database/Driver"),
+                    "reason" => $e->getMessage(),
                 ],
                 null,
                 $e
@@ -184,8 +184,8 @@ abstract class Driver implements DriverInterface
     {
         if (_connection === null) {
             throw new MissingConnectionException([
-                'driver' => App::shortName(static::class, 'Database/Driver'),
-                'reason' => 'Unknown',
+                "driver" => App::shortName(static::class, "Database/Driver"),
+                "reason" => "Unknown",
             ]);
         }
 
@@ -278,7 +278,7 @@ abstract class Driver implements DriverInterface
      */
     function supportsSavePoints(): bool
     {
-        deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
+        deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
 
         return this.supports(static::FEATURE_SAVEPOINT);
     }
@@ -291,7 +291,7 @@ abstract class Driver implements DriverInterface
      */
     function supportsCTEs(): bool
     {
-        deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
+        deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
 
         return this.supports(static::FEATURE_CTE);
     }
@@ -314,7 +314,7 @@ abstract class Driver implements DriverInterface
      */
     function supportsQuoting(): bool
     {
-        deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
+        deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
 
         return this.supports(static::FEATURE_QUOTE);
     }
@@ -340,28 +340,28 @@ abstract class Driver implements DriverInterface
     function schemaValue($value): string
     {
         if ($value === null) {
-            return 'NULL';
+            return "NULL";
         }
         if ($value === false) {
-            return 'FALSE';
+            return "FALSE";
         }
         if ($value === true) {
-            return 'TRUE';
+            return "TRUE";
         }
         if (is_float($value)) {
-            return str_replace(',', '.', (string)$value);
+            return str_replace(",", ".", (string)$value);
         }
         /** @psalm-suppress InvalidArgument */
         if (
             (
                 is_int($value) ||
-                $value === '0'
+                $value === "0"
             ) ||
             (
                 is_numeric($value) &&
-                strpos($value, ',') === false &&
-                substr($value, 0, 1) != '0' &&
-                strpos($value, 'e') === false
+                strpos($value, ",") === false &&
+                substr($value, 0, 1) != "0" &&
+                strpos($value, "e") === false
             )
         ) {
             return (string)$value;
@@ -375,7 +375,7 @@ abstract class Driver implements DriverInterface
      */
     function schema(): string
     {
-        return _config['schema'];
+        return _config["schema"];
     }
 
     /**
@@ -401,7 +401,7 @@ abstract class Driver implements DriverInterface
             $connected = false;
         } else {
             try {
-                $connected = (bool)_connection->query('SELECT 1');
+                $connected = (bool)_connection->query("SELECT 1");
             } catch (PDOException $e) {
                 $connected = false;
             }
@@ -484,9 +484,9 @@ abstract class Driver implements DriverInterface
     function newTableSchema(string $table, array $columns = []): TableSchema
     {
         $className = TableSchema::class;
-        if (isset(_config['tableSchema'])) {
+        if (isset(_config["tableSchema"])) {
             /** @var class-string<\Cake\Database\Schema\TableSchema> $className */
-            $className = _config['tableSchema'];
+            $className = _config["tableSchema"];
         }
 
         return new $className($table, $columns);
@@ -531,7 +531,7 @@ abstract class Driver implements DriverInterface
     function __debugInfo(): array
     {
         return [
-            'connected' => _connection != null,
+            "connected" => _connection != null,
         ];
     }
 }

@@ -38,20 +38,20 @@ class SqlserverCompiler extends QueryCompiler
      * @inheritDoc
      */
     protected $_templates = [
-        'delete' => 'DELETE',
-        'where' => ' WHERE %s',
-        'group' => ' GROUP BY %s',
-        'order' => ' %s',
-        'offset' => ' OFFSET %s ROWS',
-        'epilog' => ' %s',
+        "delete" => "DELETE",
+        "where" => " WHERE %s",
+        "group" => " GROUP BY %s",
+        "order" => " %s",
+        "offset" => " OFFSET %s ROWS",
+        "epilog" => " %s",
     ];
 
     /**
      * @inheritDoc
      */
     protected $_selectParts = [
-        'with', 'select', 'from', 'join', 'where', 'group', 'having', 'window', 'order',
-        'offset', 'limit', 'union', 'epilog',
+        "with", "select", "from", "join", "where", "group", "having", "window", "order",
+        "offset", "limit", "union", "epilog",
     ];
 
     /**
@@ -71,7 +71,7 @@ class SqlserverCompiler extends QueryCompiler
             $expressions[] = $cte->sql($binder);
         }
 
-        return sprintf('WITH %s ', implode(', ', $expressions));
+        return sprintf("WITH %s ", implode(", ", $expressions));
     }
 
     /**
@@ -79,7 +79,7 @@ class SqlserverCompiler extends QueryCompiler
      *
      * To better handle concurrency and low transaction isolation levels,
      * we also include an OUTPUT clause so we can ensure we get the inserted
-     * row's data back.
+     * row"s data back.
      *
      * @param array $parts The parts to build
      * @param \Cake\Database\Query $query The query that is being compiled
@@ -90,19 +90,19 @@ class SqlserverCompiler extends QueryCompiler
     {
         if (!isset($parts[0])) {
             throw new DatabaseException(
-                'Could not compile insert query. No table was specified. ' .
-                'Use `into()` to define a table.'
+                "Could not compile insert query. No table was specified. " .
+                "Use `into()` to define a table."
             );
         }
         $table = $parts[0];
         $columns = _stringifyExpressions($parts[1], $binder);
-        $modifiers = _buildModifierPart($query->clause('modifier'), $query, $binder);
+        $modifiers = _buildModifierPart($query->clause("modifier"), $query, $binder);
 
         return sprintf(
-            'INSERT%s INTO %s (%s) OUTPUT INSERTED.*',
+            "INSERT%s INTO %s (%s) OUTPUT INSERTED.*",
             $modifiers,
             $table,
-            implode(', ', $columns)
+            implode(", ", $columns)
         );
     }
 
@@ -115,11 +115,11 @@ class SqlserverCompiler extends QueryCompiler
      */
     protected function _buildLimitPart(int $limit, Query $query): string
     {
-        if ($query->clause('offset') === null) {
-            return '';
+        if ($query->clause("offset") === null) {
+            return "";
         }
 
-        return sprintf(' FETCH FIRST %d ROWS ONLY', $limit);
+        return sprintf(" FETCH FIRST %d ROWS ONLY", $limit);
     }
 
     /**
@@ -134,7 +134,7 @@ class SqlserverCompiler extends QueryCompiler
      */
     protected function _buildHavingPart($parts, $query, $binder)
     {
-        $selectParts = $query->clause('select');
+        $selectParts = $query->clause("select");
 
         foreach ($selectParts as $selectKey => $selectPart) {
             if (!$selectPart instanceof FunctionExpression) {
@@ -145,7 +145,7 @@ class SqlserverCompiler extends QueryCompiler
                     continue;
                 }
                 preg_match_all(
-                    '/\b' . trim($selectKey, '[]') . '\b/i',
+                    "/\b" . trim($selectKey, "[]") . "\b/i",
                     $p,
                     $matches
                 );
@@ -155,13 +155,13 @@ class SqlserverCompiler extends QueryCompiler
                 }
 
                 $parts[$k] = preg_replace(
-                    ['/\[|\]/', '/\b' . trim($selectKey, '[]') . '\b/i'],
-                    ['', $selectPart->sql($binder)],
+                    ["/\[|\]/", "/\b" . trim($selectKey, "[]") . "\b/i"],
+                    ["", $selectPart->sql($binder)],
                     $p
                 );
             }
         }
 
-        return sprintf(' HAVING %s', implode(', ', $parts));
+        return sprintf(" HAVING %s", implode(", ", $parts));
     }
 }

@@ -39,13 +39,13 @@ class PostgresCompiler extends QueryCompiler
      * @inheritDoc
      */
     protected $_templates = [
-        'delete' => 'DELETE',
-        'where' => ' WHERE %s',
-        'group' => ' GROUP BY %s',
-        'order' => ' %s',
-        'limit' => ' LIMIT %s',
-        'offset' => ' OFFSET %s',
-        'epilog' => ' %s',
+        "delete" => "DELETE",
+        "where" => " WHERE %s",
+        "group" => " GROUP BY %s",
+        "order" => " %s",
+        "limit" => " LIMIT %s",
+        "offset" => " OFFSET %s",
+        "epilog" => " %s",
     ];
 
     /**
@@ -60,7 +60,7 @@ class PostgresCompiler extends QueryCompiler
      */
     protected function _buildHavingPart($parts, $query, $binder)
     {
-        $selectParts = $query->clause('select');
+        $selectParts = $query->clause("select");
 
         foreach ($selectParts as $selectKey => $selectPart) {
             if (!$selectPart instanceof FunctionExpression) {
@@ -71,7 +71,7 @@ class PostgresCompiler extends QueryCompiler
                     continue;
                 }
                 preg_match_all(
-                    '/\b' . trim($selectKey, '"') . '\b/i',
+                    "/\b" . trim($selectKey, """) . "\b/i",
                     $p,
                     $matches
                 );
@@ -81,13 +81,13 @@ class PostgresCompiler extends QueryCompiler
                 }
 
                 $parts[$k] = preg_replace(
-                    ['/"/', '/\b' . trim($selectKey, '"') . '\b/i'],
-                    ['', $selectPart->sql($binder)],
+                    ["/"/", "/\b" . trim($selectKey, """) . "\b/i"],
+                    ["", $selectPart->sql($binder)],
                     $p
                 );
             }
         }
 
-        return sprintf(' HAVING %s', implode(', ', $parts));
+        return sprintf(" HAVING %s", implode(", ", $parts));
     }
 }

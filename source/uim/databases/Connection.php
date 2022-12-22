@@ -137,16 +137,16 @@ class Connection implements ConnectionInterface
         _config = $config;
 
         $driverConfig = array_diff_key($config, array_flip([
-            'name',
-            'driver',
-            'log',
-            'cacheMetaData',
-            'cacheKeyPrefix',
+            "name",
+            "driver",
+            "log",
+            "cacheMetaData",
+            "cacheKeyPrefix",
         ]));
-        _driver = this.createDriver($config['driver'] ?? '', $driverConfig);
+        _driver = this.createDriver($config["driver"] ?? "", $driverConfig);
 
-        if (!empty($config['log'])) {
-            this.enableQueryLogging((bool)$config['log']);
+        if (!empty($config["log"])) {
+            this.enableQueryLogging((bool)$config["log"]);
         }
     }
 
@@ -158,7 +158,7 @@ class Connection implements ConnectionInterface
     function __destruct()
     {
         if (_transactionStarted && class_exists(Log::class)) {
-            Log::warning('The connection is going to be closed but there is an active transaction.');
+            Log::warning("The connection is going to be closed but there is an active transaction.");
         }
     }
 
@@ -175,7 +175,7 @@ class Connection implements ConnectionInterface
      */
     function configName(): string
     {
-        return _config['name'] ?? '';
+        return _config["name"] ?? "";
     }
 
     /**
@@ -185,13 +185,13 @@ class Connection implements ConnectionInterface
      * @param \Cake\Database\DriverInterface|string $driver The driver instance to use.
      * @param array<string, mixed> $config Config for a new driver.
      * @throws \Cake\Database\Exception\MissingDriverException When a driver class is missing.
-     * @throws \Cake\Database\Exception\MissingExtensionException When a driver's PHP extension is missing.
+     * @throws \Cake\Database\Exception\MissingExtensionException When a driver"s PHP extension is missing.
      * @return this
      * @deprecated 4.4.0 Setting the driver is deprecated. Use the connection config instead.
      */
     function setDriver($driver, $config = [])
     {
-        deprecationWarning('Setting the driver is deprecated. Use the connection config instead.');
+        deprecationWarning("Setting the driver is deprecated. Use the connection config instead.");
 
         _driver = this.createDriver($driver, $config);
 
@@ -205,22 +205,22 @@ class Connection implements ConnectionInterface
      * @param array $config Driver config if $name is not an instance.
      * @return \Cake\Database\DriverInterface
      * @throws \Cake\Database\Exception\MissingDriverException When a driver class is missing.
-     * @throws \Cake\Database\Exception\MissingExtensionException When a driver's PHP extension is missing.
+     * @throws \Cake\Database\Exception\MissingExtensionException When a driver"s PHP extension is missing.
      */
     protected function createDriver($name, array $config): DriverInterface
     {
         $driver = $name;
         if (is_string($driver)) {
             /** @psalm-var class-string<\Cake\Database\DriverInterface>|null $className */
-            $className = App::className($driver, 'Database/Driver');
+            $className = App::className($driver, "Database/Driver");
             if ($className === null) {
-                throw new MissingDriverException(['driver' => $driver, 'connection' => this.configName()]);
+                throw new MissingDriverException(["driver" => $driver, "connection" => this.configName()]);
             }
             $driver = new $className($config);
         }
 
         if (!$driver->enabled()) {
-            throw new MissingExtensionException(['driver' => get_class($driver), 'name' => this.configName()]);
+            throw new MissingExtensionException(["driver" => get_class($driver), "name" => this.configName()]);
         }
 
         return $driver;
@@ -262,8 +262,8 @@ class Connection implements ConnectionInterface
         } catch (Throwable $e) {
             throw new MissingConnectionException(
                 [
-                    'driver' => App::shortName(get_class(_driver), 'Database/Driver'),
-                    'reason' => $e->getMessage(),
+                    "driver" => App::shortName(get_class(_driver), "Database/Driver"),
+                    "reason" => $e->getMessage(),
                 ],
                 null,
                 $e
@@ -334,7 +334,7 @@ class Connection implements ConnectionInterface
 
     /**
      * Compiles a Query object into a SQL string according to the dialect for this
-     * connection's driver
+     * connection"s driver
      *
      * @param \Cake\Database\Query $query The query to be compiled
      * @param \Cake\Database\ValueBinder $binder Value binder
@@ -413,10 +413,10 @@ class Connection implements ConnectionInterface
             return _schemaCollection;
         }
 
-        if (!empty(_config['cacheMetadata'])) {
+        if (!empty(_config["cacheMetadata"])) {
             return _schemaCollection = new CachedCollection(
                 new SchemaCollection(this),
-                empty(_config['cacheKeyPrefix']) ? this.configName() : _config['cacheKeyPrefix'],
+                empty(_config["cacheKeyPrefix"]) ? this.configName() : _config["cacheKeyPrefix"],
                 this.getCacher()
             );
         }
@@ -489,7 +489,7 @@ class Connection implements ConnectionInterface
     {
         if (!_transactionStarted) {
             if (_logQueries) {
-                this.log('BEGIN');
+                this.log("BEGIN");
             }
 
             this.getDisconnectRetry()->run(function (): void {
@@ -531,7 +531,7 @@ class Connection implements ConnectionInterface
             _transactionStarted = false;
             this.nestedTransactionRollbackException = null;
             if (_logQueries) {
-                this.log('COMMIT');
+                this.log("COMMIT");
             }
 
             return _driver->commitTransaction();
@@ -567,7 +567,7 @@ class Connection implements ConnectionInterface
             _transactionStarted = false;
             this.nestedTransactionRollbackException = null;
             if (_logQueries) {
-                this.log('ROLLBACK');
+                this.log("ROLLBACK");
             }
             _driver->rollbackTransaction();
 
@@ -775,7 +775,7 @@ class Connection implements ConnectionInterface
      * @param \Cake\Database\TypeInterface|string|int $type Type to be used for determining kind of quoting to perform
      * @return string Quoted value
      */
-    function quote($value, $type = 'string'): string
+    function quote($value, $type = "string"): string
     {
         [$value, $type] = this.cast($value, $type);
 
@@ -820,7 +820,7 @@ class Connection implements ConnectionInterface
     function cacheMetadata($cache): void
     {
         _schemaCollection = null;
-        _config['cacheMetadata'] = $cache;
+        _config["cacheMetadata"] = $cache;
         if (is_string($cache)) {
             this.cacher = null;
         }
@@ -845,15 +845,15 @@ class Connection implements ConnectionInterface
             return this.cacher;
         }
 
-        $configName = _config['cacheMetadata'] ?? '_cake_model_';
+        $configName = _config["cacheMetadata"] ?? "_cake_model_";
         if (!is_string($configName)) {
-            $configName = '_cake_model_';
+            $configName = "_cake_model_";
         }
 
         if (!class_exists(Cache::class)) {
             throw new RuntimeException(
-                'To use caching you must either set a cacher using Connection::setCacher()' .
-                ' or require the cakephp/cache package in your composer config.'
+                "To use caching you must either set a cacher using Connection::setCacher()" .
+                " or require the cakephp/cache package in your composer config."
             );
         }
 
@@ -922,12 +922,12 @@ class Connection implements ConnectionInterface
 
         if (!class_exists(BaseLog::class)) {
             throw new RuntimeException(
-                'For logging you must either set a logger using Connection::setLogger()' .
-                ' or require the cakephp/log package in your composer config.'
+                "For logging you must either set a logger using Connection::setLogger()" .
+                " or require the cakephp/log package in your composer config."
             );
         }
 
-        return _logger = new QueryLogger(['connection' => this.configName()]);
+        return _logger = new QueryLogger(["connection" => this.configName()]);
     }
 
     /**
@@ -940,7 +940,7 @@ class Connection implements ConnectionInterface
     {
         $query = new LoggedQuery();
         $query->query = $sql;
-        this.getLogger()->debug((string)$query, ['query' => $query]);
+        this.getLogger()->debug((string)$query, ["query" => $query]);
     }
 
     /**
@@ -967,23 +967,23 @@ class Connection implements ConnectionInterface
     function __debugInfo(): array
     {
         $secrets = [
-            'password' => '*****',
-            'username' => '*****',
-            'host' => '*****',
-            'database' => '*****',
-            'port' => '*****',
+            "password" => "*****",
+            "username" => "*****",
+            "host" => "*****",
+            "database" => "*****",
+            "port" => "*****",
         ];
         $replace = array_intersect_key($secrets, _config);
         $config = $replace + _config;
 
         return [
-            'config' => $config,
-            'driver' => _driver,
-            'transactionLevel' => _transactionLevel,
-            'transactionStarted' => _transactionStarted,
-            'useSavePoints' => _useSavePoints,
-            'logQueries' => _logQueries,
-            'logger' => _logger,
+            "config" => $config,
+            "driver" => _driver,
+            "transactionLevel" => _transactionLevel,
+            "transactionStarted" => _transactionStarted,
+            "useSavePoints" => _useSavePoints,
+            "logQueries" => _logQueries,
+            "logger" => _logger,
         ];
     }
 }
