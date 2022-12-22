@@ -94,7 +94,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
      * only be passed if you actually want to create the simple
      * case expression variant!
      *
-     * @param \Cake\Database\IDTBExpression|object|scalar|null $value The case value.
+     * @param uim.databases\IDTBExpression|object|scalar|null $value The case value.
      * @param string|null $type The case value type. If no type is provided, the type will be tried to be inferred
      *  from the value.
      */
@@ -254,7 +254,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
      *      .bind(":userData", $userData,"integer")
      * ```
      *
-     * @param \Cake\Database\IDTBExpression|\Closure|object|array|scalar $when The `WHEN` value. When using an
+     * @param uim.databases\IDTBExpression|\Closure|object|array|scalar $when The `WHEN` value. When using an
      *  array of conditions, it must be compatible with `\Cake\Database\Query::where()`. Note that this argument is
      *  _not_ completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in! If
      *  you plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to
@@ -342,7 +342,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
      *     // ...
      * ```
      *
-     * @param \Cake\Database\IDTBExpression|object|scalar|null $result The result value.
+     * @param uim.databases\IDTBExpression|object|scalar|null $result The result value.
      * @param string|null $type The result type. If no type is provided, the type will be tried to be inferred from the
      *  value.
      * @return $this
@@ -369,7 +369,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
     /**
      * Sets the `ELSE` result value.
      *
-     * @param \Cake\Database\IDTBExpression|object|scalar|null $result The result value.
+     * @param uim.databases\IDTBExpression|object|scalar|null $result The result value.
      * @param string|null $type The result type. If no type is provided, the type will be tried to be inferred from the
      *  value.
      * @return $this
@@ -491,7 +491,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
     }
 
 
-    string sql(ValueBinder $binder)
+    string sql(ValueBinder aValueBinder)
     {
         if ($this.whenBuffer !is null) {
             throw new LogicException("Case expression has incomplete when clause. Missing `then()` after `when()`.");

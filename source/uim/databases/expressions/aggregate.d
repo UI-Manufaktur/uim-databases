@@ -30,7 +30,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
      * Adds conditions to the FILTER clause. The conditions are the same format as
      * `Query::where()`.
      *
-     * @param \Cake\Database\IDTBExpression|\Closure|array|string $conditions The conditions to filter on.
+     * @param uim.databases\IDTBExpression|\Closure|array|string $conditions The conditions to filter on.
      * @param array<string, string> $types Associative array of type names used to bind values to query
      * @return $this
      * @see \Cake\Database\Query::where()
@@ -156,7 +156,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
     }
 
 
-    string sql(ValueBinder $binder)
+    string sql(ValueBinder aValueBinder)
     {
         $sql = parent::sql($binder);
         if ($this.filter !is null) {

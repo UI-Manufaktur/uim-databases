@@ -44,8 +44,8 @@ class FieldTypeConverter
     /**
      * Builds the type map
      *
-     * @param \Cake\Database\TypeMap myTypeMap Contains the types to use for converting results
-     * @param \Cake\Database\IDriver myDriver The driver to use for the type conversion
+     * @param uim.databases\TypeMap myTypeMap Contains the types to use for converting results
+     * @param uim.databases\IDriver myDriver The driver to use for the type conversion
      */
     this(TypeMap myTypeMap, IDriver myDriver) {
         _driver = myDriver;

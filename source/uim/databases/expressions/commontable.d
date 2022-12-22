@@ -52,7 +52,7 @@ class CommonTableExpression : IDTBExpression
      * Constructor.
      *
      * @param string $name The CTE name.
-     * @param \Cake\Database\IDTBExpression|\Closure $query CTE query
+     * @param uim.databases\IDTBExpression|\Closure $query CTE query
      */
     this(string $name ="", $query = null)
     {
@@ -81,7 +81,7 @@ class CommonTableExpression : IDTBExpression
     /**
      * Sets the query for this CTE.
      *
-     * @param \Cake\Database\IDTBExpression|\Closure $query CTE query
+     * @param uim.databases\IDTBExpression|\Closure $query CTE query
      * @return $this
      */
     function query($query)
@@ -102,7 +102,7 @@ class CommonTableExpression : IDTBExpression
     /**
      * Adds one or more fields (arguments) to the CTE.
      *
-     * @param \Cake\Database\Expression\IdentifierExpression|array<\Cake\Database\Expression\IdentifierExpression>|array<string>|string $fields Field names
+     * @param uim.databases\Expression\IdentifierExpression|array<\Cake\Database\Expression\IdentifierExpression>|array<string>|string $fields Field names
      * @return $this
      */
     function field($fields)
@@ -165,7 +165,7 @@ class CommonTableExpression : IDTBExpression
     }
 
 
-    string sql(ValueBinder $binder)
+    string sql(ValueBinder aValueBinder)
     {
         $fields ="";
         if ($this.fields) {

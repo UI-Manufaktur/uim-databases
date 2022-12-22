@@ -132,7 +132,7 @@ class Query : IExpression, IteratorAggregate {
     /**
      * Constructor.
      *
-     * @param \Cake\Database\Connection myConnection The connection
+     * @param uim.databases\Connection myConnection The connection
      * object to be used for transforming and executing this query
      */
     this(Connection myConnection) {
@@ -142,14 +142,14 @@ class Query : IExpression, IteratorAggregate {
     /**
      * Sets the connection instance to be used for executing and transforming this query.
      *
-     * @param \Cake\Database\Connection myConnection Connection instance
+     * @param uim.databases\Connection myConnection Connection instance
      * @return this
      */
     auto setConnection(Connection myConnection) {
         _dirty();
         _connection = myConnection;
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -229,10 +229,10 @@ class Query : IExpression, IteratorAggregate {
      * values when the query is executed, hence it is most suitable to use with
      * prepared statements.
      *
-     * @param \Cake\Database\ValueBinder|null $binder Value binder that generates parameter placeholders
+     * @param uim.databases\ValueBinder|null $binder Value binder that generates parameter placeholders
      * @return string
      */
-    function sql(?ValueBinder $binder = null) {
+    function sql(?ValueBinder aValueBinder = null) {
         if (!$binder) {
             $binder = this.getValueBinder();
             $binder.resetCount();
@@ -267,7 +267,7 @@ class Query : IExpression, IteratorAggregate {
             $callback($part, myName);
         }
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -299,7 +299,7 @@ class Query : IExpression, IteratorAggregate {
             $visitor(_parts[myName], myName);
         }
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -341,12 +341,12 @@ class Query : IExpression, IteratorAggregate {
      * });
      * ```
      *
-     * @param \Cake\Database\Expression\CommonTableExpression|\Closure $cte The CTE to add.
-     * @param bool $overwrite Whether to reset the list of CTEs.
+     * @param uim.databases\Expression\CommonTableExpression|\Closure $cte The CTE to add.
+     * @param bool shouldOverwrite Whether to reset the list of CTEs.
      * @return this
      */
-    function with($cte, bool $overwrite = false) {
-        if ($overwrite) {
+    function with($cte, bool shouldOverwrite = false) {
+        if (shouldOverwrite) {
             _parts["with"] = [];
         }
 
@@ -363,7 +363,7 @@ class Query : IExpression, IteratorAggregate {
         _parts["with"][] = $cte;
         _dirty();
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -397,11 +397,11 @@ class Query : IExpression, IteratorAggregate {
      * fields you should also call `Cake\ORM\Query::enableAutoFields()` to select the default fields
      * from the table.
      *
-     * @param \Cake\Database\IExpression|callable|array|string myFields fields to be added to the list.
-     * @param bool $overwrite whether to reset fields with passed list or not
+     * @param uim.databases\IExpression|callable|array|string myFields fields to be added to the list.
+     * @param bool shouldOverwrite whether to reset fields with passed list or not
      * @return this
      */
-    function select(myFields = [], bool $overwrite = false) {
+    function select(myFields = [], bool shouldOverwrite = false) {
         if (!is_string(myFields) && is_callable(myFields)) {
             myFields = myFields(this);
         }
@@ -410,7 +410,7 @@ class Query : IExpression, IteratorAggregate {
             myFields = [myFields];
         }
 
-        if ($overwrite) {
+        if (shouldOverwrite) {
             _parts["select"] = myFields;
         } else {
             _parts["select"] = array_merge(_parts["select"], myFields);
@@ -419,7 +419,7 @@ class Query : IExpression, IteratorAggregate {
         _dirty();
         _type = "select";
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -445,12 +445,12 @@ class Query : IExpression, IteratorAggregate {
      * myQuery.distinct("name", true);
      * ```
      *
-     * @param \Cake\Database\IExpression|array|string|bool $on Enable/disable distinct class
+     * @param uim.databases\IExpression|array|string|bool $on Enable/disable distinct class
      * or list of fields to be filtered on
-     * @param bool $overwrite whether to reset fields with passed list or not
+     * @param bool shouldOverwrite whether to reset fields with passed list or not
      * @return this
      */
-    function distinct($on = [], $overwrite = false) {
+    function distinct($on = [], shouldOverwrite = false) {
         if ($on == []) {
             $on = true;
         } elseif (is_string($on)) {
@@ -462,13 +462,13 @@ class Query : IExpression, IteratorAggregate {
             if (is_array(_parts["distinct"])) {
                 myMerge = _parts["distinct"];
             }
-            $on = $overwrite ? array_values($on) : array_merge(myMerge, array_values($on));
+            $on = shouldOverwrite ? array_values($on) : array_merge(myMerge, array_values($on));
         }
 
         _parts["distinct"] = $on;
         _dirty();
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -489,13 +489,15 @@ class Query : IExpression, IteratorAggregate {
      * // It will produce the SQL: SELECT HIGH_PRIORITY SQL_NO_CACHE name, city FROM products
      * ```
      *
-     * @param \Cake\Database\IExpression|array|string modifiers modifiers to be applied to the query
-     * @param bool $overwrite whether to reset order with field list or not
+     * @param uim.databases\IExpression|array|string modifiers modifiers to be applied to the query
+     * @param bool shouldOverwrite whether to reset order with field list or not
      * @return this
      */
-    function modifier($modifiers, $overwrite = false) {
+    O modifier(this O)($modifiers, shouldOverwrite = false) {
+    }
+    O modifier(this O)($modifiers, shouldOverwrite = false) {
         _dirty();
-        if ($overwrite) {
+        if (shouldOverwrite) {
             _parts["modifier"] = [];
         }
         if (!is_array($modifiers)) {
@@ -503,7 +505,7 @@ class Query : IExpression, IteratorAggregate {
         }
         _parts["modifier"] = array_merge(_parts["modifier"], $modifiers);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -532,13 +534,13 @@ class Query : IExpression, IteratorAggregate {
      * @param array|string myTables tables to be added to the list. This argument, can be
      *  passed as an array of strings, array of expression objects, or a single string. See
      *  the examples above for the valid call types.
-     * @param bool $overwrite whether to reset tables with passed list or not
+     * @param bool shouldOverwrite whether to reset tables with passed list or not
      * @return this
      */
-    function from(myTables = [], $overwrite = false) {
+    function from(myTables = [], shouldOverwrite = false) {
         myTables = (array)myTables;
 
-        if ($overwrite) {
+        if (shouldOverwrite) {
             _parts["from"] = myTables;
         } else {
             _parts["from"] = array_merge(_parts["from"], myTables);
@@ -546,7 +548,7 @@ class Query : IExpression, IteratorAggregate {
 
         _dirty();
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -631,11 +633,11 @@ class Query : IExpression, IteratorAggregate {
      *
      * @param array<string, mixed>|string myTables list of tables to be joined in the query
      * @param array<string, string> myTypes Associative array of type names used to bind values to query
-     * @param bool $overwrite whether to reset joins with passed list or not
+     * @param bool shouldOverwrite whether to reset joins with passed list or not
      * @see \Cake\Database\TypeFactory
      * @return this
      */
-    function join(myTables, myTypes = [], $overwrite = false) {
+    function join(myTables, myTypes = [], shouldOverwrite = false) {
         if (is_string(myTables) || isset(myTables["table"])) {
             myTables = [myTables];
         }
@@ -658,7 +660,7 @@ class Query : IExpression, IteratorAggregate {
             $joins[myAlias ?: $i++] = $t + ["type":static::JOIN_TYPE_INNER, "alias":myAlias];
         }
 
-        if ($overwrite) {
+        if (shouldOverwrite) {
             _parts["join"] = $joins;
         } else {
             _parts["join"] = array_merge(_parts["join"], $joins);
@@ -666,7 +668,7 @@ class Query : IExpression, IteratorAggregate {
 
         _dirty();
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -682,7 +684,7 @@ class Query : IExpression, IteratorAggregate {
         unset(_parts["join"][myName]);
         _dirty();
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -716,7 +718,7 @@ class Query : IExpression, IteratorAggregate {
      * See `join()` for further details on conditions and types.
      *
      * @param array<string>|string myTable The table to join with
-     * @param \Cake\Database\IExpression|array|string conditions The conditions
+     * @param uim.databases\IExpression|array|string conditions The conditions
      * to use for joining.
      * @param array myTypes a list of types associated to the conditions used for converting
      * values to the corresponding database representation.
@@ -725,7 +727,7 @@ class Query : IExpression, IteratorAggregate {
     function leftJoin(myTable, $conditions = [], myTypes = []) {
         this.join(_makeJoin(myTable, $conditions, static::JOIN_TYPE_LEFT), myTypes);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -737,7 +739,7 @@ class Query : IExpression, IteratorAggregate {
      * to that methods description for further details.
      *
      * @param array<string>|string myTable The table to join with
-     * @param \Cake\Database\IExpression|array|string conditions The conditions
+     * @param uim.databases\IExpression|array|string conditions The conditions
      * to use for joining.
      * @param array myTypes a list of types associated to the conditions used for converting
      * values to the corresponding database representation.
@@ -746,7 +748,7 @@ class Query : IExpression, IteratorAggregate {
     function rightJoin(myTable, $conditions = [], myTypes = []) {
         this.join(_makeJoin(myTable, $conditions, static::JOIN_TYPE_RIGHT), myTypes);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -758,7 +760,7 @@ class Query : IExpression, IteratorAggregate {
      * to that method"s description for further details.
      *
      * @param array|string myTable The table to join with
-     * @param \Cake\Database\IExpression|array|string conditions The conditions
+     * @param uim.databases\IExpression|array|string conditions The conditions
      * to use for joining.
      * @param array<string, string> myTypes a list of types associated to the conditions used for converting
      * values to the corresponding database representation.
@@ -767,14 +769,14 @@ class Query : IExpression, IteratorAggregate {
     function innerJoin(myTable, $conditions = [], myTypes = []) {
         this.join(_makeJoin(myTable, $conditions, static::JOIN_TYPE_INNER), myTypes);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
      * Returns an array that can be passed to the join method describing a single join clause
      *
      * @param array<string>|string myTable The table to join with
-     * @param \Cake\Database\IExpression|array|string conditions The conditions
+     * @param uim.databases\IExpression|array|string conditions The conditions
      * to use for joining.
      * @param string myType the join type to use
      * @psalm-suppress InvalidReturnType
@@ -913,30 +915,30 @@ class Query : IExpression, IteratorAggregate {
      * If you use string conditions make sure that your values are correctly quoted.
      * The safest thing you can do is to never use string conditions.
      *
-     * @param \Cake\Database\IExpression|\Closure|array|string|null $conditions The conditions to filter on.
+     * @param uim.databases\IExpression|\Closure|array|string|null $conditions The conditions to filter on.
      * @param array<string, string> myTypes Associative array of type names used to bind values to query
-     * @param bool $overwrite whether to reset conditions with passed list or not
+     * @param bool shouldOverwrite whether to reset conditions with passed list or not
      * @see \Cake\Database\TypeFactory
      * @see \Cake\Database\Expression\QueryExpression
      * @return this
      */
-    function where($conditions = null, array myTypes = [], bool $overwrite = false) {
-        if ($overwrite) {
+    function where($conditions = null, array myTypes = [], bool shouldOverwrite = false) {
+        if (shouldOverwrite) {
             _parts["where"] = this.newExpr();
         }
         _conjugate("where", $conditions, "AND", myTypes);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
      * Convenience method that adds a NOT NULL condition to the query
      *
-     * @param \Cake\Database\IExpression|array|string myFields A single field or expressions or a list of them
+     * @param uim.databases\IExpression|array|string myFields A single field or expressions or a list of them
      *  that should be not null.
      * @return this
      */
-    function whereNotNull(myFields) {
+    O whereNotNull(this O)(myFields) {
         if (!is_array(myFields)) {
             myFields = [myFields];
         }
@@ -947,17 +949,17 @@ class Query : IExpression, IteratorAggregate {
             $exp.isNotNull(myField);
         }
 
-        return this.where($exp);
+        return cast(O)this.where($exp);
     }
 
     /**
      * Convenience method that adds a IS NULL condition to the query
      *
-     * @param \Cake\Database\IExpression|array|string myFields A single field or expressions or a list of them
+     * @param uim.databases\IExpression|array|string myFields A single field or expressions or a list of them
      *   that should be null.
      * @return this
      */
-    function whereNull(myFields) {
+    O whereNull(this O)(myFields) {
         if (!is_array(myFields)) {
             myFields = [myFields];
         }
@@ -968,7 +970,7 @@ class Query : IExpression, IteratorAggregate {
             $exp.isNull(myField);
         }
 
-        return this.where($exp);
+        return cast(O)this.where($exp);
     }
 
     /**
@@ -999,7 +1001,7 @@ class Query : IExpression, IteratorAggregate {
             return this.where("1=0");
         }
 
-        return this.where([myField . " IN":myValues], myOptions["types"]);
+        return cast(O)this.where([myField . " IN":myValues], myOptions["types"]);
     }
 
     /**
@@ -1025,7 +1027,7 @@ class Query : IExpression, IteratorAggregate {
             return this.where([myField . " IS NOT":null]);
         }
 
-        return this.where([myField . " NOT IN":myValues], myOptions["types"]);
+        return cast(O)this.where([myField . " NOT IN":myValues], myOptions["types"]);
     }
 
     /**
@@ -1110,16 +1112,15 @@ class Query : IExpression, IteratorAggregate {
      *
      * `WHERE (title = "Foo") AND (author_id = 1 OR author_id = 2)`
      *
-     * @param \Cake\Database\IExpression|\Closure|array|string conditions The conditions to add with AND.
+     * @param uim.databases\IExpression|\Closure|array|string conditions The conditions to add with AND.
      * @param array<string, string> myTypes Associative array of type names used to bind values to query
      * @see \Cake\Database\Query::where()
      * @see \Cake\Database\TypeFactory
-     * @return this
      */
-    function andWhere($conditions, array myTypes = []) {
+    O andWhere(this O)($conditions, array myTypes = []) {
         _conjugate("where", $conditions, "AND", myTypes);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1179,17 +1180,17 @@ class Query : IExpression, IteratorAggregate {
      * If you need to set complex expressions as order conditions, you
      * should use `orderAsc()` or `orderDesc()`.
      *
-     * @param \Cake\Database\IExpression|\Closure|array|string myFields fields to be added to the list
-     * @param bool $overwrite whether to reset order with field list or not
+     * @param uim.databases\IExpression|\Closure|array|string myFields fields to be added to the list
+     * @param bool shouldOverwrite whether to reset order with field list or not
      * @return this
      */
-    function order(myFields, $overwrite = false) {
-        if ($overwrite) {
+    function order(myFields, shouldOverwrite = false) {
+        if (shouldOverwrite) {
             _parts["order"] = null;
         }
 
         if (!myFields) {
-            return this;
+            return cast(O)this;
         }
 
         if (!_parts["order"]) {
@@ -1197,7 +1198,7 @@ class Query : IExpression, IteratorAggregate {
         }
         _conjugate("order", myFields, "", []);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1209,16 +1210,16 @@ class Query : IExpression, IteratorAggregate {
      * Order fields are not suitable for use with user supplied data as they are
      * not sanitized by the query builder.
      *
-     * @param \Cake\Database\IExpression|\Closure|string myField The field to order on.
-     * @param bool $overwrite Whether to reset the order clauses.
+     * @param uim.databases\IExpression|\Closure|string myField The field to order on.
+     * @param bool shouldOverwrite Whether to reset the order clauses.
      * @return this
      */
-    function orderAsc(myField, $overwrite = false) {
-        if ($overwrite) {
+    function orderAsc(myField, shouldOverwrite = false) {
+        if (shouldOverwrite) {
             _parts["order"] = null;
         }
         if (!myField) {
-            return this;
+            return cast(O)this;
         }
 
         if (myField instanceof Closure) {
@@ -1230,7 +1231,7 @@ class Query : IExpression, IteratorAggregate {
         }
         _parts["order"].add(new OrderClauseExpression(myField, "ASC"));
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1242,16 +1243,16 @@ class Query : IExpression, IteratorAggregate {
      * Order fields are not suitable for use with user supplied data as they are
      * not sanitized by the query builder.
      *
-     * @param \Cake\Database\IExpression|\Closure|string myField The field to order on.
-     * @param bool $overwrite Whether to reset the order clauses.
+     * @param uim.databases\IExpression|\Closure|string myField The field to order on.
+     * @param bool shouldOverwrite Whether to reset the order clauses.
      * @return this
      */
-    function orderDesc(myField, $overwrite = false) {
-        if ($overwrite) {
+    function orderDesc(myField, shouldOverwrite = false) {
+        if (shouldOverwrite) {
             _parts["order"] = null;
         }
         if (!myField) {
-            return this;
+            return cast(O)this;
         }
 
         if (myField instanceof Closure) {
@@ -1263,7 +1264,7 @@ class Query : IExpression, IteratorAggregate {
         }
         _parts["order"].add(new OrderClauseExpression(myField, "DESC"));
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1287,12 +1288,12 @@ class Query : IExpression, IteratorAggregate {
      * Group fields are not suitable for use with user supplied data as they are
      * not sanitized by the query builder.
      *
-     * @param \Cake\Database\IExpression|array|string myFields fields to be added to the list
-     * @param bool $overwrite whether to reset fields with passed list or not
+     * @param uim.databases\IExpression|array|string myFields fields to be added to the list
+     * @param bool shouldOverwrite whether to reset fields with passed list or not
      * @return this
      */
-    function group(myFields, $overwrite = false) {
-        if ($overwrite) {
+    function group(myFields, shouldOverwrite = false) {
+        if (shouldOverwrite) {
             _parts["group"] = [];
         }
 
@@ -1303,7 +1304,7 @@ class Query : IExpression, IteratorAggregate {
         _parts["group"] = array_merge(_parts["group"], array_values(myFields));
         _dirty();
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1315,19 +1316,19 @@ class Query : IExpression, IteratorAggregate {
      * Having fields are not suitable for use with user supplied data as they are
      * not sanitized by the query builder.
      *
-     * @param \Cake\Database\IExpression|\Closure|array|string|null $conditions The having conditions.
+     * @param uim.databases\IExpression|\Closure|array|string|null $conditions The having conditions.
      * @param array<string, string> myTypes Associative array of type names used to bind values to query
-     * @param bool $overwrite whether to reset conditions with passed list or not
+     * @param bool shouldOverwrite whether to reset conditions with passed list or not
      * @see \Cake\Database\Query::where()
      * @return this
      */
-    function having($conditions = null, myTypes = [], $overwrite = false) {
-        if ($overwrite) {
+    function having($conditions = null, myTypes = [], shouldOverwrite = false) {
+        if (shouldOverwrite) {
             _parts["having"] = this.newExpr();
         }
         _conjugate("having", $conditions, "AND", myTypes);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1339,7 +1340,7 @@ class Query : IExpression, IteratorAggregate {
      * Having fields are not suitable for use with user supplied data as they are
      * not sanitized by the query builder.
      *
-     * @param \Cake\Database\IExpression|\Closure|array|string conditions The AND conditions for HAVING.
+     * @param uim.databases\IExpression|\Closure|array|string conditions The AND conditions for HAVING.
      * @param array<string, string> myTypes Associative array of type names used to bind values to query
      * @see \Cake\Database\Query::andWhere()
      * @return this
@@ -1347,7 +1348,7 @@ class Query : IExpression, IteratorAggregate {
     function andHaving($conditions, myTypes = []) {
         _conjugate("having", $conditions, "AND", myTypes);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1356,12 +1357,12 @@ class Query : IExpression, IteratorAggregate {
      * You are responsible for adding windows in the order your database requires.
      *
      * @param string myName Window name
-     * @param \Cake\Database\Expression\WindowExpression|\Closure $window Window expression
-     * @param bool $overwrite Clear all previous query window expressions
+     * @param uim.databases\Expression\WindowExpression|\Closure $window Window expression
+     * @param bool shouldOverwrite Clear all previous query window expressions
      * @return this
      */
-    function window(string myName, $window, bool $overwrite = false) {
-        if ($overwrite) {
+    function window(string myName, $window, bool shouldOverwrite = false) {
+        if (shouldOverwrite) {
             _parts["window"] = [];
         }
 
@@ -1375,7 +1376,7 @@ class Query : IExpression, IteratorAggregate {
         _parts["window"][] = ["name":new IdentifierExpression(myName), "window":$window];
         _dirty();
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1411,7 +1412,7 @@ class Query : IExpression, IteratorAggregate {
         }
         this.offset((int)$offset);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1427,14 +1428,14 @@ class Query : IExpression, IteratorAggregate {
      * myQuery.limit(myQuery.newExpr().add(["1 + 1"])); // LIMIT (1 + 1)
      * ```
      *
-     * @param \Cake\Database\IExpression|int|null $limit number of records to be returned
+     * @param uim.databases\IExpression|int|null $limit number of records to be returned
      * @return this
      */
-    function limit($limit) {
+    O limit(this O)($limit) {
         _dirty();
         _parts["limit"] = $limit;
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1452,14 +1453,14 @@ class Query : IExpression, IteratorAggregate {
      * myQuery.offset(myQuery.newExpr().add(["1 + 1"])); // OFFSET (1 + 1)
      * ```
      *
-     * @param \Cake\Database\IExpression|int|null $offset number of records to be skipped
+     * @param uim.databases\IExpression|int|null $offset number of records to be skipped
      * @return this
      */
-    function offset($offset) {
+    O offset(this O)($offset) {
         _dirty();
         _parts["offset"] = $offset;
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1482,12 +1483,12 @@ class Query : IExpression, IteratorAggregate {
      *
      * `SELECT id, name FROM things d UNION SELECT id, title FROM articles a`
      *
-     * @param \Cake\Database\Query|string myQuery full SQL query to be used in UNION operator
-     * @param bool $overwrite whether to reset the list of queries to be operated or not
+     * @param uim.databases\Query|string myQuery full SQL query to be used in UNION operator
+     * @param bool shouldOverwrite whether to reset the list of queries to be operated or not
      * @return this
      */
-    function union(myQuery, $overwrite = false) {
-        if ($overwrite) {
+    O union(this O)(myQuery, shouldOverwrite = false) {
+        if (shouldOverwrite) {
             _parts["union"] = [];
         }
         _parts["union"][] = [
@@ -1496,7 +1497,7 @@ class Query : IExpression, IteratorAggregate {
         ];
         _dirty();
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1516,12 +1517,12 @@ class Query : IExpression, IteratorAggregate {
      *
      * `SELECT id, name FROM things d UNION ALL SELECT id, title FROM articles a`
      *
-     * @param \Cake\Database\Query|string myQuery full SQL query to be used in UNION operator
-     * @param bool $overwrite whether to reset the list of queries to be operated or not
+     * @param uim.databases\Query|string myQuery full SQL query to be used in UNION operator
+     * @param bool shouldOverwrite whether to reset the list of queries to be operated or not
      * @return this
      */
-    function unionAll(myQuery, $overwrite = false) {
-        if ($overwrite) {
+    O unionAll(this O)(myQuery, shouldOverwrite = false) {
+        if (shouldOverwrite) {
             _parts["union"] = [];
         }
         _parts["union"][] = [
@@ -1530,7 +1531,7 @@ class Query : IExpression, IteratorAggregate {
         ];
         _dirty();
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1544,7 +1545,7 @@ class Query : IExpression, IteratorAggregate {
      * @return this
      * @throws \RuntimeException When there are 0 columns.
      */
-    function insert(array $columns, array myTypes = []) {
+    O insert(this O)(array $columns, array myTypes = []) {
         if (empty($columns)) {
             throw new RuntimeException("At least 1 column is required to perform an insert.");
         }
@@ -1557,7 +1558,7 @@ class Query : IExpression, IteratorAggregate {
             _parts["values"].setColumns($columns);
         }
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1566,12 +1567,12 @@ class Query : IExpression, IteratorAggregate {
      * @param string myTable The table name to insert into.
      * @return this
      */
-    function into(string myTable) {
+    O into(this O)(string myTable) {
         _dirty();
         _type = "insert";
         _parts["insert"][0] = myTable;
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1590,8 +1591,8 @@ class Query : IExpression, IteratorAggregate {
      * @param string myIdentifier The identifier for an expression
      * @return \Cake\Database\IExpression
      */
-    IExpression identifier(string myIdentifier) {
-        return new IdentifierExpression(myIdentifier);
+    IDTBExpression identifier(string myIdentifier) {
+      return new IdentifierExpression(myIdentifier);
     }
 
     /**
@@ -1601,12 +1602,12 @@ class Query : IExpression, IteratorAggregate {
      * or by providing an array of value sets. Additionally myData can be a Query
      * instance to insert data from another SELECT statement.
      *
-     * @param \Cake\Database\Expression\ValuesExpression|\Cake\Database\Query|array myData The data to insert.
+     * @param uim.databases\Expression\ValuesExpression|\Cake\Database\Query|array myData The data to insert.
      * @return this
      * @throws \Cake\Database\Exception\DatabaseException if you try to set values before declaring columns.
      *   Or if you try to set values on non-insert queries.
      */
-    function values(myData) {
+    O values(this O)(myData) {
         if (_type !== "insert") {
             throw new DatabaseException(
                 "You cannot add values before defining columns to use."
@@ -1622,34 +1623,29 @@ class Query : IExpression, IteratorAggregate {
         if (myData instanceof ValuesExpression) {
             _parts["values"] = myData;
 
-            return this;
+            return cast(O)this;
         }
 
         _parts["values"].add(myData);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
      * Create an update query.
-     *
      * Can be combined with set() and where() methods to create update queries.
-     *
-     * @param \Cake\Database\IExpression|string myTable The table you want to update.
-     * @return this
+     * @param uim.databases\IExpression|string myTable The table you want to update.
      */
-    function update(myTable) {
-        if (!is_string(myTable) && !(myTable instanceof IExpression)) {
-            $text = "Table must be of type string or "%s", got "%s"";
-            myMessage = sprintf($text, IExpression::class, gettype(myTable));
-            throw new InvalidArgumentException(myMessage);
-        }
+    O update(this O)(IExpression myTable) {
+      // TODO
+    }
 
-        _dirty();
-        _type = "update";
-        _parts["update"][0] = myTable;
+    O update(this O)(string myTable) {
+      _dirty();
+      _type = "update";
+      _parts["update"][0] = myTable;
 
-        return this;
+      return cast(O)this;
     }
 
     /**
@@ -1677,7 +1673,7 @@ class Query : IExpression, IteratorAggregate {
      * });
      * ```
      *
-     * @param \Cake\Database\Expression\QueryExpression|\Closure|array|string myKey The column name or array of keys
+     * @param uim.databases\Expression\QueryExpression|\Closure|array|string myKey The column name or array of keys
      *    + values to set. This can also be a QueryExpression containing a SQL fragment.
      *    It can also be a Closure, that is required to return an expression object.
      * @param mixed myValue The value to update myKey to. Can be null if myKey is an
@@ -1686,7 +1682,7 @@ class Query : IExpression, IteratorAggregate {
      * @param array<string, string>|string myTypes The column types to treat data as.
      * @return this
      */
-    auto set(myKey, myValue = null, myTypes = []) {
+    O set(this O)(myKey, myValue = null, myTypes = []) {
         if (empty(_parts["set"])) {
             _parts["set"] = this.newExpr().setConjunction(",");
         }
@@ -1695,14 +1691,14 @@ class Query : IExpression, IteratorAggregate {
             $exp = this.newExpr().setConjunction(",");
             _parts["set"].add(myKey($exp));
 
-            return this;
+            return cast(O)this;
         }
 
         if (is_array(myKey) || myKey instanceof IExpression) {
             myTypes = (array)myValue;
             _parts["set"].add(myKey, myTypes);
 
-            return this;
+            return cast(O)this;
         }
 
         if (!is_string(myTypes)) {
@@ -1710,7 +1706,7 @@ class Query : IExpression, IteratorAggregate {
         }
         _parts["set"].eq(myKey, myValue, myTypes);
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1722,14 +1718,14 @@ class Query : IExpression, IteratorAggregate {
      * @param string|null myTable The table to use when deleting.
      * @return this
      */
-    function delete(Nullable!string myTable = null) {
-        _dirty();
-        _type = "delete";
-        if (myTable  !is null) {
-            this.from(myTable);
-        }
+    O delete(this O)(Nullable!string myTable = null) {
+      _dirty();
+      _type = "delete";
+      if (myTable  !is null) {
+          this.from(myTable);
+      }
 
-        return this;
+      return cast(O)this;
     }
 
     /**
@@ -1746,21 +1742,19 @@ class Query : IExpression, IteratorAggregate {
      *
      * Epliog content is raw SQL and not suitable for use with user supplied data.
      *
-     * @param \Cake\Database\IExpression|string|null $expression The expression to be appended
+     * @param uim.databases\IExpression|string|null $expression The expression to be appended
      * @return this
      */
-    function epilog($expression = null) {
+    O epilog(this O)($expression = null) {
         _dirty();
         _parts["epilog"] = $expression;
 
-        return this;
+        return cast(O)this;
     }
 
-    /**
-     * Returns the type of this query (select, insert, update, delete)
-     */
+    // Returns the type of this query (select, insert, update, delete)
     string type() {
-        return _type;
+      return _type;
     }
 
     /**
@@ -1777,7 +1771,7 @@ class Query : IExpression, IteratorAggregate {
      * $expression = myQuery.newExpr("Table.column = Table2.column"); // Return a raw SQL expression
      * ```
      *
-     * @param \Cake\Database\IExpression|array|string|null $rawExpression A string, array or anything you want wrapped in an expression object
+     * @param uim.databases\IExpression|array|string|null $rawExpression A string, array or anything you want wrapped in an expression object
      * @return \Cake\Database\Expression\QueryExpression
      */
     QueryExpression newExpr($rawExpression = null) {
@@ -1895,11 +1889,10 @@ class Query : IExpression, IteratorAggregate {
      * ```
      *
      * @param callable|null $callback The callback to invoke when results are fetched.
-     * @param bool $overwrite Whether this should append or replace all existing decorators.
-     * @return this
+     * @param bool shouldOverwrite Whether this should append or replace all existing decorators.
      */
-    function decorateResults(?callable $callback, bool $overwrite = false) {
-        if ($overwrite) {
+    O decorateResults(this O)(?callable $callback, bool shouldOverwrite = false) {
+        if (shouldOverwrite) {
             _resultDecorators = [];
         }
 
@@ -1907,7 +1900,7 @@ class Query : IExpression, IteratorAggregate {
             _resultDecorators[] = $callback;
         }
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -1920,9 +1913,8 @@ class Query : IExpression, IteratorAggregate {
      *
      * @param callable $callback the function to be executed for each IExpression
      *   found inside this query.
-     * @return this
      */
-    function traverseExpressions(callable $callback) {
+    O traverseExpressions(this O)(callable $callback) {
         if (!$callback instanceof Closure) {
             $callback = Closure::fromCallable($callback);
         }
@@ -1931,35 +1923,35 @@ class Query : IExpression, IteratorAggregate {
             _expressionsVisitor($part, $callback);
         }
 
-        return this;
+        return cast(O)this;
     }
 
     /**
      * Query parts traversal method used by traverseExpressions()
      *
-     * @param \Cake\Database\IExpression|array<\Cake\Database\IExpression> $expression Query expression or
+     * @param uim.databases\IExpression|array<\Cake\Database\IExpression> $expression Query expression or
      *   array of expressions.
      * @param \Closure $callback The callback to be executed for each IExpression
      *   found inside this query.
      */
     protected void _expressionsVisitor($expression, Closure $callback) {
-        if (is_array($expression)) {
-            foreach ($expression as $e) {
-                _expressionsVisitor($e, $callback);
-            }
-
-            return;
+      if (is_array($expression)) {
+        foreach ($expression as $e) {
+            _expressionsVisitor($e, $callback);
         }
 
-        if ($expression instanceof IExpression) {
-            $expression.traverse(function ($exp) use ($callback) {
-                _expressionsVisitor($exp, $callback);
-            });
+        return;
+      }
 
-            if (!$expression instanceof self) {
-                $callback($expression);
-            }
+      if ($expression instanceof IExpression) {
+        $expression.traverse(function ($exp) use ($callback) {
+            _expressionsVisitor($exp, $callback);
+        });
+
+        if (!$expression instanceof self) {
+            $callback($expression);
         }
+      }
     }
 
     /**
@@ -1977,9 +1969,9 @@ class Query : IExpression, IteratorAggregate {
      * @return this
      */
     function bind($param, myValue, myType = null) {
-        this.getValueBinder().bind($param, myValue, myType);
+      this.getValueBinder().bind($param, myValue, myType);
 
-        return this;
+      return cast(O)this;
     }
 
     /**
@@ -1992,11 +1984,11 @@ class Query : IExpression, IteratorAggregate {
      * @return \Cake\Database\ValueBinder
      */
     ValueBinder getValueBinder() {
-        if (_valueBinder is null) {
-            _valueBinder = new ValueBinder();
-        }
+      if (_valueBinder is null) {
+        _valueBinder = new ValueBinder();
+      }
 
-        return _valueBinder;
+      return _valueBinder;
     }
 
     /**
@@ -2006,13 +1998,12 @@ class Query : IExpression, IteratorAggregate {
      * associate values to those placeholders so that they can be passed correctly
      * to the statement object.
      *
-     * @param \Cake\Database\ValueBinder|null $binder The binder or null to disable binding.
-     * @return this
+     * @param uim.databases\ValueBinder|null $binder The binder or null to disable binding.
      */
-    auto setValueBinder(?ValueBinder $binder) {
-        _valueBinder = $binder;
+    O setValueBinder(this O)(ValueBinder aValueBinder) {
+      _valueBinder = aValueBinder;
 
-        return this;
+      return cast(O)this;
     }
 
     /**
@@ -2029,10 +2020,10 @@ class Query : IExpression, IteratorAggregate {
      * @return this
      */
     function enableBufferedResults(bool myEnable = true) {
-        _dirty();
-        _useBufferedResults = myEnable;
+      _dirty();
+      _useBufferedResults = myEnable;
 
-        return this;
+      return cast(O)this;
     }
 
     /**
@@ -2040,14 +2031,12 @@ class Query : IExpression, IteratorAggregate {
      *
      * Disabling buffering will consume less memory as fetched results are not
      * remembered for future iterations.
-     *
-     * @return this
      */
-    function disableBufferedResults() {
-        _dirty();
-        _useBufferedResults = false;
+    O disableBufferedResults(this O)() {
+      _dirty();
+      _useBufferedResults = false;
 
-        return this;
+      return cast(O)this;
     }
 
     /**
@@ -2061,21 +2050,20 @@ class Query : IExpression, IteratorAggregate {
      * remembered for future iterations.
      */
     bool isBufferedResultsEnabled() {
-        return _useBufferedResults;
+      return _useBufferedResults;
     }
 
     /**
      * Sets the TypeMap class where the types for each of the fields in the
      * select clause are stored.
      *
-     * @param \Cake\Database\TypeMap myTypeMap The map object to use
-     * @return this
+     * @param uim.databases\TypeMap myTypeMap The map object to use
      */
-    auto setSelectTypeMap(TypeMap myTypeMap) {
-        _selectTypeMap = myTypeMap;
-        _dirty();
+    O setSelectTypeMap(this O)(TypeMap myTypeMap) {
+      _selectTypeMap = myTypeMap;
+      _dirty();
 
-        return this;
+      return cast(O)this;
     }
 
     /**
@@ -2085,11 +2073,11 @@ class Query : IExpression, IteratorAggregate {
      * @return \Cake\Database\TypeMap
      */
     TypeMap getSelectTypeMap() {
-        if (_selectTypeMap is null) {
-            _selectTypeMap = new TypeMap();
-        }
+      if (_selectTypeMap is null) {
+        _selectTypeMap = new TypeMap();
+      }
 
-        return _selectTypeMap;
+      return _selectTypeMap;
     }
 
     /**
@@ -2102,9 +2090,9 @@ class Query : IExpression, IteratorAggregate {
      * @return this
      */
     function disableResultsCasting() {
-        this.typeCastEnabled = false;
+      this.typeCastEnabled = false;
 
-        return this;
+      return cast(O)this;
     }
 
     /**
@@ -2118,7 +2106,7 @@ class Query : IExpression, IteratorAggregate {
     function enableResultsCasting() {
         this.typeCastEnabled = true;
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -2139,7 +2127,7 @@ class Query : IExpression, IteratorAggregate {
      * Auxiliary function used to wrap the original statement from the driver with
      * any registered callbacks.
      *
-     * @param \Cake\Database\IStatement $statement to be decorated
+     * @param uim.databases\IStatement $statement to be decorated
      * @return \Cake\Database\Statement\CallbackStatement|\Cake\Database\IStatement
      */
     protected auto _decorateStatement(IStatement $statement) {
@@ -2161,7 +2149,7 @@ class Query : IExpression, IteratorAggregate {
      * Helper function used to build conditions by composing QueryExpression objects.
      *
      * @param string part Name of the query part to append the new part to
-     * @param \Cake\Database\IExpression|\Closure|array|string|null $append Expression or builder function to append.
+     * @param uim.databases\IExpression|\Closure|array|string|null $append Expression or builder function to append.
      *   to append.
      * @param string conjunction type of conjunction to be used to operate part
      * @param array<string, string> myTypes Associative array of type names used to bind values to query

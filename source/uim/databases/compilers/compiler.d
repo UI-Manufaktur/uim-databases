@@ -57,10 +57,10 @@ class QueryCompiler {
      * Returns the SQL representation of the provided query after generating
      * the placeholders for the bound values using the provided generator
      *
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholders
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholders
      */
-    string compile(Query myQuery, ValueBinder $binder) {
+    string compile(Query myQuery, ValueBinder aValueBinder) {
         mySql = "";
         myType = myQuery.type();
         myQuery.traverseParts(
@@ -87,11 +87,11 @@ class QueryCompiler {
      * of this query.
      *
      * @param string mySql initial sql string to append to
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return \Closure
      */
-    protected Closure _sqlCompiler(string &mySql, Query myQuery, ValueBinder $binder) {
+    protected Closure _sqlCompiler(string &mySql, Query myQuery, ValueBinder aValueBinder) {
         return function ($part, $partName) use (&mySql, myQuery, $binder) {
             if (
                 $part is null ||
@@ -121,11 +121,11 @@ class QueryCompiler {
      * keyword when required.
      *
      * @param array someParts List of CTEs to be transformed to string
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected string _buildWithPart(array someParts, Query myQuery, ValueBinder $binder) {
+    protected string _buildWithPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $recursive = false;
         $expressions = [];
         foreach (someParts as $cte) {
@@ -145,11 +145,11 @@ class QueryCompiler {
      * DISTINCT clause for the query.
      *
      * @param array someParts list of fields to be transformed to string
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected string _buildSelectPart(array someParts, Query myQuery, ValueBinder $binder) {
+    protected string _buildSelectPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $select = "SELECT%s %s%s";
         if (_orderedUnion && myQuery.clause("union")) {
             $select = "(SELECT%s %s%s";
@@ -191,11 +191,11 @@ class QueryCompiler {
      * converting expression objects to string.
      *
      * @param array someParts list of tables to be transformed to string
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected string _buildFromPart(array someParts, Query myQuery, ValueBinder $binder) {
+    protected string _buildFromPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $select = " FROM %s";
         $normalized = [];
         someParts = _stringifyExpressions(someParts, $binder);
@@ -216,11 +216,11 @@ class QueryCompiler {
      * to be used.
      *
      * @param array someParts list of joins to be transformed to string
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected string _buildJoinPart(array someParts, Query myQuery, ValueBinder $binder) {
+    protected string _buildJoinPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $joins = "";
         foreach (someParts as $join) {
             if (!isset($join["table"])) {
@@ -254,11 +254,11 @@ class QueryCompiler {
      * Helper function to build the string representation of a window clause.
      *
      * @param array someParts List of windows to be transformed to string
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected string _buildWindowPart(array someParts, Query myQuery, ValueBinder $binder) {
+    protected string _buildWindowPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $windows = [];
         foreach (someParts as $window) {
             $windows[] = $window["name"].sql($binder) . " AS (" . $window["window"].sql($binder) . ")";
@@ -271,11 +271,11 @@ class QueryCompiler {
      * Helper function to generate SQL for SET expressions.
      *
      * @param array someParts List of keys & values to set.
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected string _buildSetPart(array someParts, Query myQuery, ValueBinder $binder) {
+    protected string _buildSetPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $set = [];
         foreach (someParts as $part) {
             if ($part instanceof IExpression) {
@@ -296,11 +296,11 @@ class QueryCompiler {
      * dialect.
      *
      * @param array someParts list of queries to be operated with UNION
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected string _buildUnionPart(array someParts, Query myQuery, ValueBinder $binder) {
+    protected string _buildUnionPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         someParts = array_map(function ($p) use ($binder) {
             $p["query"] = $p["query"].sql($binder);
             $p["query"] = $p["query"][0] == "(" ? trim($p["query"], "()") : $p["query"];
@@ -324,7 +324,7 @@ class QueryCompiler {
     //  \Cake\Database\Query myQuery The query that is being compiled
     // $binder Value binder used to generate parameter placeholder
     // SQL fragment.
-    protected string _buildInsertPart(array someParts, DDTBQuery myQuery, DDTBValueBinder $binder) {
+    protected string _buildInsertPart(array someParts, DDTBQuery myQuery, DDTBValueBinder aValueBinder) {
         if (0 !in someParts[0]) {
             throw new DatabaseException(
                 "Could not compile insert query. No table was specified. " .
@@ -342,11 +342,11 @@ class QueryCompiler {
      * Builds the SQL fragment for INSERT INTO.
      *
      * @param array someParts The values parts.
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return SQL fragment.
      */
-    protected string _buildValuesPart(array someParts, Query myQuery, ValueBinder $binder) {
+    protected string _buildValuesPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         return implode("", _stringifyExpressions(someParts, $binder));
     }
 
@@ -354,8 +354,8 @@ class QueryCompiler {
      * Builds the SQL fragment for UPDATE.
      *
      * @param array someParts The update parts.
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return SQL fragment.
      */
     protected string _buildUpdatePart(array someParts, Query aQuery, ValueBinder aBinder) {
@@ -369,8 +369,8 @@ class QueryCompiler {
      * Builds the SQL modifier fragment
      *
      * @param array someParts The query modifier parts
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return SQL fragment.
      */
     protected string _buildModifierPart(array someParts, Query aQuery, ValueBinder aBinder) {
@@ -385,7 +385,7 @@ class QueryCompiler {
      * into their string representation.
      *
      * @param array $expressions list of strings and IExpression objects
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @param $wrap Whether to wrap each expression object with parenthesis
      * @return array
      */

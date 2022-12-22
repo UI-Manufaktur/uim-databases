@@ -57,7 +57,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
     /**
      * Constructor
      *
-     * @param \Cake\Database\IDTBExpression|string $field the field name to compare to a value
+     * @param uim.databases\IDTBExpression|string $field the field name to compare to a value
      * @param mixed $value The value to be used in comparison
      * @param string|null $type the type name used to cast the value
      * @param string $operator the operator used for comparing field and value
@@ -121,7 +121,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
     }
 
 
-    string sql(ValueBinder $binder)
+    string sql(ValueBinder aValueBinder)
     {
         /** @var \Cake\Database\IDTBExpression|string $field */
         $field = _field;
@@ -184,10 +184,10 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      * Returns a template and a placeholder for the value after registering it
      * with the placeholder $binder
      *
-     * @param \Cake\Database\ValueBinder $binder The value binder to use.
+     * @param uim.databases\ValueBinder aValueBinder The value binder to use.
      * @return array First position containing the template and the second a placeholder
      */
-    protected function _stringExpression(ValueBinder $binder): array
+    protected function _stringExpression(ValueBinder aValueBinder): array
     {
         $template ="%s";
 
@@ -224,14 +224,13 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      * Registers a value in the placeholder generator and returns the generated placeholder
      *
      * @param mixed $value The value to bind
-     * @param \Cake\Database\ValueBinder $binder The value binder to use
+     * @param uim.databases\ValueBinder aValueBinder The value binder to use
      * @param string|null $type The type of $value
      * @return string generated placeholder
      */
-    protected string _bindValue($value, ValueBinder $binder, ?string $type = null)
-    {
-        $placeholder = $binder.placeholder("c");
-        $binder.bind($placeholder, $value, $type);
+    protected string _bindValue($value, ValueBinder aValueBinder, ?string $type = null) {
+        $placeholder = aValueBinder.placeholder("c");
+        aValueBinder.bind($placeholder, $value, $type);
 
         return $placeholder;
     }
@@ -241,16 +240,14 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      * $binder and separated by `,`
      *
      * @param iterable $value the value to flatten
-     * @param \Cake\Database\ValueBinder $binder The value binder to use
+     * @param uim.databases\ValueBinder aValueBinder The value binder to use
      * @param string|null $type the type to cast values to
-     * @return string
      */
-    protected string _flattenValue(iterable $value, ValueBinder $binder, ?string $type = null)
-    {
+    protected string _flattenValue(iterable $value, ValueBinder aValueBinder, ?string $type = null) {
         $parts = [];
         if (is_array($value)) {
             foreach (_valueExpressions as $k: $v) {
-                $parts[$k] = $v.sql($binder);
+                $parts[$k] = $v.sql(aValueBinder);
                 unset($value[$k]);
             }
         }
@@ -267,39 +264,30 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      * and all IDTBExpression objects that could be found in the second
      * position.
      *
-     * @param \Cake\Database\IDTBExpression|iterable $values The rows to insert
+     * @param uim.databases\IDTBExpression|iterable $values The rows to insert
      * @return array
      */
-    protected function _collectExpressions($values): array
-    {
-        if ($values instanceof IDTBExpression) {
-            return [$values, []];
-        }
+    protected array _collectExpressions(IDTBExpression[] someValues...) {
+      return _collectExpressions(someValues);
+    }
+    protected array _collectExpressions(IDTBExpression[] someValues) {
+      if ($values instanceof IDTBExpression) {
+          return [$values, []];
+      }
 
-        $expressions = $result = [];
-        $isArray = is_array($values);
+      $expressions = $result = [];
+      $result = $values;
 
-        if ($isArray) {
-            /** @var array $result */
-            $result = $values;
-        }
+      foreach ($values as $k: $v) {
+          if ($v instanceof IDTBExpression) {
+              $expressions[$k] = $v;
+          }
 
-        foreach ($values as $k: $v) {
-            if ($v instanceof IDTBExpression) {
-                $expressions[$k] = $v;
-            }
+          if ($isArray) {
+              $result[$k] = $v;
+          }
+      }
 
-            if ($isArray) {
-                $result[$k] = $v;
-            }
-        }
-
-        return [$result, $expressions];
+      return [$result, $expressions];
     }
 }
-
-// phpcs:disable
-// Comparison will not load during instanceof checks so ensure it"s loaded here
-// @deprecated 4.1.0 Add backwards compatible alias.
-class_alias("Cake\Database\Expression\ComparisonExpression","Cake\Database\Expression\Comparison");
-// phpcs:enable

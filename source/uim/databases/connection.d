@@ -126,7 +126,7 @@ class Connection : IConnection {
      * Sets the driver instance. If a string is passed it will be treated
      * as a class name and will be instantiated.
      *
-     * @param \Cake\Database\IDriver|string myDriver The driver instance to use.
+     * @param uim.databases\IDriver|string myDriver The driver instance to use.
      * @param array<string, mixed> myConfig Config for a new driver.
      * @throws \Cake\Database\Exception\MissingDriverException When a driver class is missing.
      * @throws \Cake\Database\Exception\MissingExtensionException When a driver"s PHP extension is missing.
@@ -147,7 +147,7 @@ class Connection : IConnection {
 
         _driver = myDriver;
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -211,7 +211,7 @@ class Connection : IConnection {
     /**
      * Prepares a SQL statement to be executed.
      *
-     * @param \Cake\Database\Query|string myQuery The SQL to convert into a prepared statement.
+     * @param uim.databases\Query|string myQuery The SQL to convert into a prepared statement.
      * @return \Cake\Database\IStatement
      */
     function prepare(myQuery): IStatement
@@ -253,10 +253,10 @@ class Connection : IConnection {
      * Compiles a Query object into a SQL string according to the dialect for this
      * connection"s driver
      *
-     * @param \Cake\Database\Query myQuery The query to be compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder
+     * @param uim.databases\Query myQuery The query to be compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder
      */
-    string compileQuery(Query myQuery, ValueBinder $binder) {
+    string compileQuery(Query myQuery, ValueBinder aValueBinder) {
         return this.getDriver().compileQuery(myQuery, $binder)[1];
     }
 
@@ -264,7 +264,7 @@ class Connection : IConnection {
      * Executes the provided query after compiling it for the specific driver
      * dialect and returns the executed Statement object.
      *
-     * @param \Cake\Database\Query myQuery The query to be executed
+     * @param uim.databases\Query myQuery The query to be executed
      * @return \Cake\Database\IStatement executed statement
      */
     function run(Query myQuery): IStatement
@@ -307,13 +307,13 @@ class Connection : IConnection {
     /**
      * Sets a Schema\Collection object for this connection.
      *
-     * @param \Cake\Database\Schema\ICollection myCollection The schema collection object
+     * @param uim.databases\Schema\ICollection myCollection The schema collection object
      * @return this
      */
     auto setSchemaCollection(SchemaICollection myCollection) {
         _schemaCollection = myCollection;
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -510,7 +510,7 @@ class Connection : IConnection {
             _useSavePoints = _driver.supports(IDriver::FEATURE_SAVEPOINT);
         }
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -521,7 +521,7 @@ class Connection : IConnection {
     function disableSavePoints() {
         _useSavePoints = false;
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -659,7 +659,7 @@ class Connection : IConnection {
      * This uses `PDO::quote()` and requires `supportsQuoting()` to work.
      *
      * @param mixed myValue The value to quote.
-     * @param \Cake\Database\IType|string|int myType Type to be used for determining kind of quoting to perform
+     * @param uim.databases\IType|string|int myType Type to be used for determining kind of quoting to perform
      * @return  Quoted value
      */
     string quote(myValue, myType = "string") {
@@ -709,7 +709,7 @@ class Connection : IConnection {
     auto setCacher(ICache $cacher) {
         this.cacher = $cacher;
 
-        return this;
+        return cast(O)this;
     }
 
     
@@ -743,7 +743,7 @@ class Connection : IConnection {
     function enableQueryLogging(bool myEnable = true) {
         _logQueries = myEnable;
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -754,7 +754,7 @@ class Connection : IConnection {
     function disableQueryLogging() {
         _logQueries = false;
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -774,7 +774,7 @@ class Connection : IConnection {
     auto setLogger(LoggerInterface $logger) {
         _logger = $logger;
 
-        return this;
+        return cast(O)this;
     }
 
     /**
@@ -813,7 +813,7 @@ class Connection : IConnection {
      * Returns a new statement object that will log the activity
      * for the passed original statement instance.
      *
-     * @param \Cake\Database\IStatement $statement the instance to be decorated
+     * @param uim.databases\IStatement $statement the instance to be decorated
      * @return \Cake\Database\Log\LoggingStatement
      */
     protected auto _newLogger(IStatement $statement): LoggingStatement

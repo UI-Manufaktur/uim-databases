@@ -69,7 +69,7 @@ interface IDriver {
     /**
      * Prepares a sql statement to be executed.
      *
-     * @param \Cake\Database\Query|string myQuery The query to turn into a prepared statement.
+     * @param uim.databases\Query|string myQuery The query to turn into a prepared statement.
      * @return \Cake\Database\IStatement
      */
     IStatement prepare(myQuery);
@@ -219,12 +219,12 @@ interface IDriver {
      * Transforms the passed query to this Driver"s dialect and returns an instance
      * of the transformed query and the full compiled SQL string.
      *
-     * @param \Cake\Database\Query myQuery The query to compile.
-     * @param \Cake\Database\ValueBinder $binder The value binder to use.
+     * @param uim.databases\Query myQuery The query to compile.
+     * @param uim.databases\ValueBinder aValueBinder The value binder to use.
      * @return array containing 2 entries. The first entity is the transformed query
      * and the second one the compiled SQL.
      */
-    array compileQuery(Query myQuery, ValueBinder $binder);
+    array compileQuery(Query myQuery, ValueBinder aValueBinder);
 
     // Returns an instance of a QueryCompiler.
     QueryCompiler newCompiler();

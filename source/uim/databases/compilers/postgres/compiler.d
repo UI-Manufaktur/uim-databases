@@ -30,8 +30,8 @@ class PostgresCompiler : QueryCompiler {
      * converting expression objects to string.
      *
      * @param array $parts list of fields to be transformed to string
-     * @param \Cake\Database\Query myQuery The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases\Query myQuery The query that is being compiled
+     * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
     protected auto _buildHavingPart($parts, myQuery, $binder) {

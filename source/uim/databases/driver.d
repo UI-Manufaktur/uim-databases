@@ -168,7 +168,7 @@ abstract class Driver : IDriver
     auto setConnection(myConnection) {
         _connection = myConnection;
 
-        return this;
+        return cast(O)this;
     }
 
     
@@ -337,14 +337,14 @@ abstract class Driver : IDriver
     function enableAutoQuoting(bool myEnable = true) {
         _autoQuoting = myEnable;
 
-        return this;
+        return cast(O)this;
     }
 
     
     function disableAutoQuoting() {
         _autoQuoting = false;
 
-        return this;
+        return cast(O)this;
     }
 
     
@@ -371,7 +371,7 @@ abstract class Driver : IDriver
         return false;
     }
 
-    array compileQuery(Query myQuery, ValueBinder $binder) {
+    array compileQuery(Query myQuery, ValueBinder aValueBinder) {
         $processor = this.newCompiler();
         $translator = this.queryTranslator(myQuery.type());
         myQuery = $translator(myQuery);
