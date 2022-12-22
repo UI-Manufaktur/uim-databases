@@ -158,19 +158,19 @@ class AggregateExpression : FunctionExpression : IWindow
 
     string sql(ValueBinder aValueBinder)
     {
-        $sql = parent.sql($binder);
+        mySql = parent.sql($binder);
         if ($this.filter !is null) {
-            $sql .=" FILTER (WHERE" . $this.filter.sql($binder) .")";
+            mySql .=" FILTER (WHERE" . $this.filter.sql($binder) .")";
         }
         if ($this.window !is null) {
             if ($this.window.isNamedOnly()) {
-                $sql .=" OVER" . $this.window.sql($binder);
+                mySql .=" OVER" . $this.window.sql($binder);
             } else {
-                $sql .=" OVER (" . $this.window.sql($binder) .")";
+                mySql .=" OVER (" . $this.window.sql($binder) .")";
             }
         }
 
-        return $sql;
+        return mySql;
     }
 
 

@@ -103,7 +103,7 @@ class TypeFactory
      * @param \Cake\Database\TypeInterface $instance The type instance you want to set.
      * @return void
      */
-    public static function set(string $name, TypeInterface $instance): void
+    public static void set(string $name, TypeInterface $instance)
     {
         static.$_builtTypes[$name] = $instance;
         static.$_types[$name] = get_class($instance);
@@ -117,7 +117,7 @@ class TypeFactory
      * @return void
      * @psalm-param class-string<\Cake\Database\TypeInterface> $className
      */
-    public static function map(string $type, string $className): void
+    public static void map(string $type, string $className)
     {
         static.$_types[$type] = $className;
         unset(static.$_builtTypes[$type]);
@@ -130,7 +130,7 @@ class TypeFactory
      * @return void
      * @psalm-param array<string, class-string<\Cake\Database\TypeInterface>> $map
      */
-    public static function setMap(array $map): void
+    public static void setMap(array $map)
     {
         static.$_types = $map;
         static.$_builtTypes = [];
@@ -156,7 +156,7 @@ class TypeFactory
      *
      * @return void
      */
-    public static function clear(): void
+    public static void clear()
     {
         static.$_types = [];
         static.$_builtTypes = [];

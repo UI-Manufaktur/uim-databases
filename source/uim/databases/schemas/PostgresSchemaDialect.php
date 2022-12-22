@@ -34,11 +34,11 @@ class PostgresSchemaDialect : SchemaDialect
      */
     function listTablesSql(array $config): array
     {
-        $sql = "SELECT table_name as name FROM information_schema.tables
+        mySql = "SELECT table_name as name FROM information_schema.tables
                 WHERE table_schema = ? ORDER BY name";
         $schema = empty($config["schema"]) ? "public" : $config["schema"];
 
-        return [$sql, [$schema]];
+        return [mySql, [$schema]];
     }
 
     /**
@@ -50,17 +50,17 @@ class PostgresSchemaDialect : SchemaDialect
      */
     function listTablesWithoutViewsSql(array $config): array
     {
-        $sql = "SELECT table_name as name FROM information_schema.tables
+        mySql = "SELECT table_name as name FROM information_schema.tables
                 WHERE table_schema = ? AND table_type = \"BASE TABLE\" ORDER BY name";
         $schema = empty($config["schema"]) ? "public" : $config["schema"];
 
-        return [$sql, [$schema]];
+        return [mySql, [$schema]];
     }
 
 
     function describeColumnSql(string $tableName, array $config): array
     {
-        $sql = "SELECT DISTINCT table_schema AS schema,
+        mySql = "SELECT DISTINCT table_schema AS schema,
             column_name AS name,
             data_type AS type,
             is_nullable AS null, column_default AS default,
@@ -83,7 +83,7 @@ class PostgresSchemaDialect : SchemaDialect
 
         $schema = empty($config["schema"]) ? "public" : $config["schema"];
 
-        return [$sql, [$tableName, $schema, $config["database"]]];
+        return [mySql, [$tableName, $schema, $config["database"]]];
     }
 
     /**
@@ -258,7 +258,7 @@ class PostgresSchemaDialect : SchemaDialect
 
     function describeIndexSql(string $tableName, array $config): array
     {
-        $sql = "SELECT
+        mySql = "SELECT
         c2.relname,
         a.attname,
         i.indisprimary,
@@ -278,7 +278,7 @@ class PostgresSchemaDialect : SchemaDialect
             $schema = $config["schema"];
         }
 
-        return [$sql, [$schema, $tableName]];
+        return [mySql, [$schema, $tableName]];
     }
 
 
@@ -334,7 +334,7 @@ class PostgresSchemaDialect : SchemaDialect
     function describeForeignKeySql(string $tableName, array $config): array
     {
         // phpcs:disable Generic.Files.LineLength
-        $sql = "SELECT
+        mySql = "SELECT
         c.conname AS name,
         c.contype AS type,
         a.attname AS column_name,
@@ -355,7 +355,7 @@ class PostgresSchemaDialect : SchemaDialect
 
         $schema = empty($config["schema"]) ? "public" : $config["schema"];
 
-        return [$sql, [$schema, $tableName]];
+        return [mySql, [$schema, $tableName]];
     }
 
 
@@ -393,9 +393,9 @@ class PostgresSchemaDialect : SchemaDialect
         /** @var array $data */
         $data = $schema.getColumn($name);
 
-        $sql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
-        if ($sql != null) {
-            return $sql;
+        mySql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
+        if (mySql != null) {
+            return mySql;
         }
 
         $out = this._driver.quoteIdentifier($name);
@@ -515,26 +515,26 @@ class PostgresSchemaDialect : SchemaDialect
 
     function addConstraintSql(TableSchema $schema): array
     {
-        $sqlPattern = "ALTER TABLE %s ADD %s;";
-        $sql = [];
+        mySqlPattern = "ALTER TABLE %s ADD %s;";
+        mySql = [];
 
         foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
             $constraint = $schema.getConstraint($name);
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
                 $tableName = this._driver.quoteIdentifier($schema.name());
-                $sql[] = sprintf($sqlPattern, $tableName, this.constraintSql($schema, $name));
+                mySql[] = sprintf(mySqlPattern, $tableName, this.constraintSql($schema, $name));
             }
         }
 
-        return $sql;
+        return mySql;
     }
 
 
     function dropConstraintSql(TableSchema $schema): array
     {
-        $sqlPattern = "ALTER TABLE %s DROP CONSTRAINT %s;";
-        $sql = [];
+        mySqlPattern = "ALTER TABLE %s DROP CONSTRAINT %s;";
+        mySql = [];
 
         foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
@@ -542,11 +542,11 @@ class PostgresSchemaDialect : SchemaDialect
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
                 $tableName = this._driver.quoteIdentifier($schema.name());
                 $constraintName = this._driver.quoteIdentifier($name);
-                $sql[] = sprintf($sqlPattern, $tableName, $constraintName);
+                mySql[] = sprintf(mySqlPattern, $tableName, $constraintName);
             }
         }
 
-        return $sql;
+        return mySql;
     }
 
 
@@ -655,12 +655,12 @@ class PostgresSchemaDialect : SchemaDialect
      */
     function dropTableSql(TableSchema $schema): array
     {
-        $sql = sprintf(
+        mySql = sprintf(
             "DROP TABLE %s CASCADE",
             this._driver.quoteIdentifier($schema.name())
         );
 
-        return [$sql];
+        return [mySql];
     }
 }
 

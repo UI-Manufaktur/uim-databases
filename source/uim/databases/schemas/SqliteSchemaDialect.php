@@ -185,14 +185,10 @@ class SqliteSchemaDialect : SchemaDialect
     }
 
 
-    function describeColumnSql(string $tableName, array $config): array
-    {
-        $sql = sprintf(
-            "PRAGMA table_info(%s)",
-            this._driver.quoteIdentifier($tableName)
-        );
+    function describeColumnSql(string $tableName, array $config): array {
+        mySql = "PRAGMA table_info(%s)".format(this._driver.quoteIdentifier($tableName));
 
-        return [$sql, []];
+        return [mySql, []];
     }
 
 
@@ -254,12 +250,12 @@ class SqliteSchemaDialect : SchemaDialect
 
     function describeIndexSql(string $tableName, array $config): array
     {
-        $sql = sprintf(
+        mySql = sprintf(
             "PRAGMA index_list(%s)",
             this._driver.quoteIdentifier($tableName)
         );
 
-        return [$sql, []];
+        return [mySql, []];
     }
 
     /**
@@ -277,11 +273,11 @@ class SqliteSchemaDialect : SchemaDialect
      */
     function convertIndexDescription(TableSchema $schema, array $row): void
     {
-        $sql = sprintf(
+        mySql = sprintf(
             "PRAGMA index_info(%s)",
             this._driver.quoteIdentifier($row["name"])
         );
-        $statement = this._driver.prepare($sql);
+        $statement = this._driver.prepare(mySql);
         $statement.execute();
         $columns = [];
         /** @psalm-suppress PossiblyFalseIterator */
@@ -305,13 +301,13 @@ class SqliteSchemaDialect : SchemaDialect
 
     function describeForeignKeySql(string $tableName, array $config): array
     {
-        $sql = sprintf("PRAGMA foreign_key_list(%s)", this._driver.quoteIdentifier($tableName));
+        mySql = sprintf("PRAGMA foreign_key_list(%s)", this._driver.quoteIdentifier($tableName));
 
-        return [$sql, []];
+        return [mySql, []];
     }
 
 
-    function convertForeignKeyDescription(TableSchema $schema, array $row): void
+    void convertForeignKeyDescription(TableSchema $schema, array $row)
     {
         $name = $row["from"] . "_fk";
 
@@ -347,9 +343,9 @@ class SqliteSchemaDialect : SchemaDialect
         /** @var array $data */
         $data = $schema.getColumn($name);
 
-        $sql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
-        if ($sql != null) {
-            return $sql;
+        mySql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
+        if (mySql != null) {
+            return mySql;
         }
 
         $typeMap = [
@@ -596,14 +592,14 @@ class SqliteSchemaDialect : SchemaDialect
     function truncateTableSql(TableSchema $schema): array
     {
         $name = $schema.name();
-        $sql = [];
+        mySql = [];
         if (this.hasSequences()) {
-            $sql[] = sprintf("DELETE FROM sqlite_sequence WHERE name="%s"", $name);
+            mySql[] = sprintf("DELETE FROM sqlite_sequence WHERE name="%s"", $name);
         }
 
-        $sql[] = sprintf("DELETE FROM "%s"", $name);
+        mySql[] = sprintf("DELETE FROM "%s"", $name);
 
-        return $sql;
+        return mySql;
     }
 
     /**

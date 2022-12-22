@@ -102,10 +102,10 @@ class QueryCompiler
      */
     function compile(Query $query, ValueBinder $binder): string
     {
-        $sql = "";
+        mySql = "";
         $type = $query.type();
         $query.traverseParts(
-            _sqlCompiler($sql, $query, $binder),
+            _sqlCompiler(mySql, $query, $binder),
             this.{"_{$type}Parts"}
         );
 
@@ -114,27 +114,27 @@ class QueryCompiler
         if ($query.getValueBinder() != $binder) {
             foreach ($query.getValueBinder().bindings() as $binding) {
                 $placeholder = ":" . $binding["placeholder"];
-                if (preg_match("/" . $placeholder . "(?:\W|$)/", $sql) > 0) {
+                if (preg_match("/" . $placeholder . "(?:\W|$)/", mySql) > 0) {
                     $binder.bind($placeholder, $binding["value"], $binding["type"]);
                 }
             }
         }
 
-        return $sql;
+        return mySql;
     }
 
     /**
      * Returns a callable object that can be used to compile a SQL string representation
      * of this query.
      *
-     * @param string $sql initial sql string to append to
+     * @param string mySql initial sql string to append to
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return \Closure
      */
-    protected function _sqlCompiler(string &$sql, Query $query, ValueBinder $binder): Closure
+    protected function _sqlCompiler(string &mySql, Query $query, ValueBinder $binder): Closure
     {
-        return function ($part, $partName) use (&$sql, $query, $binder) {
+        return function ($part, $partName) use (&mySql, $query, $binder) {
             if (
                 $part == null ||
                 (is_array($part) && empty($part)) ||
@@ -148,12 +148,12 @@ class QueryCompiler
             }
             if (isset(_templates[$partName])) {
                 $part = _stringifyExpressions((array)$part, $binder);
-                $sql .= sprintf(_templates[$partName], implode(", ", $part));
+                mySql .= sprintf(_templates[$partName], implode(", ", $part));
 
                 return;
             }
 
-            $sql .= this.{"_build" . $partName . "Part"}($part, $query, $binder);
+            mySql .= this.{"_build" . $partName . "Part"}($part, $query, $binder);
         };
     }
 

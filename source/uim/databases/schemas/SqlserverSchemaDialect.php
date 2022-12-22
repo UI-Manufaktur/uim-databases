@@ -37,14 +37,14 @@ class SqlserverSchemaDialect : SchemaDialect
      */
     function listTablesSql(array $config): array
     {
-        $sql = "SELECT TABLE_NAME
+        mySql = "SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
             WHERE TABLE_SCHEMA = ?
             AND (TABLE_TYPE = "BASE TABLE" OR TABLE_TYPE = "VIEW")
             ORDER BY TABLE_NAME";
         $schema = empty($config["schema"]) ? static::DEFAULT_SCHEMA_NAME : $config["schema"];
 
-        return [$sql, [$schema]];
+        return [mySql, [$schema]];
     }
 
     /**
@@ -56,20 +56,20 @@ class SqlserverSchemaDialect : SchemaDialect
      */
     function listTablesWithoutViewsSql(array $config): array
     {
-        $sql = "SELECT TABLE_NAME
+        mySql = "SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
             WHERE TABLE_SCHEMA = ?
             AND (TABLE_TYPE = "BASE TABLE")
             ORDER BY TABLE_NAME";
         $schema = empty($config["schema"]) ? static::DEFAULT_SCHEMA_NAME : $config["schema"];
 
-        return [$sql, [$schema]];
+        return [mySql, [$schema]];
     }
 
 
     function describeColumnSql(string $tableName, array $config): array
     {
-        $sql = "SELECT DISTINCT
+        mySql = "SELECT DISTINCT
             AC.column_id AS [column_id],
             AC.name AS [name],
             TY.name AS [type],
@@ -89,7 +89,7 @@ class SqlserverSchemaDialect : SchemaDialect
 
         $schema = empty($config["schema"]) ? static::DEFAULT_SCHEMA_NAME : $config["schema"];
 
-        return [$sql, [$tableName, $schema]];
+        return [mySql, [$tableName, $schema]];
     }
 
     /**
@@ -206,7 +206,7 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    function convertColumnDescription(TableSchema $schema, array $row): void
+    void convertColumnDescription(TableSchema $schema, array $row)
     {
         $field = this._convertColumn(
             $row["type"],
@@ -268,7 +268,7 @@ class SqlserverSchemaDialect : SchemaDialect
 
     function describeIndexSql(string $tableName, array $config): array
     {
-        $sql = "SELECT
+        mySql = "SELECT
                 I.[name] AS [index_name],
                 IC.[index_column_id] AS [index_order],
                 AC.[name] AS [column_name],
@@ -284,11 +284,11 @@ class SqlserverSchemaDialect : SchemaDialect
 
         $schema = empty($config["schema"]) ? static::DEFAULT_SCHEMA_NAME : $config["schema"];
 
-        return [$sql, [$tableName, $schema]];
+        return [mySql, [$tableName, $schema]];
     }
 
 
-    function convertIndexDescription(TableSchema $schema, array $row): void
+    function convertIndexDescription(TableSchema $schema, array $row)
     {
         $type = TableSchema::INDEX_INDEX;
         $name = $row["index_name"];
@@ -328,7 +328,7 @@ class SqlserverSchemaDialect : SchemaDialect
     function describeForeignKeySql(string $tableName, array $config): array
     {
         // phpcs:disable Generic.Files.LineLength
-        $sql = "SELECT FK.[name] AS [foreign_key_name], FK.[delete_referential_action_desc] AS [delete_type],
+        mySql = "SELECT FK.[name] AS [foreign_key_name], FK.[delete_referential_action_desc] AS [delete_type],
                 FK.[update_referential_action_desc] AS [update_type], C.name AS [column], RT.name AS [reference_table],
                 RC.name AS [reference_column]
             FROM sys.foreign_keys FK
@@ -344,11 +344,11 @@ class SqlserverSchemaDialect : SchemaDialect
 
         $schema = empty($config["schema"]) ? static::DEFAULT_SCHEMA_NAME : $config["schema"];
 
-        return [$sql, [$tableName, $schema]];
+        return [mySql, [$tableName, $schema]];
     }
 
 
-    function convertForeignKeyDescription(TableSchema $schema, array $row): void
+    void convertForeignKeyDescription(TableSchema $schema, array $row)
     {
         $data = [
             "type" : TableSchema::CONSTRAINT_FOREIGN,
@@ -392,9 +392,9 @@ class SqlserverSchemaDialect : SchemaDialect
         /** @var array $data */
         $data = $schema.getColumn($name);
 
-        $sql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
-        if ($sql != null) {
-            return $sql;
+        mySql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
+        if (mySql != null) {
+            return mySql;
         }
 
         $out = this._driver.quoteIdentifier($name);
@@ -532,26 +532,26 @@ class SqlserverSchemaDialect : SchemaDialect
 
     function addConstraintSql(TableSchema $schema): array
     {
-        $sqlPattern = "ALTER TABLE %s ADD %s;";
-        $sql = [];
+        mySqlPattern = "ALTER TABLE %s ADD %s;";
+        mySql = [];
 
         foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
             $constraint = $schema.getConstraint($name);
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
                 $tableName = this._driver.quoteIdentifier($schema.name());
-                $sql[] = sprintf($sqlPattern, $tableName, this.constraintSql($schema, $name));
+                mySql[] = sprintf(mySqlPattern, $tableName, this.constraintSql($schema, $name));
             }
         }
 
-        return $sql;
+        return mySql;
     }
 
 
     function dropConstraintSql(TableSchema $schema): array
     {
-        $sqlPattern = "ALTER TABLE %s DROP CONSTRAINT %s;";
-        $sql = [];
+        mySqlPattern = "ALTER TABLE %s DROP CONSTRAINT %s;";
+        mySql = [];
 
         foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
@@ -559,11 +559,11 @@ class SqlserverSchemaDialect : SchemaDialect
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
                 $tableName = this._driver.quoteIdentifier($schema.name());
                 $constraintName = this._driver.quoteIdentifier($name);
-                $sql[] = sprintf($sqlPattern, $tableName, $constraintName);
+                mySql[] = sprintf(mySqlPattern, $tableName, $constraintName);
             }
         }
 
-        return $sql;
+        return mySql;
     }
 
 

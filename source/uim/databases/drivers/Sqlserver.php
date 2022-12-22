@@ -197,13 +197,13 @@ class Sqlserver : Driver
     {
         this.connect();
 
-        $sql = $query;
+        mySql = $query;
         $options = [
             PDO::ATTR_CURSOR : PDO::CURSOR_SCROLL,
             PDO::SQLSRV_ATTR_CURSOR_SCROLL_TYPE : PDO::SQLSRV_CURSOR_BUFFERED,
         ];
         if ($query instanceof Query) {
-            $sql = $query.sql();
+            mySql = $query.sql();
             if (count($query.getValueBinder().bindings()) > 2100) {
                 throw new InvalidArgumentException(
                     "Exceeded maximum number of parameters (2100) for prepared statements in Sql Server. " .
@@ -219,7 +219,7 @@ class Sqlserver : Driver
         }
 
         /** @psalm-suppress PossiblyInvalidArgument */
-        $statement = this._connection.prepare($sql, $options);
+        $statement = this._connection.prepare(mySql, $options);
 
         return new SqlserverStatement($statement, this);
     }

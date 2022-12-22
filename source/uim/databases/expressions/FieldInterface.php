@@ -28,7 +28,7 @@ interface FieldInterface
      * @param uim.databases\IDTBExpression|array|string $field The field to compare with.
      * @return void
      */
-    function setField($field): void;
+    void setField($field);
 
     /**
      * Returns the field name

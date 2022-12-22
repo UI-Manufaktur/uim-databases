@@ -165,11 +165,11 @@ class LoggedQuery : JsonSerializable
      */
     function __toString(): string
     {
-        $sql = this.query;
+        mySql = this.query;
         if (!empty(this.params)) {
-            $sql = this.interpolate();
+            mySql = this.interpolate();
         }
 
-        return $sql;
+        return mySql;
     }
 }

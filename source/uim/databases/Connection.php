@@ -309,15 +309,15 @@ class Connection : ConnectionInterface
      * Executes a query using $params for interpolating values and $types as a hint for each
      * those params.
      *
-     * @param string $sql SQL to be executed and interpolated with $params
-     * @param array $params list or associative array of params to be interpolated in $sql as values
+     * @param string mySql SQL to be executed and interpolated with $params
+     * @param array $params list or associative array of params to be interpolated in mySql as values
      * @param array $types list or associative array of types to be used for casting values in query
      * @return \Cake\Database\IStatement executed statement
      */
-    function execute(string $sql, array $params = [], array $types = []): IStatement
+    function execute(string mySql, array $params = [], array $types = []): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($sql, $params, someTypes) {
-            $statement = this.prepare($sql);
+        return this.getDisconnectRetry().run(function () use (mySql, $params, someTypes) {
+            $statement = this.prepare(mySql);
             if (!empty($params)) {
                 $statement.bind($params, someTypes);
             }
@@ -361,13 +361,13 @@ class Connection : ConnectionInterface
     /**
      * Executes a SQL statement and returns the Statement object as result.
      *
-     * @param string $sql The SQL query to execute.
+     * @param string mySql The SQL query to execute.
      * @return \Cake\Database\IStatement
      */
-    function query(string $sql): IStatement
+    function query(string mySql): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($sql) {
-            $statement = this.prepare($sql);
+        return this.getDisconnectRetry().run(function () use (mySql) {
+            $statement = this.prepare(mySql);
             $statement.execute();
 
             return $statement;
@@ -627,7 +627,7 @@ class Connection : ConnectionInterface
      * @param string|int $name Save point name or id
      * @return void
      */
-    function createSavePoint($name): void
+    void createSavePoint($name)
     {
         this.execute(_driver.savePointSQL($name)).closeCursor();
     }
@@ -638,11 +638,11 @@ class Connection : ConnectionInterface
      * @param string|int $name Save point name or id
      * @return void
      */
-    function releaseSavePoint($name): void
+    void releaseSavePoint($name)
     {
-        $sql = _driver.releaseSavePointSQL($name);
-        if ($sql) {
-            this.execute($sql).closeCursor();
+        mySql = _driver.releaseSavePointSQL($name);
+        if (mySql) {
+            this.execute(mySql).closeCursor();
         }
     }
 
@@ -662,9 +662,9 @@ class Connection : ConnectionInterface
      *
      * @return void
      */
-    function disableForeignKeys(): void
+    void disableForeignKeys()
     {
-        this.getDisconnectRetry().run(function (): void {
+        this.getDisconnectRetry().run(void () {
             this.execute(_driver.disableForeignKeySQL()).closeCursor();
         });
     }
@@ -913,13 +913,13 @@ class Connection : ConnectionInterface
     /**
      * Logs a Query string using the configured logger object.
      *
-     * @param string $sql string to be logged
+     * @param string mySql string to be logged
      * @return void
      */
-    function log(string $sql): void
+    function log(string mySql): void
     {
         $query = new LoggedQuery();
-        $query.query = $sql;
+        $query.query = mySql;
         this.getLogger().debug((string)$query, ["query": $query]);
     }
 

@@ -146,7 +146,7 @@ class Postgres : Driver
      * @param string $encoding The encoding to use.
      * @return void
      */
-    function setEncoding(string $encoding): void
+    void setEncoding(string $encoding)
     {
         this.connect();
         this._connection.exec("SET NAMES " . this._connection.quote($encoding));
@@ -159,7 +159,7 @@ class Postgres : Driver
      * @param string $schema The schema names to set `search_path` to.
      * @return void
      */
-    function setSchema(string $schema): void
+    void setSchema(string $schema)
     {
         this.connect();
         this._connection.exec("SET search_path TO " . this._connection.quote($schema));
@@ -232,7 +232,7 @@ class Postgres : Driver
      * @param \Cake\Database\Expression\IdentifierExpression $expression The expression to tranform.
      * @return void
      */
-    protected function _transformIdentifierExpression(IdentifierExpression $expression): void
+    protected void _transformIdentifierExpression(IdentifierExpression $expression)
     {
         $collation = $expression.getCollation();
         if ($collation) {
@@ -249,7 +249,7 @@ class Postgres : Driver
      *   to postgres SQL.
      * @return void
      */
-    protected function _transformFunctionExpression(FunctionExpression $expression): void
+    protected void _transformFunctionExpression(FunctionExpression $expression)
     {
         switch ($expression.getName()) {
             case "CONCAT":
@@ -312,7 +312,7 @@ class Postgres : Driver
      * @param \Cake\Database\Expression\StringExpression $expression The string expression to tranform.
      * @return void
      */
-    protected function _transformStringExpression(StringExpression $expression): void
+    protected void _transformStringExpression(StringExpression $expression)
     {
         // use trim() to work around expression being transformed multiple times
         $expression.setCollation(""" . trim($expression.getCollation(), """) . """);

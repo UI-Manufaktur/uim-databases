@@ -79,7 +79,7 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    function convertOptionsDescription(TableSchema $schema, array $row): void
+    void convertOptionsDescription(TableSchema $schema, array $row)
     {
         $schema.setOptions([
             "engine" : $row["Engine"],
@@ -200,7 +200,7 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    function convertColumnDescription(TableSchema $schema, array $row): void
+    void convertColumnDescription(TableSchema $schema, array $row)
     {
         $field = this._convertColumn($row["Type"]);
         $field += [
@@ -216,7 +216,7 @@ class MysqlSchemaDialect : SchemaDialect
     }
 
 
-    function convertIndexDescription(TableSchema $schema, array $row): void
+    void convertIndexDescription(TableSchema $schema, array $row)
     {
         $type = null;
         $columns = $length = [];
@@ -274,7 +274,7 @@ class MysqlSchemaDialect : SchemaDialect
 
     function describeForeignKeySql(string $tableName, array $config): array
     {
-        $sql = "SELECT * FROM information_schema.key_column_usage AS kcu
+        mySql = "SELECT * FROM information_schema.key_column_usage AS kcu
             INNER JOIN information_schema.referential_constraints AS rc
             ON (
                 kcu.CONSTRAINT_NAME = rc.CONSTRAINT_NAME
@@ -283,11 +283,11 @@ class MysqlSchemaDialect : SchemaDialect
             WHERE kcu.TABLE_SCHEMA = ? AND kcu.TABLE_NAME = ? AND rc.TABLE_NAME = ?
             ORDER BY kcu.ORDINAL_POSITION ASC";
 
-        return [$sql, [$config["database"], $tableName, $tableName]];
+        return [mySql, [$config["database"], $tableName, $tableName]];
     }
 
 
-    function convertForeignKeyDescription(TableSchema $schema, array $row): void
+    void convertForeignKeyDescription(TableSchema $schema, array $row)
     {
         $data = [
             "type" : TableSchema::CONSTRAINT_FOREIGN,
@@ -332,9 +332,9 @@ class MysqlSchemaDialect : SchemaDialect
         /** @var array $data */
         $data = $schema.getColumn($name);
 
-        $sql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
-        if ($sql != null) {
-            return $sql;
+        mySql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
+        if (mySql != null) {
+            return mySql;
         }
 
         $out = this._driver.quoteIdentifier($name);
@@ -547,26 +547,26 @@ class MysqlSchemaDialect : SchemaDialect
 
     function addConstraintSql(TableSchema $schema): array
     {
-        $sqlPattern = "ALTER TABLE %s ADD %s;";
-        $sql = [];
+        mySqlPattern = "ALTER TABLE %s ADD %s;";
+        mySql = [];
 
         foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
             $constraint = $schema.getConstraint($name);
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
                 $tableName = this._driver.quoteIdentifier($schema.name());
-                $sql[] = sprintf($sqlPattern, $tableName, this.constraintSql($schema, $name));
+                mySql[] = sprintf(mySqlPattern, $tableName, this.constraintSql($schema, $name));
             }
         }
 
-        return $sql;
+        return mySql;
     }
 
 
     function dropConstraintSql(TableSchema $schema): array
     {
-        $sqlPattern = "ALTER TABLE %s DROP FOREIGN KEY %s;";
-        $sql = [];
+        mySqlPattern = "ALTER TABLE %s DROP FOREIGN KEY %s;";
+        mySql = [];
 
         foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
@@ -574,11 +574,11 @@ class MysqlSchemaDialect : SchemaDialect
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
                 $tableName = this._driver.quoteIdentifier($schema.name());
                 $constraintName = this._driver.quoteIdentifier($name);
-                $sql[] = sprintf($sqlPattern, $tableName, $constraintName);
+                mySql[] = sprintf(mySqlPattern, $tableName, $constraintName);
             }
         }
 
-        return $sql;
+        return mySql;
     }
 
 

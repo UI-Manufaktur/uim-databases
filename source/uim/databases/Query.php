@@ -2084,7 +2084,7 @@ class Query : ExpressionInterface, IteratorAggregate
      *   found inside this query.
      * @return void
      */
-    protected function _expressionsVisitor($expression, Closure $callback): void
+    protected void _expressionsVisitor($expression, Closure $callback)
     {
         if (is_array($expression)) {
             foreach ($expression as $e) {
@@ -2326,7 +2326,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * @param array<string, string> someTypes Associative array of type names used to bind values to query
      * @return void
      */
-    protected function _conjugate(string $part, $append, $conjunction, array someTypes): void
+    protected void _conjugate(string $part, $append, $conjunction, array someTypes)
     {
         $expression = _parts[$part] ?: this.newExpr();
         if (empty($append)) {
@@ -2357,7 +2357,7 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * @return void
      */
-    protected function _dirty(): void
+    protected void _dirty()
     {
         _dirty = true;
 
@@ -2431,10 +2431,10 @@ class Query : ExpressionInterface, IteratorAggregate
                 },
                 E_ALL
             );
-            $sql = this.sql();
+            mySql = this.sql();
             $params = this.getValueBinder().bindings();
         } catch (RuntimeException $e) {
-            $sql = "SQL could not be generated for this query as it is incomplete.";
+            mySql = "SQL could not be generated for this query as it is incomplete.";
             $params = [];
         } finally {
             restore_error_handler();
@@ -2442,7 +2442,7 @@ class Query : ExpressionInterface, IteratorAggregate
 
         return [
             "(help)": "This is a Query object, to get the results execute or iterate it.",
-            "sql": $sql,
+            "sql": mySql,
             "params": $params,
             "defaultTypes": this.getDefaultTypes(),
             "decorators": count(_resultDecorators),

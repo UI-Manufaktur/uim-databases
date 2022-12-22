@@ -68,7 +68,7 @@ class ValuesExpression : IDTBExpression
      * @return void
      * @throws \Cake\Database\Exception\DatabaseException When mixing array + Query data types.
      */
-    function add(someValues): void
+    void add(someValues)
     {
         if (
             (
@@ -274,7 +274,7 @@ class ValuesExpression : IDTBExpression
      *
      * @return void
      */
-    protected function _processExpressions(): void
+    protected void _processExpressions()
     {
         $types = [];
         $typeMap = $this.getTypeMap();

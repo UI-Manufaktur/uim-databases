@@ -60,9 +60,9 @@ class Collection : CollectionInterface
      */
     function listTablesWithoutViews(): array
     {
-        [$sql, $params] = this._dialect.listTablesWithoutViewsSql(this._connection.config());
+        [mySql, $params] = this._dialect.listTablesWithoutViewsSql(this._connection.config());
         $result = [];
-        $statement = this._connection.execute($sql, $params);
+        $statement = this._connection.execute(mySql, $params);
         while ($row = $statement.fetch()) {
             $result[] = $row[0];
         }
@@ -78,9 +78,9 @@ class Collection : CollectionInterface
      */
     function listTables(): array
     {
-        [$sql, $params] = this._dialect.listTablesSql(this._connection.config());
+        [mySql, $params] = this._dialect.listTablesSql(this._connection.config());
         $result = [];
-        $statement = this._connection.execute($sql, $params);
+        $statement = this._connection.execute(mySql, $params);
         while ($row = $statement.fetch()) {
             $result[] = $row[0];
         }
@@ -150,12 +150,12 @@ class Collection : CollectionInterface
         $describeMethod = "describe{$stage}Sql";
         $convertMethod = "convert{$stage}Description";
 
-        [$sql, $params] = this._dialect.{$describeMethod}($name, $config);
-        if (empty($sql)) {
+        [mySql, $params] = this._dialect.{$describeMethod}($name, $config);
+        if (empty(mySql)) {
             return;
         }
         try {
-            $statement = this._connection.execute($sql, $params);
+            $statement = this._connection.execute(mySql, $params);
         } catch (PDOException $e) {
             throw new DatabaseException($e.getMessage(), 500, $e);
         }
