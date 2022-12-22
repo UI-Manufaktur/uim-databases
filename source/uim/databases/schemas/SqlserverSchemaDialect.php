@@ -420,22 +420,22 @@ class SqlserverSchemaDialect : SchemaDialect
         ];
 
         if (isset($typeMap[$data["type"]])) {
-            $out .= $typeMap[$data["type"]];
+            $out ~= $typeMap[$data["type"]];
         }
 
         if ($data["type"] == TableSchema::TYPE_INTEGER || $data["type"] == TableSchema::TYPE_BIGINTEGER) {
             if ($schema.getPrimaryKey() == [$name] || $data["autoIncrement"] == true) {
                 unset($data["null"], $data["default"]);
-                $out .= " IDENTITY(1, 1)";
+                $out ~= " IDENTITY(1, 1)";
             }
         }
 
         if ($data["type"] == TableSchema::TYPE_TEXT && $data["length"] != TableSchema::LENGTH_TINY) {
-            $out .= " NVARCHAR(MAX)";
+            $out ~= " NVARCHAR(MAX)";
         }
 
         if ($data["type"] == TableSchema::TYPE_CHAR) {
-            $out .= "(" . $data["length"] . ")";
+            $out ~= "(" . $data["length"] . ")";
         }
 
         if ($data["type"] == TableSchema::TYPE_BINARY) {
@@ -447,11 +447,11 @@ class SqlserverSchemaDialect : SchemaDialect
             }
 
             if ($data["length"] == 1) {
-                $out .= " BINARY(1)";
+                $out ~= " BINARY(1)";
             } else {
-                $out .= " VARBINARY";
+                $out ~= " VARBINARY";
 
-                $out .= sprintf("(%s)", $data["length"]);
+                $out ~= sprintf("(%s)", $data["length"]);
             }
         }
 
@@ -464,12 +464,12 @@ class SqlserverSchemaDialect : SchemaDialect
         ) {
             $type = " NVARCHAR";
             $length = $data["length"] ?? TableSchema::LENGTH_TINY;
-            $out .= sprintf("%s(%d)", $type, $length);
+            $out ~= sprintf("%s(%d)", $type, $length);
         }
 
         $hasCollate = [TableSchema::TYPE_TEXT, TableSchema::TYPE_STRING, TableSchema::TYPE_CHAR];
         if (in_array($data["type"], $hasCollate, true) && isset($data["collate"]) && $data["collate"] != "") {
-            $out .= " COLLATE " . $data["collate"];
+            $out ~= " COLLATE " . $data["collate"];
         }
 
         $precisionTypes = [
@@ -480,7 +480,7 @@ class SqlserverSchemaDialect : SchemaDialect
             TableSchema::TYPE_TIMESTAMP_FRACTIONAL,
         ];
         if (in_array($data["type"], $precisionTypes, true) && isset($data["precision"])) {
-            $out .= "(" . (int)$data["precision"] . ")";
+            $out ~= "(" . (int)$data["precision"] . ")";
         }
 
         if (
@@ -490,11 +490,11 @@ class SqlserverSchemaDialect : SchemaDialect
                 isset($data["precision"])
             )
         ) {
-            $out .= "(" . (int)$data["length"] . "," . (int)$data["precision"] . ")";
+            $out ~= "(" . (int)$data["length"] . "," . (int)$data["precision"] . ")";
         }
 
         if (isset($data["null"]) && $data["null"] == false) {
-            $out .= " NOT NULL";
+            $out ~= " NOT NULL";
         }
 
         $dateTimeTypes = [
@@ -516,14 +516,14 @@ class SqlserverSchemaDialect : SchemaDialect
             in_array($data["type"], $dateTimeTypes, true) &&
             in_array(strtolower($data["default"]), $dateTimeDefaults, true)
         ) {
-            $out .= " DEFAULT " . strtoupper($data["default"]);
+            $out ~= " DEFAULT " . strtoupper($data["default"]);
         } elseif (isset($data["default"])) {
             $default = is_bool($data["default"])
                 ? (int)$data["default"]
                 : this._driver.schemaValue($data["default"]);
-            $out .= " DEFAULT " . $default;
+            $out ~= " DEFAULT " . $default;
         } elseif (isset($data["null"]) && $data["null"] != false) {
-            $out .= " DEFAULT NULL";
+            $out ~= " DEFAULT NULL";
         }
 
         return $out;
@@ -594,7 +594,7 @@ class SqlserverSchemaDialect : SchemaDialect
             $out = "PRIMARY KEY";
         }
         if ($data["type"] == TableSchema::CONSTRAINT_UNIQUE) {
-            $out .= " UNIQUE";
+            $out ~= " UNIQUE";
         }
 
         return this._keySql($out, $data);

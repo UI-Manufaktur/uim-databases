@@ -110,7 +110,7 @@ class Postgres : Driver
         }
 
         if (!empty($config["timezone"])) {
-            $config["init"][] = sprintf("SET timezone = %s", $connection.quote($config["timezone"]));
+            $config["init"][] = "SET timezone = %s".format($connection.quote($config["timezone"]));
         }
 
         foreach ($config["init"] as $command) {
@@ -290,7 +290,7 @@ class Postgres : Driver
                     .setConjunction(" + INTERVAL")
                     .iterateParts(function ($p, $key) {
                         if ($key == 1) {
-                            $p = sprintf(""%s"", $p);
+                            $p = ""%s"".format($p);
                         }
 
                         return $p;

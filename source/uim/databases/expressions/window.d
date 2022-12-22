@@ -205,7 +205,7 @@ class WindowExpression : IDTBExpression, IDTBWindow {
             $frameSql = sprintf("%s BETWEEN %s AND %s", $this.frame["type"], $start, $end);
 
             if ($this.exclusion !is null) {
-                $frameSql .=" EXCLUDE" . $this.exclusion;
+                $frameSql ~=" EXCLUDE" . $this.exclusion;
             }
 
             $clauses[] = $frameSql;

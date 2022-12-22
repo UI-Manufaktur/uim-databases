@@ -148,12 +148,12 @@ class QueryCompiler
             }
             if (isset(_templates[$partName])) {
                 $part = _stringifyExpressions((array)$part, $binder);
-                mySql .= sprintf(_templates[$partName], implode(", ", $part));
+                mySql ~= _templates[$partName].format(implode(", ", $part));
 
                 return;
             }
 
-            mySql .= this.{"_build" . $partName . "Part"}($part, $query, $binder);
+            mySql ~= this.{"_build" . $partName . "Part"}($part, $query, $binder);
         };
     }
 
@@ -178,7 +178,7 @@ class QueryCompiler
 
         $recursive = $recursive ? "RECURSIVE " : "";
 
-        return sprintf("WITH %s%s ", $recursive, implode(", ", $expressions));
+        return "WITH %s%s ".format($recursive, implode(", ", $expressions));
     }
 
     /**
@@ -209,9 +209,9 @@ class QueryCompiler
             if (!is_numeric($k)) {
                 $p = $p . " AS ";
                 if ($quoteIdentifiers) {
-                    $p .= $driver.quoteIdentifier($k);
+                    $p ~= $driver.quoteIdentifier($k);
                 } else {
-                    $p .= $k;
+                    $p ~= $k;
                 }
             }
             $normalized[] = $p;
@@ -223,10 +223,10 @@ class QueryCompiler
 
         if (is_array($distinct)) {
             $distinct = _stringifyExpressions($distinct, $binder);
-            $distinct = sprintf("DISTINCT ON (%s) ", implode(", ", $distinct));
+            $distinct = "DISTINCT ON (%s) ".format(implode(", ", $distinct));
         }
 
-        return sprintf($select, myModifiers, $distinct, implode(", ", $normalized));
+        return $select.format(myModifiers, $distinct, implode(", ", $normalized));
     }
 
     /**
@@ -251,7 +251,7 @@ class QueryCompiler
             $normalized[] = $p;
         }
 
-        return sprintf($select, implode(", ", $normalized));
+        return $select.format(implode(", ", $normalized));
     }
 
     /**
@@ -270,26 +270,25 @@ class QueryCompiler
         $joins = "";
         foreach ($parts as $join) {
             if (!isset($join["table"])) {
-                throw new DatabaseException(sprintf(
-                    "Could not compile join clause for alias `%s`. No table was specified. " .
-                    "Use the `table` key to define a table.",
-                    $join["alias"]
+                throw new DatabaseException(
+                    "Could not compile join clause for alias `%s`. No table was specified. "~
+                    "Use the `table` key to define a table.".format($join["alias"])
                 ));
             }
             if ($join["table"] instanceof ExpressionInterface) {
                 $join["table"] = "(" . $join["table"].sql($binder) . ")";
             }
 
-            $joins .= sprintf(" %s JOIN %s %s", $join["type"], $join["table"], $join["alias"]);
+            $joins ~= " %s JOIN %s %s".format($join["type"], $join["table"], $join["alias"]);
 
             $condition = "";
             if (isset($join["conditions"]) && $join["conditions"] instanceof ExpressionInterface) {
                 $condition = $join["conditions"].sql($binder);
             }
             if ($condition == "") {
-                $joins .= " ON 1 = 1";
+                $joins ~= " ON 1 = 1";
             } else {
-                $joins .= " ON {$condition}";
+                $joins ~= " ON {$condition}";
             }
         }
 
@@ -362,10 +361,10 @@ class QueryCompiler
         }, $parts);
 
         if (_orderedUnion) {
-            return sprintf(")\nUNION %s", implode("\nUNION ", $parts));
+            return ")\nUNION %s".format(implode("\nUNION ", $parts));
         }
 
-        return sprintf("\nUNION %s", implode("\nUNION ", $parts));
+        return "\nUNION %s".format(implode("\nUNION ", $parts));
     }
 
     /**
@@ -388,7 +387,7 @@ class QueryCompiler
         $columns = _stringifyExpressions($parts[1], $binder);
         myModifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
 
-        return sprintf("INSERT%s INTO %s (%s)", myModifiers, $table, implode(", ", $columns));
+        return "INSERT%s INTO %s (%s)".format(myModifiers, $table, implode(", ", $columns));
     }
 
     /**
@@ -417,7 +416,7 @@ class QueryCompiler
         $table = _stringifyExpressions($parts, $binder);
         myModifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
 
-        return sprintf("UPDATE%s %s", myModifiers, implode(",", $table));
+        return "UPDATE%s %s".format(myModifiers, implode(",", $table));
     }
 
     /**

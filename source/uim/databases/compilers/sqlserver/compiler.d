@@ -127,6 +127,6 @@ class SqlserverCompiler : QueryCompiler
             }
         }
 
-        return sprintf(" HAVING %s", implode(", ", ));
+        return " HAVING %s ".format(implode(", ", );
     }
 }

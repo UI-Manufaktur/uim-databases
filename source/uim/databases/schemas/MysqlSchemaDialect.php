@@ -314,13 +314,13 @@ class MysqlSchemaDialect : SchemaDialect
         $content = sprintf("CREATE%sTABLE `%s` (\n%s\n)", $temporary, $schema.name(), $content);
         $options = $schema.getOptions();
         if (isset($options["engine"])) {
-            $content .= sprintf(" ENGINE=%s", $options["engine"]);
+            $content ~= sprintf(" ENGINE=%s", $options["engine"]);
         }
         if (isset($options["charset"])) {
-            $content .= sprintf(" DEFAULT CHARSET=%s", $options["charset"]);
+            $content ~= sprintf(" DEFAULT CHARSET=%s", $options["charset"]);
         }
         if (isset($options["collate"])) {
-            $content .= sprintf(" COLLATE=%s", $options["collate"]);
+            $content ~= sprintf(" COLLATE=%s", $options["collate"]);
         }
 
         return [$content];
@@ -367,12 +367,12 @@ class MysqlSchemaDialect : SchemaDialect
             "binary" : true,
         ];
         if (isset($typeMap[$data["type"]])) {
-            $out .= $typeMap[$data["type"]];
+            $out ~= $typeMap[$data["type"]];
         }
         if (isset($specialMap[$data["type"]])) {
             switch ($data["type"]) {
                 case TableSchema::TYPE_STRING:
-                    $out .= " VARCHAR";
+                    $out ~= " VARCHAR";
                     if (!isset($data["length"])) {
                         $data["length"] = 255;
                     }
@@ -380,13 +380,13 @@ class MysqlSchemaDialect : SchemaDialect
                 case TableSchema::TYPE_TEXT:
                     $isKnownLength = in_array($data["length"], TableSchema::$columnLengths);
                     if (empty($data["length"]) || !$isKnownLength) {
-                        $out .= " TEXT";
+                        $out ~= " TEXT";
                         break;
                     }
 
                     /** @var string $length */
                     $length = array_search($data["length"], TableSchema::$columnLengths);
-                    $out .= " " . strtoupper($length) . "TEXT";
+                    $out ~= " " . strtoupper($length) . "TEXT";
 
                     break;
                 case TableSchema::TYPE_BINARY:
@@ -394,19 +394,19 @@ class MysqlSchemaDialect : SchemaDialect
                     if ($isKnownLength) {
                         /** @var string $length */
                         $length = array_search($data["length"], TableSchema::$columnLengths);
-                        $out .= " " . strtoupper($length) . "BLOB";
+                        $out ~= " " . strtoupper($length) . "BLOB";
                         break;
                     }
 
                     if (empty($data["length"])) {
-                        $out .= " BLOB";
+                        $out ~= " BLOB";
                         break;
                     }
 
                     if ($data["length"] > 2) {
-                        $out .= " VARBINARY(" . $data["length"] . ")";
+                        $out ~= " VARBINARY(" . $data["length"] . ")";
                     } else {
-                        $out .= " BINARY(" . $data["length"] . ")";
+                        $out ~= " BINARY(" . $data["length"] . ")";
                     }
                     break;
             }
@@ -419,21 +419,21 @@ class MysqlSchemaDialect : SchemaDialect
             TableSchema::TYPE_STRING,
         ];
         if (in_array($data["type"], $hasLength, true) && isset($data["length"])) {
-            $out .= "(" . $data["length"] . ")";
+            $out ~= "(" . $data["length"] . ")";
         }
 
         $lengthAndPrecisionTypes = [TableSchema::TYPE_FLOAT, TableSchema::TYPE_DECIMAL];
         if (in_array($data["type"], $lengthAndPrecisionTypes, true) && isset($data["length"])) {
             if (isset($data["precision"])) {
-                $out .= "(" . (int)$data["length"] . "," . (int)$data["precision"] . ")";
+                $out ~= "(" . (int)$data["length"] . "," . (int)$data["precision"] . ")";
             } else {
-                $out .= "(" . (int)$data["length"] . ")";
+                $out ~= "(" . (int)$data["length"] . ")";
             }
         }
 
         $precisionTypes = [TableSchema::TYPE_DATETIME_FRACTIONAL, TableSchema::TYPE_TIMESTAMP_FRACTIONAL];
         if (in_array($data["type"], $precisionTypes, true) && isset($data["precision"])) {
-            $out .= "(" . (int)$data["precision"] . ")";
+            $out ~= "(" . (int)$data["precision"] . ")";
         }
 
         $hasUnsigned = [
@@ -449,7 +449,7 @@ class MysqlSchemaDialect : SchemaDialect
             isset($data["unsigned"]) &&
             $data["unsigned"] == true
         ) {
-            $out .= " UNSIGNED";
+            $out ~= " UNSIGNED";
         }
 
         $hasCollate = [
@@ -458,11 +458,11 @@ class MysqlSchemaDialect : SchemaDialect
             TableSchema::TYPE_STRING,
         ];
         if (in_array($data["type"], $hasCollate, true) && isset($data["collate"]) && $data["collate"] != "") {
-            $out .= " COLLATE " . $data["collate"];
+            $out ~= " COLLATE " . $data["collate"];
         }
 
         if (isset($data["null"]) && $data["null"] == false) {
-            $out .= " NOT NULL";
+            $out ~= " NOT NULL";
         }
         $addAutoIncrement = (
             $schema.getPrimaryKey() == [$name] &&
@@ -476,7 +476,7 @@ class MysqlSchemaDialect : SchemaDialect
                 $addAutoIncrement
             )
         ) {
-            $out .= " AUTO_INCREMENT";
+            $out ~= " AUTO_INCREMENT";
         }
 
         $timestampTypes = [
@@ -485,7 +485,7 @@ class MysqlSchemaDialect : SchemaDialect
             TableSchema::TYPE_TIMESTAMP_TIMEZONE,
         ];
         if (isset($data["null"]) && $data["null"] == true && in_array($data["type"], $timestampTypes, true)) {
-            $out .= " NULL";
+            $out ~= " NULL";
             unset($data["default"]);
         }
 
@@ -501,18 +501,18 @@ class MysqlSchemaDialect : SchemaDialect
             in_array($data["type"], $dateTimeTypes) &&
             strpos(strtolower($data["default"]), "current_timestamp") != false
         ) {
-            $out .= " DEFAULT CURRENT_TIMESTAMP";
+            $out ~= " DEFAULT CURRENT_TIMESTAMP";
             if (isset($data["precision"])) {
-                $out .= "(" . $data["precision"] . ")";
+                $out ~= "(" . $data["precision"] . ")";
             }
             unset($data["default"]);
         }
         if (isset($data["default"])) {
-            $out .= " DEFAULT " . this._driver.schemaValue($data["default"]);
+            $out ~= " DEFAULT " . this._driver.schemaValue($data["default"]);
             unset($data["default"]);
         }
         if (isset($data["comment"]) && $data["comment"] != "") {
-            $out .= " COMMENT " . this._driver.schemaValue($data["comment"]);
+            $out ~= " COMMENT " . this._driver.schemaValue($data["comment"]);
         }
 
         return $out;
@@ -539,7 +539,7 @@ class MysqlSchemaDialect : SchemaDialect
         if ($data["type"] == TableSchema::CONSTRAINT_FOREIGN) {
             $out = "CONSTRAINT ";
         }
-        $out .= this._driver.quoteIdentifier($name);
+        $out ~= this._driver.quoteIdentifier($name);
 
         return this._keySql($out, $data);
     }
@@ -593,7 +593,7 @@ class MysqlSchemaDialect : SchemaDialect
         if ($data["type"] == TableSchema::INDEX_FULLTEXT) {
             $out = "FULLTEXT KEY ";
         }
-        $out .= this._driver.quoteIdentifier($name);
+        $out ~= this._driver.quoteIdentifier($name);
 
         return this._keySql($out, $data);
     }
@@ -613,7 +613,7 @@ class MysqlSchemaDialect : SchemaDialect
         );
         foreach ($data["columns"] as $i : $column) {
             if (isset($data["length"][$column])) {
-                $columns[$i] .= sprintf("(%d)", $data["length"][$column]);
+                $columns[$i] ~= sprintf("(%d)", $data["length"][$column]);
             }
         }
         if ($data["type"] == TableSchema::CONSTRAINT_FOREIGN) {

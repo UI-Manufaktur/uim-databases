@@ -195,7 +195,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
         }
 
         if (_isMultiple) {
-            $template .="%s (%s)";
+            $template ~="%s (%s)";
             $type = _type;
             if ($type !is null) {
                 $type = str_replace("[]","", $type);
@@ -212,7 +212,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
                 );
             }
         } else {
-            $template .="%s %s";
+            $template ~="%s %s";
             aValue = _bindValue(_value, $binder, _type);
         }
 

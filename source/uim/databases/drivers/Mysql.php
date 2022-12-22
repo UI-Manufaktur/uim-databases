@@ -132,7 +132,7 @@ class Mysql : Driver
         }
 
         if (!empty($config["timezone"])) {
-            $config["init"][] = sprintf("SET time_zone = "%s"", $config["timezone"]);
+            $config["init"][] = "SET time_zone = "%s"".format($config["timezone"]);
         }
 
         $config["flags"] += [
@@ -156,7 +156,7 @@ class Mysql : Driver
         }
 
         if (!empty($config["encoding"])) {
-            $dsn .= ";charset={$config["encoding"]}";
+            $dsn ~= ";charset={$config["encoding"]}";
         }
 
         this._connect($dsn, $config);

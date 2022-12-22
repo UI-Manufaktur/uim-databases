@@ -351,7 +351,7 @@ class DateTimeType : BaseType, IBatchCasting
                 is_numeric(DValue aValue["day"])
             )
         ) {
-            $format .= sprintf("%d-%02d-%02d", DValue aValue["year"], DValue aValue["month"], DValue aValue["day"]);
+            $format ~= sprintf("%d-%02d-%02d", DValue aValue["year"], DValue aValue["month"], DValue aValue["day"]);
         }
 
         if (isset(DValue aValue["meridian"]) && (int)aValue["hour"] == 12) {
@@ -360,7 +360,7 @@ class DateTimeType : BaseType, IBatchCasting
         if (isset(DValue aValue["meridian"])) {
             aValue["hour"] = strtolower(DValue aValue["meridian"]) == "am" ? aValue["hour"] : aValue["hour"] + 12;
         }
-        $format .= sprintf(
+        $format ~= sprintf(
             "%s%02d:%02d:%02d.%06d",
             empty($format) ? "" : " ",
             aValue["hour"],

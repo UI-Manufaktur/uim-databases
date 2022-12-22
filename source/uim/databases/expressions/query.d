@@ -288,7 +288,7 @@ class QueryExpression : IDTBExpression, Countable {
             $type = _calculateType($field);
         }
         $type = $type ?:"string";
-        $type .="[]";
+        $type ~="[]";
         someValues = someValues instanceof IDTBExpression ? someValues : (array)someValues;
 
         return $this.add(new ComparisonExpression($field, someValues, $type,"IN"));
@@ -361,7 +361,7 @@ class QueryExpression : IDTBExpression, Countable {
             $type = _calculateType($field);
         }
         $type = $type ?:"string";
-        $type .="[]";
+        $type ~="[]";
         someValues = someValues instanceof IDTBExpression ? someValues : (array)someValues;
 
         return $this.add(new ComparisonExpression($field, someValues, $type,"NOT IN"));
@@ -767,7 +767,7 @@ class QueryExpression : IDTBExpression, Countable {
         if (in_array($operator, ["in","not in"]) || $typeMultiple) {
             $type = $type ?:"string";
             if (!$typeMultiple) {
-                $type .="[]";
+                $type ~="[]";
             }
             $operator = $operator =="=" ?"IN" : $operator;
             $operator = $operator =="!=" ?"NOT IN" : $operator;

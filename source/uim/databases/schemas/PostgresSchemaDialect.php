@@ -419,7 +419,7 @@ class PostgresSchemaDialect : SchemaDialect
         ];
 
         if (isset($typeMap[$data["type"]])) {
-            $out .= $typeMap[$data["type"]];
+            $out ~= $typeMap[$data["type"]];
         }
 
         if ($data["type"] == TableSchema::TYPE_INTEGER || $data["type"] == TableSchema::TYPE_BIGINTEGER) {
@@ -428,18 +428,18 @@ class PostgresSchemaDialect : SchemaDialect
                 $type = $data["type"] == TableSchema::TYPE_INTEGER ? " SERIAL" : " BIGSERIAL";
                 unset($data["null"], $data["default"]);
             }
-            $out .= $type;
+            $out ~= $type;
         }
 
         if ($data["type"] == TableSchema::TYPE_TEXT && $data["length"] != TableSchema::LENGTH_TINY) {
-            $out .= " TEXT";
+            $out ~= " TEXT";
         }
         if ($data["type"] == TableSchema::TYPE_BINARY) {
-            $out .= " BYTEA";
+            $out ~= " BYTEA";
         }
 
         if ($data["type"] == TableSchema::TYPE_CHAR) {
-            $out .= "(" . $data["length"] . ")";
+            $out ~= "(" . $data["length"] . ")";
         }
 
         if (
@@ -449,15 +449,15 @@ class PostgresSchemaDialect : SchemaDialect
                 $data["length"] == TableSchema::LENGTH_TINY
             )
         ) {
-            $out .= " VARCHAR";
+            $out ~= " VARCHAR";
             if (isset($data["length"]) && $data["length"] != "") {
-                $out .= "(" . $data["length"] . ")";
+                $out ~= "(" . $data["length"] . ")";
             }
         }
 
         $hasCollate = [TableSchema::TYPE_TEXT, TableSchema::TYPE_STRING, TableSchema::TYPE_CHAR];
         if (in_array($data["type"], $hasCollate, true) && isset($data["collate"]) && $data["collate"] != "") {
-            $out .= " COLLATE "" . $data["collate"] . """;
+            $out ~= " COLLATE "" . $data["collate"] . """;
         }
 
         $hasPrecision = [
@@ -469,7 +469,7 @@ class PostgresSchemaDialect : SchemaDialect
             TableSchema::TYPE_TIMESTAMP_TIMEZONE,
         ];
         if (in_array($data["type"], $hasPrecision) && isset($data["precision"])) {
-            $out .= "(" . $data["precision"] . ")";
+            $out ~= "(" . $data["precision"] . ")";
         }
 
         if (
@@ -479,11 +479,11 @@ class PostgresSchemaDialect : SchemaDialect
                 isset($data["precision"])
             )
         ) {
-            $out .= "(" . $data["length"] . "," . (int)$data["precision"] . ")";
+            $out ~= "(" . $data["length"] . "," . (int)$data["precision"] . ")";
         }
 
         if (isset($data["null"]) && $data["null"] == false) {
-            $out .= " NOT NULL";
+            $out ~= " NOT NULL";
         }
 
         $datetimeTypes = [
@@ -498,15 +498,15 @@ class PostgresSchemaDialect : SchemaDialect
             in_array($data["type"], $datetimeTypes) &&
             strtolower($data["default"]) == "current_timestamp"
         ) {
-            $out .= " DEFAULT CURRENT_TIMESTAMP";
+            $out ~= " DEFAULT CURRENT_TIMESTAMP";
         } elseif (isset($data["default"])) {
             $defaultValue = $data["default"];
             if ($data["type"] == "boolean") {
                 $defaultValue = (bool)$defaultValue;
             }
-            $out .= " DEFAULT " . this._driver.schemaValue($defaultValue);
+            $out ~= " DEFAULT " . this._driver.schemaValue($defaultValue);
         } elseif (isset($data["null"]) && $data["null"] != false) {
-            $out .= " DEFAULT NULL";
+            $out ~= " DEFAULT NULL";
         }
 
         return $out;
@@ -577,7 +577,7 @@ class PostgresSchemaDialect : SchemaDialect
             $out = "PRIMARY KEY";
         }
         if ($data["type"] == TableSchema::CONSTRAINT_UNIQUE) {
-            $out .= " UNIQUE";
+            $out ~= " UNIQUE";
         }
 
         return this._keySql($out, $data);
