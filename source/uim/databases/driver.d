@@ -286,7 +286,7 @@ abstract class Driver : IDriver
         /** @psalm-suppress InvalidArgument */
         if (
             (
-                is_int(myValue) ||
+                isInt(myValue) ||
                 myValue == "0"
             ) ||
             (

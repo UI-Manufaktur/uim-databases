@@ -35,14 +35,14 @@ class QueryCompiler
      * @var array<string, string>
      */
     protected $_templates = [
-        "delete" => "DELETE",
-        "where" => " WHERE %s",
-        "group" => " GROUP BY %s ",
-        "having" => " HAVING %s ",
-        "order" => " %s",
-        "limit" => " LIMIT %s",
-        "offset" => " OFFSET %s",
-        "epilog" => " %s",
+        "delete": "DELETE",
+        "where": " WHERE %s",
+        "group": " GROUP BY %s ",
+        "having": " HAVING %s ",
+        "order": " %s",
+        "limit": " LIMIT %s",
+        "offset": " OFFSET %s",
+        "epilog": " %s",
     ];
 
     /**
@@ -205,7 +205,7 @@ class QueryCompiler
         $quoteIdentifiers = $driver->isAutoQuotingEnabled() || _quotedSelectAliases;
         $normalized = [];
         $parts = _stringifyExpressions($parts, $binder);
-        foreach ($parts as $k => $p) {
+        foreach ($parts as $k: $p) {
             if (!is_numeric($k)) {
                 $p = $p . " AS ";
                 if ($quoteIdentifiers) {
@@ -244,7 +244,7 @@ class QueryCompiler
         $select = " FROM %s";
         $normalized = [];
         $parts = _stringifyExpressions($parts, $binder);
-        foreach ($parts as $k => $p) {
+        foreach ($parts as $k: $p) {
             if (!is_numeric($k)) {
                 $p = $p . " " . $k;
             }
@@ -449,7 +449,7 @@ class QueryCompiler
     protected function _stringifyExpressions(array $expressions, ValueBinder $binder, bool $wrap = true): array
     {
         $result = [];
-        foreach ($expressions as $k => $expression) {
+        foreach ($expressions as $k: $expression) {
             if ($expression instanceof ExpressionInterface) {
                 $value = $expression->sql($binder);
                 $expression = $wrap ? "(" . $value . ")" : $value;

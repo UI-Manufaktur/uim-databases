@@ -281,7 +281,7 @@ class ValuesExpression : IDTBExpression
 
         $columns = _columnNames();
         foreach ($columns as $c) {
-            if (!is_string($c) && !is_int($c)) {
+            if (!is_string($c) && !isInt($c)) {
                 continue;
             }
             $types[$c] = $typeMap.type($c);

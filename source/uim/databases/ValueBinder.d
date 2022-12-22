@@ -21,7 +21,7 @@ class ValueBinder {
      *
      * @var array
      */
-    protected $_bindings = [];
+    protected _bindings = [];
 
     // _bindingsCount - A counter of the number of parameters bound in this expression object
     protected int _bindingsCount = 0;
@@ -36,10 +36,9 @@ class ValueBinder {
      * to database
      * @return void
      */
-    void bind($param, $value, $type = null) {
-        _bindings[$param] = compact("value", "type") + [
-            "placeholder" => is_int($param) ? $param : substr($param, 1),
-        ];
+    void bind(string aParameter, param, aValue, aType = null) {
+        _bindings[aParameter] = ["value": aValue, "type":aType];
+        _bindings[aParameter]["placeholder"] = isInt(aParameter) ? aParameter : substr(aParameter, 1);
     }
 
     /**
@@ -73,9 +72,9 @@ class ValueBinder {
         foreach (key, value; $values) {
             $param = this.placeholder("c");
             _bindings[$param] = [
-                "value" => value,
-                "type" => $type,
-                "placeholder" => substr($param, 1),
+                "value": value,
+                "type": $type,
+                "placeholder": substr($param, 1),
             ];
             $placeholders[key] = $param;
         }
@@ -86,12 +85,9 @@ class ValueBinder {
     /**
      * Returns all values bound to this expression object at this nesting level.
      * Subexpression bound values will not be returned with this function.
-     *
-     * @return array
      */
-    function bindings(): array
-    {
-        return _bindings;
+    auto bindings() {
+      return _bindings;
     }
 
     // Clears any bindings that were previously registered

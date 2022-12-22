@@ -45,7 +45,7 @@ trait CaseExpressionTrait
 
         if (is_string($value)) {
             $type ="string";
-        } elseif (is_int($value)) {
+        } elseif (isInt($value)) {
             $type ="integer";
         } elseif (is_float($value)) {
             $type ="float";

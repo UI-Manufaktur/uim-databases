@@ -63,7 +63,7 @@ class SchemaCache
 
         foreach ($tables as $table) {
             /** @psalm-suppress PossiblyNullArgument */
-            _schema->describe($table, ["forceRefresh" => true]);
+            _schema->describe($table, ["forceRefresh": true]);
         }
 
         return $tables;

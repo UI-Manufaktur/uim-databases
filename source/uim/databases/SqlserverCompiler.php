@@ -38,12 +38,12 @@ class SqlserverCompiler extends QueryCompiler
      * @inheritDoc
      */
     protected $_templates = [
-        "delete" => "DELETE",
-        "where" => " WHERE %s",
-        "group" => " GROUP BY %s",
-        "order" => " %s",
-        "offset" => " OFFSET %s ROWS",
-        "epilog" => " %s",
+        "delete": "DELETE",
+        "where": " WHERE %s",
+        "group": " GROUP BY %s",
+        "order": " %s",
+        "offset": " OFFSET %s ROWS",
+        "epilog": " %s",
     ];
 
     /**
@@ -136,11 +136,11 @@ class SqlserverCompiler extends QueryCompiler
     {
         $selectParts = $query->clause("select");
 
-        foreach ($selectParts as $selectKey => $selectPart) {
+        foreach ($selectParts as $selectKey: $selectPart) {
             if (!$selectPart instanceof FunctionExpression) {
                 continue;
             }
-            foreach ($parts as $k => $p) {
+            foreach ($parts as $k: $p) {
                 if (!is_string($p)) {
                     continue;
                 }

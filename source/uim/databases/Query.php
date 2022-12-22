@@ -75,26 +75,26 @@ class Query implements ExpressionInterface, IteratorAggregate
      * @var array<string, mixed>
      */
     protected $_parts = [
-        "delete" => true,
-        "update" => [],
-        "set" => [],
-        "insert" => [],
-        "values" => [],
-        "with" => [],
-        "select" => [],
-        "distinct" => false,
-        "modifier" => [],
-        "from" => [],
-        "join" => [],
-        "where" => null,
-        "group" => [],
-        "having" => null,
-        "window" => [],
-        "order" => null,
-        "limit" => null,
-        "offset" => null,
-        "union" => [],
-        "epilog" => null,
+        "delete": true,
+        "update": [],
+        "set": [],
+        "insert": [],
+        "values": [],
+        "with": [],
+        "select": [],
+        "distinct": false,
+        "modifier": [],
+        "from": [],
+        "join": [],
+        "where": null,
+        "group": [],
+        "having": null,
+        "window": [],
+        "order": null,
+        "limit": null,
+        "offset": null,
+        "union": [],
+        "epilog": null,
     ];
 
     /**
@@ -337,7 +337,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      */
     public O traverse(this O)($callback)
     {
-        foreach (_parts as $name => $part) {
+        foreach (_parts as $name: $part) {
             $callback($part, $name);
         }
 
@@ -461,11 +461,11 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query->select(["id", "title"]); // Produces SELECT id, title
-     * $query->select(["author" => "author_id"]); // Appends author: SELECT id, title, author_id as author
+     * $query->select(["author": "author_id"]); // Appends author: SELECT id, title, author_id as author
      * $query->select("id", true); // Resets the list: SELECT id
-     * $query->select(["total" => $countQuery]); // SELECT id, (SELECT ...) AS total
+     * $query->select(["total": $countQuery]); // SELECT id, (SELECT ...) AS total
      * $query->select(function ($query) {
-     *     return ["article_id", "total" => $query->count("*")];
+     *     return ["article_id", "total": $query->count("*")];
      * })
      * ```
      *
@@ -602,10 +602,10 @@ class Query implements ExpressionInterface, IteratorAggregate
      * ### Examples:
      *
      * ```
-     * $query->from(["p" => "posts"]); // Produces FROM posts p
+     * $query->from(["p": "posts"]); // Produces FROM posts p
      * $query->from("authors"); // Appends authors: FROM posts p, authors
      * $query->from(["products"], true); // Resets the list: FROM products
-     * $query->from(["sub" => $countQuery]); // FROM (SELECT ...) sub
+     * $query->from(["sub": $countQuery]); // FROM (SELECT ...) sub
      * ```
      *
      * @param array|string $tables tables to be added to the list. This argument, can be
@@ -641,16 +641,16 @@ class Query implements ExpressionInterface, IteratorAggregate
      * `$query->join(["authors"])` will produce `INNER JOIN authors ON 1 = 1`
      *
      * It is also possible to alias joins using the array key:
-     * `$query->join(["a" => "authors"])` will produce `INNER JOIN authors a ON 1 = 1`
+     * `$query->join(["a": "authors"])` will produce `INNER JOIN authors a ON 1 = 1`
      *
      * A join can be fully described and aliased using the array notation:
      *
      * ```
      * $query->join([
-     *     "a" => [
-     *         "table" => "authors",
-     *         "type" => "LEFT",
-     *         "conditions" => "a.id = b.author_id"
+     *     "a": [
+     *         "table": "authors",
+     *         "type": "LEFT",
+     *         "conditions": "a.id = b.author_id"
      *     ]
      * ]);
      * // Produces LEFT JOIN authors a ON a.id = b.author_id
@@ -660,15 +660,15 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query->join([
-     *     "a" => [
-     *         "table" => "authors",
-     *         "type" => "LEFT",
-     *         "conditions" => "a.id = b.author_id"
+     *     "a": [
+     *         "table": "authors",
+     *         "type": "LEFT",
+     *         "conditions": "a.id = b.author_id"
      *     ],
-     *     "p" => [
-     *         "table" => "publishers",
-     *         "type" => "INNER",
-     *         "conditions" => "p.id = b.publisher_id AND p.name = "Cake Software Foundation""
+     *     "p": [
+     *         "table": "publishers",
+     *         "type": "INNER",
+     *         "conditions": "p.id = b.publisher_id AND p.name = "Cake Software Foundation""
      *     ]
      * ]);
      * // LEFT JOIN authors a ON a.id = b.author_id
@@ -686,14 +686,14 @@ class Query implements ExpressionInterface, IteratorAggregate
      * using the second parameter of this function.
      *
      * ```
-     * $query->join(["a" => [
-     *     "table" => "articles",
-     *     "conditions" => [
-     *         "a.posted >=" => new DateTime("-3 days"),
-     *         "a.published" => true,
+     * $query->join(["a": [
+     *     "table": "articles",
+     *     "conditions": [
+     *         "a.posted >=": new DateTime("-3 days"),
+     *         "a.published": true,
      *         "a.author_id = authors.id"
      *     ]
-     * ]], ["a.posted" => "datetime", "a.published" => "boolean"])
+     * ]], ["a.posted": "datetime", "a.published": "boolean"])
      * ```
      *
      * ### Overwriting joins
@@ -704,9 +704,9 @@ class Query implements ExpressionInterface, IteratorAggregate
      * with another list if the third parameter for this function is set to true.
      *
      * ```
-     * $query->join(["alias" => "table"]); // joins table with as alias
-     * $query->join(["alias" => "another_table"]); // joins another_table with as alias
-     * $query->join(["something" => "different_table"], [], true); // resets joins list
+     * $query->join(["alias": "table"]); // joins table with as alias
+     * $query->join(["alias": "another_table"]); // joins another_table with as alias
+     * $query->join(["something": "different_table"], [], true); // resets joins list
      * ```
      *
      * @param array<string, mixed>|string $tables list of tables to be joined in the query
@@ -723,9 +723,9 @@ class Query implements ExpressionInterface, IteratorAggregate
 
         $joins = [];
         $i = count(_parts["join"]);
-        foreach ($tables as $alias => $t) {
+        foreach ($tables as $alias: $t) {
             if (!is_array($t)) {
-                $t = ["table" => $t, "conditions" => this.newExpr()];
+                $t = ["table": $t, "conditions": this.newExpr()];
             }
 
             if (!is_string($t["conditions"]) && is_callable($t["conditions"])) {
@@ -736,7 +736,7 @@ class Query implements ExpressionInterface, IteratorAggregate
                 $t["conditions"] = this.newExpr()->add($t["conditions"], $types);
             }
             $alias = is_string($alias) ? $alias : null;
-            $joins[$alias ?: $i++] = $t + ["type" => static::JOIN_TYPE_INNER, "alias" => $alias];
+            $joins[$alias ?: $i++] = $t + ["type": static::JOIN_TYPE_INNER, "alias": $alias];
         }
 
         if ($overwrite) {
@@ -780,7 +780,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * $query->leftJoin("authors", "authors.id = posts.author_id");
      *
      * // LEFT JOIN authors a ON a.id = posts.author_id
-     * $query->leftJoin(["a" => "authors"], "a.id = posts.author_id");
+     * $query->leftJoin(["a": "authors"], "a.id = posts.author_id");
      * ```
      *
      * Conditions can be passed as strings, arrays, or expression objects. When
@@ -788,11 +788,11 @@ class Query implements ExpressionInterface, IteratorAggregate
      * in order to define how to convert the values:
      *
      * ```
-     * $query->leftJoin(["a" => "articles"], [
-     *      "a.posted >=" => new DateTime("-3 days"),
-     *      "a.published" => true,
+     * $query->leftJoin(["a": "articles"], [
+     *      "a.posted >=": new DateTime("-3 days"),
+     *      "a.published": true,
      *      "a.author_id = authors.id"
-     * ], ["a.posted" => "datetime", "a.published" => "boolean"]);
+     * ], ["a.posted": "datetime", "a.published": "boolean"]);
      * ```
      *
      * See `join()` for further details on conditions and types.
@@ -879,10 +879,10 @@ class Query implements ExpressionInterface, IteratorAggregate
          * @psalm-suppress InvalidReturnStatement
          */
         return [
-            $alias => [
-                "table" => $table,
-                "conditions" => $conditions,
-                "type" => $type,
+            $alias: [
+                "table": $table,
+                "conditions": $conditions,
+                "type": $type,
             ],
         ];
     }
@@ -906,10 +906,10 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query->where([
-     *     "posted >=" => new DateTime("3 days ago"),
-     *     "title LIKE" => "Hello W%",
-     *     "author_id" => 1,
-     * ], ["posted" => "datetime"]);
+     *     "posted >=": new DateTime("3 days ago"),
+     *     "title LIKE": "Hello W%",
+     *     "author_id": 1,
+     * ], ["posted": "datetime"]);
      * ```
      *
      * The previous example produces:
@@ -923,10 +923,10 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query->where([
-     *     "author_id !=" => 1,
-     *     "OR" => ["published" => true, "posted <" => new DateTime("now")],
-     *     "NOT" => ["title" => "Hello"]
-     * ], ["published" => boolean, "posted" => "datetime"]
+     *     "author_id !=": 1,
+     *     "OR": ["published": true, "posted <": new DateTime("now")],
+     *     "NOT": ["title": "Hello"]
+     * ], ["published": boolean, "posted": "datetime"]
      * ```
      *
      * The previous example produces:
@@ -937,7 +937,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * may want to define 2 different options for the same key, in that case, you can
      * wrap each condition inside a new array:
      *
-     * `$query->where(["OR" => [["published" => false], ["published" => true]])`
+     * `$query->where(["OR": [["published": false], ["published": true]])`
      *
      * Would result in:
      *
@@ -951,8 +951,8 @@ class Query implements ExpressionInterface, IteratorAggregate
      * ### Using expressions objects:
      *
      * ```
-     * $exp = $query->newExpr()->add(["id !=" => 100, "author_id" != 1])->tieWith("OR");
-     * $query->where(["published" => true], ["published" => "boolean"])->where($exp);
+     * $exp = $query->newExpr()->add(["id !=": 100, "author_id" != 1])->tieWith("OR");
+     * $query->where(["published": true], ["published": "boolean"])->where($exp);
      * ```
      *
      * The previous example produces:
@@ -970,10 +970,10 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query
-     *   ->where(["title !=" => "Hello World"])
+     *   ->where(["title !=": "Hello World"])
      *   ->where(function ($exp, $query) {
-     *     $or = $exp->or(["id" => 1]);
-     *     $and = $exp->and(["id >" => 2, "id <" => 10]);
+     *     $or = $exp->or(["id": 1]);
+     *     $and = $exp->and(["id >": 2, "id <": 10]);
      *    return $or->add($and);
      *   });
      * ```
@@ -1082,15 +1082,15 @@ class Query implements ExpressionInterface, IteratorAggregate
     function whereInList(string $field, array $values, array $options = [])
     {
         $options += [
-            "types" => [],
-            "allowEmpty" => false,
+            "types": [],
+            "allowEmpty": false,
         ];
 
         if ($options["allowEmpty"] && !$values) {
             return this.where("1=0");
         }
 
-        return this.where([$field . " IN" => $values], $options["types"]);
+        return this.where([$field . " IN": $values], $options["types"]);
     }
 
     /**
@@ -1109,15 +1109,15 @@ class Query implements ExpressionInterface, IteratorAggregate
     function whereNotInList(string $field, array $values, array $options = [])
     {
         $options += [
-            "types" => [],
-            "allowEmpty" => false,
+            "types": [],
+            "allowEmpty": false,
         ];
 
         if ($options["allowEmpty"] && !$values) {
-            return this.where([$field . " IS NOT" => null]);
+            return this.where([$field . " IS NOT": null]);
         }
 
-        return this.where([$field . " NOT IN" => $values], $options["types"]);
+        return this.where([$field . " NOT IN": $values], $options["types"]);
     }
 
     /**
@@ -1137,17 +1137,17 @@ class Query implements ExpressionInterface, IteratorAggregate
     function whereNotInListOrNull(string $field, array $values, array $options = [])
     {
         $options += [
-            "types" => [],
-            "allowEmpty" => false,
+            "types": [],
+            "allowEmpty": false,
         ];
 
         if ($options["allowEmpty"] && !$values) {
-            return this.where([$field . " IS NOT" => null]);
+            return this.where([$field . " IS NOT": null]);
         }
 
         return this.where(
             [
-                "OR" => [$field . " NOT IN" => $values, $field . " IS" => null],
+                "OR": [$field . " NOT IN": $values, $field . " IS": null],
             ],
             $options["types"]
         );
@@ -1172,7 +1172,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * ### Examples:
      *
      * ```
-     * $query->where(["title" => "Hello World")->andWhere(["author_id" => 1]);
+     * $query->where(["title": "Hello World")->andWhere(["author_id": 1]);
      * ```
      *
      * Will produce:
@@ -1181,8 +1181,8 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query
-     *   ->where(["OR" => ["published" => false, "published is NULL"]])
-     *   ->andWhere(["author_id" => 1, "comments_count >" => 10])
+     *   ->where(["OR": ["published": false, "published is NULL"]])
+     *   ->andWhere(["author_id": 1, "comments_count >": 10])
      * ```
      *
      * Produces:
@@ -1191,11 +1191,11 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query
-     *   ->where(["title" => "Foo"])
+     *   ->where(["title": "Foo"])
      *   ->andWhere(function ($exp, $query) {
      *     return $exp
-     *       ->or(["author_id" => 1])
-     *       ->add(["author_id" => 2]);
+     *       ->or(["author_id": 1])
+     *       ->add(["author_id": 2]);
      *   });
      * ```
      *
@@ -1232,7 +1232,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * ### Examples:
      *
      * ```
-     * $query->order(["title" => "DESC", "author_id" => "ASC"]);
+     * $query->order(["title": "DESC", "author_id": "ASC"]);
      * ```
      *
      * Produces:
@@ -1241,7 +1241,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query
-     *     ->order(["title" => $query->newExpr("DESC NULLS FIRST")])
+     *     ->order(["title": $query->newExpr("DESC NULLS FIRST")])
      *     ->order("author_id");
      * ```
      *
@@ -1251,14 +1251,14 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * ```
      * $expression = $query->newExpr()->add(["id % 2 = 0"]);
-     * $query->order($expression)->order(["title" => "ASC"]);
+     * $query->order($expression)->order(["title": "ASC"]);
      * ```
      *
      * and
      *
      * ```
      * $query->order(function ($exp, $query) {
-     *     return [$exp->add(["id % 2 = 0"]), "title" => "ASC"];
+     *     return [$exp->add(["id % 2 = 0"]), "title": "ASC"];
      * });
      * ```
      *
@@ -1473,7 +1473,7 @@ class Query implements ExpressionInterface, IteratorAggregate
             }
         }
 
-        _parts["window"][] = ["name" => new IdentifierExpression($name), "window" => $window];
+        _parts["window"][] = ["name": new IdentifierExpression($name), "window": $window];
         _dirty();
 
         return this;
@@ -1578,8 +1578,8 @@ class Query implements ExpressionInterface, IteratorAggregate
      * ### Examples
      *
      * ```
-     * $union = (new Query($conn))->select(["id", "title"])->from(["a" => "articles"]);
-     * $query->select(["id", "name"])->from(["d" => "things"])->union($union);
+     * $union = (new Query($conn))->select(["id", "title"])->from(["a": "articles"]);
+     * $query->select(["id", "name"])->from(["d": "things"])->union($union);
      * ```
      *
      * Will produce:
@@ -1596,8 +1596,8 @@ class Query implements ExpressionInterface, IteratorAggregate
             _parts["union"] = [];
         }
         _parts["union"][] = [
-            "all" => false,
-            "query" => $query,
+            "all": false,
+            "query": $query,
         ];
         _dirty();
 
@@ -1613,8 +1613,8 @@ class Query implements ExpressionInterface, IteratorAggregate
      * Unlike UNION, UNION ALL will not remove duplicate rows.
      *
      * ```
-     * $union = (new Query($conn))->select(["id", "title"])->from(["a" => "articles"]);
-     * $query->select(["id", "name"])->from(["d" => "things"])->unionAll($union);
+     * $union = (new Query($conn))->select(["id", "title"])->from(["a": "articles"]);
+     * $query->select(["id", "name"])->from(["d": "things"])->unionAll($union);
      * ```
      *
      * Will produce:
@@ -1631,8 +1631,8 @@ class Query implements ExpressionInterface, IteratorAggregate
             _parts["union"] = [];
         }
         _parts["union"][] = [
-            "all" => true,
-            "query" => $query,
+            "all": true,
+            "query": $query,
         ];
         _dirty();
 
@@ -1777,7 +1777,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * Passing an array:
      *
      * ```
-     * $query->update("articles")->set(["title" => "The Title"], ["title" => "string"]);
+     * $query->update("articles")->set(["title": "The Title"], ["title": "string"]);
      * ```
      *
      * Passing a callable:
@@ -1850,10 +1850,10 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * ### Examples:
      * ```
-     * $query->select("id")->where(["author_id" => 1])->epilog("FOR UPDATE");
+     * $query->select("id")->where(["author_id": 1])->epilog("FOR UPDATE");
      * $query
      *  ->insert("articles", ["title"])
-     *  ->values(["author_id" => 1])
+     *  ->values(["author_id": 1])
      *  ->epilog("RETURNING id");
      * ```
      *
@@ -2384,14 +2384,14 @@ class Query implements ExpressionInterface, IteratorAggregate
         if (_selectTypeMap != null) {
             _selectTypeMap = clone _selectTypeMap;
         }
-        foreach (_parts as $name => $part) {
+        foreach (_parts as $name: $part) {
             if (empty($part)) {
                 continue;
             }
             if (is_array($part)) {
-                foreach ($part as $i => $piece) {
+                foreach ($part as $i: $piece) {
                     if (is_array($piece)) {
-                        foreach ($piece as $j => $value) {
+                        foreach ($piece as $j: $value) {
                             if ($value instanceof ExpressionInterface) {
                                 /** @psalm-suppress PossiblyUndefinedMethod */
                                 _parts[$name][$i][$j] = clone $value;
@@ -2445,12 +2445,12 @@ class Query implements ExpressionInterface, IteratorAggregate
         }
 
         return [
-            "(help)" => "This is a Query object, to get the results execute or iterate it.",
-            "sql" => $sql,
-            "params" => $params,
-            "defaultTypes" => this.getDefaultTypes(),
-            "decorators" => count(_resultDecorators),
-            "executed" => _iterator ? true : false,
+            "(help)": "This is a Query object, to get the results execute or iterate it.",
+            "sql": $sql,
+            "params": $params,
+            "defaultTypes": this.getDefaultTypes(),
+            "decorators": count(_resultDecorators),
+            "executed": _iterator ? true : false,
         ];
     }
 }

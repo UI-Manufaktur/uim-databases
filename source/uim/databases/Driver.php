@@ -132,8 +132,8 @@ abstract class Driver implements DriverInterface
         } catch (PDOException $e) {
             throw new MissingConnectionException(
                 [
-                    "driver" => App::shortName(static::class, "Database/Driver"),
-                    "reason" => $e->getMessage(),
+                    "driver": App::shortName(static::class, "Database/Driver"),
+                    "reason": $e->getMessage(),
                 ],
                 null,
                 $e
@@ -184,8 +184,8 @@ abstract class Driver implements DriverInterface
     {
         if (_connection === null) {
             throw new MissingConnectionException([
-                "driver" => App::shortName(static::class, "Database/Driver"),
-                "reason" => "Unknown",
+                "driver": App::shortName(static::class, "Database/Driver"),
+                "reason": "Unknown",
             ]);
         }
 
@@ -354,7 +354,7 @@ abstract class Driver implements DriverInterface
         /** @psalm-suppress InvalidArgument */
         if (
             (
-                is_int($value) ||
+                isInt($value) ||
                 $value === "0"
             ) ||
             (
@@ -531,7 +531,7 @@ abstract class Driver implements DriverInterface
     function __debugInfo(): array
     {
         return [
-            "connected" => _connection != null,
+            "connected": _connection != null,
         ];
     }
 }

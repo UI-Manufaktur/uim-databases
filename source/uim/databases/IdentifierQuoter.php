@@ -134,7 +134,7 @@ class IdentifierQuoter
     protected function _basicQuoter(array $part): array
     {
         $result = [];
-        foreach ($part as $alias => $value) {
+        foreach ($part as $alias: $value) {
             $value = !is_string($value) ? $value : _driver->quoteIdentifier($value);
             $alias = is_numeric($alias) ? $alias : _driver->quoteIdentifier($alias);
             $result[$alias] = $value;
