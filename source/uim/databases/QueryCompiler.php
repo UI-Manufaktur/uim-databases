@@ -379,7 +379,7 @@ class QueryCompiler
     {
         if (!isset($parts[0])) {
             throw new DatabaseException(
-                "Could not compile insert query. No table was specified. " .
+                "Could not compile insert query. No table was specified. "~
                 "Use `into()` to define a table."
             );
         }
@@ -433,7 +433,7 @@ class QueryCompiler
             return "";
         }
 
-        return " " . implode(" ", _stringifyExpressions($parts, $binder, false));
+        return " "~ implode(" ", _stringifyExpressions($parts, $binder, false));
     }
 
     /**
@@ -451,7 +451,7 @@ class QueryCompiler
         foreach ($expressions as $k: $expression) {
             if ($expression instanceof ExpressionInterface) {
                 aValue = $expression.sql($binder);
-                $expression = $wrap ? "(" . aValue . ")" : aValue;
+                $expression = $wrap ? "("~ aValue . ")" : aValue;
             }
             $result[$k] = $expression;
         }

@@ -77,8 +77,8 @@ class QueryCompiler {
         // placeholders can be found in the SQL statement.
         if (myQuery.getValueBinder() != $binder) {
             foreach (myQuery.getValueBinder().bindings() as $binding) {
-                $placeholder = ":" . $binding["placeholder"];
-                if (preg_match("/" . $placeholder . "(?:\W|$)/", mySql) > 0) {
+                $placeholder = ":"~ $binding["placeholder"];
+                if (preg_match("/"~ $placeholder . "(?:\W|$)/", mySql) > 0) {
                     $binder.bind($placeholder, $binding["value"], $binding["type"]);
                 }
             }
@@ -116,7 +116,7 @@ class QueryCompiler {
                 return;
             }
 
-            mySql ~= this.{"_build" . $partName . "Part"}($part, myQuery, $binder);
+            mySql ~= this.{"_build"~ $partName . "Part"}($part, myQuery, $binder);
         };
     }
 
@@ -206,7 +206,7 @@ class QueryCompiler {
         someParts = _stringifyExpressions(someParts, $binder);
         foreach (someParts as $k: $p) {
             if (!is_numeric($k)) {
-                $p = $p . " " . $k;
+                $p = $p . " "~ $k;
             }
             $normalized[] = $p;
         }
@@ -236,7 +236,7 @@ class QueryCompiler {
                 ));
             }
             if ($join["table"] instanceof IExpression) {
-                $join["table"] = "(" . $join["table"].sql($binder) . ")";
+                $join["table"] = "("~ $join["table"].sql($binder) . ")";
             }
 
             $joins ~= " %s JOIN %s %s".format($join["type"], $join["table"], $join["alias"]);
@@ -266,10 +266,10 @@ class QueryCompiler {
     protected string _buildWindowPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $windows = [];
         foreach (someParts as $window) {
-            $windows[] = $window["name"].sql($binder) . " AS (" . $window["window"].sql($binder) . ")";
+            $windows[] = $window["name"].sql($binder) . " AS ("~ $window["window"].sql($binder) . ")";
         }
 
-        return " WINDOW " . implode(", ", $windows);
+        return " WINDOW "~ implode(", ", $windows);
     }
 
     /**
@@ -292,7 +292,7 @@ class QueryCompiler {
             $set[] = $part;
         }
 
-        return " SET " . implode("", $set);
+        return " SET "~ implode("", $set);
     }
 
     /**
@@ -332,7 +332,7 @@ class QueryCompiler {
     protected string _buildInsertPart(array someParts, DDTBQuery myQuery, DDTBValueBinder aValueBinder) {
         if (0 !in someParts[0]) {
             throw new DatabaseException(
-                "Could not compile insert query. No table was specified. " .
+                "Could not compile insert query. No table was specified. "~
                 "Use `into()` to define a table."
             );
         }
@@ -380,7 +380,7 @@ class QueryCompiler {
      */
     protected string _buildModifierPart(array someParts, Query aQuery, ValueBinder aBinder) {
       if (someParts) {
-        return " " . implode(" ", _stringifyExpressions(someParts, aBinder, false));
+        return " "~ implode(" ", _stringifyExpressions(someParts, aBinder, false));
       }
       return "";
     }
@@ -399,7 +399,7 @@ class QueryCompiler {
       foreach (key, anExpression; someExpressions) {
           if (cast(IExpression)anExpression) {
             auto myValue = anExpression.sql(aBinder);
-            anExpression = shouldWrap ? "(" . myValue . ")" : myValue;
+            anExpression = shouldWrap ? "("~ myValue . ")" : myValue;
           }
           myResult[key] = anExpression;
       }
