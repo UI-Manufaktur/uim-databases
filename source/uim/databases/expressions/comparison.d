@@ -80,7 +80,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
     {
         $value = _castToExpression($value, _type);
 
-        $isMultiple = _type && strpos(_type,"[]") !== false;
+        $isMultiple = _type && strpos(_type,"[]") != false;
         if ($isMultiple) {
             [$value, _valueExpressions] = _collectExpressions($value);
         }

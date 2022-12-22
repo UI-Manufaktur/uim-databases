@@ -566,7 +566,7 @@ class QueryExpression : IDTBExpression, Countable {
             } elseif ($part instanceof IDTBExpression) {
                 $part = $part.sql($binder);
             }
-            if ($part !=="") {
+            if ($part !="") {
                 $parts[] = $part;
             }
         }
@@ -764,7 +764,7 @@ class QueryExpression : IDTBExpression, Countable {
         $operator = strtolower(trim($operator));
         $type = $this.getTypeMap().type($expression);
 
-        $typeMultiple = (is_string($type) && strpos($type,"[]") !== false);
+        $typeMultiple = (is_string($type) && strpos($type,"[]") != false);
         if (in_array($operator, ["in","not in"]) || $typeMultiple) {
             $type = $type ?:"string";
             if (!$typeMultiple) {
@@ -803,7 +803,7 @@ class QueryExpression : IDTBExpression, Countable {
             $operator ="!=";
         }
 
-        if ($value =is null && _conjunction !==",") {
+        if ($value =is null && _conjunction !=",") {
             throw new InvalidArgumentException(
                 sprintf("Expression `%s` is missing operator (IS, IS NOT) with `null` value.", $expression)
             );

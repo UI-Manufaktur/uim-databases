@@ -57,7 +57,7 @@ class ValueBinder {
      */
     string placeholder(string $token) {
       $number = _bindingsCount++;
-      if ($token[0] !== ':' && $token !== '?') {
+      if ($token[0] != ':' && $token != '?') {
           $token = sprintf(':%s%s', $token, $number);
       }
 

@@ -1499,7 +1499,7 @@ class Query implements ExpressionInterface, IteratorAggregate
         if ($num < 1) {
             throw new InvalidArgumentException('Pages must start at 1.');
         }
-        if ($limit !== null) {
+        if ($limit != null) {
             this->limit($limit);
         }
         $limit = this->clause('limit');
@@ -1717,7 +1717,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      */
     function values($data)
     {
-        if (_type !== 'insert') {
+        if (_type != 'insert') {
             throw new DatabaseException(
                 'You cannot add values before defining columns to use.'
             );
@@ -1838,7 +1838,7 @@ class Query implements ExpressionInterface, IteratorAggregate
     {
         _dirty();
         _type = 'delete';
-        if ($table !== null) {
+        if ($table != null) {
             this->from($table);
         }
 
@@ -1923,7 +1923,7 @@ class Query implements ExpressionInterface, IteratorAggregate
     {
         $expression = new QueryExpression([], this->getTypeMap());
 
-        if ($rawExpression !== null) {
+        if ($rawExpression != null) {
             $expression->add($rawExpression);
         }
 
@@ -2047,7 +2047,7 @@ class Query implements ExpressionInterface, IteratorAggregate
             _resultDecorators = [];
         }
 
-        if ($callback !== null) {
+        if ($callback != null) {
             _resultDecorators[] = $callback;
         }
 
@@ -2378,10 +2378,10 @@ class Query implements ExpressionInterface, IteratorAggregate
     function __clone()
     {
         _iterator = null;
-        if (_valueBinder !== null) {
+        if (_valueBinder != null) {
             _valueBinder = clone _valueBinder;
         }
-        if (_selectTypeMap !== null) {
+        if (_selectTypeMap != null) {
             _selectTypeMap = clone _selectTypeMap;
         }
         foreach (_parts as $name => $part) {

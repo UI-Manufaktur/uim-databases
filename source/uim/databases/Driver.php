@@ -360,7 +360,7 @@ abstract class Driver implements DriverInterface
             (
                 is_numeric($value) &&
                 strpos($value, ',') === false &&
-                substr($value, 0, 1) !== '0' &&
+                substr($value, 0, 1) != '0' &&
                 strpos($value, 'e') === false
             )
         ) {
@@ -531,7 +531,7 @@ abstract class Driver implements DriverInterface
     function __debugInfo(): array
     {
         return [
-            'connected' => _connection !== null,
+            'connected' => _connection != null,
         ];
     }
 }
