@@ -2123,10 +2123,10 @@ class Query : IExpression, IteratorAggregate {
     * Auxiliary function used to wrap the original statement from the driver with
     * any registered callbacks.
     *
-    * @param uim.databases\IStatement $statement to be decorated
+    * @param uim.databases\IStatement aStatement to be decorated
     * @return \Cake\Database\Statement\CallbackStatement|\Cake\Database\IStatement
     */
-  protected auto _decorateStatement(IStatement $statement) {
+  protected auto _decorateStatement(IStatement aStatement) {
       myTypeMap = this.getSelectTypeMap();
       myDriver = this.getConnection().getDriver();
 

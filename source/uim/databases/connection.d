@@ -813,10 +813,10 @@ class Connection : IConnection {
      * Returns a new statement object that will log the activity
      * for the passed original statement instance.
      *
-     * @param uim.databases\IStatement $statement the instance to be decorated
+     * @param uim.databases\IStatement aStatement the instance to be decorated
      * @return \Cake\Database\Log\LoggingStatement
      */
-    protected auto _newLogger(IStatement $statement): LoggingStatement
+    protected auto _newLogger(IStatement aStatement): LoggingStatement
     {
         $log = new LoggingStatement($statement, _driver);
         $log.setLogger(this.getLogger());

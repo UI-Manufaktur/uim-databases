@@ -22,7 +22,7 @@ namespace Cake\Database;
  *
  * @property-read string $queryString
  */
-interface StatementInterface
+interface IStatement
 {
     /**
      * Used to designate that numeric indexes be returned in a result when calling fetch methods

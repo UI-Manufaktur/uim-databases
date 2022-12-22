@@ -295,9 +295,9 @@ class Connection implements ConnectionInterface
      * Prepares a SQL statement to be executed.
      *
      * @param \Cake\Database\Query|string $query The SQL to convert into a prepared statement.
-     * @return \Cake\Database\StatementInterface
+     * @return \Cake\Database\IStatement
      */
-    function prepare($query): StatementInterface
+    function prepare($query): IStatement
     {
         return this->getDisconnectRetry()->run(function () use ($query) {
             $statement = _driver->prepare($query);
@@ -317,9 +317,9 @@ class Connection implements ConnectionInterface
      * @param string $sql SQL to be executed and interpolated with $params
      * @param array $params list or associative array of params to be interpolated in $sql as values
      * @param array $types list or associative array of types to be used for casting values in query
-     * @return \Cake\Database\StatementInterface executed statement
+     * @return \Cake\Database\IStatement executed statement
      */
-    function execute(string $sql, array $params = [], array $types = []): StatementInterface
+    function execute(string $sql, array $params = [], array $types = []): IStatement
     {
         return this->getDisconnectRetry()->run(function () use ($sql, $params, $types) {
             $statement = this->prepare($sql);
@@ -350,9 +350,9 @@ class Connection implements ConnectionInterface
      * dialect and returns the executed Statement object.
      *
      * @param \Cake\Database\Query $query The query to be executed
-     * @return \Cake\Database\StatementInterface executed statement
+     * @return \Cake\Database\IStatement executed statement
      */
-    function run(Query $query): StatementInterface
+    function run(Query $query): IStatement
     {
         return this->getDisconnectRetry()->run(function () use ($query) {
             $statement = this->prepare($query);
@@ -367,9 +367,9 @@ class Connection implements ConnectionInterface
      * Executes a SQL statement and returns the Statement object as result.
      *
      * @param string $sql The SQL query to execute.
-     * @return \Cake\Database\StatementInterface
+     * @return \Cake\Database\IStatement
      */
-    function query(string $sql): StatementInterface
+    function query(string $sql): IStatement
     {
         return this->getDisconnectRetry()->run(function () use ($sql) {
             $statement = this->prepare($sql);
@@ -430,9 +430,9 @@ class Connection implements ConnectionInterface
      * @param string $table the table to insert values in
      * @param array $values values to be inserted
      * @param array<int|string, string> $types Array containing the types to be used for casting
-     * @return \Cake\Database\StatementInterface
+     * @return \Cake\Database\IStatement
      */
-    function insert(string $table, array $values, array $types = []): StatementInterface
+    function insert(string $table, array $values, array $types = []): IStatement
     {
         return this->getDisconnectRetry()->run(function () use ($table, $values, $types) {
             $columns = array_keys($values);
@@ -451,9 +451,9 @@ class Connection implements ConnectionInterface
      * @param array $values values to be updated
      * @param array $conditions conditions to be set for update statement
      * @param array<string> $types list of associative array containing the types to be used for casting
-     * @return \Cake\Database\StatementInterface
+     * @return \Cake\Database\IStatement
      */
-    function update(string $table, array $values, array $conditions = [], array $types = []): StatementInterface
+    function update(string $table, array $values, array $conditions = [], array $types = []): IStatement
     {
         return this->getDisconnectRetry()->run(function () use ($table, $values, $conditions, $types) {
             return this->newQuery()->update($table)
@@ -469,9 +469,9 @@ class Connection implements ConnectionInterface
      * @param string $table the table to delete rows from
      * @param array $conditions conditions to be set for delete statement
      * @param array<string> $types list of associative array containing the types to be used for casting
-     * @return \Cake\Database\StatementInterface
+     * @return \Cake\Database\IStatement
      */
-    function delete(string $table, array $conditions = [], array $types = []): StatementInterface
+    function delete(string $table, array $conditions = [], array $types = []): IStatement
     {
         return this->getDisconnectRetry()->run(function () use ($table, $conditions, $types) {
             return this->newQuery()->delete($table)
@@ -947,10 +947,10 @@ class Connection implements ConnectionInterface
      * Returns a new statement object that will log the activity
      * for the passed original statement instance.
      *
-     * @param \Cake\Database\StatementInterface $statement the instance to be decorated
+     * @param \Cake\Database\IStatement aStatement the instance to be decorated
      * @return \Cake\Database\Log\LoggingStatement
      */
-    protected function _newLogger(StatementInterface $statement): LoggingStatement
+    protected function _newLogger(IStatement aStatement): LoggingStatement
     {
         $log = new LoggingStatement($statement, _driver);
         $log->setLogger(this->getLogger());

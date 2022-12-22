@@ -153,7 +153,7 @@ class Query implements ExpressionInterface, IteratorAggregate
     /**
      * Statement object resulting from executing this query.
      *
-     * @var \Cake\Database\StatementInterface|null
+     * @var \Cake\Database\IStatement|null
      */
     protected $_iterator;
 
@@ -247,9 +247,9 @@ class Query implements ExpressionInterface, IteratorAggregate
      * This method can be overridden in query subclasses to decorate behavior
      * around query execution.
      *
-     * @return \Cake\Database\StatementInterface
+     * @return \Cake\Database\IStatement
      */
-    function execute(): StatementInterface
+    function execute(): IStatement
     {
         $statement = _connection->run(this);
         _iterator = _decorateStatement($statement);
@@ -1958,7 +1958,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * iterated without having to call execute() manually, thus making it look like
      * a result set instead of the query itself.
      *
-     * @return \Cake\Database\StatementInterface
+     * @return \Cake\Database\IStatement
      * @psalm-suppress ImplementedReturnTypeMismatch
      */
     #[\ReturnTypeWillChange]
@@ -2301,10 +2301,10 @@ class Query implements ExpressionInterface, IteratorAggregate
      * Auxiliary function used to wrap the original statement from the driver with
      * any registered callbacks.
      *
-     * @param \Cake\Database\StatementInterface $statement to be decorated
-     * @return \Cake\Database\Statement\CallbackStatement|\Cake\Database\StatementInterface
+     * @param \Cake\Database\IStatement aStatement to be decorated
+     * @return \Cake\Database\Statement\CallbackStatement|\Cake\Database\IStatement
      */
-    protected function _decorateStatement(StatementInterface $statement)
+    protected function _decorateStatement(IStatement aStatement)
     {
         $typeMap = this->getSelectTypeMap();
         $driver = this->getConnection()->getDriver();

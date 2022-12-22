@@ -214,7 +214,7 @@ abstract class Driver implements DriverInterface
     /**
      * @inheritDoc
      */
-    function prepare($query): StatementInterface
+    function prepare($query): IStatement
     {
         this->connect();
         $statement = _connection->prepare($query instanceof Query ? $query->sql() : $query);

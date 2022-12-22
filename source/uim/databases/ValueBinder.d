@@ -99,42 +99,30 @@ class ValueBinder {
         return _bindings;
     }
 
-    /**
-     * Clears any bindings that were previously registered
-     *
-     * @return void
-     */
-    function reset(): void
-    {
-        _bindings = [];
-        _bindingsCount = 0;
+    // Clears any bindings that were previously registered
+    void reset() {
+      _bindings = [];
+      _bindingsCount = 0;
     }
 
-    /**
-     * Resets the bindings count without clearing previously bound values
-     *
-     * @return void
-     */
-    function resetCount(): void
-    {
-        _bindingsCount = 0;
+    // Resets the bindings count without clearing previously bound values
+    void resetCount() {
+      _bindingsCount = 0;
     }
 
     /**
      * Binds all the stored values in this object to the passed statement.
      *
-     * @param \Cake\Database\StatementInterface $statement The statement to add parameters to.
-     * @return void
+     * @param \Cake\Database\IStatement aStatement The statement to add parameters to.
      */
-    function attachTo(StatementInterface $statement): void
-    {
-        $bindings = this->bindings();
-        if (empty($bindings)) {
-            return;
-        }
+    void attachTo(IStatement aStatement) {
+      $bindings = this->bindings();
+      if (empty($bindings)) {
+          return;
+      }
 
-        foreach ($bindings as $b) {
-            $statement->bindValue($b['placeholder'], $b['value'], $b['type']);
-        }
+      foreach ($bindings as $b) {
+          $statement->bindValue($b['placeholder'], $b['value'], $b['type']);
+      }
     }
 }
