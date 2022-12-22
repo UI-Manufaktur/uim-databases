@@ -55,12 +55,12 @@ class SqlserverCompiler : QueryCompiler
      * it constructs the CTE definitions list without generating the `RECURSIVE`
      * keyword that is neither required nor valid.
      *
-     * @param array $parts List of CTEs to be transformed to string
+     * @param array someParts List of CTEs to be transformed to string
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildWithPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildWithPart(array someParts, Query $query, ValueBinder $binder): string
     {
         $expressions = [];
         foreach ($parts as $cte) {
@@ -77,12 +77,12 @@ class SqlserverCompiler : QueryCompiler
      * we also include an OUTPUT clause so we can ensure we get the inserted
      * row"s data back.
      *
-     * @param array $parts The parts to build
+     * @param array someParts The parts to build
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildInsertPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildInsertPart(array someParts, Query $query, ValueBinder $binder): string
     {
         if (!isset($parts[0])) {
             throw new DatabaseException(
@@ -92,11 +92,11 @@ class SqlserverCompiler : QueryCompiler
         }
         $table = $parts[0];
         $columns = _stringifyExpressions($parts[1], $binder);
-        $modifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
+        myModifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
 
         return sprintf(
             "INSERT%s INTO %s (%s) OUTPUT INSERTED.*",
-            $modifiers,
+            myModifiers,
             $table,
             implode(", ", $columns)
         );
@@ -123,7 +123,7 @@ class SqlserverCompiler : QueryCompiler
      * it constructs the field list taking care of aliasing and
      * converting expression objects to string.
      *
-     * @param array $parts list of fields to be transformed to string
+     * @param array someParts list of fields to be transformed to string
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string

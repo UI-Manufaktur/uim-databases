@@ -162,12 +162,12 @@ class QueryCompiler
      * it constructs the CTE definitions list and generates the `RECURSIVE`
      * keyword when required.
      *
-     * @param array $parts List of CTEs to be transformed to string
+     * @param array someParts List of CTEs to be transformed to string
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildWithPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildWithPart(array someParts, Query $query, ValueBinder $binder): string
     {
         $recursive = false;
         $expressions = [];
@@ -187,19 +187,19 @@ class QueryCompiler
      * converting expression objects to string. This function also constructs the
      * DISTINCT clause for the query.
      *
-     * @param array $parts list of fields to be transformed to string
+     * @param array someParts list of fields to be transformed to string
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildSelectPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildSelectPart(array someParts, Query $query, ValueBinder $binder): string
     {
         $select = "SELECT%s %s%s";
         if (_orderedUnion && $query.clause("union")) {
             $select = "(SELECT%s %s%s";
         }
         $distinct = $query.clause("distinct");
-        $modifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
+        myModifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
 
         $driver = $query.getConnection().getDriver();
         $quoteIdentifiers = $driver.isAutoQuotingEnabled() || _quotedSelectAliases;
@@ -226,7 +226,7 @@ class QueryCompiler
             $distinct = sprintf("DISTINCT ON (%s) ", implode(", ", $distinct));
         }
 
-        return sprintf($select, $modifiers, $distinct, implode(", ", $normalized));
+        return sprintf($select, myModifiers, $distinct, implode(", ", $normalized));
     }
 
     /**
@@ -234,12 +234,12 @@ class QueryCompiler
      * it constructs the tables list taking care of aliasing and
      * converting expression objects to string.
      *
-     * @param array $parts list of tables to be transformed to string
+     * @param array someParts list of tables to be transformed to string
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildFromPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildFromPart(array someParts, Query $query, ValueBinder $binder): string
     {
         $select = " FROM %s";
         $normalized = [];
@@ -260,12 +260,12 @@ class QueryCompiler
      * expression objects to string in both the table to be joined and the conditions
      * to be used.
      *
-     * @param array $parts list of joins to be transformed to string
+     * @param array someParts list of joins to be transformed to string
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildJoinPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildJoinPart(array someParts, Query $query, ValueBinder $binder): string
     {
         $joins = "";
         foreach ($parts as $join) {
@@ -299,12 +299,12 @@ class QueryCompiler
     /**
      * Helper function to build the string representation of a window clause.
      *
-     * @param array $parts List of windows to be transformed to string
+     * @param array someParts List of windows to be transformed to string
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildWindowPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildWindowPart(array someParts, Query $query, ValueBinder $binder): string
     {
         $windows = [];
         foreach ($parts as $window) {
@@ -317,12 +317,12 @@ class QueryCompiler
     /**
      * Helper function to generate SQL for SET expressions.
      *
-     * @param array $parts List of keys & values to set.
+     * @param array someParts List of keys & values to set.
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildSetPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildSetPart(array someParts, Query $query, ValueBinder $binder): string
     {
         $set = [];
         foreach ($parts as $part) {
@@ -343,12 +343,12 @@ class QueryCompiler
      * with query objects it will also transform them using their configured SQL
      * dialect.
      *
-     * @param array $parts list of queries to be operated with UNION
+     * @param array someParts list of queries to be operated with UNION
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildUnionPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildUnionPart(array someParts, Query $query, ValueBinder $binder): string
     {
         $parts = array_map(function ($p) use ($binder) {
             $p["query"] = $p["query"].sql($binder);
@@ -371,12 +371,12 @@ class QueryCompiler
     /**
      * Builds the SQL fragment for INSERT INTO.
      *
-     * @param array $parts The insert parts.
+     * @param array someParts The insert parts.
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string SQL fragment.
      */
-    protected function _buildInsertPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildInsertPart(array someParts, Query $query, ValueBinder $binder): string
     {
         if (!isset($parts[0])) {
             throw new DatabaseException(
@@ -386,20 +386,20 @@ class QueryCompiler
         }
         $table = $parts[0];
         $columns = _stringifyExpressions($parts[1], $binder);
-        $modifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
+        myModifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
 
-        return sprintf("INSERT%s INTO %s (%s)", $modifiers, $table, implode(", ", $columns));
+        return sprintf("INSERT%s INTO %s (%s)", myModifiers, $table, implode(", ", $columns));
     }
 
     /**
      * Builds the SQL fragment for INSERT INTO.
      *
-     * @param array $parts The values parts.
+     * @param array someParts The values parts.
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string SQL fragment.
      */
-    protected function _buildValuesPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildValuesPart(array someParts, Query $query, ValueBinder $binder): string
     {
         return implode("", _stringifyExpressions($parts, $binder));
     }
@@ -407,28 +407,28 @@ class QueryCompiler
     /**
      * Builds the SQL fragment for UPDATE.
      *
-     * @param array $parts The update parts.
+     * @param array someParts The update parts.
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string SQL fragment.
      */
-    protected function _buildUpdatePart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildUpdatePart(array someParts, Query $query, ValueBinder $binder): string
     {
         $table = _stringifyExpressions($parts, $binder);
-        $modifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
+        myModifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
 
-        return sprintf("UPDATE%s %s", $modifiers, implode(",", $table));
+        return sprintf("UPDATE%s %s", myModifiers, implode(",", $table));
     }
 
     /**
      * Builds the SQL modifier fragment
      *
-     * @param array $parts The query modifier parts
+     * @param array someParts The query modifier parts
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string SQL fragment.
      */
-    protected function _buildModifierPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildModifierPart(array someParts, Query $query, ValueBinder $binder): string
     {
         if ($parts == []) {
             return "";

@@ -368,7 +368,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * @param array<string> $parts The list of query parts to traverse
      * @return cast(O)this
      */
-    function traverseParts(callable $visitor, array $parts)
+    function traverseParts(callable $visitor, array someParts)
     {
         foreach ($parts as $name) {
             $visitor(_parts[$name], $name);
@@ -567,20 +567,20 @@ class Query : ExpressionInterface, IteratorAggregate
      * // It will produce the SQL: SELECT HIGH_PRIORITY SQL_NO_CACHE name, city FROM products
      * ```
      *
-     * @param \Cake\Database\ExpressionInterface|array|string $modifiers modifiers to be applied to the query
+     * @param \Cake\Database\ExpressionInterface|array|string myModifiers modifiers to be applied to the query
      * @param bool shouldOverwrite whether to reset order with field list or not
      * @return cast(O)this
      */
-    function modifier($modifiers, shouldOverwrite = false)
+    function modifier(myModifiers, shouldOverwrite = false)
     {
         _dirty();
         if (shouldOverwrite) {
             _parts["modifier"] = [];
         }
-        if (!is_array($modifiers)) {
-            $modifiers = [$modifiers];
+        if (!is_array(myModifiers)) {
+            myModifiers = [myModifiers];
         }
-        _parts["modifier"] = array_merge(_parts["modifier"], $modifiers);
+        _parts["modifier"] = array_merge(_parts["modifier"], myModifiers);
 
         return cast(O)this;
     }

@@ -33,15 +33,15 @@ class SqlserverCompiler : QueryCompiler
      * it constructs the CTE definitions list without generating the `RECURSIVE`
      * keyword that is neither required nor valid.
      *
-     * @param array $parts List of CTEs to be transformed to string
+     * @param array someParts List of CTEs to be transformed to string
      * @param uim.databases\Query myQuery The query that is being compiled
      * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected string _buildWithPart(array $parts, Query myQuery, ValueBinder aValueBinder) {
+    protected string _buildWithPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $expressions = [];
-        foreach ($parts as $cte) {
-            $expressions[] = $cte.sql($binder);
+        foreach (myPart; someParts) {
+            $expressions[] = myPart.sql(aValueBinder);
         }
 
         return sprintf("WITH %s ", implode(", ", $expressions));
@@ -54,43 +54,38 @@ class SqlserverCompiler : QueryCompiler
      * we also include an OUTPUT clause so we can ensure we get the inserted
      * row"s data back.
      *
-     * @param array $parts The parts to build
+     * @param array someParts The parts to build
      * @param uim.databases\Query myQuery The query that is being compiled
      * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected string _buildInsertPart(array $parts, Query myQuery, ValueBinder aValueBinder) {
-        if (!isset($parts[0])) {
+    protected string _buildInsertPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
+        if (!isset([0])) {
             throw new DatabaseException(
                 "Could not compile insert query. No table was specified. " .
                 "Use `into()` to define a table."
             );
         }
-        myTable = $parts[0];
-        $columns = _stringifyExpressions($parts[1], $binder);
-        $modifiers = _buildModifierPart(myQuery.clause("modifier"), myQuery, $binder);
+        myTable = [0];
+        $columns = _stringifyExpressions([1], aValueBinder);
+        auto myModifiers = _buildModifierPart(myQuery.clause("modifier"), myQuery, aValueBinder);
 
-        return sprintf(
-            "INSERT%s INTO %s (%s) OUTPUT INSERTED.*",
-            $modifiers,
-            myTable,
-            implode(", ", $columns)
-        );
+        return "INSERT%s INTO %s (%s) OUTPUT INSERTED.*".format(myModifiers, myTable, implode(", ", $columns));
     }
 
     /**
      * Generates the LIMIT part of a SQL query
      *
-     * @param int $limit the limit clause
+     * @param int aLimit the limit clause
      * @param uim.databases\Query myQuery The query that is being compiled
      * @return string
      */
-    protected string _buildLimitPart(int $limit, Query myQuery) {
+    protected string _buildLimitPart(int aLimit, Query myQuery) {
         if (myQuery.clause("offset") is null) {
             return "";
         }
 
-        return sprintf(" FETCH FIRST %d ROWS ONLY", $limit);
+        return sprintf(" FETCH FIRST %d ROWS ONLY", aLimit);
     }
 
     /**
@@ -98,19 +93,19 @@ class SqlserverCompiler : QueryCompiler
      * it constructs the field list taking care of aliasing and
      * converting expression objects to string.
      *
-     * @param array $parts list of fields to be transformed to string
+     * @param array someParts list of fields to be transformed to string
      * @param uim.databases\Query myQuery The query that is being compiled
      * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected auto _buildHavingPart($parts, myQuery, $binder) {
+    protected auto _buildHavingPart(, myQuery, aValueBinder) {
         $selectParts = myQuery.clause("select");
 
         foreach ($selectParts as $selectKey: $selectPart) {
             if (!$selectPart instanceof FunctionExpression) {
                 continue;
             }
-            foreach ($parts as $k: $p) {
+            foreach ( as $k: $p) {
                 if (!is_string($p)) {
                     continue;
                 }
@@ -124,14 +119,14 @@ class SqlserverCompiler : QueryCompiler
                     continue;
                 }
 
-                $parts[$k] = preg_replace(
+                [$k] = preg_replace(
                     ["/\[|\]/", "/\b" . trim($selectKey, "[]") . "\b/i"],
-                    ["", $selectPart.sql($binder)],
+                    ["", $selectPart.sql(aValueBinder)],
                     $p
                 );
             }
         }
 
-        return sprintf(" HAVING %s", implode(", ", $parts));
+        return sprintf(" HAVING %s", implode(", ", ));
     }
 }

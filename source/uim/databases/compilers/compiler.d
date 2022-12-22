@@ -160,7 +160,7 @@ class QueryCompiler {
             $select = "(SELECT%s %s%s";
         }
         $distinct = myQuery.clause("distinct");
-        $modifiers = _buildModifierPart(myQuery.clause("modifier"), myQuery, $binder);
+        myModifiers = _buildModifierPart(myQuery.clause("modifier"), myQuery, $binder);
 
         myDriver = myQuery.getConnection().getDriver();
         $quoteIdentifiers = myDriver.isAutoQuotingEnabled() || _quotedSelectAliases;
@@ -187,7 +187,7 @@ class QueryCompiler {
             $distinct = sprintf("DISTINCT ON (%s) ", implode(", ", $distinct));
         }
 
-        return sprintf($select, $modifiers, $distinct, implode(", ", $normalized));
+        return sprintf($select, myModifiers, $distinct, implode(", ", $normalized));
     }
 
     /**

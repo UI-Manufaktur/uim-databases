@@ -29,7 +29,7 @@ class PostgresCompiler : QueryCompiler {
      * it constructs the field list taking care of aliasing and
      * converting expression objects to string.
      *
-     * @param array $parts list of fields to be transformed to string
+     * @param array someParts list of fields to be transformed to string
      * @param uim.databases\Query myQuery The query that is being compiled
      * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string

@@ -51,7 +51,7 @@ class PostgresCompiler : QueryCompiler
      * it constructs the field list taking care of aliasing and
      * converting expression objects to string.
      *
-     * @param array $parts list of fields to be transformed to string
+     * @param array someParts list of fields to be transformed to string
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      */

@@ -493,17 +493,17 @@ class Query : IExpression, IteratorAggregate {
     * @param bool shouldOverwrite whether to reset order with field list or not
     * @return this
     */
-  O modifier(this O)($modifiers, shouldOverwrite = false) {
+  O modifier(this O)(myModifiers, shouldOverwrite = false) {
   }
-  O modifier(this O)($modifiers, shouldOverwrite = false) {
+  O modifier(this O)(myModifiers, shouldOverwrite = false) {
       _dirty();
       if (shouldOverwrite) {
           _parts["modifier"] = [];
       }
-      if (!is_array($modifiers)) {
-          $modifiers = [$modifiers];
+      if (!is_array(myModifiers)) {
+          myModifiers = [myModifiers];
       }
-      _parts["modifier"] = array_merge(_parts["modifier"], $modifiers);
+      _parts["modifier"] = array_merge(_parts["modifier"], myModifiers);
 
       return cast(O)this;
   }
