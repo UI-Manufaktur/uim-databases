@@ -497,9 +497,7 @@ class CaseStatementExpression : ExpressionInterface, TypedResultInterface
         return $this.{$clause};
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         if ($this.whenBuffer !is null) {
@@ -526,9 +524,7 @@ class CaseStatementExpression : ExpressionInterface, TypedResultInterface
         return "CASE {$value}{$whenThen} ELSE $else END";
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function traverse(Closure $callback)
     {
         if ($this.whenBuffer !is null) {

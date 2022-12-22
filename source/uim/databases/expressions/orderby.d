@@ -25,9 +25,7 @@ class OrderByExpression extends QueryExpression
         parent::__construct($conditions, $types, $conjunction);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         $order = [];

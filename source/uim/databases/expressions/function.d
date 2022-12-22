@@ -125,9 +125,7 @@ class FunctionExpression extends QueryExpression : TypedResultInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         $parts = [];

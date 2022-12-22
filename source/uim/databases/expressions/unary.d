@@ -61,9 +61,7 @@ class UnaryExpression : ExpressionInterface
         $this.position = $position;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         $operand = _value;
@@ -78,9 +76,7 @@ class UnaryExpression : ExpressionInterface
         return _operator ." (" . $operand .")";
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function traverse(Closure $callback)
     {
         if (_value instanceof ExpressionInterface) {

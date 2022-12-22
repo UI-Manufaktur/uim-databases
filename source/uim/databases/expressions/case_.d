@@ -228,9 +228,7 @@ class CaseExpression : ExpressionInterface
         return implode("", $parts);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function traverse(Closure $callback)
     {
         foreach (["_conditions","_values"] as $part) {

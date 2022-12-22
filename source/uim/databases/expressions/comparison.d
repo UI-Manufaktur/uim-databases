@@ -120,9 +120,7 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
         return _operator;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         /** @var \Cake\Database\ExpressionInterface|string $field */
@@ -145,9 +143,7 @@ class ComparisonExpression : ExpressionInterface, FieldInterface
         return sprintf($template, $field, _operator, $value);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function traverse(Closure $callback)
     {
         if (_field instanceof ExpressionInterface) {

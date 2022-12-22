@@ -256,9 +256,7 @@ class WhenThenExpression : ExpressionInterface
         return $this.{$clause};
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         if ($this.when =is null) {
@@ -296,9 +294,7 @@ class WhenThenExpression : ExpressionInterface
         return "WHEN $when THEN $then";
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function traverse(Closure $callback)
     {
         if ($this.when instanceof ExpressionInterface) {

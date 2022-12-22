@@ -87,9 +87,7 @@ class TupleComparison extends ComparisonExpression
         _value = $value;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         $template ="(%s) %s (%s)";
@@ -159,9 +157,7 @@ class TupleComparison extends ComparisonExpression
         return implode(",", $values);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     protected string _bindValue($value, ValueBinder $binder, ?string $type = null)
     {
         $placeholder = $binder.placeholder("tuple");
@@ -170,9 +166,7 @@ class TupleComparison extends ComparisonExpression
         return $placeholder;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function traverse(Closure $callback)
     {
         /** @var array<string> $fields */

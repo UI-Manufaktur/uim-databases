@@ -164,9 +164,7 @@ class CommonTableExpression : ExpressionInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         $fields ="";
@@ -188,9 +186,7 @@ class CommonTableExpression : ExpressionInterface
         );
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function traverse(Closure $callback)
     {
         $callback($this.name);

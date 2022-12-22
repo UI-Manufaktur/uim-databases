@@ -567,9 +567,7 @@ class QueryExpression : ExpressionInterface, Countable
         return $this.eq($wrapIdentifier($leftField), $wrapIdentifier($rightField));
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         $len = $this.count();
@@ -593,9 +591,7 @@ class QueryExpression : ExpressionInterface, Countable
         return sprintf($template, implode(" $conjunction ", $parts));
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function traverse(Closure $callback)
     {
         foreach (_conditions as $c) {

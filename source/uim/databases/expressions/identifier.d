@@ -70,9 +70,7 @@ class IdentifierExpression : ExpressionInterface
         return $this.collation;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         $sql = _identifier;
@@ -83,9 +81,7 @@ class IdentifierExpression : ExpressionInterface
         return $sql;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function traverse(Closure $callback)
     {
         return $this;

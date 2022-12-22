@@ -34,9 +34,7 @@ class OrderClauseExpression : ExpressionInterface, FieldInterface
         _direction = strtolower($direction) ==="asc" ?"ASC" :"DESC";
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         /** @var \Cake\Database\ExpressionInterface|string $field */
@@ -50,9 +48,7 @@ class OrderClauseExpression : ExpressionInterface, FieldInterface
         return sprintf("%s %s", $field, _direction);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function traverse(Closure $callback)
     {
         if (_field instanceof ExpressionInterface) {

@@ -80,9 +80,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function partition($partitions)
     {
         $this.over();
@@ -91,9 +89,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function order($fields)
     {
         $this.over();
@@ -102,9 +98,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function range($start, $end = 0)
     {
         $this.over();
@@ -113,9 +107,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function rows(?int $start, ?int $end = 0)
     {
         $this.over();
@@ -124,9 +116,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function groups(?int $start, ?int $end = 0)
     {
         $this.over();
@@ -135,9 +125,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function frame(
         string $type,
         $startOffset,
@@ -151,9 +139,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function excludeCurrent()
     {
         $this.over();
@@ -162,9 +148,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function excludeGroup()
     {
         $this.over();
@@ -173,9 +157,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function excludeTies()
     {
         $this.over();
@@ -184,9 +166,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     string sql(ValueBinder $binder)
     {
         $sql = parent::sql($binder);
@@ -204,9 +184,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $sql;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function traverse(Closure $callback)
     {
         parent::traverse($callback);
@@ -222,9 +200,7 @@ class AggregateExpression extends FunctionExpression : WindowInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function count(): int
     {
         $count = parent::count();
