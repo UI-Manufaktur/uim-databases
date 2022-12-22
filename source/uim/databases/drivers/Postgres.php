@@ -110,11 +110,11 @@ class Postgres : Driver
         }
 
         if (!empty($config["timezone"])) {
-            $config["init"][] = sprintf("SET timezone = %s", $connection->quote($config["timezone"]));
+            $config["init"][] = sprintf("SET timezone = %s", $connection.quote($config["timezone"]));
         }
 
         foreach ($config["init"] as $command) {
-            $connection->exec($command);
+            $connection.exec($command);
         }
 
         return true;
@@ -149,7 +149,7 @@ class Postgres : Driver
     function setEncoding(string $encoding): void
     {
         this.connect();
-        this._connection->exec("SET NAMES " . this._connection->quote($encoding));
+        this._connection.exec("SET NAMES " . this._connection.quote($encoding));
     }
 
     /**
@@ -162,7 +162,7 @@ class Postgres : Driver
     function setSchema(string $schema): void
     {
         this.connect();
-        this._connection->exec("SET search_path TO " . this._connection->quote($schema));
+        this._connection.exec("SET search_path TO " . this._connection.quote($schema));
     }
 
 
@@ -209,8 +209,8 @@ class Postgres : Driver
 
     protected function _insertQueryTranslator(Query $query): Query
     {
-        if (!$query->clause("epilog")) {
-            $query->epilog("RETURNING *");
+        if (!$query.clause("epilog")) {
+            $query.epilog("RETURNING *");
         }
 
         return $query;
@@ -234,10 +234,10 @@ class Postgres : Driver
      */
     protected function _transformIdentifierExpression(IdentifierExpression $expression): void
     {
-        $collation = $expression->getCollation();
+        $collation = $expression.getCollation();
         if ($collation) {
             // use trim() to work around expression being transformed multiple times
-            $expression->setCollation(""" . trim($collation, """) . """);
+            $expression.setCollation(""" . trim($collation, """) . """);
         }
     }
 
@@ -251,16 +251,16 @@ class Postgres : Driver
      */
     protected function _transformFunctionExpression(FunctionExpression $expression): void
     {
-        switch ($expression->getName()) {
+        switch ($expression.getName()) {
             case "CONCAT":
                 // CONCAT function is expressed as exp1 || exp2
-                $expression->setName("")->setConjunction(" ||");
+                $expression.setName("").setConjunction(" ||");
                 break;
             case "DATEDIFF":
                 $expression
-                    ->setName("")
-                    ->setConjunction("-")
-                    ->iterateParts(function ($p) {
+                    .setName("")
+                    .setConjunction("-")
+                    .iterateParts(function ($p) {
                         if (is_string($p)) {
                             $p = ["value" : [$p : "literal"], "type" : null];
                         } else {
@@ -272,23 +272,23 @@ class Postgres : Driver
                 break;
             case "CURRENT_DATE":
                 $time = new FunctionExpression("LOCALTIMESTAMP", [" 0 " : "literal"]);
-                $expression->setName("CAST")->setConjunction(" AS ")->add([$time, "date" : "literal"]);
+                $expression.setName("CAST").setConjunction(" AS ").add([$time, "date" : "literal"]);
                 break;
             case "CURRENT_TIME":
                 $time = new FunctionExpression("LOCALTIMESTAMP", [" 0 " : "literal"]);
-                $expression->setName("CAST")->setConjunction(" AS ")->add([$time, "time" : "literal"]);
+                $expression.setName("CAST").setConjunction(" AS ").add([$time, "time" : "literal"]);
                 break;
             case "NOW":
-                $expression->setName("LOCALTIMESTAMP")->add([" 0 " : "literal"]);
+                $expression.setName("LOCALTIMESTAMP").add([" 0 " : "literal"]);
                 break;
             case "RAND":
-                $expression->setName("RANDOM");
+                $expression.setName("RANDOM");
                 break;
             case "DATE_ADD":
                 $expression
-                    ->setName("")
-                    ->setConjunction(" + INTERVAL")
-                    ->iterateParts(function ($p, $key) {
+                    .setName("")
+                    .setConjunction(" + INTERVAL")
+                    .iterateParts(function ($p, $key) {
                         if ($key == 1) {
                             $p = sprintf(""%s"", $p);
                         }
@@ -298,10 +298,10 @@ class Postgres : Driver
                 break;
             case "DAYOFWEEK":
                 $expression
-                    ->setName("EXTRACT")
-                    ->setConjunction(" ")
-                    ->add(["DOW FROM" : "literal"], [], true)
-                    ->add([") + (1" : "literal"]); // Postgres starts on index 0 but Sunday should be 1
+                    .setName("EXTRACT")
+                    .setConjunction(" ")
+                    .add(["DOW FROM" : "literal"], [], true)
+                    .add([") + (1" : "literal"]); // Postgres starts on index 0 but Sunday should be 1
                 break;
         }
     }
@@ -315,7 +315,7 @@ class Postgres : Driver
     protected function _transformStringExpression(StringExpression $expression): void
     {
         // use trim() to work around expression being transformed multiple times
-        $expression->setCollation(""" . trim($expression->getCollation(), """) . """);
+        $expression.setCollation(""" . trim($expression.getCollation(), """) . """);
     }
 
     /**

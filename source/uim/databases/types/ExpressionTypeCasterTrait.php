@@ -53,7 +53,7 @@ trait ExpressionTypeCasterTrait
             return array_map([$converter, "toExpression"], aValue);
         }
 
-        return $converter->toExpression(aValue);
+        return $converter.toExpression(aValue);
     }
 
     /**

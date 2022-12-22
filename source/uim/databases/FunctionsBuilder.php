@@ -152,7 +152,7 @@ class FunctionsBuilder
         }
 
         $expression = new FunctionExpression("CAST", this.toLiteralParam($field));
-        $expression->setConjunction(" AS")->add([$type: "literal"]);
+        $expression.setConjunction(" AS").add([$type: "literal"]);
 
         return $expression;
     }
@@ -194,7 +194,7 @@ class FunctionsBuilder
     function extract(string $part, $expression, array $types = []): FunctionExpression
     {
         $expression = new FunctionExpression("EXTRACT", this.toLiteralParam($expression), $types, "integer");
-        $expression->setConjunction(" FROM")->add([$part: "literal"], [], true);
+        $expression.setConjunction(" FROM").add([$part: "literal"], [], true);
 
         return $expression;
     }
@@ -215,7 +215,7 @@ class FunctionsBuilder
         }
         $interval = aValue . " " . $unit;
         $expression = new FunctionExpression("DATE_ADD", this.toLiteralParam($expression), $types, "datetime");
-        $expression->setConjunction(", INTERVAL")->add([$interval: "literal"]);
+        $expression.setConjunction(", INTERVAL").add([$interval: "literal"]);
 
         return $expression;
     }
@@ -276,7 +276,7 @@ class FunctionsBuilder
      */
     function rowNumber(): AggregateExpression
     {
-        return (new AggregateExpression("ROW_NUMBER", [], [], "integer"))->over();
+        return (new AggregateExpression("ROW_NUMBER", [], [], "integer")).over();
     }
 
     /**
@@ -300,7 +300,7 @@ class FunctionsBuilder
             $types = [$type, "integer", $type];
         }
 
-        return (new AggregateExpression("LAG", $params, $types, $type ?? "float"))->over();
+        return (new AggregateExpression("LAG", $params, $types, $type ?? "float")).over();
     }
 
     /**
@@ -324,7 +324,7 @@ class FunctionsBuilder
             $types = [$type, "integer", $type];
         }
 
-        return (new AggregateExpression("LEAD", $params, $types, $type ?? "float"))->over();
+        return (new AggregateExpression("LEAD", $params, $types, $type ?? "float")).over();
     }
 
     /**

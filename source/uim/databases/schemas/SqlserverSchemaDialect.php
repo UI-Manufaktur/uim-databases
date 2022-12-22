@@ -224,7 +224,7 @@ class SqlserverSchemaDialect : SchemaDialect
             "default" : this._defaultValue($field["type"], $row["default"]),
             "collate" : $row["collation_name"],
         ];
-        $schema->addColumn($row["name"], $field);
+        $schema.addColumn($row["name"], $field);
     }
 
     /**
@@ -300,9 +300,9 @@ class SqlserverSchemaDialect : SchemaDialect
         }
 
         if ($type == TableSchema::INDEX_INDEX) {
-            $existing = $schema->getIndex($name);
+            $existing = $schema.getIndex($name);
         } else {
-            $existing = $schema->getConstraint($name);
+            $existing = $schema.getConstraint($name);
         }
 
         $columns = [$row["column_name"]];
@@ -311,14 +311,14 @@ class SqlserverSchemaDialect : SchemaDialect
         }
 
         if ($type == TableSchema::CONSTRAINT_PRIMARY || $type == TableSchema::CONSTRAINT_UNIQUE) {
-            $schema->addConstraint($name, [
+            $schema.addConstraint($name, [
                 "type" : $type,
                 "columns" : $columns,
             ]);
 
             return;
         }
-        $schema->addIndex($name, [
+        $schema.addIndex($name, [
             "type" : $type,
             "columns" : $columns,
         ]);
@@ -358,7 +358,7 @@ class SqlserverSchemaDialect : SchemaDialect
             "delete" : this._convertOnClause($row["delete_type"]),
         ];
         $name = $row["foreign_key_name"];
-        $schema->addConstraint($name, $data);
+        $schema.addConstraint($name, $data);
     }
 
 
@@ -390,14 +390,14 @@ class SqlserverSchemaDialect : SchemaDialect
     function columnSql(TableSchema $schema, string $name): string
     {
         /** @var array $data */
-        $data = $schema->getColumn($name);
+        $data = $schema.getColumn($name);
 
         $sql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
         if ($sql != null) {
             return $sql;
         }
 
-        $out = this._driver->quoteIdentifier($name);
+        $out = this._driver.quoteIdentifier($name);
         $typeMap = [
             TableSchema::TYPE_TINYINTEGER : " TINYINT",
             TableSchema::TYPE_SMALLINTEGER : " SMALLINT",
@@ -424,7 +424,7 @@ class SqlserverSchemaDialect : SchemaDialect
         }
 
         if ($data["type"] == TableSchema::TYPE_INTEGER || $data["type"] == TableSchema::TYPE_BIGINTEGER) {
-            if ($schema->getPrimaryKey() == [$name] || $data["autoIncrement"] == true) {
+            if ($schema.getPrimaryKey() == [$name] || $data["autoIncrement"] == true) {
                 unset($data["null"], $data["default"]);
                 $out .= " IDENTITY(1, 1)";
             }
@@ -520,7 +520,7 @@ class SqlserverSchemaDialect : SchemaDialect
         } elseif (isset($data["default"])) {
             $default = is_bool($data["default"])
                 ? (int)$data["default"]
-                : this._driver->schemaValue($data["default"]);
+                : this._driver.schemaValue($data["default"]);
             $out .= " DEFAULT " . $default;
         } elseif (isset($data["null"]) && $data["null"] != false) {
             $out .= " DEFAULT NULL";
@@ -535,11 +535,11 @@ class SqlserverSchemaDialect : SchemaDialect
         $sqlPattern = "ALTER TABLE %s ADD %s;";
         $sql = [];
 
-        foreach ($schema->constraints() as $name) {
+        foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
-            $constraint = $schema->getConstraint($name);
+            $constraint = $schema.getConstraint($name);
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
-                $tableName = this._driver->quoteIdentifier($schema->name());
+                $tableName = this._driver.quoteIdentifier($schema.name());
                 $sql[] = sprintf($sqlPattern, $tableName, this.constraintSql($schema, $name));
             }
         }
@@ -553,12 +553,12 @@ class SqlserverSchemaDialect : SchemaDialect
         $sqlPattern = "ALTER TABLE %s DROP CONSTRAINT %s;";
         $sql = [];
 
-        foreach ($schema->constraints() as $name) {
+        foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
-            $constraint = $schema->getConstraint($name);
+            $constraint = $schema.getConstraint($name);
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
-                $tableName = this._driver->quoteIdentifier($schema->name());
-                $constraintName = this._driver->quoteIdentifier($name);
+                $tableName = this._driver.quoteIdentifier($schema.name());
+                $constraintName = this._driver.quoteIdentifier($name);
                 $sql[] = sprintf($sqlPattern, $tableName, $constraintName);
             }
         }
@@ -570,7 +570,7 @@ class SqlserverSchemaDialect : SchemaDialect
     function indexSql(TableSchema $schema, string $name): string
     {
         /** @var array $data */
-        $data = $schema->getIndex($name);
+        $data = $schema.getIndex($name);
         $columns = array_map(
             [this._driver, "quoteIdentifier"],
             $data["columns"]
@@ -578,8 +578,8 @@ class SqlserverSchemaDialect : SchemaDialect
 
         return sprintf(
             "CREATE INDEX %s ON %s (%s)",
-            this._driver->quoteIdentifier($name),
-            this._driver->quoteIdentifier($schema->name()),
+            this._driver.quoteIdentifier($name),
+            this._driver.quoteIdentifier($schema.name()),
             implode(", ", $columns)
         );
     }
@@ -588,8 +588,8 @@ class SqlserverSchemaDialect : SchemaDialect
     function constraintSql(TableSchema $schema, string $name): string
     {
         /** @var array $data */
-        $data = $schema->getConstraint($name);
-        $out = "CONSTRAINT " . this._driver->quoteIdentifier($name);
+        $data = $schema.getConstraint($name);
+        $out = "CONSTRAINT " . this._driver.quoteIdentifier($name);
         if ($data["type"] == TableSchema::CONSTRAINT_PRIMARY) {
             $out = "PRIMARY KEY";
         }
@@ -617,7 +617,7 @@ class SqlserverSchemaDialect : SchemaDialect
             return $prefix . sprintf(
                 " FOREIGN KEY (%s) REFERENCES %s (%s) ON UPDATE %s ON DELETE %s",
                 implode(", ", $columns),
-                this._driver->quoteIdentifier($data["references"][0]),
+                this._driver.quoteIdentifier($data["references"][0]),
                 this._convertConstraintColumns($data["references"][1]),
                 this._foreignOnClause($data["update"]),
                 this._foreignOnClause($data["delete"])
@@ -632,7 +632,7 @@ class SqlserverSchemaDialect : SchemaDialect
     {
         $content = array_merge($columns, $constraints);
         $content = implode(",\n", array_filter($content));
-        $tableName = this._driver->quoteIdentifier($schema->name());
+        $tableName = this._driver.quoteIdentifier($schema.name());
         $out = [];
         $out[] = sprintf("CREATE TABLE %s (\n%s\n)", $tableName, $content);
         foreach ($indexes as $index) {
@@ -645,22 +645,22 @@ class SqlserverSchemaDialect : SchemaDialect
 
     function truncateTableSql(TableSchema $schema): array
     {
-        $name = this._driver->quoteIdentifier($schema->name());
+        $name = this._driver.quoteIdentifier($schema.name());
         $queries = [
             sprintf("DELETE FROM %s", $name),
         ];
 
         // Restart identity sequences
-        $pk = $schema->getPrimaryKey();
+        $pk = $schema.getPrimaryKey();
         if (count($pk) == 1) {
             /** @var array $column */
-            $column = $schema->getColumn($pk[0]);
+            $column = $schema.getColumn($pk[0]);
             if (in_array($column["type"], ["integer", "biginteger"])) {
                 $queries[] = sprintf(
                     "IF EXISTS (SELECT * FROM sys.identity_columns WHERE OBJECT_NAME(OBJECT_ID) = "%s" AND " .
                     "last_value IS NOT NULL) DBCC CHECKIDENT("%s", RESEED, 0)",
-                    $schema->name(),
-                    $schema->name()
+                    $schema.name(),
+                    $schema.name()
                 );
             }
         }

@@ -103,19 +103,19 @@ class QueryCompiler
     function compile(Query $query, ValueBinder $binder): string
     {
         $sql = "";
-        $type = $query->type();
-        $query->traverseParts(
+        $type = $query.type();
+        $query.traverseParts(
             _sqlCompiler($sql, $query, $binder),
             this.{"_{$type}Parts"}
         );
 
         // Propagate bound parameters from sub-queries if the
         // placeholders can be found in the SQL statement.
-        if ($query->getValueBinder() != $binder) {
-            foreach ($query->getValueBinder()->bindings() as $binding) {
+        if ($query.getValueBinder() != $binder) {
+            foreach ($query.getValueBinder().bindings() as $binding) {
                 $placeholder = ":" . $binding["placeholder"];
                 if (preg_match("/" . $placeholder . "(?:\W|$)/", $sql) > 0) {
-                    $binder->bind($placeholder, $binding["value"], $binding["type"]);
+                    $binder.bind($placeholder, $binding["value"], $binding["type"]);
                 }
             }
         }
@@ -144,7 +144,7 @@ class QueryCompiler
             }
 
             if ($part instanceof ExpressionInterface) {
-                $part = [$part->sql($binder)];
+                $part = [$part.sql($binder)];
             }
             if (isset(_templates[$partName])) {
                 $part = _stringifyExpressions((array)$part, $binder);
@@ -172,8 +172,8 @@ class QueryCompiler
         $recursive = false;
         $expressions = [];
         foreach ($parts as $cte) {
-            $recursive = $recursive || $cte->isRecursive();
-            $expressions[] = $cte->sql($binder);
+            $recursive = $recursive || $cte.isRecursive();
+            $expressions[] = $cte.sql($binder);
         }
 
         $recursive = $recursive ? "RECURSIVE " : "";
@@ -195,21 +195,21 @@ class QueryCompiler
     protected function _buildSelectPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $select = "SELECT%s %s%s";
-        if (_orderedUnion && $query->clause("union")) {
+        if (_orderedUnion && $query.clause("union")) {
             $select = "(SELECT%s %s%s";
         }
-        $distinct = $query->clause("distinct");
-        $modifiers = _buildModifierPart($query->clause("modifier"), $query, $binder);
+        $distinct = $query.clause("distinct");
+        $modifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
 
-        $driver = $query->getConnection()->getDriver();
-        $quoteIdentifiers = $driver->isAutoQuotingEnabled() || _quotedSelectAliases;
+        $driver = $query.getConnection().getDriver();
+        $quoteIdentifiers = $driver.isAutoQuotingEnabled() || _quotedSelectAliases;
         $normalized = [];
         $parts = _stringifyExpressions($parts, $binder);
         foreach ($parts as $k: $p) {
             if (!is_numeric($k)) {
                 $p = $p . " AS ";
                 if ($quoteIdentifiers) {
-                    $p .= $driver->quoteIdentifier($k);
+                    $p .= $driver.quoteIdentifier($k);
                 } else {
                     $p .= $k;
                 }
@@ -277,14 +277,14 @@ class QueryCompiler
                 ));
             }
             if ($join["table"] instanceof ExpressionInterface) {
-                $join["table"] = "(" . $join["table"]->sql($binder) . ")";
+                $join["table"] = "(" . $join["table"].sql($binder) . ")";
             }
 
             $joins .= sprintf(" %s JOIN %s %s", $join["type"], $join["table"], $join["alias"]);
 
             $condition = "";
             if (isset($join["conditions"]) && $join["conditions"] instanceof ExpressionInterface) {
-                $condition = $join["conditions"]->sql($binder);
+                $condition = $join["conditions"].sql($binder);
             }
             if ($condition == "") {
                 $joins .= " ON 1 = 1";
@@ -308,7 +308,7 @@ class QueryCompiler
     {
         $windows = [];
         foreach ($parts as $window) {
-            $windows[] = $window["name"]->sql($binder) . " AS (" . $window["window"]->sql($binder) . ")";
+            $windows[] = $window["name"].sql($binder) . " AS (" . $window["window"].sql($binder) . ")";
         }
 
         return " WINDOW " . implode(", ", $windows);
@@ -327,7 +327,7 @@ class QueryCompiler
         $set = [];
         foreach ($parts as $part) {
             if ($part instanceof ExpressionInterface) {
-                $part = $part->sql($binder);
+                $part = $part.sql($binder);
             }
             if ($part[0] == "(") {
                 $part = subString($part, 1, -1);
@@ -351,7 +351,7 @@ class QueryCompiler
     protected function _buildUnionPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $parts = array_map(function ($p) use ($binder) {
-            $p["query"] = $p["query"]->sql($binder);
+            $p["query"] = $p["query"].sql($binder);
             $p["query"] = $p["query"][0] == "(" ? trim($p["query"], "()") : $p["query"];
             $prefix = $p["all"] ? "ALL " : "";
             if (_orderedUnion) {
@@ -386,7 +386,7 @@ class QueryCompiler
         }
         $table = $parts[0];
         $columns = _stringifyExpressions($parts[1], $binder);
-        $modifiers = _buildModifierPart($query->clause("modifier"), $query, $binder);
+        $modifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
 
         return sprintf("INSERT%s INTO %s (%s)", $modifiers, $table, implode(", ", $columns));
     }
@@ -415,7 +415,7 @@ class QueryCompiler
     protected function _buildUpdatePart(array $parts, Query $query, ValueBinder $binder): string
     {
         $table = _stringifyExpressions($parts, $binder);
-        $modifiers = _buildModifierPart($query->clause("modifier"), $query, $binder);
+        $modifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
 
         return sprintf("UPDATE%s %s", $modifiers, implode(",", $table));
     }
@@ -451,7 +451,7 @@ class QueryCompiler
         $result = [];
         foreach ($expressions as $k: $expression) {
             if ($expression instanceof ExpressionInterface) {
-                aValue = $expression->sql($binder);
+                aValue = $expression.sql($binder);
                 $expression = $wrap ? "(" . aValue . ")" : aValue;
             }
             $result[$k] = $expression;

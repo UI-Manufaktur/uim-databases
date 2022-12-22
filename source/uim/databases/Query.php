@@ -251,7 +251,7 @@ class Query : ExpressionInterface, IteratorAggregate
      */
     function execute(): IStatement
     {
-        $statement = _connection->run(this);
+        $statement = _connection.run(this);
         _iterator = _decorateStatement($statement);
         _dirty = false;
 
@@ -268,10 +268,10 @@ class Query : ExpressionInterface, IteratorAggregate
      * ## Example
      *
      * ```
-     * $rowCount = $query->update("articles")
-     *                 ->set(["published"=>true])
-     *                 ->where(["published"=>false])
-     *                 ->rowCountAndClose();
+     * $rowCount = $query.update("articles")
+     *                 .set(["published"=>true])
+     *                 .where(["published"=>false])
+     *                 .rowCountAndClose();
      * ```
      *
      * The above example will change the published column to true for all false records, and return the number of
@@ -283,9 +283,9 @@ class Query : ExpressionInterface, IteratorAggregate
     {
         $statement = this.execute();
         try {
-            return $statement->rowCount();
+            return $statement.rowCount();
         } finally {
-            $statement->closeCursor();
+            $statement.closeCursor();
         }
     }
 
@@ -308,10 +308,10 @@ class Query : ExpressionInterface, IteratorAggregate
     {
         if (!$binder) {
             $binder = this.getValueBinder();
-            $binder->resetCount();
+            $binder.resetCount();
         }
 
-        return this.getConnection()->compileQuery(this, $binder);
+        return this.getConnection().compileQuery(this, $binder);
     }
 
     /**
@@ -325,7 +325,7 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ### Example
      * ```
-     * $query->select(["title"])->from("articles")->traverse(function (aValue, $clause) {
+     * $query.select(["title"]).from("articles").traverse(function (aValue, $clause) {
      *     if ($clause == "select") {
      *         var_dump(aValue);
      *     }
@@ -357,7 +357,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Example
      *
      * ```
-     * $query->select(["title"])->from("articles")->traverse(function (aValue, $clause) {
+     * $query.select(["title"]).from("articles").traverse(function (aValue, $clause) {
      *     if ($clause == "select") {
      *         var_dump(aValue);
      *     }
@@ -389,12 +389,12 @@ class Query : ExpressionInterface, IteratorAggregate
      * $cte = new \Cake\Database\Expression\CommonTableExpression(
      *     "cte",
      *     $connection
-     *         ->newQuery()
-     *         ->select("*")
-     *         ->from("articles")
+     *         .newQuery()
+     *         .select("*")
+     *         .from("articles")
      * );
      *
-     * $query->with($cte);
+     * $query.with($cte);
      * ```
      *
      * or returned from a closure, which will receive a new common table expression
@@ -402,17 +402,17 @@ class Query : ExpressionInterface, IteratorAggregate
      * the second argument:
      *
      * ```
-     * $query->with(function (
+     * $query.with(function (
      *     \Cake\Database\Expression\CommonTableExpression $cte,
      *     \Cake\Database\Query $query
      *  ) {
      *     $cteQuery = $query
-     *         ->select("*")
-     *         ->from("articles");
+     *         .select("*")
+     *         .from("articles");
      *
      *     return $cte
-     *         ->name("cte")
-     *         ->query($cteQuery);
+     *         .name("cte")
+     *         .query($cteQuery);
      * });
      * ```
      *
@@ -427,7 +427,7 @@ class Query : ExpressionInterface, IteratorAggregate
         }
 
         if ($cte instanceof Closure) {
-            $query = this.getConnection()->newQuery();
+            $query = this.getConnection().newQuery();
             $cte = $cte(new CommonTableExpression(), $query);
             if (!($cte instanceof CommonTableExpression)) {
                 throw new RuntimeException(
@@ -460,12 +460,12 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Examples:
      *
      * ```
-     * $query->select(["id", "title"]); // Produces SELECT id, title
-     * $query->select(["author": "author_id"]); // Appends author: SELECT id, title, author_id as author
-     * $query->select("id", true); // Resets the list: SELECT id
-     * $query->select(["total": $countQuery]); // SELECT id, (SELECT ...) AS total
-     * $query->select(function ($query) {
-     *     return ["article_id", "total": $query->count("*")];
+     * $query.select(["id", "title"]); // Produces SELECT id, title
+     * $query.select(["author": "author_id"]); // Appends author: SELECT id, title, author_id as author
+     * $query.select("id", true); // Resets the list: SELECT id
+     * $query.select(["total": $countQuery]); // SELECT id, (SELECT ...) AS total
+     * $query.select(function ($query) {
+     *     return ["article_id", "total": $query.count("*")];
      * })
      * ```
      *
@@ -511,15 +511,15 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ```
      * // Filters products with the same name and city
-     * $query->select(["name", "city"])->from("products")->distinct();
+     * $query.select(["name", "city"]).from("products").distinct();
      *
      * // Filters products in the same city
-     * $query->distinct(["city"]);
-     * $query->distinct("city");
+     * $query.distinct(["city"]);
+     * $query.distinct("city");
      *
      * // Filter products with the same name
-     * $query->distinct(["name"], true);
-     * $query->distinct("name", true);
+     * $query.distinct(["name"], true);
+     * $query.distinct("name", true);
      * ```
      *
      * @param \Cake\Database\ExpressionInterface|array|string|bool $on Enable/disable distinct class
@@ -559,11 +559,11 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ```
      * // Ignore cache query in MySQL
-     * $query->select(["name", "city"])->from("products")->modifier("SQL_NO_CACHE");
+     * $query.select(["name", "city"]).from("products").modifier("SQL_NO_CACHE");
      * // It will produce the SQL: SELECT SQL_NO_CACHE name, city FROM products
      *
      * // Or with multiple modifiers
-     * $query->select(["name", "city"])->from("products")->modifier(["HIGH_PRIORITY", "SQL_NO_CACHE"]);
+     * $query.select(["name", "city"]).from("products").modifier(["HIGH_PRIORITY", "SQL_NO_CACHE"]);
      * // It will produce the SQL: SELECT HIGH_PRIORITY SQL_NO_CACHE name, city FROM products
      * ```
      *
@@ -602,10 +602,10 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Examples:
      *
      * ```
-     * $query->from(["p": "posts"]); // Produces FROM posts p
-     * $query->from("authors"); // Appends authors: FROM posts p, authors
-     * $query->from(["products"], true); // Resets the list: FROM products
-     * $query->from(["sub": $countQuery]); // FROM (SELECT ...) sub
+     * $query.from(["p": "posts"]); // Produces FROM posts p
+     * $query.from("authors"); // Appends authors: FROM posts p, authors
+     * $query.from(["products"], true); // Resets the list: FROM products
+     * $query.from(["sub": $countQuery]); // FROM (SELECT ...) sub
      * ```
      *
      * @param array|string $tables tables to be added to the list. This argument, can be
@@ -638,15 +638,15 @@ class Query : ExpressionInterface, IteratorAggregate
      * to be joined, unless the third argument is set to true.
      *
      * When no join type is specified an `INNER JOIN` is used by default:
-     * `$query->join(["authors"])` will produce `INNER JOIN authors ON 1 = 1`
+     * `$query.join(["authors"])` will produce `INNER JOIN authors ON 1 = 1`
      *
      * It is also possible to alias joins using the array key:
-     * `$query->join(["a": "authors"])` will produce `INNER JOIN authors a ON 1 = 1`
+     * `$query.join(["a": "authors"])` will produce `INNER JOIN authors a ON 1 = 1`
      *
      * A join can be fully described and aliased using the array notation:
      *
      * ```
-     * $query->join([
+     * $query.join([
      *     "a": [
      *         "table": "authors",
      *         "type": "LEFT",
@@ -659,7 +659,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * You can even specify multiple joins in an array, including the full description:
      *
      * ```
-     * $query->join([
+     * $query.join([
      *     "a": [
      *         "table": "authors",
      *         "type": "LEFT",
@@ -686,7 +686,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * using the second parameter of this function.
      *
      * ```
-     * $query->join(["a": [
+     * $query.join(["a": [
      *     "table": "articles",
      *     "conditions": [
      *         "a.posted >=": new DateTime("-3 days"),
@@ -704,9 +704,9 @@ class Query : ExpressionInterface, IteratorAggregate
      * with another list if the third parameter for this function is set to true.
      *
      * ```
-     * $query->join(["alias": "table"]); // joins table with as alias
-     * $query->join(["alias": "another_table"]); // joins another_table with as alias
-     * $query->join(["something": "different_table"], [], true); // resets joins list
+     * $query.join(["alias": "table"]); // joins table with as alias
+     * $query.join(["alias": "another_table"]); // joins another_table with as alias
+     * $query.join(["something": "different_table"], [], true); // resets joins list
      * ```
      *
      * @param array<string, mixed>|string $tables list of tables to be joined in the query
@@ -733,7 +733,7 @@ class Query : ExpressionInterface, IteratorAggregate
             }
 
             if (!($t["conditions"] instanceof ExpressionInterface)) {
-                $t["conditions"] = this.newExpr()->add($t["conditions"], $types);
+                $t["conditions"] = this.newExpr().add($t["conditions"], $types);
             }
             $alias = is_string($alias) ? $alias : null;
             $joins[$alias ?: $i++] = $t + ["type": static.JOIN_TYPE_INNER, "alias": $alias];
@@ -777,10 +777,10 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ```
      * // LEFT JOIN authors ON authors.id = posts.author_id
-     * $query->leftJoin("authors", "authors.id = posts.author_id");
+     * $query.leftJoin("authors", "authors.id = posts.author_id");
      *
      * // LEFT JOIN authors a ON a.id = posts.author_id
-     * $query->leftJoin(["a": "authors"], "a.id = posts.author_id");
+     * $query.leftJoin(["a": "authors"], "a.id = posts.author_id");
      * ```
      *
      * Conditions can be passed as strings, arrays, or expression objects. When
@@ -788,7 +788,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * in order to define how to convert the values:
      *
      * ```
-     * $query->leftJoin(["a": "articles"], [
+     * $query.leftJoin(["a": "articles"], [
      *      "a.posted >=": new DateTime("-3 days"),
      *      "a.published": true,
      *      "a.author_id = authors.id"
@@ -905,7 +905,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Conditions using operators:
      *
      * ```
-     * $query->where([
+     * $query.where([
      *     "posted >=": new DateTime("3 days ago"),
      *     "title LIKE": "Hello W%",
      *     "author_id": 1,
@@ -922,7 +922,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Nesting conditions with conjunctions:
      *
      * ```
-     * $query->where([
+     * $query.where([
      *     "author_id !=": 1,
      *     "OR": ["published": true, "posted <": new DateTime("now")],
      *     "NOT": ["title": "Hello"]
@@ -937,7 +937,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * may want to define 2 different options for the same key, in that case, you can
      * wrap each condition inside a new array:
      *
-     * `$query->where(["OR": [["published": false], ["published": true]])`
+     * `$query.where(["OR": [["published": false], ["published": true]])`
      *
      * Would result in:
      *
@@ -951,8 +951,8 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Using expressions objects:
      *
      * ```
-     * $exp = $query->newExpr()->add(["id !=": 100, "author_id" != 1])->tieWith("OR");
-     * $query->where(["published": true], ["published": "boolean"])->where($exp);
+     * $exp = $query.newExpr().add(["id !=": 100, "author_id" != 1]).tieWith("OR");
+     * $query.where(["published": true], ["published": "boolean"]).where($exp);
      * ```
      *
      * The previous example produces:
@@ -970,11 +970,11 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query
-     *   ->where(["title !=": "Hello World"])
-     *   ->where(function ($exp, $query) {
-     *     $or = $exp->or(["id": 1]);
-     *     $and = $exp->and(["id >": 2, "id <": 10]);
-     *    return $or->add($and);
+     *   .where(["title !=": "Hello World"])
+     *   .where(function ($exp, $query) {
+     *     $or = $exp.or(["id": 1]);
+     *     $and = $exp.and(["id >": 2, "id <": 10]);
+     *    return $or.add($and);
      *   });
      * ```
      *
@@ -985,7 +985,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Conditions as strings:
      *
      * ```
-     * $query->where(["articles.author_id = authors.id", "modified IS NULL"]);
+     * $query.where(["articles.author_id = authors.id", "modified IS NULL"]);
      * ```
      *
      * The previous example produces:
@@ -1033,7 +1033,7 @@ class Query : ExpressionInterface, IteratorAggregate
         $exp = this.newExpr();
 
         foreach ($fields as $field) {
-            $exp->isNotNull($field);
+            $exp.isNotNull($field);
         }
 
         return this.where($exp);
@@ -1055,7 +1055,7 @@ class Query : ExpressionInterface, IteratorAggregate
         $exp = this.newExpr();
 
         foreach ($fields as $field) {
-            $exp->isNull($field);
+            $exp.isNull($field);
         }
 
         return this.where($exp);
@@ -1172,7 +1172,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Examples:
      *
      * ```
-     * $query->where(["title": "Hello World")->andWhere(["author_id": 1]);
+     * $query.where(["title": "Hello World").andWhere(["author_id": 1]);
      * ```
      *
      * Will produce:
@@ -1181,8 +1181,8 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query
-     *   ->where(["OR": ["published": false, "published is NULL"]])
-     *   ->andWhere(["author_id": 1, "comments_count >": 10])
+     *   .where(["OR": ["published": false, "published is NULL"]])
+     *   .andWhere(["author_id": 1, "comments_count >": 10])
      * ```
      *
      * Produces:
@@ -1191,11 +1191,11 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query
-     *   ->where(["title": "Foo"])
-     *   ->andWhere(function ($exp, $query) {
+     *   .where(["title": "Foo"])
+     *   .andWhere(function ($exp, $query) {
      *     return $exp
-     *       ->or(["author_id": 1])
-     *       ->add(["author_id": 2]);
+     *       .or(["author_id": 1])
+     *       .add(["author_id": 2]);
      *   });
      * ```
      *
@@ -1232,7 +1232,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Examples:
      *
      * ```
-     * $query->order(["title": "DESC", "author_id": "ASC"]);
+     * $query.order(["title": "DESC", "author_id": "ASC"]);
      * ```
      *
      * Produces:
@@ -1241,8 +1241,8 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ```
      * $query
-     *     ->order(["title": $query->newExpr("DESC NULLS FIRST")])
-     *     ->order("author_id");
+     *     .order(["title": $query.newExpr("DESC NULLS FIRST")])
+     *     .order("author_id");
      * ```
      *
      * Will generate:
@@ -1250,15 +1250,15 @@ class Query : ExpressionInterface, IteratorAggregate
      * `ORDER BY title DESC NULLS FIRST, author_id`
      *
      * ```
-     * $expression = $query->newExpr()->add(["id % 2 = 0"]);
-     * $query->order($expression)->order(["title": "ASC"]);
+     * $expression = $query.newExpr().add(["id % 2 = 0"]);
+     * $query.order($expression).order(["title": "ASC"]);
      * ```
      *
      * and
      *
      * ```
-     * $query->order(function ($exp, $query) {
-     *     return [$exp->add(["id % 2 = 0"]), "title": "ASC"];
+     * $query.order(function ($exp, $query) {
+     *     return [$exp.add(["id % 2 = 0"]), "title": "ASC"];
      * });
      * ```
      *
@@ -1324,7 +1324,7 @@ class Query : ExpressionInterface, IteratorAggregate
         if (!_parts["order"]) {
             _parts["order"] = new OrderByExpression();
         }
-        _parts["order"]->add(new OrderClauseExpression($field, "ASC"));
+        _parts["order"].add(new OrderClauseExpression($field, "ASC"));
 
         return this;
     }
@@ -1358,7 +1358,7 @@ class Query : ExpressionInterface, IteratorAggregate
         if (!_parts["order"]) {
             _parts["order"] = new OrderByExpression();
         }
-        _parts["order"]->add(new OrderClauseExpression($field, "DESC"));
+        _parts["order"].add(new OrderClauseExpression($field, "DESC"));
 
         return this;
     }
@@ -1375,10 +1375,10 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ```
      * // Produces GROUP BY id, title
-     * $query->group(["id", "title"]);
+     * $query.group(["id", "title"]);
      *
      * // Produces GROUP BY title
-     * $query->group("title");
+     * $query.group("title");
      * ```
      *
      * Group fields are not suitable for use with user supplied data as they are
@@ -1525,8 +1525,8 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Examples
      *
      * ```
-     * $query->limit(10) // generates LIMIT 10
-     * $query->limit($query->newExpr()->add(["1 + 1"])); // LIMIT (1 + 1)
+     * $query.limit(10) // generates LIMIT 10
+     * $query.limit($query.newExpr().add(["1 + 1"])); // LIMIT (1 + 1)
      * ```
      *
      * @param \Cake\Database\ExpressionInterface|int|null $limit number of records to be returned
@@ -1551,8 +1551,8 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Examples
      *
      * ```
-     * $query->offset(10) // generates OFFSET 10
-     * $query->offset($query->newExpr()->add(["1 + 1"])); // OFFSET (1 + 1)
+     * $query.offset(10) // generates OFFSET 10
+     * $query.offset($query.newExpr().add(["1 + 1"])); // OFFSET (1 + 1)
      * ```
      *
      * @param \Cake\Database\ExpressionInterface|int|null $offset number of records to be skipped
@@ -1578,8 +1578,8 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Examples
      *
      * ```
-     * $union = (new Query($conn))->select(["id", "title"])->from(["a": "articles"]);
-     * $query->select(["id", "name"])->from(["d": "things"])->union($union);
+     * $union = (new Query($conn)).select(["id", "title"]).from(["a": "articles"]);
+     * $query.select(["id", "name"]).from(["d": "things"]).union($union);
      * ```
      *
      * Will produce:
@@ -1613,8 +1613,8 @@ class Query : ExpressionInterface, IteratorAggregate
      * Unlike UNION, UNION ALL will not remove duplicate rows.
      *
      * ```
-     * $union = (new Query($conn))->select(["id", "title"])->from(["a": "articles"]);
-     * $query->select(["id", "name"])->from(["d": "things"])->unionAll($union);
+     * $union = (new Query($conn)).select(["id", "title"]).from(["a": "articles"]);
+     * $query.select(["id", "name"]).from(["d": "things"]).unionAll($union);
      * ```
      *
      * Will produce:
@@ -1659,9 +1659,9 @@ class Query : ExpressionInterface, IteratorAggregate
         _type = "insert";
         _parts["insert"][1] = $columns;
         if (!_parts["values"]) {
-            _parts["values"] = new ValuesExpression($columns, this.getTypeMap()->setTypes($types));
+            _parts["values"] = new ValuesExpression($columns, this.getTypeMap().setTypes($types));
         } else {
-            _parts["values"]->setColumns($columns);
+            _parts["values"].setColumns($columns);
         }
 
         return this;
@@ -1692,7 +1692,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Example
      *
      * ```
-     * $query->newExpr()->lte("count", $query->identifier("total"));
+     * $query.newExpr().lte("count", $query.identifier("total"));
      * ```
      *
      * @param string $identifier The identifier for an expression
@@ -1735,7 +1735,7 @@ class Query : ExpressionInterface, IteratorAggregate
             return this;
         }
 
-        _parts["values"]->add($data);
+        _parts["values"].add($data);
 
         return this;
     }
@@ -1771,20 +1771,20 @@ class Query : ExpressionInterface, IteratorAggregate
      * Passing a string:
      *
      * ```
-     * $query->update("articles")->set("title", "The Title");
+     * $query.update("articles").set("title", "The Title");
      * ```
      *
      * Passing an array:
      *
      * ```
-     * $query->update("articles")->set(["title": "The Title"], ["title": "string"]);
+     * $query.update("articles").set(["title": "The Title"], ["title": "string"]);
      * ```
      *
      * Passing a callable:
      *
      * ```
-     * $query->update("articles")->set(function ($exp) {
-     *   return $exp->eq("title", "The title", "string");
+     * $query.update("articles").set(function ($exp) {
+     *   return $exp.eq("title", "The title", "string");
      * });
      * ```
      *
@@ -1800,19 +1800,19 @@ class Query : ExpressionInterface, IteratorAggregate
     function set($key, aValue = null, $types = [])
     {
         if (empty(_parts["set"])) {
-            _parts["set"] = this.newExpr()->setConjunction(",");
+            _parts["set"] = this.newExpr().setConjunction(",");
         }
 
         if ($key instanceof Closure) {
-            $exp = this.newExpr()->setConjunction(",");
-            _parts["set"]->add($key($exp));
+            $exp = this.newExpr().setConjunction(",");
+            _parts["set"].add($key($exp));
 
             return this;
         }
 
         if (is_array($key) || $key instanceof ExpressionInterface) {
             $types = (array)aValue;
-            _parts["set"]->add($key, $types);
+            _parts["set"].add($key, $types);
 
             return this;
         }
@@ -1820,7 +1820,7 @@ class Query : ExpressionInterface, IteratorAggregate
         if (!is_string($types)) {
             $types = null;
         }
-        _parts["set"]->eq($key, aValue, $types);
+        _parts["set"].eq($key, aValue, $types);
 
         return this;
     }
@@ -1850,11 +1850,11 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ### Examples:
      * ```
-     * $query->select("id")->where(["author_id": 1])->epilog("FOR UPDATE");
+     * $query.select("id").where(["author_id": 1]).epilog("FOR UPDATE");
      * $query
-     *  ->insert("articles", ["title"])
-     *  ->values(["author_id": 1])
-     *  ->epilog("RETURNING id");
+     *  .insert("articles", ["title"])
+     *  .values(["author_id": 1])
+     *  .epilog("RETURNING id");
      * ```
      *
      * Epliog content is raw SQL and not suitable for use with user supplied data.
@@ -1890,8 +1890,8 @@ class Query : ExpressionInterface, IteratorAggregate
      * any format accepted by \Cake\Database\Expression\QueryExpression:
      *
      * ```
-     * $expression = $query->expr(); // Returns an empty expression object
-     * $expression = $query->expr("Table.column = Table2.column"); // Return a raw SQL expression
+     * $expression = $query.expr(); // Returns an empty expression object
+     * $expression = $query.expr("Table.column = Table2.column"); // Return a raw SQL expression
      * ```
      *
      * @param \Cake\Database\ExpressionInterface|array|string|null $rawExpression A string, array or anything you want wrapped in an expression object
@@ -1912,8 +1912,8 @@ class Query : ExpressionInterface, IteratorAggregate
      * any format accepted by \Cake\Database\Expression\QueryExpression:
      *
      * ```
-     * $expression = $query->expr(); // Returns an empty expression object
-     * $expression = $query->expr("Table.column = Table2.column"); // Return a raw SQL expression
+     * $expression = $query.expr(); // Returns an empty expression object
+     * $expression = $query.expr("Table.column = Table2.column"); // Return a raw SQL expression
      * ```
      *
      * @param \Cake\Database\ExpressionInterface|array|string|null $rawExpression A string, array or anything you want wrapped in an expression object
@@ -1924,7 +1924,7 @@ class Query : ExpressionInterface, IteratorAggregate
         $expression = new QueryExpression([], this.getTypeMap());
 
         if ($rawExpression != null) {
-            $expression->add($rawExpression);
+            $expression.add($rawExpression);
         }
 
         return $expression;
@@ -1937,8 +1937,8 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Example:
      *
      * ```
-     * $query->func()->count("*");
-     * $query->func()->dateDiff(["2012-01-05", "2012-01-02"])
+     * $query.func().count("*");
+     * $query.func().dateDiff(["2012-01-05", "2012-01-02"])
      * ```
      *
      * @return \Cake\Database\FunctionsBuilder
@@ -2031,7 +2031,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Example
      *
      * ```
-     * $query->decorateResults(function ($row) {
+     * $query.decorateResults(function ($row) {
      *   $row["order_total"] = $row["subtotal"] + ($row["subtotal"] * $row["tax"]);
      *    return $row;
      * });
@@ -2099,7 +2099,7 @@ class Query : ExpressionInterface, IteratorAggregate
         }
 
         if ($expression instanceof ExpressionInterface) {
-            $expression->traverse(function ($exp) use ($callback) {
+            $expression.traverse(function ($exp) use ($callback) {
                 _expressionsVisitor($exp, $callback);
             });
 
@@ -2113,7 +2113,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * Associates a query placeholder to a value and a type.
      *
      * ```
-     * $query->bind(":id", 1, "integer");
+     * $query.bind(":id", 1, "integer");
      * ```
      *
      * @param string|int $param placeholder to be replaced with quoted version
@@ -2125,7 +2125,7 @@ class Query : ExpressionInterface, IteratorAggregate
      */
     function bind($param, aValue, $type = null)
     {
-        this.getValueBinder()->bind($param, aValue, $type);
+        this.getValueBinder().bind($param, aValue, $type);
 
         return this;
     }
@@ -2307,9 +2307,9 @@ class Query : ExpressionInterface, IteratorAggregate
     protected function _decorateStatement(IStatement aStatement)
     {
         $typeMap = this.getSelectTypeMap();
-        $driver = this.getConnection()->getDriver();
+        $driver = this.getConnection().getDriver();
 
-        if (this.typeCastEnabled && $typeMap->toArray()) {
+        if (this.typeCastEnabled && $typeMap.toArray()) {
             $statement = new CallbackStatement($statement, $driver, new FieldTypeConverter($typeMap, $driver));
         }
 
@@ -2343,12 +2343,12 @@ class Query : ExpressionInterface, IteratorAggregate
             $append = $append(this.newExpr(), this);
         }
 
-        if ($expression->getConjunction() == $conjunction) {
-            $expression->add($append, $types);
+        if ($expression.getConjunction() == $conjunction) {
+            $expression.add($append, $types);
         } else {
             $expression = this.newExpr()
-                ->setConjunction($conjunction)
-                ->add([$expression, $append], $types);
+                .setConjunction($conjunction)
+                .add([$expression, $append], $types);
         }
 
         _parts[$part] = $expression;
@@ -2366,7 +2366,7 @@ class Query : ExpressionInterface, IteratorAggregate
         _dirty = true;
 
         if (_iterator && _valueBinder) {
-            this.getValueBinder()->reset();
+            this.getValueBinder().reset();
         }
     }
 
@@ -2436,7 +2436,7 @@ class Query : ExpressionInterface, IteratorAggregate
                 E_ALL
             );
             $sql = this.sql();
-            $params = this.getValueBinder()->bindings();
+            $params = this.getValueBinder().bindings();
         } catch (RuntimeException $e) {
             $sql = "SQL could not be generated for this query as it is incomplete.";
             $params = [];

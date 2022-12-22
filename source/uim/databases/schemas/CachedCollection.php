@@ -61,13 +61,13 @@ class CachedCollection : CollectionInterface
 
     function listTablesWithoutViews(): array
     {
-        return this.collection->listTablesWithoutViews();
+        return this.collection.listTablesWithoutViews();
     }
 
 
     function listTables(): array
     {
-        return this.collection->listTables();
+        return this.collection.listTables();
     }
 
 
@@ -77,14 +77,14 @@ class CachedCollection : CollectionInterface
         $cacheKey = this.cacheKey($name);
 
         if (!$options["forceRefresh"]) {
-            $cached = this.cacher->get($cacheKey);
+            $cached = this.cacher.get($cacheKey);
             if ($cached != null) {
                 return $cached;
             }
         }
 
-        $table = this.collection->describe($name, $options);
-        this.cacher->set($cacheKey, $table);
+        $table = this.collection.describe($name, $options);
+        this.cacher.set($cacheKey, $table);
 
         return $table;
     }

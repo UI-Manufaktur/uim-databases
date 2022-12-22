@@ -41,7 +41,7 @@ class StringType : BaseType : OptionalConvertInterface
         }
 
         if (is_object(aValue) && method_exists(aValue, "__toString")) {
-            return aValue->__toString();
+            return aValue.__toString();
         }
 
         if (is_scalar(aValue)) {

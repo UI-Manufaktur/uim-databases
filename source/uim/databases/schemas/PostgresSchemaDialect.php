@@ -221,7 +221,7 @@ class PostgresSchemaDialect : SchemaDialect
             $field["precision"] = $row["datetime_precision"];
         }
 
-        $schema->addColumn($row["name"], $field);
+        $schema.addColumn($row["name"], $field);
     }
 
     /**
@@ -297,7 +297,7 @@ class PostgresSchemaDialect : SchemaDialect
 
             return;
         }
-        $index = $schema->getIndex($name);
+        $index = $schema.getIndex($name);
         if (!$index) {
             $index = [
                 "type" : $type,
@@ -305,7 +305,7 @@ class PostgresSchemaDialect : SchemaDialect
             ];
         }
         $index["columns"][] = $row["attname"];
-        $schema->addIndex($name, $index);
+        $schema.addIndex($name, $index);
     }
 
     /**
@@ -319,7 +319,7 @@ class PostgresSchemaDialect : SchemaDialect
      */
     protected function _convertConstraint(TableSchema $schema, string $name, string $type, array $row): void
     {
-        $constraint = $schema->getConstraint($name);
+        $constraint = $schema.getConstraint($name);
         if (!$constraint) {
             $constraint = [
                 "type" : $type,
@@ -327,7 +327,7 @@ class PostgresSchemaDialect : SchemaDialect
             ];
         }
         $constraint["columns"][] = $row["attname"];
-        $schema->addConstraint($name, $constraint);
+        $schema.addConstraint($name, $constraint);
     }
 
 
@@ -368,7 +368,7 @@ class PostgresSchemaDialect : SchemaDialect
             "update" : this._convertOnClause($row["on_update"]),
             "delete" : this._convertOnClause($row["on_delete"]),
         ];
-        $schema->addConstraint($row["name"], $data);
+        $schema.addConstraint($row["name"], $data);
     }
 
 
@@ -391,14 +391,14 @@ class PostgresSchemaDialect : SchemaDialect
     function columnSql(TableSchema $schema, string $name): string
     {
         /** @var array $data */
-        $data = $schema->getColumn($name);
+        $data = $schema.getColumn($name);
 
         $sql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
         if ($sql != null) {
             return $sql;
         }
 
-        $out = this._driver->quoteIdentifier($name);
+        $out = this._driver.quoteIdentifier($name);
         $typeMap = [
             TableSchema::TYPE_TINYINTEGER : " SMALLINT",
             TableSchema::TYPE_SMALLINTEGER : " SMALLINT",
@@ -424,7 +424,7 @@ class PostgresSchemaDialect : SchemaDialect
 
         if ($data["type"] == TableSchema::TYPE_INTEGER || $data["type"] == TableSchema::TYPE_BIGINTEGER) {
             $type = $data["type"] == TableSchema::TYPE_INTEGER ? " INTEGER" : " BIGINT";
-            if ($schema->getPrimaryKey() == [$name] || $data["autoIncrement"] == true) {
+            if ($schema.getPrimaryKey() == [$name] || $data["autoIncrement"] == true) {
                 $type = $data["type"] == TableSchema::TYPE_INTEGER ? " SERIAL" : " BIGSERIAL";
                 unset($data["null"], $data["default"]);
             }
@@ -504,7 +504,7 @@ class PostgresSchemaDialect : SchemaDialect
             if ($data["type"] == "boolean") {
                 $defaultValue = (bool)$defaultValue;
             }
-            $out .= " DEFAULT " . this._driver->schemaValue($defaultValue);
+            $out .= " DEFAULT " . this._driver.schemaValue($defaultValue);
         } elseif (isset($data["null"]) && $data["null"] != false) {
             $out .= " DEFAULT NULL";
         }
@@ -518,11 +518,11 @@ class PostgresSchemaDialect : SchemaDialect
         $sqlPattern = "ALTER TABLE %s ADD %s;";
         $sql = [];
 
-        foreach ($schema->constraints() as $name) {
+        foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
-            $constraint = $schema->getConstraint($name);
+            $constraint = $schema.getConstraint($name);
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
-                $tableName = this._driver->quoteIdentifier($schema->name());
+                $tableName = this._driver.quoteIdentifier($schema.name());
                 $sql[] = sprintf($sqlPattern, $tableName, this.constraintSql($schema, $name));
             }
         }
@@ -536,12 +536,12 @@ class PostgresSchemaDialect : SchemaDialect
         $sqlPattern = "ALTER TABLE %s DROP CONSTRAINT %s;";
         $sql = [];
 
-        foreach ($schema->constraints() as $name) {
+        foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
-            $constraint = $schema->getConstraint($name);
+            $constraint = $schema.getConstraint($name);
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
-                $tableName = this._driver->quoteIdentifier($schema->name());
-                $constraintName = this._driver->quoteIdentifier($name);
+                $tableName = this._driver.quoteIdentifier($schema.name());
+                $constraintName = this._driver.quoteIdentifier($name);
                 $sql[] = sprintf($sqlPattern, $tableName, $constraintName);
             }
         }
@@ -553,7 +553,7 @@ class PostgresSchemaDialect : SchemaDialect
     function indexSql(TableSchema $schema, string $name): string
     {
         /** @var array $data */
-        $data = $schema->getIndex($name);
+        $data = $schema.getIndex($name);
         $columns = array_map(
             [this._driver, "quoteIdentifier"],
             $data["columns"]
@@ -561,8 +561,8 @@ class PostgresSchemaDialect : SchemaDialect
 
         return sprintf(
             "CREATE INDEX %s ON %s (%s)",
-            this._driver->quoteIdentifier($name),
-            this._driver->quoteIdentifier($schema->name()),
+            this._driver.quoteIdentifier($name),
+            this._driver.quoteIdentifier($schema.name()),
             implode(", ", $columns)
         );
     }
@@ -571,8 +571,8 @@ class PostgresSchemaDialect : SchemaDialect
     function constraintSql(TableSchema $schema, string $name): string
     {
         /** @var array<string, mixed> $data */
-        $data = $schema->getConstraint($name);
-        $out = "CONSTRAINT " . this._driver->quoteIdentifier($name);
+        $data = $schema.getConstraint($name);
+        $out = "CONSTRAINT " . this._driver.quoteIdentifier($name);
         if ($data["type"] == TableSchema::CONSTRAINT_PRIMARY) {
             $out = "PRIMARY KEY";
         }
@@ -600,7 +600,7 @@ class PostgresSchemaDialect : SchemaDialect
             return $prefix . sprintf(
                 " FOREIGN KEY (%s) REFERENCES %s (%s) ON UPDATE %s ON DELETE %s DEFERRABLE INITIALLY IMMEDIATE",
                 implode(", ", $columns),
-                this._driver->quoteIdentifier($data["references"][0]),
+                this._driver.quoteIdentifier($data["references"][0]),
                 this._convertConstraintColumns($data["references"][1]),
                 this._foreignOnClause($data["update"]),
                 this._foreignOnClause($data["delete"])
@@ -615,21 +615,21 @@ class PostgresSchemaDialect : SchemaDialect
     {
         $content = array_merge($columns, $constraints);
         $content = implode(",\n", array_filter($content));
-        $tableName = this._driver->quoteIdentifier($schema->name());
-        $temporary = $schema->isTemporary() ? " TEMPORARY " : " ";
+        $tableName = this._driver.quoteIdentifier($schema.name());
+        $temporary = $schema.isTemporary() ? " TEMPORARY " : " ";
         $out = [];
         $out[] = sprintf("CREATE%sTABLE %s (\n%s\n)", $temporary, $tableName, $content);
         foreach ($indexes as $index) {
             $out[] = $index;
         }
-        foreach ($schema->columns() as $column) {
-            $columnData = $schema->getColumn($column);
+        foreach ($schema.columns() as $column) {
+            $columnData = $schema.getColumn($column);
             if (isset($columnData["comment"])) {
                 $out[] = sprintf(
                     "COMMENT ON COLUMN %s.%s IS %s",
                     $tableName,
-                    this._driver->quoteIdentifier($column),
-                    this._driver->schemaValue($columnData["comment"])
+                    this._driver.quoteIdentifier($column),
+                    this._driver.schemaValue($columnData["comment"])
                 );
             }
         }
@@ -640,7 +640,7 @@ class PostgresSchemaDialect : SchemaDialect
 
     function truncateTableSql(TableSchema $schema): array
     {
-        $name = this._driver->quoteIdentifier($schema->name());
+        $name = this._driver.quoteIdentifier($schema.name());
 
         return [
             sprintf("TRUNCATE %s RESTART IDENTITY CASCADE", $name),
@@ -657,7 +657,7 @@ class PostgresSchemaDialect : SchemaDialect
     {
         $sql = sprintf(
             "DROP TABLE %s CASCADE",
-            this._driver->quoteIdentifier($schema->name())
+            this._driver.quoteIdentifier($schema.name())
         );
 
         return [$sql];

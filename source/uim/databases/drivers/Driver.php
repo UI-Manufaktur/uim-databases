@@ -128,18 +128,18 @@ abstract class Driver : IDTBDriver
 
         $retry = new CommandRetry(new ErrorCodeWaitStrategy(static.RETRY_ERROR_CODES, 5), 4);
         try {
-            $retry->run($action);
+            $retry.run($action);
         } catch (PDOException $e) {
             throw new MissingConnectionException(
                 [
                     "driver": App.shortName(static.class, "Database/Driver"),
-                    "reason": $e->getMessage(),
+                    "reason": $e.getMessage(),
                 ],
                 null,
                 $e
             );
         } finally {
-            this.connectRetries = $retry->getRetries();
+            this.connectRetries = $retry.getRetries();
         }
 
         return true;
@@ -165,7 +165,7 @@ abstract class Driver : IDTBDriver
     {
         if (_version == null) {
             this.connect();
-            _version = (string)_connection->getAttribute(PDO.ATTR_SERVER_VERSION);
+            _version = (string)_connection.getAttribute(PDO.ATTR_SERVER_VERSION);
         }
 
         return _version;
@@ -209,7 +209,7 @@ abstract class Driver : IDTBDriver
     function prepare($query): IStatement
     {
         this.connect();
-        $statement = _connection->prepare($query instanceof Query ? $query->sql() : $query);
+        $statement = _connection.prepare($query instanceof Query ? $query.sql() : $query);
 
         return new PDOStatement($statement, this);
     }
@@ -218,33 +218,33 @@ abstract class Driver : IDTBDriver
     function beginTransaction(): bool
     {
         this.connect();
-        if (_connection->inTransaction()) {
+        if (_connection.inTransaction()) {
             return true;
         }
 
-        return _connection->beginTransaction();
+        return _connection.beginTransaction();
     }
 
 
     function commitTransaction(): bool
     {
         this.connect();
-        if (!_connection->inTransaction()) {
+        if (!_connection.inTransaction()) {
             return false;
         }
 
-        return _connection->commit();
+        return _connection.commit();
     }
 
 
     function rollbackTransaction(): bool
     {
         this.connect();
-        if (!_connection->inTransaction()) {
+        if (!_connection.inTransaction()) {
             return false;
         }
 
-        return _connection->rollBack();
+        return _connection.rollBack();
     }
 
     /**
@@ -256,7 +256,7 @@ abstract class Driver : IDTBDriver
     {
         this.connect();
 
-        return _connection->inTransaction();
+        return _connection.inTransaction();
     }
 
 
@@ -285,7 +285,7 @@ abstract class Driver : IDTBDriver
     {
         this.connect();
 
-        return _connection->quote((string)aValue, $type);
+        return _connection.quote((string)aValue, $type);
     }
 
     /**
@@ -341,7 +341,7 @@ abstract class Driver : IDTBDriver
             return (string)aValue;
         }
 
-        return _connection->quote((string)aValue, PDO.PARAM_STR);
+        return _connection.quote((string)aValue, PDO.PARAM_STR);
     }
 
 
@@ -356,10 +356,10 @@ abstract class Driver : IDTBDriver
         this.connect();
 
         if (_connection instanceof PDO) {
-            return _connection->lastInsertId($table);
+            return _connection.lastInsertId($table);
         }
 
-        return _connection->lastInsertId($table);
+        return _connection.lastInsertId($table);
     }
 
 
@@ -369,7 +369,7 @@ abstract class Driver : IDTBDriver
             $connected = false;
         } else {
             try {
-                $connected = (bool)_connection->query("SELECT 1");
+                $connected = (bool)_connection.query("SELECT 1");
             } catch (PDOException $e) {
                 $connected = false;
             }
@@ -424,10 +424,10 @@ abstract class Driver : IDTBDriver
     function compileQuery(Query $query, ValueBinder $binder): array
     {
         $processor = this.newCompiler();
-        $translator = this.queryTranslator($query->type());
+        $translator = this.queryTranslator($query.type());
         $query = $translator($query);
 
-        return [$query, $processor->compile($query, $binder)];
+        return [$query, $processor.compile($query, $binder)];
     }
 
 

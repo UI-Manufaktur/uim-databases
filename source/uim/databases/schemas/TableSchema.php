@@ -392,7 +392,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
         }
 
         if (TypeFactory::getMap($type)) {
-            $type = TypeFactory::build($type)->getBaseType();
+            $type = TypeFactory::build($type).getBaseType();
         }
 
         return this._columns[$column]["baseType"] = $type;
@@ -674,51 +674,51 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function createSql(Connection $connection): array
     {
-        $dialect = $connection->getDriver()->schemaDialect();
+        $dialect = $connection.getDriver().schemaDialect();
         $columns = $constraints = $indexes = [];
         foreach (array_keys(this._columns) as $name) {
-            $columns[] = $dialect->columnSql(this, $name);
+            $columns[] = $dialect.columnSql(this, $name);
         }
         foreach (array_keys(this._constraints) as $name) {
-            $constraints[] = $dialect->constraintSql(this, $name);
+            $constraints[] = $dialect.constraintSql(this, $name);
         }
         foreach (array_keys(this._indexes) as $name) {
-            $indexes[] = $dialect->indexSql(this, $name);
+            $indexes[] = $dialect.indexSql(this, $name);
         }
 
-        return $dialect->createTableSql(this, $columns, $constraints, $indexes);
+        return $dialect.createTableSql(this, $columns, $constraints, $indexes);
     }
 
 
     function dropSql(Connection $connection): array
     {
-        $dialect = $connection->getDriver()->schemaDialect();
+        $dialect = $connection.getDriver().schemaDialect();
 
-        return $dialect->dropTableSql(this);
+        return $dialect.dropTableSql(this);
     }
 
 
     function truncateSql(Connection $connection): array
     {
-        $dialect = $connection->getDriver()->schemaDialect();
+        $dialect = $connection.getDriver().schemaDialect();
 
-        return $dialect->truncateTableSql(this);
+        return $dialect.truncateTableSql(this);
     }
 
 
     function addConstraintSql(Connection $connection): array
     {
-        $dialect = $connection->getDriver()->schemaDialect();
+        $dialect = $connection.getDriver().schemaDialect();
 
-        return $dialect->addConstraintSql(this);
+        return $dialect.addConstraintSql(this);
     }
 
 
     function dropConstraintSql(Connection $connection): array
     {
-        $dialect = $connection->getDriver()->schemaDialect();
+        $dialect = $connection.getDriver().schemaDialect();
 
-        return $dialect->dropConstraintSql(this);
+        return $dialect.dropConstraintSql(this);
     }
 
     /**

@@ -164,7 +164,7 @@ class Mysql : Driver
         if (!empty($config["init"])) {
             $connection = this.getConnection();
             foreach ((array)$config["init"] as $command) {
-                $connection->exec($command);
+                $connection.exec($command);
             }
         }
 
@@ -195,11 +195,11 @@ class Mysql : Driver
          * @psalm-suppress PossiblyInvalidMethodCall
          * @psalm-suppress PossiblyInvalidArgument
          */
-        $statement = this._connection->prepare($isObject ? $query->sql() : $query);
+        $statement = this._connection.prepare($isObject ? $query.sql() : $query);
         $result = new MysqlStatement($statement, this);
         /** @psalm-suppress PossiblyInvalidMethodCall */
-        if ($isObject && $query->isBufferedResultsEnabled() == false) {
-            $result->bufferResults(false);
+        if ($isObject && $query.isBufferedResultsEnabled() == false) {
+            $result.bufferResults(false);
         }
 
         return $result;
@@ -277,7 +277,7 @@ class Mysql : Driver
     {
         if (this._version == null) {
             this.connect();
-            this._version = (string)this._connection->getAttribute(PDO::ATTR_SERVER_VERSION);
+            this._version = (string)this._connection.getAttribute(PDO::ATTR_SERVER_VERSION);
 
             if (strpos(this._version, "MariaDB") != false) {
                 this.serverType = static::SERVER_TYPE_MARIADB;

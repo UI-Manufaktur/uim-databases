@@ -50,7 +50,7 @@ class Collection : CollectionInterface
     public this(Connection $connection)
     {
         this._connection = $connection;
-        this._dialect = $connection->getDriver()->schemaDialect();
+        this._dialect = $connection.getDriver().schemaDialect();
     }
 
     /**
@@ -60,13 +60,13 @@ class Collection : CollectionInterface
      */
     function listTablesWithoutViews(): array
     {
-        [$sql, $params] = this._dialect->listTablesWithoutViewsSql(this._connection->config());
+        [$sql, $params] = this._dialect.listTablesWithoutViewsSql(this._connection.config());
         $result = [];
-        $statement = this._connection->execute($sql, $params);
-        while ($row = $statement->fetch()) {
+        $statement = this._connection.execute($sql, $params);
+        while ($row = $statement.fetch()) {
             $result[] = $row[0];
         }
-        $statement->closeCursor();
+        $statement.closeCursor();
 
         return $result;
     }
@@ -78,13 +78,13 @@ class Collection : CollectionInterface
      */
     function listTables(): array
     {
-        [$sql, $params] = this._dialect->listTablesSql(this._connection->config());
+        [$sql, $params] = this._dialect.listTablesSql(this._connection.config());
         $result = [];
-        $statement = this._connection->execute($sql, $params);
-        while ($row = $statement->fetch()) {
+        $statement = this._connection.execute($sql, $params);
+        while ($row = $statement.fetch()) {
             $result[] = $row[0];
         }
-        $statement->closeCursor();
+        $statement.closeCursor();
 
         return $result;
     }
@@ -109,14 +109,14 @@ class Collection : CollectionInterface
      */
     function describe(string $name, array $options = []): ITableSchema
     {
-        $config = this._connection->config();
+        $config = this._connection.config();
         if (strpos($name, ".")) {
             [$config["schema"], $name] = explode(".", $name);
         }
-        $table = this._connection->getDriver()->newTableSchema($name);
+        $table = this._connection.getDriver().newTableSchema($name);
 
         this._reflect("Column", $name, $config, $table);
-        if (count($table->columns()) == 0) {
+        if (count($table.columns()) == 0) {
             throw new DatabaseException(sprintf("Cannot describe %s. It has 0 columns.", $name));
         }
 
@@ -150,19 +150,19 @@ class Collection : CollectionInterface
         $describeMethod = "describe{$stage}Sql";
         $convertMethod = "convert{$stage}Description";
 
-        [$sql, $params] = this._dialect->{$describeMethod}($name, $config);
+        [$sql, $params] = this._dialect.{$describeMethod}($name, $config);
         if (empty($sql)) {
             return;
         }
         try {
-            $statement = this._connection->execute($sql, $params);
+            $statement = this._connection.execute($sql, $params);
         } catch (PDOException $e) {
-            throw new DatabaseException($e->getMessage(), 500, $e);
+            throw new DatabaseException($e.getMessage(), 500, $e);
         }
         /** @psalm-suppress PossiblyFalseIterator */
-        foreach ($statement->fetchAll("assoc") as $row) {
-            this._dialect->{$convertMethod}($schema, $row);
+        foreach ($statement.fetchAll("assoc") as $row) {
+            this._dialect.{$convertMethod}($schema, $row);
         }
-        $statement->closeCursor();
+        $statement.closeCursor();
     }
 }

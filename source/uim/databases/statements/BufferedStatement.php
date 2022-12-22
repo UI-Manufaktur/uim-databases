@@ -95,7 +95,7 @@ class BufferedStatement : Iterator, StatementInterface
     {
         if ($property == "queryString") {
             /** @psalm-suppress NoInterfaceProperties */
-            return this.statement->queryString;
+            return this.statement.queryString;
         }
 
         return null;
@@ -104,31 +104,31 @@ class BufferedStatement : Iterator, StatementInterface
 
     function bindValue($column, aValue, $type = "string"): void
     {
-        this.statement->bindValue($column, aValue, $type);
+        this.statement.bindValue($column, aValue, $type);
     }
 
 
     function closeCursor(): void
     {
-        this.statement->closeCursor();
+        this.statement.closeCursor();
     }
 
 
     function columnCount(): int
     {
-        return this.statement->columnCount();
+        return this.statement.columnCount();
     }
 
 
     function errorCode()
     {
-        return this.statement->errorCode();
+        return this.statement.errorCode();
     }
 
 
     function errorInfo(): array
     {
-        return this.statement->errorInfo();
+        return this.statement.errorInfo();
     }
 
 
@@ -137,7 +137,7 @@ class BufferedStatement : Iterator, StatementInterface
         this._reset();
         this._hasExecuted = true;
 
-        return this.statement->execute($params);
+        return this.statement.execute($params);
     }
 
 
@@ -165,13 +165,13 @@ class BufferedStatement : Iterator, StatementInterface
 
     function bind(array $params, array $types): void
     {
-        this.statement->bind($params, $types);
+        this.statement.bind($params, $types);
     }
 
 
     function lastInsertId(?string $table = null, ?string $column = null)
     {
-        return this.statement->lastInsertId($table, $column);
+        return this.statement.lastInsertId($table, $column);
     }
 
     /**
@@ -196,10 +196,10 @@ class BufferedStatement : Iterator, StatementInterface
             return $row;
         }
 
-        $record = this.statement->fetch($type);
+        $record = this.statement.fetch($type);
         if ($record == false) {
             this._allFetched = true;
-            this.statement->closeCursor();
+            this.statement.closeCursor();
 
             return false;
         }
@@ -224,12 +224,12 @@ class BufferedStatement : Iterator, StatementInterface
         if (this._allFetched) {
             return this.buffer;
         }
-        $results = this.statement->fetchAll($type);
+        $results = this.statement.fetchAll($type);
         if ($results != false) {
             this.buffer = array_merge(this.buffer, $results);
         }
         this._allFetched = true;
-        this.statement->closeCursor();
+        this.statement.closeCursor();
 
         return this.buffer;
     }

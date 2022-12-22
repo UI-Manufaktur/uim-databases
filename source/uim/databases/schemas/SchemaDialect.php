@@ -48,7 +48,7 @@ abstract class SchemaDialect
      */
     public this(IDTBDriver aDriver)
     {
-        $driver->connect();
+        $driver.connect();
         this._driver = $driver;
     }
 
@@ -107,7 +107,7 @@ abstract class SchemaDialect
     protected function _convertConstraintColumns($references): string
     {
         if (is_string($references)) {
-            return this._driver->quoteIdentifier($references);
+            return this._driver.quoteIdentifier($references);
         }
 
         return implode(", ", array_map(
@@ -140,7 +140,7 @@ abstract class SchemaDialect
             return null;
         }
 
-        return $type->getColumnSql($schema, $column, this._driver);
+        return $type.getColumnSql($schema, $column, this._driver);
     }
 
     /**
@@ -163,7 +163,7 @@ abstract class SchemaDialect
             return null;
         }
 
-        return $type->convertColumnDefinition($definition, this._driver);
+        return $type.convertColumnDefinition($definition, this._driver);
     }
 
     /**
@@ -176,7 +176,7 @@ abstract class SchemaDialect
     {
         $sql = sprintf(
             "DROP TABLE %s",
-            this._driver->quoteIdentifier($schema->name())
+            this._driver.quoteIdentifier($schema.name())
         );
 
         return [$sql];

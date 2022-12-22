@@ -82,7 +82,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     {
         if ($property == "queryString") {
             /** @psalm-suppress NoInterfaceProperties */
-            return this._statement->queryString;
+            return this._statement.queryString;
         }
 
         return null;
@@ -98,9 +98,9 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Examples:
      *
      * ```
-     * $statement->bindValue(1, "a title");
-     * $statement->bindValue("active", true, "boolean");
-     * $statement->bindValue(5, new \DateTime(), "date");
+     * $statement.bindValue(1, "a title");
+     * $statement.bindValue("active", true, "boolean");
+     * $statement.bindValue(5, new \DateTime(), "date");
      * ```
      *
      * @param string|int $column name or param position to be bound
@@ -110,7 +110,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      */
     function bindValue($column, aValue, $type = "string"): void
     {
-        this._statement->bindValue($column, aValue, $type);
+        this._statement.bindValue($column, aValue, $type);
     }
 
     /**
@@ -122,7 +122,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      */
     function closeCursor(): void
     {
-        this._statement->closeCursor();
+        this._statement.closeCursor();
     }
 
     /**
@@ -131,16 +131,16 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Example:
      *
      * ```
-     * $statement = $connection->prepare("SELECT id, title from articles");
-     * $statement->execute();
-     * echo $statement->columnCount(); // outputs 2
+     * $statement = $connection.prepare("SELECT id, title from articles");
+     * $statement.execute();
+     * echo $statement.columnCount(); // outputs 2
      * ```
      *
      * @return int
      */
     function columnCount(): int
     {
-        return this._statement->columnCount();
+        return this._statement.columnCount();
     }
 
     /**
@@ -150,7 +150,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      */
     function errorCode()
     {
-        return this._statement->errorCode();
+        return this._statement.errorCode();
     }
 
     /**
@@ -161,7 +161,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      */
     function errorInfo(): array
     {
-        return this._statement->errorInfo();
+        return this._statement.errorInfo();
     }
 
     /**
@@ -177,7 +177,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     {
         this._hasExecuted = true;
 
-        return this._statement->execute($params);
+        return this._statement.execute($params);
     }
 
     /**
@@ -188,9 +188,9 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Example:
      *
      * ```
-     * $statement = $connection->prepare("SELECT id, title from articles");
-     * $statement->execute();
-     * print_r($statement->fetch("assoc")); // will show ["id" : 1, "title" : "a title"]
+     * $statement = $connection.prepare("SELECT id, title from articles");
+     * $statement.execute();
+     * print_r($statement.fetch("assoc")); // will show ["id" : 1, "title" : "a title"]
      * ```
      *
      * @param string|int $type "num" for positional columns, assoc for named columns
@@ -199,12 +199,12 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      */
     function fetch($type = self::FETCH_TYPE_NUM)
     {
-        return this._statement->fetch($type);
+        return this._statement.fetch($type);
     }
 
     /**
      * Returns the next row in a result set as an associative array. Calling this function is the same as calling
-     * $statement->fetch(StatementDecorator::FETCH_TYPE_ASSOC). If no results are found an empty array is returned.
+     * $statement.fetch(StatementDecorator::FETCH_TYPE_ASSOC). If no results are found an empty array is returned.
      *
      * @return array
      */
@@ -237,9 +237,9 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Example:
      *
      * ```
-     * $statement = $connection->prepare("SELECT id, title from articles");
-     * $statement->execute();
-     * print_r($statement->fetchAll("assoc")); // will show [0 : ["id" : 1, "title" : "a title"]]
+     * $statement = $connection.prepare("SELECT id, title from articles");
+     * $statement.execute();
+     * print_r($statement.fetchAll("assoc")); // will show [0 : ["id" : 1, "title" : "a title"]]
      * ```
      *
      * @param string|int $type num for fetching columns as positional keys or assoc for column names as keys
@@ -247,7 +247,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      */
     function fetchAll($type = self::FETCH_TYPE_NUM)
     {
-        return this._statement->fetchAll($type);
+        return this._statement.fetchAll($type);
     }
 
     /**
@@ -256,16 +256,16 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Example:
      *
      * ```
-     * $statement = $connection->prepare("SELECT id, title from articles");
-     * $statement->execute();
-     * print_r($statement->rowCount()); // will show 1
+     * $statement = $connection.prepare("SELECT id, title from articles");
+     * $statement.execute();
+     * print_r($statement.rowCount()); // will show 1
      * ```
      *
      * @return int
      */
     function rowCount(): int
     {
-        return this._statement->rowCount();
+        return this._statement.rowCount();
     }
 
     /**
@@ -275,7 +275,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Example:
      *
      * ```
-     * $statement = $connection->prepare("SELECT id, title from articles");
+     * $statement = $connection.prepare("SELECT id, title from articles");
      * foreach ($statement as $row) {
      *   //do stuff
      * }
@@ -348,7 +348,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
             }
         }
 
-        return this._driver->lastInsertId($table, $column);
+        return this._driver.lastInsertId($table, $column);
     }
 
     /**

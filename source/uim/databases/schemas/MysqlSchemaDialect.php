@@ -42,7 +42,7 @@ class MysqlSchemaDialect : SchemaDialect
      */
     function listTablesSql(array $config): array
     {
-        return ["SHOW FULL TABLES FROM " . this._driver->quoteIdentifier($config["database"]), []];
+        return ["SHOW FULL TABLES FROM " . this._driver.quoteIdentifier($config["database"]), []];
     }
 
     /**
@@ -55,7 +55,7 @@ class MysqlSchemaDialect : SchemaDialect
     function listTablesWithoutViewsSql(array $config): array
     {
         return [
-            "SHOW FULL TABLES FROM " . this._driver->quoteIdentifier($config["database"])
+            "SHOW FULL TABLES FROM " . this._driver.quoteIdentifier($config["database"])
             . " WHERE TABLE_TYPE = "BASE TABLE""
         , []];
     }
@@ -63,13 +63,13 @@ class MysqlSchemaDialect : SchemaDialect
 
     function describeColumnSql(string $tableName, array $config): array
     {
-        return ["SHOW FULL COLUMNS FROM " . this._driver->quoteIdentifier($tableName), []];
+        return ["SHOW FULL COLUMNS FROM " . this._driver.quoteIdentifier($tableName), []];
     }
 
 
     function describeIndexSql(string $tableName, array $config): array
     {
-        return ["SHOW INDEXES FROM " . this._driver->quoteIdentifier($tableName), []];
+        return ["SHOW INDEXES FROM " . this._driver.quoteIdentifier($tableName), []];
     }
 
 
@@ -81,7 +81,7 @@ class MysqlSchemaDialect : SchemaDialect
 
     function convertOptionsDescription(TableSchema $schema, array $row): void
     {
-        $schema->setOptions([
+        $schema.setOptions([
             "engine" : $row["Engine"],
             "collation" : $row["Collation"],
         ]);
@@ -212,7 +212,7 @@ class MysqlSchemaDialect : SchemaDialect
         if (isset($row["Extra"]) && $row["Extra"] == "auto_increment") {
             $field["autoIncrement"] = true;
         }
-        $schema->addColumn($row["Field"], $field);
+        $schema.addColumn($row["Field"], $field);
     }
 
 
@@ -246,9 +246,9 @@ class MysqlSchemaDialect : SchemaDialect
             $type == TableSchema::INDEX_FULLTEXT
         );
         if ($isIndex) {
-            $existing = $schema->getIndex($name);
+            $existing = $schema.getIndex($name);
         } else {
-            $existing = $schema->getConstraint($name);
+            $existing = $schema.getConstraint($name);
         }
 
         // MySQL multi column indexes come back as multiple rows.
@@ -257,13 +257,13 @@ class MysqlSchemaDialect : SchemaDialect
             $length = array_merge($existing["length"], $length);
         }
         if ($isIndex) {
-            $schema->addIndex($name, [
+            $schema.addIndex($name, [
                 "type" : $type,
                 "columns" : $columns,
                 "length" : $length,
             ]);
         } else {
-            $schema->addConstraint($name, [
+            $schema.addConstraint($name, [
                 "type" : $type,
                 "columns" : $columns,
                 "length" : $length,
@@ -297,22 +297,22 @@ class MysqlSchemaDialect : SchemaDialect
             "delete" : this._convertOnClause($row["DELETE_RULE"]),
         ];
         $name = $row["CONSTRAINT_NAME"];
-        $schema->addConstraint($name, $data);
+        $schema.addConstraint($name, $data);
     }
 
 
     function truncateTableSql(TableSchema $schema): array
     {
-        return [sprintf("TRUNCATE TABLE `%s`", $schema->name())];
+        return [sprintf("TRUNCATE TABLE `%s`", $schema.name())];
     }
 
 
     function createTableSql(TableSchema $schema, array $columns, array $constraints, array $indexes): array
     {
         $content = implode(",\n", array_merge($columns, $constraints, $indexes));
-        $temporary = $schema->isTemporary() ? " TEMPORARY " : " ";
-        $content = sprintf("CREATE%sTABLE `%s` (\n%s\n)", $temporary, $schema->name(), $content);
-        $options = $schema->getOptions();
+        $temporary = $schema.isTemporary() ? " TEMPORARY " : " ";
+        $content = sprintf("CREATE%sTABLE `%s` (\n%s\n)", $temporary, $schema.name(), $content);
+        $options = $schema.getOptions();
         if (isset($options["engine"])) {
             $content .= sprintf(" ENGINE=%s", $options["engine"]);
         }
@@ -330,15 +330,15 @@ class MysqlSchemaDialect : SchemaDialect
     function columnSql(TableSchema $schema, string $name): string
     {
         /** @var array $data */
-        $data = $schema->getColumn($name);
+        $data = $schema.getColumn($name);
 
         $sql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
         if ($sql != null) {
             return $sql;
         }
 
-        $out = this._driver->quoteIdentifier($name);
-        $nativeJson = this._driver->supports(IDTBDriver::FEATURE_JSON);
+        $out = this._driver.quoteIdentifier($name);
+        $nativeJson = this._driver.supports(IDTBDriver::FEATURE_JSON);
 
         $typeMap = [
             TableSchema::TYPE_TINYINTEGER : " TINYINT",
@@ -465,8 +465,8 @@ class MysqlSchemaDialect : SchemaDialect
             $out .= " NOT NULL";
         }
         $addAutoIncrement = (
-            $schema->getPrimaryKey() == [$name] &&
-            !$schema->hasAutoincrement() &&
+            $schema.getPrimaryKey() == [$name] &&
+            !$schema.hasAutoincrement() &&
             !isset($data["autoIncrement"])
         );
         if (
@@ -508,11 +508,11 @@ class MysqlSchemaDialect : SchemaDialect
             unset($data["default"]);
         }
         if (isset($data["default"])) {
-            $out .= " DEFAULT " . this._driver->schemaValue($data["default"]);
+            $out .= " DEFAULT " . this._driver.schemaValue($data["default"]);
             unset($data["default"]);
         }
         if (isset($data["comment"]) && $data["comment"] != "") {
-            $out .= " COMMENT " . this._driver->schemaValue($data["comment"]);
+            $out .= " COMMENT " . this._driver.schemaValue($data["comment"]);
         }
 
         return $out;
@@ -522,7 +522,7 @@ class MysqlSchemaDialect : SchemaDialect
     function constraintSql(TableSchema $schema, string $name): string
     {
         /** @var array $data */
-        $data = $schema->getConstraint($name);
+        $data = $schema.getConstraint($name);
         if ($data["type"] == TableSchema::CONSTRAINT_PRIMARY) {
             $columns = array_map(
                 [this._driver, "quoteIdentifier"],
@@ -539,7 +539,7 @@ class MysqlSchemaDialect : SchemaDialect
         if ($data["type"] == TableSchema::CONSTRAINT_FOREIGN) {
             $out = "CONSTRAINT ";
         }
-        $out .= this._driver->quoteIdentifier($name);
+        $out .= this._driver.quoteIdentifier($name);
 
         return this._keySql($out, $data);
     }
@@ -550,11 +550,11 @@ class MysqlSchemaDialect : SchemaDialect
         $sqlPattern = "ALTER TABLE %s ADD %s;";
         $sql = [];
 
-        foreach ($schema->constraints() as $name) {
+        foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
-            $constraint = $schema->getConstraint($name);
+            $constraint = $schema.getConstraint($name);
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
-                $tableName = this._driver->quoteIdentifier($schema->name());
+                $tableName = this._driver.quoteIdentifier($schema.name());
                 $sql[] = sprintf($sqlPattern, $tableName, this.constraintSql($schema, $name));
             }
         }
@@ -568,12 +568,12 @@ class MysqlSchemaDialect : SchemaDialect
         $sqlPattern = "ALTER TABLE %s DROP FOREIGN KEY %s;";
         $sql = [];
 
-        foreach ($schema->constraints() as $name) {
+        foreach ($schema.constraints() as $name) {
             /** @var array $constraint */
-            $constraint = $schema->getConstraint($name);
+            $constraint = $schema.getConstraint($name);
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
-                $tableName = this._driver->quoteIdentifier($schema->name());
-                $constraintName = this._driver->quoteIdentifier($name);
+                $tableName = this._driver.quoteIdentifier($schema.name());
+                $constraintName = this._driver.quoteIdentifier($name);
                 $sql[] = sprintf($sqlPattern, $tableName, $constraintName);
             }
         }
@@ -585,7 +585,7 @@ class MysqlSchemaDialect : SchemaDialect
     function indexSql(TableSchema $schema, string $name): string
     {
         /** @var array $data */
-        $data = $schema->getIndex($name);
+        $data = $schema.getIndex($name);
         $out = "";
         if ($data["type"] == TableSchema::INDEX_INDEX) {
             $out = "KEY ";
@@ -593,7 +593,7 @@ class MysqlSchemaDialect : SchemaDialect
         if ($data["type"] == TableSchema::INDEX_FULLTEXT) {
             $out = "FULLTEXT KEY ";
         }
-        $out .= this._driver->quoteIdentifier($name);
+        $out .= this._driver.quoteIdentifier($name);
 
         return this._keySql($out, $data);
     }
@@ -620,7 +620,7 @@ class MysqlSchemaDialect : SchemaDialect
             return $prefix . sprintf(
                 " FOREIGN KEY (%s) REFERENCES %s (%s) ON UPDATE %s ON DELETE %s",
                 implode(", ", $columns),
-                this._driver->quoteIdentifier($data["references"][0]),
+                this._driver.quoteIdentifier($data["references"][0]),
                 this._convertConstraintColumns($data["references"][1]),
                 this._foreignOnClause($data["update"]),
                 this._foreignOnClause($data["delete"])

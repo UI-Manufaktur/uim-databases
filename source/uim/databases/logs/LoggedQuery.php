@@ -144,8 +144,8 @@ class LoggedQuery : JsonSerializable
         if ($error != null) {
             $error = [
                 "class" : get_class($error),
-                "message" : $error->getMessage(),
-                "code" : $error->getCode(),
+                "message" : $error.getMessage(),
+                "code" : $error.getCode(),
             ];
         }
 

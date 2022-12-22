@@ -215,7 +215,7 @@ class Connection : ConnectionInterface
             $driver = new $className($config);
         }
 
-        if (!$driver->enabled()) {
+        if (!$driver.enabled()) {
             throw new MissingExtensionException(["driver": get_class($driver), "name": this.configName()]);
         }
 
@@ -252,14 +252,14 @@ class Connection : ConnectionInterface
     function connect(): bool
     {
         try {
-            return _driver->connect();
+            return _driver.connect();
         } catch (MissingConnectionException $e) {
             throw $e;
         } catch (Throwable $e) {
             throw new MissingConnectionException(
                 [
                     "driver": App.shortName(get_class(_driver), "Database/Driver"),
-                    "reason": $e->getMessage(),
+                    "reason": $e.getMessage(),
                 ],
                 null,
                 $e
@@ -274,7 +274,7 @@ class Connection : ConnectionInterface
      */
     function disconnect(): void
     {
-        _driver->disconnect();
+        _driver.disconnect();
     }
 
     /**
@@ -284,7 +284,7 @@ class Connection : ConnectionInterface
      */
     function isConnected(): bool
     {
-        return _driver->isConnected();
+        return _driver.isConnected();
     }
 
     /**
@@ -294,8 +294,8 @@ class Connection : ConnectionInterface
      * @return \Cake\Database\IStatement
      */
     IStatement prepare($query) {
-        return this.getDisconnectRetry()->run(function () use ($query) {
-            $statement = _driver->prepare($query);
+        return this.getDisconnectRetry().run(function () use ($query) {
+            $statement = _driver.prepare($query);
 
             if (_logQueries) {
                 $statement = _newLogger($statement);
@@ -316,12 +316,12 @@ class Connection : ConnectionInterface
      */
     function execute(string $sql, array $params = [], array $types = []): IStatement
     {
-        return this.getDisconnectRetry()->run(function () use ($sql, $params, $types) {
+        return this.getDisconnectRetry().run(function () use ($sql, $params, $types) {
             $statement = this.prepare($sql);
             if (!empty($params)) {
-                $statement->bind($params, $types);
+                $statement.bind($params, $types);
             }
-            $statement->execute();
+            $statement.execute();
 
             return $statement;
         });
@@ -337,7 +337,7 @@ class Connection : ConnectionInterface
      */
     function compileQuery(Query $query, ValueBinder $binder): string
     {
-        return this.getDriver()->compileQuery($query, $binder)[1];
+        return this.getDriver().compileQuery($query, $binder)[1];
     }
 
     /**
@@ -349,10 +349,10 @@ class Connection : ConnectionInterface
      */
     function run(Query $query): IStatement
     {
-        return this.getDisconnectRetry()->run(function () use ($query) {
+        return this.getDisconnectRetry().run(function () use ($query) {
             $statement = this.prepare($query);
-            $query->getValueBinder()->attachTo($statement);
-            $statement->execute();
+            $query.getValueBinder().attachTo($statement);
+            $statement.execute();
 
             return $statement;
         });
@@ -366,9 +366,9 @@ class Connection : ConnectionInterface
      */
     function query(string $sql): IStatement
     {
-        return this.getDisconnectRetry()->run(function () use ($sql) {
+        return this.getDisconnectRetry().run(function () use ($sql) {
             $statement = this.prepare($sql);
-            $statement->execute();
+            $statement.execute();
 
             return $statement;
         });
@@ -429,13 +429,13 @@ class Connection : ConnectionInterface
      */
     function insert(string $table, array someValues, array $types = []): IStatement
     {
-        return this.getDisconnectRetry()->run(function () use ($table, someValues, $types) {
+        return this.getDisconnectRetry().run(function () use ($table, someValues, $types) {
             $columns = array_keys(someValues);
 
-            return this.newQuery()->insert($columns, $types)
-                ->into($table)
-                ->values(someValues)
-                ->execute();
+            return this.newQuery().insert($columns, $types)
+                .into($table)
+                .values(someValues)
+                .execute();
         });
     }
 
@@ -450,11 +450,11 @@ class Connection : ConnectionInterface
      */
     function update(string $table, array someValues, array $conditions = [], array $types = []): IStatement
     {
-        return this.getDisconnectRetry()->run(function () use ($table, someValues, $conditions, $types) {
-            return this.newQuery()->update($table)
-                ->set(someValues, $types)
-                ->where($conditions, $types)
-                ->execute();
+        return this.getDisconnectRetry().run(function () use ($table, someValues, $conditions, $types) {
+            return this.newQuery().update($table)
+                .set(someValues, $types)
+                .where($conditions, $types)
+                .execute();
         });
     }
 
@@ -468,10 +468,10 @@ class Connection : ConnectionInterface
      */
     function delete(string $table, array $conditions = [], array $types = []): IStatement
     {
-        return this.getDisconnectRetry()->run(function () use ($table, $conditions, $types) {
-            return this.newQuery()->delete($table)
-                ->where($conditions, $types)
-                ->execute();
+        return this.getDisconnectRetry().run(function () use ($table, $conditions, $types) {
+            return this.newQuery().delete($table)
+                .where($conditions, $types)
+                .execute();
         });
     }
 
@@ -487,8 +487,8 @@ class Connection : ConnectionInterface
                 this.log("BEGIN");
             }
 
-            this.getDisconnectRetry()->run(function (): void {
-                _driver->beginTransaction();
+            this.getDisconnectRetry().run(function (): void {
+                _driver.beginTransaction();
             });
 
             _transactionLevel = 0;
@@ -529,7 +529,7 @@ class Connection : ConnectionInterface
                 this.log("COMMIT");
             }
 
-            return _driver->commitTransaction();
+            return _driver.commitTransaction();
         }
         if (this.isSavePointsEnabled()) {
             this.releaseSavePoint((string)_transactionLevel);
@@ -564,7 +564,7 @@ class Connection : ConnectionInterface
             if (_logQueries) {
                 this.log("ROLLBACK");
             }
-            _driver->rollbackTransaction();
+            _driver.rollbackTransaction();
 
             return true;
         }
@@ -593,7 +593,7 @@ class Connection : ConnectionInterface
         if ($enable == false) {
             _useSavePoints = false;
         } else {
-            _useSavePoints = _driver->supports(IDTBDriver.FEATURE_SAVEPOINT);
+            _useSavePoints = _driver.supports(IDTBDriver.FEATURE_SAVEPOINT);
         }
 
         return this;
@@ -629,7 +629,7 @@ class Connection : ConnectionInterface
      */
     function createSavePoint($name): void
     {
-        this.execute(_driver->savePointSQL($name))->closeCursor();
+        this.execute(_driver.savePointSQL($name)).closeCursor();
     }
 
     /**
@@ -640,9 +640,9 @@ class Connection : ConnectionInterface
      */
     function releaseSavePoint($name): void
     {
-        $sql = _driver->releaseSavePointSQL($name);
+        $sql = _driver.releaseSavePointSQL($name);
         if ($sql) {
-            this.execute($sql)->closeCursor();
+            this.execute($sql).closeCursor();
         }
     }
 
@@ -654,7 +654,7 @@ class Connection : ConnectionInterface
      */
     function rollbackSavepoint($name): void
     {
-        this.execute(_driver->rollbackSavePointSQL($name))->closeCursor();
+        this.execute(_driver.rollbackSavePointSQL($name)).closeCursor();
     }
 
     /**
@@ -664,8 +664,8 @@ class Connection : ConnectionInterface
      */
     function disableForeignKeys(): void
     {
-        this.getDisconnectRetry()->run(function (): void {
-            this.execute(_driver->disableForeignKeySQL())->closeCursor();
+        this.getDisconnectRetry().run(function (): void {
+            this.execute(_driver.disableForeignKeySQL()).closeCursor();
         });
     }
 
@@ -676,8 +676,8 @@ class Connection : ConnectionInterface
      */
     function enableForeignKeys(): void
     {
-        this.getDisconnectRetry()->run(function (): void {
-            this.execute(_driver->enableForeignKeySQL())->closeCursor();
+        this.getDisconnectRetry().run(function (): void {
+            this.execute(_driver.enableForeignKeySQL()).closeCursor();
         });
     }
 
@@ -690,7 +690,7 @@ class Connection : ConnectionInterface
      */
     function supportsDynamicConstraints(): bool
     {
-        return _driver->supportsDynamicConstraints();
+        return _driver.supportsDynamicConstraints();
     }
 
 
@@ -734,7 +734,7 @@ class Connection : ConnectionInterface
 
     function disableConstraints(callable $callback)
     {
-        return this.getDisconnectRetry()->run(function () use ($callback) {
+        return this.getDisconnectRetry().run(function () use ($callback) {
             this.disableForeignKeys();
 
             try {
@@ -762,15 +762,14 @@ class Connection : ConnectionInterface
      *
      * This uses `PDO.quote()` and requires `supportsQuoting()` to work.
      *
-     * @param mixed aValue The value to quote.
+     * aValue - The value to quote.
      * @param \Cake\Database\TypeInterface|string|int $type Type to be used for determining kind of quoting to perform
      * @return string Quoted value
      */
-    function quote(aValue, $type = "string"): string
-    {
-        [aValue, $type] = this.cast(aValue, $type);
+    string quote(DValue aValue, $type = "string") {
+      [aValue, $type] = this.cast(aValue, $type);
 
-        return _driver->quote(aValue, $type);
+      return _driver.quote(aValue, $type);
     }
 
     /**
@@ -780,9 +779,8 @@ class Connection : ConnectionInterface
      *
      * @return bool
      */
-    function supportsQuoting(): bool
-    {
-        return _driver->supports(IDTBDriver.FEATURE_QUOTE);
+    bool supportsQuoting() {
+      return _driver.supports(IDTBDriver.FEATURE_QUOTE);
     }
 
     /**
@@ -796,7 +794,7 @@ class Connection : ConnectionInterface
      */
     function quoteIdentifier(string $identifier): string
     {
-        return _driver->quoteIdentifier($identifier);
+        return _driver.quoteIdentifier($identifier);
     }
 
     /**
@@ -926,8 +924,8 @@ class Connection : ConnectionInterface
     function log(string $sql): void
     {
         $query = new LoggedQuery();
-        $query->query = $sql;
-        this.getLogger()->debug((string)$query, ["query": $query]);
+        $query.query = $sql;
+        this.getLogger().debug((string)$query, ["query": $query]);
     }
 
     /**
@@ -940,7 +938,7 @@ class Connection : ConnectionInterface
     protected function _newLogger(IStatement aStatement): LoggingStatement
     {
         $log = new LoggingStatement($statement, _driver);
-        $log->setLogger(this.getLogger());
+        $log.setLogger(this.getLogger());
 
         return $log;
     }
