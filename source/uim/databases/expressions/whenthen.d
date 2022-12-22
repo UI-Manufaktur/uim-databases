@@ -77,7 +77,7 @@ class WhenThenExpression : IDTBExpression
      * @param \Cake\Database\TypeMap|null $typeMap The type map to use when using an array of conditions for the `WHEN`
      *  value.
      */
-    function __construct(?TypeMap $typeMap = null)
+    this(?TypeMap $typeMap = null)
     {
         if ($typeMap =is null) {
             $typeMap = new TypeMap();

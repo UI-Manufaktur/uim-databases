@@ -41,7 +41,7 @@ class WindowExpression : IDTBExpression, WindowInterface
     /**
      * @param string $name Window name
      */
-    function __construct(string $name ="")
+    this(string $name ="")
     {
         $this.name = new IdentifierExpression($name);
     }

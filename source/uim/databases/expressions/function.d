@@ -51,7 +51,7 @@ class FunctionExpression extends QueryExpression : IDTBTypedResult
      * passed arguments
      * @param string $returnType The return type of this expression
      */
-    function __construct(string $name, array $params = [], array $types = [], string $returnType ="string")
+    this(string $name, array $params = [], array $types = [], string $returnType ="string")
     {
         _name = $name;
         _returnType = $returnType;
@@ -126,8 +126,7 @@ class FunctionExpression extends QueryExpression : IDTBTypedResult
     }
 
 
-    string sql(ValueBinder $binder)
-    {
+    string sql(ValueBinder $binder) {
         $parts = [];
         foreach (_conditions as $condition) {
             if ($condition instanceof Query) {

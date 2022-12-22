@@ -54,7 +54,7 @@ class CommonTableExpression : IDTBExpression
      * @param string $name The CTE name.
      * @param \Cake\Database\IDTBExpression|\Closure $query CTE query
      */
-    function __construct(string $name ="", $query = null)
+    this(string $name ="", $query = null)
     {
         $this.name = new IdentifierExpression($name);
         if ($query) {

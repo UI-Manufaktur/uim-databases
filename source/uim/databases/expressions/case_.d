@@ -98,7 +98,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
      * @param string|null $type The case value type. If no type is provided, the type will be tried to be inferred
      *  from the value.
      */
-    function __construct($value = null, ?string $type = null)
+    this($value = null, ?string $type = null)
     {
         if (func_num_args() > 0) {
             if (

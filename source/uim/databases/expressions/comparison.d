@@ -62,7 +62,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      * @param string|null $type the type name used to cast the value
      * @param string $operator the operator used for comparing field and value
      */
-    function __construct($field, $value, ?string $type = null, string $operator ="=")
+    this($field, $value, ?string $type = null, string $operator ="=")
     {
         _type = $type;
         $this.setField($field);

@@ -27,7 +27,7 @@ class StringExpression : IDTBExpression
      * @param string $string String value
      * @param string $collation String collation
      */
-    function __construct(string $string, string $collation)
+    this(string $string, string $collation)
     {
         $this.string = $string;
         $this.collation = $collation;

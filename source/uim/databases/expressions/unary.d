@@ -54,7 +54,7 @@ class UnaryExpression : IDTBExpression
      * @param mixed $value the value to use as the operand for the expression
      * @param int $position either UnaryExpression::PREFIX or UnaryExpression::POSTFIX
      */
-    function __construct(string $operator, $value, $position = self::PREFIX)
+    this(string $operator, $value, $position = self::PREFIX)
     {
         _operator = $operator;
         _value = $value;

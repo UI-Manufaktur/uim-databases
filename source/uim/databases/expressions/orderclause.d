@@ -28,7 +28,7 @@ class OrderClauseExpression : IDTBExpression, FieldInterface
      * @param \Cake\Database\IDTBExpression|string $field The field to order on.
      * @param string $direction The direction to sort on.
      */
-    function __construct($field, $direction)
+    this($field, $direction)
     {
         _field = $field;
         _direction = strtolower($direction) =="asc" ?"ASC" :"DESC";

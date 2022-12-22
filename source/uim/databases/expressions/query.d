@@ -13,18 +13,23 @@ import uim.cake;
  * expressions that can be compiled by converting this object to string
  * and will contain a correctly parenthesized and nested expression.
  */
-class QueryExpression : IDTBExpression, Countable
-{
+class QueryExpression : IDTBExpression, Countable {
     use TypeMapTrait;
 
-    /**
-     * String to be used for joining each of the internal expressions
-     * this object internally stores for example "AND", "OR", etc.
-     *
-     * @var string
-     */
-    protected $_conjunction;
+    // conjunction - String to be used for joining each of the internal expressions this object internally stores for example "AND", "OR", etc.
+    protected string _conjunction;
+    
+    // Changes the conjunction for the conditions at this level of the expression tree.
+    // aConjunction - Value to be used for joining conditions
+    O conjunction(this O)(string aConjunction) {
+      _conjunction = aConjunction.toUpper;
+      return cast(O)this;
+    }
 
+    // Gets the currently configured conjunction for the conditions at this level of the expression tree.
+    string conjunction() {
+      return _conjunction;
+    }
     /**
      * A list of strings or other expression objects that represent the "branches" of
      * the expression tree. For example one key of the array might look like "sum > :value"
@@ -48,37 +53,15 @@ class QueryExpression : IDTBExpression, Countable
      * level of the expression tree. For example "AND", "OR", "XOR"...
      * @see \Cake\Database\Expression\QueryExpression::add() for more details on $conditions and $types
      */
-    function __construct($conditions = [], $types = [], $conjunction ="AND")
-    {
+    this($conditions = [], $types = [], $conjunction ="AND") {
         $this.setTypeMap($types);
-        $this.setConjunction(strtoupper($conjunction));
+        $this.setConjunction($conjunction.toUpper);
         if (!empty($conditions)) {
-            $this.add($conditions, $this.getTypeMap().getTypes());
+          $this.add($conditions, $this.getTypeMap().getTypes());
         }
     }
 
-    /**
-     * Changes the conjunction for the conditions at this level of the expression tree.
-     *
-     * @param string $conjunction Value to be used for joining conditions
-     * @return $this
-     */
-    function setConjunction(string $conjunction)
-    {
-        _conjunction = strtoupper($conjunction);
-
-        return $this;
-    }
-
-    /**
-     * Gets the currently configured conjunction for the conditions at this level of the expression tree.
-     *
-     * @return string
-     */
-    string getConjunction()
-    {
-        return _conjunction;
-    }
+    
 
     /**
      * Adds one or more conditions to this expression object. Conditions can be
