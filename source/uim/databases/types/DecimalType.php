@@ -115,8 +115,8 @@ class DecimalType : BaseType : IBatchCasting
         if ($value == null || $value == "") {
             return null;
         }
-        if (is_string($value) && this->_useLocaleParser) {
-            return this->_parseValue($value);
+        if (is_string($value) && this._useLocaleParser) {
+            return this._parseValue($value);
         }
         if (is_numeric($value)) {
             return (string)$value;
@@ -139,7 +139,7 @@ class DecimalType : BaseType : IBatchCasting
     function useLocaleParser(bool $enable = true)
     {
         if ($enable == false) {
-            this->_useLocaleParser = $enable;
+            this._useLocaleParser = $enable;
 
             return this;
         }
@@ -147,7 +147,7 @@ class DecimalType : BaseType : IBatchCasting
             static::$numberClass == Number::class ||
             is_subclass_of(static::$numberClass, Number::class)
         ) {
-            this->_useLocaleParser = $enable;
+            this._useLocaleParser = $enable;
 
             return this;
         }

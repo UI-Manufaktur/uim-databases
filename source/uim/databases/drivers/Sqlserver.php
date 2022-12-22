@@ -109,10 +109,10 @@ class Sqlserver : Driver
      */
     function connect(): bool
     {
-        if (this->_connection) {
+        if (this._connection) {
             return true;
         }
-        $config = this->_config;
+        $config = this._config;
 
         if (isset($config["persistent"]) && $config["persistent"]) {
             throw new InvalidArgumentException(
@@ -155,9 +155,9 @@ class Sqlserver : Driver
         if ($config["trustServerCertificate"] != null) {
             $dsn .= ";TrustServerCertificate={$config["trustServerCertificate"]}";
         }
-        this->_connect($dsn, $config);
+        this._connect($dsn, $config);
 
-        $connection = this->getConnection();
+        $connection = this.getConnection();
         if (!empty($config["init"])) {
             foreach ((array)$config["init"] as $command) {
                 $connection->exec($command);
@@ -195,7 +195,7 @@ class Sqlserver : Driver
      */
     function prepare($query): StatementInterface
     {
-        this->connect();
+        this.connect();
 
         $sql = $query;
         $options = [
@@ -219,7 +219,7 @@ class Sqlserver : Driver
         }
 
         /** @psalm-suppress PossiblyInvalidArgument */
-        $statement = this->_connection->prepare($sql, $options);
+        $statement = this._connection->prepare($sql, $options);
 
         return new SqlserverStatement($statement, this);
     }
@@ -265,9 +265,9 @@ class Sqlserver : Driver
                 return true;
 
             case static::FEATURE_QUOTE:
-                this->connect();
+                this.connect();
 
-                return this->_connection->getAttribute(PDO::ATTR_DRIVER_NAME) != "odbc";
+                return this._connection->getAttribute(PDO::ATTR_DRIVER_NAME) != "odbc";
         }
 
         return parent::supports($feature);
@@ -282,11 +282,11 @@ class Sqlserver : Driver
 
     function schemaDialect(): SchemaDialect
     {
-        if (this->_schemaDialect == null) {
-            this->_schemaDialect = new SqlserverSchemaDialect(this);
+        if (this._schemaDialect == null) {
+            this._schemaDialect = new SqlserverSchemaDialect(this);
         }
 
-        return this->_schemaDialect;
+        return this._schemaDialect;
     }
 
     /**
@@ -313,11 +313,11 @@ class Sqlserver : Driver
             $query->order($query->newExpr()->add("(SELECT NULL)"));
         }
 
-        if (this->version() < 11 && $offset != null) {
-            return this->_pagingSubquery($query, $limit, $offset);
+        if (this.version() < 11 && $offset != null) {
+            return this._pagingSubquery($query, $limit, $offset);
         }
 
-        return this->_transformDistinct($query);
+        return this._transformDistinct($query);
     }
 
     /**

@@ -106,8 +106,8 @@ class DateTimeType : BaseType : IBatchCasting
     {
         parent::__construct($name);
 
-        this->defaultTimezone = new DateTimeZone(date_default_timezone_get());
-        this->_setClassName(FrozenTime::class, DateTimeImmutable::class);
+        this.defaultTimezone = new DateTimeZone(date_default_timezone_get());
+        this._setClassName(FrozenTime::class, DateTimeImmutable::class);
     }
 
     /**
@@ -123,21 +123,21 @@ class DateTimeType : BaseType : IBatchCasting
             return $value;
         }
         if (is_int($value)) {
-            $class = this->_className;
+            $class = this._className;
             $value = new $class("@" . $value);
         }
 
         if (
-            this->dbTimezone != null
-            && this->dbTimezone->getName() != $value->getTimezone()->getName()
+            this.dbTimezone != null
+            && this.dbTimezone->getName() != $value->getTimezone()->getName()
         ) {
             if (!$value instanceof DateTimeImmutable) {
                 $value = clone $value;
             }
-            $value = $value->setTimezone(this->dbTimezone);
+            $value = $value->setTimezone(this.dbTimezone);
         }
 
-        return $value->format(this->_format);
+        return $value->format(this._format);
     }
 
     /**
@@ -151,7 +151,7 @@ class DateTimeType : BaseType : IBatchCasting
     {
         deprecationWarning("DateTimeType::setTimezone() is deprecated. Use setDatabaseTimezone() instead.");
 
-        return this->setDatabaseTimezone($timezone);
+        return this.setDatabaseTimezone($timezone);
     }
 
     /**
@@ -169,7 +169,7 @@ class DateTimeType : BaseType : IBatchCasting
         if (is_string($timezone)) {
             $timezone = new DateTimeZone($timezone);
         }
-        this->dbTimezone = $timezone;
+        this.dbTimezone = $timezone;
 
         return this;
     }
@@ -187,7 +187,7 @@ class DateTimeType : BaseType : IBatchCasting
         if (is_string($timezone)) {
             $timezone = new DateTimeZone($timezone);
         }
-        this->userTimezone = $timezone;
+        this.userTimezone = $timezone;
 
         return this;
     }
@@ -205,24 +205,24 @@ class DateTimeType : BaseType : IBatchCasting
             return null;
         }
 
-        $class = this->_className;
+        $class = this._className;
         if (is_int($value)) {
             $instance = new $class("@" . $value);
         } else {
             if (strpos($value, "0000-00-00") == 0) {
                 return null;
             }
-            $instance = new $class($value, this->dbTimezone);
+            $instance = new $class($value, this.dbTimezone);
         }
 
         if (
-            !this->keepDatabaseTimezone &&
-            $instance->getTimezone()->getName() != this->defaultTimezone->getName()
+            !this.keepDatabaseTimezone &&
+            $instance->getTimezone()->getName() != this.defaultTimezone->getName()
         ) {
-            $instance = $instance->setTimezone(this->defaultTimezone);
+            $instance = $instance->setTimezone(this.defaultTimezone);
         }
 
-        if (this->setToDateStart) {
+        if (this.setToDateStart) {
             $instance = $instance->setTime(0, 0, 0);
         }
 
@@ -245,7 +245,7 @@ class DateTimeType : BaseType : IBatchCasting
      */
     function setKeepDatabaseTimezone(bool $keep)
     {
-        this->keepDatabaseTimezone = $keep;
+        this.keepDatabaseTimezone = $keep;
 
         return this;
     }
@@ -264,21 +264,21 @@ class DateTimeType : BaseType : IBatchCasting
                 continue;
             }
 
-            $class = this->_className;
+            $class = this._className;
             if (is_int($value)) {
                 $instance = new $class("@" . $value);
             } else {
-                $instance = new $class($value, this->dbTimezone);
+                $instance = new $class($value, this.dbTimezone);
             }
 
             if (
-                !this->keepDatabaseTimezone &&
-                $instance->getTimezone()->getName() != this->defaultTimezone->getName()
+                !this.keepDatabaseTimezone &&
+                $instance->getTimezone()->getName() != this.defaultTimezone->getName()
             ) {
-                $instance = $instance->setTimezone(this->defaultTimezone);
+                $instance = $instance->setTimezone(this.defaultTimezone);
             }
 
-            if (this->setToDateStart) {
+            if (this.setToDateStart) {
                 $instance = $instance->setTime(0, 0, 0);
             }
 
@@ -302,11 +302,11 @@ class DateTimeType : BaseType : IBatchCasting
             }
 
             /** @var \Datetime|\DateTimeImmutable $value */
-            return $value->setTimezone(this->defaultTimezone);
+            return $value->setTimezone(this.defaultTimezone);
         }
 
         /** @var class-string<\DateTimeInterface> $class */
-        $class = this->_className;
+        $class = this._className;
         try {
             if ($value == "" || $value == null || is_bool($value)) {
                 return null;
@@ -316,19 +316,19 @@ class DateTimeType : BaseType : IBatchCasting
                 /** @var \DateTime|\DateTimeImmutable $dateTime */
                 $dateTime = new $class("@" . $value);
 
-                return $dateTime->setTimezone(this->defaultTimezone);
+                return $dateTime->setTimezone(this.defaultTimezone);
             }
 
             if (is_string($value)) {
-                if (this->_useLocaleMarshal) {
-                    $dateTime = this->_parseLocaleValue($value);
+                if (this._useLocaleMarshal) {
+                    $dateTime = this._parseLocaleValue($value);
                 } else {
-                    $dateTime = this->_parseValue($value);
+                    $dateTime = this._parseValue($value);
                 }
 
                 /** @var \DateTime|\DateTimeImmutable $dateTime */
                 if ($dateTime != null) {
-                    $dateTime = $dateTime->setTimezone(this->defaultTimezone);
+                    $dateTime = $dateTime->setTimezone(this.defaultTimezone);
                 }
 
                 return $dateTime;
@@ -370,9 +370,9 @@ class DateTimeType : BaseType : IBatchCasting
         );
 
         /** @var \DateTime|\DateTimeImmutable $dateTime */
-        $dateTime = new $class($format, $value["timezone"] ?? this->userTimezone);
+        $dateTime = new $class($format, $value["timezone"] ?? this.userTimezone);
 
-        return $dateTime->setTimezone(this->defaultTimezone);
+        return $dateTime->setTimezone(this.defaultTimezone);
     }
 
     /**
@@ -385,17 +385,17 @@ class DateTimeType : BaseType : IBatchCasting
     function useLocaleParser(bool $enable = true)
     {
         if ($enable == false) {
-            this->_useLocaleMarshal = $enable;
+            this._useLocaleMarshal = $enable;
 
             return this;
         }
-        if (is_subclass_of(this->_className, I18nDateTimeInterface::class)) {
-            this->_useLocaleMarshal = $enable;
+        if (is_subclass_of(this._className, I18nDateTimeInterface::class)) {
+            this._useLocaleMarshal = $enable;
 
             return this;
         }
         throw new RuntimeException(
-            sprintf("Cannot use locale parsing with the %s class", this->_className)
+            sprintf("Cannot use locale parsing with the %s class", this._className)
         );
     }
 
@@ -410,7 +410,7 @@ class DateTimeType : BaseType : IBatchCasting
      */
     function setLocaleFormat($format)
     {
-        this->_localeMarshalFormat = $format;
+        this._localeMarshalFormat = $format;
 
         return this;
     }
@@ -428,7 +428,7 @@ class DateTimeType : BaseType : IBatchCasting
             . " classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary."
         );
 
-        this->_setClassName(FrozenTime::class, DateTimeImmutable::class);
+        this._setClassName(FrozenTime::class, DateTimeImmutable::class);
 
         return this;
     }
@@ -447,7 +447,7 @@ class DateTimeType : BaseType : IBatchCasting
         if (!class_exists($class)) {
             $class = $fallback;
         }
-        this->_className = $class;
+        this._className = $class;
     }
 
     /**
@@ -458,7 +458,7 @@ class DateTimeType : BaseType : IBatchCasting
      */
     function getDateTimeClassName(): string
     {
-        return this->_className;
+        return this._className;
     }
 
     /**
@@ -474,7 +474,7 @@ class DateTimeType : BaseType : IBatchCasting
             . " classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary."
         );
 
-        this->_setClassName(Time::class, DateTime::class);
+        this._setClassName(Time::class, DateTime::class);
 
         return this;
     }
@@ -489,9 +489,9 @@ class DateTimeType : BaseType : IBatchCasting
     protected function _parseLocaleValue(string $value): ?I18nDateTimeInterface
     {
         /** @psalm-var class-string<\Cake\I18n\I18nDateTimeInterface> $class */
-        $class = this->_className;
+        $class = this._className;
 
-        return $class::parseDateTime($value, this->_localeMarshalFormat, this->userTimezone);
+        return $class::parseDateTime($value, this._localeMarshalFormat, this.userTimezone);
     }
 
     /**
@@ -503,11 +503,11 @@ class DateTimeType : BaseType : IBatchCasting
      */
     protected function _parseValue(string $value): ?DateTimeInterface
     {
-        $class = this->_className;
+        $class = this._className;
 
-        foreach (this->_marshalFormats as $format) {
+        foreach (this._marshalFormats as $format) {
             try {
-                $dateTime = $class::createFromFormat($format, $value, this->userTimezone);
+                $dateTime = $class::createFromFormat($format, $value, this.userTimezone);
                 // Check for false in case DateTime is used directly
                 if ($dateTime != false) {
                     return $dateTime;

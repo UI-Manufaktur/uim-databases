@@ -65,25 +65,25 @@ class LoggingStatement : StatementDecorator
      */
     function execute(?array $params = null): bool
     {
-        this->startTime = microtime(true);
+        this.startTime = microtime(true);
 
-        this->loggedQuery = new LoggedQuery();
-        this->loggedQuery->driver = this->_driver;
-        this->loggedQuery->params = $params ?: this->_compiledParams;
+        this.loggedQuery = new LoggedQuery();
+        this.loggedQuery->driver = this._driver;
+        this.loggedQuery->params = $params ?: this._compiledParams;
 
         try {
             $result = parent::execute($params);
-            this->loggedQuery->took = (int)round((microtime(true) - this->startTime) * 1000, 0);
+            this.loggedQuery->took = (int)round((microtime(true) - this.startTime) * 1000, 0);
         } catch (Exception $e) {
             /** @psalm-suppress UndefinedPropertyAssignment */
-            $e->queryString = this->queryString;
-            this->loggedQuery->error = $e;
-            this->_log();
+            $e->queryString = this.queryString;
+            this.loggedQuery->error = $e;
+            this._log();
             throw $e;
         }
 
-        if (preg_match("/^(?!SELECT)/i", this->queryString)) {
-            this->rowCount();
+        if (preg_match("/^(?!SELECT)/i", this.queryString)) {
+            this.rowCount();
         }
 
         return $result;
@@ -94,8 +94,8 @@ class LoggingStatement : StatementDecorator
     {
         $record = parent::fetch($type);
 
-        if (this->loggedQuery) {
-            this->rowCount();
+        if (this.loggedQuery) {
+            this.rowCount();
         }
 
         return $record;
@@ -106,8 +106,8 @@ class LoggingStatement : StatementDecorator
     {
         $results = parent::fetchAll($type);
 
-        if (this->loggedQuery) {
-            this->rowCount();
+        if (this.loggedQuery) {
+            this.rowCount();
         }
 
         return $results;
@@ -118,9 +118,9 @@ class LoggingStatement : StatementDecorator
     {
         $result = parent::rowCount();
 
-        if (this->loggedQuery) {
-            this->loggedQuery->numRows = $result;
-            this->_log();
+        if (this.loggedQuery) {
+            this.loggedQuery->numRows = $result;
+            this._log();
         }
 
         return $result;
@@ -134,14 +134,14 @@ class LoggingStatement : StatementDecorator
      */
     protected function _log(): void
     {
-        if (this->loggedQuery == null) {
+        if (this.loggedQuery == null) {
             return;
         }
 
-        this->loggedQuery->query = this->queryString;
-        this->getLogger()->debug((string)this->loggedQuery, ["query" : this->loggedQuery]);
+        this.loggedQuery->query = this.queryString;
+        this.getLogger()->debug((string)this.loggedQuery, ["query" : this.loggedQuery]);
 
-        this->loggedQuery = null;
+        this.loggedQuery = null;
     }
 
     /**
@@ -161,9 +161,9 @@ class LoggingStatement : StatementDecorator
             $type = "string";
         }
         if (!ctype_digit($type)) {
-            $value = this->cast($value, $type)[0];
+            $value = this.cast($value, $type)[0];
         }
-        this->_compiledParams[$column] = $value;
+        this._compiledParams[$column] = $value;
     }
 
     /**
@@ -174,7 +174,7 @@ class LoggingStatement : StatementDecorator
      */
     function setLogger(LoggerInterface $logger): void
     {
-        this->_logger = $logger;
+        this._logger = $logger;
     }
 
     /**
@@ -184,6 +184,6 @@ class LoggingStatement : StatementDecorator
      */
     function getLogger(): LoggerInterface
     {
-        return this->_logger;
+        return this._logger;
     }
 }

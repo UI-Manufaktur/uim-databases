@@ -30,11 +30,11 @@ class MysqlStatement : PDOStatement
 
     function execute(?array $params = null): bool
     {
-        $connection = this->_driver->getConnection();
+        $connection = this._driver->getConnection();
 
         try {
-            $connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, this->_bufferResults);
-            $result = this->_statement->execute($params);
+            $connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, this._bufferResults);
+            $result = this._statement->execute($params);
         } finally {
             $connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
         }

@@ -38,7 +38,7 @@ class JsonType : BaseType : IBatchCasting
             return null;
         }
 
-        return json_encode($value, this->_encodingOptions);
+        return json_encode($value, this._encodingOptions);
     }
 
     /**
@@ -103,7 +103,7 @@ class JsonType : BaseType : IBatchCasting
      */
     function setEncodingOptions(int $options)
     {
-        this->_encodingOptions = $options;
+        this._encodingOptions = $options;
 
         return this;
     }

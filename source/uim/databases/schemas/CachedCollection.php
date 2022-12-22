@@ -53,38 +53,38 @@ class CachedCollection : CollectionInterface
      */
     public this(CollectionInterface $collection, string $prefix, CacheInterface $cacher)
     {
-        this->collection = $collection;
-        this->prefix = $prefix;
-        this->cacher = $cacher;
+        this.collection = $collection;
+        this.prefix = $prefix;
+        this.cacher = $cacher;
     }
 
 
     function listTablesWithoutViews(): array
     {
-        return this->collection->listTablesWithoutViews();
+        return this.collection->listTablesWithoutViews();
     }
 
 
     function listTables(): array
     {
-        return this->collection->listTables();
+        return this.collection->listTables();
     }
 
 
     function describe(string $name, array $options = []): ITableSchema
     {
         $options += ["forceRefresh" : false];
-        $cacheKey = this->cacheKey($name);
+        $cacheKey = this.cacheKey($name);
 
         if (!$options["forceRefresh"]) {
-            $cached = this->cacher->get($cacheKey);
+            $cached = this.cacher->get($cacheKey);
             if ($cached != null) {
                 return $cached;
             }
         }
 
-        $table = this->collection->describe($name, $options);
-        this->cacher->set($cacheKey, $table);
+        $table = this.collection->describe($name, $options);
+        this.cacher->set($cacheKey, $table);
 
         return $table;
     }
@@ -97,7 +97,7 @@ class CachedCollection : CollectionInterface
      */
     function cacheKey(string $name): string
     {
-        return this->prefix . "_" . $name;
+        return this.prefix . "_" . $name;
     }
 
     /**
@@ -108,7 +108,7 @@ class CachedCollection : CollectionInterface
      */
     function setCacher(CacheInterface $cacher)
     {
-        this->cacher = $cacher;
+        this.cacher = $cacher;
 
         return this;
     }
@@ -120,6 +120,6 @@ class CachedCollection : CollectionInterface
      */
     function getCacher(): CacheInterface
     {
-        return this->cacher;
+        return this.cacher;
     }
 }

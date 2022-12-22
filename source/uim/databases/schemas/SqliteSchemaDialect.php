@@ -77,7 +77,7 @@ class SqliteSchemaDialect : SchemaDialect
             $precision = (int)$precision;
         }
 
-        $type = this->_applyTypeSpecificColumnConversion(
+        $type = this._applyTypeSpecificColumnConversion(
             $col,
             compact("length", "precision", "scale")
         );
@@ -189,7 +189,7 @@ class SqliteSchemaDialect : SchemaDialect
     {
         $sql = sprintf(
             "PRAGMA table_info(%s)",
-            this->_driver->quoteIdentifier($tableName)
+            this._driver->quoteIdentifier($tableName)
         );
 
         return [$sql, []];
@@ -198,10 +198,10 @@ class SqliteSchemaDialect : SchemaDialect
 
     function convertColumnDescription(TableSchema $schema, array $row): void
     {
-        $field = this->_convertColumn($row["type"]);
+        $field = this._convertColumn($row["type"]);
         $field += [
             "null" : !$row["notnull"],
-            "default" : this->_defaultValue($row["dflt_value"]),
+            "default" : this._defaultValue($row["dflt_value"]),
         ];
         $primary = $schema->getConstraint("primary");
 
@@ -256,7 +256,7 @@ class SqliteSchemaDialect : SchemaDialect
     {
         $sql = sprintf(
             "PRAGMA index_list(%s)",
-            this->_driver->quoteIdentifier($tableName)
+            this._driver->quoteIdentifier($tableName)
         );
 
         return [$sql, []];
@@ -279,9 +279,9 @@ class SqliteSchemaDialect : SchemaDialect
     {
         $sql = sprintf(
             "PRAGMA index_info(%s)",
-            this->_driver->quoteIdentifier($row["name"])
+            this._driver->quoteIdentifier($row["name"])
         );
-        $statement = this->_driver->prepare($sql);
+        $statement = this._driver->prepare($sql);
         $statement->execute();
         $columns = [];
         /** @psalm-suppress PossiblyFalseIterator */
@@ -305,7 +305,7 @@ class SqliteSchemaDialect : SchemaDialect
 
     function describeForeignKeySql(string $tableName, array $config): array
     {
-        $sql = sprintf("PRAGMA foreign_key_list(%s)", this->_driver->quoteIdentifier($tableName));
+        $sql = sprintf("PRAGMA foreign_key_list(%s)", this._driver->quoteIdentifier($tableName));
 
         return [$sql, []];
     }
@@ -321,14 +321,14 @@ class SqliteSchemaDialect : SchemaDialect
             "type" : TableSchema::CONSTRAINT_FOREIGN,
             "columns" : [$row["from"]],
             "references" : [$row["table"], $row["to"]],
-            "update" : this->_convertOnClause($update),
-            "delete" : this->_convertOnClause($delete),
+            "update" : this._convertOnClause($update),
+            "delete" : this._convertOnClause($delete),
         ];
 
-        if (isset(this->_constraintsIdMap[$schema->name()][$row["id"]])) {
-            $name = this->_constraintsIdMap[$schema->name()][$row["id"]];
+        if (isset(this._constraintsIdMap[$schema->name()][$row["id"]])) {
+            $name = this._constraintsIdMap[$schema->name()][$row["id"]];
         } else {
-            this->_constraintsIdMap[$schema->name()][$row["id"]] = $name;
+            this._constraintsIdMap[$schema->name()][$row["id"]] = $name;
         }
 
         $schema->addConstraint($name, $data);
@@ -347,7 +347,7 @@ class SqliteSchemaDialect : SchemaDialect
         /** @var array $data */
         $data = $schema->getColumn($name);
 
-        $sql = this->_getTypeSpecificColumnSql($data["type"], $schema, $name);
+        $sql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
         if ($sql != null) {
             return $sql;
         }
@@ -373,7 +373,7 @@ class SqliteSchemaDialect : SchemaDialect
             TableSchema::TYPE_JSON : " TEXT",
         ];
 
-        $out = this->_driver->quoteIdentifier($name);
+        $out = this._driver->quoteIdentifier($name);
         $hasUnsigned = [
             TableSchema::TYPE_TINYINTEGER,
             TableSchema::TYPE_SMALLINTEGER,
@@ -470,7 +470,7 @@ class SqliteSchemaDialect : SchemaDialect
             $out .= " DEFAULT NULL";
         }
         if (isset($data["default"])) {
-            $out .= " DEFAULT " . this->_driver->schemaValue($data["default"]);
+            $out .= " DEFAULT " . this._driver->schemaValue($data["default"]);
         }
 
         return $out;
@@ -511,20 +511,20 @@ class SqliteSchemaDialect : SchemaDialect
 
             $clause = sprintf(
                 " REFERENCES %s (%s) ON UPDATE %s ON DELETE %s",
-                this->_driver->quoteIdentifier($data["references"][0]),
-                this->_convertConstraintColumns($data["references"][1]),
-                this->_foreignOnClause($data["update"]),
-                this->_foreignOnClause($data["delete"])
+                this._driver->quoteIdentifier($data["references"][0]),
+                this._convertConstraintColumns($data["references"][1]),
+                this._foreignOnClause($data["update"]),
+                this._foreignOnClause($data["delete"])
             );
         }
         $columns = array_map(
-            [this->_driver, "quoteIdentifier"],
+            [this._driver, "quoteIdentifier"],
             $data["columns"]
         );
 
         return sprintf(
             "CONSTRAINT %s %s (%s)%s",
-            this->_driver->quoteIdentifier($name),
+            this._driver->quoteIdentifier($name),
             $type,
             implode(", ", $columns),
             $clause
@@ -565,14 +565,14 @@ class SqliteSchemaDialect : SchemaDialect
         /** @var array $data */
         $data = $schema->getIndex($name);
         $columns = array_map(
-            [this->_driver, "quoteIdentifier"],
+            [this._driver, "quoteIdentifier"],
             $data["columns"]
         );
 
         return sprintf(
             "CREATE INDEX %s ON %s (%s)",
-            this->_driver->quoteIdentifier($name),
-            this->_driver->quoteIdentifier($schema->name()),
+            this._driver->quoteIdentifier($name),
+            this._driver->quoteIdentifier($schema->name()),
             implode(", ", $columns)
         );
     }
@@ -597,7 +597,7 @@ class SqliteSchemaDialect : SchemaDialect
     {
         $name = $schema->name();
         $sql = [];
-        if (this->hasSequences()) {
+        if (this.hasSequences()) {
             $sql[] = sprintf("DELETE FROM sqlite_sequence WHERE name="%s"", $name);
         }
 
@@ -614,14 +614,14 @@ class SqliteSchemaDialect : SchemaDialect
      */
     function hasSequences(): bool
     {
-        $result = this->_driver->prepare(
+        $result = this._driver->prepare(
             "SELECT 1 FROM sqlite_master WHERE name = "sqlite_sequence""
         );
         $result->execute();
-        this->_hasSequences = (bool)$result->rowCount();
+        this._hasSequences = (bool)$result->rowCount();
         $result->closeCursor();
 
-        return this->_hasSequences;
+        return this._hasSequences;
     }
 }
 

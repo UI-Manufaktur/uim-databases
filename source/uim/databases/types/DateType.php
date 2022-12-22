@@ -49,7 +49,7 @@ class DateType : DateTimeType
     {
         parent::__construct($name);
 
-        this->_setClassName(FrozenDate::class, DateTimeImmutable::class);
+        this._setClassName(FrozenDate::class, DateTimeImmutable::class);
     }
 
     /**
@@ -65,7 +65,7 @@ class DateType : DateTimeType
             . " classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary."
         );
 
-        this->_setClassName(FrozenDate::class, DateTimeImmutable::class);
+        this._setClassName(FrozenDate::class, DateTimeImmutable::class);
 
         return this;
     }
@@ -83,7 +83,7 @@ class DateType : DateTimeType
             . " classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary."
         );
 
-        this->_setClassName(Date::class, DateTime::class);
+        this._setClassName(Date::class, DateTime::class);
 
         return this;
     }
@@ -110,8 +110,8 @@ class DateType : DateTimeType
     protected function _parseLocaleValue(string $value): ?I18nDateTimeInterface
     {
         /** @psalm-var class-string<\Cake\I18n\I18nDateTimeInterface> $class */
-        $class = this->_className;
+        $class = this._className;
 
-        return $class::parseDate($value, this->_localeMarshalFormat);
+        return $class::parseDate($value, this._localeMarshalFormat);
     }
 }

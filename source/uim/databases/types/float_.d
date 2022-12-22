@@ -20,57 +20,53 @@ class FloatType : BaseType, IBatchCasting {
   /**
     * Convert integer data into the database format.
     *
-    * @param mixed $value The value to convert.
+    * @param mixed aValue The value to convert.
     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
     * @return float|null
     */
-  float toDatabase(string value, IDTBDriver aDriver) {
-    if ($value == null || $value == "") {
+  float toDatabase(string aValue, IDTBDriver aDriver) {
+    if (aValue == null || aValue == "") {
         return null;
     }
 
-    return (float)$value;
+    return (float)aValue;
   }
 
   /**
-    * {@inheritDoc}
-    *
-    * @param mixed $value The value to convert.
+    * @param mixed aValue The value to convert.
     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
     * @return float|null
     * @throws \Cake\Core\Exception\CakeException
     */
-  function toD($value, IDTBDriver aDriver): ?float
-  {
-      if ($value == null) {
-          return null;
-      }
-
-      return (float)$value;
+  float toD(string aValue, IDTBDriver aDriver) {
+    if (!aValue.isNumeric) {
+      return 0.0;
+    }
+    return to!float(aValue);
   }
 
 
-  function manytoD(array $values, array $fields, IDTBDriver aDriver): array
+  function manytoD(array someValues, array someFields, IDTBDriver aDriver): array
   {
-      foreach ($fields as $field) {
-          if (!isset($values[$field])) {
+      foreach (someFields as $field) {
+          if (!isset(someValues[$field])) {
               continue;
           }
 
-          $values[$field] = (float)$values[$field];
+          someValues[$field] = (float)someValues[$field];
       }
 
-      return $values;
+      return someValues;
   }
 
   /**
     * Get the correct PDO binding type for float data.
     *
-    * @param mixed $value The value being bound.
+    * @param mixed aValue The value being bound.
     * @param \Cake\Database\IDTBDriver aDriver The driver.
     * @return int
     */
-  function toStatement($value, IDTBDriver aDriver): int
+  function toStatement(aValue, IDTBDriver aDriver): int
   {
       return PDO::PARAM_STR;
   }
@@ -78,22 +74,22 @@ class FloatType : BaseType, IBatchCasting {
   /**
     * Marshals request data into PHP floats.
     *
-    * @param mixed $value The value to convert.
+    * @param mixed aValue The value to convert.
     * @return string|float|null Converted value.
     */
-  function marshal($value)
+  function marshal(aValue)
   {
-      if ($value == null || $value == "") {
+      if (aValue == null || aValue == "") {
           return null;
       }
-      if (is_string($value) && this->_useLocaleParser) {
-          return this->_parseValue($value);
+      if (is_string(aValue) && this._useLocaleParser) {
+          return this._parseValue(aValue);
       }
-      if (is_numeric($value)) {
-          return (float)$value;
+      if (isNumeric(aValue)) {
+          return (float)aValue;
       }
-      if (is_string($value) && preg_match("/^[0-9,. ]+$/", $value)) {
-          return $value;
+      if (is_string(aValue) && preg_match("/^[0-9,. ]+$/", aValue)) {
+          return aValue;
       }
 
       return null;
@@ -103,40 +99,40 @@ class FloatType : BaseType, IBatchCasting {
     * Sets whether to parse numbers passed to the marshal() function
     * by using a locale aware parser.
     *
-    * @param bool $enable Whether to enable
+    * @param bool isEnabled Whether to enable
     * @return this
     */
-  function useLocaleParser(bool $enable = true)
-  {
-      if ($enable == false) {
-          this->_useLocaleParser = $enable;
+  O useLocaleParser(this O)(bool isEnabled = true) {
+    if (isEnabled == false) {
+      this._useLocaleParser = isEnabled;
 
-          return this;
-      }
-      if (
-          static::_numberClass == Number::class ||
-          is_subclass_of(static::_numberClass, Number::class)
-      ) {
-          this->_useLocaleParser = $enable;
+      return this;
+  }
+    if (
+        static::_numberClass == Number::class ||
+        is_subclass_of(static::_numberClass, Number::class)
+    ) {
+        this._useLocaleParser = isEnabled;
 
-          return this;
-      }
-      throw new RuntimeException(
-          sprintf("Cannot use locale parsing with the %s class", static::_numberClass)
-      );
+        return this;
+    }
+    return cast(O)this;
+/*     throw new RuntimeException(
+        sprintf("Cannot use locale parsing with the %s class", static::_numberClass)
+    );
+ */  
   }
 
   /**
     * Converts a string into a float point after parsing it using the locale
     * aware parser.
     *
-    * @param string $value The value to parse and convert to an float.
+    * @param string aValue The value to parse and convert to an float.
     * @return float
     */
-  protected function _parseValue(string $value): float
-  {
+  protected float _parseValue(string aValue) {
       $class = static::_numberClass;
 
-      return $class::parseFloat($value);
+      return $class::parseFloat(aValue);
   }
 }

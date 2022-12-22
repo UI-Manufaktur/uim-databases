@@ -294,16 +294,16 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
      */
     public this(string $table, array $columns = [])
     {
-        this->_table = $table;
+        this._table = $table;
         foreach ($columns as $field : $definition) {
-            this->addColumn($field, $definition);
+            this.addColumn($field, $definition);
         }
     }
 
 
     function name(): string
     {
-        return this->_table;
+        return this._table;
     }
 
 
@@ -317,8 +317,8 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
             $valid += static::$_columnExtras[$attrs["type"]];
         }
         $attrs = array_intersect_key($attrs, $valid);
-        this->_columns[$name] = $attrs + $valid;
-        this->_typeMap[$name] = this->_columns[$name]["type"];
+        this._columns[$name] = $attrs + $valid;
+        this._typeMap[$name] = this._columns[$name]["type"];
 
         return this;
     }
@@ -326,7 +326,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function removeColumn(string $name)
     {
-        unset(this->_columns[$name], this->_typeMap[$name]);
+        unset(this._columns[$name], this._typeMap[$name]);
 
         return this;
     }
@@ -334,16 +334,16 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function columns(): array
     {
-        return array_keys(this->_columns);
+        return array_keys(this._columns);
     }
 
 
     function getColumn(string $name): ?array
     {
-        if (!isset(this->_columns[$name])) {
+        if (!isset(this._columns[$name])) {
             return null;
         }
-        $column = this->_columns[$name];
+        $column = this._columns[$name];
         unset($column["baseType"]);
 
         return $column;
@@ -352,22 +352,22 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function getColumnType(string $name): ?string
     {
-        if (!isset(this->_columns[$name])) {
+        if (!isset(this._columns[$name])) {
             return null;
         }
 
-        return this->_columns[$name]["type"];
+        return this._columns[$name]["type"];
     }
 
 
     function setColumnType(string $name, string $type)
     {
-        if (!isset(this->_columns[$name])) {
+        if (!isset(this._columns[$name])) {
             return this;
         }
 
-        this->_columns[$name]["type"] = $type;
-        this->_typeMap[$name] = $type;
+        this._columns[$name]["type"] = $type;
+        this._typeMap[$name] = $type;
 
         return this;
     }
@@ -375,17 +375,17 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function hasColumn(string $name): bool
     {
-        return isset(this->_columns[$name]);
+        return isset(this._columns[$name]);
     }
 
 
     function baseColumnType(string $column): ?string
     {
-        if (isset(this->_columns[$column]["baseType"])) {
-            return this->_columns[$column]["baseType"];
+        if (isset(this._columns[$column]["baseType"])) {
+            return this._columns[$column]["baseType"];
         }
 
-        $type = this->getColumnType($column);
+        $type = this.getColumnType($column);
 
         if ($type == null) {
             return null;
@@ -395,30 +395,30 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
             $type = TypeFactory::build($type)->getBaseType();
         }
 
-        return this->_columns[$column]["baseType"] = $type;
+        return this._columns[$column]["baseType"] = $type;
     }
 
 
     function typeMap(): array
     {
-        return this->_typeMap;
+        return this._typeMap;
     }
 
 
     function isNullable(string $name): bool
     {
-        if (!isset(this->_columns[$name])) {
+        if (!isset(this._columns[$name])) {
             return true;
         }
 
-        return this->_columns[$name]["null"] == true;
+        return this._columns[$name]["null"] == true;
     }
 
 
     function defaultValues(): array
     {
         $defaults = [];
-        foreach (this->_columns as $name : $data) {
+        foreach (this._columns as $name : $data) {
             if (!array_key_exists("default", $data)) {
                 continue;
             }
@@ -446,30 +446,30 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
                 "Invalid index type "%s" in index "%s" in table "%s".",
                 $attrs["type"],
                 $name,
-                this->_table
+                this._table
             ));
         }
         if (empty($attrs["columns"])) {
             throw new DatabaseException(sprintf(
                 "Index "%s" in table "%s" must have at least one column.",
                 $name,
-                this->_table
+                this._table
             ));
         }
         $attrs["columns"] = (array)$attrs["columns"];
         foreach ($attrs["columns"] as $field) {
-            if (empty(this->_columns[$field])) {
+            if (empty(this._columns[$field])) {
                 $msg = sprintf(
                     "Columns used in index "%s" in table "%s" must be added to the Table schema first. " .
                     "The column "%s" was not found.",
                     $name,
-                    this->_table,
+                    this._table,
                     $field
                 );
                 throw new DatabaseException($msg);
             }
         }
-        this->_indexes[$name] = $attrs;
+        this._indexes[$name] = $attrs;
 
         return this;
     }
@@ -477,17 +477,17 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function indexes(): array
     {
-        return array_keys(this->_indexes);
+        return array_keys(this._indexes);
     }
 
 
     function getIndex(string $name): ?array
     {
-        if (!isset(this->_indexes[$name])) {
+        if (!isset(this._indexes[$name])) {
             return null;
         }
 
-        return this->_indexes[$name];
+        return this._indexes[$name];
     }
 
     /**
@@ -501,13 +501,13 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
     {
         deprecationWarning("`TableSchema::primaryKey()` is deprecated. Use `TableSchema::getPrimaryKey()`.");
 
-        return this->getPrimarykey();
+        return this.getPrimarykey();
     }
 
 
     function getPrimaryKey(): array
     {
-        foreach (this->_constraints as $data) {
+        foreach (this._constraints as $data) {
             if ($data["type"] == static::CONSTRAINT_PRIMARY) {
                 return $data["columns"];
             }
@@ -528,40 +528,40 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
             throw new DatabaseException(sprintf(
                 "Invalid constraint type "%s" in table "%s".",
                 $attrs["type"],
-                this->_table
+                this._table
             ));
         }
         if (empty($attrs["columns"])) {
             throw new DatabaseException(sprintf(
                 "Constraints in table "%s" must have at least one column.",
-                this->_table
+                this._table
             ));
         }
         $attrs["columns"] = (array)$attrs["columns"];
         foreach ($attrs["columns"] as $field) {
-            if (empty(this->_columns[$field])) {
+            if (empty(this._columns[$field])) {
                 $msg = sprintf(
                     "Columns used in constraints must be added to the Table schema first. " .
                     "The column "%s" was not found in table "%s".",
                     $field,
-                    this->_table
+                    this._table
                 );
                 throw new DatabaseException($msg);
             }
         }
 
         if ($attrs["type"] == static::CONSTRAINT_FOREIGN) {
-            $attrs = this->_checkForeignKey($attrs);
+            $attrs = this._checkForeignKey($attrs);
 
-            if (isset(this->_constraints[$name])) {
-                this->_constraints[$name]["columns"] = array_unique(array_merge(
-                    this->_constraints[$name]["columns"],
+            if (isset(this._constraints[$name])) {
+                this._constraints[$name]["columns"] = array_unique(array_merge(
+                    this._constraints[$name]["columns"],
                     $attrs["columns"]
                 ));
 
-                if (isset(this->_constraints[$name]["references"])) {
-                    this->_constraints[$name]["references"][1] = array_unique(array_merge(
-                        (array)this->_constraints[$name]["references"][1],
+                if (isset(this._constraints[$name]["references"])) {
+                    this._constraints[$name]["references"][1] = array_unique(array_merge(
+                        (array)this._constraints[$name]["references"][1],
                         [$attrs["references"][1]]
                     ));
                 }
@@ -572,7 +572,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
             unset($attrs["references"], $attrs["update"], $attrs["delete"]);
         }
 
-        this->_constraints[$name] = $attrs;
+        this._constraints[$name] = $attrs;
 
         return this;
     }
@@ -580,8 +580,8 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function dropConstraint(string $name)
     {
-        if (isset(this->_constraints[$name])) {
-            unset(this->_constraints[$name]);
+        if (isset(this._constraints[$name])) {
+            unset(this._constraints[$name]);
         }
 
         return this;
@@ -594,7 +594,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
      */
     function hasAutoincrement(): bool
     {
-        foreach (this->_columns as $column) {
+        foreach (this._columns as $column) {
             if (isset($column["autoIncrement"]) && $column["autoIncrement"]) {
                 return true;
             }
@@ -634,19 +634,19 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function constraints(): array
     {
-        return array_keys(this->_constraints);
+        return array_keys(this._constraints);
     }
 
 
     function getConstraint(string $name): ?array
     {
-        return this->_constraints[$name] ?? null;
+        return this._constraints[$name] ?? null;
     }
 
 
     function setOptions(array $options)
     {
-        this->_options = $options + this->_options;
+        this._options = $options + this._options;
 
         return this;
     }
@@ -654,13 +654,13 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function getOptions(): array
     {
-        return this->_options;
+        return this._options;
     }
 
 
     function setTemporary(bool $temporary)
     {
-        this->_temporary = $temporary;
+        this._temporary = $temporary;
 
         return this;
     }
@@ -668,7 +668,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function isTemporary(): bool
     {
-        return this->_temporary;
+        return this._temporary;
     }
 
 
@@ -676,13 +676,13 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
     {
         $dialect = $connection->getDriver()->schemaDialect();
         $columns = $constraints = $indexes = [];
-        foreach (array_keys(this->_columns) as $name) {
+        foreach (array_keys(this._columns) as $name) {
             $columns[] = $dialect->columnSql(this, $name);
         }
-        foreach (array_keys(this->_constraints) as $name) {
+        foreach (array_keys(this._constraints) as $name) {
             $constraints[] = $dialect->constraintSql(this, $name);
         }
-        foreach (array_keys(this->_indexes) as $name) {
+        foreach (array_keys(this._indexes) as $name) {
             $indexes[] = $dialect->indexSql(this, $name);
         }
 
@@ -729,13 +729,13 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
     function __debugInfo(): array
     {
         return [
-            "table" : this->_table,
-            "columns" : this->_columns,
-            "indexes" : this->_indexes,
-            "constraints" : this->_constraints,
-            "options" : this->_options,
-            "typeMap" : this->_typeMap,
-            "temporary" : this->_temporary,
+            "table" : this._table,
+            "columns" : this._columns,
+            "indexes" : this._indexes,
+            "constraints" : this._constraints,
+            "options" : this._options,
+            "typeMap" : this._typeMap,
+            "temporary" : this._temporary,
         ];
     }
 }

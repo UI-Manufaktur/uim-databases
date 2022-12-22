@@ -122,10 +122,10 @@ class Mysql : Driver
      */
     function connect(): bool
     {
-        if (this->_connection) {
+        if (this._connection) {
             return true;
         }
-        $config = this->_config;
+        $config = this._config;
 
         if ($config["timezone"] == "UTC") {
             $config["timezone"] = "+0:00";
@@ -159,10 +159,10 @@ class Mysql : Driver
             $dsn .= ";charset={$config["encoding"]}";
         }
 
-        this->_connect($dsn, $config);
+        this._connect($dsn, $config);
 
         if (!empty($config["init"])) {
-            $connection = this->getConnection();
+            $connection = this.getConnection();
             foreach ((array)$config["init"] as $command) {
                 $connection->exec($command);
             }
@@ -189,13 +189,13 @@ class Mysql : Driver
      */
     function prepare($query): StatementInterface
     {
-        this->connect();
+        this.connect();
         $isObject = $query instanceof Query;
         /**
          * @psalm-suppress PossiblyInvalidMethodCall
          * @psalm-suppress PossiblyInvalidArgument
          */
-        $statement = this->_connection->prepare($isObject ? $query->sql() : $query);
+        $statement = this._connection->prepare($isObject ? $query->sql() : $query);
         $result = new MysqlStatement($statement, this);
         /** @psalm-suppress PossiblyInvalidMethodCall */
         if ($isObject && $query->isBufferedResultsEnabled() == false) {
@@ -208,17 +208,17 @@ class Mysql : Driver
 
     function schemaDialect(): SchemaDialect
     {
-        if (this->_schemaDialect == null) {
-            this->_schemaDialect = new MysqlSchemaDialect(this);
+        if (this._schemaDialect == null) {
+            this._schemaDialect = new MysqlSchemaDialect(this);
         }
 
-        return this->_schemaDialect;
+        return this._schemaDialect;
     }
 
 
     function schema(): string
     {
-        return this->_config["database"];
+        return this._config["database"];
     }
 
 
@@ -241,8 +241,8 @@ class Mysql : Driver
             case static::FEATURE_JSON:
             case static::FEATURE_WINDOW:
                 return version_compare(
-                    this->version(),
-                    this->featureVersions[this->serverType][$feature],
+                    this.version(),
+                    this.featureVersions[this.serverType][$feature],
                     ">="
                 );
         }
@@ -263,9 +263,9 @@ class Mysql : Driver
      */
     function isMariadb(): bool
     {
-        this->version();
+        this.version();
 
-        return this->serverType == static::SERVER_TYPE_MARIADB;
+        return this.serverType == static::SERVER_TYPE_MARIADB;
     }
 
     /**
@@ -275,18 +275,18 @@ class Mysql : Driver
      */
     function version(): string
     {
-        if (this->_version == null) {
-            this->connect();
-            this->_version = (string)this->_connection->getAttribute(PDO::ATTR_SERVER_VERSION);
+        if (this._version == null) {
+            this.connect();
+            this._version = (string)this._connection->getAttribute(PDO::ATTR_SERVER_VERSION);
 
-            if (strpos(this->_version, "MariaDB") != false) {
-                this->serverType = static::SERVER_TYPE_MARIADB;
-                preg_match("/^(?:5\.5\.5-)?(\d+\.\d+\.\d+.*-MariaDB[^:]*)/", this->_version, $matches);
-                this->_version = $matches[1];
+            if (strpos(this._version, "MariaDB") != false) {
+                this.serverType = static::SERVER_TYPE_MARIADB;
+                preg_match("/^(?:5\.5\.5-)?(\d+\.\d+\.\d+.*-MariaDB[^:]*)/", this._version, $matches);
+                this._version = $matches[1];
             }
         }
 
-        return this->_version;
+        return this._version;
     }
 
     /**
@@ -299,7 +299,7 @@ class Mysql : Driver
     {
         deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
 
-        return this->supports(static::FEATURE_CTE);
+        return this.supports(static::FEATURE_CTE);
     }
 
     /**
@@ -312,7 +312,7 @@ class Mysql : Driver
     {
         deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
 
-        return this->supports(static::FEATURE_JSON);
+        return this.supports(static::FEATURE_JSON);
     }
 
     /**
@@ -325,6 +325,6 @@ class Mysql : Driver
     {
         deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
 
-        return this->supports(static::FEATURE_WINDOW);
+        return this.supports(static::FEATURE_WINDOW);
     }
 }

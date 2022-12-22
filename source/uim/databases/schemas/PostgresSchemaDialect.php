@@ -109,7 +109,7 @@ class PostgresSchemaDialect : SchemaDialect
             $length = (int)$matches[2];
         }
 
-        $type = this->_applyTypeSpecificColumnConversion(
+        $type = this._applyTypeSpecificColumnConversion(
             $col,
             compact("length", "precision", "scale")
         );
@@ -183,7 +183,7 @@ class PostgresSchemaDialect : SchemaDialect
 
     function convertColumnDescription(TableSchema $schema, array $row): void
     {
-        $field = this->_convertColumn($row["type"]);
+        $field = this._convertColumn($row["type"]);
 
         if ($field["type"] == TableSchema::TYPE_BOOLEAN) {
             if ($row["default"] == "true") {
@@ -198,7 +198,7 @@ class PostgresSchemaDialect : SchemaDialect
         }
 
         $field += [
-            "default" : this->_defaultValue($row["default"]),
+            "default" : this._defaultValue($row["default"]),
             "null" : $row["null"] == "YES",
             "collate" : $row["collation_name"],
             "comment" : $row["comment"],
@@ -293,7 +293,7 @@ class PostgresSchemaDialect : SchemaDialect
             $type = TableSchema::CONSTRAINT_UNIQUE;
         }
         if ($type == TableSchema::CONSTRAINT_PRIMARY || $type == TableSchema::CONSTRAINT_UNIQUE) {
-            this->_convertConstraint($schema, $name, $type, $row);
+            this._convertConstraint($schema, $name, $type, $row);
 
             return;
         }
@@ -365,8 +365,8 @@ class PostgresSchemaDialect : SchemaDialect
             "type" : TableSchema::CONSTRAINT_FOREIGN,
             "columns" : $row["column_name"],
             "references" : [$row["references_table"], $row["references_field"]],
-            "update" : this->_convertOnClause($row["on_update"]),
-            "delete" : this->_convertOnClause($row["on_delete"]),
+            "update" : this._convertOnClause($row["on_update"]),
+            "delete" : this._convertOnClause($row["on_delete"]),
         ];
         $schema->addConstraint($row["name"], $data);
     }
@@ -393,12 +393,12 @@ class PostgresSchemaDialect : SchemaDialect
         /** @var array $data */
         $data = $schema->getColumn($name);
 
-        $sql = this->_getTypeSpecificColumnSql($data["type"], $schema, $name);
+        $sql = this._getTypeSpecificColumnSql($data["type"], $schema, $name);
         if ($sql != null) {
             return $sql;
         }
 
-        $out = this->_driver->quoteIdentifier($name);
+        $out = this._driver->quoteIdentifier($name);
         $typeMap = [
             TableSchema::TYPE_TINYINTEGER : " SMALLINT",
             TableSchema::TYPE_SMALLINTEGER : " SMALLINT",
@@ -504,7 +504,7 @@ class PostgresSchemaDialect : SchemaDialect
             if ($data["type"] == "boolean") {
                 $defaultValue = (bool)$defaultValue;
             }
-            $out .= " DEFAULT " . this->_driver->schemaValue($defaultValue);
+            $out .= " DEFAULT " . this._driver->schemaValue($defaultValue);
         } elseif (isset($data["null"]) && $data["null"] != false) {
             $out .= " DEFAULT NULL";
         }
@@ -522,8 +522,8 @@ class PostgresSchemaDialect : SchemaDialect
             /** @var array $constraint */
             $constraint = $schema->getConstraint($name);
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
-                $tableName = this->_driver->quoteIdentifier($schema->name());
-                $sql[] = sprintf($sqlPattern, $tableName, this->constraintSql($schema, $name));
+                $tableName = this._driver->quoteIdentifier($schema->name());
+                $sql[] = sprintf($sqlPattern, $tableName, this.constraintSql($schema, $name));
             }
         }
 
@@ -540,8 +540,8 @@ class PostgresSchemaDialect : SchemaDialect
             /** @var array $constraint */
             $constraint = $schema->getConstraint($name);
             if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
-                $tableName = this->_driver->quoteIdentifier($schema->name());
-                $constraintName = this->_driver->quoteIdentifier($name);
+                $tableName = this._driver->quoteIdentifier($schema->name());
+                $constraintName = this._driver->quoteIdentifier($name);
                 $sql[] = sprintf($sqlPattern, $tableName, $constraintName);
             }
         }
@@ -555,14 +555,14 @@ class PostgresSchemaDialect : SchemaDialect
         /** @var array $data */
         $data = $schema->getIndex($name);
         $columns = array_map(
-            [this->_driver, "quoteIdentifier"],
+            [this._driver, "quoteIdentifier"],
             $data["columns"]
         );
 
         return sprintf(
             "CREATE INDEX %s ON %s (%s)",
-            this->_driver->quoteIdentifier($name),
-            this->_driver->quoteIdentifier($schema->name()),
+            this._driver->quoteIdentifier($name),
+            this._driver->quoteIdentifier($schema->name()),
             implode(", ", $columns)
         );
     }
@@ -572,7 +572,7 @@ class PostgresSchemaDialect : SchemaDialect
     {
         /** @var array<string, mixed> $data */
         $data = $schema->getConstraint($name);
-        $out = "CONSTRAINT " . this->_driver->quoteIdentifier($name);
+        $out = "CONSTRAINT " . this._driver->quoteIdentifier($name);
         if ($data["type"] == TableSchema::CONSTRAINT_PRIMARY) {
             $out = "PRIMARY KEY";
         }
@@ -580,7 +580,7 @@ class PostgresSchemaDialect : SchemaDialect
             $out .= " UNIQUE";
         }
 
-        return this->_keySql($out, $data);
+        return this._keySql($out, $data);
     }
 
     /**
@@ -593,17 +593,17 @@ class PostgresSchemaDialect : SchemaDialect
     protected function _keySql(string $prefix, array $data): string
     {
         $columns = array_map(
-            [this->_driver, "quoteIdentifier"],
+            [this._driver, "quoteIdentifier"],
             $data["columns"]
         );
         if ($data["type"] == TableSchema::CONSTRAINT_FOREIGN) {
             return $prefix . sprintf(
                 " FOREIGN KEY (%s) REFERENCES %s (%s) ON UPDATE %s ON DELETE %s DEFERRABLE INITIALLY IMMEDIATE",
                 implode(", ", $columns),
-                this->_driver->quoteIdentifier($data["references"][0]),
-                this->_convertConstraintColumns($data["references"][1]),
-                this->_foreignOnClause($data["update"]),
-                this->_foreignOnClause($data["delete"])
+                this._driver->quoteIdentifier($data["references"][0]),
+                this._convertConstraintColumns($data["references"][1]),
+                this._foreignOnClause($data["update"]),
+                this._foreignOnClause($data["delete"])
             );
         }
 
@@ -615,7 +615,7 @@ class PostgresSchemaDialect : SchemaDialect
     {
         $content = array_merge($columns, $constraints);
         $content = implode(",\n", array_filter($content));
-        $tableName = this->_driver->quoteIdentifier($schema->name());
+        $tableName = this._driver->quoteIdentifier($schema->name());
         $temporary = $schema->isTemporary() ? " TEMPORARY " : " ";
         $out = [];
         $out[] = sprintf("CREATE%sTABLE %s (\n%s\n)", $temporary, $tableName, $content);
@@ -628,8 +628,8 @@ class PostgresSchemaDialect : SchemaDialect
                 $out[] = sprintf(
                     "COMMENT ON COLUMN %s.%s IS %s",
                     $tableName,
-                    this->_driver->quoteIdentifier($column),
-                    this->_driver->schemaValue($columnData["comment"])
+                    this._driver->quoteIdentifier($column),
+                    this._driver->schemaValue($columnData["comment"])
                 );
             }
         }
@@ -640,7 +640,7 @@ class PostgresSchemaDialect : SchemaDialect
 
     function truncateTableSql(TableSchema $schema): array
     {
-        $name = this->_driver->quoteIdentifier($schema->name());
+        $name = this._driver->quoteIdentifier($schema->name());
 
         return [
             sprintf("TRUNCATE %s RESTART IDENTITY CASCADE", $name),
@@ -657,7 +657,7 @@ class PostgresSchemaDialect : SchemaDialect
     {
         $sql = sprintf(
             "DROP TABLE %s CASCADE",
-            this->_driver->quoteIdentifier($schema->name())
+            this._driver->quoteIdentifier($schema->name())
         );
 
         return [$sql];

@@ -45,7 +45,7 @@ class IntegerType : BaseType : IBatchCasting
             return null;
         }
 
-        this->checkNumeric($value);
+        this.checkNumeric($value);
 
         return (int)$value;
     }
@@ -74,7 +74,7 @@ class IntegerType : BaseType : IBatchCasting
                 continue;
             }
 
-            this->checkNumeric($values[$field]);
+            this.checkNumeric($values[$field]);
 
             $values[$field] = (int)$values[$field];
         }

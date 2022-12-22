@@ -39,19 +39,19 @@ abstract class BaseType : TypeInterface
      */
     public this(?string $name = null)
     {
-        this->_name = $name;
+        this._name = $name;
     }
 
 
     function getName(): ?string
     {
-        return this->_name;
+        return this._name;
     }
 
 
     function getBaseType(): ?string
     {
-        return this->_name;
+        return this._name;
     }
 
 
