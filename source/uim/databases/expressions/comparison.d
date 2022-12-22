@@ -58,11 +58,11 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      * Constructor
      *
      * @param uim.databases\IDTBExpression|string $field the field name to compare to a value
-     * @param mixed aValue The value to be used in comparison
+     * aValue - The value to be used in comparison
      * @param string|null $type the type name used to cast the value
      * @param string $operator the operator used for comparing field and value
      */
-    this($field, aValue, ?string $type = null, string $operator ="=")
+    this($field, DValue aValue, ?string $type = null, string $operator ="=")
     {
         _type = $type;
         $this.setField($field);
@@ -73,10 +73,10 @@ class ComparisonExpression : IDTBExpression, FieldInterface
     /**
      * Sets the value
      *
-     * @param mixed aValue The value to compare
+     * aValue - The value to compare
      * @return void
      */
-    function setValue(aValue): void
+    function setValue(DValue aValue): void
     {
         aValue = _castToExpression(aValue, _type);
 
@@ -94,8 +94,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      *
      * @return mixed
      */
-    function getValue()
-    {
+    DValue getValue() {
         return _value;
     }
 
@@ -137,10 +136,10 @@ class ComparisonExpression : IDTBExpression, FieldInterface
             $template ="%s %s (%s)";
             aValue = _value.sql($binder);
         } else {
-            [$template, aValue] = _stringExpression($binder);
+            [$template, DValue aValue] = _stringExpression($binder);
         }
 
-        return sprintf($template, $field, _operator, aValue);
+        return sprintf($template, $field, _operator, DValue aValue);
     }
 
 
@@ -217,7 +216,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
             aValue = _bindValue(_value, $binder, _type);
         }
 
-        return [$template, aValue];
+        return [$template, DValue aValue];
     }
 
     /**
@@ -230,7 +229,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      */
     protected string _bindValue(aValue, ValueBinder aValueBinder, ?string $type = null) {
         $placeholder = aValueBinder.placeholder("c");
-        aValueBinder.bind($placeholder, aValue, $type);
+        aValueBinder.bind($placeholder, DValue aValue, $type);
 
         return $placeholder;
     }

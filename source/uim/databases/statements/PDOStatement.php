@@ -87,7 +87,7 @@ class PDOStatement : StatementDecorator
      * @param string|int|null $type PDO type or name of configured Type class
      * @return void
      */
-    function bindValue($column, aValue, $type = "string"): void
+    function bindValue($column, DValue aValue, $type = "string"): void
     {
         if ($type == null) {
             $type = "string";
@@ -95,7 +95,7 @@ class PDOStatement : StatementDecorator
         if (!is_int($type)) {
             [aValue, $type] = this.cast(aValue, $type);
         }
-        this._statement.bindValue($column, aValue, $type);
+        this._statement.bindValue($column, DValue aValue, $type);
     }
 
     /**

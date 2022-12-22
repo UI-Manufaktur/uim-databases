@@ -88,7 +88,7 @@ class FloatType : BaseType, IBatchCasting {
       if (isNumeric(aValue)) {
           return (float)aValue;
       }
-      if (is_string(aValue) && preg_match("/^[0-9,. ]+$/", aValue)) {
+      if (is_string(aValue) && preg_match("/^[0-9,. ]+$/", DValue aValue)) {
           return aValue;
       }
 

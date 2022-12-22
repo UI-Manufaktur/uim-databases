@@ -82,14 +82,14 @@ class BetweenExpression : IExpression, IField {
     /**
      * Registers a value in the placeholder generator and returns the generated placeholder
      *
-     * @param mixed aValue The value to bind
+     * aValue - The value to bind
      * @param uim.databases\ValueBinder aValueBinder The value binder to use
      * @param string $type The type of aValue
      * @return string generated placeholder
      */
-    protected string _bindValue(aValue, DDTBValueBinder aBinder, $type) {
+    protected string _bindValue(DValue aValue, DDTBValueBinder aBinder, $type) {
       auto myPlaceholder = aBinder.placeholder("c");
-      aBinder.bind(myPlaceholder, aValue, $type);
+      aBinder.bind(myPlaceholder, DValue aValue, $type);
 
       return myPlaceholder;
     }

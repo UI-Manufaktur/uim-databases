@@ -83,7 +83,7 @@ trait CaseExpressionTrait
      * @param string|null $type The value type.
      * @return string
      */
-    protected string compileNullableValue(ValueBinder aValueBinder, aValue, ?string $type = null)
+    protected string compileNullableValue(ValueBinder aValueBinder, DValue aValue, ?string $type = null)
     {
         if (
             $type !is null &&
@@ -95,12 +95,12 @@ trait CaseExpressionTrait
         if (aValue =is null) {
             aValue ="NULL";
         } elseif (aValue instanceof Query) {
-            aValue = sprintf("(%s)", aValue.sql($binder));
+            aValue = sprintf("(%s)", DValue aValue.sql($binder));
         } elseif (aValue instanceof IDTBExpression) {
             aValue = aValue.sql($binder);
         } else {
             $placeholder = $binder.placeholder("c");
-            $binder.bind($placeholder, aValue, $type);
+            $binder.bind($placeholder, DValue aValue, $type);
             aValue = $placeholder;
         }
 

@@ -65,7 +65,7 @@ interface IStatement
      * @param string|int|null $type name of configured Type class, or PDO type constant.
      * @return void
      */
-    function bindValue($column, aValue, $type = "string"): void;
+    function bindValue($column, DValue aValue, $type = "string"): void;
 
     /**
      * Closes a cursor in the database, freeing up any resources and memory

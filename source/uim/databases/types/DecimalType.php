@@ -121,7 +121,7 @@ class DecimalType : BaseType, IBatchCasting
         if (is_numeric(aValue)) {
             return (string)aValue;
         }
-        if (is_string(aValue) && preg_match("/^[0-9,. ]+$/", aValue)) {
+        if (is_string(aValue) && preg_match("/^[0-9,. ]+$/", DValue aValue)) {
             return aValue;
         }
 

@@ -170,7 +170,7 @@ class Sqlserver : Driver
         }
         if (!empty($config["attributes"]) && is_array($config["attributes"])) {
             foreach ($config["attributes"] as $key : aValue) {
-                $connection.setAttribute($key, aValue);
+                $connection.setAttribute($key, DValue aValue);
             }
         }
 

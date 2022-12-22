@@ -52,61 +52,50 @@ class TupleComparison : ComparisonExpression
         $this.setValue(someValues);
     }
 
-    /**
-     * Returns the type to be used for casting the value to a database representation
-     *
-     * @return array<string|null>
-     */
-    function getType(): array
-    {
-        return _type;
+    // Returns the type to be used for casting the value to a database representation
+    Nullable!string[] getType() {
+      return _type;
     }
 
-    /**
-     * Sets the value
-     *
-     * @param mixed aValue The value to compare
-     * @return void
-     */
-    function setValue(aValue): void
-    {
-        if ($this.isMulti()) {
-            if (is_array(aValue) && !is_array(current(aValue))) {
-                throw new InvalidArgumentException(
-                   "Multi-tuple comparisons require a multi-tuple value, single-tuple given."
-                );
-            }
-        } else {
-            if (is_array(aValue) && is_array(current(aValue))) {
-                throw new InvalidArgumentException(
-                   "Single-tuple comparisons require a single-tuple value, multi-tuple given."
-                );
-            }
+    // Sets the value
+    // aValue - The value to compare
+    void setValue(DValue aValue) {
+      if ($this.isMulti()) {
+        if (is_array(aValue) && !is_array(current(aValue))) {
+          throw new InvalidArgumentException(
+            "Multi-tuple comparisons require a multi-tuple value, single-tuple given."
+          );
         }
+      } else {
+        if (is_array(aValue) && is_array(current(aValue))) {
+          throw new InvalidArgumentException(
+            "Single-tuple comparisons require a single-tuple value, multi-tuple given."
+          );
+        }
+      }
 
-        _value = aValue;
+      _value = aValue;
     }
 
 
-    string sql(ValueBinder aValueBinder)
-    {
-        $template ="(%s) %s (%s)";
-        $fields = [];
-        $originalFields = $this.getField();
+    string sql(ValueBinder aValueBinder) {
+      $template ="(%s) %s (%s)";
+      $fields = [];
+      $originalFields = $this.getField();
 
-        if (!is_array($originalFields)) {
-            $originalFields = [$originalFields];
-        }
+      if (!is_array($originalFields)) {
+          $originalFields = [$originalFields];
+      }
 
-        foreach ($originalFields as $field) {
-            $fields[] = $field instanceof IDTBExpression ? $field.sql($binder) : $field;
-        }
+      foreach ($originalFields as $field) {
+          $fields[] = $field instanceof IDTBExpression ? $field.sql($binder) : $field;
+      }
 
-        someValues = _stringifyValues($binder);
+      someValues = _stringifyValues($binder);
 
-        $field = implode(",", $fields);
+      $field = implode(",", $fields);
 
-        return sprintf($template, $field, _operator, someValues);
+      return sprintf($template, $field, _operator, someValues);
     }
 
     /**
@@ -161,7 +150,7 @@ class TupleComparison : ComparisonExpression
     protected string _bindValue(aValue, ValueBinder aValueBinder, ?string $type = null)
     {
         $placeholder = $binder.placeholder("tuple");
-        $binder.bind($placeholder, aValue, $type);
+        $binder.bind($placeholder, DValue aValue, $type);
 
         return $placeholder;
     }
@@ -200,11 +189,11 @@ class TupleComparison : ComparisonExpression
      * Conditionally executes the callback for the passed value if
      * it is an IDTBExpression
      *
-     * @param mixed aValue The value to traverse
+     * aValue - The value to traverse
      * @param \Closure $callback The callable to use when traversing
      * @return void
      */
-    protected function _traverseValue(aValue, Closure $callback): void
+    protected function _traverseValue(DValue aValue, Closure $callback): void
     {
         if (aValue instanceof IDTBExpression) {
             $callback(aValue);

@@ -36,7 +36,7 @@ class ValueBinder {
      * to database
      * @return void
      */
-    void bind(string aParameter, param, aValue, aType = null) {
+    void bind(string aParameter, param, DValue aValue, aType = null) {
         _bindings[aParameter] = ["value": aValue, "type":aType];
         _bindings[aParameter]["placeholder"] = isInt(aParameter) ? aParameter : subString(aParameter, 1);
     }

@@ -776,8 +776,6 @@ class Connection : ConnectionInterface
      * Checks if using `quote()` is supported.
      *
      * This is not required to use `quoteIdentifier()`.
-     *
-     * @return bool
      */
     bool supportsQuoting() {
       return _driver.supports(IDTBDriver.FEATURE_QUOTE);
@@ -792,9 +790,8 @@ class Connection : ConnectionInterface
      * @param string $identifier The identifier to quote.
      * @return string
      */
-    function quoteIdentifier(string $identifier): string
-    {
-        return _driver.quoteIdentifier($identifier);
+    string quoteIdentifier(string $identifier) {
+      return _driver.quoteIdentifier($identifier);
     }
 
     /**
@@ -806,18 +803,16 @@ class Connection : ConnectionInterface
      *   true to use `_cake_model_` or the name of the cache config to use.
      * @return void
      */
-    function cacheMetadata($cache): void
-    {
-        _schemaCollection = null;
-        _config["cacheMetadata"] = $cache;
-        if (is_string($cache)) {
-            this.cacher = null;
-        }
+    void cacheMetadata($cache) {
+      _schemaCollection = null;
+      _config["cacheMetadata"] = $cache;
+      if (is_string($cache)) {
+          this.cacher = null;
+      }
     }
 
 
-    function setCacher(CacheInterface $cacher)
-    {
+    function setCacher(CacheInterface $cacher) {
         this.cacher = $cacher;
 
         return this;

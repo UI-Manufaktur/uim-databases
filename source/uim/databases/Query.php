@@ -1797,7 +1797,7 @@ class Query : ExpressionInterface, IteratorAggregate
      * @param array<string, string>|string $types The column types to treat data as.
      * @return this
      */
-    function set($key, aValue = null, $types = [])
+    function set($key, DValue aValue = null, $types = [])
     {
         if (empty(_parts["set"])) {
             _parts["set"] = this.newExpr().setConjunction(",");
@@ -1820,7 +1820,7 @@ class Query : ExpressionInterface, IteratorAggregate
         if (!is_string($types)) {
             $types = null;
         }
-        _parts["set"].eq($key, aValue, $types);
+        _parts["set"].eq($key, DValue aValue, $types);
 
         return this;
     }
@@ -2123,9 +2123,9 @@ class Query : ExpressionInterface, IteratorAggregate
      *   to database
      * @return this
      */
-    function bind($param, aValue, $type = null)
+    function bind($param, DValue aValue, $type = null)
     {
-        this.getValueBinder().bind($param, aValue, $type);
+        this.getValueBinder().bind($param, DValue aValue, $type);
 
         return this;
     }

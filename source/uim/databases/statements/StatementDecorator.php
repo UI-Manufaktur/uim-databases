@@ -108,9 +108,9 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * @param string|int|null $type name of configured Type class
      * @return void
      */
-    function bindValue($column, aValue, $type = "string"): void
+    function bindValue($column, DValue aValue, $type = "string"): void
     {
-        this._statement.bindValue($column, aValue, $type);
+        this._statement.bindValue($column, DValue aValue, $type);
     }
 
     /**
@@ -327,7 +327,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
                 $index += $offset;
             }
             /** @psalm-suppress InvalidScalarArgument */
-            this.bindValue($index, aValue, $type);
+            this.bindValue($index, DValue aValue, $type);
         }
     }
 

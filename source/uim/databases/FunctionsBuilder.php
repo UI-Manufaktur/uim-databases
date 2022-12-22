@@ -208,7 +208,7 @@ class FunctionsBuilder
      * @param array $types list of types to bind to the arguments
      * @return \Cake\Database\Expression\FunctionExpression
      */
-    function dateAdd($expression, aValue, string $unit, array $types = []): FunctionExpression
+    function dateAdd($expression, DValue aValue, string $unit, array $types = []): FunctionExpression
     {
         if (!is_numeric(aValue)) {
             aValue = 0;

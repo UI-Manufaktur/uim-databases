@@ -337,21 +337,21 @@ class DateTimeType : BaseType, IBatchCasting
             return null;
         }
 
-        if (is_array(aValue) && implode("", aValue) == "") {
+        if (is_array(aValue) && implode("", DValue aValue) == "") {
             return null;
         }
         aValue += ["hour" : 0, "minute" : 0, "second" : 0, "microsecond" : 0];
 
         $format = "";
         if (
-            isset(aValue["year"], aValue["month"], aValue["day"]) &&
+            isset(aValue["year"], DValue aValue["month"], DValue aValue["day"]) &&
             (
                 is_numeric(aValue["year"]) &&
                 is_numeric(aValue["month"]) &&
                 is_numeric(aValue["day"])
             )
         ) {
-            $format .= sprintf("%d-%02d-%02d", aValue["year"], aValue["month"], aValue["day"]);
+            $format .= sprintf("%d-%02d-%02d", DValue aValue["year"], DValue aValue["month"], DValue aValue["day"]);
         }
 
         if (isset(aValue["meridian"]) && (int)aValue["hour"] == 12) {
@@ -370,7 +370,7 @@ class DateTimeType : BaseType, IBatchCasting
         );
 
         /** @var \DateTime|\DateTimeImmutable $dateTime */
-        $dateTime = new $class($format, aValue["timezone"] ?? this.userTimezone);
+        $dateTime = new $class($format, DValue aValue["timezone"] ?? this.userTimezone);
 
         return $dateTime.setTimezone(this.defaultTimezone);
     }
@@ -507,7 +507,7 @@ class DateTimeType : BaseType, IBatchCasting
 
         foreach (this._marshalFormats as $format) {
             try {
-                $dateTime = $class::createFromFormat($format, aValue, this.userTimezone);
+                $dateTime = $class::createFromFormat($format, DValue aValue, this.userTimezone);
                 // Check for false in case DateTime is used directly
                 if ($dateTime != false) {
                     return $dateTime;

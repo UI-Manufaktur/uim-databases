@@ -54,7 +54,7 @@ class UnaryExpression : IDTBExpression
      * @param mixed aValue the value to use as the operand for the expression
      * @param int $position either UnaryExpression.PREFIX or UnaryExpression.POSTFIX
      */
-    this(string $operator, aValue, $position = self.PREFIX)
+    this(string $operator, DValue aValue, $position = self.PREFIX)
     {
         _operator = $operator;
         _value = aValue;

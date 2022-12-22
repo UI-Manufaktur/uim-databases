@@ -36,7 +36,7 @@ class SqlserverStatement : PDOStatement
      * @param string|int|null $type PDO type or name of configured Type class
      * @return void
      */
-    function bindValue($column, aValue, $type = "string"): void
+    function bindValue($column, DValue aValue, $type = "string"): void
     {
         if ($type == null) {
             $type = "string";
@@ -46,9 +46,9 @@ class SqlserverStatement : PDOStatement
         }
         if ($type == PDO::PARAM_LOB) {
             /** @psalm-suppress UndefinedConstant */
-            this._statement.bindParam($column, aValue, $type, 0, PDO::SQLSRV_ENCODING_BINARY);
+            this._statement.bindParam($column, DValue aValue, $type, 0, PDO::SQLSRV_ENCODING_BINARY);
         } else {
-            this._statement.bindValue($column, aValue, $type);
+            this._statement.bindValue($column, DValue aValue, $type);
         }
     }
 }
