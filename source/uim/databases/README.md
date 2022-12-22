@@ -55,7 +55,7 @@ directly in the options array:
 import uim.databases.Connection;
 
 myConnection = new Connection([
-	"driver":Cake\Database\Driver\Sqlite::class,
+	"driver":Cake\Database\Driver\Sqlite.class,
 	"database":"/path/to/file.db"
 ]);
 ```

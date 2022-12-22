@@ -33,7 +33,7 @@ trait TypeConverterTrait
     function cast($value, $type = "string"): array
     {
         if (is_string($type)) {
-            $type = TypeFactory::build($type);
+            $type = TypeFactory.build($type);
         }
         if ($type instanceof TypeInterface) {
             $value = $type->toDatabase($value, _driver);

@@ -38,14 +38,14 @@ use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Sqlite;
 
 $connection = new Connection([
-	"driver": Mysql::class,
+	"driver": Mysql.class,
 	"database": "test",
 	"username": "root",
 	"password": "secret",
 ]);
 
 $connection2 = new Connection([
-	"driver": Sqlite::class,
+	"driver": Sqlite.class,
 	"database": "/path/to/file.db"
 ]);
 ```

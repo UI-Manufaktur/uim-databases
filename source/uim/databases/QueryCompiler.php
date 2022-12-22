@@ -330,7 +330,7 @@ class QueryCompiler
                 $part = $part->sql($binder);
             }
             if ($part[0] === "(") {
-                $part = substr($part, 1, -1);
+                $part = subString($part, 1, -1);
             }
             $set[] = $part;
         }

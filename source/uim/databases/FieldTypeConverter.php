@@ -67,7 +67,7 @@ class FieldTypeConverter
     {
         _driver = $driver;
         $map = $typeMap->toArray();
-        $types = TypeFactory::buildAll();
+        $types = TypeFactory.buildAll();
 
         $simpleMap = $batchingMap = [];
         $simpleResult = $batchingResult = [];

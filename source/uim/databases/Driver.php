@@ -126,13 +126,13 @@ abstract class Driver implements DriverInterface
             ));
         };
 
-        $retry = new CommandRetry(new ErrorCodeWaitStrategy(static::RETRY_ERROR_CODES, 5), 4);
+        $retry = new CommandRetry(new ErrorCodeWaitStrategy(static.RETRY_ERROR_CODES, 5), 4);
         try {
             $retry->run($action);
         } catch (PDOException $e) {
             throw new MissingConnectionException(
                 [
-                    "driver": App::shortName(static::class, "Database/Driver"),
+                    "driver": App.shortName(static.class, "Database/Driver"),
                     "reason": $e->getMessage(),
                 ],
                 null,
@@ -169,7 +169,7 @@ abstract class Driver implements DriverInterface
     {
         if (_version === null) {
             this.connect();
-            _version = (string)_connection->getAttribute(PDO::ATTR_SERVER_VERSION);
+            _version = (string)_connection->getAttribute(PDO.ATTR_SERVER_VERSION);
         }
 
         return _version;
@@ -184,7 +184,7 @@ abstract class Driver implements DriverInterface
     {
         if (_connection === null) {
             throw new MissingConnectionException([
-                "driver": App::shortName(static::class, "Database/Driver"),
+                "driver": App.shortName(static.class, "Database/Driver"),
                 "reason": "Unknown",
             ]);
         }
@@ -280,26 +280,26 @@ abstract class Driver implements DriverInterface
     {
         deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
 
-        return this.supports(static::FEATURE_SAVEPOINT);
+        return this.supports(static.FEATURE_SAVEPOINT);
     }
 
     /**
      * Returns true if the server supports common table expressions.
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(DriverInterface::FEATURE_QUOTE)` instead
+     * @deprecated 4.3.0 Use `supports(DriverInterface.FEATURE_QUOTE)` instead
      */
     function supportsCTEs(): bool
     {
         deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
 
-        return this.supports(static::FEATURE_CTE);
+        return this.supports(static.FEATURE_CTE);
     }
 
     /**
      * @inheritDoc
      */
-    function quote($value, $type = PDO::PARAM_STR): string
+    function quote($value, $type = PDO.PARAM_STR): string
     {
         this.connect();
 
@@ -310,13 +310,13 @@ abstract class Driver implements DriverInterface
      * Checks if the driver supports quoting, as PDO_ODBC does not support it.
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(DriverInterface::FEATURE_QUOTE)` instead
+     * @deprecated 4.3.0 Use `supports(DriverInterface.FEATURE_QUOTE)` instead
      */
     function supportsQuoting(): bool
     {
         deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
 
-        return this.supports(static::FEATURE_QUOTE);
+        return this.supports(static.FEATURE_QUOTE);
     }
 
     /**
@@ -360,14 +360,14 @@ abstract class Driver implements DriverInterface
             (
                 is_numeric($value) &&
                 strpos($value, ",") === false &&
-                substr($value, 0, 1) != "0" &&
+                subString($value, 0, 1) != "0" &&
                 strpos($value, "e") === false
             )
         ) {
             return (string)$value;
         }
 
-        return _connection->quote((string)$value, PDO::PARAM_STR);
+        return _connection->quote((string)$value, PDO.PARAM_STR);
     }
 
     /**
@@ -449,9 +449,9 @@ abstract class Driver implements DriverInterface
     function supports(string $feature): bool
     {
         switch ($feature) {
-            case static::FEATURE_DISABLE_CONSTRAINT_WITHOUT_TRANSACTION:
-            case static::FEATURE_QUOTE:
-            case static::FEATURE_SAVEPOINT:
+            case static.FEATURE_DISABLE_CONSTRAINT_WITHOUT_TRANSACTION:
+            case static.FEATURE_QUOTE:
+            case static.FEATURE_SAVEPOINT:
                 return true;
         }
 
@@ -483,7 +483,7 @@ abstract class Driver implements DriverInterface
      */
     function newTableSchema(string $table, array $columns = []): TableSchema
     {
-        $className = TableSchema::class;
+        $className = TableSchema.class;
         if (isset(_config["tableSchema"])) {
             /** @var class-string<\Cake\Database\Schema\TableSchema> $className */
             $className = _config["tableSchema"];
@@ -500,7 +500,7 @@ abstract class Driver implements DriverInterface
      */
     function getMaxAliasLength(): ?int
     {
-        return static::MAX_ALIAS_LENGTH;
+        return static.MAX_ALIAS_LENGTH;
     }
 
     /**

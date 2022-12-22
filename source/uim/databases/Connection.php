@@ -157,8 +157,8 @@ class Connection implements ConnectionInterface
      */
     function __destruct()
     {
-        if (_transactionStarted && class_exists(Log::class)) {
-            Log::warning("The connection is going to be closed but there is an active transaction.");
+        if (_transactionStarted && class_exists(Log.class)) {
+            Log.warning("The connection is going to be closed but there is an active transaction.");
         }
     }
 
@@ -212,7 +212,7 @@ class Connection implements ConnectionInterface
         $driver = $name;
         if (is_string($driver)) {
             /** @psalm-var class-string<\Cake\Database\DriverInterface>|null $className */
-            $className = App::className($driver, "Database/Driver");
+            $className = App.className($driver, "Database/Driver");
             if ($className === null) {
                 throw new MissingDriverException(["driver": $driver, "connection": this.configName()]);
             }
@@ -262,7 +262,7 @@ class Connection implements ConnectionInterface
         } catch (Throwable $e) {
             throw new MissingConnectionException(
                 [
-                    "driver": App::shortName(get_class(_driver), "Database/Driver"),
+                    "driver": App.shortName(get_class(_driver), "Database/Driver"),
                     "reason": $e->getMessage(),
                 ],
                 null,
@@ -297,8 +297,7 @@ class Connection implements ConnectionInterface
      * @param \Cake\Database\Query|string $query The SQL to convert into a prepared statement.
      * @return \Cake\Database\IStatement
      */
-    function prepare($query): IStatement
-    {
+    IStatement prepare($query) {
         return this.getDisconnectRetry()->run(function () use ($query) {
             $statement = _driver->prepare($query);
 
@@ -598,7 +597,7 @@ class Connection implements ConnectionInterface
         if ($enable === false) {
             _useSavePoints = false;
         } else {
-            _useSavePoints = _driver->supports(DriverInterface::FEATURE_SAVEPOINT);
+            _useSavePoints = _driver->supports(DriverInterface.FEATURE_SAVEPOINT);
         }
 
         return this;
@@ -769,7 +768,7 @@ class Connection implements ConnectionInterface
     /**
      * Quotes value to be used safely in database query.
      *
-     * This uses `PDO::quote()` and requires `supportsQuoting()` to work.
+     * This uses `PDO.quote()` and requires `supportsQuoting()` to work.
      *
      * @param mixed $value The value to quote.
      * @param \Cake\Database\TypeInterface|string|int $type Type to be used for determining kind of quoting to perform
@@ -791,7 +790,7 @@ class Connection implements ConnectionInterface
      */
     function supportsQuoting(): bool
     {
-        return _driver->supports(DriverInterface::FEATURE_QUOTE);
+        return _driver->supports(DriverInterface.FEATURE_QUOTE);
     }
 
     /**
@@ -850,14 +849,14 @@ class Connection implements ConnectionInterface
             $configName = "_cake_model_";
         }
 
-        if (!class_exists(Cache::class)) {
+        if (!class_exists(Cache.class)) {
             throw new RuntimeException(
-                "To use caching you must either set a cacher using Connection::setCacher()" .
+                "To use caching you must either set a cacher using Connection.setCacher()" .
                 " or require the cakephp/cache package in your composer config."
             );
         }
 
-        return this.cacher = Cache::pool($configName);
+        return this.cacher = Cache.pool($configName);
     }
 
     /**
@@ -920,9 +919,9 @@ class Connection implements ConnectionInterface
             return _logger;
         }
 
-        if (!class_exists(BaseLog::class)) {
+        if (!class_exists(BaseLog.class)) {
             throw new RuntimeException(
-                "For logging you must either set a logger using Connection::setLogger()" .
+                "For logging you must either set a logger using Connection.setLogger()" .
                 " or require the cakephp/log package in your composer config."
             );
         }

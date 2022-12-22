@@ -102,9 +102,9 @@ interface IWindow {
      * @param string $endDirection Frame end direction
      * @return $this
      * @throws \InvalidArgumentException WHen offsets are negative.
-     * @psalm-param self::RANGE|self::ROWS|self::GROUPS $type
-     * @psalm-param self::PRECEDING|self::FOLLOWING $startDirection
-     * @psalm-param self::PRECEDING|self::FOLLOWING $endDirection
+     * @psalm-param self.RANGE|self.ROWS|self.GROUPS $type
+     * @psalm-param self.PRECEDING|self.FOLLOWING $startDirection
+     * @psalm-param self.PRECEDING|self.FOLLOWING $endDirection
      */
     O frame(this O)(
         string $type,

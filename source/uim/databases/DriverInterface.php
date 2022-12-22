@@ -52,7 +52,7 @@ interface DriverInterface
     public const FEATURE_JSON = "json";
 
     /**
-     * PDO::quote() support.
+     * PDO.quote() support.
      *
      * @var string
      */
@@ -196,7 +196,7 @@ interface DriverInterface
      * Returns whether this driver supports save points for nested transactions.
      *
      * @return bool True if save points are supported, false otherwise.
-     * @deprecated 4.3.0 Use `supports(DriverInterface::FEATURE_SAVEPOINT)` instead
+     * @deprecated 4.3.0 Use `supports(DriverInterface.FEATURE_SAVEPOINT)` instead
      */
     function supportsSavePoints(): bool;
 
@@ -204,7 +204,7 @@ interface DriverInterface
      * Returns a value in a safe representation to be used in a query string
      *
      * @param mixed $value The value to quote.
-     * @param int $type Must be one of the \PDO::PARAM_* constants
+     * @param int $type Must be one of the \PDO.PARAM_* constants
      * @return string
      */
     function quote($value, $type): string;
@@ -213,7 +213,7 @@ interface DriverInterface
      * Checks if the driver supports quoting.
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(DriverInterface::FEATURE_QUOTE)` instead
+     * @deprecated 4.3.0 Use `supports(DriverInterface.FEATURE_QUOTE)` instead
      */
     function supportsQuoting(): bool;
 

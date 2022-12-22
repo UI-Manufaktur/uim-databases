@@ -50,7 +50,7 @@ class FieldTypeConverter
     this(TypeMap myTypeMap, IDriver myDriver) {
         _driver = myDriver;
         $map = myTypeMap.toArray();
-        myTypes = TypeFactory::buildAll();
+        myTypes = TypeFactory.buildAll();
 
         $simpleMap = $batchingMap = [];
         $simpleResult = $batchingResult = [];

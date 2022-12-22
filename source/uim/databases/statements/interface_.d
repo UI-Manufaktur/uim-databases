@@ -8,19 +8,13 @@ module uim.databases;
  */
 interface IStatement
 {
-    /**
-     * Used to designate that numeric indexes be returned in a result when calling fetch methods
-     */
+    // Used to designate that numeric indexes be returned in a result when calling fetch methods
     public const string FETCH_TYPE_NUM = "num";
 
-    /**
-     * Used to designate that an associated array be returned in a result when calling fetch methods
-     */
+    // Used to designate that an associated array be returned in a result when calling fetch methods
     public const string FETCH_TYPE_ASSOC = "assoc";
 
-    /**
-     * Used to designate that a stdClass object be returned in a result when calling fetch methods
-     */
+    // Used to designate that a stdClass object be returned in a result when calling fetch methods
     public const string FETCH_TYPE_OBJ = "obj";
 
     /**
@@ -121,7 +115,8 @@ interface IStatement
      * @param string|int myType num for fetching columns as positional keys or assoc for column names as keys
      * @return array|false list of all results from database for this statement or false on failure.
      */
-    function fetchAll(myType = "num");
+    function fetchAll(string myType = "num");
+    function fetchAll(int myType);
 
     /**
      * Returns the value of the result at position.

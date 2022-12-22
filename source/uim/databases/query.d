@@ -394,7 +394,7 @@ class Query : IExpression, IteratorAggregate {
     * ```
     *
     * By default no fields are selected, if you have an instance of `Cake\ORM\Query` and try to append
-    * fields you should also call `Cake\ORM\Query::enableAutoFields()` to select the default fields
+    * fields you should also call `Cake\ORM\Query.enableAutoFields()` to select the default fields
     * from the table.
     *
     * @param uim.databases\IExpression|callable|array|string myFields fields to be added to the list.
@@ -657,7 +657,7 @@ class Query : IExpression, IteratorAggregate {
               $t["conditions"] = this.newExpr().add($t["conditions"], myTypes);
           }
           myAlias = is_string(myAlias) ? myAlias : null;
-          $joins[myAlias ?: $i++] = $t + ["type":static::JOIN_TYPE_INNER, "alias":myAlias];
+          $joins[myAlias ?: $i++] = $t + ["type":static.JOIN_TYPE_INNER, "alias":myAlias];
       }
 
       if (shouldOverwrite) {
@@ -725,7 +725,7 @@ class Query : IExpression, IteratorAggregate {
     * @return this
     */
   function leftJoin(myTable, $conditions = [], myTypes = []) {
-      this.join(_makeJoin(myTable, $conditions, static::JOIN_TYPE_LEFT), myTypes);
+      this.join(_makeJoin(myTable, $conditions, static.JOIN_TYPE_LEFT), myTypes);
 
       return cast(O)this;
   }
@@ -746,7 +746,7 @@ class Query : IExpression, IteratorAggregate {
     * @return this
     */
   function rightJoin(myTable, $conditions = [], myTypes = []) {
-      this.join(_makeJoin(myTable, $conditions, static::JOIN_TYPE_RIGHT), myTypes);
+      this.join(_makeJoin(myTable, $conditions, static.JOIN_TYPE_RIGHT), myTypes);
 
       return cast(O)this;
   }
@@ -767,7 +767,7 @@ class Query : IExpression, IteratorAggregate {
     * @return this
     */
   function innerJoin(myTable, $conditions = [], myTypes = []) {
-      this.join(_makeJoin(myTable, $conditions, static::JOIN_TYPE_INNER), myTypes);
+      this.join(_makeJoin(myTable, $conditions, static.JOIN_TYPE_INNER), myTypes);
 
       return cast(O)this;
   }
@@ -1114,7 +1114,7 @@ class Query : IExpression, IteratorAggregate {
     *
     * @param uim.databases\IExpression|\Closure|array|string conditions The conditions to add with AND.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
-    * @see \Cake\Database\Query::where()
+    * @see \Cake\Database\Query.where()
     * @see \Cake\Database\TypeFactory
     */
   O andWhere(this O)($conditions, array myTypes = []) {
@@ -1319,7 +1319,7 @@ class Query : IExpression, IteratorAggregate {
     * @param uim.databases\IExpression|\Closure|array|string|null $conditions The having conditions.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @param bool shouldOverwrite whether to reset conditions with passed list or not
-    * @see \Cake\Database\Query::where()
+    * @see \Cake\Database\Query.where()
     * @return this
     */
   function having($conditions = null, myTypes = [], shouldOverwrite = false) {
@@ -1342,7 +1342,7 @@ class Query : IExpression, IteratorAggregate {
     *
     * @param uim.databases\IExpression|\Closure|array|string conditions The AND conditions for HAVING.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
-    * @see \Cake\Database\Query::andWhere()
+    * @see \Cake\Database\Query.andWhere()
     * @return this
     */
   function andHaving($conditions, myTypes = []) {
@@ -1538,7 +1538,7 @@ class Query : IExpression, IteratorAggregate {
     * Create an insert query.
     *
     * Note calling this method will reset any data previously set
-    * with Query::values().
+    * with Query.values().
     *
     * @param array $columns The columns to insert into.
     * @param array<string, string> myTypes A map between columns & their datatypes.
@@ -1912,7 +1912,7 @@ class Query : IExpression, IteratorAggregate {
     */
   O traverseExpressions(this O)(callable $callback) {
       if (!$callback instanceof Closure) {
-          $callback = Closure::fromCallable($callback);
+          $callback = Closure.fromCallable($callback);
       }
 
       foreach (_parts as $part) {

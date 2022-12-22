@@ -109,7 +109,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
                 throw new InvalidArgumentException(sprintf(
                    "The `$value` argument must be either `null`, a scalar value, an object," .
                    "or an instance of `\%s`, `%s` given.",
-                    IDTBExpression::class,
+                    IDTBExpression.class,
                     getTypeName($value)
                 ));
             }
@@ -158,7 +158,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
      * using `then()` on this object, instead the statement will be closed
      * on the `\Cake\Database\Expression\WhenThenExpression`
      * object using
-     * `\Cake\Database\Expression\WhenThenExpression::then()`.
+     * `\Cake\Database\Expression\WhenThenExpression.then()`.
      *
      * Callables will receive an instance of `\Cake\Database\Expression\WhenThenExpression`,
      * and must return one, being it the same object, or a custom one:
@@ -187,7 +187,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
      * instance received by the callables will inherit that type map, however
      * the types passed here will _not_ be merged in case of using callables,
      * instead the types must be passed in
-     * `\Cake\Database\Expression\WhenThenExpression::when()`:
+     * `\Cake\Database\Expression\WhenThenExpression.when()`:
      *
      * ```
      * $queryExpression
@@ -255,7 +255,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
      * ```
      *
      * @param uim.databases\IDTBExpression|\Closure|object|array|scalar $when The `WHEN` value. When using an
-     *  array of conditions, it must be compatible with `\Cake\Database\Query::where()`. Note that this argument is
+     *  array of conditions, it must be compatible with `\Cake\Database\Query.where()`. Note that this argument is
      *  _not_ completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in! If
      *  you plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to
      *  be a non-array, and then always binds the data), use a conditions array where the user data is only passed on
@@ -278,7 +278,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
             if (!($when instanceof WhenThenExpression)) {
                 throw new LogicException(sprintf(
                    "`when()` callables must return an instance of `\%s`, `%s` given.",
-                    WhenThenExpression::class,
+                    WhenThenExpression.class,
                     getTypeName($when)
                 ));
             }
@@ -391,7 +391,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
             throw new InvalidArgumentException(sprintf(
                "The `$result` argument must be either `null`, a scalar value, an object," .
                "or an instance of `\%s`, `%s` given.",
-                IDTBExpression::class,
+                IDTBExpression.class,
                 getTypeName($result)
             ));
         }
@@ -415,7 +415,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
      * for this to work, otherwise the type will default to `string`.
      *
      * @return string
-     * @see CaseStatementExpression::then()
+     * @see CaseStatementExpression.then()
      */
     string getReturnType()
     {

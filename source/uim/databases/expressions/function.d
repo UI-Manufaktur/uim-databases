@@ -55,7 +55,7 @@ class FunctionExpression extends QueryExpression : IDTBTypedResult
     {
         _name = $name;
         _returnType = $returnType;
-        parent::__construct($params, $types,",");
+        parent.__construct($params, $types,",");
     }
 
     /**
@@ -89,7 +89,7 @@ class FunctionExpression extends QueryExpression : IDTBTypedResult
      * @param array<string, string> $types Associative array of types to be associated with the
      * passed arguments
      * @param bool $prepend Whether to prepend or append to the list of arguments
-     * @see \Cake\Database\Expression\FunctionExpression::__construct() for more details.
+     * @see \Cake\Database\Expression\FunctionExpression.__construct() for more details.
      * @return $this
      * @psalm-suppress MoreSpecificImplementedParamType
      */

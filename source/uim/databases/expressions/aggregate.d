@@ -28,12 +28,12 @@ class AggregateExpression extends FunctionExpression : IWindow
 
     /**
      * Adds conditions to the FILTER clause. The conditions are the same format as
-     * `Query::where()`.
+     * `Query.where()`.
      *
      * @param uim.databases\IDTBExpression|\Closure|array|string $conditions The conditions to filter on.
      * @param array<string, string> $types Associative array of type names used to bind values to query
      * @return $this
-     * @see \Cake\Database\Query::where()
+     * @see \Cake\Database\Query.where()
      */
     function filter($conditions, array $types = [])
     {
@@ -158,7 +158,7 @@ class AggregateExpression extends FunctionExpression : IWindow
 
     string sql(ValueBinder aValueBinder)
     {
-        $sql = parent::sql($binder);
+        $sql = parent.sql($binder);
         if ($this.filter !is null) {
             $sql .=" FILTER (WHERE" . $this.filter.sql($binder) .")";
         }
@@ -176,7 +176,7 @@ class AggregateExpression extends FunctionExpression : IWindow
 
     O traverse(this O)(Closure $callback)
     {
-        parent::traverse($callback);
+        parent.traverse($callback);
         if ($this.filter !is null) {
             $callback($this.filter);
             $this.filter.traverse($callback);
@@ -192,7 +192,7 @@ class AggregateExpression extends FunctionExpression : IWindow
 
     function count(): int
     {
-        $count = parent::count();
+        $count = parent.count();
         if ($this.window !is null) {
             $count = $count + 1;
         }
@@ -207,7 +207,7 @@ class AggregateExpression extends FunctionExpression : IWindow
      */
     function __clone()
     {
-        parent::__clone();
+        parent.__clone();
         if ($this.filter !is null) {
             $this.filter = clone $this.filter;
         }

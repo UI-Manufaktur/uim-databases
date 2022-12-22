@@ -21,7 +21,7 @@ interface IDriver {
     // Native JSON data type support.
     public const string FEATURE_JSON = "json";
 
-    // PDO::quote() support.
+    // PDO.quote() support.
     public const string FEATURE_QUOTE = "quote";
 
     // Transaction savepoint support.
@@ -126,7 +126,7 @@ interface IDriver {
      * Returns whether this driver supports save points for nested transactions.
      *
      * @return bool True if save points are supported, false otherwise.
-     * @deprecated 4.3.0 Use `supports(IDriver::FEATURE_SAVEPOINT)` instead
+     * @deprecated 4.3.0 Use `supports(IDriver.FEATURE_SAVEPOINT)` instead
      */
     bool supportsSavePoints();
 
@@ -134,7 +134,7 @@ interface IDriver {
      * Returns a value in a safe representation to be used in a query string
      *
      * @param mixed myValue The value to quote.
-     * @param int myType Must be one of the \PDO::PARAM_* constants
+     * @param int myType Must be one of the \PDO.PARAM_* constants
      */
     string quote(myValue, myType);
 
@@ -142,7 +142,7 @@ interface IDriver {
      * Checks if the driver supports quoting.
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(IDriver::FEATURE_QUOTE)` instead
+     * @deprecated 4.3.0 Use `supports(IDriver.FEATURE_QUOTE)` instead
      */
     bool supportsQuoting();
 

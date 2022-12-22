@@ -470,7 +470,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * ```
      *
      * By default no fields are selected, if you have an instance of `Cake\ORM\Query` and try to append
-     * fields you should also call `Cake\ORM\Query::enableAutoFields()` to select the default fields
+     * fields you should also call `Cake\ORM\Query.enableAutoFields()` to select the default fields
      * from the table.
      *
      * @param \Cake\Database\ExpressionInterface|callable|array|string $fields fields to be added to the list.
@@ -736,7 +736,7 @@ class Query implements ExpressionInterface, IteratorAggregate
                 $t["conditions"] = this.newExpr()->add($t["conditions"], $types);
             }
             $alias = is_string($alias) ? $alias : null;
-            $joins[$alias ?: $i++] = $t + ["type": static::JOIN_TYPE_INNER, "alias": $alias];
+            $joins[$alias ?: $i++] = $t + ["type": static.JOIN_TYPE_INNER, "alias": $alias];
         }
 
         if ($overwrite) {
@@ -806,7 +806,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      */
     function leftJoin($table, $conditions = [], $types = [])
     {
-        this.join(_makeJoin($table, $conditions, static::JOIN_TYPE_LEFT), $types);
+        this.join(_makeJoin($table, $conditions, static.JOIN_TYPE_LEFT), $types);
 
         return this;
     }
@@ -828,7 +828,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      */
     function rightJoin($table, $conditions = [], $types = [])
     {
-        this.join(_makeJoin($table, $conditions, static::JOIN_TYPE_RIGHT), $types);
+        this.join(_makeJoin($table, $conditions, static.JOIN_TYPE_RIGHT), $types);
 
         return this;
     }
@@ -850,7 +850,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      */
     function innerJoin($table, $conditions = [], $types = [])
     {
-        this.join(_makeJoin($table, $conditions, static::JOIN_TYPE_INNER), $types);
+        this.join(_makeJoin($table, $conditions, static.JOIN_TYPE_INNER), $types);
 
         return this;
     }
@@ -1205,7 +1205,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * @param \Cake\Database\ExpressionInterface|\Closure|array|string $conditions The conditions to add with AND.
      * @param array<string, string> $types Associative array of type names used to bind values to query
-     * @see \Cake\Database\Query::where()
+     * @see \Cake\Database\Query.where()
      * @see \Cake\Database\TypeFactory
      * @return this
      */
@@ -1416,7 +1416,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * @param \Cake\Database\ExpressionInterface|\Closure|array|string|null $conditions The having conditions.
      * @param array<string, string> $types Associative array of type names used to bind values to query
      * @param bool $overwrite whether to reset conditions with passed list or not
-     * @see \Cake\Database\Query::where()
+     * @see \Cake\Database\Query.where()
      * @return this
      */
     function having($conditions = null, $types = [], $overwrite = false)
@@ -1440,7 +1440,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * @param \Cake\Database\ExpressionInterface|\Closure|array|string $conditions The AND conditions for HAVING.
      * @param array<string, string> $types Associative array of type names used to bind values to query
-     * @see \Cake\Database\Query::andWhere()
+     * @see \Cake\Database\Query.andWhere()
      * @return this
      */
     function andHaving($conditions, $types = [])
@@ -1643,7 +1643,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * Create an insert query.
      *
      * Note calling this method will reset any data previously set
-     * with Query::values().
+     * with Query.values().
      *
      * @param array $columns The columns to insert into.
      * @param array<int|string, string> $types A map between columns & their datatypes.
@@ -1752,7 +1752,7 @@ class Query implements ExpressionInterface, IteratorAggregate
     {
         if (!is_string($table) && !($table instanceof ExpressionInterface)) {
             $text = "Table must be of type string or "%s", got "%s"";
-            $message = sprintf($text, ExpressionInterface::class, gettype($table));
+            $message = sprintf($text, ExpressionInterface.class, gettype($table));
             throw new InvalidArgumentException($message);
         }
 
@@ -2069,7 +2069,7 @@ class Query implements ExpressionInterface, IteratorAggregate
     function traverseExpressions(callable $callback)
     {
         if (!$callback instanceof Closure) {
-            $callback = Closure::fromCallable($callback);
+            $callback = Closure.fromCallable($callback);
         }
 
         foreach (_parts as $part) {

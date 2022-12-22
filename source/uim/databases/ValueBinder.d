@@ -21,7 +21,7 @@ class ValueBinder {
      *
      * @var array
      */
-    protected _bindings = [];
+    protected STRINGAA[string] _bindings;
 
     // _bindingsCount - A counter of the number of parameters bound in this expression object
     protected int _bindingsCount = 0;
@@ -38,7 +38,7 @@ class ValueBinder {
      */
     void bind(string aParameter, param, aValue, aType = null) {
         _bindings[aParameter] = ["value": aValue, "type":aType];
-        _bindings[aParameter]["placeholder"] = isInt(aParameter) ? aParameter : substr(aParameter, 1);
+        _bindings[aParameter]["placeholder"] = isInt(aParameter) ? aParameter : subString(aParameter, 1);
     }
 
     /**
@@ -67,19 +67,19 @@ class ValueBinder {
      * @param string|int|null $type The type with which all values will be bound
      * @return array with the placeholders to insert in the query
      */
-    function generateManyNamed(iterable $values, $type = null): array {
-        $placeholders = [];
-        foreach (key, value; $values) {
-            $param = this.placeholder("c");
-            _bindings[$param] = [
-                "value": value,
-                "type": $type,
-                "placeholder": substr($param, 1),
+    STRINGAA generateManyNamed(DValue[string] values, aType = null) {
+        auto myPlaceholders = [];
+        foreach (myKey, myValue; values) {
+            auto myParameter = this.placeholder("c");
+            _bindings[myParameter] = [
+                "value": myValue.toString,
+                "type": aType.toString,
+                "placeholder": subString(myParameter, 1),
             ];
-            $placeholders[key] = $param;
+            myPlaceholders[myKey] = myParameter;
         }
 
-        return $placeholders;
+        return myPlaceholders;
     }
 
     /**
@@ -103,17 +103,14 @@ class ValueBinder {
 
     /**
      * Binds all the stored values in this object to the passed statement.
-     *
-     * @param \Cake\Database\IStatement aStatement The statement to add parameters to.
+     * aStatement The statement to add parameters to.
      */
     void attachTo(IStatement aStatement) {
       auto myBindings = this.bindings();
-      if (empty(myBindings)) {
-          return;
-      }
+      if (myBindings.empty) { return; }
 
       foreach (myBinding; myBindings) {
-          $statement->bindValue(myBinding["placeholder"], myBinding["value"], myBinding["type"]);
+        aStatement.bindValue(myBinding["placeholder"], myBinding["value"], myBinding["type"]);
       }
     }
 }

@@ -89,7 +89,7 @@ class WhenThenExpression : IDTBExpression
      * Sets the `WHEN` value.
      *
      * @param uim.databases\IDTBExpression|object|array|scalar $when The `WHEN` value. When using an array of
-     *  conditions, it must be compatible with `\Cake\Database\Query::where()`. Note that this argument is _not_
+     *  conditions, it must be compatible with `\Cake\Database\Query.where()`. Note that this argument is _not_
      *  completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in! If you
      *  plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to be
      *  a non-array, and then always binds the data), use a conditions array where the user data is only passed on the
@@ -104,7 +104,7 @@ class WhenThenExpression : IDTBExpression
      * an array, nor null.
      * @throws \InvalidArgumentException In case the `$when` argument is a non-array value, and the `$type` argument is
      * neither a string, nor null.
-     * @see CaseStatementExpression::when() for a more detailed usage explanation.
+     * @see CaseStatementExpression.when() for a more detailed usage explanation.
      */
     function when($when, $type = null)
     {
@@ -116,7 +116,7 @@ class WhenThenExpression : IDTBExpression
             throw new InvalidArgumentException(sprintf(
                "The `$when` argument must be either a non-empty array, a scalar value, an object," .
                "or an instance of `\%s`, `%s` given.",
-                IDTBExpression::class,
+                IDTBExpression.class,
                 is_array($when) ?"[]" : getTypeName($when) // @phpstan-ignore-line
             ));
         }
@@ -198,7 +198,7 @@ class WhenThenExpression : IDTBExpression
             throw new InvalidArgumentException(sprintf(
                "The `$result` argument must be either `null`, a scalar value, an object," .
                "or an instance of `\%s`, `%s` given.",
-                IDTBExpression::class,
+                IDTBExpression.class,
                 getTypeName($result)
             ));
         }
@@ -220,7 +220,7 @@ class WhenThenExpression : IDTBExpression
      * Returns the expression"s result value type.
      *
      * @return string|null
-     * @see WhenThenExpression::then()
+     * @see WhenThenExpression.then()
      */
     function getResultType(): ?string
     {

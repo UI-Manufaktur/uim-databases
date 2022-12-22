@@ -19,13 +19,8 @@ class Connection : IConnection {
      */
     protected _config;
 
-    /**
-     * Driver object, responsible for creating the real connection
-     * and provide specific SQL dialect.
-     *
-     * @var \Cake\Database\IDriver
-     */
-    protected _driver;
+    // Driver object, responsible for creating the real connection and provide specific SQL dialect.
+    protected IDriver _driver;
 
     // Contains how many nested transactions have been started.
     protected int $_transactionLevel = 0;
@@ -33,47 +28,23 @@ class Connection : IConnection {
     // Whether a transaction is active in this connection.
     protected bool $_transactionStarted = false;
 
-    /**
-     * Whether this connection can and should use savepoints for nested
-     * transactions.
-     */
+    // Whether this connection can and should use savepoints for nested transactions.
     protected bool $_useSavePoints = false;
 
-    /**
-     * Whether to log queries generated during this connection.
-     *
-     * @var bool
-     */
-    protected _logQueries = false;
+    // Whether to log queries generated during this connection.
+    protected bool _logQueries = false;
 
-    /**
-     * Logger object instance.
-     *
-     * @var \Psr\Log\LoggerInterface|null
-     */
-    protected _logger;
+    // Logger object instance.
+    protected ILogger _logger;
 
-    /**
-     * Cacher object instance.
-     *
-     * @var \Psr\SimpleCache\ICache|null
-     */
-    protected cacher;
+    // Cacher object instance.
+    protected ICache cacher;
 
-    /**
-     * The schema collection object
-     *
-     * @var \Cake\Database\Schema\ICollection|null
-     */
-    protected _schemaCollection;
+    // The schema collection object
+    protected ICollection _schemaCollection;
 
-    /**
-     * NestedTransactionRollbackException object instance, will be stored if
-     * the rollback method is called in some nested transaction.
-     *
-     * @var \Cake\Database\Exception\NestedTransactionRollbackException|null
-     */
-    protected nestedTransactionRollbackException;
+    // NestedTransactionRollbackException object instance, will be stored if the rollback method is called in some nested transaction.
+    protected NestedTransactionRollbackException nestedTransactionRollbackException;
 
     /**
      * Constructor.
@@ -90,17 +61,17 @@ class Connection : IConnection {
      * @param array<string, mixed> myConfig Configuration array.
      */
     this(array myConfig) {
-        _config = myConfig;
+      _config = myConfig;
 
-        myDriver = "";
-        if (!empty(myConfig["driver"])) {
-            myDriver = myConfig["driver"];
-        }
-        this.setDriver(myDriver, myConfig);
+      myDriver = "";
+      if (!empty(myConfig["driver"])) {
+        myDriver = myConfig["driver"];
+      }
+      this.setDriver(myDriver, myConfig);
 
-        if (!empty(myConfig["log"])) {
-            this.enableQueryLogging((bool)myConfig["log"]);
-        }
+      if (!empty(myConfig["log"])) {
+        this.enableQueryLogging((bool)myConfig["log"]);
+      }
     }
 
     /**
@@ -109,45 +80,46 @@ class Connection : IConnection {
      * Disconnects the driver to release the connection.
      */
     auto __destruct() {
-        if (_transactionStarted && class_exists(Log::class)) {
-            Log::warning("The connection is going to be closed but there is an active transaction.");
+        if (_transactionStarted && class_exists(Log.class)) {
+          Log.warning("The connection is going to be closed but there is an active transaction.");
         }
     }
 
-    array config() {
-        return _config;
+    auto config() {
+      return _config;
     }
 
     string configName() {
-        return _config["name"] ?? "";
+      return _config["name"] ? _config["name"] : "";
     }
 
     /**
-     * Sets the driver instance. If a string is passed it will be treated
-     * as a class name and will be instantiated.
+     * Sets the driver instance. If a string is passed it will be treated as a class name and will be instantiated.
      *
      * @param uim.databases\IDriver|string myDriver The driver instance to use.
      * @param array<string, mixed> myConfig Config for a new driver.
      * @throws \Cake\Database\Exception\MissingDriverException When a driver class is missing.
      * @throws \Cake\Database\Exception\MissingExtensionException When a driver"s PHP extension is missing.
-     * @return this
      */
-    auto setDriver(myDriver, myConfig = []) {
-        if (is_string(myDriver)) {
-            /** @psalm-var class-string<\Cake\Database\IDriver>|null myClassName */
-            myClassName = App::className(myDriver, "Database/Driver");
-            if (myClassName is null) {
-                throw new MissingDriverException(["driver":myDriver]);
-            }
-            myDriver = new myClassName(myConfig);
-        }
-        if (!myDriver.enabled()) {
-            throw new MissingExtensionException(["driver":get_class(myDriver)]);
+    O setDriver(this O)(string aDriver, aConfig = []) {
+      auto myClassName = App.className(aDriver, "Database/Driver");
+      if (myClassName is null) {
+          throw new MissingDriverException(["driver":aDriver]);
+      }
+      auto myDriver = new myClassName(aConfig);
+
+      setDriver(myDriver, aConfig);
+      return cast(O)this;
+    }
+    O setDriver(this O)(IDriver aDriver, aConfig = []) {
+      if (aDriver) {
+        if (!aDriver.enabled()) {
+            throw new MissingExtensionException(["driver":get_class(aDriver)]);
         }
 
-        _driver = myDriver;
-
-        return cast(O)this;
+        _driver = aDriver;
+      }
+      return cast(O)this;
     }
 
     /**
@@ -184,7 +156,7 @@ class Connection : IConnection {
         } catch (Throwable $e) {
             throw new MissingConnectionException(
                 [
-                    "driver":App::shortName(get_class(_driver), "Database/Driver"),
+                    "driver":App.shortName(get_class(_driver), "Database/Driver"),
                     "reason":$e.getMessage(),
                 ],
                 null,
@@ -507,7 +479,7 @@ class Connection : IConnection {
         if (myEnable == false) {
             _useSavePoints = false;
         } else {
-            _useSavePoints = _driver.supports(IDriver::FEATURE_SAVEPOINT);
+            _useSavePoints = _driver.supports(IDriver.FEATURE_SAVEPOINT);
         }
 
         return cast(O)this;
@@ -656,7 +628,7 @@ class Connection : IConnection {
     /**
      * Quotes value to be used safely in database query.
      *
-     * This uses `PDO::quote()` and requires `supportsQuoting()` to work.
+     * This uses `PDO.quote()` and requires `supportsQuoting()` to work.
      *
      * @param mixed myValue The value to quote.
      * @param uim.databases\IType|string|int myType Type to be used for determining kind of quoting to perform
@@ -674,7 +646,7 @@ class Connection : IConnection {
      * This is not required to use `quoteIdentifier()`.
      */
     bool supportsQuoting() {
-        return _driver.supports(IDriver::FEATURE_QUOTE);
+        return _driver.supports(IDriver.FEATURE_QUOTE);
     }
 
     /**
@@ -724,14 +696,14 @@ class Connection : IConnection {
             myConfigName = "_cake_model_";
         }
 
-        if (!class_exists(Cache::class)) {
+        if (!class_exists(Cache.class)) {
             throw new RuntimeException(
-                "To use caching you must either set a cacher using Connection::setCacher()" .
+                "To use caching you must either set a cacher using Connection.setCacher()" .
                 " or require the UIM/cache package in your composer config."
             );
         }
 
-        return this.cacher = Cache::pool(myConfigName);
+        return this.cacher = Cache.pool(myConfigName);
     }
 
     /**
@@ -788,9 +760,9 @@ class Connection : IConnection {
             return _logger;
         }
 
-        if (!class_exists(QueryLogger::class)) {
+        if (!class_exists(QueryLogger.class)) {
             throw new RuntimeException(
-                "For logging you must either set a logger using Connection::setLogger()" .
+                "For logging you must either set a logger using Connection.setLogger()" .
                 " or require the UIM/log package in your composer config."
             );
         }

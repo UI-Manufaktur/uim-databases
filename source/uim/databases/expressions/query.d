@@ -51,7 +51,7 @@ class QueryExpression : IDTBExpression, Countable {
      * passed in $conditions.
      * @param string $conjunction the glue that will join all the string conditions at this
      * level of the expression tree. For example "AND", "OR", "XOR"...
-     * @see \Cake\Database\Expression\QueryExpression::add() for more details on $conditions and $types
+     * @see \Cake\Database\Expression\QueryExpression.add() for more details on $conditions and $types
      */
     this($conditions = [], $types = [], $conjunction ="AND") {
         $this.setTypeMap($types);
@@ -80,7 +80,7 @@ class QueryExpression : IDTBExpression, Countable {
      * as conditions.
      * @param array<int|string, string> $types Associative array of fields pointing to the type of the
      * values that are being passed. Used for correctly binding values to statements.
-     * @see \Cake\Database\Query::where() for examples on conditions
+     * @see \Cake\Database\Query.where() for examples on conditions
      * @return $this
      */
     function add($conditions, array $types = [])
@@ -221,7 +221,7 @@ class QueryExpression : IDTBExpression, Countable {
             $field = new IdentifierExpression($field);
         }
 
-        return $this.add(new UnaryExpression("IS NULL", $field, UnaryExpression::POSTFIX));
+        return $this.add(new UnaryExpression("IS NULL", $field, UnaryExpression.POSTFIX));
     }
 
     /**
@@ -237,7 +237,7 @@ class QueryExpression : IDTBExpression, Countable {
             $field = new IdentifierExpression($field);
         }
 
-        return $this.add(new UnaryExpression("IS NOT NULL", $field, UnaryExpression::POSTFIX));
+        return $this.add(new UnaryExpression("IS NOT NULL", $field, UnaryExpression.POSTFIX));
     }
 
     /**
@@ -306,11 +306,11 @@ class QueryExpression : IDTBExpression, Countable {
      * @param array<string> $types Associative array of types to be associated with the values
      * passed in $values
      * @return $this
-     * @deprecated 4.3.0 Use QueryExpression::case() or CaseStatementExpression instead
+     * @deprecated 4.3.0 Use QueryExpression.case() or CaseStatementExpression instead
      */
     function addCase($conditions, $values = [], $types = [])
     {
-        deprecationWarning("QueryExpression::addCase() is deprecated, use case() instead.");
+        deprecationWarning("QueryExpression.addCase() is deprecated, use case() instead.");
 
         return $this.add(new CaseExpression($conditions, $values, $types));
     }
@@ -395,7 +395,7 @@ class QueryExpression : IDTBExpression, Countable {
      */
     function exists(IDTBExpression $expression)
     {
-        return $this.add(new UnaryExpression("EXISTS", $expression, UnaryExpression::PREFIX));
+        return $this.add(new UnaryExpression("EXISTS", $expression, UnaryExpression.PREFIX));
     }
 
     /**
@@ -406,7 +406,7 @@ class QueryExpression : IDTBExpression, Countable {
      */
     function notExists(IDTBExpression $expression)
     {
-        return $this.add(new UnaryExpression("NOT EXISTS", $expression, UnaryExpression::PREFIX));
+        return $this.add(new UnaryExpression("NOT EXISTS", $expression, UnaryExpression.PREFIX));
     }
 
     /**
@@ -478,7 +478,7 @@ class QueryExpression : IDTBExpression, Countable {
      */
     function and_($conditions, $types = [])
     {
-        deprecationWarning("QueryExpression::and_() is deprecated use and() instead.");
+        deprecationWarning("QueryExpression.and_() is deprecated use and() instead.");
 
         return $this.and($conditions, $types);
     }
@@ -495,7 +495,7 @@ class QueryExpression : IDTBExpression, Countable {
      */
     function or_($conditions, $types = [])
     {
-        deprecationWarning("QueryExpression::or_() is deprecated use or() instead.");
+        deprecationWarning("QueryExpression.or_() is deprecated use or() instead.");
 
         return $this.or($conditions, $types);
     }
@@ -783,7 +783,7 @@ class QueryExpression : IDTBExpression, Countable {
             return new UnaryExpression(
                "IS NULL",
                 new IdentifierExpression($expression),
-                UnaryExpression::POSTFIX
+                UnaryExpression.POSTFIX
             );
         }
 
@@ -791,7 +791,7 @@ class QueryExpression : IDTBExpression, Countable {
             return new UnaryExpression(
                "IS NOT NULL",
                 new IdentifierExpression($expression),
-                UnaryExpression::POSTFIX
+                UnaryExpression.POSTFIX
             );
         }
 

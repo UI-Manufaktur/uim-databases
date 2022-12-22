@@ -32,27 +32,27 @@ class TypeFactory
      * @psalm-var array<string, class-string<\Cake\Database\TypeInterface>>
      */
     protected static $_types = [
-        "tinyinteger": Type\IntegerType::class,
-        "smallinteger": Type\IntegerType::class,
-        "integer": Type\IntegerType::class,
-        "biginteger": Type\IntegerType::class,
-        "binary": Type\BinaryType::class,
-        "binaryuuid": Type\BinaryUuidType::class,
-        "boolean": Type\BoolType::class,
-        "date": Type\DateType::class,
-        "datetime": Type\DateTimeType::class,
-        "datetimefractional": Type\DateTimeFractionalType::class,
-        "decimal": Type\DecimalType::class,
-        "float": Type\FloatType::class,
-        "json": Type\JsonType::class,
-        "string": Type\StringType::class,
-        "char": Type\StringType::class,
-        "text": Type\StringType::class,
-        "time": Type\TimeType::class,
-        "timestamp": Type\DateTimeType::class,
-        "timestampfractional": Type\DateTimeFractionalType::class,
-        "timestamptimezone": Type\DateTimeTimezoneType::class,
-        "uuid": Type\UuidType::class,
+        "tinyinteger": Type\IntegerType.class,
+        "smallinteger": Type\IntegerType.class,
+        "integer": Type\IntegerType.class,
+        "biginteger": Type\IntegerType.class,
+        "binary": Type\BinaryType.class,
+        "binaryuuid": Type\BinaryUuidType.class,
+        "boolean": Type\BoolType.class,
+        "date": Type\DateType.class,
+        "datetime": Type\DateTimeType.class,
+        "datetimefractional": Type\DateTimeFractionalType.class,
+        "decimal": Type\DecimalType.class,
+        "float": Type\FloatType.class,
+        "json": Type\JsonType.class,
+        "string": Type\StringType.class,
+        "char": Type\StringType.class,
+        "text": Type\StringType.class,
+        "time": Type\TimeType.class,
+        "timestamp": Type\DateTimeType.class,
+        "timestampfractional": Type\DateTimeFractionalType.class,
+        "timestamptimezone": Type\DateTimeTimezoneType.class,
+        "uuid": Type\UuidType.class,
     ];
 
     /**
@@ -71,14 +71,14 @@ class TypeFactory
      */
     public static function build(string $name): TypeInterface
     {
-        if (isset(static::$_builtTypes[$name])) {
-            return static::$_builtTypes[$name];
+        if (isset(static.$_builtTypes[$name])) {
+            return static.$_builtTypes[$name];
         }
-        if (!isset(static::$_types[$name])) {
+        if (!isset(static.$_types[$name])) {
             throw new InvalidArgumentException(sprintf("Unknown type "%s"", $name));
         }
 
-        return static::$_builtTypes[$name] = new static::$_types[$name]($name);
+        return static.$_builtTypes[$name] = new static.$_types[$name]($name);
     }
 
     /**
@@ -89,8 +89,8 @@ class TypeFactory
     public static function buildAll(): array
     {
         $result = [];
-        foreach (static::$_types as $name: $type) {
-            $result[$name] = static::$_builtTypes[$name] ?? static::build($name);
+        foreach (static.$_types as $name: $type) {
+            $result[$name] = static.$_builtTypes[$name] ?? static.build($name);
         }
 
         return $result;
@@ -105,8 +105,8 @@ class TypeFactory
      */
     public static function set(string $name, TypeInterface $instance): void
     {
-        static::$_builtTypes[$name] = $instance;
-        static::$_types[$name] = get_class($instance);
+        static.$_builtTypes[$name] = $instance;
+        static.$_types[$name] = get_class($instance);
     }
 
     /**
@@ -119,8 +119,8 @@ class TypeFactory
      */
     public static function map(string $type, string $className): void
     {
-        static::$_types[$type] = $className;
-        unset(static::$_builtTypes[$type]);
+        static.$_types[$type] = $className;
+        unset(static.$_builtTypes[$type]);
     }
 
     /**
@@ -132,8 +132,8 @@ class TypeFactory
      */
     public static function setMap(array $map): void
     {
-        static::$_types = $map;
-        static::$_builtTypes = [];
+        static.$_types = $map;
+        static.$_builtTypes = [];
     }
 
     /**
@@ -145,10 +145,10 @@ class TypeFactory
     public static function getMap(?string $type = null)
     {
         if ($type === null) {
-            return static::$_types;
+            return static.$_types;
         }
 
-        return static::$_types[$type] ?? null;
+        return static.$_types[$type] ?? null;
     }
 
     /**
@@ -158,7 +158,7 @@ class TypeFactory
      */
     public static function clear(): void
     {
-        static::$_types = [];
-        static::$_builtTypes = [];
+        static.$_types = [];
+        static.$_builtTypes = [];
     }
 }

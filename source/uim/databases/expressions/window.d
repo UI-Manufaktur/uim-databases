@@ -107,19 +107,19 @@ class WindowExpression : IDTBExpression, IDTBWindow {
 
     function range($start, $end = 0)
     {
-        return $this.frame(self::RANGE, $start, self::PRECEDING, $end, self::FOLLOWING);
+        return $this.frame(self.RANGE, $start, self.PRECEDING, $end, self.FOLLOWING);
     }
 
 
     function rows(?int $start, ?int $end = 0)
     {
-        return $this.frame(self::ROWS, $start, self::PRECEDING, $end, self::FOLLOWING);
+        return $this.frame(self.ROWS, $start, self.PRECEDING, $end, self.FOLLOWING);
     }
 
 
     function groups(?int $start, ?int $end = 0)
     {
-        return $this.frame(self::GROUPS, $start, self::PRECEDING, $end, self::FOLLOWING);
+        return $this.frame(self.GROUPS, $start, self.PRECEDING, $end, self.FOLLOWING);
     }
 
 
