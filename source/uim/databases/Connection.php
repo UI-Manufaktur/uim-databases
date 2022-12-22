@@ -762,15 +762,15 @@ class Connection : ConnectionInterface
      *
      * This uses `PDO.quote()` and requires `supportsQuoting()` to work.
      *
-     * @param mixed $value The value to quote.
+     * @param mixed aValue The value to quote.
      * @param \Cake\Database\TypeInterface|string|int $type Type to be used for determining kind of quoting to perform
      * @return string Quoted value
      */
-    function quote($value, $type = "string"): string
+    function quote(aValue, $type = "string"): string
     {
-        [$value, $type] = this.cast($value, $type);
+        [aValue, $type] = this.cast(aValue, $type);
 
-        return _driver->quote($value, $type);
+        return _driver->quote(aValue, $type);
     }
 
     /**

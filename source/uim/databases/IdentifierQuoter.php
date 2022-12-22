@@ -134,10 +134,10 @@ class IdentifierQuoter
     protected function _basicQuoter(array $part): array
     {
         $result = [];
-        foreach ($part as $alias: $value) {
-            $value = !is_string($value) ? $value : _driver->quoteIdentifier($value);
+        foreach ($part as $alias: aValue) {
+            aValue = !is_string(aValue) ? aValue : _driver->quoteIdentifier(aValue);
             $alias = is_numeric($alias) ? $alias : _driver->quoteIdentifier($alias);
-            $result[$alias] = $value;
+            $result[$alias] = aValue;
         }
 
         return $result;
@@ -153,18 +153,18 @@ class IdentifierQuoter
     protected function _quoteJoins(array $joins): array
     {
         $result = [];
-        foreach ($joins as $value) {
+        foreach ($joins as aValue) {
             $alias = "";
-            if (!empty($value["alias"])) {
-                $alias = _driver->quoteIdentifier($value["alias"]);
-                $value["alias"] = $alias;
+            if (!empty(aValue["alias"])) {
+                $alias = _driver->quoteIdentifier(aValue["alias"]);
+                aValue["alias"] = $alias;
             }
 
-            if (is_string($value["table"])) {
-                $value["table"] = _driver->quoteIdentifier($value["table"]);
+            if (is_string(aValue["table"])) {
+                aValue["table"] = _driver->quoteIdentifier(aValue["table"]);
             }
 
-            $result[$alias] = $value;
+            $result[$alias] = aValue;
         }
 
         return $result;

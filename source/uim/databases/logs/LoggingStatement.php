@@ -149,21 +149,21 @@ class LoggingStatement : StatementDecorator
      * in the logger function.
      *
      * @param string|int $column Name or param position to be bound
-     * @param mixed $value The value to bind to variable in query
+     * @param mixed aValue The value to bind to variable in query
      * @param string|int|null $type PDO type or name of configured Type class
      * @return void
      */
-    function bindValue($column, $value, $type = "string"): void
+    function bindValue($column, aValue, $type = "string"): void
     {
-        parent::bindValue($column, $value, $type);
+        parent::bindValue($column, aValue, $type);
 
         if ($type == null) {
             $type = "string";
         }
         if (!ctype_digit($type)) {
-            $value = this.cast($value, $type)[0];
+            aValue = this.cast(aValue, $type)[0];
         }
-        this._compiledParams[$column] = $value;
+        this._compiledParams[$column] = aValue;
     }
 
     /**

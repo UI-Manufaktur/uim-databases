@@ -65,26 +65,26 @@ class TupleComparison : ComparisonExpression
     /**
      * Sets the value
      *
-     * @param mixed $value The value to compare
+     * @param mixed aValue The value to compare
      * @return void
      */
-    function setValue($value): void
+    function setValue(aValue): void
     {
         if ($this.isMulti()) {
-            if (is_array($value) && !is_array(current($value))) {
+            if (is_array(aValue) && !is_array(current(aValue))) {
                 throw new InvalidArgumentException(
                    "Multi-tuple comparisons require a multi-tuple value, single-tuple given."
                 );
             }
         } else {
-            if (is_array($value) && is_array(current($value))) {
+            if (is_array(aValue) && is_array(current(aValue))) {
                 throw new InvalidArgumentException(
                    "Single-tuple comparisons require a single-tuple value, multi-tuple given."
                 );
             }
         }
 
-        _value = $value;
+        _value = aValue;
     }
 
 
@@ -125,9 +125,9 @@ class TupleComparison : ComparisonExpression
             return $parts.sql($binder);
         }
 
-        foreach ($parts as $i: $value) {
-            if ($value instanceof IDTBExpression) {
-                someValues[] = $value.sql($binder);
+        foreach ($parts as $i: aValue) {
+            if (aValue instanceof IDTBExpression) {
+                someValues[] = aValue.sql($binder);
                 continue;
             }
 
@@ -139,7 +139,7 @@ class TupleComparison : ComparisonExpression
 
             if ($isMultiOperation) {
                 $bound = [];
-                foreach ($value as $k: $val) {
+                foreach (aValue as $k: $val) {
                     /** @var string $valType */
                     $valType = $type && isset($type[$k]) ? $type[$k] : $type;
                     $bound[] = _bindValue($val, $binder, $valType);
@@ -151,17 +151,17 @@ class TupleComparison : ComparisonExpression
 
             /** @var string $valType */
             $valType = $type && isset($type[$i]) ? $type[$i] : $type;
-            someValues[] = _bindValue($value, $binder, $valType);
+            someValues[] = _bindValue(aValue, $binder, $valType);
         }
 
         return implode(",", someValues);
     }
 
 
-    protected string _bindValue($value, ValueBinder aValueBinder, ?string $type = null)
+    protected string _bindValue(aValue, ValueBinder aValueBinder, ?string $type = null)
     {
         $placeholder = $binder.placeholder("tuple");
-        $binder.bind($placeholder, $value, $type);
+        $binder.bind($placeholder, aValue, $type);
 
         return $placeholder;
     }
@@ -175,15 +175,15 @@ class TupleComparison : ComparisonExpression
             _traverseValue($field, $callback);
         }
 
-        $value = $this.getValue();
-        if ($value instanceof IDTBExpression) {
-            $callback($value);
-            $value.traverse($callback);
+        aValue = $this.getValue();
+        if (aValue instanceof IDTBExpression) {
+            $callback(aValue);
+            aValue.traverse($callback);
 
             return $this;
         }
 
-        foreach ($value as $val) {
+        foreach (aValue as $val) {
             if ($this.isMulti()) {
                 foreach ($val as $v) {
                     _traverseValue($v, $callback);
@@ -200,15 +200,15 @@ class TupleComparison : ComparisonExpression
      * Conditionally executes the callback for the passed value if
      * it is an IDTBExpression
      *
-     * @param mixed $value The value to traverse
+     * @param mixed aValue The value to traverse
      * @param \Closure $callback The callable to use when traversing
      * @return void
      */
-    protected function _traverseValue($value, Closure $callback): void
+    protected function _traverseValue(aValue, Closure $callback): void
     {
-        if ($value instanceof IDTBExpression) {
-            $callback($value);
-            $value.traverse($callback);
+        if (aValue instanceof IDTBExpression) {
+            $callback(aValue);
+            aValue.traverse($callback);
         }
     }
 

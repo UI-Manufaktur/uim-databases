@@ -451,8 +451,8 @@ class QueryCompiler
         $result = [];
         foreach ($expressions as $k: $expression) {
             if ($expression instanceof ExpressionInterface) {
-                $value = $expression->sql($binder);
-                $expression = $wrap ? "(" . $value . ")" : $value;
+                aValue = $expression->sql($binder);
+                $expression = $wrap ? "(" . aValue . ")" : aValue;
             }
             $result[$k] = $expression;
         }

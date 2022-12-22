@@ -30,8 +30,8 @@ class ValueBinder {
      * Associates a query placeholder to a value and a type
      *
      * @param string|int $param placeholder to be replaced with quoted version
-     * of $value
-     * @param mixed $value The value to be bound
+     * of aValue
+     * @param mixed aValue The value to be bound
      * @param string|int|null $type the mapped type name, used for casting when sending
      * to database
      * @return void

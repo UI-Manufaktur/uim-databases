@@ -13,7 +13,7 @@ import uim.databases;
  *
  * Use to convert decimal data between PHP and the database types.
  */
-class DecimalType : BaseType : IBatchCasting
+class DecimalType : BaseType, IBatchCasting
 {
     /**
      * The class to use for representing number objects
@@ -33,49 +33,49 @@ class DecimalType : BaseType : IBatchCasting
     /**
      * Convert decimal strings into the database format.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|float|int|null
      * @throws \InvalidArgumentException
      */
-    function toDatabase($value, IDTBDriver aDriver)
+    function toDatabase(aValue, IDTBDriver aDriver)
     {
-        if ($value == null || $value == "") {
+        if (aValue == null || aValue == "") {
             return null;
         }
 
-        if (is_numeric($value)) {
-            return $value;
+        if (is_numeric(aValue)) {
+            return aValue;
         }
 
         if (
-            is_object($value)
-            && method_exists($value, "__toString")
-            && is_numeric(strval($value))
+            is_object(aValue)
+            && method_exists(aValue, "__toString")
+            && is_numeric(strval(aValue))
         ) {
-            return strval($value);
+            return strval(aValue);
         }
 
         throw new InvalidArgumentException(sprintf(
             "Cannot convert value of type `%s` to a decimal",
-            getTypeName($value)
+            getTypeName(aValue)
         ));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      */
-    function toD($value, IDTBDriver aDriver): ?string
+    function toD(aValue, IDTBDriver aDriver): ?string
     {
-        if ($value == null) {
+        if (aValue == null) {
             return null;
         }
 
-        return (string)$value;
+        return (string)aValue;
     }
 
 
@@ -95,11 +95,11 @@ class DecimalType : BaseType : IBatchCasting
     /**
      * Get the correct PDO binding type for decimal data.
      *
-     * @param mixed $value The value being bound.
+     * @param mixed aValue The value being bound.
      * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement($value, IDTBDriver aDriver): int
+    function toStatement(aValue, IDTBDriver aDriver): int
     {
         return PDO::PARAM_STR;
     }
@@ -107,22 +107,22 @@ class DecimalType : BaseType : IBatchCasting
     /**
      * Marshalls request data into decimal strings.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @return string|null Converted value.
      */
-    function marshal($value): ?string
+    function marshal(aValue): ?string
     {
-        if ($value == null || $value == "") {
+        if (aValue == null || aValue == "") {
             return null;
         }
-        if (is_string($value) && this._useLocaleParser) {
-            return this._parseValue($value);
+        if (is_string(aValue) && this._useLocaleParser) {
+            return this._parseValue(aValue);
         }
-        if (is_numeric($value)) {
-            return (string)$value;
+        if (is_numeric(aValue)) {
+            return (string)aValue;
         }
-        if (is_string($value) && preg_match("/^[0-9,. ]+$/", $value)) {
-            return $value;
+        if (is_string(aValue) && preg_match("/^[0-9,. ]+$/", aValue)) {
+            return aValue;
         }
 
         return null;
@@ -160,14 +160,14 @@ class DecimalType : BaseType : IBatchCasting
      * Converts localized string into a decimal string after parsing it using
      * the locale aware parser.
      *
-     * @param string $value The value to parse and convert to an float.
+     * @param string aValue The value to parse and convert to an float.
      * @return string
      */
-    protected function _parseValue(string $value): string
+    protected function _parseValue(string aValue): string
     {
         /** @var \Cake\I18n\Number $class */
         $class = static::$numberClass;
 
-        return (string)$class::parseFloat($value);
+        return (string)$class::parseFloat(aValue);
     }
 }

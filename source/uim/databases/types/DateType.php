@@ -91,12 +91,12 @@ class DateType : DateTimeType
     /**
      * Convert request data into a datetime object.
      *
-     * @param mixed $value Request data
+     * @param mixed aValue Request data
      * @return \DateTimeInterface|null
      */
-    function marshal($value): ?DateTimeInterface
+    function marshal(aValue): ?DateTimeInterface
     {
-        $date = parent::marshal($value);
+        $date = parent::marshal(aValue);
         /** @psalm-var \DateTime|\DateTimeImmutable|null $date */
         if ($date && !$date instanceof I18nDateTimeInterface) {
             // Clear time manually when I18n types aren"t available and raw DateTime used
@@ -107,11 +107,11 @@ class DateType : DateTimeType
     }
 
 
-    protected function _parseLocaleValue(string $value): ?I18nDateTimeInterface
+    protected function _parseLocaleValue(string aValue): ?I18nDateTimeInterface
     {
         /** @psalm-var class-string<\Cake\I18n\I18nDateTimeInterface> $class */
         $class = this._className;
 
-        return $class::parseDate($value, this._localeMarshalFormat);
+        return $class::parseDate(aValue, this._localeMarshalFormat);
     }
 }

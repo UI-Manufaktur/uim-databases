@@ -34,14 +34,14 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
      *
      * @var \Cake\Database\IDTBExpression|object|scalar|null
      */
-    protected $value = null;
+    protected aValue = null;
 
     /**
      * The case value type.
      *
      * @var string|null
      */
-    protected $valueType = null;
+    protected aValueType = null;
 
     /**
      * The `WHEN ... THEN ...` expressions.
@@ -94,34 +94,34 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
      * only be passed if you actually want to create the simple
      * case expression variant!
      *
-     * @param uim.databases\IDTBExpression|object|scalar|null $value The case value.
+     * @param uim.databases\IDTBExpression|object|scalar|null aValue The case value.
      * @param string|null $type The case value type. If no type is provided, the type will be tried to be inferred
      *  from the value.
      */
-    this($value = null, ?string $type = null)
+    this(aValue = null, ?string $type = null)
     {
         if (func_num_args() > 0) {
             if (
-                $value !is null &&
-                !is_scalar($value) &&
-                !(is_object($value) && !($value instanceof Closure))
+                aValue !is null &&
+                !is_scalar(aValue) &&
+                !(is_object(aValue) && !(aValue instanceof Closure))
             ) {
                 throw new InvalidArgumentException(sprintf(
-                   "The `$value` argument must be either `null`, a scalar value, an object," .
+                   "The `aValue` argument must be either `null`, a scalar value, an object," .
                    "or an instance of `\%s`, `%s` given.",
                     IDTBExpression.class,
-                    getTypeName($value)
+                    getTypeName(aValue)
                 ));
             }
 
-            $this.value = $value;
+            $this.value = aValue;
 
             if (
-                $value !is null &&
+                aValue !is null &&
                 $type =is null &&
-                !($value instanceof IDTBExpression)
+                !(aValue instanceof IDTBExpression)
             ) {
-                $type = $this.inferType($value);
+                $type = $this.inferType(aValue);
             }
             $this.valueType = $type;
 
@@ -501,9 +501,9 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
             throw new LogicException("Case expression must have at least one when statement.");
         }
 
-        $value ="";
+        aValue ="";
         if ($this.isSimpleVariant) {
-            $value = $this.compileNullableValue($binder, $this.value, $this.valueType) ."";
+            aValue = $this.compileNullableValue($binder, $this.value, $this.valueType) ."";
         }
 
         $whenThenExpressions = [];
@@ -514,7 +514,7 @@ class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
 
         $else = $this.compileNullableValue($binder, $this.else, $this.elseType);
 
-        return "CASE {$value}{$whenThen} ELSE $else END";
+        return "CASE {aValue}{$whenThen} ELSE $else END";
     }
 
 

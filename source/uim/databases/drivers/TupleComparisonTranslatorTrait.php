@@ -66,15 +66,15 @@ trait TupleComparisonTranslatorTrait
             );
         }
 
-        $value = $expression->getValue();
+        aValue = $expression->getValue();
         $true = new QueryExpression("1");
 
-        if ($value instanceof Query) {
-            $selected = array_values($value->clause("select"));
+        if (aValue instanceof Query) {
+            $selected = array_values(aValue->clause("select"));
             foreach ($fields as $i : $field) {
-                $value->andWhere([$field : new IdentifierExpression($selected[$i])]);
+                aValue->andWhere([$field : new IdentifierExpression($selected[$i])]);
             }
-            $value->select($true, true);
+            aValue->select($true, true);
             $expression->setField($true);
             $expression->setOperator("=");
 
@@ -93,15 +93,15 @@ trait TupleComparisonTranslatorTrait
             ->newQuery()
             ->select($true);
 
-        if (!is_array(current($value))) {
-            $value = [$value];
+        if (!is_array(current(aValue))) {
+            aValue = [aValue];
         }
 
         $conditions = ["OR" : []];
-        foreach ($value as $tuple) {
+        foreach (aValue as $tuple) {
             $item = [];
-            foreach (array_values($tuple) as $i : $value2) {
-                $item[] = [$fields[$i] : $value2];
+            foreach (array_values($tuple) as $i : aValue2) {
+                $item[] = [$fields[$i] : aValue2];
             }
             $conditions["OR"][] = $item;
         }

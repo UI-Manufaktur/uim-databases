@@ -217,16 +217,16 @@ class ValuesExpression : IDTBExpression
             $rowPlaceholders = [];
 
             foreach ($columns as $column) {
-                $value = $row[$column];
+                aValue = $row[$column];
 
-                if ($value instanceof IDTBExpression) {
-                    $rowPlaceholders[] ="(" . $value.sql($binder) .")";
+                if (aValue instanceof IDTBExpression) {
+                    $rowPlaceholders[] ="(" . aValue.sql($binder) .")";
                     continue;
                 }
 
                 $placeholder = $binder.placeholder("c");
                 $rowPlaceholders[] = $placeholder;
-                $binder.bind($placeholder, $value, $types[$column]);
+                $binder.bind($placeholder, aValue, $types[$column]);
             }
 
             $placeholders[] = implode(",", $rowPlaceholders);

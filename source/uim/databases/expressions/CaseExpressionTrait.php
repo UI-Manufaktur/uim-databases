@@ -36,40 +36,40 @@ trait CaseExpressionTrait
     /**
      * Infers the abstract type for the given value.
      *
-     * @param mixed $value The value for which to infer the type.
+     * @param mixed aValue The value for which to infer the type.
      * @return string|null The abstract type, or `null` if it could not be inferred.
      */
-    protected function inferType($value): ?string
+    protected function inferType(aValue): ?string
     {
         $type = null;
 
-        if (is_string($value)) {
+        if (is_string(aValue)) {
             $type ="string";
-        } elseif (isInt($value)) {
+        } elseif (isInt(aValue)) {
             $type ="integer";
-        } elseif (is_float($value)) {
+        } elseif (is_float(aValue)) {
             $type ="float";
-        } elseif (is_bool($value)) {
+        } elseif (is_bool(aValue)) {
             $type ="boolean";
         } elseif (
-            $value instanceof Date ||
-            $value instanceof MutableDate
+            aValue instanceof Date ||
+            aValue instanceof MutableDate
         ) {
             $type ="date";
-        } elseif ($value instanceof DateTimeInterface) {
+        } elseif (aValue instanceof DateTimeInterface) {
             $type ="datetime";
         } elseif (
-            is_object($value) &&
-            method_exists($value,"__toString")
+            is_object(aValue) &&
+            method_exists(aValue,"__toString")
         ) {
             $type ="string";
         } elseif (
             _typeMap !is null &&
-            $value instanceof IdentifierExpression
+            aValue instanceof IdentifierExpression
         ) {
-            $type = _typeMap.type($value.getIdentifier());
-        } elseif ($value instanceof IDTBTypedResult) {
-            $type = $value.getReturnType();
+            $type = _typeMap.type(aValue.getIdentifier());
+        } elseif (aValue instanceof IDTBTypedResult) {
+            $type = aValue.getReturnType();
         }
 
         return $type;
@@ -79,31 +79,31 @@ trait CaseExpressionTrait
      * Compiles a nullable value to SQL.
      *
      * @param uim.databases\ValueBinder aValueBinder The value binder to use.
-     * @param uim.databases\IDTBExpression|object|scalar|null $value The value to compile.
+     * @param uim.databases\IDTBExpression|object|scalar|null aValue The value to compile.
      * @param string|null $type The value type.
      * @return string
      */
-    protected string compileNullableValue(ValueBinder aValueBinder, $value, ?string $type = null)
+    protected string compileNullableValue(ValueBinder aValueBinder, aValue, ?string $type = null)
     {
         if (
             $type !is null &&
-            !($value instanceof IDTBExpression)
+            !(aValue instanceof IDTBExpression)
         ) {
-            $value = _castToExpression($value, $type);
+            aValue = _castToExpression(aValue, $type);
         }
 
-        if ($value =is null) {
-            $value ="NULL";
-        } elseif ($value instanceof Query) {
-            $value = sprintf("(%s)", $value.sql($binder));
-        } elseif ($value instanceof IDTBExpression) {
-            $value = $value.sql($binder);
+        if (aValue =is null) {
+            aValue ="NULL";
+        } elseif (aValue instanceof Query) {
+            aValue = sprintf("(%s)", aValue.sql($binder));
+        } elseif (aValue instanceof IDTBExpression) {
+            aValue = aValue.sql($binder);
         } else {
             $placeholder = $binder.placeholder("c");
-            $binder.bind($placeholder, $value, $type);
-            $value = $placeholder;
+            $binder.bind($placeholder, aValue, $type);
+            aValue = $placeholder;
         }
 
-        return $value;
+        return aValue;
     }
 }

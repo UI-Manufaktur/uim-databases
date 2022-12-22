@@ -104,13 +104,13 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ```
      *
      * @param string|int $column name or param position to be bound
-     * @param mixed $value The value to bind to variable in query
+     * @param mixed aValue The value to bind to variable in query
      * @param string|int|null $type name of configured Type class
      * @return void
      */
-    function bindValue($column, $value, $type = "string"): void
+    function bindValue($column, aValue, $type = "string"): void
     {
-        this._statement->bindValue($column, $value, $type);
+        this._statement->bindValue($column, aValue, $type);
     }
 
     /**
@@ -320,14 +320,14 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
 
         $anonymousParams = is_int(key($params));
         $offset = 1;
-        foreach ($params as $index : $value) {
+        foreach ($params as $index : aValue) {
             $type = $types[$index] ?? null;
             if ($anonymousParams) {
                 /** @psalm-suppress InvalidOperand */
                 $index += $offset;
             }
             /** @psalm-suppress InvalidScalarArgument */
-            this.bindValue($index, $value, $type);
+            this.bindValue($index, aValue, $type);
         }
     }
 

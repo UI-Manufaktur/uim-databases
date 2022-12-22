@@ -325,9 +325,9 @@ class Query : ExpressionInterface, IteratorAggregate
      *
      * ### Example
      * ```
-     * $query->select(["title"])->from("articles")->traverse(function ($value, $clause) {
+     * $query->select(["title"])->from("articles")->traverse(function (aValue, $clause) {
      *     if ($clause == "select") {
-     *         var_dump($value);
+     *         var_dump(aValue);
      *     }
      * });
      * ```
@@ -357,9 +357,9 @@ class Query : ExpressionInterface, IteratorAggregate
      * ### Example
      *
      * ```
-     * $query->select(["title"])->from("articles")->traverse(function ($value, $clause) {
+     * $query->select(["title"])->from("articles")->traverse(function (aValue, $clause) {
      *     if ($clause == "select") {
-     *         var_dump($value);
+     *         var_dump(aValue);
      *     }
      * }, ["select", "from"]);
      * ```
@@ -1791,13 +1791,13 @@ class Query : ExpressionInterface, IteratorAggregate
      * @param \Cake\Database\Expression\QueryExpression|\Closure|array|string $key The column name or array of keys
      *    + values to set. This can also be a QueryExpression containing a SQL fragment.
      *    It can also be a Closure, that is required to return an expression object.
-     * @param mixed $value The value to update $key to. Can be null if $key is an
+     * @param mixed aValue The value to update $key to. Can be null if $key is an
      *    array or QueryExpression. When $key is an array, this parameter will be
      *    used as $types instead.
      * @param array<string, string>|string $types The column types to treat data as.
      * @return this
      */
-    function set($key, $value = null, $types = [])
+    function set($key, aValue = null, $types = [])
     {
         if (empty(_parts["set"])) {
             _parts["set"] = this.newExpr()->setConjunction(",");
@@ -1811,7 +1811,7 @@ class Query : ExpressionInterface, IteratorAggregate
         }
 
         if (is_array($key) || $key instanceof ExpressionInterface) {
-            $types = (array)$value;
+            $types = (array)aValue;
             _parts["set"]->add($key, $types);
 
             return this;
@@ -1820,7 +1820,7 @@ class Query : ExpressionInterface, IteratorAggregate
         if (!is_string($types)) {
             $types = null;
         }
-        _parts["set"]->eq($key, $value, $types);
+        _parts["set"]->eq($key, aValue, $types);
 
         return this;
     }
@@ -2117,15 +2117,15 @@ class Query : ExpressionInterface, IteratorAggregate
      * ```
      *
      * @param string|int $param placeholder to be replaced with quoted version
-     *   of $value
-     * @param mixed $value The value to be bound
+     *   of aValue
+     * @param mixed aValue The value to be bound
      * @param string|int|null $type the mapped type name, used for casting when sending
      *   to database
      * @return this
      */
-    function bind($param, $value, $type = null)
+    function bind($param, aValue, $type = null)
     {
-        this.getValueBinder()->bind($param, $value, $type);
+        this.getValueBinder()->bind($param, aValue, $type);
 
         return this;
     }
@@ -2391,10 +2391,10 @@ class Query : ExpressionInterface, IteratorAggregate
             if (is_array($part)) {
                 foreach ($part as $i: $piece) {
                     if (is_array($piece)) {
-                        foreach ($piece as $j: $value) {
-                            if ($value instanceof ExpressionInterface) {
+                        foreach ($piece as $j: aValue) {
+                            if (aValue instanceof ExpressionInterface) {
                                 /** @psalm-suppress PossiblyUndefinedMethod */
-                                _parts[$name][$i][$j] = clone $value;
+                                _parts[$name][$i][$j] = clone aValue;
                             }
                         }
                     } elseif ($piece instanceof ExpressionInterface) {

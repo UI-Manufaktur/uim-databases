@@ -25,22 +25,22 @@ trait TypeConverterTrait
      * Converts a give value to a suitable database value based on type
      * and return relevant internal statement type
      *
-     * @param mixed $value The value to cast
+     * @param mixed aValue The value to cast
      * @param \Cake\Database\TypeInterface|string|int $type The type name or type instance to use.
      * @return array list containing converted value and internal type
      * @pslam-return array{mixed, int}
      */
-    function cast($value, $type = "string"): array
+    function cast(aValue, $type = "string"): array
     {
         if (is_string($type)) {
             $type = TypeFactory.build($type);
         }
         if ($type instanceof TypeInterface) {
-            $value = $type->toDatabase($value, _driver);
-            $type = $type->toStatement($value, _driver);
+            aValue = $type->toDatabase(aValue, _driver);
+            $type = $type->toStatement(aValue, _driver);
         }
 
-        return [$value, $type];
+        return [aValue, $type];
     }
 
     /**

@@ -33,45 +33,45 @@ class BinaryType : BaseType
      * Binary data is not altered before being inserted into the database.
      * As PDO will handle reading file handles.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return resource|string
      */
-    function toDatabase($value, IDTBDriver aDriver)
+    function toDatabase(aValue, IDTBDriver aDriver)
     {
-        return $value;
+        return aValue;
     }
 
     /**
      * Convert binary into resource handles
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return resource|null
      * @throws \Cake\Core\Exception\CakeException
      */
-    function toD($value, IDTBDriver aDriver)
+    function toD(aValue, IDTBDriver aDriver)
     {
-        if ($value == null) {
+        if (aValue == null) {
             return null;
         }
-        if (is_string($value)) {
-            return fopen("data:text/plain;base64," . base64_encode($value), "rb");
+        if (is_string(aValue)) {
+            return fopen("data:text/plain;base64," . base64_encode(aValue), "rb");
         }
-        if (is_resource($value)) {
-            return $value;
+        if (is_resource(aValue)) {
+            return aValue;
         }
-        throw new CakeException(sprintf("Unable to convert %s into binary.", gettype($value)));
+        throw new CakeException(sprintf("Unable to convert %s into binary.", gettype(aValue)));
     }
 
     /**
      * Get the correct PDO binding type for Binary data.
      *
-     * @param mixed $value The value being bound.
+     * @param mixed aValue The value being bound.
      * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement($value, IDTBDriver aDriver): int
+    function toStatement(aValue, IDTBDriver aDriver): int
     {
         return PDO::PARAM_LOB;
     }
@@ -82,11 +82,11 @@ class BinaryType : BaseType
      * Most useful for converting request data into PHP objects
      * that make sense for the rest of the ORM/Database layers.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @return mixed Converted value.
      */
-    function marshal($value)
+    function marshal(aValue)
     {
-        return $value;
+        return aValue;
     }
 }

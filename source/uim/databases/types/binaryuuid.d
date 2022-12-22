@@ -34,22 +34,22 @@ class BinaryUuidType : BaseType
      * Binary data is not altered before being inserted into the database.
      * As PDO will handle reading file handles.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return resource|string|null
      */
-    function toDatabase($value, IDTBDriver aDriver)
+    function toDatabase(aValue, IDTBDriver aDriver)
     {
-        if (!is_string($value)) {
-            return $value;
+        if (!is_string(aValue)) {
+            return aValue;
         }
 
-        $length = strlen($value);
+        $length = strlen(aValue);
         if ($length != 36 && $length != 32) {
             return null;
         }
 
-        return this.convertStringToBinaryUuid($value);
+        return this.convertStringToBinaryUuid(aValue);
     }
 
     /**
@@ -65,34 +65,34 @@ class BinaryUuidType : BaseType
     /**
      * Convert binary uuid into resource handles
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return resource|string|null
      * @throws \Cake\Core\Exception\CakeException
      */
-    function toD($value, IDTBDriver aDriver)
+    function toD(aValue, IDTBDriver aDriver)
     {
-        if ($value == null) {
+        if (aValue == null) {
             return null;
         }
-        if (is_string($value)) {
-            return this.convertBinaryUuidToString($value);
+        if (is_string(aValue)) {
+            return this.convertBinaryUuidToString(aValue);
         }
-        if (is_resource($value)) {
-            return $value;
+        if (is_resource(aValue)) {
+            return aValue;
         }
 
-        throw new CakeException(sprintf("Unable to convert %s into binary uuid.", gettype($value)));
+        throw new CakeException(sprintf("Unable to convert %s into binary uuid.", gettype(aValue)));
     }
 
     /**
      * Get the correct PDO binding type for Binary data.
      *
-     * @param mixed $value The value being bound.
+     * @param mixed aValue The value being bound.
      * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement($value, IDTBDriver aDriver): int
+    function toStatement(aValue, IDTBDriver aDriver): int
     {
         return PDO::PARAM_LOB;
     }
@@ -103,12 +103,12 @@ class BinaryUuidType : BaseType
      * Most useful for converting request data into PHP objects
      * that make sense for the rest of the ORM/Database layers.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @return mixed Converted value.
      */
-    function marshal($value)
+    function marshal(aValue)
     {
-        return $value;
+        return aValue;
     }
 
     /**

@@ -311,9 +311,9 @@ class Sqlite : Driver
                     ->setConjunction(" ,")
                     ->iterateParts(function ($p, $key) {
                         if ($key == 0) {
-                            $value = rtrim(strtolower($p), "s");
-                            if (isset(this._dateParts[$value])) {
-                                $p = ["value" : "%" . this._dateParts[$value], "type" : null];
+                            aValue = rtrim(strtolower($p), "s");
+                            if (isset(this._dateParts[aValue])) {
+                                $p = ["value" : "%" . this._dateParts[aValue], "type" : null];
                             }
                         }
 

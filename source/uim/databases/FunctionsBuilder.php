@@ -203,17 +203,17 @@ class FunctionsBuilder
      * Add the time unit to the date expression
      *
      * @param \Cake\Database\ExpressionInterface|string $expression Expression to obtain the date part from.
-     * @param string|int $value Value to be added. Use negative to subtract.
+     * @param string|int aValue Value to be added. Use negative to subtract.
      * @param string $unit Unit of the value e.g. hour or day.
      * @param array $types list of types to bind to the arguments
      * @return \Cake\Database\Expression\FunctionExpression
      */
-    function dateAdd($expression, $value, string $unit, array $types = []): FunctionExpression
+    function dateAdd($expression, aValue, string $unit, array $types = []): FunctionExpression
     {
-        if (!is_numeric($value)) {
-            $value = 0;
+        if (!is_numeric(aValue)) {
+            aValue = 0;
         }
-        $interval = $value . " " . $unit;
+        $interval = aValue . " " . $unit;
         $expression = new FunctionExpression("DATE_ADD", this.toLiteralParam($expression), $types, "datetime");
         $expression->setConjunction(", INTERVAL")->add([$interval: "literal"]);
 

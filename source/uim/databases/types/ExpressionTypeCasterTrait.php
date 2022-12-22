@@ -29,31 +29,31 @@ trait ExpressionTypeCasterTrait
      * if the type class : the ExpressionTypeInterface. Otherwise,
      * returns the value unmodified.
      *
-     * @param mixed $value The value to convert to ExpressionInterface
+     * @param mixed aValue The value to convert to ExpressionInterface
      * @param string|null $type The type name
      * @return mixed
      */
-    protected function _castToExpression($value, ?string $type = null)
+    protected function _castToExpression(aValue, ?string $type = null)
     {
         if ($type == null) {
-            return $value;
+            return aValue;
         }
 
         $baseType = str_replace("[]", "", $type);
         $converter = TypeFactory::build($baseType);
 
         if (!$converter instanceof ExpressionTypeInterface) {
-            return $value;
+            return aValue;
         }
 
         $multi = $type != $baseType;
 
         if ($multi) {
             /** @var \Cake\Database\Type\ExpressionTypeInterface $converter */
-            return array_map([$converter, "toExpression"], $value);
+            return array_map([$converter, "toExpression"], aValue);
         }
 
-        return $converter->toExpression($value);
+        return $converter->toExpression(aValue);
     }
 
     /**

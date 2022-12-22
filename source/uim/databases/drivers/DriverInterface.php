@@ -203,11 +203,11 @@ interface IDTBDriver
     /**
      * Returns a value in a safe representation to be used in a query string
      *
-     * @param mixed $value The value to quote.
+     * @param mixed aValue The value to quote.
      * @param int $type Must be one of the \PDO.PARAM_* constants
      * @return string
      */
-    function quote($value, $type): string;
+    function quote(aValue, $type): string;
 
     /**
      * Checks if the driver supports quoting.
@@ -253,10 +253,10 @@ interface IDTBDriver
     /**
      * Escapes values for use in schema definitions.
      *
-     * @param mixed $value The value to escape.
+     * @param mixed aValue The value to escape.
      * @return string String for use in schema definitions.
      */
-    function schemaValue($value): string;
+    function schemaValue(aValue): string;
 
     /**
      * Returns the schema name that"s being used.

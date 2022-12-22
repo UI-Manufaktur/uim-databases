@@ -25,29 +25,29 @@ interface TypeInterface
     /**
      * Casts given value from a PHP type to one acceptable by a database.
      *
-     * @param mixed $value Value to be converted to a database equivalent.
+     * @param mixed aValue Value to be converted to a database equivalent.
      * @param \Cake\Database\IDTBDriver aDriver Object from which database preferences and configuration will be extracted.
      * @return mixed Given PHP type casted to one acceptable by a database.
      */
-    function toDatabase($value, IDTBDriver aDriver);
+    function toDatabase(aValue, IDTBDriver aDriver);
 
     /**
      * Casts given value from a database type to a PHP equivalent.
      *
-     * @param mixed $value Value to be converted to PHP equivalent
+     * @param mixed aValue Value to be converted to PHP equivalent
      * @param \Cake\Database\IDTBDriver aDriver Object from which database preferences and configuration will be extracted
      * @return mixed Given value casted from a database to a PHP equivalent.
      */
-    function toD($value, IDTBDriver aDriver);
+    function toD(aValue, IDTBDriver aDriver);
 
     /**
      * Casts given value to its Statement equivalent.
      *
-     * @param mixed $value Value to be converted to PDO statement.
+     * @param mixed aValue Value to be converted to PDO statement.
      * @param \Cake\Database\IDTBDriver aDriver Object from which database preferences and configuration will be extracted.
      * @return mixed Given value casted to its Statement equivalent.
      */
-    function toStatement($value, IDTBDriver aDriver);
+    function toStatement(aValue, IDTBDriver aDriver);
 
     /**
      * Marshals flat data into PHP objects.
@@ -55,10 +55,10 @@ interface TypeInterface
      * Most useful for converting request data into PHP objects,
      * that make sense for the rest of the ORM/Database layers.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed aValue The value to convert.
      * @return mixed Converted value.
      */
-    function marshal($value);
+    function marshal(aValue);
 
     /**
      * Returns the base type name that this class is inheriting.

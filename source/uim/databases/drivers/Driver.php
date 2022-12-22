@@ -281,11 +281,11 @@ abstract class Driver : IDTBDriver
     }
 
 
-    function quote($value, $type = PDO.PARAM_STR): string
+    function quote(aValue, $type = PDO.PARAM_STR): string
     {
         this.connect();
 
-        return _connection->quote((string)$value, $type);
+        return _connection->quote((string)aValue, $type);
     }
 
     /**
@@ -311,37 +311,37 @@ abstract class Driver : IDTBDriver
     abstract function quoteIdentifier(string $identifier): string;
 
 
-    function schemaValue($value): string
+    function schemaValue(aValue): string
     {
-        if ($value == null) {
+        if (aValue == null) {
             return "NULL";
         }
-        if ($value == false) {
+        if (aValue == false) {
             return "FALSE";
         }
-        if ($value == true) {
+        if (aValue == true) {
             return "TRUE";
         }
-        if (is_float($value)) {
-            return str_replace(",", ".", (string)$value);
+        if (is_float(aValue)) {
+            return str_replace(",", ".", (string)aValue);
         }
         /** @psalm-suppress InvalidArgument */
         if (
             (
-                isInt($value) ||
-                $value == "0"
+                isInt(aValue) ||
+                aValue == "0"
             ) ||
             (
-                is_numeric($value) &&
-                strpos($value, ",") == false &&
-                subString($value, 0, 1) != "0" &&
-                strpos($value, "e") == false
+                is_numeric(aValue) &&
+                strpos(aValue, ",") == false &&
+                subString(aValue, 0, 1) != "0" &&
+                strpos(aValue, "e") == false
             )
         ) {
-            return (string)$value;
+            return (string)aValue;
         }
 
-        return _connection->quote((string)$value, PDO.PARAM_STR);
+        return _connection->quote((string)aValue, PDO.PARAM_STR);
     }
 
 

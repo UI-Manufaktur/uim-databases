@@ -51,13 +51,13 @@ class UnaryExpression : IDTBExpression
      * Constructor
      *
      * @param string $operator The operator to used for the expression
-     * @param mixed $value the value to use as the operand for the expression
+     * @param mixed aValue the value to use as the operand for the expression
      * @param int $position either UnaryExpression.PREFIX or UnaryExpression.POSTFIX
      */
-    this(string $operator, $value, $position = self.PREFIX)
+    this(string $operator, aValue, $position = self.PREFIX)
     {
         _operator = $operator;
-        _value = $value;
+        _value = aValue;
         $this.position = $position;
     }
 

@@ -61,11 +61,11 @@ interface IStatement
      * ```
      *
      * @param string|int $column name or param position to be bound
-     * @param mixed $value The value to bind to variable in query
+     * @param mixed aValue The value to bind to variable in query
      * @param string|int|null $type name of configured Type class, or PDO type constant.
      * @return void
      */
-    function bindValue($column, $value, $type = "string"): void;
+    function bindValue($column, aValue, $type = "string"): void;
 
     /**
      * Closes a cursor in the database, freeing up any resources and memory

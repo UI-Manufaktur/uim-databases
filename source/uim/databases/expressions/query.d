@@ -106,106 +106,106 @@ class QueryExpression : IDTBExpression, Countable {
      * Adds a new condition to the expression object in the form "field = value".
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param mixed aValue The value to be bound to $field for comparison
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * If it is suffixed with "[]" and the value is an array then multiple placeholders
      * will be created, one per each value in the array.
      * @return $this
      */
-    function eq($field, $value, ?string $type = null)
+    function eq($field, aValue, ?string $type = null)
     {
         if ($type =is null) {
             $type = _calculateType($field);
         }
 
-        return $this.add(new ComparisonExpression($field, $value, $type,"="));
+        return $this.add(new ComparisonExpression($field, aValue, $type,"="));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field != value".
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param mixed aValue The value to be bound to $field for comparison
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * If it is suffixed with "[]" and the value is an array then multiple placeholders
      * will be created, one per each value in the array.
      * @return $this
      */
-    function notEq($field, $value, $type = null)
+    function notEq($field, aValue, $type = null)
     {
         if ($type =is null) {
             $type = _calculateType($field);
         }
 
-        return $this.add(new ComparisonExpression($field, $value, $type,"!="));
+        return $this.add(new ComparisonExpression($field, aValue, $type,"!="));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field > value".
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param mixed aValue The value to be bound to $field for comparison
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * @return $this
      */
-    function gt($field, $value, $type = null)
+    function gt($field, aValue, $type = null)
     {
         if ($type =is null) {
             $type = _calculateType($field);
         }
 
-        return $this.add(new ComparisonExpression($field, $value, $type,">"));
+        return $this.add(new ComparisonExpression($field, aValue, $type,">"));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field < value".
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param mixed aValue The value to be bound to $field for comparison
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * @return $this
      */
-    function lt($field, $value, $type = null)
+    function lt($field, aValue, $type = null)
     {
         if ($type =is null) {
             $type = _calculateType($field);
         }
 
-        return $this.add(new ComparisonExpression($field, $value, $type,"<"));
+        return $this.add(new ComparisonExpression($field, aValue, $type,"<"));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field >= value".
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param mixed aValue The value to be bound to $field for comparison
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * @return $this
      */
-    function gte($field, $value, $type = null)
+    function gte($field, aValue, $type = null)
     {
         if ($type =is null) {
             $type = _calculateType($field);
         }
 
-        return $this.add(new ComparisonExpression($field, $value, $type,">="));
+        return $this.add(new ComparisonExpression($field, aValue, $type,">="));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field <= value".
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param mixed aValue The value to be bound to $field for comparison
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * @return $this
      */
-    function lte($field, $value, $type = null)
+    function lte($field, aValue, $type = null)
     {
         if ($type =is null) {
             $type = _calculateType($field);
         }
 
-        return $this.add(new ComparisonExpression($field, $value, $type,"<="));
+        return $this.add(new ComparisonExpression($field, aValue, $type,"<="));
     }
 
     /**
@@ -244,34 +244,34 @@ class QueryExpression : IDTBExpression, Countable {
      * Adds a new condition to the expression object in the form "field LIKE value".
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param mixed aValue The value to be bound to $field for comparison
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * @return $this
      */
-    function like($field, $value, $type = null)
+    function like($field, aValue, $type = null)
     {
         if ($type =is null) {
             $type = _calculateType($field);
         }
 
-        return $this.add(new ComparisonExpression($field, $value, $type,"LIKE"));
+        return $this.add(new ComparisonExpression($field, aValue, $type,"LIKE"));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field NOT LIKE value".
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param mixed aValue The value to be bound to $field for comparison
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * @return $this
      */
-    function notLike($field, $value, $type = null)
+    function notLike($field, aValue, $type = null)
     {
         if ($type =is null) {
             $type = _calculateType($field);
         }
 
-        return $this.add(new ComparisonExpression($field, $value, $type,"NOT LIKE"));
+        return $this.add(new ComparisonExpression($field, aValue, $type,"NOT LIKE"));
     }
 
     /**
@@ -280,7 +280,7 @@ class QueryExpression : IDTBExpression, Countable {
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
      * @param uim.databases\IDTBExpression|array|string someValues the value to be bound to $field for comparison
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * @return $this
      */
     function in($field, someValues, $type = null)
@@ -302,7 +302,7 @@ class QueryExpression : IDTBExpression, Countable {
      * instance, or an array of IDTBExpression instances.
      * @param uim.databases\IDTBExpression|array someValues Associative array of values to be associated with the
      * conditions passed in $conditions. If there are more someValues than $conditions,
-     * the last $value is used as the `ELSE` value.
+     * the last aValue is used as the `ELSE` value.
      * @param array<string> $types Associative array of types to be associated with the values
      * passed in someValues
      * @return $this
@@ -331,15 +331,15 @@ class QueryExpression : IDTBExpression, Countable {
      * only be passed if you actually want to create the simple
      * case expression variant!
      *
-     * @param uim.databases\IDTBExpression|object|scalar|null $value The case value.
+     * @param uim.databases\IDTBExpression|object|scalar|null aValue The case value.
      * @param string|null $type The case value type. If no type is provided, the type will be tried to be inferred
      *  from the value.
      * @return \Cake\Database\Expression\CaseStatementExpression
      */
-    function case($value = null, ?string $type = null): CaseStatementExpression
+    function case(aValue = null, ?string $type = null): CaseStatementExpression
     {
         if (func_num_args() > 0) {
-            $expression = new CaseStatementExpression($value, $type);
+            $expression = new CaseStatementExpression(aValue, $type);
         } else {
             $expression = new CaseStatementExpression();
         }
@@ -353,7 +353,7 @@ class QueryExpression : IDTBExpression, Countable {
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
      * @param uim.databases\IDTBExpression|array|string someValues the value to be bound to $field for comparison
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * @return $this
      */
     function notIn($field, someValues, $type = null)
@@ -374,7 +374,7 @@ class QueryExpression : IDTBExpression, Countable {
      *
      * @param uim.databases\IDTBExpression|string $field Database field to be compared against value
      * @param uim.databases\IDTBExpression|array|string someValues the value to be bound to $field for comparison
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * @return $this
      */
     function notInOrNull($field, someValues, ?string $type = null)
@@ -416,7 +416,7 @@ class QueryExpression : IDTBExpression, Countable {
      * @param uim.databases\IDTBExpression|string $field The field name to compare for values inbetween the range.
      * @param mixed $from The initial value of the range.
      * @param mixed $to The ending value in the comparison range.
-     * @param string|null $type the type name for $value as configured using the Type map.
+     * @param string|null $type the type name for aValue as configured using the Type map.
      * @return $this
      */
     function between($field, $from, $to, $type = null)
@@ -733,11 +733,11 @@ class QueryExpression : IDTBExpression, Countable {
      *
      * @param string $field The value from which the actual field and operator will
      * be extracted.
-     * @param mixed $value The value to be bound to a placeholder for the field
+     * @param mixed aValue The value to be bound to a placeholder for the field
      * @return \Cake\Database\IDTBExpression
      * @throws \InvalidArgumentException If operator is invalid or missing on NULL usage.
      */
-    protected function _parseCondition(string $field, $value)
+    protected function _parseCondition(string $field, aValue)
     {
         $field = trim($field);
         $operator ="=";
@@ -776,10 +776,10 @@ class QueryExpression : IDTBExpression, Countable {
         }
 
         if ($typeMultiple) {
-            $value = $value instanceof IDTBExpression ? $value : (array)$value;
+            aValue = aValue instanceof IDTBExpression ? aValue : (array)aValue;
         }
 
-        if ($operator =="is" && $value =is null) {
+        if ($operator =="is" && aValue =is null) {
             return new UnaryExpression(
                "IS NULL",
                 new IdentifierExpression($expression),
@@ -787,7 +787,7 @@ class QueryExpression : IDTBExpression, Countable {
             );
         }
 
-        if ($operator =="is not" && $value =is null) {
+        if ($operator =="is not" && aValue =is null) {
             return new UnaryExpression(
                "IS NOT NULL",
                 new IdentifierExpression($expression),
@@ -795,21 +795,21 @@ class QueryExpression : IDTBExpression, Countable {
             );
         }
 
-        if ($operator =="is" && $value !is null) {
+        if ($operator =="is" && aValue !is null) {
             $operator ="=";
         }
 
-        if ($operator =="is not" && $value !is null) {
+        if ($operator =="is not" && aValue !is null) {
             $operator ="!=";
         }
 
-        if ($value =is null && _conjunction !=",") {
+        if (aValue =is null && _conjunction !=",") {
             throw new InvalidArgumentException(
                 sprintf("Expression `%s` is missing operator (IS, IS NOT) with `null` value.", $expression)
             );
         }
 
-        return new ComparisonExpression($expression, $value, $type, $operator);
+        return new ComparisonExpression($expression, aValue, $type, $operator);
     }
 
     /**

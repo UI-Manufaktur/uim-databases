@@ -29,8 +29,8 @@ interface ExpressionTypeInterface
      * Returns an ExpressionInterface object for the given value that can
      * be used in queries.
      *
-     * @param mixed $value The value to be converted to an expression
+     * @param mixed aValue The value to be converted to an expression
      * @return \Cake\Database\ExpressionInterface
      */
-    function toExpression($value): ExpressionInterface;
+    function toExpression(aValue): ExpressionInterface;
 }

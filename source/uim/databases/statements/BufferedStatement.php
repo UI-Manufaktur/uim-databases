@@ -102,9 +102,9 @@ class BufferedStatement : Iterator, StatementInterface
     }
 
 
-    function bindValue($column, $value, $type = "string"): void
+    function bindValue($column, aValue, $type = "string"): void
     {
-        this.statement->bindValue($column, $value, $type);
+        this.statement->bindValue($column, aValue, $type);
     }
 
 
