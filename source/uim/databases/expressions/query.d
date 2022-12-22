@@ -1,28 +1,12 @@
-<?php
-declare(strict_types=1);
+/*********************************************************************************************************
+*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
+*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
+*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
+**********************************************************************************************************/
+module uim.cake;
 
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         3.0.0
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
-namespace Cake\Database\Expression;
-
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query;
-use Cake\Database\TypeMapTrait;
-use Cake\Database\ValueBinder;
-use Closure;
-use Countable;
-use InvalidArgumentException;
+@safe:
+import uim.cake;
 
 /**
  * Represents a SQL Query expression. Internally it stores a tree of
