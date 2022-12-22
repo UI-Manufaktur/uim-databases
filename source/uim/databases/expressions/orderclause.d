@@ -11,7 +11,7 @@ import uim.cake;
 /**
  * An expression object for complex ORDER BY clauses
  */
-class OrderClauseExpression implements ExpressionInterface, FieldInterface
+class OrderClauseExpression : ExpressionInterface, FieldInterface
 {
     use FieldTrait;
 

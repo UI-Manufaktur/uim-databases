@@ -14,7 +14,7 @@ import uim.cake;
  * Helps generate SQL with the correct number of placeholders and bind
  * values correctly into the statement.
  */
-class ValuesExpression implements ExpressionInterface
+class ValuesExpression : ExpressionInterface
 {
     use ExpressionTypeCasterTrait;
     use TypeMapTrait;

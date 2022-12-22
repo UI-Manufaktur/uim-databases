@@ -16,7 +16,7 @@ import uim.cake;
  *
  * @see \Cake\Database\Query::identifier()
  */
-class IdentifierExpression implements ExpressionInterface
+class IdentifierExpression : ExpressionInterface
 {
     /**
      * Holds the identifier string

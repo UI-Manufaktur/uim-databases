@@ -11,7 +11,7 @@ import uim.cake;
 /**
  * String expression with collation.
  */
-class StringExpression implements ExpressionInterface
+class StringExpression : ExpressionInterface
 {
     /**
      * @var string

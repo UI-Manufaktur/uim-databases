@@ -13,7 +13,7 @@ import uim.cake;
  * expressions that can be compiled by converting this object to string
  * and will contain a correctly parenthesized and nested expression.
  */
-class QueryExpression implements ExpressionInterface, Countable
+class QueryExpression : ExpressionInterface, Countable
 {
     use TypeMapTrait;
 

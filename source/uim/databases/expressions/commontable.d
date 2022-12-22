@@ -11,7 +11,7 @@ import uim.cake;
 /**
  * An expression that represents a common table expression definition.
  */
-class CommonTableExpression implements ExpressionInterface
+class CommonTableExpression : ExpressionInterface
 {
     /**
      * The CTE name.

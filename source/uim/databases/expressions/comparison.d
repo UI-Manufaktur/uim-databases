@@ -13,7 +13,7 @@ import uim.cake;
  * involving a field an operator and a value. In its most common form the
  * string representation of a comparison is `field = value`
  */
-class ComparisonExpression implements ExpressionInterface, FieldInterface
+class ComparisonExpression : ExpressionInterface, FieldInterface
 {
     use ExpressionTypeCasterTrait;
     use FieldTrait;

@@ -10,7 +10,7 @@ import uim.cake;
 /**
  * An expression object that represents an expression with only a single operand.
  */
-class UnaryExpression implements ExpressionInterface
+class UnaryExpression : ExpressionInterface
 {
     /**
      * Indicates that the operation is in pre-order

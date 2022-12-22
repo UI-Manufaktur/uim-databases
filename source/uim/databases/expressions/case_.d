@@ -26,7 +26,7 @@ use Closure;
  *
  * @deprecated 4.3.0 Use QueryExpression::case() or CaseStatementExpression instead
  */
-class CaseExpression implements ExpressionInterface
+class CaseExpression : ExpressionInterface
 {
     use ExpressionTypeCasterTrait;
 

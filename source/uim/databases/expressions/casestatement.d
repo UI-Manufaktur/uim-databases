@@ -11,7 +11,7 @@ import uim.cake;
 /**
  * Represents a SQL case statement with a fluid API
  */
-class CaseStatementExpression implements ExpressionInterface, TypedResultInterface
+class CaseStatementExpression : ExpressionInterface, TypedResultInterface
 {
     use CaseExpressionTrait;
     use ExpressionTypeCasterTrait;

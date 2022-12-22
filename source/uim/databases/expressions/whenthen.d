@@ -11,7 +11,7 @@ import uim.cake;
 /**
  * Represents a SQL when/then clause with a fluid API
  */
-class WhenThenExpression implements ExpressionInterface
+class WhenThenExpression : ExpressionInterface
 {
     use CaseExpressionTrait;
     use ExpressionTypeCasterTrait;

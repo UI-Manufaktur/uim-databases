@@ -11,7 +11,7 @@ import uim.cake;
 /**
  * This represents a SQL window expression used by aggregate and window functions.
  */
-class WindowExpression implements ExpressionInterface, WindowInterface
+class WindowExpression : ExpressionInterface, WindowInterface
 {
     /**
      * @var \Cake\Database\Expression\IdentifierExpression
