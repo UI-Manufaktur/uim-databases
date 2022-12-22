@@ -34,10 +34,10 @@ class BinaryType : BaseType
      * As PDO will handle reading file handles.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return resource|string
      */
-    function toDatabase($value, IDTBDriver $driver)
+    function toDatabase($value, IDTBDriver aDriver)
     {
         return $value;
     }
@@ -46,11 +46,11 @@ class BinaryType : BaseType
      * Convert binary into resource handles
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return resource|null
      * @throws \Cake\Core\Exception\CakeException
      */
-    function toD($value, IDTBDriver $driver)
+    function toD($value, IDTBDriver aDriver)
     {
         if ($value == null) {
             return null;
@@ -68,10 +68,10 @@ class BinaryType : BaseType
      * Get the correct PDO binding type for Binary data.
      *
      * @param mixed $value The value being bound.
-     * @param \Cake\Database\IDTBDriver $driver The driver.
+     * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement($value, IDTBDriver $driver): int
+    function toStatement($value, IDTBDriver aDriver): int
     {
         return PDO::PARAM_LOB;
     }

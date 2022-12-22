@@ -30,8 +30,8 @@ interface IBatchCasting
      *
      * @param array $values The original array of values containing the fields to be casted
      * @param array<string> $fields The field keys to cast
-     * @param \Cake\Database\IDTBDriver $driver Object from which database preferences and configuration will be extracted.
+     * @param \Cake\Database\IDTBDriver aDriver Object from which database preferences and configuration will be extracted.
      * @return array<string, mixed>
      */
-    function manytoD(array $values, array $fields, IDTBDriver $driver): array;
+    function manytoD(array $values, array $fields, IDTBDriver aDriver): array;
 }

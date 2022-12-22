@@ -31,10 +31,10 @@ class StringType : BaseType : OptionalConvertInterface
      * Convert string data into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      */
-    function toDatabase($value, IDTBDriver $driver): ?string
+    function toDatabase($value, IDTBDriver aDriver): ?string
     {
         if ($value == null || is_string($value)) {
             return $value;
@@ -58,10 +58,10 @@ class StringType : BaseType : OptionalConvertInterface
      * Convert string values to PHP strings.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      */
-    function toD($value, IDTBDriver $driver): ?string
+    function toD($value, IDTBDriver aDriver): ?string
     {
         if ($value == null) {
             return null;
@@ -74,10 +74,10 @@ class StringType : BaseType : OptionalConvertInterface
      * Get the correct PDO binding type for string data.
      *
      * @param mixed $value The value being bound.
-     * @param \Cake\Database\IDTBDriver $driver The driver.
+     * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement($value, IDTBDriver $driver): int
+    function toStatement($value, IDTBDriver aDriver): int
     {
         return PDO::PARAM_STR;
     }

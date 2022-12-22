@@ -34,11 +34,11 @@ class DecimalType : BaseType : IBatchCasting
      * Convert decimal strings into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|float|int|null
      * @throws \InvalidArgumentException
      */
-    function toDatabase($value, IDTBDriver $driver)
+    function toDatabase($value, IDTBDriver aDriver)
     {
         if ($value == null || $value == "") {
             return null;
@@ -66,10 +66,10 @@ class DecimalType : BaseType : IBatchCasting
      * {@inheritDoc}
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      */
-    function toD($value, IDTBDriver $driver): ?string
+    function toD($value, IDTBDriver aDriver): ?string
     {
         if ($value == null) {
             return null;
@@ -79,7 +79,7 @@ class DecimalType : BaseType : IBatchCasting
     }
 
 
-    function manytoD(array $values, array $fields, IDTBDriver $driver): array
+    function manytoD(array $values, array $fields, IDTBDriver aDriver): array
     {
         foreach ($fields as $field) {
             if (!isset($values[$field])) {
@@ -96,10 +96,10 @@ class DecimalType : BaseType : IBatchCasting
      * Get the correct PDO binding type for decimal data.
      *
      * @param mixed $value The value being bound.
-     * @param \Cake\Database\IDTBDriver $driver The driver.
+     * @param \Cake\Database\IDTBDriver aDriver The driver.
      * @return int
      */
-    function toStatement($value, IDTBDriver $driver): int
+    function toStatement($value, IDTBDriver aDriver): int
     {
         return PDO::PARAM_STR;
     }

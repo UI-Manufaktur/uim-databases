@@ -44,9 +44,9 @@ abstract class SchemaDialect
      * This constructor will connect the driver so that methods like columnSql() and others
      * will fail when the driver has not been connected.
      *
-     * @param \Cake\Database\IDTBDriver $driver The driver to use.
+     * @param \Cake\Database\IDTBDriver aDriver The driver to use.
      */
-    public this(IDTBDriver $driver)
+    public this(IDTBDriver aDriver)
     {
         $driver->connect();
         this->_driver = $driver;

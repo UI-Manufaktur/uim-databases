@@ -12,19 +12,19 @@ interface IDTBColumnSchemaAware {
   /**
     * Generate the SQL fragment for a single column in a table.
     *
-    * @param \Cake\Database\Schema\ITableSchema $schema The table schema instance the column is in.
-    * @param string $column The name of the column.
-    * @param \Cake\Database\IDTBDriver $driver The driver instance being used.
-    * @return string|null An SQL fragment, or `null` in case the column isn"t processed by this type.
+    * aSchema - The table schema instance the column is in.
+    * aColumn - The name of the column.
+    * aDriver - The driver instance being used.
+    * returns an SQL fragment, or `null` in case the column isn"t processed by this type.
     */
-  function getColumnSql(ITableSchema $schema, string $column, IDTBDriver $driver): ?string;
+  string getColumnSql(ITableSchema aSchema, string aColumn, IDTBDriver aDriver);
 
   /**
     * Convert a SQL column definition to an abstract type definition.
     *
     * @param array $definition The column definition.
-    * @param \Cake\Database\IDTBDriver $driver The driver instance being used.
+    * aDriver - The driver instance being used.
     * @return array<string, mixed>|null Array of column information, or `null` in case the column isn"t processed by this type.
     */
-  function convertColumnDefinition(array $definition, IDTBDriver $driver): ?array;
+  function convertColumnDefinition(array $definition, IDTBDriver aDriver): ?array;
 }
