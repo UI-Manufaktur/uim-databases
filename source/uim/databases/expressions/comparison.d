@@ -23,28 +23,28 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      *
      * @var mixed
      */
-    protected $_value;
+    protected _value;
 
     /**
      * The type to be used for casting the value to a database representation
      *
      * @var string|null
      */
-    protected $_type;
+    protected _type;
 
     /**
      * The operator used for comparing field and value
      *
      * @var string
      */
-    protected $_operator ="=";
+    protected _operator ="=";
 
     /**
      * Whether the value in this expression is a traversable
      *
      * @var bool
      */
-    protected $_isMultiple = false;
+    protected _isMultiple = false;
 
     /**
      * A cached list of IDTBExpression objects that were
@@ -52,7 +52,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      *
      * @var array<\Cake\Database\IDTBExpression>
      */
-    protected $_valueExpressions = [];
+    protected _valueExpressions = [];
 
     /**
      * Constructor

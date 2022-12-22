@@ -24,21 +24,21 @@ class ValuesExpression : IDTBExpression
      *
      * @var array
      */
-    protected $_values = [];
+    protected _values = [];
 
     /**
      * List of columns to ensure are part of the insert.
      *
      * @var array
      */
-    protected $_columns = [];
+    protected _columns = [];
 
     /**
      * The Query object to use as a values expression
      *
      * @var \Cake\Database\Query|null
      */
-    protected $_query;
+    protected _query;
 
     /**
      * Whether values have been casted to expressions
@@ -46,7 +46,7 @@ class ValuesExpression : IDTBExpression
      *
      * @var bool
      */
-    protected $_castedExpressions = false;
+    protected _castedExpressions = false;
 
     /**
      * Constructor

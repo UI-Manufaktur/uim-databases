@@ -24,5 +24,5 @@ use Cake\Core\Exception\CakeException;
 class MissingConnectionException : CakeException
 {
 
-    protected $_messageTemplate = "Connection to %s could not be established: %s";
+    protected _messageTemplate = "Connection to %s could not be established: %s";
 }

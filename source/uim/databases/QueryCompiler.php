@@ -34,7 +34,7 @@ class QueryCompiler
      *
      * @var array<string, string>
      */
-    protected $_templates = [
+    protected _templates = [
         "delete": "DELETE",
         "where": " WHERE %s",
         "group": " GROUP BY %s ",
@@ -50,7 +50,7 @@ class QueryCompiler
      *
      * @var array<string>
      */
-    protected $_selectParts = [
+    protected _selectParts = [
         "with", "select", "from", "join", "where", "group", "having", "window", "order",
         "limit", "offset", "union", "epilog",
     ];
@@ -60,21 +60,21 @@ class QueryCompiler
      *
      * @var array<string>
      */
-    protected $_updateParts = ["with", "update", "set", "where", "epilog"];
+    protected _updateParts = ["with", "update", "set", "where", "epilog"];
 
     /**
      * The list of query clauses to traverse for generating a DELETE statement
      *
      * @var array<string>
      */
-    protected $_deleteParts = ["with", "delete", "modifier", "from", "where", "epilog"];
+    protected _deleteParts = ["with", "delete", "modifier", "from", "where", "epilog"];
 
     /**
      * The list of query clauses to traverse for generating an INSERT statement
      *
      * @var array<string>
      */
-    protected $_insertParts = ["with", "insert", "values", "epilog"];
+    protected _insertParts = ["with", "insert", "values", "epilog"];
 
     /**
      * Indicate whether this query dialect supports ordered unions.
@@ -83,14 +83,14 @@ class QueryCompiler
      *
      * @var bool
      */
-    protected $_orderedUnion = true;
+    protected _orderedUnion = true;
 
     /**
      * Indicate whether aliases in SELECT clause need to be always quoted.
      *
      * @var bool
      */
-    protected $_quotedSelectAliases = false;
+    protected _quotedSelectAliases = false;
 
     /**
      * Returns the SQL representation of the provided query after generating

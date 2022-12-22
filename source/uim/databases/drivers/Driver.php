@@ -49,14 +49,14 @@ abstract class Driver : IDTBDriver
      *
      * @var \PDO
      */
-    protected $_connection;
+    protected _connection;
 
     /**
      * Configuration data.
      *
      * @var array<string, mixed>
      */
-    protected $_config;
+    protected _config;
 
     /**
      * Base configuration that is merged into the user
@@ -64,7 +64,7 @@ abstract class Driver : IDTBDriver
      *
      * @var array<string, mixed>
      */
-    protected $_baseConfig = [];
+    protected _baseConfig = [];
 
     /**
      * Indicates whether the driver is doing automatic identifier quoting
@@ -72,14 +72,14 @@ abstract class Driver : IDTBDriver
      *
      * @var bool
      */
-    protected $_autoQuoting = false;
+    protected _autoQuoting = false;
 
     /**
      * The server version
      *
      * @var string|null
      */
-    protected $_version;
+    protected _version;
 
     /**
      * The last number of connection retry attempts.
@@ -94,7 +94,7 @@ abstract class Driver : IDTBDriver
      * @param array<string, mixed> $config The configuration for the driver.
      * @throws \InvalidArgumentException
      */
-    public this(array $config = [])
+    public this(array aConfig = [])
     {
         if (empty($config["username"]) && !empty($config["login"])) {
             throw new InvalidArgumentException(
@@ -115,7 +115,7 @@ abstract class Driver : IDTBDriver
      * @param array<string, mixed> $config configuration to be used for creating connection
      * @return bool true on success
      */
-    protected function _connect(string $dsn, array $config): bool
+    protected function _connect(string $dsn, array aConfig): bool
     {
         $action = function () use ($dsn, $config) {
             this.setConnection(new PDO(

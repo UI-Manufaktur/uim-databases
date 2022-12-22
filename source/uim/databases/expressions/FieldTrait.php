@@ -26,7 +26,7 @@ trait FieldTrait
      *
      * @var \Cake\Database\IDTBExpression|array|string
      */
-    protected $_field;
+    protected _field;
 
     /**
      * Sets the field name

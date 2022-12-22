@@ -12,7 +12,7 @@ import uim.databases;
 class PostgresCompiler : QueryCompiler {
     // Always quote aliases in SELECT clause.
     // Postgres auto converts unquoted identifiers to lower case.
-    protected bool $_quotedSelectAliases = true;
+    protected bool _quotedSelectAliases = true;
 
     protected STRINGAA _templates = [
         "delete":"DELETE",

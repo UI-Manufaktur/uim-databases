@@ -54,7 +54,7 @@ class Sqlserver : Driver
      *
      * @var array<string, mixed>
      */
-    protected $_baseConfig = [
+    protected _baseConfig = [
         "host" : "localhost\SQLEXPRESS",
         "username" : "",
         "password" : "",
@@ -80,21 +80,21 @@ class Sqlserver : Driver
      *
      * @var \Cake\Database\Schema\SqlserverSchemaDialect|null
      */
-    protected $_schemaDialect;
+    protected _schemaDialect;
 
     /**
      * String used to start a database identifier quoting to make it safe
      *
      * @var string
      */
-    protected $_startQuote = "[";
+    protected _startQuote = "[";
 
     /**
      * String used to end a database identifier quoting to make it safe
      *
      * @var string
      */
-    protected $_endQuote = "]";
+    protected _endQuote = "]";
 
     /**
      * Establishes a connection to the database server.

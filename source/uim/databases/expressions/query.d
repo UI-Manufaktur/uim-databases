@@ -36,7 +36,7 @@ class QueryExpression : IDTBExpression, Countable {
      *
      * @var array
      */
-    protected $_conditions = [];
+    protected _conditions = [];
 
     /**
      * Constructor. A new expression object can be created without any params and

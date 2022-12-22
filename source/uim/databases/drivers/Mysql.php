@@ -53,7 +53,7 @@ class Mysql : Driver
      *
      * @var array<string, mixed>
      */
-    protected $_baseConfig = [
+    protected _baseConfig = [
         "persistent" : true,
         "host" : "localhost",
         "username" : "root",
@@ -71,21 +71,21 @@ class Mysql : Driver
      *
      * @var \Cake\Database\Schema\MysqlSchemaDialect|null
      */
-    protected $_schemaDialect;
+    protected _schemaDialect;
 
     /**
      * String used to start a database identifier quoting to make it safe
      *
      * @var string
      */
-    protected $_startQuote = "`";
+    protected _startQuote = "`";
 
     /**
      * String used to end a database identifier quoting to make it safe
      *
      * @var string
      */
-    protected $_endQuote = "`";
+    protected _endQuote = "`";
 
     /**
      * Server type.

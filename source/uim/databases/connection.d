@@ -23,13 +23,13 @@ class Connection : IConnection {
     protected IDTBDriver _driver;
 
     // Contains how many nested transactions have been started.
-    protected int $_transactionLevel = 0;
+    protected int _transactionLevel = 0;
 
     // Whether a transaction is active in this connection.
-    protected bool $_transactionStarted = false;
+    protected bool _transactionStarted = false;
 
     // Whether this connection can and should use savepoints for nested transactions.
-    protected bool $_useSavePoints = false;
+    protected bool _useSavePoints = false;
 
     // Whether to log queries generated during this connection.
     protected bool _logQueries = false;

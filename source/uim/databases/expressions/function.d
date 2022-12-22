@@ -24,7 +24,7 @@ class FunctionExpression : QueryExpression : IDTBTypedResult
      *
      * @var string
      */
-    protected $_name;
+    protected _name;
 
     /**
      * Constructor. Takes a name for the function to be invoked and a list of params

@@ -42,7 +42,7 @@ class Postgres : Driver
      *
      * @var array<string, mixed>
      */
-    protected $_baseConfig = [
+    protected _baseConfig = [
         "persistent" : true,
         "host" : "localhost",
         "username" : "root",
@@ -61,21 +61,21 @@ class Postgres : Driver
      *
      * @var \Cake\Database\Schema\PostgresSchemaDialect|null
      */
-    protected $_schemaDialect;
+    protected _schemaDialect;
 
     /**
      * String used to start a database identifier quoting to make it safe
      *
      * @var string
      */
-    protected $_startQuote = """;
+    protected _startQuote = """;
 
     /**
      * String used to end a database identifier quoting to make it safe
      *
      * @var string
      */
-    protected $_endQuote = """;
+    protected _endQuote = """;
 
     /**
      * Establishes a connection to the database server

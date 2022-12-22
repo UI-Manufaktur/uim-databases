@@ -20,7 +20,7 @@ class OrderClauseExpression : IDTBExpression, FieldInterface
      *
      * @var string
      */
-    protected $_direction;
+    protected _direction;
 
     /**
      * Constructor

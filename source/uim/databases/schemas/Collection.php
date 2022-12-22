@@ -33,14 +33,14 @@ class Collection : CollectionInterface
      *
      * @var \Cake\Database\Connection
      */
-    protected $_connection;
+    protected _connection;
 
     /**
      * Schema dialect instance.
      *
      * @var \Cake\Database\Schema\SchemaDialect
      */
-    protected $_dialect;
+    protected _dialect;
 
     /**
      * Constructor.
@@ -145,7 +145,7 @@ class Collection : CollectionInterface
      * @uses \Cake\Database\Schema\SchemaDialect::convertForeignKeyDescription
      * @uses \Cake\Database\Schema\SchemaDialect::convertOptionsDescription
      */
-    protected function _reflect(string $stage, string $name, array $config, TableSchema aSchema): void
+    protected function _reflect(string $stage, string $name, array aConfig, TableSchema aSchema): void
     {
         $describeMethod = "describe{$stage}Sql";
         $convertMethod = "convert{$stage}Description";

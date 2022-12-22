@@ -50,7 +50,7 @@ class Connection : ConnectionInterface
      *
      * @var array<string, mixed>
      */
-    protected $_config;
+    protected _config;
 
     /**
      * Driver object, responsible for creating the real connection
@@ -58,21 +58,21 @@ class Connection : ConnectionInterface
      *
      * @var \Cake\Database\IDTBDriver
      */
-    protected $_driver;
+    protected _driver;
 
     /**
      * Contains how many nested transactions have been started.
      *
      * @var int
      */
-    protected $_transactionLevel = 0;
+    protected _transactionLevel = 0;
 
     /**
      * Whether a transaction is active in this connection.
      *
      * @var bool
      */
-    protected $_transactionStarted = false;
+    protected _transactionStarted = false;
 
     /**
      * Whether this connection can and should use savepoints for nested
@@ -80,21 +80,21 @@ class Connection : ConnectionInterface
      *
      * @var bool
      */
-    protected $_useSavePoints = false;
+    protected _useSavePoints = false;
 
     /**
      * Whether to log queries generated during this connection.
      *
      * @var bool
      */
-    protected $_logQueries = false;
+    protected _logQueries = false;
 
     /**
      * Logger object instance.
      *
      * @var \Psr\Log\LoggerInterface|null
      */
-    protected $_logger;
+    protected _logger;
 
     /**
      * Cacher object instance.
@@ -108,7 +108,7 @@ class Connection : ConnectionInterface
      *
      * @var \Cake\Database\Schema\CollectionInterface|null
      */
-    protected $_schemaCollection;
+    protected _schemaCollection;
 
     /**
      * NestedTransactionRollbackException object instance, will be stored if
@@ -132,7 +132,7 @@ class Connection : ConnectionInterface
      *
      * @param array<string, mixed> $config Configuration array.
      */
-    public this(array $config)
+    public this(array aConfig)
     {
         _config = $config;
 
@@ -198,12 +198,12 @@ class Connection : ConnectionInterface
      * Creates driver from name, class name or instance.
      *
      * @param \Cake\Database\IDTBDriver|string $name Driver name, class name or instance.
-     * @param array $config Driver config if $name is not an instance.
+     * @param array aConfig Driver config if $name is not an instance.
      * @return \Cake\Database\IDTBDriver
      * @throws \Cake\Database\Exception\MissingDriverException When a driver class is missing.
      * @throws \Cake\Database\Exception\MissingExtensionException When a driver"s PHP extension is missing.
      */
-    protected function createDriver($name, array $config): IDTBDriver
+    protected function createDriver($name, array aConfig): IDTBDriver
     {
         $driver = $name;
         if (is_string($driver)) {

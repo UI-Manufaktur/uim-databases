@@ -46,7 +46,7 @@ class Sqlite : Driver
      *
      * @var array<string, mixed>
      */
-    protected $_baseConfig = [
+    protected _baseConfig = [
         "persistent" : false,
         "username" : null,
         "password" : null,
@@ -64,35 +64,35 @@ class Sqlite : Driver
      *
      * @var \Cake\Database\Schema\SqliteSchemaDialect|null
      */
-    protected $_schemaDialect;
+    protected _schemaDialect;
 
     /**
      * Whether the connected server supports window functions.
      *
      * @var bool|null
      */
-    protected $_supportsWindowFunctions;
+    protected _supportsWindowFunctions;
 
     /**
      * String used to start a database identifier quoting to make it safe
      *
      * @var string
      */
-    protected $_startQuote = """;
+    protected _startQuote = """;
 
     /**
      * String used to end a database identifier quoting to make it safe
      *
      * @var string
      */
-    protected $_endQuote = """;
+    protected _endQuote = """;
 
     /**
      * Mapping of date parts.
      *
      * @var array<string, string>
      */
-    protected $_dateParts = [
+    protected _dateParts = [
         "day" : "d",
         "hour" : "H",
         "month" : "m",

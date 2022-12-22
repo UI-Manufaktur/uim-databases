@@ -31,7 +31,7 @@ class FieldTypeConverter
      *
      * @var array<\Cake\Database\TypeInterface>
      */
-    protected $_typeMap;
+    protected _typeMap;
 
     /**
      * An array containing the name of the fields and the Type objects
@@ -55,7 +55,7 @@ class FieldTypeConverter
      *
      * @var \Cake\Database\IDTBDriver
      */
-    protected $_driver;
+    protected _driver;
 
     /**
      * Builds the type map

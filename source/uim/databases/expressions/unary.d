@@ -31,14 +31,14 @@ class UnaryExpression : IDTBExpression
      *
      * @var string
      */
-    protected $_operator;
+    protected _operator;
 
     /**
      * Holds the value which the unary expression operates
      *
      * @var mixed
      */
-    protected $_value;
+    protected _value;
 
     /**
      * Where to place the operator

@@ -33,7 +33,7 @@ class WhenThenExpression : IDTBExpression
      *
      * @var \Cake\Database\TypeMap
      */
-    protected $_typeMap;
+    protected _typeMap;
 
     /**
      * Then `WHEN` value.
