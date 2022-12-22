@@ -162,17 +162,13 @@ class Connection implements ConnectionInterface
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function config(): array
     {
         return _config;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function configName(): string
     {
         return _config["name"] ?? "";
@@ -697,9 +693,7 @@ class Connection implements ConnectionInterface
         return _driver->supportsDynamicConstraints();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function transactional(callable $callback)
     {
         this.begin();
@@ -737,9 +731,7 @@ class Connection implements ConnectionInterface
         return this.nestedTransactionRollbackException instanceof NestedTransactionRollbackException;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function disableConstraints(callable $callback)
     {
         return this.getDisconnectRetry()->run(function () use ($callback) {
@@ -825,9 +817,7 @@ class Connection implements ConnectionInterface
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function setCacher(CacheInterface $cacher)
     {
         this.cacher = $cacher;
@@ -835,9 +825,7 @@ class Connection implements ConnectionInterface
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function getCacher(): CacheInterface
     {
         if (this.cacher != null) {

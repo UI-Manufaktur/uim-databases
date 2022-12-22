@@ -35,9 +35,7 @@ class PostgresCompiler extends QueryCompiler
      */
     protected $_quotedSelectAliases = true;
 
-    /**
-     * @inheritDoc
-     */
+
     protected $_templates = [
         "delete": "DELETE",
         "where": " WHERE %s",
@@ -56,38 +54,36 @@ class PostgresCompiler extends QueryCompiler
      * @param array $parts list of fields to be transformed to string
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
-     * @return string
      */
-    protected function _buildHavingPart($parts, $query, $binder)
-    {
-        $selectParts = $query->clause("select");
+    protected string _buildHavingPart($parts, $query, $binder) {
+      $selectParts = $query->clause("select");
 
-        foreach ($selectParts as $selectKey: $selectPart) {
-            if (!$selectPart instanceof FunctionExpression) {
-                continue;
-            }
-            foreach ($parts as $k: $p) {
-                if (!is_string($p)) {
-                    continue;
-                }
-                preg_match_all(
-                    "/\b" . trim($selectKey, """) . "\b/i",
-                    $p,
-                    $matches
-                );
+      foreach ($selectParts as $selectKey: $selectPart) {
+          if (!$selectPart instanceof FunctionExpression) {
+              continue;
+          }
+          foreach ($parts as $k: $p) {
+              if (!is_string($p)) {
+                  continue;
+              }
+              preg_match_all(
+                  "/\b" . trim($selectKey, "") . "\b/i",
+                  $p,
+                  $matches
+              );
 
-                if (empty($matches[0])) {
-                    continue;
-                }
+              if (empty($matches[0])) {
+                  continue;
+              }
 
-                $parts[$k] = preg_replace(
-                    ["/"/", "/\b" . trim($selectKey, """) . "\b/i"],
-                    ["", $selectPart->sql($binder)],
-                    $p
-                );
-            }
-        }
+              $parts[$k] = preg_replace(
+                  ["//", "/\b" . trim($selectKey, "") . "\b/i"],
+                  ["", $selectPart->sql($binder)],
+                  $p
+              );
+          }
+      }
 
-        return sprintf(" HAVING %s", implode(", ", $parts));
+      return " HAVING %s ".format(implode(", ", $parts)));
     }
 }

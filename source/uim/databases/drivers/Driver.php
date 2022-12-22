@@ -145,14 +145,10 @@ abstract class Driver implements DriverInterface
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     abstract function connect(): bool;
 
-    /**
-     * @inheritDoc
-     */
+
     function disconnect(): void
     {
         /** @psalm-suppress PossiblyNullPropertyAssignmentValue */
@@ -206,14 +202,10 @@ abstract class Driver implements DriverInterface
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     abstract function enabled(): bool;
 
-    /**
-     * @inheritDoc
-     */
+
     function prepare($query): IStatement
     {
         this.connect();
@@ -222,9 +214,7 @@ abstract class Driver implements DriverInterface
         return new PDOStatement($statement, this);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function beginTransaction(): bool
     {
         this.connect();
@@ -235,9 +225,7 @@ abstract class Driver implements DriverInterface
         return _connection->beginTransaction();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function commitTransaction(): bool
     {
         this.connect();
@@ -248,9 +236,7 @@ abstract class Driver implements DriverInterface
         return _connection->commit();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function rollbackTransaction(): bool
     {
         this.connect();
@@ -273,9 +259,7 @@ abstract class Driver implements DriverInterface
         return _connection->inTransaction();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function supportsSavePoints(): bool
     {
         deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
@@ -296,9 +280,7 @@ abstract class Driver implements DriverInterface
         return this.supports(static.FEATURE_CTE);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function quote($value, $type = PDO.PARAM_STR): string
     {
         this.connect();
@@ -319,24 +301,16 @@ abstract class Driver implements DriverInterface
         return this.supports(static.FEATURE_QUOTE);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     abstract function queryTranslator(string $type): Closure;
 
-    /**
-     * @inheritDoc
-     */
+
     abstract function schemaDialect(): SchemaDialect;
 
-    /**
-     * @inheritDoc
-     */
+
     abstract function quoteIdentifier(string $identifier): string;
 
-    /**
-     * @inheritDoc
-     */
+
     function schemaValue($value): string
     {
         if ($value === null) {
@@ -370,17 +344,13 @@ abstract class Driver implements DriverInterface
         return _connection->quote((string)$value, PDO.PARAM_STR);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function schema(): string
     {
         return _config["schema"];
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function lastInsertId(?string $table = null, ?string $column = null)
     {
         this.connect();
@@ -392,9 +362,7 @@ abstract class Driver implements DriverInterface
         return _connection->lastInsertId($table);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function isConnected(): bool
     {
         if (_connection === null) {
@@ -410,9 +378,7 @@ abstract class Driver implements DriverInterface
         return $connected;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function enableAutoQuoting(bool $enable = true)
     {
         _autoQuoting = $enable;
@@ -420,9 +386,7 @@ abstract class Driver implements DriverInterface
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function disableAutoQuoting()
     {
         _autoQuoting = false;
@@ -430,9 +394,7 @@ abstract class Driver implements DriverInterface
         return this;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function isAutoQuotingEnabled(): bool
     {
         return _autoQuoting;
@@ -458,9 +420,7 @@ abstract class Driver implements DriverInterface
         return false;
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function compileQuery(Query $query, ValueBinder $binder): array
     {
         $processor = this.newCompiler();
@@ -470,17 +430,13 @@ abstract class Driver implements DriverInterface
         return [$query, $processor->compile($query, $binder)];
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function newCompiler(): QueryCompiler
     {
         return new QueryCompiler();
     }
 
-    /**
-     * @inheritDoc
-     */
+
     function newTableSchema(string $table, array $columns = []): TableSchema
     {
         $className = TableSchema.class;

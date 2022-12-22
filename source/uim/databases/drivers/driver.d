@@ -1,24 +1,20 @@
+/*********************************************************************************************************
+*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
+*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
+*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
+**********************************************************************************************************/
 module uim.databases;
 
 @safe:
 import uim.databases;
 
+// Represents a database driver containing all specificities for a database engine including its SQL dialect.
+abstract class Driver : IDriver {
+    // Maximum alias length or null if no limit
+    protected const int MAX_ALIAS_LENGTH = 0;
 
-/**
- * Represents a database driver containing all specificities for
- * a database engine including its SQL dialect.
- */
-abstract class Driver : IDriver
-{
-    /**
-     * @var int|null Maximum alias length or null if no limit
-     */
-    protected const MAX_ALIAS_LENGTH = null;
-
-    /**
-     * @var array<int>  DB-specific error codes that allow connect retry
-     */
-    protected const RETRY_ERROR_CODES = [];
+    // DB-specific error codes that allow connect retry
+    protected const int[] RETRY_ERROR_CODES;
 
     /**
      * Instance of PDO.
@@ -50,19 +46,11 @@ abstract class Driver : IDriver
      */
     protected _autoQuoting = false;
 
-    /**
-     * The server version
-     *
-     * @var string|null
-     */
-    protected _version;
+    // The server version
+    protected string _version;
 
-    /**
-     * The last number of connection retry attempts.
-     *
-     * @var int
-     */
-    protected connectRetries = 0;
+    // The last number of connection retry attempts.
+    protected int connectRetries = 0;
 
     /**
      * Constructor
