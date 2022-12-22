@@ -17,17 +17,17 @@ class StringExpression : IDTBExpression {
     * @param string _collation String collation
     */
   this(string aString, string aCollation) {
-      _string = aString;
-      _collation = aCollation;
+    _string = aString;
+    collation(aCollation);
   }
 
   mixin(OProperty!("string", "collation"));
 
   string sql(ValueBinder aValueBinder) {
-      $placeholder = $binder.placeholder("c");
-      $binder.bind($placeholder, $this.string,"string");
+    $placeholder = aValueBinder.placeholder("c");
+    aValueBinder.bind($placeholder, $this.string,"string");
 
-      return $placeholder ." COLLATE" . $this.collation;
+    return $placeholder ~ " COLLATE " ~ this.collation;
   }
 
   O traverse(this O)(Closure $callback)
