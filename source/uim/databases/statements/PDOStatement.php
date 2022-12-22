@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Cake\Database\Statement;
 
 use Cake\Core\Exception\CakeException;
-use Cake\Database\DriverInterface;
+use Cake\Database\IDTBDriver;
 use PDO;
 use PDOStatement as Statement;
 
@@ -38,9 +38,9 @@ class PDOStatement extends StatementDecorator
      * Constructor
      *
      * @param \PDOStatement $statement Original statement to be decorated.
-     * @param \Cake\Database\DriverInterface $driver Driver instance.
+     * @param \Cake\Database\IDTBDriver $driver Driver instance.
      */
-    public this(Statement $statement, DriverInterface $driver)
+    public this(Statement $statement, IDTBDriver $driver)
     {
         this->_statement = $statement;
         this->_driver = $driver;

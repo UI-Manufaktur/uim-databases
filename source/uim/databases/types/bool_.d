@@ -15,11 +15,10 @@ class BoolType extends BaseType : IBatchCasting {
      * Convert bool data into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return bool|null
      */
-    function toDatabase($value, DriverInterface $driver): ?bool
-    {
+    Nullable!bool toDatabase($value, IDTBDriver $driver) {
         if ($value === true || $value === false || $value === null) {
             return $value;
         }
@@ -38,10 +37,10 @@ class BoolType extends BaseType : IBatchCasting {
      * Convert bool values to PHP booleans
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return bool|null
      */
-    function toPHP($value, DriverInterface $driver): ?bool
+    function toPHP($value, IDTBDriver $driver): ?bool
     {
         if ($value === null || is_bool($value)) {
             return $value;
@@ -57,7 +56,7 @@ class BoolType extends BaseType : IBatchCasting {
     /**
      * @inheritDoc
      */
-    function manyToPHP(array $values, array $fields, DriverInterface $driver): array
+    function manyToPHP(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {
             $value = $values[$field] ?? null;
@@ -80,10 +79,10 @@ class BoolType extends BaseType : IBatchCasting {
      * Get the correct PDO binding type for bool data.
      *
      * @param mixed $value The value being bound.
-     * @param \Cake\Database\DriverInterface $driver The driver.
+     * @param \Cake\Database\IDTBDriver $driver The driver.
      * @return int
      */
-    function toStatement($value, DriverInterface $driver): int
+    function toStatement($value, IDTBDriver $driver): int
     {
         if ($value === null) {
             return PDO::PARAM_NULL;

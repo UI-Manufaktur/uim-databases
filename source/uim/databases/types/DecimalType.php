@@ -34,11 +34,11 @@ class DecimalType extends BaseType : IBatchCasting
      * Convert decimal strings into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return string|float|int|null
      * @throws \InvalidArgumentException
      */
-    function toDatabase($value, DriverInterface $driver)
+    function toDatabase($value, IDTBDriver $driver)
     {
         if ($value === null || $value === '') {
             return null;
@@ -66,10 +66,10 @@ class DecimalType extends BaseType : IBatchCasting
      * {@inheritDoc}
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return string|null
      */
-    function toPHP($value, DriverInterface $driver): ?string
+    function toPHP($value, IDTBDriver $driver): ?string
     {
         if ($value === null) {
             return null;
@@ -81,7 +81,7 @@ class DecimalType extends BaseType : IBatchCasting
     /**
      * @inheritDoc
      */
-    function manyToPHP(array $values, array $fields, DriverInterface $driver): array
+    function manyToPHP(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {
             if (!isset($values[$field])) {
@@ -98,10 +98,10 @@ class DecimalType extends BaseType : IBatchCasting
      * Get the correct PDO binding type for decimal data.
      *
      * @param mixed $value The value being bound.
-     * @param \Cake\Database\DriverInterface $driver The driver.
+     * @param \Cake\Database\IDTBDriver $driver The driver.
      * @return int
      */
-    function toStatement($value, DriverInterface $driver): int
+    function toStatement($value, IDTBDriver $driver): int
     {
         return PDO::PARAM_STR;
     }

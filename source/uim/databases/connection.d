@@ -20,7 +20,7 @@ class Connection : IConnection {
     protected _config;
 
     // Driver object, responsible for creating the real connection and provide specific SQL dialect.
-    protected IDriver _driver;
+    protected IDTBDriver _driver;
 
     // Contains how many nested transactions have been started.
     protected int $_transactionLevel = 0;
@@ -96,7 +96,7 @@ class Connection : IConnection {
     /**
      * Sets the driver instance. If a string is passed it will be treated as a class name and will be instantiated.
      *
-     * @param uim.databases\IDriver|string myDriver The driver instance to use.
+     * @param uim.databases\IDTBDriver|string myDriver The driver instance to use.
      * @param array<string, mixed> myConfig Config for a new driver.
      * @throws \Cake\Database\Exception\MissingDriverException When a driver class is missing.
      * @throws \Cake\Database\Exception\MissingExtensionException When a driver"s PHP extension is missing.
@@ -108,7 +108,7 @@ class Connection : IConnection {
       }
       return cast(O)this;
     }
-    O setDriver(this O)(IDriver aDriver, aConfig = []) {
+    O setDriver(this O)(IDTBDriver aDriver, aConfig = []) {
       if (aDriver) {
         if (!aDriver.enabled()) {
             throw new MissingExtensionException(["driver":get_class(aDriver)]);
@@ -132,9 +132,9 @@ class Connection : IConnection {
     /**
      * Gets the driver instance.
      *
-     * @return \Cake\Database\IDriver
+     * @return \Cake\Database\IDTBDriver
      */
-    auto getDriver(): IDriver
+    auto getDriver(): IDTBDriver
     {
         return _driver;
     }
@@ -476,7 +476,7 @@ class Connection : IConnection {
         if (myEnable == false) {
             _useSavePoints = false;
         } else {
-            _useSavePoints = _driver.supports(IDriver.FEATURE_SAVEPOINT);
+            _useSavePoints = _driver.supports(IDTBDriver.FEATURE_SAVEPOINT);
         }
 
         return cast(O)this;
@@ -643,7 +643,7 @@ class Connection : IConnection {
      * This is not required to use `quoteIdentifier()`.
      */
     bool supportsQuoting() {
-        return _driver.supports(IDriver.FEATURE_QUOTE);
+        return _driver.supports(IDTBDriver.FEATURE_QUOTE);
     }
 
     /**

@@ -36,10 +36,10 @@ class IntegerType extends BaseType : IBatchCasting
      * Convert integer data into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return int|null
      */
-    function toDatabase($value, DriverInterface $driver): ?int
+    function toDatabase($value, IDTBDriver $driver): ?int
     {
         if ($value === null || $value === '') {
             return null;
@@ -54,10 +54,10 @@ class IntegerType extends BaseType : IBatchCasting
      * {@inheritDoc}
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return int|null
      */
-    function toPHP($value, DriverInterface $driver): ?int
+    function toPHP($value, IDTBDriver $driver): ?int
     {
         if ($value === null) {
             return null;
@@ -69,7 +69,7 @@ class IntegerType extends BaseType : IBatchCasting
     /**
      * @inheritDoc
      */
-    function manyToPHP(array $values, array $fields, DriverInterface $driver): array
+    function manyToPHP(array $values, array $fields, IDTBDriver $driver): array
     {
         foreach ($fields as $field) {
             if (!isset($values[$field])) {
@@ -88,10 +88,10 @@ class IntegerType extends BaseType : IBatchCasting
      * Get the correct PDO binding type for integer data.
      *
      * @param mixed $value The value being bound.
-     * @param \Cake\Database\DriverInterface $driver The driver.
+     * @param \Cake\Database\IDTBDriver $driver The driver.
      * @return int
      */
-    function toStatement($value, DriverInterface $driver): int
+    function toStatement($value, IDTBDriver $driver): int
     {
         return PDO::PARAM_INT;
     }

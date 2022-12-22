@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Cake\Database\Type;
 
 use Cake\Core\Exception\CakeException;
-use Cake\Database\DriverInterface;
+use Cake\Database\IDTBDriver;
 use PDO;
 
 /**
@@ -34,10 +34,10 @@ class BinaryType extends BaseType
      * As PDO will handle reading file handles.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return resource|string
      */
-    function toDatabase($value, DriverInterface $driver)
+    function toDatabase($value, IDTBDriver $driver)
     {
         return $value;
     }
@@ -46,11 +46,11 @@ class BinaryType extends BaseType
      * Convert binary into resource handles
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\IDTBDriver $driver The driver instance to convert with.
      * @return resource|null
      * @throws \Cake\Core\Exception\CakeException
      */
-    function toPHP($value, DriverInterface $driver)
+    function toPHP($value, IDTBDriver $driver)
     {
         if ($value === null) {
             return null;
@@ -68,10 +68,10 @@ class BinaryType extends BaseType
      * Get the correct PDO binding type for Binary data.
      *
      * @param mixed $value The value being bound.
-     * @param \Cake\Database\DriverInterface $driver The driver.
+     * @param \Cake\Database\IDTBDriver $driver The driver.
      * @return int
      */
-    function toStatement($value, DriverInterface $driver): int
+    function toStatement($value, IDTBDriver $driver): int
     {
         return PDO::PARAM_LOB;
     }

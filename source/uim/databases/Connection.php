@@ -56,7 +56,7 @@ class Connection : ConnectionInterface
      * Driver object, responsible for creating the real connection
      * and provide specific SQL dialect.
      *
-     * @var \Cake\Database\DriverInterface
+     * @var \Cake\Database\IDTBDriver
      */
     protected $_driver;
 
@@ -178,7 +178,7 @@ class Connection : ConnectionInterface
      * Sets the driver instance. If a string is passed it will be treated
      * as a class name and will be instantiated.
      *
-     * @param \Cake\Database\DriverInterface|string $driver The driver instance to use.
+     * @param \Cake\Database\IDTBDriver|string $driver The driver instance to use.
      * @param array<string, mixed> $config Config for a new driver.
      * @throws \Cake\Database\Exception\MissingDriverException When a driver class is missing.
      * @throws \Cake\Database\Exception\MissingExtensionException When a driver"s PHP extension is missing.
@@ -197,17 +197,17 @@ class Connection : ConnectionInterface
     /**
      * Creates driver from name, class name or instance.
      *
-     * @param \Cake\Database\DriverInterface|string $name Driver name, class name or instance.
+     * @param \Cake\Database\IDTBDriver|string $name Driver name, class name or instance.
      * @param array $config Driver config if $name is not an instance.
-     * @return \Cake\Database\DriverInterface
+     * @return \Cake\Database\IDTBDriver
      * @throws \Cake\Database\Exception\MissingDriverException When a driver class is missing.
      * @throws \Cake\Database\Exception\MissingExtensionException When a driver"s PHP extension is missing.
      */
-    protected function createDriver($name, array $config): DriverInterface
+    protected function createDriver($name, array $config): IDTBDriver
     {
         $driver = $name;
         if (is_string($driver)) {
-            /** @psalm-var class-string<\Cake\Database\DriverInterface>|null $className */
+            /** @psalm-var class-string<\Cake\Database\IDTBDriver>|null $className */
             $className = App.className($driver, "Database/Driver");
             if ($className === null) {
                 throw new MissingDriverException(["driver": $driver, "connection": this.configName()]);
@@ -236,9 +236,9 @@ class Connection : ConnectionInterface
     /**
      * Gets the driver instance.
      *
-     * @return \Cake\Database\DriverInterface
+     * @return \Cake\Database\IDTBDriver
      */
-    function getDriver(): DriverInterface
+    function getDriver(): IDTBDriver
     {
         return _driver;
     }
@@ -593,7 +593,7 @@ class Connection : ConnectionInterface
         if ($enable === false) {
             _useSavePoints = false;
         } else {
-            _useSavePoints = _driver->supports(DriverInterface.FEATURE_SAVEPOINT);
+            _useSavePoints = _driver->supports(IDTBDriver.FEATURE_SAVEPOINT);
         }
 
         return this;
@@ -782,7 +782,7 @@ class Connection : ConnectionInterface
      */
     function supportsQuoting(): bool
     {
-        return _driver->supports(DriverInterface.FEATURE_QUOTE);
+        return _driver->supports(IDTBDriver.FEATURE_QUOTE);
     }
 
     /**

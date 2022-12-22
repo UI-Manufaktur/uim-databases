@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Type;
 
-use Cake\Database\DriverInterface;
+use Cake\Database\IDTBDriver;
 
 /**
  * Denotes type objects capable of converting many values from their original
@@ -30,8 +30,8 @@ interface IBatchCasting
      *
      * @param array $values The original array of values containing the fields to be casted
      * @param array<string> $fields The field keys to cast
-     * @param \Cake\Database\DriverInterface $driver Object from which database preferences and configuration will be extracted.
+     * @param \Cake\Database\IDTBDriver $driver Object from which database preferences and configuration will be extracted.
      * @return array<string, mixed>
      */
-    function manyToPHP(array $values, array $fields, DriverInterface $driver): array;
+    function manyToPHP(array $values, array $fields, IDTBDriver $driver): array;
 }

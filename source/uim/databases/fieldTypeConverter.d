@@ -12,8 +12,7 @@ import uim.databases;
  * A callable class to be used for processing each of the rows in a statement
  * result, so that the values are converted to the right PHP types.
  */
-class FieldTypeConverter
-{
+class FieldTypeConverter {
     /**
      * An array containing the name of the fields and the Type objects
      * each should use when converting them.
@@ -39,20 +38,16 @@ class FieldTypeConverter
      */
     protected myTypes;
 
-    /**
-     * The driver object to be used in the type conversion
-     *
-     * @var \Cake\Database\IDriver
-     */
-    protected _driver;
+    // The driver object to be used in the type conversion
+    protected IDTBDriver _driver;
 
     /**
      * Builds the type map
      *
      * @param uim.databases\TypeMap myTypeMap Contains the types to use for converting results
-     * @param uim.databases\IDriver myDriver The driver to use for the type conversion
+     * @param uim.databases\IDTBDriver myDriver The driver to use for the type conversion
      */
-    this(TypeMap myTypeMap, IDriver myDriver) {
+    this(TypeMap myTypeMap, IDTBDriver myDriver) {
         _driver = myDriver;
         $map = myTypeMap.toArray();
         myTypes = TypeFactory.buildAll();

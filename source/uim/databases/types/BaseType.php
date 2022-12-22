@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Type;
 
-use Cake\Database\DriverInterface;
+use Cake\Database\IDTBDriver;
 use Cake\Database\TypeInterface;
 use PDO;
 
@@ -61,7 +61,7 @@ abstract class BaseType : TypeInterface
     /**
      * @inheritDoc
      */
-    function toStatement($value, DriverInterface $driver)
+    function toStatement($value, IDTBDriver $driver)
     {
         if ($value === null) {
             return PDO::PARAM_NULL;

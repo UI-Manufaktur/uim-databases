@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Schema;
 
-use Cake\Database\DriverInterface;
+use Cake\Database\IDTBDriver;
 use Cake\Database\Type\ColumnSchemaAwareInterface;
 use Cake\Database\TypeFactory;
 use InvalidArgumentException;
@@ -34,7 +34,7 @@ abstract class SchemaDialect
     /**
      * The driver instance being used.
      *
-     * @var \Cake\Database\DriverInterface
+     * @var \Cake\Database\IDTBDriver
      */
     protected $_driver;
 
@@ -44,9 +44,9 @@ abstract class SchemaDialect
      * This constructor will connect the driver so that methods like columnSql() and others
      * will fail when the driver has not been connected.
      *
-     * @param \Cake\Database\DriverInterface $driver The driver to use.
+     * @param \Cake\Database\IDTBDriver $driver The driver to use.
      */
-    public this(DriverInterface $driver)
+    public this(IDTBDriver $driver)
     {
         $driver->connect();
         this->_driver = $driver;

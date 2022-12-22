@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Type;
 
-use Cake\Database\DriverInterface;
+use Cake\Database\IDTBDriver;
 use Cake\Utility\Text;
 
 /**
@@ -28,10 +28,10 @@ class UuidType extends StringType
      * Casts given value from a PHP type to one acceptable by database
      *
      * @param mixed $value value to be converted to database equivalent
-     * @param \Cake\Database\DriverInterface $driver object from which database preferences and configuration will be extracted
+     * @param \Cake\Database\IDTBDriver $driver object from which database preferences and configuration will be extracted
      * @return string|null
      */
-    function toDatabase($value, DriverInterface $driver): ?string
+    function toDatabase($value, IDTBDriver $driver): ?string
     {
         if ($value === null || $value === '' || $value === false) {
             return null;

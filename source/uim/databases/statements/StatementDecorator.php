@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Statement;
 
-use Cake\Database\DriverInterface;
+use Cake\Database\IDTBDriver;
 use Cake\Database\StatementInterface;
 use Cake\Database\TypeConverterTrait;
 use Countable;
@@ -48,7 +48,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     /**
      * Reference to the driver object associated to this statement.
      *
-     * @var \Cake\Database\DriverInterface
+     * @var \Cake\Database\IDTBDriver
      */
     protected $_driver;
 
@@ -64,9 +64,9 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      *
      * @param \Cake\Database\StatementInterface $statement Statement implementation
      *  such as PDOStatement.
-     * @param \Cake\Database\DriverInterface $driver Driver instance
+     * @param \Cake\Database\IDTBDriver $driver Driver instance
      */
-    public this(StatementInterface $statement, DriverInterface $driver)
+    public this(StatementInterface $statement, IDTBDriver $driver)
     {
         this->_statement = $statement;
         this->_driver = $driver;

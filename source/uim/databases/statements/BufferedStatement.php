@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Statement;
 
-use Cake\Database\DriverInterface;
+use Cake\Database\IDTBDriver;
 use Cake\Database\StatementInterface;
 use Cake\Database\TypeConverterTrait;
 use Iterator;
@@ -48,7 +48,7 @@ class BufferedStatement : Iterator, StatementInterface
     /**
      * The driver for the statement
      *
-     * @var \Cake\Database\DriverInterface
+     * @var \Cake\Database\IDTBDriver
      */
     protected $_driver;
 
@@ -77,9 +77,9 @@ class BufferedStatement : Iterator, StatementInterface
      * Constructor
      *
      * @param \Cake\Database\StatementInterface $statement Statement implementation such as PDOStatement
-     * @param \Cake\Database\DriverInterface $driver Driver instance
+     * @param \Cake\Database\IDTBDriver $driver Driver instance
      */
-    public this(StatementInterface $statement, DriverInterface $driver)
+    public this(StatementInterface $statement, IDTBDriver $driver)
     {
         this->statement = $statement;
         this->_driver = $driver;
