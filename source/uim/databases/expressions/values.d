@@ -1,4 +1,4 @@
-module uim.databases.Expression;
+module uim.databases.expressions;
 
 import uim.databases.exceptions.DatabaseException;
 import uim.databases.IDBAExpression;

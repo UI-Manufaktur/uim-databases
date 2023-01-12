@@ -1,4 +1,4 @@
-module uim.databases.Expression;
+module uim.databases.expressions;
 
 import uim.databases.IDBAExpression;
 import uim.databases.Query;

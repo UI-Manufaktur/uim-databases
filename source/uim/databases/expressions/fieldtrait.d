@@ -1,4 +1,4 @@
-module uim.databases.Expression;
+module uim.databases.expressions;
 
 /**
  * Contains the field property with a getter and a setter for it

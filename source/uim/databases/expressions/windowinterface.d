@@ -1,4 +1,4 @@
-module uim.databases.Expression;
+module uim.databases.expressions;
 
 // This defines the functions used for building window expressions.
 interface IWindow {

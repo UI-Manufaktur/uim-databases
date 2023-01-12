@@ -5,7 +5,7 @@
 
 
  * @since         4.1.0
-  */module uim.databases.Expression;
+  */module uim.databases.expressions;
 
 import uim.databases.IDBAExpression;
 import uim.databases.ValueBinder;
