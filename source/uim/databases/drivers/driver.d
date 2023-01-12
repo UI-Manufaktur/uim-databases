@@ -38,13 +38,8 @@ abstract class Driver : IDBADriver {
      */
     protected _baseConfig = [];
 
-    /**
-     * Indicates whether the driver is doing automatic identifier quoting
-     * for all queries
-     *
-     * @var bool
-     */
-    protected _autoQuoting = false;
+    // Indicates whether the driver is doing automatic identifier quoting for all queries
+    protected bool _autoQuoting = false;
 
     // The server version
     protected string _version;
@@ -58,7 +53,7 @@ abstract class Driver : IDBADriver {
      * @param array<string, mixed> myConfig The configuration for the driver.
      * @throws \InvalidArgumentException
      */
-    this(array myConfig = []) {
+    this(Json aConfig = Json(null)) {
         if (empty(myConfig["username"]) && !empty(myConfig["login"])) {
             throw new InvalidArgumentException(
                 "Please pass "username" instead of "login" for connecting to the database"

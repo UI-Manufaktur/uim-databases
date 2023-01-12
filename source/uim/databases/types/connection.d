@@ -91,7 +91,7 @@ class Connection : IConnection {
      *
      * @param array<string, mixed> aConfig Configuration array.
      */
-    this(Json aConfig) {
+    this(Json aConfig = Json(null) {
         _config = aConfig;
 
         $driverConfig = array_diff_key(aConfig, array_flip([
@@ -157,7 +157,7 @@ class Connection : IConnection {
      * @throws uim.databases.exceptions.MissingDriverException When a driver class is missing.
      * @throws uim.databases.exceptions.MissingExtensionException When a driver's PHP extension is missing.
      */
-    protected function createDriver($name, Json aConfig): IDriver
+    protected function createDriver($name, Json aConfig = Json(null): IDriver
     {
         $driver = $name;
         if (is_string($driver)) {

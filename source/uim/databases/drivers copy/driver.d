@@ -84,7 +84,7 @@ abstract class Driver : IDriver
      * @param array<string, mixed> aConfig configuration to be used for creating connection
      * @return bool true on success
      */
-    protected bool _connect(string $dsn, Json aConfig) {
+    protected bool _connect(string $dsn, Json aConfig = Json(null) {
         $action = function () use ($dsn, aConfig) {
             this.setConnection(new PDO(
                 $dsn,

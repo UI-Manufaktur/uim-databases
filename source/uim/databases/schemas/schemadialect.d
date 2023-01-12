@@ -16,7 +16,7 @@ use InvalidArgumentException;
  * This class contains methods that are common across
  * the various SQL dialects.
  *
- * @method array<mixed> listTablesWithoutViewsSql(Json aConfig) Generate the SQL to list the tables, excluding all views.
+ * @method array<mixed> listTablesWithoutViewsSql(Json aConfig = Json(null) Generate the SQL to list the tables, excluding all views.
  */
 abstract class SchemaDialect
 {
@@ -170,7 +170,7 @@ abstract class SchemaDialect
      *    getting tables from.
      * @return array An array of (sql, params) to execute.
      */
-    abstract array listTablesSql(Json aConfig);
+    abstract array listTablesSql(Json aConfig = Json(null);
 
     /**
      * Generate the SQL to describe a table.
@@ -179,7 +179,7 @@ abstract class SchemaDialect
      * @param array<string, mixed> aConfig The connection configuration.
      * @return array An array of (sql, params) to execute.
      */
-    abstract array describeColumnSql(string $tableName, Json aConfig);
+    abstract array describeColumnSql(string $tableName, Json aConfig = Json(null);
 
     /**
      * Generate the SQL to describe the indexes in a table.
@@ -188,7 +188,7 @@ abstract class SchemaDialect
      * @param array<string, mixed> aConfig The connection configuration.
      * @return array An array of (sql, params) to execute.
      */
-    abstract array describeIndexSql(string $tableName, Json aConfig);
+    abstract array describeIndexSql(string $tableName, Json aConfig = Json(null);
 
     /**
      * Generate the SQL to describe the foreign keys in a table.
@@ -197,7 +197,7 @@ abstract class SchemaDialect
      * @param array<string, mixed> aConfig The connection configuration.
      * @return array An array of (sql, params) to execute.
      */
-    abstract array describeForeignKeySql(string $tableName, Json aConfig);
+    abstract array describeForeignKeySql(string $tableName, Json aConfig = Json(null);
 
     /**
      * Generate the SQL to describe table options
@@ -206,7 +206,7 @@ abstract class SchemaDialect
      * @param array<string, mixed> aConfig The connection configuration.
      * @return array SQL statements to get options for a table.
      */
-    array describeOptionsSql(string $tableName, Json aConfig) {
+    array describeOptionsSql(string $tableName, Json aConfig = Json(null) {
         return ["", ""];
     }
 
