@@ -1,4 +1,4 @@
-module uim.cake.databases.schemas;
+module uim.databases.schemas;
 
 /**
  * Defines the interface for getting the schema.

@@ -1,4 +1,4 @@
-module uim.cake.databases.Statement;
+module uim.databases.Statement;
 
 /**
  * Contains a setter for marking a Statement as buffered

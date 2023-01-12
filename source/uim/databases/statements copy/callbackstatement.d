@@ -1,7 +1,7 @@
-module uim.cake.databases.Statement;
+module uim.databases.Statement;
 
-import uim.cake.databases.IDriver;
-import uim.cake.databases.IStatement;
+import uim.databases.IDriver;
+import uim.databases.IStatement;
 
 /**
  * Wraps a statement in a callback that allows row results
@@ -21,8 +21,8 @@ class CallbackStatement : StatementDecorator
     /**
      * Constructor
      *
-     * @param uim.cake.databases.IStatement $statement The statement to decorate.
-     * @param uim.cake.databases.IDriver aDriver The driver instance used by the statement.
+     * @param uim.databases.IStatement $statement The statement to decorate.
+     * @param uim.databases.IDriver aDriver The driver instance used by the statement.
      * @param callable $callback The callback to apply to results before they are returned.
      */
     this(IStatement $statement, IDriver aDriver, callable $callback) {

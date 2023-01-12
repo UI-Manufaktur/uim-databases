@@ -5,9 +5,9 @@
 
 
  * @since         4.1.0
-  */module uim.cake.databases.Expression;
+  */module uim.databases.Expression;
 
-import uim.cake.databases.ValueBinder;
+import uim.databases.ValueBinder;
 use Closure;
 
 /**
@@ -32,10 +32,10 @@ class AggregateExpression : FunctionExpression : IWindow
      * Adds conditions to the FILTER clause. The conditions are the same format as
      * `Query::where()`.
      *
-     * @param uim.cake.databases.IExpression|\Closure|array|string $conditions The conditions to filter on.
+     * @param uim.databases.IDBAExpression|\Closure|array|string $conditions The conditions to filter on.
      * @param array<string, string> $types Associative array of type names used to bind values to query
      * @return this
-     * @see uim.cake.databases.Query::where()
+     * @see uim.databases.Query::where()
      */
     function filter($conditions, array $types = null) {
         if (this.filter == null) {

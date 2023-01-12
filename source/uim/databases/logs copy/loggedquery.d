@@ -1,6 +1,6 @@
-module uim.cake.databases.Log;
+module uim.databases.Log;
 
-import uim.cake.databases.Driver\Sqlserver;
+import uim.databases.Driver\Sqlserver;
 use JsonSerializable;
 
 /**

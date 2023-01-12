@@ -1,4 +1,4 @@
-module uim.cake.databases.schemas;
+module uim.databases.schemas;
 
 use Psr\SimpleCache\CacheInterface;
 

@@ -3,9 +3,9 @@
   License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  
   Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      
 **********************************************************************************************************/
-module uim.cake.databases.types;
+module uim.databases.types;
 
-import uim.cake.databases.IDriver;
+import uim.databases.IDriver;
 use InvalidArgumentException;
 use PDO;
 
@@ -20,7 +20,7 @@ class StringType : BaseType : OptionalConvertInterface
      * Convert string data into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param uim.cake.databases.IDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDriver aDriver The driver instance to convert with.
      */
     Nullable!string toDatabase($value, IDriver aDriver) {
         if ($value == null || is_string($value)) {
@@ -45,7 +45,7 @@ class StringType : BaseType : OptionalConvertInterface
      * Convert string values to PHP strings.
      *
      * @param mixed $value The value to convert.
-     * @param uim.cake.databases.IDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDriver aDriver The driver instance to convert with.
      */
     Nullable!string toPHP($value, IDriver aDriver) {
         if ($value == null) {
@@ -59,7 +59,7 @@ class StringType : BaseType : OptionalConvertInterface
      * Get the correct PDO binding type for string data.
      *
      * @param mixed $value The value being bound.
-     * @param uim.cake.databases.IDriver aDriver The driver.
+     * @param uim.databases.IDriver aDriver The driver.
      */
     int toStatement($value, IDriver aDriver) {
         return PDO::PARAM_STR;

@@ -1,17 +1,17 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.Chronos\Date;
-import uim.cake.Chronos\MutableDate;
-import uim.cake.databases.IExpression;
-import uim.cake.databases.Query;
-import uim.cake.databases.ITypedResult;
-import uim.cake.databases.ValueBinder;
+import uim.Chronos\Date;
+import uim.Chronos\MutableDate;
+import uim.databases.IDBAExpression;
+import uim.databases.Query;
+import uim.databases.ITypedResult;
+import uim.databases.ValueBinder;
 use DateTimeInterface;
 
 /**
  * Trait that holds shared functionality for case related expressions.
  *
- * @property uim.cake.databases.TypeMap _typeMap The type map to use when using an array of conditions for the `WHEN`
+ * @property uim.databases.TypeMap _typeMap The type map to use when using an array of conditions for the `WHEN`
  *  value.
  * @internal
  */
@@ -61,14 +61,14 @@ trait CaseExpressionTrait
     /**
      * Compiles a nullable value to SQL.
      *
-     * @param uim.cake.databases.ValueBinder aBinder The value binder to use.
-     * @param uim.cake.databases.IExpression|object|scalar|null $value The value to compile.
+     * @param uim.databases.ValueBinder aBinder The value binder to use.
+     * @param uim.databases.IDBAExpression|object|scalar|null $value The value to compile.
      * @param string|null $type The value type.
      */
     protected string compileNullableValue(ValueBinder aBinder, $value, Nullable!string $type = null) {
         if (
             $type != null &&
-            !($value instanceof IExpression)
+            !($value instanceof IDBAExpression)
         ) {
             $value = _castToExpression($value, $type);
         }
@@ -77,7 +77,7 @@ trait CaseExpressionTrait
             $value = "NULL";
         } elseif ($value instanceof Query) {
             $value = sprintf("(%s)", $value.sql($binder));
-        } elseif ($value instanceof IExpression) {
+        } elseif ($value instanceof IDBAExpression) {
             $value = $value.sql($binder);
         } else {
             $placeholder = $binder.placeholder("c");

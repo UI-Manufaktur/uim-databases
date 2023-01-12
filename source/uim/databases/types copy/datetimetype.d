@@ -1,9 +1,9 @@
-module uim.cake.databases.types;
+module uim.databases.types;
 
-import uim.cake.databases.IDriver;
-import uim.cake.I18n\FrozenTime;
-import uim.cake.I18n\I18nDateTimeInterface;
-import uim.cake.I18n\Time;
+import uim.databases.IDriver;
+import uim.I18n\FrozenTime;
+import uim.I18n\I18nDateTimeInterface;
+import uim.I18n\Time;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -110,7 +110,7 @@ class DateTimeType : BaseType : BatchCastingInterface
      * Convert DateTime instance into strings.
      *
      * @param mixed $value The value to convert.
-     * @param uim.cake.databases.IDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDriver aDriver The driver instance to convert with.
      */
     Nullable!string toDatabase($value, IDriver aDriver) {
         if ($value == null || is_string($value)) {
@@ -187,7 +187,7 @@ class DateTimeType : BaseType : BatchCastingInterface
      * {@inheritDoc}
      *
      * @param mixed $value Value to be converted to PHP equivalent
-     * @param uim.cake.databases.IDriver aDriver Object from which database preferences and configuration will be extracted
+     * @param uim.databases.IDriver aDriver Object from which database preferences and configuration will be extracted
      * @return \DateTimeInterface|null
      */
     function toPHP($value, IDriver aDriver) {
@@ -392,7 +392,7 @@ class DateTimeType : BaseType : BatchCastingInterface
      * See `Cake\I18n\Time::parseDateTime()` for accepted formats.
      *
      * @param array|string $format The locale-aware format
-     * @see uim.cake.I18n\Time::parseDateTime()
+     * @see uim.I18n\Time::parseDateTime()
      * @return this
      */
     function setLocaleFormat($format) {
@@ -466,11 +466,11 @@ class DateTimeType : BaseType : BatchCastingInterface
      * aware parser with the format set by `setLocaleFormat()`.
      *
      * @param string aValue The value to parse and convert to an object.
-     * @return uim.cake.I18n\I18nDateTimeInterface|null
+     * @return uim.I18n\I18nDateTimeInterface|null
      */
     protected function _parseLocaleValue(string aValue): ?I18nDateTimeInterface
     {
-        /** @psalm-var class-string<uim.cake.I18n\I18nDateTimeInterface> $class */
+        /** @psalm-var class-string<uim.I18n\I18nDateTimeInterface> $class */
         $class = _className;
 
         return $class::parseDateTime($value, _localeMarshalFormat, this.userTimezone);
@@ -508,7 +508,7 @@ class DateTimeType : BaseType : BatchCastingInterface
      * Casts given value to Statement equivalent
      *
      * @param mixed $value value to be converted to PDO statement
-     * @param uim.cake.databases.IDriver aDriver object from which database preferences and configuration will be extracted
+     * @param uim.databases.IDriver aDriver object from which database preferences and configuration will be extracted
      * @return mixed
      */
     function toStatement($value, IDriver aDriver) {

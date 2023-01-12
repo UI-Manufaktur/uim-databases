@@ -1,4 +1,4 @@
-module uim.cake.databases.exceptions.nestedtransactionrollback;
+module uim.databases.exceptions.nestedtransactionrollback;
 
 @safe:
 import uim.cake;

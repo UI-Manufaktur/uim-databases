@@ -1,10 +1,10 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.Query;
-import uim.cake.databases.types.ExpressionTypeCasterTrait;
-import uim.cake.databases.TypeMap;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.Query;
+import uim.databases.types.ExpressionTypeCasterTrait;
+import uim.databases.TypeMap;
+import uim.databases.ValueBinder;
 use Closure;
 use InvalidArgumentException;
 use LogicException;
@@ -12,7 +12,7 @@ use LogicException;
 /**
  * Represents a SQL when/then clause with a fluid API
  */
-class WhenThenExpression : IExpression
+class WhenThenExpression : IDBAExpression
 {
     use CaseExpressionTrait;
     use ExpressionTypeCasterTrait;
@@ -39,7 +39,7 @@ class WhenThenExpression : IExpression
     /**
      * Then `WHEN` value.
      *
-     * @var DDBIExpression|object|scalar|null
+     * @var DDBIDBAExpression|object|scalar|null
      */
     protected $when = null;
 
@@ -53,7 +53,7 @@ class WhenThenExpression : IExpression
     /**
      * The `THEN` value.
      *
-     * @var DDBIExpression|object|scalar|null
+     * @var DDBIDBAExpression|object|scalar|null
      */
     protected $then = null;
 
@@ -72,7 +72,7 @@ class WhenThenExpression : IExpression
     /**
      * Constructor.
      *
-     * @param uim.cake.databases.TypeMap|null $typeMap The type map to use when using an array of conditions for the `WHEN`
+     * @param uim.databases.TypeMap|null $typeMap The type map to use when using an array of conditions for the `WHEN`
      *  value.
      */
     this(?TypeMap $typeMap = null) {
@@ -85,8 +85,8 @@ class WhenThenExpression : IExpression
     /**
      * Sets the `WHEN` value.
      *
-     * @param uim.cake.databases.IExpression|object|array|scalar $when The `WHEN` value. When using an array of
-     *  conditions, it must be compatible with `uim.cake.databases.Query::where()`. Note that this argument is _not_
+     * @param uim.databases.IDBAExpression|object|array|scalar $when The `WHEN` value. When using an array of
+     *  conditions, it must be compatible with `uim.databases.Query::where()`. Note that this argument is _not_
      *  completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in! If you
      *  plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to be
      *  a non-array, and then always binds the data), use a conditions array where the user data is only passed on the
@@ -95,7 +95,7 @@ class WhenThenExpression : IExpression
      *  conditions, or else a string. If no type is provided, the type will be tried to be inferred from the value.
      * @return this
      * @throws \InvalidArgumentException In case the `$when` argument is neither a non-empty array, nor a scalar value,
-     *  an object, or an instance of `uim.cake.databases.IExpression`.
+     *  an object, or an instance of `uim.databases.IDBAExpression`.
      * @throws \InvalidArgumentException In case the `$type` argument is neither an array, a string, nor null.
      * @throws \InvalidArgumentException In case the `$when` argument is an array, and the `$type` argument is neither
      * an array, nor null.
@@ -112,7 +112,7 @@ class WhenThenExpression : IExpression
             throw new InvalidArgumentException(sprintf(
                 "The `$when` argument must be either a non-empty array, a scalar value, an object, " ~
                 "or an instance of `\%s`, `%s` given.",
-                IExpression::class,
+                IDBAExpression::class,
                 is_array($when) ? "[]" : getTypeName($when) // @phpstan-ignore-line
             ));
         }
@@ -164,7 +164,7 @@ class WhenThenExpression : IExpression
 
             if (
                 $type == null &&
-                !($when instanceof IExpression)
+                !($when instanceof IDBAExpression)
             ) {
                 $type = this.inferType($when);
             }
@@ -179,7 +179,7 @@ class WhenThenExpression : IExpression
     /**
      * Sets the `THEN` result value.
      *
-     * @param uim.cake.databases.IExpression|object|scalar|null $result The result value.
+     * @param uim.databases.IDBAExpression|object|scalar|null $result The result value.
      * @param string|null $type The result type. If no type is provided, the type will be inferred from the given
      *  result value.
      * @return this
@@ -193,7 +193,7 @@ class WhenThenExpression : IExpression
             throw new InvalidArgumentException(sprintf(
                 "The `$result` argument must be either `null`, a scalar value, an object, " ~
                 "or an instance of `\%s`, `%s` given.",
-                IExpression::class,
+                IDBAExpression::class,
                 getTypeName($result)
             ));
         }
@@ -232,7 +232,7 @@ class WhenThenExpression : IExpression
      * * `then`: The `THEN` result value.
      *
      * @param string $clause The name of the clause to obtain.
-     * @return uim.cake.databases.IExpression|object|scalar|null
+     * @return uim.databases.IDBAExpression|object|scalar|null
      * @throws \InvalidArgumentException In case the given clause name is invalid.
      */
     function clause(string $clause) {
@@ -262,13 +262,13 @@ class WhenThenExpression : IExpression
         $when = this.when;
         if (
             is_string(this.whenType) &&
-            !($when instanceof IExpression)
+            !($when instanceof IDBAExpression)
         ) {
             $when = _castToExpression($when, this.whenType);
         }
         if ($when instanceof Query) {
             $when = sprintf("(%s)", $when.sql($binder));
-        } elseif ($when instanceof IExpression) {
+        } elseif ($when instanceof IDBAExpression) {
             $when = $when.sql($binder);
         } else {
             $placeholder = $binder.placeholder("c");
@@ -288,12 +288,12 @@ class WhenThenExpression : IExpression
 
 
     O traverse(this O)(Closure $callback) {
-        if (this.when instanceof IExpression) {
+        if (this.when instanceof IDBAExpression) {
             $callback(this.when);
             this.when.traverse($callback);
         }
 
-        if (this.then instanceof IExpression) {
+        if (this.then instanceof IDBAExpression) {
             $callback(this.then);
             this.then.traverse($callback);
         }
@@ -305,11 +305,11 @@ class WhenThenExpression : IExpression
      * Clones the inner expression objects.
      */
     void __clone() {
-        if (this.when instanceof IExpression) {
+        if (this.when instanceof IDBAExpression) {
             this.when = clone this.when;
         }
 
-        if (this.then instanceof IExpression) {
+        if (this.then instanceof IDBAExpression) {
             this.then = clone this.then;
         }
     }

@@ -6,7 +6,7 @@ import uim.databases;
 /**
  * An expression object that represents a SQL BETWEEN snippet
  */
-class BetweenExpression : IExpression, IField {
+class BetweenExpression : IDBAExpression, IField {
     use ExpressionTypeCasterTrait;
     use FieldTrait;
 

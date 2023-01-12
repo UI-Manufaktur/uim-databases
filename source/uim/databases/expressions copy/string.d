@@ -1,13 +1,13 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.ValueBinder;
 use Closure;
 
 /**
  * String expression with collation.
  */
-class StringExpression : IExpression
+class StringExpression : IDBAExpression
 {
     /**
      */

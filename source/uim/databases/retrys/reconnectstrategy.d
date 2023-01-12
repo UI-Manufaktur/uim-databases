@@ -1,7 +1,7 @@
-module uim.cake.databases.Retry;
+module uim.databases.Retry;
 
-import uim.cake.core.Retry\RetryStrategyInterface;
-import uim.cake.databases.Connection;
+import uim.core.Retry\RetryStrategyInterface;
+import uim.databases.Connection;
 use Exception;
 
 /**
@@ -48,7 +48,7 @@ class ReconnectStrategy : RetryStrategyInterface
      * passed connection. This reference will be used to automatically
      * reconnect to the server in case of failure.
      *
-     * @param uim.cake.databases.Connection $connection The connection to check
+     * @param uim.databases.Connection $connection The connection to check
      */
     this(Connection $connection) {
         this.connection = $connection;

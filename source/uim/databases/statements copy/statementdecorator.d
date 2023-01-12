@@ -1,8 +1,8 @@
-module uim.cake.databases.Statement;
+module uim.databases.Statement;
 
-import uim.cake.databases.IDriver;
-import uim.cake.databases.IStatement;
-import uim.cake.databases.TypeConverterTrait;
+import uim.databases.IDriver;
+import uim.databases.IStatement;
+import uim.databases.TypeConverterTrait;
 use Countable;
 use IteratorAggregate;
 
@@ -44,9 +44,9 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
     /**
      * Constructor
      *
-     * @param uim.cake.databases.IStatement $statement Statement implementation
+     * @param uim.databases.IStatement $statement Statement implementation
      *  such as PDOStatement.
-     * @param uim.cake.databases.IDriver aDriver Driver instance
+     * @param uim.databases.IDriver aDriver Driver instance
      */
     this(IStatement $statement, IDriver aDriver) {
         _statement = $statement;
@@ -238,7 +238,7 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      * }
      * ```
      *
-     * @return uim.cake.databases.IStatement
+     * @return uim.databases.IStatement
      * @psalm-suppress ImplementedReturnTypeMismatch
      */
     #[\ReturnTypeWillChange]
@@ -304,7 +304,7 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
     /**
      * Returns the statement object that was decorated by this class.
      *
-     * @return uim.cake.databases.IStatement
+     * @return uim.databases.IStatement
      */
     function getInnerStatement() {
         return _statement;

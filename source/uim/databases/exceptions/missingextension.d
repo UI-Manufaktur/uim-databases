@@ -1,4 +1,4 @@
-module uim.cake.databases.exceptions.missingextension;
+module uim.databases.exceptions.missingextension;
 
 @safe:
 import uim.cake;

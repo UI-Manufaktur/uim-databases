@@ -5,9 +5,9 @@
 
 
  * @since         4.2.0
-  */module uim.cake.databases.Retry;
+  */module uim.databases.Retry;
 
-import uim.cake.core.Retry\RetryStrategyInterface;
+import uim.core.Retry\RetryStrategyInterface;
 use Exception;
 use PDOException;
 

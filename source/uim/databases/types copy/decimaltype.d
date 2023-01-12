@@ -3,10 +3,10 @@
   License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  
   Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      
 **********************************************************************************************************/
-module uim.cake.databases.types;
+module uim.databases.types;
 
-import uim.cake.databases.IDriver;
-import uim.cake.I18n\Number;
+import uim.databases.IDriver;
+import uim.I18n\Number;
 use InvalidArgumentException;
 use PDO;
 use RuntimeException;
@@ -35,7 +35,7 @@ class DecimalType : BaseType : BatchCastingInterface
      * Convert decimal strings into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param uim.cake.databases.IDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDriver aDriver The driver instance to convert with.
      * @return string|float|int|null
      * @throws \InvalidArgumentException
      */
@@ -66,7 +66,7 @@ class DecimalType : BaseType : BatchCastingInterface
      * {@inheritDoc}
      *
      * @param mixed $value The value to convert.
-     * @param uim.cake.databases.IDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDriver aDriver The driver instance to convert with.
      */
     Nullable!string toPHP($value, IDriver aDriver) {
         if ($value == null) {
@@ -93,7 +93,7 @@ class DecimalType : BaseType : BatchCastingInterface
      * Get the correct PDO binding type for decimal data.
      *
      * @param mixed $value The value being bound.
-     * @param uim.cake.databases.IDriver aDriver The driver.
+     * @param uim.databases.IDriver aDriver The driver.
      */
     int toStatement($value, IDriver aDriver) {
         return PDO::PARAM_STR;
@@ -156,7 +156,7 @@ class DecimalType : BaseType : BatchCastingInterface
      * @param string aValue The value to parse and convert to an float.
      */
     protected string _parseValue(string aValue) {
-        /** @var uim.cake.I18n\Number $class */
+        /** @var uim.I18n\Number $class */
         $class = static::$numberClass;
 
         return (string)$class::parseFloat($value);

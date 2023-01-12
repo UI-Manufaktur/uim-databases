@@ -1,7 +1,7 @@
-module uim.cake.databases.Log;
+module uim.databases.Log;
 
-import uim.cake.logs.Engine\BaseLog;
-import uim.cake.logs.Log;
+import uim.logs.Engine\BaseLog;
+import uim.logs.Log;
 
 /**
  * This class is a bridge used to write LoggedQuery objects into a real log.

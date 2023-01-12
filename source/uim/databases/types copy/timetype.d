@@ -3,9 +3,9 @@
   License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  
   Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      
 **********************************************************************************************************/
-module uim.cake.databases.types;
+module uim.databases.types;
 
-import uim.cake.I18n\I18nDateTimeInterface;
+import uim.I18n\I18nDateTimeInterface;
 
 /**
  * Time type converter.
@@ -25,7 +25,7 @@ class TimeType : DateTimeType {
 
     protected function _parseLocaleValue(string aValue): ?I18nDateTimeInterface
     {
-        /** @psalm-var class-string<uim.cake.I18n\I18nDateTimeInterface> $class */
+        /** @psalm-var class-string<uim.I18n\I18nDateTimeInterface> $class */
         $class = _className;
 
         /** @psalm-suppress PossiblyInvalidArgument */

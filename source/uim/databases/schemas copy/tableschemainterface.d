@@ -1,4 +1,4 @@
-module uim.cake.databases.schemas;
+module uim.databases.schemas;
 
 use Cake\Datasource\SchemaInterface;
 

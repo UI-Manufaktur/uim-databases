@@ -5,16 +5,16 @@
 
 
  * @since         4.1.0
-  */module uim.cake.databases.Expression;
+  */module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.ValueBinder;
 use Closure;
 
 /**
  * This represents a SQL window expression used by aggregate and window functions.
  */
-class WindowExpression : IExpression, IWindow
+class WindowExpression : IDBAExpression, IWindow
 {
     /**
      * @var DDBExpression\IdentifierExpression
@@ -22,7 +22,7 @@ class WindowExpression : IExpression, IWindow
     protected $name;
 
     /**
-     * @var array<uim.cake.databases.IExpression>
+     * @var array<uim.databases.IDBAExpression>
      */
     protected $partitions = null;
 
@@ -231,12 +231,12 @@ class WindowExpression : IExpression, IWindow
 
         if (this.frame != null) {
             $offset = this.frame["start"]["offset"];
-            if ($offset instanceof IExpression) {
+            if ($offset instanceof IDBAExpression) {
                 $callback($offset);
                 $offset.traverse($callback);
             }
             $offset = this.frame["end"]["offset"] ?? null;
-            if ($offset instanceof IExpression) {
+            if ($offset instanceof IDBAExpression) {
                 $callback($offset);
                 $offset.traverse($callback);
             }
@@ -248,8 +248,8 @@ class WindowExpression : IExpression, IWindow
     /**
      * Builds frame offset sql.
      *
-     * @param uim.cake.databases.ValueBinder aBinder Value binder
-     * @param uim.cake.databases.IExpression|string|int|null $offset Frame offset
+     * @param uim.databases.ValueBinder aBinder Value binder
+     * @param uim.databases.IDBAExpression|string|int|null $offset Frame offset
      * @param string $direction Frame offset direction
      */
     protected string buildOffsetSql(ValueBinder aBinder, $offset, string $direction) {
@@ -257,7 +257,7 @@ class WindowExpression : IExpression, IWindow
             return "CURRENT ROW";
         }
 
-        if ($offset instanceof IExpression) {
+        if ($offset instanceof IDBAExpression) {
             $offset = $offset.sql($binder);
         }
 

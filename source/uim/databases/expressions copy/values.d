@@ -1,12 +1,12 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.exceptions.DatabaseException;
-import uim.cake.databases.IExpression;
-import uim.cake.databases.Query;
-import uim.cake.databases.types.ExpressionTypeCasterTrait;
-import uim.cake.databases.TypeMap;
-import uim.cake.databases.TypeMapTrait;
-import uim.cake.databases.ValueBinder;
+import uim.databases.exceptions.DatabaseException;
+import uim.databases.IDBAExpression;
+import uim.databases.Query;
+import uim.databases.types.ExpressionTypeCasterTrait;
+import uim.databases.TypeMap;
+import uim.databases.TypeMapTrait;
+import uim.databases.ValueBinder;
 use Closure;
 
 /**
@@ -15,7 +15,7 @@ use Closure;
  * Helps generate SQL with the correct number of placeholders and bind
  * values correctly into the statement.
  */
-class ValuesExpression : IExpression {
+class ValuesExpression : IDBAExpression {
     use ExpressionTypeCasterTrait;
     use TypeMapTrait;
 
@@ -50,7 +50,7 @@ class ValuesExpression : IExpression {
      * Constructor
      *
      * @param array $columns The list of columns that are going to be part of the values.
-     * @param uim.cake.databases.TypeMap $typeMap A dictionary of column . type names
+     * @param uim.databases.TypeMap $typeMap A dictionary of column . type names
      */
     this(array $columns, TypeMap $typeMap) {
         _columns = $columns;
@@ -60,10 +60,10 @@ class ValuesExpression : IExpression {
     /**
      * Add a row of data to be inserted.
      *
-     * @param uim.cake.databases.Query|array $values Array of data to append into the insert, or
+     * @param uim.databases.Query|array $values Array of data to append into the insert, or
      *   a query for doing INSERT INTO .. SELECT style commands
      * @return void
-     * @throws uim.cake.databases.exceptions.DatabaseException When mixing array + Query data types.
+     * @throws uim.databases.exceptions.DatabaseException When mixing array + Query data types.
      */
     void add($values) {
         if (
@@ -156,7 +156,7 @@ class ValuesExpression : IExpression {
      * Sets the query object to be used as the values expression to be evaluated
      * to insert records in the table.
      *
-     * @param uim.cake.databases.Query $query The query to set
+     * @param uim.databases.Query $query The query to set
      * @return this
      */
     function setQuery(Query $query) {
@@ -169,7 +169,7 @@ class ValuesExpression : IExpression {
      * Gets the query object to be used as the values expression to be evaluated
      * to insert records in the table.
      *
-     * @return uim.cake.databases.Query|null
+     * @return uim.databases.Query|null
      */
     function getQuery(): ?Query
     {
@@ -203,7 +203,7 @@ class ValuesExpression : IExpression {
             foreach ($columns as $column) {
                 $value = $row[$column];
 
-                if ($value instanceof IExpression) {
+                if ($value instanceof IDBAExpression) {
                     $rowPlaceholders[] = "(" ~ $value.sql($binder) ~ ")";
                     continue;
                 }
@@ -235,14 +235,14 @@ class ValuesExpression : IExpression {
         }
 
         foreach (_values as $v) {
-            if ($v instanceof IExpression) {
+            if ($v instanceof IDBAExpression) {
                 $v.traverse($callback);
             }
             if (!is_array($v)) {
                 continue;
             }
             foreach ($v as $field) {
-                if ($field instanceof IExpression) {
+                if ($field instanceof IDBAExpression) {
                     $callback($field);
                     $field.traverse($callback);
                 }

@@ -1,10 +1,10 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.types.ExpressionTypeCasterTrait;
-import uim.cake.databases.ITypedResult;
-import uim.cake.databases.TypeMapTrait;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.types.ExpressionTypeCasterTrait;
+import uim.databases.ITypedResult;
+import uim.databases.TypeMapTrait;
+import uim.databases.ValueBinder;
 use Closure;
 use InvalidArgumentException;
 use LogicException;
@@ -12,7 +12,7 @@ use LogicException;
 /**
  * Represents a SQL case statement with a fluid API
  */
-class CaseStatementExpression : IExpression, ITypedResult
+class CaseStatementExpression : IDBAExpression, ITypedResult
 {
     use CaseExpressionTrait;
     use ExpressionTypeCasterTrait;
@@ -38,7 +38,7 @@ class CaseStatementExpression : IExpression, ITypedResult
     /**
      * The case value.
      *
-     * @var DDBIExpression|object|scalar|null
+     * @var DDBIDBAExpression|object|scalar|null
      */
     protected $value = null;
 
@@ -51,7 +51,7 @@ class CaseStatementExpression : IExpression, ITypedResult
     /**
      * The `WHEN ... THEN ...` expressions.
      *
-     * @var array<uim.cake.databases.Expression\WhenThenExpression>
+     * @var array<uim.databases.Expression\WhenThenExpression>
      */
     protected $when = null;
 
@@ -65,7 +65,7 @@ class CaseStatementExpression : IExpression, ITypedResult
     /**
      * The else part result value.
      *
-     * @var DDBIExpression|object|scalar|null
+     * @var DDBIDBAExpression|object|scalar|null
      */
     protected $else = null;
 
@@ -97,7 +97,7 @@ class CaseStatementExpression : IExpression, ITypedResult
      * only be passed if you actually want to create the simple
      * case expression variant!
      *
-     * @param uim.cake.databases.IExpression|object|scalar|null $value The case value.
+     * @param uim.databases.IDBAExpression|object|scalar|null $value The case value.
      * @param string|null $type The case value type. If no type is provided, the type will be tried to be inferred
      *  from the value.
      */
@@ -111,7 +111,7 @@ class CaseStatementExpression : IExpression, ITypedResult
                 throw new InvalidArgumentException(sprintf(
                     "The `$value` argument must be either `null`, a scalar value, an object, " ~
                     "or an instance of `\%s`, `%s` given.",
-                    IExpression::class,
+                    IDBAExpression::class,
                     getTypeName($value)
                 ));
             }
@@ -121,7 +121,7 @@ class CaseStatementExpression : IExpression, ITypedResult
             if (
                 $value != null &&
                 $type == null &&
-                !($value instanceof IExpression)
+                !($value instanceof IDBAExpression)
             ) {
                 $type = this.inferType($value);
             }
@@ -139,7 +139,7 @@ class CaseStatementExpression : IExpression, ITypedResult
      * ### Order based syntax
      *
      * When passing a value other than a self-contained
-     * `uim.cake.databases.Expression\WhenThenExpression`,
+     * `uim.databases.Expression\WhenThenExpression`,
      * instance, the `WHEN ... THEN ...` statement must be closed off with
      * a call to `then()` before invoking `when()` again or `else()`:
      *
@@ -155,25 +155,25 @@ class CaseStatementExpression : IExpression, ITypedResult
      *
      * ### Self-contained expressions
      *
-     * When passing an instance of `uim.cake.databases.Expression\WhenThenExpression`,
+     * When passing an instance of `uim.databases.Expression\WhenThenExpression`,
      * being it directly, or via a callable, then there is no need to close
      * using `then()` on this object, instead the statement will be closed
-     * on the `uim.cake.databases.Expression\WhenThenExpression`
+     * on the `uim.databases.Expression\WhenThenExpression`
      * object using
-     * `uim.cake.databases.Expression\WhenThenExpression::then()`.
+     * `uim.databases.Expression\WhenThenExpression::then()`.
      *
-     * Callables will receive an instance of `uim.cake.databases.Expression\WhenThenExpression`,
+     * Callables will receive an instance of `uim.databases.Expression\WhenThenExpression`,
      * and must return one, being it the same object, or a custom one:
      *
      * ```
      * $queryExpression
      *     .case()
-     *     .when(function (uim.cake.databases.Expression\WhenThenExpression $whenThen) {
+     *     .when(function (uim.databases.Expression\WhenThenExpression $whenThen) {
      *         return $whenThen
      *             .when(["Table.column": true])
      *             .then("Yes");
      *     })
-     *     .when(function (uim.cake.databases.Expression\WhenThenExpression $whenThen) {
+     *     .when(function (uim.databases.Expression\WhenThenExpression $whenThen) {
      *         return $whenThen
      *             .when(["Table.column": false])
      *             .then("No");
@@ -185,21 +185,21 @@ class CaseStatementExpression : IExpression, ITypedResult
      *
      * The types provided via the `$type` argument will be merged with the
      * type map set for this expression. When using callables for `$when`,
-     * the `uim.cake.databases.Expression\WhenThenExpression`
+     * the `uim.databases.Expression\WhenThenExpression`
      * instance received by the callables will inherit that type map, however
      * the types passed here will _not_ be merged in case of using callables,
      * instead the types must be passed in
-     * `uim.cake.databases.Expression\WhenThenExpression::when()`:
+     * `uim.databases.Expression\WhenThenExpression::when()`:
      *
      * ```
      * $queryExpression
      *     .case()
-     *     .when(function (uim.cake.databases.Expression\WhenThenExpression $whenThen) {
+     *     .when(function (uim.databases.Expression\WhenThenExpression $whenThen) {
      *         return $whenThen
      *             .when(["unmapped_column": true], ["unmapped_column": "bool"])
      *             .then("Yes");
      *     })
-     *     .when(function (uim.cake.databases.Expression\WhenThenExpression $whenThen) {
+     *     .when(function (uim.databases.Expression\WhenThenExpression $whenThen) {
      *         return $whenThen
      *             .when(["unmapped_column": false], ["unmapped_column": "bool"])
      *             .then("No");
@@ -256,8 +256,8 @@ class CaseStatementExpression : IExpression, ITypedResult
      *      .bind(":userData", $userData, "integer")
      * ```
      *
-     * @param uim.cake.databases.IExpression|\Closure|object|array|scalar $when The `WHEN` value. When using an
-     *  array of conditions, it must be compatible with `uim.cake.databases.Query::where()`. Note that this argument is
+     * @param uim.databases.IDBAExpression|\Closure|object|array|scalar $when The `WHEN` value. When using an
+     *  array of conditions, it must be compatible with `uim.databases.Query::where()`. Note that this argument is
      *  _not_ completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in! If
      *  you plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to
      *  be a non-array, and then always binds the data), use a conditions array where the user data is only passed on
@@ -267,7 +267,7 @@ class CaseStatementExpression : IExpression, ITypedResult
      * @return this
      * @throws \LogicException In case this a closing `then()` call is required before calling this method.
      * @throws \LogicException In case the callable doesn"t return an instance of
-     *  `uim.cake.databases.Expression\WhenThenExpression`.
+     *  `uim.databases.Expression\WhenThenExpression`.
      */
     function when($when, $type = null) {
         if (this.whenBuffer != null) {
@@ -302,7 +302,7 @@ class CaseStatementExpression : IExpression, ITypedResult
      *
      * This method can only be invoked in case `when()` was previously
      * used with a value other than a closure or an instance of
-     * `uim.cake.databases.Expression\WhenThenExpression`:
+     * `uim.databases.Expression\WhenThenExpression`:
      *
      * ```
      * $case
@@ -343,12 +343,12 @@ class CaseStatementExpression : IExpression, ITypedResult
      *     // ...
      * ```
      *
-     * @param uim.cake.databases.IExpression|object|scalar|null $result The result value.
+     * @param uim.databases.IDBAExpression|object|scalar|null $result The result value.
      * @param string|null $type The result type. If no type is provided, the type will be tried to be inferred from the
      *  value.
      * @return this
      * @throws \LogicException In case `when()` wasn"t previously called with a value other than a closure or an
-     *  instance of `uim.cake.databases.Expression\WhenThenExpression`.
+     *  instance of `uim.databases.Expression\WhenThenExpression`.
      */
     function then($result, Nullable!string $type = null) {
         if (this.whenBuffer == null) {
@@ -369,13 +369,13 @@ class CaseStatementExpression : IExpression, ITypedResult
     /**
      * Sets the `ELSE` result value.
      *
-     * @param uim.cake.databases.IExpression|object|scalar|null $result The result value.
+     * @param uim.databases.IDBAExpression|object|scalar|null $result The result value.
      * @param string|null $type The result type. If no type is provided, the type will be tried to be inferred from the
      *  value.
      * @return this
      * @throws \LogicException In case a closing `then()` call is required before calling this method.
      * @throws \InvalidArgumentException In case the `$result` argument is neither a scalar value, nor an object, an
-     *  instance of `uim.cake.databases.IExpression`, or `null`.
+     *  instance of `uim.databases.IDBAExpression`, or `null`.
      */
     function else($result, Nullable!string $type = null) {
         if (this.whenBuffer != null) {
@@ -390,7 +390,7 @@ class CaseStatementExpression : IExpression, ITypedResult
             throw new InvalidArgumentException(sprintf(
                 "The `$result` argument must be either `null`, a scalar value, an object, " ~
                 "or an instance of `\%s`, `%s` given.",
-                IExpression::class,
+                IDBAExpression::class,
                 getTypeName($result)
             ));
         }
@@ -469,7 +469,7 @@ class CaseStatementExpression : IExpression, ITypedResult
      * * `else`: The `ELSE` result value.
      *
      * @param string $clause The name of the clause to obtain.
-     * @return uim.cake.databases.IExpression|object|array<uim.cake.databases.Expression\WhenThenExpression>|scalar|null
+     * @return uim.databases.IDBAExpression|object|array<uim.databases.Expression\WhenThenExpression>|scalar|null
      * @throws \InvalidArgumentException In case the given clause name is invalid.
      */
     function clause(string $clause) {
@@ -518,7 +518,7 @@ class CaseStatementExpression : IExpression, ITypedResult
             throw new LogicException("Case expression has incomplete when clause. Missing `then()` after `when()`.");
         }
 
-        if (this.value instanceof IExpression) {
+        if (this.value instanceof IDBAExpression) {
             $callback(this.value);
             this.value.traverse($callback);
         }
@@ -528,7 +528,7 @@ class CaseStatementExpression : IExpression, ITypedResult
             $when.traverse($callback);
         }
 
-        if (this.else instanceof IExpression) {
+        if (this.else instanceof IDBAExpression) {
             $callback(this.else);
             this.else.traverse($callback);
         }
@@ -544,7 +544,7 @@ class CaseStatementExpression : IExpression, ITypedResult
             throw new LogicException("Case expression has incomplete when clause. Missing `then()` after `when()`.");
         }
 
-        if (this.value instanceof IExpression) {
+        if (this.value instanceof IDBAExpression) {
             this.value = clone this.value;
         }
 
@@ -552,7 +552,7 @@ class CaseStatementExpression : IExpression, ITypedResult
             this.when[$key] = clone this.when[$key];
         }
 
-        if (this.else instanceof IExpression) {
+        if (this.else instanceof IDBAExpression) {
             this.else = clone this.else;
         }
     }

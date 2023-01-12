@@ -1,10 +1,10 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.types.ExpressionTypeCasterTrait;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.types.ExpressionTypeCasterTrait;
+import uim.databases.ValueBinder;
 use Closure;
 
 /**
@@ -12,7 +12,7 @@ use Closure;
  *
  * @deprecated 4.3.0 Use QueryExpression::case() or CaseStatementExpression instead
  */
-class CaseExpression : IExpression
+class CaseExpression : IDBAExpression
 {
     use ExpressionTypeCasterTrait;
 
@@ -35,16 +35,16 @@ class CaseExpression : IExpression
     /**
      * The `ELSE` value for the case statement. If null then no `ELSE` will be included.
      *
-     * @var DDBIExpression|array|string|null
+     * @var DDBIDBAExpression|array|string|null
      */
     protected _elseValue;
 
     /**
      * Constructs the case expression
      *
-     * @param uim.cake.databases.IExpression|array $conditions The conditions to test. Must be a IExpression
-     * instance, or an array of IExpression instances.
-     * @param uim.cake.databases.IExpression|array $values Associative array of values to be associated with the
+     * @param uim.databases.IDBAExpression|array $conditions The conditions to test. Must be a IDBAExpression
+     * instance, or an array of IDBAExpression instances.
+     * @param uim.databases.IDBAExpression|array $values Associative array of values to be associated with the
      * conditions passed in $conditions. If there are more $values than $conditions,
      * the last $value is used as the `ELSE` value.
      * @param array<string> $types Associative array of types to be associated with the values
@@ -71,9 +71,9 @@ class CaseExpression : IExpression
      * Conditions must be a one dimensional array or a QueryExpression.
      * The trueValues must be a similar structure, but may contain a string value.
      *
-     * @param uim.cake.databases.IExpression|array $conditions Must be a IExpression instance,
-     *   or an array of IExpression instances.
-     * @param uim.cake.databases.IExpression|array $values Associative array of values of each condition
+     * @param uim.databases.IDBAExpression|array $conditions Must be a IDBAExpression instance,
+     *   or an array of IDBAExpression instances.
+     * @param uim.databases.IDBAExpression|array $values Associative array of values of each condition
      * @param array<string> $types Associative array of types to be associated with the values
      * @return this
      */
@@ -91,7 +91,7 @@ class CaseExpression : IExpression
      * Iterates over the passed in conditions and ensures that there is a matching true value for each.
      * If no matching true value, then it is defaulted to "1".
      *
-     * @param array $conditions Array of IExpression instances.
+     * @param array $conditions Array of IDBAExpression instances.
      * @param array<mixed> $values Associative array of values of each condition
      * @param array<string> $types Associative array of types to be associated with the values
      */
@@ -106,7 +106,7 @@ class CaseExpression : IExpression
                 continue;
             }
 
-            if (!$c instanceof IExpression) {
+            if (!$c instanceof IDBAExpression) {
                 continue;
             }
 
@@ -129,11 +129,11 @@ class CaseExpression : IExpression
 
             $type = $types[$k] ?? null;
 
-            if ($type != null && !$value instanceof IExpression) {
+            if ($type != null && !$value instanceof IDBAExpression) {
                 $value = _castToExpression($value, $type);
             }
 
-            if ($value instanceof IExpression) {
+            if ($value instanceof IDBAExpression) {
                 _values[] = $value;
                 continue;
             }
@@ -145,7 +145,7 @@ class CaseExpression : IExpression
     /**
      * Sets the default value
      *
-     * @param uim.cake.databases.IExpression|array|string|null $value Value to set
+     * @param uim.databases.IDBAExpression|array|string|null $value Value to set
      * @param string|null $type Type of value
      */
     void elseValue($value = null, Nullable!string $type = null) {
@@ -154,11 +154,11 @@ class CaseExpression : IExpression
             $value = key($value);
         }
 
-        if ($value != null && !$value instanceof IExpression) {
+        if ($value != null && !$value instanceof IDBAExpression) {
             $value = _castToExpression($value, $type);
         }
 
-        if (!$value instanceof IExpression) {
+        if (!$value instanceof IDBAExpression) {
             $value = ["value": $value, "type": $type];
         }
 
@@ -168,11 +168,11 @@ class CaseExpression : IExpression
     /**
      * Compiles the relevant parts into sql
      *
-     * @param uim.cake.databases.IExpression|array|string $part The part to compile
-     * @param uim.cake.databases.ValueBinder aBinder Sql generator
+     * @param uim.databases.IDBAExpression|array|string $part The part to compile
+     * @param uim.databases.ValueBinder aBinder Sql generator
      */
     protected string _compile($part, ValueBinder aBinder) {
-        if ($part instanceof IExpression) {
+        if ($part instanceof IDBAExpression) {
             $part = $part.sql($binder);
         } elseif (is_array($part)) {
             $placeholder = $binder.placeholder("param");
@@ -186,7 +186,7 @@ class CaseExpression : IExpression
     /**
      * Converts the Node into a SQL string fragment.
      *
-     * @param uim.cake.databases.ValueBinder aBinder Placeholder generator object
+     * @param uim.databases.ValueBinder aBinder Placeholder generator object
      */
     string sql(ValueBinder aBinder) {
         $parts = null;
@@ -208,13 +208,13 @@ class CaseExpression : IExpression
     O traverse(this O)(Closure $callback) {
         foreach (["_conditions", "_values"] as $part) {
             foreach (this.{$part} as $c) {
-                if ($c instanceof IExpression) {
+                if ($c instanceof IDBAExpression) {
                     $callback($c);
                     $c.traverse($callback);
                 }
             }
         }
-        if (_elseValue instanceof IExpression) {
+        if (_elseValue instanceof IDBAExpression) {
             $callback(_elseValue);
             _elseValue.traverse($callback);
         }

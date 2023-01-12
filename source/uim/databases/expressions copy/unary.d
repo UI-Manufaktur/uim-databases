@@ -1,13 +1,13 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.ValueBinder;
 use Closure;
 
 /**
  * An expression object that represents an expression with only a single operand.
  */
-class UnaryExpression : IExpression
+class UnaryExpression : IDBAExpression
 {
     /**
      * Indicates that the operation is in pre-order
@@ -56,7 +56,7 @@ class UnaryExpression : IExpression
 
     string sql(ValueBinder aBinder) {
         $operand = _value;
-        if ($operand instanceof IExpression) {
+        if ($operand instanceof IDBAExpression) {
             $operand = $operand.sql($binder);
         }
 
@@ -69,7 +69,7 @@ class UnaryExpression : IExpression
 
 
     O traverse(this O)(Closure $callback) {
-        if (_value instanceof IExpression) {
+        if (_value instanceof IDBAExpression) {
             $callback(_value);
             _value.traverse($callback);
         }
@@ -81,7 +81,7 @@ class UnaryExpression : IExpression
      * Perform a deep clone of the inner expression.
      */
     void __clone() {
-        if (_value instanceof IExpression) {
+        if (_value instanceof IDBAExpression) {
             _value = clone _value;
         }
     }

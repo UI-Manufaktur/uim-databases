@@ -1,4 +1,4 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
 /**
  * Describes a getter and a setter for the a field property. Useful for expressions
@@ -9,14 +9,14 @@ interface FieldInterface
     /**
      * Sets the field name
      *
-     * @param uim.cake.databases.IExpression|array|string $field The field to compare with.
+     * @param uim.databases.IDBAExpression|array|string $field The field to compare with.
      */
     void setField($field);
 
     /**
      * Returns the field name
      *
-     * @return uim.cake.databases.IExpression|array|string
+     * @return uim.databases.IDBAExpression|array|string
      */
     function getField();
 }

@@ -1,4 +1,4 @@
-module uim.cake.databases.exceptions.missingdriver;
+module uim.databases.exceptions.missingdriver;
 
 @safe:
 import uim.cake;

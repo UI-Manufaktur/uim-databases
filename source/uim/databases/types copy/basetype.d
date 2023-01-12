@@ -1,7 +1,7 @@
-module uim.cake.databases.types;
+module uim.databases.types;
 
-import uim.cake.databases.IDriver;
-import uim.cake.databases.TypeInterface;
+import uim.databases.IDriver;
+import uim.databases.TypeInterface;
 use PDO;
 
 /**

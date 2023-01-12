@@ -1,4 +1,4 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
 // This defines the functions used for building window expressions.
 interface IWindow {
@@ -25,7 +25,7 @@ interface IWindow {
     /**
      * Adds one or more partition expressions to the window.
      *
-     * @param uim.cake.databases.IExpression|\Closure|array<uim.cake.databases.IExpression|string>|string $partitions Partition expressions
+     * @param uim.databases.IDBAExpression|\Closure|array<uim.databases.IDBAExpression|string>|string $partitions Partition expressions
      * @return this
      */
     function partition($partitions);
@@ -33,7 +33,7 @@ interface IWindow {
     /**
      * Adds one or more order clauses to the window.
      *
-     * @param uim.cake.databases.IExpression|\Closure|array<uim.cake.databases.IExpression|string>|string $fields Order expressions
+     * @param uim.databases.IDBAExpression|\Closure|array<uim.databases.IDBAExpression|string>|string $fields Order expressions
      * @return this
      */
     function order($fields);
@@ -54,8 +54,8 @@ interface IWindow {
      * If you need to use "FOLLOWING" with frame start or
      * "PRECEDING" with frame end, use `frame()` instead.
      *
-     * @param uim.cake.databases.IExpression|string|int|null $start Frame start
-     * @param uim.cake.databases.IExpression|string|int|null $end Frame end
+     * @param uim.databases.IDBAExpression|string|int|null $start Frame start
+     * @param uim.databases.IDBAExpression|string|int|null $end Frame end
      *  If not passed in, only frame start SQL will be generated.
      * @return this
      */
@@ -98,9 +98,9 @@ interface IWindow {
      *  - `null` - "UNBOUNDED"
      *
      * @param string $type Frame type
-     * @param uim.cake.databases.IExpression|string|int|null $startOffset Frame start offset
+     * @param uim.databases.IDBAExpression|string|int|null $startOffset Frame start offset
      * @param string $startDirection Frame start direction
-     * @param uim.cake.databases.IExpression|string|int|null $endOffset Frame end offset
+     * @param uim.databases.IDBAExpression|string|int|null $endOffset Frame end offset
      * @param string $endDirection Frame end direction
      * @return this
      * @throws \InvalidArgumentException WHen offsets are negative.

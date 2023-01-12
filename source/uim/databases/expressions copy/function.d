@@ -1,11 +1,11 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.Query;
-import uim.cake.databases.types.ExpressionTypeCasterTrait;
-import uim.cake.databases.ITypedResult;
-import uim.cake.databases.TypedResultTrait;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.Query;
+import uim.databases.types.ExpressionTypeCasterTrait;
+import uim.databases.ITypedResult;
+import uim.databases.TypedResultTrait;
+import uim.databases.ValueBinder;
 
 /**
  * This class represents a function call string in a SQL statement. Calls can be
@@ -81,7 +81,7 @@ class FunctionExpression : QueryExpression : ITypedResult
      * @param array<string, string> $types Associative array of types to be associated with the
      * passed arguments
      * @param bool $prepend Whether to prepend or append to the list of arguments
-     * @see uim.cake.databases.Expression\FunctionExpression::__construct() for more details.
+     * @see uim.databases.Expression\FunctionExpression::__construct() for more details.
      * @return this
      * @psalm-suppress MoreSpecificImplementedParamType
      */
@@ -101,11 +101,11 @@ class FunctionExpression : QueryExpression : ITypedResult
 
             $type = $typeMap.type($k);
 
-            if ($type != null && !$p instanceof IExpression) {
+            if ($type != null && !$p instanceof IDBAExpression) {
                 $p = _castToExpression($p, $type);
             }
 
-            if ($p instanceof IExpression) {
+            if ($p instanceof IDBAExpression) {
                 $put(_conditions, $p);
                 continue;
             }
@@ -122,7 +122,7 @@ class FunctionExpression : QueryExpression : ITypedResult
         foreach (_conditions as $condition) {
             if ($condition instanceof Query) {
                 $condition = sprintf("(%s)", $condition.sql($binder));
-            } elseif ($condition instanceof IExpression) {
+            } elseif ($condition instanceof IDBAExpression) {
                 $condition = $condition.sql($binder);
             } elseif (is_array($condition)) {
                 $p = $binder.placeholder("param");

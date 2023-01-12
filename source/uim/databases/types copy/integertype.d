@@ -3,9 +3,9 @@
   License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  
   Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      
 **********************************************************************************************************/
-module uim.cake.databases.types;
+module uim.databases.types;
 
-import uim.cake.databases.IDriver;
+import uim.databases.IDriver;
 use InvalidArgumentException;
 use PDO;
 
@@ -35,7 +35,7 @@ class IntegerType : BaseType : BatchCastingInterface
      * Convert integer data into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param uim.cake.databases.IDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDriver aDriver The driver instance to convert with.
      */
     Nullable!int toDatabase($value, IDriver aDriver) {
         if ($value == null || $value == "") {
@@ -51,7 +51,7 @@ class IntegerType : BaseType : BatchCastingInterface
      * {@inheritDoc}
      *
      * @param mixed $value The value to convert.
-     * @param uim.cake.databases.IDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDriver aDriver The driver instance to convert with.
      */
     Nullable!int toPHP($value, IDriver aDriver) {
         if ($value == null) {
@@ -80,7 +80,7 @@ class IntegerType : BaseType : BatchCastingInterface
      * Get the correct PDO binding type for integer data.
      *
      * @param mixed $value The value being bound.
-     * @param uim.cake.databases.IDriver aDriver The driver.
+     * @param uim.databases.IDriver aDriver The driver.
      */
     int toStatement($value, IDriver aDriver) {
         return PDO::PARAM_INT;

@@ -5,9 +5,9 @@
 
 
  * @since         3.1.2
-  */module uim.cake.databases.types;
+  */module uim.databases.types;
 
-import uim.cake.databases.IDriver;
+import uim.databases.IDriver;
 use InvalidArgumentException;
 use PDO;
 
@@ -22,7 +22,7 @@ class BoolType : BaseType : BatchCastingInterface
      * Convert bool data into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param uim.cake.databases.IDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDriver aDriver The driver instance to convert with.
      * @return bool|null
      */
     function toDatabase($value, IDriver aDriver): ?bool
@@ -45,7 +45,7 @@ class BoolType : BaseType : BatchCastingInterface
      * Convert bool values to PHP booleans
      *
      * @param mixed $value The value to convert.
-     * @param uim.cake.databases.IDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDriver aDriver The driver instance to convert with.
      * @return bool|null
      */
     function toPHP($value, IDriver aDriver): ?bool
@@ -84,7 +84,7 @@ class BoolType : BaseType : BatchCastingInterface
      * Get the correct PDO binding type for bool data.
      *
      * @param mixed $value The value being bound.
-     * @param uim.cake.databases.IDriver aDriver The driver.
+     * @param uim.databases.IDriver aDriver The driver.
      */
     int toStatement($value, IDriver aDriver) {
         if ($value == null) {

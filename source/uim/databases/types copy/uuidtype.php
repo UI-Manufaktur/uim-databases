@@ -1,7 +1,7 @@
-module uim.cake.databases.types;
+module uim.databases.types;
 
-import uim.cake.databases.IDriver;
-import uim.cake.utilities.Text;
+import uim.databases.IDriver;
+import uim.utilities.Text;
 
 /**
  * Provides behavior for the UUID type
@@ -11,7 +11,7 @@ class UuidType : StringType {
      * Casts given value from a PHP type to one acceptable by database
      *
      * @param mixed $value value to be converted to database equivalent
-     * @param uim.cake.databases.IDriver aDriver object from which database preferences and configuration will be extracted
+     * @param uim.databases.IDriver aDriver object from which database preferences and configuration will be extracted
      */
     Nullable!string toDatabase($value, IDriver aDriver) {
         if ($value == null || $value == "" || $value == false) {

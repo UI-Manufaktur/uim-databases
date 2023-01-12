@@ -1,8 +1,8 @@
-module uim.cake.databases.Statement;
+module uim.databases.Statement;
 
-import uim.cake.databases.IDriver;
-import uim.cake.databases.IStatement;
-import uim.cake.databases.TypeConverterTrait;
+import uim.databases.IDriver;
+import uim.databases.IStatement;
+import uim.databases.TypeConverterTrait;
 use Iterator;
 
 /**
@@ -54,8 +54,8 @@ class BufferedStatement : Iterator, IStatement
     /**
      * Constructor
      *
-     * @param uim.cake.databases.IStatement $statement Statement implementation such as PDOStatement
-     * @param uim.cake.databases.IDriver aDriver Driver instance
+     * @param uim.databases.IStatement $statement Statement implementation such as PDOStatement
+     * @param uim.databases.IDriver aDriver Driver instance
      */
     this(IStatement $statement, IDriver aDriver) {
         this.statement = $statement;
@@ -262,7 +262,7 @@ class BufferedStatement : Iterator, IStatement
     /**
      * Get the wrapped statement
      *
-     * @return uim.cake.databases.IStatement
+     * @return uim.databases.IStatement
      */
     function getInnerStatement(): IStatement
     {

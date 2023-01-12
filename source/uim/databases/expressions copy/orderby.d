@@ -1,7 +1,7 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.ValueBinder;
 use RuntimeException;
 
 /**
@@ -12,8 +12,8 @@ class OrderByExpression : QueryExpression
     /**
      * Constructor
      *
-     * @param uim.cake.databases.IExpression|array|string $conditions The sort columns
-     * @param uim.cake.databases.TypeMap|array<string, string> $types The types for each column.
+     * @param uim.databases.IDBAExpression|array|string $conditions The sort columns
+     * @param uim.databases.TypeMap|array<string, string> $types The types for each column.
      * @param string $conjunction The glue used to join conditions together.
      */
     this($conditions = null, $types = null, $conjunction = "") {
@@ -24,7 +24,7 @@ class OrderByExpression : QueryExpression
     string sql(ValueBinder aBinder) {
         $order = null;
         foreach (_conditions as $k: $direction) {
-            if ($direction instanceof IExpression) {
+            if ($direction instanceof IDBAExpression) {
                 $direction = $direction.sql($binder);
             }
             $order[] = is_numeric($k) ? $direction : sprintf("%s %s", $k, $direction);

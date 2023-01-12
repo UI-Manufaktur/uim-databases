@@ -3,22 +3,22 @@
   License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  
   Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      
 **********************************************************************************************************/
-module uim.cake.databases.types;
+module uim.databases.types;
 
-import uim.cake.databases.TypeFactory;
+import uim.databases.TypeFactory;
 
 /**
- * Offers a method to convert values to IExpression objects
+ * Offers a method to convert values to IDBAExpression objects
  * if the type they should be converted to : ExpressionTypeInterface
  */
 trait ExpressionTypeCasterTrait
 {
     /**
-     * Conditionally converts the passed value to an IExpression object
+     * Conditionally converts the passed value to an IDBAExpression object
      * if the type class : the ExpressionTypeInterface. Otherwise,
      * returns the value unmodified.
      *
-     * @param mixed $value The value to convert to IExpression
+     * @param mixed $value The value to convert to IDBAExpression
      * @param string|null $type The type name
      * @return mixed
      */

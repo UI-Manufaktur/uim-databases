@@ -1,14 +1,14 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.ValueBinder;
 use Closure;
 use RuntimeException;
 
 /**
  * An expression that represents a common table expression definition.
  */
-class CommonTableExpression : IExpression
+class CommonTableExpression : IDBAExpression
 {
     /**
      * The CTE name.
@@ -20,14 +20,14 @@ class CommonTableExpression : IExpression
     /**
      * The field names to use for the CTE.
      *
-     * @var array<uim.cake.databases.Expression\IdentifierExpression>
+     * @var array<uim.databases.Expression\IdentifierExpression>
      */
     protected $fields = null;
 
     /**
      * The CTE query definition.
      *
-     * @var DDBIExpression|null
+     * @var DDBIDBAExpression|null
      */
     protected $query;
 
@@ -46,7 +46,7 @@ class CommonTableExpression : IExpression
      * Constructor.
      *
      * @param string aName The CTE name.
-     * @param uim.cake.databases.IExpression|\Closure $query CTE query
+     * @param uim.databases.IDBAExpression|\Closure $query CTE query
      */
     this(string aName = "", $query = null) {
         this.name = new IdentifierExpression($name);
@@ -73,15 +73,15 @@ class CommonTableExpression : IExpression
     /**
      * Sets the query for this CTE.
      *
-     * @param uim.cake.databases.IExpression|\Closure $query CTE query
+     * @param uim.databases.IDBAExpression|\Closure $query CTE query
      * @return this
      */
     function query($query) {
         if ($query instanceof Closure) {
             $query = $query();
-            if (!($query instanceof IExpression)) {
+            if (!($query instanceof IDBAExpression)) {
                 throw new RuntimeException(
-                    "You must return an `IExpression` from a Closure passed to `query()`."
+                    "You must return an `IDBAExpression` from a Closure passed to `query()`."
                 );
             }
         }
@@ -93,7 +93,7 @@ class CommonTableExpression : IExpression
     /**
      * Adds one or more fields (arguments) to the CTE.
      *
-     * @param uim.cake.databases.Expression\IdentifierExpression|array<uim.cake.databases.Expression\IdentifierExpression>|array<string>|string $fields Field names
+     * @param uim.databases.Expression\IdentifierExpression|array<uim.databases.Expression\IdentifierExpression>|array<string>|string $fields Field names
      * @return this
      */
     function field($fields) {

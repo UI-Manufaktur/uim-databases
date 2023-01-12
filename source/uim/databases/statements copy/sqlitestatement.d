@@ -1,4 +1,4 @@
-module uim.cake.databases.Statement;
+module uim.databases.Statement;
 
 /**
  * Statement class meant to be used by an Sqlite driver

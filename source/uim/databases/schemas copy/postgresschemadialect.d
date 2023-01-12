@@ -1,6 +1,6 @@
-module uim.cake.databases.schemas;
+module uim.databases.schemas;
 
-import uim.cake.databases.exceptions.DatabaseException;
+import uim.databases.exceptions.DatabaseException;
 
 use Cake\Database\Exception\DatabaseException;
 

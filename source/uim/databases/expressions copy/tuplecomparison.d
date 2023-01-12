@@ -1,7 +1,7 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.ValueBinder;
 use Closure;
 use InvalidArgumentException;
 
@@ -22,8 +22,8 @@ class TupleComparison : ComparisonExpression
     /**
      * Constructor
      *
-     * @param uim.cake.databases.IExpression|array|string $fields the fields to use to form a tuple
-     * @param uim.cake.databases.IExpression|array $values the values to use to form a tuple
+     * @param uim.databases.IDBAExpression|array|string $fields the fields to use to form a tuple
+     * @param uim.databases.IDBAExpression|array $values the values to use to form a tuple
      * @param array<string|null> $types the types names to use for casting each of the values, only
      * one type per position in the value array in needed
      * @param string $conjunction the operator used for comparing field and value
@@ -78,7 +78,7 @@ class TupleComparison : ComparisonExpression
         }
 
         foreach ($originalFields as $field) {
-            $fields[] = $field instanceof IExpression ? $field.sql($binder) : $field;
+            $fields[] = $field instanceof IDBAExpression ? $field.sql($binder) : $field;
         }
 
         $values = _stringifyValues($binder);
@@ -92,18 +92,18 @@ class TupleComparison : ComparisonExpression
      * Returns a string with the values as placeholders in a string to be used
      * for the SQL version of this expression
      *
-     * @param uim.cake.databases.ValueBinder aBinder The value binder to convert expressions with.
+     * @param uim.databases.ValueBinder aBinder The value binder to convert expressions with.
      */
     protected string _stringifyValues(ValueBinder aBinder) {
         $values = null;
         $parts = this.getValue();
 
-        if ($parts instanceof IExpression) {
+        if ($parts instanceof IDBAExpression) {
             return $parts.sql($binder);
         }
 
         foreach ($parts as $i: $value) {
-            if ($value instanceof IExpression) {
+            if ($value instanceof IDBAExpression) {
                 $values[] = $value.sql($binder);
                 continue;
             }
@@ -151,7 +151,7 @@ class TupleComparison : ComparisonExpression
         }
 
         $value = this.getValue();
-        if ($value instanceof IExpression) {
+        if ($value instanceof IDBAExpression) {
             $callback($value);
             $value.traverse($callback);
 
@@ -173,13 +173,13 @@ class TupleComparison : ComparisonExpression
 
     /**
      * Conditionally executes the callback for the passed value if
-     * it is an IExpression
+     * it is an IDBAExpression
      *
      * @param mixed $value The value to traverse
      * @param \Closure $callback The callable to use when traversing
      */
     protected void _traverseValue($value, Closure $callback) {
-        if ($value instanceof IExpression) {
+        if ($value instanceof IDBAExpression) {
             $callback($value);
             $value.traverse($callback);
         }

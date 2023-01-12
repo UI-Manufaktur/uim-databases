@@ -1,14 +1,14 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.Query;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.Query;
+import uim.databases.ValueBinder;
 use Closure;
 
 /**
  * An expression object for complex ORDER BY clauses
  */
-class OrderClauseExpression : IExpression, FieldInterface
+class OrderClauseExpression : IDBAExpression, FieldInterface
 {
     use FieldTrait;
 
@@ -20,7 +20,7 @@ class OrderClauseExpression : IExpression, FieldInterface
     /**
      * Constructor
      *
-     * @param uim.cake.databases.IExpression|string $field The field to order on.
+     * @param uim.databases.IDBAExpression|string $field The field to order on.
      * @param string $direction The direction to sort on.
      */
     this($field, $direction) {
@@ -30,11 +30,11 @@ class OrderClauseExpression : IExpression, FieldInterface
 
 
     string sql(ValueBinder aBinder) {
-        /** @var DDBIExpression|string $field */
+        /** @var DDBIDBAExpression|string $field */
         $field = _field;
         if ($field instanceof Query) {
             $field = sprintf("(%s)", $field.sql($binder));
-        } elseif ($field instanceof IExpression) {
+        } elseif ($field instanceof IDBAExpression) {
             $field = $field.sql($binder);
         }
 
@@ -43,7 +43,7 @@ class OrderClauseExpression : IExpression, FieldInterface
 
 
     O traverse(this O)(Closure $callback) {
-        if (_field instanceof IExpression) {
+        if (_field instanceof IDBAExpression) {
             $callback(_field);
             _field.traverse($callback);
         }
@@ -55,7 +55,7 @@ class OrderClauseExpression : IExpression, FieldInterface
      * Create a deep clone of the order clause.
      */
     void __clone() {
-        if (_field instanceof IExpression) {
+        if (_field instanceof IDBAExpression) {
             _field = clone _field;
         }
     }

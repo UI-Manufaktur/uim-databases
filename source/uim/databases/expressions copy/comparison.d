@@ -1,9 +1,9 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.exceptions.DatabaseException;
-import uim.cake.databases.IExpression;
-import uim.cake.databases.types.ExpressionTypeCasterTrait;
-import uim.cake.databases.ValueBinder;
+import uim.databases.exceptions.DatabaseException;
+import uim.databases.IDBAExpression;
+import uim.databases.types.ExpressionTypeCasterTrait;
+import uim.databases.ValueBinder;
 use Closure;
 
 /**
@@ -11,7 +11,7 @@ use Closure;
  * involving a field an operator and a value. In its most common form the
  * string representation of a comparison is `field = value`
  */
-class ComparisonExpression : IExpression, FieldInterface
+class ComparisonExpression : IDBAExpression, FieldInterface
 {
     use ExpressionTypeCasterTrait;
     use FieldTrait;
@@ -40,17 +40,17 @@ class ComparisonExpression : IExpression, FieldInterface
     protected bool _isMultiple = false;
 
     /**
-     * A cached list of IExpression objects that were
+     * A cached list of IDBAExpression objects that were
      * found in the value for this expression.
      *
-     * @var array<uim.cake.databases.IExpression>
+     * @var array<uim.databases.IDBAExpression>
      */
     protected _valueExpressions = null;
 
     /**
      * Constructor
      *
-     * @param uim.cake.databases.IExpression|string $field the field name to compare to a value
+     * @param uim.databases.IDBAExpression|string $field the field name to compare to a value
      * @param mixed $value The value to be used in comparison
      * @param string|null $type the type name used to cast the value
      * @param string $operator the operator used for comparing field and value
@@ -106,17 +106,17 @@ class ComparisonExpression : IExpression, FieldInterface
 
 
     string sql(ValueBinder aBinder) {
-        /** @var DDBIExpression|string $field */
+        /** @var DDBIDBAExpression|string $field */
         $field = _field;
 
-        if ($field instanceof IExpression) {
+        if ($field instanceof IDBAExpression) {
             $field = $field.sql($binder);
         }
 
         if (_value instanceof IdentifierExpression) {
             $template = "%s %s %s";
             $value = _value.sql($binder);
-        } elseif (_value instanceof IExpression) {
+        } elseif (_value instanceof IDBAExpression) {
             $template = "%s %s (%s)";
             $value = _value.sql($binder);
         } else {
@@ -128,12 +128,12 @@ class ComparisonExpression : IExpression, FieldInterface
 
 
     O traverse(this O)(Closure $callback) {
-        if (_field instanceof IExpression) {
+        if (_field instanceof IDBAExpression) {
             $callback(_field);
             _field.traverse($callback);
         }
 
-        if (_value instanceof IExpression) {
+        if (_value instanceof IDBAExpression) {
             $callback(_value);
             _value.traverse($callback);
         }
@@ -153,7 +153,7 @@ class ComparisonExpression : IExpression, FieldInterface
      */
     void __clone() {
         foreach (["_value", "_field"] as $prop) {
-            if (this.{$prop} instanceof IExpression) {
+            if (this.{$prop} instanceof IDBAExpression) {
                 this.{$prop} = clone this.{$prop};
             }
         }
@@ -163,13 +163,13 @@ class ComparisonExpression : IExpression, FieldInterface
      * Returns a template and a placeholder for the value after registering it
      * with the placeholder $binder
      *
-     * @param uim.cake.databases.ValueBinder aBinder The value binder to use.
+     * @param uim.databases.ValueBinder aBinder The value binder to use.
      * @return array First position containing the template and the second a placeholder
      */
     protected array _stringExpression(ValueBinder aBinder) {
         $template = "%s ";
 
-        if (_field instanceof IExpression && !_field instanceof IdentifierExpression) {
+        if (_field instanceof IDBAExpression && !_field instanceof IdentifierExpression) {
             $template = "(%s) ";
         }
 
@@ -184,7 +184,7 @@ class ComparisonExpression : IExpression, FieldInterface
             // To avoid SQL errors when comparing a field to a list of empty values,
             // better just throw an exception here
             if ($value == "") {
-                $field = _field instanceof IExpression ? _field.sql($binder) : _field;
+                $field = _field instanceof IDBAExpression ? _field.sql($binder) : _field;
                 /** @psalm-suppress PossiblyInvalidCast */
                 throw new DatabaseException(
                     "Impossible to generate condition with empty list of values for field ($field)"
@@ -202,7 +202,7 @@ class ComparisonExpression : IExpression, FieldInterface
      * Registers a value in the placeholder generator and returns the generated placeholder
      *
      * @param mixed $value The value to bind
-     * @param uim.cake.databases.ValueBinder aBinder The value binder to use
+     * @param uim.databases.ValueBinder aBinder The value binder to use
      * @param string|null $type The type of $value
      * @return string generated placeholder
      */
@@ -218,7 +218,7 @@ class ComparisonExpression : IExpression, FieldInterface
      * $binder and separated by `,`
      *
      * @param iterable $value the value to flatten
-     * @param uim.cake.databases.ValueBinder aBinder The value binder to use
+     * @param uim.databases.ValueBinder aBinder The value binder to use
      * @param string|null $type the type to cast values to
      */
     protected string _flattenValue(iterable $value, ValueBinder aBinder, Nullable!string $type = null) {
@@ -239,13 +239,13 @@ class ComparisonExpression : IExpression, FieldInterface
 
     /**
      * Returns an array with the original $values in the first position
-     * and all IExpression objects that could be found in the second
+     * and all IDBAExpression objects that could be found in the second
      * position.
      *
-     * @param uim.cake.databases.IExpression|iterable $values The rows to insert
+     * @param uim.databases.IDBAExpression|iterable $values The rows to insert
      */
     protected array _collectExpressions($values) {
-        if ($values instanceof IExpression) {
+        if ($values instanceof IDBAExpression) {
             return [$values, []];
         }
 
@@ -258,7 +258,7 @@ class ComparisonExpression : IExpression, FieldInterface
         }
 
         foreach ($values as $k: $v) {
-            if ($v instanceof IExpression) {
+            if ($v instanceof IDBAExpression) {
                 $expressions[$k] = $v;
             }
 

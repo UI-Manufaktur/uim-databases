@@ -1,4 +1,4 @@
-module uim.cake.databases.exceptions.missingconnection;
+module uim.databases.exceptions.missingconnection;
 
 @safe:
 import uim.cake;

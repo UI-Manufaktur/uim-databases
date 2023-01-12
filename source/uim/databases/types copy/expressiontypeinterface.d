@@ -5,23 +5,23 @@
 
 
  * @since         3.3.0
-  */module uim.cake.databases.types;
+  */module uim.databases.types;
 
-import uim.cake.databases.IExpression;
+import uim.databases.IDBAExpression;
 
 /**
  * An interface used by Type objects to signal whether the value should
- * be converted to an IExpression instead of a string when sent
+ * be converted to an IDBAExpression instead of a string when sent
  * to the database.
  */
 interface ExpressionTypeInterface
 {
     /**
-     * Returns an IExpression object for the given value that can
+     * Returns an IDBAExpression object for the given value that can
      * be used in queries.
      *
      * @param mixed $value The value to be converted to an expression
-     * @return uim.cake.databases.IExpression
+     * @return uim.databases.IDBAExpression
      */
-    function toExpression($value): IExpression;
+    function toExpression($value): IDBAExpression;
 }

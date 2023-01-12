@@ -1,7 +1,7 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
-import uim.cake.databases.IExpression;
-import uim.cake.databases.ValueBinder;
+import uim.databases.IDBAExpression;
+import uim.databases.ValueBinder;
 use Closure;
 
 /**
@@ -10,9 +10,9 @@ use Closure;
  * Identifier values are unsafe with user supplied data.
  * Values will be quoted when identifier quoting is enabled.
  *
- * @see uim.cake.databases.Query::identifier()
+ * @see uim.databases.Query::identifier()
  */
-class IdentifierExpression : IExpression
+class IdentifierExpression : IDBAExpression
 {
     /**
      * Holds the identifier string

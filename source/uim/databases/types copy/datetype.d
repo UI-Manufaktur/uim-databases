@@ -1,8 +1,8 @@
-module uim.cake.databases.types;
+module uim.databases.types;
 
-import uim.cake.I18n\Date;
-import uim.cake.I18n\FrozenDate;
-import uim.cake.I18n\I18nDateTimeInterface;
+import uim.I18n\Date;
+import uim.I18n\FrozenDate;
+import uim.I18n\I18nDateTimeInterface;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -87,7 +87,7 @@ class DateType : DateTimeType {
 
     protected function _parseLocaleValue(string aValue): ?I18nDateTimeInterface
     {
-        /** @psalm-var class-string<uim.cake.I18n\I18nDateTimeInterface> $class */
+        /** @psalm-var class-string<uim.I18n\I18nDateTimeInterface> $class */
         $class = _className;
 
         return $class::parseDate($value, _localeMarshalFormat);
