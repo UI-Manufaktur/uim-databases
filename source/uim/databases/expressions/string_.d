@@ -6,7 +6,7 @@
 module uim.expressions.string_;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 // String expression with collation.
 class StringExpression : IDTBExpression {

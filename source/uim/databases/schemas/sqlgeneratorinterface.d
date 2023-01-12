@@ -1,6 +1,6 @@
 module uim.databases.schemas;
 
-import uim.databases.Connection;
+import DDBAConnection;
 
 /**
  * An interface used by TableSchema objects.
@@ -13,7 +13,7 @@ interface ISqlGenerator
      * Uses the connection to access the schema dialect
      * to generate platform specific SQL.
      *
-     * @param uim.databases.Connection $connection The connection to generate SQL for.
+     * @param DDBAConnection $connection The connection to generate SQL for.
      * @return array List of SQL statements to create the table and the
      *    required indexes.
      */
@@ -25,7 +25,7 @@ interface ISqlGenerator
      * Uses the connection to access the schema dialect to generate platform
      * specific SQL.
      *
-     * @param uim.databases.Connection $connection The connection to generate SQL for.
+     * @param DDBAConnection $connection The connection to generate SQL for.
      * @return array SQL to drop a table.
      */
     array dropSql(Connection $connection);
@@ -33,7 +33,7 @@ interface ISqlGenerator
     /**
      * Generate the SQL statements to truncate a table
      *
-     * @param uim.databases.Connection $connection The connection to generate SQL for.
+     * @param DDBAConnection $connection The connection to generate SQL for.
      * @return array SQL to truncate a table.
      */
     array truncateSql(Connection $connection);
@@ -41,7 +41,7 @@ interface ISqlGenerator
     /**
      * Generate the SQL statements to add the constraints to the table
      *
-     * @param uim.databases.Connection $connection The connection to generate SQL for.
+     * @param DDBAConnection $connection The connection to generate SQL for.
      * @return array SQL to add the constraints.
      */
     array addConstraintSql(Connection $connection);
@@ -49,7 +49,7 @@ interface ISqlGenerator
     /**
      * Generate the SQL statements to drop the constraints to the table
      *
-     * @param uim.databases.Connection $connection The connection to generate SQL for.
+     * @param DDBAConnection $connection The connection to generate SQL for.
      * @return array SQL to drop a table.
      */
     array dropConstraintSql(Connection $connection);
@@ -67,7 +67,7 @@ interface SqlGeneratorInterface
      * Uses the connection to access the schema dialect
      * to generate platform specific SQL.
      *
-     * @param uim.databases.Connection $connection The connection to generate SQL for.
+     * @param DDBAConnection $connection The connection to generate SQL for.
      * @return array List of SQL statements to create the table and the
      *    required indexes.
      */
@@ -79,7 +79,7 @@ interface SqlGeneratorInterface
      * Uses the connection to access the schema dialect to generate platform
      * specific SQL.
      *
-     * @param uim.databases.Connection $connection The connection to generate SQL for.
+     * @param DDBAConnection $connection The connection to generate SQL for.
      * @return array SQL to drop a table.
      */
     function dropSql(Connection $connection): array;
@@ -87,7 +87,7 @@ interface SqlGeneratorInterface
     /**
      * Generate the SQL statements to truncate a table
      *
-     * @param uim.databases.Connection $connection The connection to generate SQL for.
+     * @param DDBAConnection $connection The connection to generate SQL for.
      * @return array SQL to truncate a table.
      */
     function truncateSql(Connection $connection): array;
@@ -95,7 +95,7 @@ interface SqlGeneratorInterface
     /**
      * Generate the SQL statements to add the constraints to the table
      *
-     * @param uim.databases.Connection $connection The connection to generate SQL for.
+     * @param DDBAConnection $connection The connection to generate SQL for.
      * @return array SQL to add the constraints.
      */
     function addConstraintSql(Connection $connection): array;
@@ -103,7 +103,7 @@ interface SqlGeneratorInterface
     /**
      * Generate the SQL statements to drop the constraints to the table
      *
-     * @param uim.databases.Connection $connection The connection to generate SQL for.
+     * @param DDBAConnection $connection The connection to generate SQL for.
      * @return array SQL to drop a table.
      */
     function dropConstraintSql(Connection $connection): array;

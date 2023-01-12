@@ -23,12 +23,8 @@ class Query : IDBAExpression, IteratorAggregate {
 
   public const string JOIN_TYPE_RIGHT = "RIGHT";
 
-  /**
-    * Connection instance to be used to execute this query.
-    *
-    * @var uim.databases.Connection
-    */
-  protected _connection;
+  // Connection instance to be used to execute this query.
+  protected DDBAConnection _connection;
 
   /**
     * Type of this query (select, insert, update, delete).
@@ -155,7 +151,7 @@ class Query : IDBAExpression, IteratorAggregate {
   /**
     * Gets the connection instance to be used for executing and transforming this query.
     *
-    * @return uim.databases.Connection
+    * @return DDBAConnection
     */
   Connection getConnection() {
       return _connection;

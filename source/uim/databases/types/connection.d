@@ -6,7 +6,7 @@
 module uim.databases;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 // Represents a connection with a database server.
 class Connection : IConnection {

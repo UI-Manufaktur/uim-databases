@@ -1,7 +1,7 @@
 module uim.databases.exceptions.missingdriver;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 // Class MissingDriverException
 class MissingDriverException : UIMException {

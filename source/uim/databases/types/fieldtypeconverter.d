@@ -6,7 +6,7 @@
 module uim.databases;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 module uim.databases;
 

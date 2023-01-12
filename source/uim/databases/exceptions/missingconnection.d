@@ -1,7 +1,7 @@
 module uim.databases.exceptions.missingconnection;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 // Class MissingConnectionException
 class MissingConnectionException : UIMException {

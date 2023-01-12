@@ -40,7 +40,7 @@ class SchemaCache
     /**
      * Constructor
      *
-     * @param uim.databases.Connection $connection Connection name to get the schema for or a connection instance
+     * @param DDBAConnection $connection Connection name to get the schema for or a connection instance
      */
     public this(Connection $connection)
     {
@@ -97,7 +97,7 @@ class SchemaCache
     /**
      * Helper method to get the schema collection.
      *
-     * @param uim.databases.Connection $connection Connection object
+     * @param DDBAConnection $connection Connection object
      * @return uim.databases.Schema\CachedCollection
      * @throws \RuntimeException If given connection object is not compatible with schema caching
      */

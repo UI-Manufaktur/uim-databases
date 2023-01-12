@@ -1,7 +1,7 @@
 module uim.databases;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 /**
  * Represents a database driver containing all specificities for

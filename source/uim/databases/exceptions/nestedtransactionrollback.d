@@ -1,7 +1,7 @@
 module uim.databases.exceptions.nestedtransactionrollback;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 use Throwable;
 

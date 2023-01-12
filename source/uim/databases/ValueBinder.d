@@ -3,10 +3,10 @@
 *	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
 *	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
 **********************************************************************************************************/
-module uim.cake;
+module uim;
 
 @safe:
-import uim.cake;
+import uim.databases;
 
 /**
  * Value binder class manages list of values bound to conditions.

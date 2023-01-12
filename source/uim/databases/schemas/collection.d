@@ -15,7 +15,7 @@ class Collection : CollectionInterface
     /**
      * Connection object
      *
-     * @var uim.databases.Connection
+     * @var DDBAConnection
      */
     protected _connection;
 
@@ -29,7 +29,7 @@ class Collection : CollectionInterface
     /**
      * Constructor.
      *
-     * @param uim.databases.Connection $connection The connection instance.
+     * @param DDBAConnection $connection The connection instance.
      */
     public this(Connection $connection)
     {
