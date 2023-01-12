@@ -1,7 +1,8 @@
 module uim.databases.Statement;
 
-use uim.databases.IDBADriver;
-use uim.databases.statementsInterface;
+@safe:
+import uim.databases;
+
 
 /**
  * Wraps a statement in a callback that allows row results

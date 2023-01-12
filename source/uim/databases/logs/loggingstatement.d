@@ -5,7 +5,9 @@
 **********************************************************************************************************/
 module uim.databases.Log;
 
-import uim.databases.statements.StatementDecorator;
+@safe:
+import uim.databases;
+
 use Exception;
 use Psr\logs.LoggerInterface;
 

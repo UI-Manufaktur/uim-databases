@@ -5,8 +5,9 @@
 **********************************************************************************************************/
 module uim.databases.schemas;
 
-use uim.databases.Connection;
-use uim.databases.Exception\DatabaseException;
+@safe:
+import uim.databases;
+
 use PDOException;
 
 /**

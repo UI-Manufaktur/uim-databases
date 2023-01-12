@@ -5,8 +5,9 @@
 **********************************************************************************************************/
 module uim.databases.schemas;
 
-use uim.databases.IDBADriver;
-use uim.databases.Exception\DatabaseException;
+@safe:
+import uim.databases;
+
 
 /**
  * Schema generation/reflection features for MySQL

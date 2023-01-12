@@ -1,5 +1,8 @@
 module uim.databases.Statement;
 
+@safe:
+import uim.databases;
+
 /**
  * Contains a setter for marking a Statement as buffered
  *

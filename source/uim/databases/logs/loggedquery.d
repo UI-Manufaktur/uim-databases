@@ -5,7 +5,9 @@
 **********************************************************************************************************/
 module uim.databases.Log;
 
-import uim.databases.Driver\Sqlserver;
+@safe:
+import uim.databases;
+
 use JsonSerializable;
 
 /**

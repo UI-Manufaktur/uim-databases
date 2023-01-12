@@ -5,15 +5,9 @@
 **********************************************************************************************************/
 module uim.databases;
 
-import uim.databases.expressions.FieldInterface;
-import uim.databases.expressions.IdentifierExpression;
-import uim.databases.expressions.OrderByExpression;
+@safe:
+import uim.databases;
 
-module uim.databases;
-
-import uim.databases.expressions.FieldInterface;
-import uim.databases.expressions.IdentifierExpression;
-import uim.databases.expressions.OrderByExpression;
 
 /**
  * Contains all the logic related to quoting identifiers in a Query object

@@ -5,6 +5,9 @@
 **********************************************************************************************************/
 module uim.databases.schemas;
 
+@safe:
+import uim.databases;
+
 use InvalidArgumentException;
 
 /**

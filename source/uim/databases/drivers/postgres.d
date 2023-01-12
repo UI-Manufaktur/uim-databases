@@ -5,15 +5,9 @@
 **********************************************************************************************************/
 module uim.databases.drivers.postgres;
 
-import uim.databases.drivers;
-import uim.databases.expressions.FunctionExpression;
-import uim.databases.expressions.IdentifierExpression;
-import uim.databases.expressions.StringExpression;
-import uim.databases.PostgresCompiler;
-import uim.databases.Query;
-import uim.databases.QueryCompiler;
-import uim.databases.schemas.PostgresSchemaDialect;
-import uim.databases.schemas.SchemaDialect;
+@safe:
+import uim.databases;
+
 use PDO;
 
 /**

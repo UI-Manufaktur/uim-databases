@@ -5,7 +5,9 @@
 **********************************************************************************************************/
 module uim.databases.schemas;
 
-import DDBAConnection;
+@safe:
+import uim.databases;
+
 
 /**
  * An interface used by TableSchema objects.

@@ -5,7 +5,9 @@
 **********************************************************************************************************/
 module uim.databases.exceptions;
 
-import uim.core.exceptions.UIMException;
+@safe:
+import uim.databases;
+
 
 /**
  * Exception for the database package.

@@ -5,8 +5,9 @@
 **********************************************************************************************************/
 module uim.databases.Statement;
 
-use Cake\Core\Exception\CakeException;
-use uim.databases.IDBADriver;
+@safe:
+import uim.databases;
+
 use PDO;
 use PDOStatement as Statement;
 

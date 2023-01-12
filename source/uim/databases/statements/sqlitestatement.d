@@ -1,5 +1,8 @@
 module uim.databases.Statement;
 
+@safe:
+import uim.databases;
+
 /**
  * Statement class meant to be used by an Sqlite driver
  *

@@ -8,9 +8,6 @@ module uim.databases.postgrescompiler;
 @safe:
 import uim.databases;
 
-module uim.databases;
-
-import uim.databases.expressions.FunctionExpression;
 
 /**
  * Responsible for compiling a Query object into its SQL representation

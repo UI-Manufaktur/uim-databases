@@ -1,8 +1,8 @@
 module uim.databases;
 
-import uim.databases.Expression\FieldInterface;
-import uim.databases.Expression\IdentifierExpression;
-import uim.databases.Expression\OrderByExpression;
+@safe:
+import uim.databases;
+
 
 /**
  * Contains all the logic related to quoting identifiers in a Query object
