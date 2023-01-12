@@ -15,21 +15,21 @@ class Collection : CollectionInterface
     /**
      * Connection object
      *
-     * @var \Cake\Database\Connection
+     * @var uim.Database\Connection
      */
     protected _connection;
 
     /**
      * Schema dialect instance.
      *
-     * @var \Cake\Database\Schema\SchemaDialect
+     * @var uim.Database\Schema\SchemaDialect
      */
     protected _dialect;
 
     /**
      * Constructor.
      *
-     * @param \Cake\Database\Connection $connection The connection instance.
+     * @param uim.Database\Connection $connection The connection instance.
      */
     public this(Connection $connection)
     {
@@ -88,8 +88,8 @@ class Collection : CollectionInterface
      *
      * @param string $name The name of the table to describe.
      * @param array<string, mixed> $options The options to use, see above.
-     * @return \Cake\Database\Schema\TableSchema Object with column metadata.
-     * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
+     * @return uim.Database\Schema\TableSchema Object with column metadata.
+     * @throws uim.Database\Exception\DatabaseException when table cannot be described.
      */
     function describe(string $name, array $options = []): ITableSchema
     {
@@ -117,17 +117,17 @@ class Collection : CollectionInterface
      * @param string $stage The stage name.
      * @param string $name The table name.
      * @param array<string, mixed> $config The config data.
-     * @param \Cake\Database\Schema\TableSchema aSchema The table schema instance.
+     * @param uim.Database\Schema\TableSchema aSchema The table schema instance.
      * @return void
-     * @throws \Cake\Database\Exception\DatabaseException on query failure.
-     * @uses \Cake\Database\Schema\SchemaDialect::describeColumnSql
-     * @uses \Cake\Database\Schema\SchemaDialect::describeIndexSql
-     * @uses \Cake\Database\Schema\SchemaDialect::describeForeignKeySql
-     * @uses \Cake\Database\Schema\SchemaDialect::describeOptionsSql
-     * @uses \Cake\Database\Schema\SchemaDialect::convertColumnDescription
-     * @uses \Cake\Database\Schema\SchemaDialect::convertIndexDescription
-     * @uses \Cake\Database\Schema\SchemaDialect::convertForeignKeyDescription
-     * @uses \Cake\Database\Schema\SchemaDialect::convertOptionsDescription
+     * @throws uim.Database\Exception\DatabaseException on query failure.
+     * @uses uim.Database\Schema\SchemaDialect::describeColumnSql
+     * @uses uim.Database\Schema\SchemaDialect::describeIndexSql
+     * @uses uim.Database\Schema\SchemaDialect::describeForeignKeySql
+     * @uses uim.Database\Schema\SchemaDialect::describeOptionsSql
+     * @uses uim.Database\Schema\SchemaDialect::convertColumnDescription
+     * @uses uim.Database\Schema\SchemaDialect::convertIndexDescription
+     * @uses uim.Database\Schema\SchemaDialect::convertForeignKeyDescription
+     * @uses uim.Database\Schema\SchemaDialect::convertOptionsDescription
      */
     protected function _reflect(string $stage, string $name, array aConfig, TableSchema aSchema): void
     {

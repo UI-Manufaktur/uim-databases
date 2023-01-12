@@ -78,7 +78,7 @@ class Sqlserver : Driver
     /**
      * The schema dialect class for this driver
      *
-     * @var \Cake\Database\Schema\SqlserverSchemaDialect|null
+     * @var uim.Database\Schema\SqlserverSchemaDialect|null
      */
     protected _schemaDialect;
 
@@ -190,8 +190,8 @@ class Sqlserver : Driver
     /**
      * Prepares a sql statement to be executed
      *
-     * @param \Cake\Database\Query|string $query The query to prepare.
-     * @return \Cake\Database\StatementInterface
+     * @param uim.Database\Query|string $query The query to prepare.
+     * @return uim.Database\StatementInterface
      */
     function prepare($query): StatementInterface
     {
@@ -292,7 +292,7 @@ class Sqlserver : Driver
     /**
      * {@inheritDoc}
      *
-     * @return \Cake\Database\SqlserverCompiler
+     * @return uim.Database\SqlserverCompiler
      */
     function newCompiler(): QueryCompiler
     {
@@ -326,10 +326,10 @@ class Sqlserver : Driver
      * Prior to SQLServer 2012 there was no equivalent to LIMIT OFFSET, so a subquery must
      * be used.
      *
-     * @param \Cake\Database\Query $original The query to wrap in a subquery.
+     * @param uim.Database\Query $original The query to wrap in a subquery.
      * @param int|null $limit The number of rows to fetch.
      * @param int|null $offset The number of rows to offset.
-     * @return \Cake\Database\Query Modified query object.
+     * @return uim.Database\Query Modified query object.
      */
     protected function _pagingSubquery(Query $original, ?int $limit, ?int $offset): Query
     {
@@ -456,7 +456,7 @@ class Sqlserver : Driver
      * Receives a FunctionExpression and changes it so that it conforms to this
      * SQL dialect.
      *
-     * @param \Cake\Database\Expression\FunctionExpression $expression The function expression to convert to TSQL.
+     * @param uim.Database\Expression\FunctionExpression $expression The function expression to convert to TSQL.
      * @return void
      */
     protected function _transformFunctionExpression(FunctionExpression $expression): void

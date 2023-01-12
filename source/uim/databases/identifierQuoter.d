@@ -14,7 +14,7 @@ class IdentifierQuoter
     /**
      * The driver instance used to do the identifier quoting
      *
-     * @var \Cake\Database\Driver
+     * @var uim.Database\Driver
      */
     protected _driver;
 
@@ -32,7 +32,7 @@ class IdentifierQuoter
      * quotes them
      *
      * @param uim.databases\Query myQuery The query to have its identifiers quoted
-     * @return \Cake\Database\Query
+     * @return uim.Database\Query
      */
     function quote(Query myQuery): Query
     {

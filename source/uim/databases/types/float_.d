@@ -21,7 +21,7 @@ class FloatType : BaseType, IBatchCasting {
     * Convert integer data into the database format.
     *
     * @param mixed aValue The value to convert.
-    * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
+    * @param uim.Database\IDTBDriver aDriver The driver instance to convert with.
     * @return float|null
     */
   float toDatabase(string aValue, IDTBDriver aDriver) {
@@ -34,9 +34,9 @@ class FloatType : BaseType, IBatchCasting {
 
   /**
     * @param mixed aValue The value to convert.
-    * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
+    * @param uim.Database\IDTBDriver aDriver The driver instance to convert with.
     * @return float|null
-    * @throws \Cake\Core\Exception\CakeException
+    * @throws uim.Core\Exception\CakeException
     */
   float toD(string aValue, IDTBDriver aDriver) {
     if (!aValue.isNumeric) {
@@ -63,7 +63,7 @@ class FloatType : BaseType, IBatchCasting {
     * Get the correct PDO binding type for float data.
     *
     * @param mixed aValue The value being bound.
-    * @param \Cake\Database\IDTBDriver aDriver The driver.
+    * @param uim.Database\IDTBDriver aDriver The driver.
     * @return int
     */
   function toStatement(DValue aValue, IDTBDriver aDriver): int

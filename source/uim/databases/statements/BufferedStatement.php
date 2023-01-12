@@ -41,14 +41,14 @@ class BufferedStatement : Iterator, StatementInterface
     /**
      * The decorated statement
      *
-     * @var \Cake\Database\StatementInterface
+     * @var uim.Database\StatementInterface
      */
     protected $statement;
 
     /**
      * The driver for the statement
      *
-     * @var \Cake\Database\IDTBDriver
+     * @var uim.Database\IDTBDriver
      */
     protected _driver;
 
@@ -76,8 +76,8 @@ class BufferedStatement : Iterator, StatementInterface
     /**
      * Constructor
      *
-     * @param \Cake\Database\StatementInterface $statement Statement implementation such as PDOStatement
-     * @param \Cake\Database\IDTBDriver aDriver Driver instance
+     * @param uim.Database\StatementInterface $statement Statement implementation such as PDOStatement
+     * @param uim.Database\IDTBDriver aDriver Driver instance
      */
     public this(StatementInterface $statement, IDTBDriver aDriver)
     {
@@ -318,7 +318,7 @@ class BufferedStatement : Iterator, StatementInterface
     /**
      * Get the wrapped statement
      *
-     * @return \Cake\Database\StatementInterface
+     * @return uim.Database\StatementInterface
      */
     function getInnerStatement(): StatementInterface
     {

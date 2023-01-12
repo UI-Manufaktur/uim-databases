@@ -26,7 +26,7 @@ class Query : IDBAExpression, IteratorAggregate {
   /**
     * Connection instance to be used to execute this query.
     *
-    * @var \Cake\Database\Connection
+    * @var uim.Database\Connection
     */
   protected _connection;
 
@@ -113,7 +113,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * The object responsible for generating query placeholders and temporarily store values
     * associated to each of those.
     *
-    * @var \Cake\Database\ValueBinder|null
+    * @var uim.Database\ValueBinder|null
     */
   protected _valueBinder;
 
@@ -155,7 +155,7 @@ class Query : IDBAExpression, IteratorAggregate {
   /**
     * Gets the connection instance to be used for executing and transforming this query.
     *
-    * @return \Cake\Database\Connection
+    * @return uim.Database\Connection
     */
   Connection getConnection() {
       return _connection;
@@ -179,7 +179,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * This method can be overridden in query subclasses to decorate behavior
     * around query execution.
     *
-    * @return \Cake\Database\IStatement
+    * @return uim.Database\IStatement
     */
   IStatement execute() {
       $statement = _connection.run(this);
@@ -311,7 +311,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * objects:
     *
     * ```
-    * $cte = new \Cake\Database\Expression\CommonTableExpression(
+    * $cte = new uim.Database\Expression\CommonTableExpression(
     *     "cte",
     *     myConnection
     *         .newQuery()
@@ -328,8 +328,8 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * ```
     * myQuery.with(function (
-    *     \Cake\Database\Expression\CommonTableExpression $cte,
-    *     \Cake\Database\Query myQuery
+    *     uim.Database\Expression\CommonTableExpression $cte,
+    *     uim.Database\Query myQuery
     *  ) {
     *     $cteQuery = myQuery
     *         .select("*")
@@ -634,7 +634,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @param array<string, mixed>|string myTables list of tables to be joined in the query
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @param bool shouldOverwrite whether to reset joins with passed list or not
-    * @see \Cake\Database\TypeFactory
+    * @see uim.Database\TypeFactory
     * @return this
     */
   function join(myTables, myTypes = [], shouldOverwrite = false) {
@@ -918,8 +918,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * @param uim.databases\IDBAExpression|\Closure|array|string|null $conditions The conditions to filter on.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @param bool shouldOverwrite whether to reset conditions with passed list or not
-    * @see \Cake\Database\TypeFactory
-    * @see \Cake\Database\Expression\QueryExpression
+    * @see uim.Database\TypeFactory
+    * @see uim.Database\Expression\QueryExpression
     * @return this
     */
   function where($conditions = null, array myTypes = [], bool shouldOverwrite = false) {
@@ -1114,8 +1114,8 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * @param uim.databases\IDBAExpression|\Closure|array|string conditions The conditions to add with AND.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
-    * @see \Cake\Database\Query.where()
-    * @see \Cake\Database\TypeFactory
+    * @see uim.Database\Query.where()
+    * @see uim.Database\TypeFactory
     */
   O andWhere(this O)($conditions, array myTypes = []) {
       _conjugate("where", $conditions, "AND", myTypes);
@@ -1319,7 +1319,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @param uim.databases\IDBAExpression|\Closure|array|string|null $conditions The having conditions.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @param bool shouldOverwrite whether to reset conditions with passed list or not
-    * @see \Cake\Database\Query.where()
+    * @see uim.Database\Query.where()
     * @return this
     */
   function having($conditions = null, myTypes = [], shouldOverwrite = false) {
@@ -1342,7 +1342,7 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * @param uim.databases\IDBAExpression|\Closure|array|string conditions The AND conditions for HAVING.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
-    * @see \Cake\Database\Query.andWhere()
+    * @see uim.Database\Query.andWhere()
     * @return this
     */
   function andHaving($conditions, myTypes = []) {
@@ -1598,9 +1598,9 @@ class Query : IDBAExpression, IteratorAggregate {
     * or by providing an array of value sets. Additionally myData can be a Query
     * instance to insert data from another SELECT statement.
     *
-    * @param uim.databases\Expression\ValuesExpression|\Cake\Database\Query|array myData The data to insert.
+    * @param uim.databases\Expression\ValuesExpression|uim.Database\Query|array myData The data to insert.
     * @return this
-    * @throws \Cake\Database\Exception\DatabaseException if you try to set values before declaring columns.
+    * @throws uim.Database\Exception\DatabaseException if you try to set values before declaring columns.
     *   Or if you try to set values on non-insert queries.
     */
   O values(this O)(myData) {
@@ -1760,7 +1760,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * if required.
     *
     * You can optionally pass a single raw SQL string or an array or expressions in
-    * any format accepted by \Cake\Database\Expression\QueryExpression:
+    * any format accepted by uim.Database\Expression\QueryExpression:
     *
     * ```
     * $expression = myQuery.newExpr(); // Returns an empty expression object
@@ -1768,7 +1768,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * ```
     *
     * @param uim.databases\IDBAExpression|array|string|null $rawExpression A string, array or anything you want wrapped in an expression object
-    * @return \Cake\Database\Expression\QueryExpression
+    * @return uim.Database\Expression\QueryExpression
     */
   QueryExpression newExpr($rawExpression = null) {
       $expression = new QueryExpression([], this.getTypeMap());
@@ -1791,7 +1791,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * myQuery.func().dateDiff(["2012-01-05", "2012-01-02"])
     * ```
     *
-    * @return \Cake\Database\FunctionsBuilder
+    * @return uim.Database\FunctionsBuilder
     */
   FunctionsBuilder func() {
       if (_functionsBuilder is null) {
@@ -1807,7 +1807,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * iterated without having to call execute() manually, thus making it look like
     * a result set instead of the query itself.
     *
-    * @return \Cake\Database\IStatement
+    * @return uim.Database\IStatement
     * @psalm-suppress ImplementedReturnTypeMismatch
     */
   #[\ReturnTypeWillChange]
@@ -1925,7 +1925,7 @@ class Query : IDBAExpression, IteratorAggregate {
   /**
     * Query parts traversal method used by traverseExpressions()
     *
-    * @param uim.databases\IDBAExpression|array<\Cake\Database\IDBAExpression> $expression Query expression or
+    * @param uim.databases\IDBAExpression|array<uim.Database\IDBAExpression> $expression Query expression or
     *   array of expressions.
     * @param \Closure $callback The callback to be executed for each IDBAExpression
     *   found inside this query.
@@ -1977,7 +1977,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * associate values to those placeholders so that they can be passed correctly
     * to the statement object.
     *
-    * @return \Cake\Database\ValueBinder
+    * @return uim.Database\ValueBinder
     */
   ValueBinder getValueBinder() {
     if (_valueBinder is null) {
@@ -2066,7 +2066,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * Gets the TypeMap class where the types for each of the fields in the
     * select clause are stored.
     *
-    * @return \Cake\Database\TypeMap
+    * @return uim.Database\TypeMap
     */
   TypeMap getSelectTypeMap() {
     if (_selectTypeMap is null) {
@@ -2124,7 +2124,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * any registered callbacks.
     *
     * @param uim.databases\IStatement aStatement to be decorated
-    * @return \Cake\Database\Statement\CallbackStatement|\Cake\Database\IStatement
+    * @return uim.Database\Statement\CallbackStatement|uim.Database\IStatement
     */
   protected auto _decorateStatement(IStatement aStatement) {
       myTypeMap = this.getSelectTypeMap();

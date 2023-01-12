@@ -79,7 +79,7 @@ class PostgresSchemaDialect : SchemaDialect
      * Cake\Database\TypeFactory can handle.
      *
      * @param string $column The column type + length
-     * @throws \Cake\Database\Exception\DatabaseException when column cannot be parsed.
+     * @throws uim.Database\Exception\DatabaseException when column cannot be parsed.
      * @return array<string, mixed> Array of column information.
      */
     protected function _convertColumn(string $column): array
@@ -297,7 +297,7 @@ class PostgresSchemaDialect : SchemaDialect
     /**
      * Add/update a constraint into the schema object.
      *
-     * @param \Cake\Database\Schema\TableSchema aSchema The table to update.
+     * @param uim.Database\Schema\TableSchema aSchema The table to update.
      * @param string $name The index name.
      * @param string $type The index type.
      * @param array aRow The metadata record to update with.
@@ -636,7 +636,7 @@ class PostgresSchemaDialect : SchemaDialect
     /**
      * Generate the SQL to drop a table.
      *
-     * @param \Cake\Database\Schema\TableSchema aSchema Table instance
+     * @param uim.Database\Schema\TableSchema aSchema Table instance
      * @return array SQL statements to drop a table.
      */
     function dropTableSql(TableSchema aSchema): array

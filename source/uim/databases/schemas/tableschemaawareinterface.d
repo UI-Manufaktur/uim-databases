@@ -8,14 +8,14 @@ interface TableSchemaAwareInterface
     /**
      * Get and set the schema for this fixture.
      *
-     * @return \Cake\Database\Schema\ITableSchema&\Cake\Database\Schema\SqlGeneratorInterface
+     * @return uim.Database\Schema\ITableSchema&uim.Database\Schema\SqlGeneratorInterface
      */
     function getTableSchema();
 
     /**
      * Get and set the schema for this fixture.
      *
-     * @param \Cake\Database\Schema\ITableSchema&\Cake\Database\Schema\SqlGeneratorInterface $schema The table to set.
+     * @param uim.Database\Schema\ITableSchema&uim.Database\Schema\SqlGeneratorInterface $schema The table to set.
      * @return this
      */
     function setTableSchema($schema);

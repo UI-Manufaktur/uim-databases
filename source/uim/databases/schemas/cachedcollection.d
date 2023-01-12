@@ -17,7 +17,7 @@ class CachedCollection : CollectionInterface
     /**
      * The decorated schema collection
      *
-     * @var \Cake\Database\Schema\CollectionInterface
+     * @var uim.Database\Schema\CollectionInterface
      */
     protected $collection;
 
@@ -31,7 +31,7 @@ class CachedCollection : CollectionInterface
     /**
      * Constructor.
      *
-     * @param \Cake\Database\Schema\CollectionInterface $collection The collection to wrap.
+     * @param uim.Database\Schema\CollectionInterface $collection The collection to wrap.
      * @param string $prefix The cache key prefix to use. Typically the connection name.
      * @param \Psr\SimpleCache\CacheInterface $cacher Cacher instance.
      */

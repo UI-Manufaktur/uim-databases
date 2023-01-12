@@ -60,7 +60,7 @@ class DDBSTypeFactory {
 
     // Set IType instance capable of converting a type identified by myName
     // myName The type identifier you want to set.
-    // \Cake\Database\IType $instance The type instance you want to set.
+    // uim.Database\IType $instance The type instance you want to set.
     static void set(string myName, IType typeInstance) {
         static._builtTypes[myName] = typeInstance;
         static._types[myName] = get_class(typeInstance);
@@ -71,7 +71,7 @@ class DDBSTypeFactory {
      *
      * @param string myType Name of type to map.
      * @param string myClassName The classname to register.
-     * @psalm-param class-string<\Cake\Database\IType> myClassName
+     * @psalm-param class-string<uim.Database\IType> myClassName
      */
     static void map(string myType, string myClassName) {
         static._types[myType] = myClassName;
@@ -82,7 +82,7 @@ class DDBSTypeFactory {
      * Set type to classname mapping.
      *
      * @param $map List of types to be mapped.
-     * @psalm-param array<string, class-string<\Cake\Database\IType>> $map
+     * @psalm-param array<string, class-string<uim.Database\IType>> $map
      */
     static void setMap(string[] $map) {
         static._types = $map;

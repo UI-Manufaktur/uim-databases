@@ -41,14 +41,14 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * Statement instance implementation, such as PDOStatement
      * or any other custom implementation.
      *
-     * @var \Cake\Database\StatementInterface
+     * @var uim.Database\StatementInterface
      */
     protected _statement;
 
     /**
      * Reference to the driver object associated to this statement.
      *
-     * @var \Cake\Database\IDTBDriver
+     * @var uim.Database\IDTBDriver
      */
     protected _driver;
 
@@ -62,9 +62,9 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     /**
      * Constructor
      *
-     * @param \Cake\Database\StatementInterface $statement Statement implementation
+     * @param uim.Database\StatementInterface $statement Statement implementation
      *  such as PDOStatement.
-     * @param \Cake\Database\IDTBDriver aDriver Driver instance
+     * @param uim.Database\IDTBDriver aDriver Driver instance
      */
     public this(StatementInterface $statement, IDTBDriver aDriver)
     {
@@ -281,7 +281,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * }
      * ```
      *
-     * @return \Cake\Database\StatementInterface
+     * @return uim.Database\StatementInterface
      * @psalm-suppress ImplementedReturnTypeMismatch
      */
     #[\ReturnTypeWillChange]
@@ -354,7 +354,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     /**
      * Returns the statement object that was decorated by this class.
      *
-     * @return \Cake\Database\StatementInterface
+     * @return uim.Database\StatementInterface
      */
     function getInnerStatement()
     {

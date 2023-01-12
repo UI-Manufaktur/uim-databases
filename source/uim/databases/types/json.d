@@ -24,7 +24,7 @@ class JsonType : BaseType, IBatchCasting
      * Convert a value data into a JSON string
      *
      * @param mixed aValue The value to convert.
-     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
+     * @param uim.Database\IDTBDriver aDriver The driver instance to convert with.
      * @return string|null
      * @throws \InvalidArgumentException
      */
@@ -45,7 +45,7 @@ class JsonType : BaseType, IBatchCasting
      * {@inheritDoc}
      *
      * @param mixed aValue The value to convert.
-     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
+     * @param uim.Database\IDTBDriver aDriver The driver instance to convert with.
      * @return array|string|null
      */
     function toD(DValue aValue, IDTBDriver aDriver)
@@ -75,7 +75,7 @@ class JsonType : BaseType, IBatchCasting
      * Get the correct PDO binding type for string data.
      *
      * @param mixed aValue The value being bound.
-     * @param \Cake\Database\IDTBDriver aDriver The driver.
+     * @param uim.Database\IDTBDriver aDriver The driver.
      * @return int
      */
     function toStatement(DValue aValue, IDTBDriver aDriver): int

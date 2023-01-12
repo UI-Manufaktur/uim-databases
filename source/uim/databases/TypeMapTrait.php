@@ -25,14 +25,14 @@ namespace Cake\Database;
 trait TypeMapTrait
 {
     /**
-     * @var \Cake\Database\TypeMap|null
+     * @var uim.Database\TypeMap|null
      */
     protected _typeMap;
 
     /**
      * Creates a new TypeMap if $typeMap is an array, otherwise exchanges it for the given one.
      *
-     * @param \Cake\Database\TypeMap|array $typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
+     * @param uim.Database\TypeMap|array $typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
      * @return this
      */
     function setTypeMap($typeMap)
@@ -45,7 +45,7 @@ trait TypeMapTrait
     /**
      * Returns the existing type map.
      *
-     * @return \Cake\Database\TypeMap
+     * @return uim.Database\TypeMap
      */
     function getTypeMap(): TypeMap
     {
@@ -68,7 +68,7 @@ trait TypeMapTrait
      *
      * @param array<int|string, string> $types The array of types to set.
      * @return this
-     * @see \Cake\Database\TypeMap.setDefaults()
+     * @see uim.Database\TypeMap.setDefaults()
      */
     function setDefaultTypes(array $types)
     {

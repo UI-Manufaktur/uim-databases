@@ -9,19 +9,19 @@ module uim.databases.types.interface_;
 interface IType {
   // Casts given value from a PHP type to one acceptable by a database.
   // mixed myValue Value to be converted to a database equivalent.
-  // \Cake\Database\IDTBDriver myDriver Object from which database preferences and configuration will be extracted.
+  // uim.Database\IDTBDriver myDriver Object from which database preferences and configuration will be extracted.
   // @return mixed Given PHP type casted to one acceptable by a database.
   function toDatabase(myValue, IDTBDriver myDriver);
 
   // Casts given value from a database type to a PHP equivalent.
   // mixed myValue Value to be converted to PHP equivalent
-  // \Cake\Database\IDTBDriver myDriver Object from which database preferences and configuration will be extracted
+  // uim.Database\IDTBDriver myDriver Object from which database preferences and configuration will be extracted
   // @return mixed Given value casted from a database to a PHP equivalent.
   function toD(myValue, IDTBDriver myDriver);
 
   // Casts given value to its Statement equivalent.
   // mixed myValue Value to be converted to PDO statement.
-  // \Cake\Database\IDTBDriver myDriver Object from which database preferences and configuration will be extracted.
+  // uim.Database\IDTBDriver myDriver Object from which database preferences and configuration will be extracted.
   // @return mixed Given value casted to its Statement equivalent.
   function toStatement(myValue, IDTBDriver myDriver);
 

@@ -29,7 +29,7 @@ class TypeFactory
      * representing the class that will do actual type conversions.
      *
      * @var array<string, string>
-     * @psalm-var array<string, class-string<\Cake\Database\TypeInterface>>
+     * @psalm-var array<string, class-string<uim.Database\TypeInterface>>
      */
     protected static _types = [
         "tinyinteger": Type\IntegerType.class,
@@ -58,7 +58,7 @@ class TypeFactory
     /**
      * Contains a map of type object instances to be reused if needed.
      *
-     * @var array<\Cake\Database\TypeInterface>
+     * @var array<uim.Database\TypeInterface>
      */
     protected static _builtTypes = [];
 
@@ -67,7 +67,7 @@ class TypeFactory
      *
      * @param string $name type identifier
      * @throws \InvalidArgumentException If type identifier is unknown
-     * @return \Cake\Database\TypeInterface
+     * @return uim.Database\TypeInterface
      */
     public static function build(string $name): TypeInterface
     {
@@ -84,7 +84,7 @@ class TypeFactory
     /**
      * Returns an arrays with all the mapped type objects, indexed by name.
      *
-     * @return array<\Cake\Database\TypeInterface>
+     * @return array<uim.Database\TypeInterface>
      */
     public static function buildAll(): array
     {
@@ -100,7 +100,7 @@ class TypeFactory
      * Set TypeInterface instance capable of converting a type identified by $name
      *
      * @param string $name The type identifier you want to set.
-     * @param \Cake\Database\TypeInterface $instance The type instance you want to set.
+     * @param uim.Database\TypeInterface $instance The type instance you want to set.
      * @return void
      */
     public static void set(string $name, TypeInterface $instance)
@@ -115,7 +115,7 @@ class TypeFactory
      * @param string $type Name of type to map.
      * @param string $className The classname to register.
      * @return void
-     * @psalm-param class-string<\Cake\Database\TypeInterface> $className
+     * @psalm-param class-string<uim.Database\TypeInterface> $className
      */
     public static void map(string $type, string $className)
     {
@@ -128,7 +128,7 @@ class TypeFactory
      *
      * @param array<string> $map List of types to be mapped.
      * @return void
-     * @psalm-param array<string, class-string<\Cake\Database\TypeInterface>> $map
+     * @psalm-param array<string, class-string<uim.Database\TypeInterface>> $map
      */
     public static void setMap(array $map)
     {
