@@ -14,7 +14,7 @@ import uim.databases;
  * for dynamically constructing each query part, execute it and transform it
  * to a specific SQL dialect.
  */
-class Query : IExpression, IteratorAggregate {
+class Query : IDBAExpression, IteratorAggregate {
   use TypeMapTrait;
 
   public const string JOIN_TYPE_INNER = "INNER";
@@ -397,7 +397,7 @@ class Query : IExpression, IteratorAggregate {
     * fields you should also call `Cake\ORM\Query.enableAutoFields()` to select the default fields
     * from the table.
     *
-    * @param uim.databases\IExpression|callable|array|string myFields fields to be added to the list.
+    * @param uim.databases\IDBAExpression|callable|array|string myFields fields to be added to the list.
     * @param bool shouldOverwrite whether to reset fields with passed list or not
     * @return this
     */
@@ -445,7 +445,7 @@ class Query : IExpression, IteratorAggregate {
     * myQuery.distinct("name", true);
     * ```
     *
-    * @param uim.databases\IExpression|array|string|bool $on Enable/disable distinct class
+    * @param uim.databases\IDBAExpression|array|string|bool $on Enable/disable distinct class
     * or list of fields to be filtered on
     * @param bool shouldOverwrite whether to reset fields with passed list or not
     * @return this
@@ -489,7 +489,7 @@ class Query : IExpression, IteratorAggregate {
     * // It will produce the SQL: SELECT HIGH_PRIORITY SQL_NO_CACHE name, city FROM products
     * ```
     *
-    * @param uim.databases\IExpression|array|string modifiers modifiers to be applied to the query
+    * @param uim.databases\IDBAExpression|array|string modifiers modifiers to be applied to the query
     * @param bool shouldOverwrite whether to reset order with field list or not
     * @return this
     */
@@ -514,7 +514,7 @@ class Query : IExpression, IteratorAggregate {
     * objects, a single expression or a single string.
     *
     * If an array is passed, keys will be used to alias tables using the value as the
-    * real field to be aliased. It is possible to alias strings, IExpression objects or
+    * real field to be aliased. It is possible to alias strings, IDBAExpression objects or
     * even other Query objects.
     *
     * By default this function will append any passed argument to the list of tables
@@ -653,7 +653,7 @@ class Query : IExpression, IteratorAggregate {
               $t["conditions"] = $t["conditions"](this.newExpr(), this);
           }
 
-          if (!($t["conditions"] instanceof IExpression)) {
+          if (!($t["conditions"] instanceof IDBAExpression)) {
               $t["conditions"] = this.newExpr().add($t["conditions"], myTypes);
           }
           myAlias = is_string(myAlias) ? myAlias : null;
@@ -718,7 +718,7 @@ class Query : IExpression, IteratorAggregate {
     * See `join()` for further details on conditions and types.
     *
     * @param array<string>|string myTable The table to join with
-    * @param uim.databases\IExpression|array|string conditions The conditions
+    * @param uim.databases\IDBAExpression|array|string conditions The conditions
     * to use for joining.
     * @param array myTypes a list of types associated to the conditions used for converting
     * values to the corresponding database representation.
@@ -739,7 +739,7 @@ class Query : IExpression, IteratorAggregate {
     * to that methods description for further details.
     *
     * @param array<string>|string myTable The table to join with
-    * @param uim.databases\IExpression|array|string conditions The conditions
+    * @param uim.databases\IDBAExpression|array|string conditions The conditions
     * to use for joining.
     * @param array myTypes a list of types associated to the conditions used for converting
     * values to the corresponding database representation.
@@ -760,7 +760,7 @@ class Query : IExpression, IteratorAggregate {
     * to that method"s description for further details.
     *
     * @param array|string myTable The table to join with
-    * @param uim.databases\IExpression|array|string conditions The conditions
+    * @param uim.databases\IDBAExpression|array|string conditions The conditions
     * to use for joining.
     * @param array<string, string> myTypes a list of types associated to the conditions used for converting
     * values to the corresponding database representation.
@@ -776,7 +776,7 @@ class Query : IExpression, IteratorAggregate {
     * Returns an array that can be passed to the join method describing a single join clause
     *
     * @param array<string>|string myTable The table to join with
-    * @param uim.databases\IExpression|array|string conditions The conditions
+    * @param uim.databases\IDBAExpression|array|string conditions The conditions
     * to use for joining.
     * @param string myType the join type to use
     * @psalm-suppress InvalidReturnType
@@ -915,7 +915,7 @@ class Query : IExpression, IteratorAggregate {
     * If you use string conditions make sure that your values are correctly quoted.
     * The safest thing you can do is to never use string conditions.
     *
-    * @param uim.databases\IExpression|\Closure|array|string|null $conditions The conditions to filter on.
+    * @param uim.databases\IDBAExpression|\Closure|array|string|null $conditions The conditions to filter on.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @param bool shouldOverwrite whether to reset conditions with passed list or not
     * @see \Cake\Database\TypeFactory
@@ -934,7 +934,7 @@ class Query : IExpression, IteratorAggregate {
   /**
     * Convenience method that adds a NOT NULL condition to the query
     *
-    * @param uim.databases\IExpression|array|string myFields A single field or expressions or a list of them
+    * @param uim.databases\IDBAExpression|array|string myFields A single field or expressions or a list of them
     *  that should be not null.
     * @return this
     */
@@ -955,7 +955,7 @@ class Query : IExpression, IteratorAggregate {
   /**
     * Convenience method that adds a IS NULL condition to the query
     *
-    * @param uim.databases\IExpression|array|string myFields A single field or expressions or a list of them
+    * @param uim.databases\IDBAExpression|array|string myFields A single field or expressions or a list of them
     *   that should be null.
     * @return this
     */
@@ -1112,7 +1112,7 @@ class Query : IExpression, IteratorAggregate {
     *
     * `WHERE (title = "Foo") AND (author_id = 1 OR author_id = 2)`
     *
-    * @param uim.databases\IExpression|\Closure|array|string conditions The conditions to add with AND.
+    * @param uim.databases\IDBAExpression|\Closure|array|string conditions The conditions to add with AND.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @see \Cake\Database\Query.where()
     * @see \Cake\Database\TypeFactory
@@ -1180,7 +1180,7 @@ class Query : IExpression, IteratorAggregate {
     * If you need to set complex expressions as order conditions, you
     * should use `orderAsc()` or `orderDesc()`.
     *
-    * @param uim.databases\IExpression|\Closure|array|string myFields fields to be added to the list
+    * @param uim.databases\IDBAExpression|\Closure|array|string myFields fields to be added to the list
     * @param bool shouldOverwrite whether to reset order with field list or not
     * @return this
     */
@@ -1210,7 +1210,7 @@ class Query : IExpression, IteratorAggregate {
     * Order fields are not suitable for use with user supplied data as they are
     * not sanitized by the query builder.
     *
-    * @param uim.databases\IExpression|\Closure|string myField The field to order on.
+    * @param uim.databases\IDBAExpression|\Closure|string myField The field to order on.
     * @param bool shouldOverwrite Whether to reset the order clauses.
     * @return this
     */
@@ -1243,7 +1243,7 @@ class Query : IExpression, IteratorAggregate {
     * Order fields are not suitable for use with user supplied data as they are
     * not sanitized by the query builder.
     *
-    * @param uim.databases\IExpression|\Closure|string myField The field to order on.
+    * @param uim.databases\IDBAExpression|\Closure|string myField The field to order on.
     * @param bool shouldOverwrite Whether to reset the order clauses.
     * @return this
     */
@@ -1288,7 +1288,7 @@ class Query : IExpression, IteratorAggregate {
     * Group fields are not suitable for use with user supplied data as they are
     * not sanitized by the query builder.
     *
-    * @param uim.databases\IExpression|array|string myFields fields to be added to the list
+    * @param uim.databases\IDBAExpression|array|string myFields fields to be added to the list
     * @param bool shouldOverwrite whether to reset fields with passed list or not
     * @return this
     */
@@ -1316,7 +1316,7 @@ class Query : IExpression, IteratorAggregate {
     * Having fields are not suitable for use with user supplied data as they are
     * not sanitized by the query builder.
     *
-    * @param uim.databases\IExpression|\Closure|array|string|null $conditions The having conditions.
+    * @param uim.databases\IDBAExpression|\Closure|array|string|null $conditions The having conditions.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @param bool shouldOverwrite whether to reset conditions with passed list or not
     * @see \Cake\Database\Query.where()
@@ -1340,7 +1340,7 @@ class Query : IExpression, IteratorAggregate {
     * Having fields are not suitable for use with user supplied data as they are
     * not sanitized by the query builder.
     *
-    * @param uim.databases\IExpression|\Closure|array|string conditions The AND conditions for HAVING.
+    * @param uim.databases\IDBAExpression|\Closure|array|string conditions The AND conditions for HAVING.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @see \Cake\Database\Query.andWhere()
     * @return this
@@ -1428,7 +1428,7 @@ class Query : IExpression, IteratorAggregate {
     * myQuery.limit(myQuery.newExpr().add(["1 + 1"])); // LIMIT (1 + 1)
     * ```
     *
-    * @param uim.databases\IExpression|int|null $limit number of records to be returned
+    * @param uim.databases\IDBAExpression|int|null $limit number of records to be returned
     * @return this
     */
   O limit(this O)($limit) {
@@ -1453,7 +1453,7 @@ class Query : IExpression, IteratorAggregate {
     * myQuery.offset(myQuery.newExpr().add(["1 + 1"])); // OFFSET (1 + 1)
     * ```
     *
-    * @param uim.databases\IExpression|int|null $offset number of records to be skipped
+    * @param uim.databases\IDBAExpression|int|null $offset number of records to be skipped
     * @return this
     */
   O offset(this O)($offset) {
@@ -1630,9 +1630,9 @@ class Query : IExpression, IteratorAggregate {
   /**
     * Create an update query.
     * Can be combined with set() and where() methods to create update queries.
-    * @param uim.databases\IExpression|string myTable The table you want to update.
+    * @param uim.databases\IDBAExpression|string myTable The table you want to update.
     */
-  O update(this O)(IExpression myTable) {
+  O update(this O)(IDBAExpression myTable) {
     // TODO
   }
 
@@ -1690,7 +1690,7 @@ class Query : IExpression, IteratorAggregate {
           return cast(O)this;
       }
 
-      if (is_array(myKey) || myKey instanceof IExpression) {
+      if (is_array(myKey) || myKey instanceof IDBAExpression) {
           myTypes = (array)myValue;
           _parts["set"].add(myKey, myTypes);
 
@@ -1738,7 +1738,7 @@ class Query : IExpression, IteratorAggregate {
     *
     * Epliog content is raw SQL and not suitable for use with user supplied data.
     *
-    * @param uim.databases\IExpression|string|null $expression The expression to be appended
+    * @param uim.databases\IDBAExpression|string|null $expression The expression to be appended
     * @return this
     */
   O epilog(this O)($expression = null) {
@@ -1767,7 +1767,7 @@ class Query : IExpression, IteratorAggregate {
     * $expression = myQuery.newExpr("Table.column = Table2.column"); // Return a raw SQL expression
     * ```
     *
-    * @param uim.databases\IExpression|array|string|null $rawExpression A string, array or anything you want wrapped in an expression object
+    * @param uim.databases\IDBAExpression|array|string|null $rawExpression A string, array or anything you want wrapped in an expression object
     * @return \Cake\Database\Expression\QueryExpression
     */
   QueryExpression newExpr($rawExpression = null) {
@@ -1902,12 +1902,12 @@ class Query : IExpression, IteratorAggregate {
   /**
     * This function works similar to the traverse() function, with the difference
     * that it does a full depth traversal of the entire expression tree. This will execute
-    * the provided callback function for each IExpression object that is
+    * the provided callback function for each IDBAExpression object that is
     * stored inside this query at any nesting depth in any part of the query.
     *
     * Callback will receive as first parameter the currently visited expression.
     *
-    * @param callable $callback the function to be executed for each IExpression
+    * @param callable $callback the function to be executed for each IDBAExpression
     *   found inside this query.
     */
   O traverseExpressions(this O)(callable $callback) {
@@ -1925,9 +1925,9 @@ class Query : IExpression, IteratorAggregate {
   /**
     * Query parts traversal method used by traverseExpressions()
     *
-    * @param uim.databases\IExpression|array<\Cake\Database\IExpression> $expression Query expression or
+    * @param uim.databases\IDBAExpression|array<\Cake\Database\IDBAExpression> $expression Query expression or
     *   array of expressions.
-    * @param \Closure $callback The callback to be executed for each IExpression
+    * @param \Closure $callback The callback to be executed for each IDBAExpression
     *   found inside this query.
     */
   protected void _expressionsVisitor($expression, Closure $callback) {
@@ -1939,7 +1939,7 @@ class Query : IExpression, IteratorAggregate {
       return;
     }
 
-    if ($expression instanceof IExpression) {
+    if ($expression instanceof IDBAExpression) {
       $expression.traverse(function ($exp) use ($callback) {
           _expressionsVisitor($exp, $callback);
       });
@@ -2145,7 +2145,7 @@ class Query : IExpression, IteratorAggregate {
     * Helper function used to build conditions by composing QueryExpression objects.
     *
     * @param string part Name of the query part to append the new part to
-    * @param uim.databases\IExpression|\Closure|array|string|null $append Expression or builder function to append.
+    * @param uim.databases\IDBAExpression|\Closure|array|string|null $append Expression or builder function to append.
     *   to append.
     * @param string conjunction type of conjunction to be used to operate part
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
@@ -2203,18 +2203,18 @@ class Query : IExpression, IteratorAggregate {
               foreach ($part as $i: $piece) {
                   if (is_array($piece)) {
                       foreach ($piece as $j: myValue) {
-                          if (myValue instanceof IExpression) {
+                          if (myValue instanceof IDBAExpression) {
                               /** @psalm-suppress PossiblyUndefinedMethod */
                               _parts[myName][$i][$j] = clone myValue;
                           }
                       }
-                  } elseif ($piece instanceof IExpression) {
+                  } elseif ($piece instanceof IDBAExpression) {
                       /** @psalm-suppress PossiblyUndefinedMethod */
                       _parts[myName][$i] = clone $piece;
                   }
               }
           }
-          if ($part instanceof IExpression) {
+          if ($part instanceof IDBAExpression) {
               _parts[myName] = clone $part;
           }
       }

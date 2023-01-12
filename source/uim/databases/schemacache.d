@@ -2,14 +2,14 @@
 	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        
 	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  
 	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      
-**********************************************************************************************************/module uim.cake.databases;
+**********************************************************************************************************/module uim.databases;
 
 @safe:
 import uim.cake;
 
-module uim.cake.databases;
+module uim.databases;
 
-import uim.cake.databases.schemas.CachedCollection;
+import uim.databases.schemas.CachedCollection;
 
 /**
  * Schema Cache.
@@ -33,7 +33,7 @@ class SchemaCache
     /**
      * Constructor
      *
-     * @param uim.cake.databases.Connection $connection Connection name to get the schema for or a connection instance
+     * @param uim.databases.Connection $connection Connection name to get the schema for or a connection instance
      */
     this(Connection $connection) {
         _schema = this.getSchema($connection);
@@ -87,8 +87,8 @@ class SchemaCache
     /**
      * Helper method to get the schema collection.
      *
-     * @param uim.cake.databases.Connection $connection Connection object
-     * @return uim.cake.databases.Schema\CachedCollection
+     * @param uim.databases.Connection $connection Connection object
+     * @return uim.databases.Schema\CachedCollection
      * @throws \RuntimeException If given connection object is not compatible with schema caching
      */
     function getSchema(Connection $connection): CachedCollection

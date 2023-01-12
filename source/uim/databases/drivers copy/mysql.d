@@ -1,11 +1,11 @@
-module uim.cake.databases.drivers;
+module uim.databases.drivers;
 
-import uim.cake.databases.drivers;
-import uim.cake.databases.Query;
-import uim.cake.databases.schemas.MysqlSchemaDialect;
-import uim.cake.databases.schemas.SchemaDialect;
-import uim.cake.databases.statements.MysqlStatement;
-import uim.cake.databases.IStatement;
+import uim.databases.drivers;
+import uim.databases.Query;
+import uim.databases.schemas.MysqlSchemaDialect;
+import uim.databases.schemas.SchemaDialect;
+import uim.databases.statements.MysqlStatement;
+import uim.databases.IStatement;
 use PDO;
 
 /**
@@ -160,8 +160,8 @@ class Mysql : Driver
     /**
      * Prepares a sql statement to be executed
      *
-     * @param uim.cake.databases.Query|string $query The query to prepare.
-     * @return uim.cake.databases.IStatement
+     * @param uim.databases.Query|string $query The query to prepare.
+     * @return uim.databases.IStatement
      */
     function prepare($query): IStatement
     {

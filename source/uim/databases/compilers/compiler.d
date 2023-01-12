@@ -106,7 +106,7 @@ class QueryCompiler {
                 return;
             }
 
-            if ($part instanceof IExpression) {
+            if ($part instanceof IDBAExpression) {
                 $part = [$part.sql($binder)];
             }
             if (isset(_templates[$partName])) {
@@ -235,14 +235,14 @@ class QueryCompiler {
                     $join["alias"]
                 ));
             }
-            if ($join["table"] instanceof IExpression) {
+            if ($join["table"] instanceof IDBAExpression) {
                 $join["table"] = "("~ $join["table"].sql($binder) . ")";
             }
 
             $joins ~= " %s JOIN %s %s".format($join["type"], $join["table"], $join["alias"]);
 
             $condition = "";
-            if (isset($join["conditions"]) && $join["conditions"] instanceof IExpression) {
+            if (isset($join["conditions"]) && $join["conditions"] instanceof IDBAExpression) {
                 $condition = $join["conditions"].sql($binder);
             }
             if ($condition == "") {
@@ -283,7 +283,7 @@ class QueryCompiler {
     protected string _buildSetPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $set = [];
         foreach (someParts as $part) {
-            if ($part instanceof IExpression) {
+            if ($part instanceof IDBAExpression) {
                 $part = $part.sql($binder);
             }
             if ($part[0] == "(") {
@@ -386,18 +386,18 @@ class QueryCompiler {
     }
 
     /**
-     * Helper function used to covert IExpression objects inside an array
+     * Helper function used to covert IDBAExpression objects inside an array
      * into their string representation.
      *
-     * @param array $expressions list of strings and IExpression objects
+     * @param array $expressions list of strings and IDBAExpression objects
      * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @param $wrap Whether to wrap each expression object with parenthesis
      * @return array
      */
-    protected array _stringifyExpressions(IExpression[] someExpressions, ValueBinder aBinder, bool shouldWrap = true) {
+    protected array _stringifyExpressions(IDBAExpression[] someExpressions, ValueBinder aBinder, bool shouldWrap = true) {
       auto myResult = [];
       foreach (key, anExpression; someExpressions) {
-          if (cast(IExpression)anExpression) {
+          if (cast(IDBAExpression)anExpression) {
             auto myValue = anExpression.sql(aBinder);
             anExpression = shouldWrap ? "("~ myValue . ")" : myValue;
           }

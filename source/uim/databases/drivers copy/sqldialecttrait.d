@@ -1,9 +1,9 @@
-module uim.cake.databases.drivers;
+module uim.databases.drivers;
 
-import uim.cake.databases.expressions.ComparisonExpression;
-import uim.cake.databases.expressions.IdentifierExpression;
-import uim.cake.databases.IdentifierQuoter;
-import uim.cake.databases.Query;
+import uim.databases.expressions.ComparisonExpression;
+import uim.databases.expressions.IdentifierExpression;
+import uim.databases.IdentifierQuoter;
+import uim.databases.Query;
 use Closure;
 use RuntimeException;
 
@@ -119,8 +119,8 @@ trait SqlDialectTrait
     /**
      * Apply translation steps to select queries.
      *
-     * @param uim.cake.databases.Query $query The query to translate
-     * @return uim.cake.databases.Query The modified query
+     * @param uim.databases.Query $query The query to translate
+     * @return uim.databases.Query The modified query
      */
     protected function _selectQueryTranslator(Query $query): Query
     {
@@ -131,8 +131,8 @@ trait SqlDialectTrait
      * Returns the passed query after rewriting the DISTINCT clause, so that drivers
      * that do not support the "ON" part can provide the actual way it should be done
      *
-     * @param uim.cake.databases.Query $query The query to be transformed
-     * @return uim.cake.databases.Query
+     * @param uim.databases.Query $query The query to be transformed
+     * @return uim.databases.Query
      */
     protected function _transformDistinct(Query $query): Query
     {
@@ -153,8 +153,8 @@ trait SqlDialectTrait
      *
      * We are intentionally not supporting deletes with joins as they have even poorer support.
      *
-     * @param uim.cake.databases.Query $query The query to translate
-     * @return uim.cake.databases.Query The modified query
+     * @param uim.databases.Query $query The query to translate
+     * @return uim.databases.Query The modified query
      */
     protected function _deleteQueryTranslator(Query $query): Query
     {
@@ -185,8 +185,8 @@ trait SqlDialectTrait
      *
      * Just like for delete queries, joins are currently not supported for update queries.
      *
-     * @param uim.cake.databases.Query $query The query to translate
-     * @return uim.cake.databases.Query The modified query
+     * @param uim.databases.Query $query The query to translate
+     * @return uim.databases.Query The modified query
      */
     protected function _updateQueryTranslator(Query $query): Query
     {
@@ -196,8 +196,8 @@ trait SqlDialectTrait
     /**
      * Removes aliases from the `WHERE` clause of a query.
      *
-     * @param uim.cake.databases.Query $query The query to process.
-     * @return uim.cake.databases.Query The modified query.
+     * @param uim.databases.Query $query The query to process.
+     * @return uim.databases.Query The modified query.
      * @throws \RuntimeException In case the processed query contains any joins, as removing
      *  aliases from the conditions can break references to the joined tables.
      */
@@ -246,8 +246,8 @@ trait SqlDialectTrait
     /**
      * Apply translation steps to insert queries.
      *
-     * @param uim.cake.databases.Query $query The query to translate
-     * @return uim.cake.databases.Query The modified query
+     * @param uim.databases.Query $query The query to translate
+     * @return uim.databases.Query The modified query
      */
     protected function _insertQueryTranslator(Query $query): Query
     {

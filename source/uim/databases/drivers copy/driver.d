@@ -1,4 +1,4 @@
-module uim.cake.databases;
+module uim.databases;
 
 @safe:
 import uim.cake;
@@ -383,7 +383,7 @@ abstract class Driver : IDriver
     {
         $className = TableSchema::class;
         if (isset(_config["tableSchema"])) {
-            /** @var class-string<uim.cake.databases.Schema\TableSchema> $className */
+            /** @var class-string<uim.databases.Schema\TableSchema> $className */
             $className = _config["tableSchema"];
         }
 

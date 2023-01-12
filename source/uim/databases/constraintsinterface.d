@@ -2,12 +2,12 @@
 	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        
 	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  
 	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      
-**********************************************************************************************************/module uim.cake.databases;
+**********************************************************************************************************/module uim.databases;
 
 @safe:
 import uim.cake;
 
-module uim.cake.databases;
+module uim.databases;
 
 import uim.datasources.IConnection;
 
@@ -24,7 +24,7 @@ interface IConstraints
      * Build and execute SQL queries necessary to create the constraints for the
      * fixture
      *
-     * @param uim.cake.Datasource\IConnection $connection An instance of the database
+     * @param uim.Datasource\IConnection $connection An instance of the database
      *  into which the constraints will be created.
      * @return bool on success or if there are no constraints to create, or false on failure
      */
@@ -34,7 +34,7 @@ interface IConstraints
      * Build and execute SQL queries necessary to drop the constraints for the
      * fixture
      *
-     * @param uim.cake.Datasource\IConnection $connection An instance of the database
+     * @param uim.Datasource\IConnection $connection An instance of the database
      *  into which the constraints will be dropped.
      * @return bool on success or if there are no constraints to drop, or false on failure
      */

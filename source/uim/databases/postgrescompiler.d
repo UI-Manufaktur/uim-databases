@@ -3,14 +3,14 @@
 	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  
 	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      
 **********************************************************************************************************/
-module uim.cake.databases.postgrescompiler;
+module uim.databases.postgrescompiler;
 
 @safe:
 import uim.cake;
 
-module uim.cake.databases;
+module uim.databases;
 
-import uim.cake.databases.expressions.FunctionExpression;
+import uim.databases.expressions.FunctionExpression;
 
 /**
  * Responsible for compiling a Query object into its SQL representation
@@ -44,8 +44,8 @@ class PostgresCompiler : QueryCompiler
      * converting expression objects to string.
      *
      * @param array $parts list of fields to be transformed to string
-     * @param uim.cake.databases.Query $query The query that is being compiled
-     * @param uim.cake.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
+     * @param uim.databases.Query $query The query that is being compiled
+     * @param uim.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
      */
     protected string _buildHavingPart($parts, $query, $binder) {
         $selectParts = $query.clause("select");

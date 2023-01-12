@@ -1,4 +1,4 @@
-module uim.cake.databases.drivers;
+module uim.databases.drivers;
 
 @safe:
 import uim.cake;
@@ -156,8 +156,8 @@ class Sqlite : Driver
     /**
      * Prepares a sql statement to be executed
      *
-     * @param uim.cake.databases.Query|string $query The query to prepare.
-     * @return uim.cake.databases.IStatement
+     * @param uim.databases.Query|string $query The query to prepare.
+     * @return uim.databases.IStatement
      */
     function prepare($query): IStatement
     {
@@ -238,7 +238,7 @@ class Sqlite : Driver
      * Receives a FunctionExpression and changes it so that it conforms to this
      * SQL dialect.
      *
-     * @param uim.cake.databases.Expression\FunctionExpression $expression The function expression to convert to TSQL.
+     * @param uim.databases.Expression\FunctionExpression $expression The function expression to convert to TSQL.
      */
     protected void _transformFunctionExpression(FunctionExpression $expression) {
         switch ($expression.getName()) {

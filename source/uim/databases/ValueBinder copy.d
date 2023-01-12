@@ -1,4 +1,4 @@
-module uim.cake.databases;
+module uim.databases;
 
 @safe:
 import uim.cake;
@@ -104,7 +104,7 @@ class ValueBinder {
     /**
      * Binds all the stored values in this object to the passed statement.
      *
-     * @param uim.cake.databases.IStatement $statement The statement to add parameters to.
+     * @param uim.databases.IStatement $statement The statement to add parameters to.
      */
     void attachTo(IStatement $statement) {
         $bindings = this.bindings();

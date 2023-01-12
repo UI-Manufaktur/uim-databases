@@ -3,15 +3,15 @@
   License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  
   Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      
 **********************************************************************************************************/
-module uim.cake.databases;
+module uim.databases;
 
 @safe:
 import uim.cake;
 
-module uim.cake.databases;
+module uim.databases;
 
-import uim.cake.databases.types.BatchCastingInterface;
-import uim.cake.databases.types.OptionalConvertInterface;
+import uim.databases.types.BatchCastingInterface;
+import uim.databases.types.OptionalConvertInterface;
 
 /**
  * A callable class to be used for processing each of the rows in a statement
@@ -23,7 +23,7 @@ class FieldTypeConverter
      * An array containing the name of the fields and the Type objects
      * each should use when converting them.
      *
-     * @var array<uim.cake.databases.TypeInterface>
+     * @var array<uim.databases.TypeInterface>
      */
     protected _typeMap;
 
@@ -40,7 +40,7 @@ class FieldTypeConverter
      * at the moment this object is created. Used so that the types list
      * is not fetched on each single row of the results.
      *
-     * @var array<uim.cake.databases.TypeInterface|uim.cake.databases.types.BatchCastingInterface>
+     * @var array<uim.databases.TypeInterface|uim.databases.types.BatchCastingInterface>
      */
     protected $types;
 
@@ -54,8 +54,8 @@ class FieldTypeConverter
     /**
      * Builds the type map
      *
-     * @param uim.cake.databases.TypeMap $typeMap Contains the types to use for converting results
-     * @param uim.cake.databases.IDriver aDriver The driver to use for the type conversion
+     * @param uim.databases.TypeMap $typeMap Contains the types to use for converting results
+     * @param uim.databases.IDriver aDriver The driver to use for the type conversion
      */
     this(TypeMap $typeMap, IDriver aDriver) {
         _driver = $driver;

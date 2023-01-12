@@ -1,14 +1,14 @@
-module uim.cake.databases;
+module uim.databases;
 
 @safe:
 import uim.cake;
 
 // An interface used by Expression objects.
-interface IExpression {
+interface IDBAExpression {
     /**
      * Converts the Node into a SQL string fragment.
      *
-     * @param uim.cake.databases.ValueBinder aBinder Parameter binder
+     * @param uim.databases.ValueBinder aBinder Parameter binder
      */
     string sql(ValueBinder aBinder);
 

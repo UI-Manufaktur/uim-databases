@@ -1,6 +1,6 @@
-module uim.cake.databases;
+module uim.databases;
 
-module uim.cake.databases;
+module uim.databases;
 
 /**
  * Type converter trait
@@ -12,7 +12,7 @@ trait TypeConverterTrait
      * and return relevant internal statement type
      *
      * @param mixed $value The value to cast
-     * @param uim.cake.databases.TypeInterface|string|int $type The type name or type instance to use.
+     * @param uim.databases.TypeInterface|string|int $type The type name or type instance to use.
      * @return array list containing converted value and internal type
      * @pslam-return array{mixed, int}
      */

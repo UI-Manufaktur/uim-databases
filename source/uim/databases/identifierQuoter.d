@@ -56,9 +56,9 @@ class IdentifierQuoter
     /**
      * Quotes identifiers inside expression objects
      *
-     * @param uim.databases\IExpression $expression The expression object to walk and quote.
+     * @param uim.databases\IDBAExpression $expression The expression object to walk and quote.
      */
-    void quoteExpression(IExpression $expression) {
+    void quoteExpression(IDBAExpression $expression) {
         if ($expression instanceof FieldInterface) {
             _quoteComparison($expression);
 
@@ -193,7 +193,7 @@ class IdentifierQuoter
                 $quoted[] = _driver.quoteIdentifier($f);
             }
             $expression.setField($quoted);
-        } elseif (myField instanceof IExpression) {
+        } elseif (myField instanceof IDBAExpression) {
             this.quoteExpression(myField);
         }
     }

@@ -1,6 +1,6 @@
-module uim.cake.databases;
+module uim.databases;
 
-module uim.cake.databases;
+module uim.databases;
 
 /**
  * Represents a database statement. Concrete implementations

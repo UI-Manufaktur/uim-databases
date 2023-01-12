@@ -1,14 +1,14 @@
-module uim.cake.databases.drivers;
+module uim.databases.drivers;
 
-import uim.cake.databases.drivers;
-import uim.cake.databases.expressions.FunctionExpression;
-import uim.cake.databases.expressions.IdentifierExpression;
-import uim.cake.databases.expressions.StringExpression;
-import uim.cake.databases.PostgresCompiler;
-import uim.cake.databases.Query;
-import uim.cake.databases.QueryCompiler;
-import uim.cake.databases.schemas.PostgresSchemaDialect;
-import uim.cake.databases.schemas.SchemaDialect;
+import uim.databases.drivers;
+import uim.databases.expressions.FunctionExpression;
+import uim.databases.expressions.IdentifierExpression;
+import uim.databases.expressions.StringExpression;
+import uim.databases.PostgresCompiler;
+import uim.databases.Query;
+import uim.databases.QueryCompiler;
+import uim.databases.schemas.PostgresSchemaDialect;
+import uim.databases.schemas.SchemaDialect;
 use PDO;
 
 /**
@@ -198,7 +198,7 @@ class Postgres : Driver
     /**
      * Changes identifer expression into postgresql format.
      *
-     * @param uim.cake.databases.Expression\IdentifierExpression $expression The expression to tranform.
+     * @param uim.databases.Expression\IdentifierExpression $expression The expression to tranform.
      */
     protected void _transformIdentifierExpression(IdentifierExpression $expression) {
         $collation = $expression.getCollation();
@@ -212,7 +212,7 @@ class Postgres : Driver
      * Receives a FunctionExpression and changes it so that it conforms to this
      * SQL dialect.
      *
-     * @param uim.cake.databases.Expression\FunctionExpression $expression The function expression to convert
+     * @param uim.databases.Expression\FunctionExpression $expression The function expression to convert
      *   to postgres SQL.
      */
     protected void _transformFunctionExpression(FunctionExpression $expression) {
@@ -274,7 +274,7 @@ class Postgres : Driver
     /**
      * Changes string expression into postgresql format.
      *
-     * @param uim.cake.databases.Expression\StringExpression $expression The string expression to tranform.
+     * @param uim.databases.Expression\StringExpression $expression The string expression to tranform.
      */
     protected void _transformStringExpression(StringExpression $expression) {
         // use trim() to work around expression being transformed multiple times
@@ -284,7 +284,7 @@ class Postgres : Driver
     /**
      * {@inheritDoc}
      *
-     * @return uim.cake.databases.PostgresCompiler
+     * @return uim.databases.PostgresCompiler
      */
     function newCompiler(): QueryCompiler
     {

@@ -1,9 +1,9 @@
-module uim.cake.databases.drivers;
+module uim.databases.drivers;
 
-import uim.cake.databases.expressions.IdentifierExpression;
-import uim.cake.databases.expressions.QueryExpression;
-import uim.cake.databases.expressions.TupleComparison;
-import uim.cake.databases.Query;
+import uim.databases.expressions.IdentifierExpression;
+import uim.databases.expressions.QueryExpression;
+import uim.databases.expressions.TupleComparison;
+import uim.databases.Query;
 use RuntimeException;
 
 /**
@@ -28,8 +28,8 @@ trait TupleComparisonTranslatorTrait
      *
      * 1 = (SELECT 1 FROM a_table WHERE (a = c) AND (b = d))
      *
-     * @param uim.cake.databases.Expression\TupleComparison $expression The expression to transform
-     * @param uim.cake.databases.Query $query The query to update.
+     * @param uim.databases.Expression\TupleComparison $expression The expression to transform
+     * @param uim.databases.Query $query The query to update.
      */
     protected void _transformTupleComparison(TupleComparison $expression, Query $query) {
         $fields = $expression.getField();

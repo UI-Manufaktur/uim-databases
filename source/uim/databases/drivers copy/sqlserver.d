@@ -1,4 +1,4 @@
-module uim.cake.databases.drivers;
+module uim.databases.drivers;
 
 @safe:
 import uim.cake;
@@ -157,8 +157,8 @@ class Sqlserver : Driver
     /**
      * Prepares a sql statement to be executed
      *
-     * @param uim.cake.databases.Query|string $query The query to prepare.
-     * @return uim.cake.databases.IStatement
+     * @param uim.databases.Query|string $query The query to prepare.
+     * @return uim.databases.IStatement
      */
     function prepare($query): IStatement
     {
@@ -252,7 +252,7 @@ class Sqlserver : Driver
     /**
      * {@inheritDoc}
      *
-     * @return uim.cake.databases.SqlserverCompiler
+     * @return uim.databases.SqlserverCompiler
      */
     function newCompiler(): QueryCompiler
     {
@@ -286,10 +286,10 @@ class Sqlserver : Driver
      * Prior to SQLServer 2012 there was no equivalent to LIMIT OFFSET, so a subquery must
      * be used.
      *
-     * @param uim.cake.databases.Query $original The query to wrap in a subquery.
+     * @param uim.databases.Query $original The query to wrap in a subquery.
      * @param int|null $limit The number of rows to fetch.
      * @param int|null $offset The number of rows to offset.
-     * @return uim.cake.databases.Query Modified query object.
+     * @return uim.databases.Query Modified query object.
      */
     protected function _pagingSubquery(Query $original, Nullable!int $limit, Nullable!int $offset): Query
     {
@@ -308,7 +308,7 @@ class Sqlserver : Driver
                     $key = $orderBy;
                     if (
                         isset($select[$orderBy]) &&
-                        $select[$orderBy] instanceof IExpression
+                        $select[$orderBy] instanceof IDBAExpression
                     ) {
                         $order.add(new OrderClauseExpression($select[$orderBy], $direction));
                     } else {
@@ -415,7 +415,7 @@ class Sqlserver : Driver
      * Receives a FunctionExpression and changes it so that it conforms to this
      * SQL dialect.
      *
-     * @param uim.cake.databases.Expression\FunctionExpression $expression The function expression to convert to TSQL.
+     * @param uim.databases.Expression\FunctionExpression $expression The function expression to convert to TSQL.
      */
     protected void _transformFunctionExpression(FunctionExpression $expression) {
         switch ($expression.getName()) {

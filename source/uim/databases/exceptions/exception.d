@@ -1,6 +1,6 @@
-module uim.cake.databases.exceptions;
+module uim.databases.exceptions;
 
-import uim.cake.core.exceptions.UIMException;
+import uim.core.exceptions.UIMException;
 
 /**
  * Exception for the database package.

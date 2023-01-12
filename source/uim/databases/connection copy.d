@@ -3,7 +3,7 @@
 	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  
 	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      
 **********************************************************************************************************/
-module uim.cake.databases;
+module uim.databases;
 
 @safe:
 import uim.cake;
@@ -133,10 +133,10 @@ class Connection : IConnection {
      * Sets the driver instance. If a string is passed it will be treated
      * as a class name and will be instantiated.
      *
-     * @param uim.cake.databases.IDriver|string $driver The driver instance to use.
+     * @param uim.databases.IDriver|string $driver The driver instance to use.
      * @param array<string, mixed> aConfig Config for a new driver.
-     * @throws uim.cake.databases.exceptions.MissingDriverException When a driver class is missing.
-     * @throws uim.cake.databases.exceptions.MissingExtensionException When a driver's PHP extension is missing.
+     * @throws uim.databases.exceptions.MissingDriverException When a driver class is missing.
+     * @throws uim.databases.exceptions.MissingExtensionException When a driver's PHP extension is missing.
      * @return this
      * @deprecated 4.4.0 Setting the driver is deprecated. Use the connection config instead.
      */
@@ -151,17 +151,17 @@ class Connection : IConnection {
     /**
      * Creates driver from name, class name or instance.
      *
-     * @param uim.cake.databases.IDriver|string aName Driver name, class name or instance.
+     * @param uim.databases.IDriver|string aName Driver name, class name or instance.
      * @param Json aConfig Driver config if $name is not an instance.
-     * @return uim.cake.databases.IDriver
-     * @throws uim.cake.databases.exceptions.MissingDriverException When a driver class is missing.
-     * @throws uim.cake.databases.exceptions.MissingExtensionException When a driver's PHP extension is missing.
+     * @return uim.databases.IDriver
+     * @throws uim.databases.exceptions.MissingDriverException When a driver class is missing.
+     * @throws uim.databases.exceptions.MissingExtensionException When a driver's PHP extension is missing.
      */
     protected function createDriver($name, Json aConfig): IDriver
     {
         $driver = $name;
         if (is_string($driver)) {
-            /** @psalm-var class-string<uim.cake.databases.IDriver>|null $className */
+            /** @psalm-var class-string<uim.databases.IDriver>|null $className */
             $className = App::className($driver, 'Database/Driver');
             if ($className == null) {
                 throw new MissingDriverException(['driver': $driver, 'connection': this.configName()]);
@@ -180,7 +180,7 @@ class Connection : IConnection {
      * Get the retry wrapper object that is allows recovery from server disconnects
      * while performing certain database actions, such as executing a query.
      *
-     * @return uim.cake.Core\Retry\CommandRetry The retry wrapper
+     * @return uim.Core\Retry\CommandRetry The retry wrapper
      */
     function getDisconnectRetry(): CommandRetry
     {
@@ -190,7 +190,7 @@ class Connection : IConnection {
     /**
      * Gets the driver instance.
      *
-     * @return uim.cake.databases.IDriver
+     * @return uim.databases.IDriver
      */
     function getDriver(): IDriver
     {
@@ -200,7 +200,7 @@ class Connection : IConnection {
     /**
      * Connects to the configured database.
      *
-     * @throws uim.cake.databases.exceptions.MissingConnectionException If database connection could not be established.
+     * @throws uim.databases.exceptions.MissingConnectionException If database connection could not be established.
      * @return bool true, if the connection was already established or the attempt was successful.
      */
     bool connect() {
@@ -237,8 +237,8 @@ class Connection : IConnection {
     /**
      * Prepares a SQL statement to be executed.
      *
-     * @param uim.cake.databases.Query|string $query The SQL to convert into a prepared statement.
-     * @return uim.cake.databases.IStatement
+     * @param uim.databases.Query|string $query The SQL to convert into a prepared statement.
+     * @return uim.databases.IStatement
      */
     function prepare($query): IStatement
     {
@@ -260,7 +260,7 @@ class Connection : IConnection {
      * @param string $sql SQL to be executed and interpolated with $params
      * @param array $params list or associative array of params to be interpolated in $sql as values
      * @param array $types list or associative array of types to be used for casting values in query
-     * @return uim.cake.databases.IStatement executed statement
+     * @return uim.databases.IStatement executed statement
      */
     function execute(string $sql, array $params = null, array $types = null): IStatement
     {
@@ -279,8 +279,8 @@ class Connection : IConnection {
      * Compiles a Query object into a SQL string according to the dialect for this
      * connection's driver
      *
-     * @param uim.cake.databases.Query $query The query to be compiled
-     * @param uim.cake.databases.ValueBinder aBinder Value binder
+     * @param uim.databases.Query $query The query to be compiled
+     * @param uim.databases.ValueBinder aBinder Value binder
      */
     string compileQuery(Query $query, ValueBinder aBinder) {
         return this.getDriver().compileQuery($query, $binder)[1];
@@ -290,8 +290,8 @@ class Connection : IConnection {
      * Executes the provided query after compiling it for the specific driver
      * dialect and returns the executed Statement object.
      *
-     * @param uim.cake.databases.Query $query The query to be executed
-     * @return uim.cake.databases.IStatement executed statement
+     * @param uim.databases.Query $query The query to be executed
+     * @return uim.databases.IStatement executed statement
      */
     function run(Query $query): IStatement
     {
@@ -308,7 +308,7 @@ class Connection : IConnection {
      * Executes a SQL statement and returns the Statement object as result.
      *
      * @param string $sql The SQL query to execute.
-     * @return uim.cake.databases.IStatement
+     * @return uim.databases.IStatement
      */
     function query(string $sql): IStatement
     {
@@ -323,7 +323,7 @@ class Connection : IConnection {
     /**
      * Create a new Query instance for this connection.
      *
-     * @return uim.cake.databases.Query
+     * @return uim.databases.Query
      */
     function newQuery(): Query
     {
@@ -333,7 +333,7 @@ class Connection : IConnection {
     /**
      * Sets a Schema\Collection object for this connection.
      *
-     * @param uim.cake.databases.Schema\ICollection $collection The schema collection object
+     * @param uim.databases.Schema\ICollection $collection The schema collection object
      * @return this
      */
     function setSchemaCollection(SchemaICollection $collection) {
@@ -345,7 +345,7 @@ class Connection : IConnection {
     /**
      * Gets a Schema\Collection object for this connection.
      *
-     * @return uim.cake.databases.Schema\ICollection
+     * @return uim.databases.Schema\ICollection
      */
     function getSchemaCollection(): SchemaICollection
     {
@@ -370,7 +370,7 @@ class Connection : IConnection {
      * @param string $table the table to insert values in
      * @param array $values values to be inserted
      * @param array<int|string, string> $types Array containing the types to be used for casting
-     * @return uim.cake.databases.IStatement
+     * @return uim.databases.IStatement
      */
     function insert(string $table, array $values, array $types = null): IStatement
     {
@@ -391,7 +391,7 @@ class Connection : IConnection {
      * @param array $values values to be updated
      * @param array $conditions conditions to be set for update statement
      * @param array<string> $types list of associative array containing the types to be used for casting
-     * @return uim.cake.databases.IStatement
+     * @return uim.databases.IStatement
      */
     function update(string $table, array $values, array $conditions = null, array $types = null): IStatement
     {
@@ -409,7 +409,7 @@ class Connection : IConnection {
      * @param string $table the table to delete rows from
      * @param array $conditions conditions to be set for delete statement
      * @param array<string> $types list of associative array containing the types to be used for casting
-     * @return uim.cake.databases.IStatement
+     * @return uim.databases.IStatement
      */
     function delete(string $table, array $conditions = null, array $types = null): IStatement
     {
@@ -680,7 +680,7 @@ class Connection : IConnection {
      * This uses `PDO::quote()` and requires `supportsQuoting()` to work.
      *
      * @param mixed $value The value to quote.
-     * @param uim.cake.databases.TypeInterface|string|int $type Type to be used for determining kind of quoting to perform
+     * @param uim.databases.TypeInterface|string|int $type Type to be used for determining kind of quoting to perform
      * @return string Quoted value
      */
     string quote($value, $type = 'string') {
@@ -834,8 +834,8 @@ class Connection : IConnection {
      * Returns a new statement object that will log the activity
      * for the passed original statement instance.
      *
-     * @param uim.cake.databases.IStatement $statement the instance to be decorated
-     * @return uim.cake.databases.logs.LoggingStatement
+     * @param uim.databases.IStatement $statement the instance to be decorated
+     * @return uim.databases.logs.LoggingStatement
      */
     protected function _newLogger(IStatement $statement): LoggingStatement
     {

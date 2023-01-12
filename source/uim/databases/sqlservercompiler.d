@@ -1,4 +1,4 @@
-module uim.cake.databases;
+module uim.databases;
 
 @safe:
 import uim.cake;
@@ -38,8 +38,8 @@ class SqlserverCompiler : QueryCompiler
      * keyword that is neither required nor valid.
      *
      * @param array $parts List of CTEs to be transformed to string
-     * @param uim.cake.databases.Query $query The query that is being compiled
-     * @param uim.cake.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
+     * @param uim.databases.Query $query The query that is being compiled
+     * @param uim.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
      */
     protected string _buildWithPart(array $parts, Query $query, ValueBinder aBinder) {
         $expressions = null;
@@ -58,8 +58,8 @@ class SqlserverCompiler : QueryCompiler
      * row"s data back.
      *
      * @param array $parts The parts to build
-     * @param uim.cake.databases.Query $query The query that is being compiled
-     * @param uim.cake.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
+     * @param uim.databases.Query $query The query that is being compiled
+     * @param uim.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
      */
     protected string _buildInsertPart(array $parts, Query $query, ValueBinder aBinder) {
         if (!isset($parts[0])) {
@@ -84,7 +84,7 @@ class SqlserverCompiler : QueryCompiler
      * Generates the LIMIT part of a SQL query
      *
      * @param int $limit the limit clause
-     * @param uim.cake.databases.Query $query The query that is being compiled
+     * @param uim.databases.Query $query The query that is being compiled
      */
     protected string _buildLimitPart(int $limit, Query $query) {
         if ($query.clause("offset") == null) {
@@ -100,8 +100,8 @@ class SqlserverCompiler : QueryCompiler
      * converting expression objects to string.
      *
      * @param array $parts list of fields to be transformed to string
-     * @param uim.cake.databases.Query $query The query that is being compiled
-     * @param uim.cake.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
+     * @param uim.databases.Query $query The query that is being compiled
+     * @param uim.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
      */
     protected string _buildHavingPart($parts, $query, $binder) {
         $selectParts = $query.clause("select");
