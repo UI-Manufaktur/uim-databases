@@ -1,39 +1,50 @@
-/*********************************************************************************************************
-*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
-**********************************************************************************************************/
-module uim.cake;
 
-@safe:
-import uim.cake;
 
-// This represents a SQL window expression used by aggregate and window functions.
-class WindowExpression : IDTBExpression, IDTBWindow {
+
+ *
+
+
+ * @since         4.1.0
+  */module uim.databases.Expression;
+
+import uim.databases.IDBAExpression;
+import uim.databases.ValueBinder;
+use Closure;
+
+/**
+ * This represents a SQL window expression used by aggregate and window functions.
+ */
+class WindowExpression : IDBAExpression, IWindow
+{
     /**
-     * @var \Cake\Database\Expression\IdentifierExpression
+     * @var DDBExpression\IdentifierExpression
      */
     protected $name;
 
-    protected IDTBExpression[] _partitions;
+    /**
+     * @var array<uim.databases.IDBAExpression>
+     */
+    protected $partitions = null;
 
     /**
-     * @var \Cake\Database\Expression\|null
+     * @var DDBExpression\OrderByExpression|null
      */
-    protected DDTBOrderByExpression _order;
+    protected $order;
 
     /**
      * @var array|null
      */
     protected $frame;
 
-    protected string exclusion;
+    /**
+     */
+    protected Nullable!string exclusion;
 
     /**
-     * @param string $name Window name
+     * @param string aName Window name
      */
-    this(string aName ="") {
-      _name = new IdentifierExpression(aName);
+    this(string aName = "") {
+        this.name = new IdentifierExpression($name);
     }
 
     /**
@@ -42,84 +53,79 @@ class WindowExpression : IDTBExpression, IDTBWindow {
      * These window expressions only specify a named window and do not
      * specify their own partitions, frame or order.
      */
-    bool isNamedOnly()
-    {
-      return this.name.getIdentifier() && (!$this.partitions && !$this.frame && !$this.order);
+    bool isNamedOnly() {
+        return this.name.getIdentifier() && (!this.partitions && !this.frame && !this.order);
     }
 
     /**
      * Sets the window name.
      *
-     * @param string $name Window name
-     * @return $this
+     * @param string aName Window name
+     * @return this
      */
-    O name(string newName) {
-      $this.name = new IdentifierExpression($name);
-      return $this;
+    function name(string aName) {
+        this.name = new IdentifierExpression($name);
+
+        return this;
     }
 
 
-    function partition(_partitions)
-    {
-        if (!_partitions) {
-            return $this;
+    function partition($partitions) {
+        if (!$partitions) {
+            return this;
         }
 
-        if (_partitions instanceof Closure) {
-            _partitions = _partitions(new QueryExpression([], [],""));
+        if ($partitions instanceof Closure) {
+            $partitions = $partitions(new QueryExpression([], [], ""));
         }
 
-        if (!is_array(_partitions)) {
-            _partitions = [_partitions];
+        if (!is_array($partitions)) {
+            $partitions = [$partitions];
         }
 
-        foreach (_partitions as &$partition) {
+        foreach ($partitions as &$partition) {
             if (is_string($partition)) {
                 $partition = new IdentifierExpression($partition);
             }
         }
 
-        $this.partitions = array_merge($this.partitions, _partitions);
+        this.partitions = array_merge(this.partitions, $partitions);
 
-        return $this;
+        return this;
     }
 
 
-    function order($fields)
-    {
+    function order($fields) {
         if (!$fields) {
-            return $this;
+            return this;
         }
 
-        if ($this.order =is null) {
-            $this.order = new OrderByExpression();
+        if (this.order == null) {
+            this.order = new OrderByExpression();
         }
 
         if ($fields instanceof Closure) {
-            $fields = $fields(new QueryExpression([], [],""));
+            $fields = $fields(new QueryExpression([], [], ""));
         }
 
-        $this.order.add($fields);
+        this.order.add($fields);
 
-        return $this;
+        return this;
     }
 
 
-    function range($start, $end = 0)
-    {
-        return $this.frame(self.RANGE, $start, self.PRECEDING, $end, self.FOLLOWING);
+    function range($start, $end = 0) {
+        return this.frame(self::RANGE, $start, self::PRECEDING, $end, self::FOLLOWING);
     }
 
 
-    function rows(?int $start, ?int $end = 0)
-    {
-        return $this.frame(self.ROWS, $start, self.PRECEDING, $end, self.FOLLOWING);
+    function rows(Nullable!int $start, Nullable!int $end = 0) {
+        return this.frame(self::ROWS, $start, self::PRECEDING, $end, self::FOLLOWING);
     }
 
 
-    function groups(?int $start, ?int $end = 0)
-    {
-        return $this.frame(self.GROUPS, $start, self.PRECEDING, $end, self.FOLLOWING);
+    function groups(Nullable!int $start, Nullable!int $end = 0) {
+        return this.frame(self::GROUPS, $start, self::PRECEDING, $end, self::FOLLOWING);
     }
 
 
@@ -130,158 +136,148 @@ class WindowExpression : IDTBExpression, IDTBWindow {
         $endOffset,
         string $endDirection
     ) {
-        $this.frame = [
-           "type": $type,
-           "start": [
-               "offset": $startOffset,
-               "direction": $startDirection,
+        this.frame = [
+            "type": $type,
+            "start": [
+                "offset": $startOffset,
+                "direction": $startDirection,
             ],
-           "end": [
-               "offset": $endOffset,
-               "direction": $endDirection,
+            "end": [
+                "offset": $endOffset,
+                "direction": $endDirection,
             ],
         ];
 
-        return $this;
+        return this;
     }
 
 
-    function excludeCurrent()
-    {
-        $this.exclusion ="CURRENT ROW";
+    function excludeCurrent() {
+        this.exclusion = "CURRENT ROW";
 
-        return $this;
+        return this;
     }
 
 
-    function excludeGroup()
-    {
-        $this.exclusion ="GROUP";
+    function excludeGroup() {
+        this.exclusion = "GROUP";
 
-        return $this;
+        return this;
     }
 
 
-    function excludeTies()
-    {
-        $this.exclusion ="TIES";
+    function excludeTies() {
+        this.exclusion = "TIES";
 
-        return $this;
+        return this;
     }
 
 
-    string sql(ValueBinder aValueBinder)
-    {
-        $clauses = [];
-        if ($this.name.getIdentifier()) {
-            $clauses[] = $this.name.sql($binder);
+    string sql(ValueBinder aBinder) {
+        $clauses = null;
+        if (this.name.getIdentifier()) {
+            $clauses[] = this.name.sql($binder);
         }
 
-        if ($this.partitions) {
-            $expressions = [];
-            foreach ($this.partitions as $partition) {
+        if (this.partitions) {
+            $expressions = null;
+            foreach (this.partitions as $partition) {
                 $expressions[] = $partition.sql($binder);
             }
 
-            $clauses[] ="PARTITION BY" . implode(",", $expressions);
+            $clauses[] = "PARTITION BY " ~ implode(", ", $expressions);
         }
 
-        if ($this.order) {
-            $clauses[] = $this.order.sql($binder);
+        if (this.order) {
+            $clauses[] = this.order.sql($binder);
         }
 
-        if ($this.frame) {
-            $start = $this.buildOffsetSql(
+        if (this.frame) {
+            $start = this.buildOffsetSql(
                 $binder,
-                $this.frame["start"]["offset"],
-                $this.frame["start"]["direction"]
+                this.frame["start"]["offset"],
+                this.frame["start"]["direction"]
             );
-            $end = $this.buildOffsetSql(
+            $end = this.buildOffsetSql(
                 $binder,
-                $this.frame["end"]["offset"],
-                $this.frame["end"]["direction"]
+                this.frame["end"]["offset"],
+                this.frame["end"]["direction"]
             );
 
-            $frameSql = sprintf("%s BETWEEN %s AND %s", $this.frame["type"], $start, $end);
+            $frameSql = sprintf("%s BETWEEN %s AND %s", this.frame["type"], $start, $end);
 
-            if ($this.exclusion !is null) {
-                $frameSql ~=" EXCLUDE" . $this.exclusion;
+            if (this.exclusion != null) {
+                $frameSql ~= " EXCLUDE " ~ this.exclusion;
             }
 
             $clauses[] = $frameSql;
         }
 
-        return implode("", $clauses);
+        return implode(" ", $clauses);
     }
 
 
-    O traverse(this O)(Closure $callback)
-    {
-        $callback($this.name);
-        foreach ($this.partitions as $partition) {
+    O traverse(this O)(Closure $callback) {
+        $callback(this.name);
+        foreach (this.partitions as $partition) {
             $callback($partition);
             $partition.traverse($callback);
         }
 
-        if ($this.order) {
-            $callback($this.order);
-            $this.order.traverse($callback);
+        if (this.order) {
+            $callback(this.order);
+            this.order.traverse($callback);
         }
 
-        if ($this.frame !is null) {
-            $offset = $this.frame["start"]["offset"];
-            if ($offset instanceof IDTBExpression) {
+        if (this.frame != null) {
+            $offset = this.frame["start"]["offset"];
+            if ($offset instanceof IDBAExpression) {
                 $callback($offset);
                 $offset.traverse($callback);
             }
-            $offset = $this.frame["end"]["offset"] ?? null;
-            if ($offset instanceof IDTBExpression) {
+            $offset = this.frame["end"]["offset"] ?? null;
+            if ($offset instanceof IDBAExpression) {
                 $callback($offset);
                 $offset.traverse($callback);
             }
         }
 
-        return $this;
+        return this;
     }
 
     /**
      * Builds frame offset sql.
      *
-     * @param uim.databases\ValueBinder aValueBinder Value binder
-     * @param uim.databases\IDTBExpression|string|int|null $offset Frame offset
+     * @param uim.databases.ValueBinder aBinder Value binder
+     * @param uim.databases.IDBAExpression|string|int|null $offset Frame offset
      * @param string $direction Frame offset direction
-     * @return string
      */
-    protected string buildOffsetSql(ValueBinder aValueBinder, $offset, string $direction)
-    {
+    protected string buildOffsetSql(ValueBinder aBinder, $offset, string $direction) {
         if ($offset == 0) {
-            return"CURRENT ROW";
+            return "CURRENT ROW";
         }
 
-        if ($offset instanceof IDTBExpression) {
+        if ($offset instanceof IDBAExpression) {
             $offset = $offset.sql($binder);
         }
 
         return sprintf(
-           "%s %s",
-            $offset ??"UNBOUNDED",
+            "%s %s",
+            $offset ?? "UNBOUNDED",
             $direction
         );
     }
 
     /**
      * Clone this object and its subtree of expressions.
-     *
-     * @return void
      */
-    function __clone()
-    {
-        $this.name = clone $this.name;
-        foreach ($this.partitions as $i: $partition) {
-            $this.partitions[$i] = clone $partition;
+    void __clone() {
+        this.name = clone this.name;
+        foreach (this.partitions as $i: $partition) {
+            this.partitions[$i] = clone $partition;
         }
-        if ($this.order !is null) {
-            $this.order = clone $this.order;
+        if (this.order != null) {
+            this.order = clone this.order;
         }
     }
 }

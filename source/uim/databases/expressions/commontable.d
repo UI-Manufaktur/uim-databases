@@ -1,64 +1,57 @@
-/*********************************************************************************************************
-*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
-**********************************************************************************************************/
-module uim.cake;
+module uim.databases.Expression;
 
-@safe:
-import uim.cake;
+import uim.databases.IDBAExpression;
+import uim.databases.ValueBinder;
+use Closure;
+use RuntimeException;
 
 /**
  * An expression that represents a common table expression definition.
  */
-class CommonTableExpression : IDTBExpression
+class CommonTableExpression : IDBAExpression
 {
     /**
      * The CTE name.
      *
-     * @var \Cake\Database\Expression\IdentifierExpression
+     * @var DDBExpression\IdentifierExpression
      */
     protected $name;
 
     /**
      * The field names to use for the CTE.
      *
-     * @var array<\Cake\Database\Expression\IdentifierExpression>
+     * @var array<uim.databases.Expression\IdentifierExpression>
      */
-    protected $fields = [];
+    protected $fields = null;
 
     /**
      * The CTE query definition.
      *
-     * @var \Cake\Database\IDTBExpression|null
+     * @var DDBIDBAExpression|null
      */
     protected $query;
 
     /**
      * Whether the CTE is materialized or not materialized.
      *
-     * @var string|null
      */
-    protected $materialized = null;
+    protected Nullable!string materialized = null;
 
     /**
      * Whether the CTE is recursive.
-     *
-     * @var bool
      */
-    protected $recursive = false;
+    protected bool $recursive = false;
 
     /**
      * Constructor.
      *
-     * @param string $name The CTE name.
-     * @param uim.databases\IDTBExpression|\Closure $query CTE query
+     * @param string aName The CTE name.
+     * @param uim.databases.IDBAExpression|\Closure $query CTE query
      */
-    this(string $name ="", $query = null)
-    {
-        $this.name = new IdentifierExpression($name);
+    this(string aName = "", $query = null) {
+        this.name = new IdentifierExpression($name);
         if ($query) {
-            $this.query($query);
+            this.query($query);
         }
     }
 
@@ -68,155 +61,141 @@ class CommonTableExpression : IDTBExpression
      * This is the named you used to reference the expression
      * in select, insert, etc queries.
      *
-     * @param string $name The CTE name.
-     * @return $this
+     * @param string aName The CTE name.
+     * @return this
      */
-    function name(string $name)
-    {
-        $this.name = new IdentifierExpression($name);
+    function name(string aName) {
+        this.name = new IdentifierExpression($name);
 
-        return $this;
+        return this;
     }
 
     /**
      * Sets the query for this CTE.
      *
-     * @param uim.databases\IDTBExpression|\Closure $query CTE query
-     * @return $this
+     * @param uim.databases.IDBAExpression|\Closure $query CTE query
+     * @return this
      */
-    function query($query)
-    {
+    function query($query) {
         if ($query instanceof Closure) {
             $query = $query();
-            if (!($query instanceof IDTBExpression)) {
+            if (!($query instanceof IDBAExpression)) {
                 throw new RuntimeException(
-                   "You must return an `IDTBExpression` from a Closure passed to `query()`."
+                    "You must return an `IDBAExpression` from a Closure passed to `query()`."
                 );
             }
         }
-        $this.query = $query;
+        this.query = $query;
 
-        return $this;
+        return this;
     }
 
     /**
      * Adds one or more fields (arguments) to the CTE.
      *
-     * @param uim.databases\Expression\IdentifierExpression|array<\Cake\Database\Expression\IdentifierExpression>|array<string>|string $fields Field names
-     * @return $this
+     * @param uim.databases.Expression\IdentifierExpression|array<uim.databases.Expression\IdentifierExpression>|array<string>|string $fields Field names
+     * @return this
      */
-    function field($fields)
-    {
+    function field($fields) {
         $fields = (array)$fields;
         foreach ($fields as &$field) {
             if (!($field instanceof IdentifierExpression)) {
                 $field = new IdentifierExpression($field);
             }
         }
-        $this.fields = array_merge($this.fields, $fields);
+        this.fields = array_merge(this.fields, $fields);
 
-        return $this;
+        return this;
     }
 
     /**
      * Sets this CTE as materialized.
      *
-     * @return $this
+     * @return this
      */
-    function materialized()
-    {
-        $this.materialized ="MATERIALIZED";
+    function materialized() {
+        this.materialized = "MATERIALIZED";
 
-        return $this;
+        return this;
     }
 
     /**
      * Sets this CTE as not materialized.
      *
-     * @return $this
+     * @return this
      */
-    function notMaterialized()
-    {
-        $this.materialized ="NOT MATERIALIZED";
+    function notMaterialized() {
+        this.materialized = "NOT MATERIALIZED";
 
-        return $this;
+        return this;
     }
 
     /**
      * Gets whether this CTE is recursive.
-     *
-     * @return bool
      */
-    function isRecursive(): bool
-    {
-        return $this.recursive;
+    bool isRecursive() {
+        return this.recursive;
     }
 
     /**
      * Sets this CTE as recursive.
      *
-     * @return $this
+     * @return this
      */
-    function recursive()
-    {
-        $this.recursive = true;
+    function recursive() {
+        this.recursive = true;
 
-        return $this;
+        return this;
     }
 
 
-    string sql(ValueBinder aValueBinder)
-    {
-        $fields ="";
-        if ($this.fields) {
+    string sql(ValueBinder aBinder) {
+        $fields = "";
+        if (this.fields) {
             $expressions = array_map(function (IdentifierExpression $e) use ($binder) {
                 return $e.sql($binder);
-            }, $this.fields);
-            $fields = sprintf("(%s)", implode(",", $expressions));
+            }, this.fields);
+            $fields = sprintf("(%s)", implode(", ", $expressions));
         }
 
-        $suffix = $this.materialized ? $this.materialized ."" :"";
+        $suffix = this.materialized ? this.materialized ~ " " : "";
 
         return sprintf(
-           "%s%s AS %s(%s)",
-            $this.name.sql($binder),
+            "%s%s AS %s(%s)",
+            this.name.sql($binder),
             $fields,
             $suffix,
-            $this.query ? $this.query.sql($binder) :""
+            this.query ? this.query.sql($binder) : ""
         );
     }
 
 
-    O traverse(this O)(Closure $callback)
-    {
-        $callback($this.name);
-        foreach ($this.fields as $field) {
+    O traverse(this O)(Closure $callback) {
+        $callback(this.name);
+        foreach (this.fields as $field) {
             $callback($field);
             $field.traverse($callback);
         }
 
-        if ($this.query) {
-            $callback($this.query);
-            $this.query.traverse($callback);
+        if (this.query) {
+            $callback(this.query);
+            this.query.traverse($callback);
         }
 
-        return $this;
+        return this;
     }
 
     /**
      * Clones the inner expression objects.
-     *
-     * @return void
      */
-    function __clone()
-    {
-        $this.name = clone $this.name;
-        if ($this.query) {
-            $this.query = clone $this.query;
+    void __clone() {
+        this.name = clone this.name;
+        if (this.query) {
+            this.query = clone this.query;
         }
 
-        foreach ($this.fields as $key: $field) {
-            $this.fields[$key] = clone $field;
+        foreach (this.fields as $key: $field) {
+            this.fields[$key] = clone $field;
         }
     }
 }

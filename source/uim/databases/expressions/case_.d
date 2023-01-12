@@ -1,568 +1,224 @@
-/*********************************************************************************************************
-*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
-**********************************************************************************************************/
-module uim.expressions.case_;
+module uim.databases.Expression;
 
-@safe:
-import uim.cake;
+module uim.databases.Expression;
 
-// Represents a SQL case statement with a fluid API
-class CaseStatementExpression : IDTBExpression, IDTBTypedResult {
-    use CaseExpressionTrait;
+import uim.databases.IDBAExpression;
+import uim.databases.types.ExpressionTypeCasterTrait;
+import uim.databases.ValueBinder;
+use Closure;
+
+/**
+ * This class represents a SQL Case statement
+ *
+ * @deprecated 4.3.0 Use QueryExpression::case() or CaseStatementExpression instead
+ */
+class CaseExpression : IDBAExpression
+{
     use ExpressionTypeCasterTrait;
-    use TypeMapTrait;
 
     /**
-     * The names of the clauses that are valid for use with the
-     * `clause()` method.
+     * A list of strings or other expression objects that represent the conditions of
+     * the case statement. For example one key of the array might look like "sum > :value"
      *
-     * @var array<string>
+     * @var array
      */
-    protected $validClauseNames = [
-       "value",
-       "when",
-       "else",
-    ];
-
-    // Whether this is a simple case expression.
-    protected bool _isSimpleVariant = false;
+    protected _conditions = null;
 
     /**
-     * The case value.
+     * Values that are associated with the conditions in the _conditions array.
+     * Each value represents the "true" value for the condition with the corresponding key.
      *
-     * @var \Cake\Database\IDTBExpression|object|scalar|null
+     * @var array
      */
-    protected aValue = null;
+    protected _values = null;
 
     /**
-     * The case value type.
+     * The `ELSE` value for the case statement. If null then no `ELSE` will be included.
      *
-     * @var string|null
+     * @var DDBIDBAExpression|array|string|null
      */
-    protected aValueType = null;
+    protected _elseValue;
 
     /**
-     * The `WHEN ... THEN ...` expressions.
+     * Constructs the case expression
      *
-     * @var array<\Cake\Database\Expression\WhenThenExpression>
+     * @param uim.databases.IDBAExpression|array $conditions The conditions to test. Must be a IDBAExpression
+     * instance, or an array of IDBAExpression instances.
+     * @param uim.databases.IDBAExpression|array $values Associative array of values to be associated with the
+     * conditions passed in $conditions. If there are more $values than $conditions,
+     * the last $value is used as the `ELSE` value.
+     * @param array<string> $types Associative array of types to be associated with the values
+     * passed in $values
      */
-    protected $when = [];
+    this($conditions = null, $values = null, $types = null) {
+        $conditions = is_array($conditions) ? $conditions : [$conditions];
+        $values = is_array($values) ? $values : [$values];
+        $types = is_array($types) ? $types : [$types];
+
+        if (!empty($conditions)) {
+            this.add($conditions, $values, $types);
+        }
+
+        if (count($values) > count($conditions)) {
+            end($values);
+            $key = key($values);
+            this.elseValue($values[$key], $types[$key] ?? null);
+        }
+    }
 
     /**
-     * Buffer that holds values and types for use with `then()`.
+     * Adds one or more conditions and their respective true values to the case object.
+     * Conditions must be a one dimensional array or a QueryExpression.
+     * The trueValues must be a similar structure, but may contain a string value.
      *
-     * @var array|null
+     * @param uim.databases.IDBAExpression|array $conditions Must be a IDBAExpression instance,
+     *   or an array of IDBAExpression instances.
+     * @param uim.databases.IDBAExpression|array $values Associative array of values of each condition
+     * @param array<string> $types Associative array of types to be associated with the values
+     * @return this
      */
-    protected $whenBuffer = null;
+    function add($conditions = null, $values = null, $types = null) {
+        $conditions = is_array($conditions) ? $conditions : [$conditions];
+        $values = is_array($values) ? $values : [$values];
+        $types = is_array($types) ? $types : [$types];
+
+        _addExpressions($conditions, $values, $types);
+
+        return this;
+    }
 
     /**
-     * The else part result value.
+     * Iterates over the passed in conditions and ensures that there is a matching true value for each.
+     * If no matching true value, then it is defaulted to "1".
      *
-     * @var \Cake\Database\IDTBExpression|object|scalar|null
+     * @param array $conditions Array of IDBAExpression instances.
+     * @param array<mixed> $values Associative array of values of each condition
+     * @param array<string> $types Associative array of types to be associated with the values
      */
-    protected $else = null;
+    protected void _addExpressions(array $conditions, array $values, array $types) {
+        $rawValues = array_values($values);
+        $keyValues = array_keys($values);
 
-    /**
-     * The else part result type.
-     *
-     * @var string|null
-     */
-    protected $elseType = null;
+        foreach ($conditions as $k: $c) {
+            $numericKey = is_numeric($k);
 
-    /**
-     * The return type.
-     *
-     * @var string|null
-     */
-    protected $returnType = null;
-
-    /**
-     * Constructor.
-     *
-     * When a value is set, the syntax generated is
-     * `CASE case_value WHEN when_value ... END` (simple case),
-     * where the `when_value`"s are compared against the
-     * `case_value`.
-     *
-     * When no value is set, the syntax generated is
-     * `CASE WHEN when_conditions ... END` (searched case),
-     * where the conditions hold the comparisons.
-     *
-     * Note that `null` is a valid case value, and thus should
-     * only be passed if you actually want to create the simple
-     * case expression variant!
-     *
-     * @param uim.databases\IDTBExpression|object|scalar|null aValue The case value.
-     * @param string|null $type The case value type. If no type is provided, the type will be tried to be inferred
-     *  from the value.
-     */
-    this(DValue aValue = null, ?string $type = null)
-    {
-        if (func_num_args() > 0) {
-            if (
-                aValue !is null &&
-                !is_scalar(DValue aValue) &&
-                !(is_object(DValue aValue) && !(DValue aValue instanceof Closure))
-            ) {
-                throw new InvalidArgumentException(sprintf(
-                   "The `aValue` argument must be either `null`, a scalar value, an object," .
-                   "or an instance of `\%s`, `%s` given.",
-                    IDTBExpression.class,
-                    getTypeName(DValue aValue)
-                ));
+            if ($numericKey && empty($c)) {
+                continue;
             }
 
-            $this.value = aValue;
-
-            if (
-                aValue !is null &&
-                $type =is null &&
-                !(DValue aValue instanceof IDTBExpression)
-            ) {
-                $type = $this.inferType(DValue aValue);
+            if (!$c instanceof IDBAExpression) {
+                continue;
             }
-            $this.valueType = $type;
 
-            $this.isSimpleVariant = true;
+            _conditions[] = $c;
+            $value = $rawValues[$k] ?? 1;
+
+            if ($value == "literal") {
+                $value = $keyValues[$k];
+                _values[] = $value;
+                continue;
+            }
+
+            if ($value == "identifier") {
+                /** @var string $identifier */
+                $identifier = $keyValues[$k];
+                $value = new IdentifierExpression($identifier);
+                _values[] = $value;
+                continue;
+            }
+
+            $type = $types[$k] ?? null;
+
+            if ($type != null && !$value instanceof IDBAExpression) {
+                $value = _castToExpression($value, $type);
+            }
+
+            if ($value instanceof IDBAExpression) {
+                _values[] = $value;
+                continue;
+            }
+
+            _values[] = ["value": $value, "type": $type];
         }
     }
 
     /**
-     * Sets the `WHEN` value for a `WHEN ... THEN ...` expression, or a
-     * self-contained expression that holds both the value for `WHEN`
-     * and the value for `THEN`.
+     * Sets the default value
      *
-     * ### Order based syntax
-     *
-     * When passing a value other than a self-contained
-     * `\Cake\Database\Expression\WhenThenExpression`,
-     * instance, the `WHEN ... THEN ...` statement must be closed off with
-     * a call to `then()` before invoking `when()` again or `else()`:
-     *
-     * ```
-     * $queryExpression
-     *     .case($query.identifier("Table.column"))
-     *     .when(true)
-     *     .then("Yes")
-     *     .when(false)
-     *     .then("No")
-     *     .else("Maybe");
-     * ```
-     *
-     * ### Self-contained expressions
-     *
-     * When passing an instance of `\Cake\Database\Expression\WhenThenExpression`,
-     * being it directly, or via a callable, then there is no need to close
-     * using `then()` on this object, instead the statement will be closed
-     * on the `\Cake\Database\Expression\WhenThenExpression`
-     * object using
-     * `\Cake\Database\Expression\WhenThenExpression.then()`.
-     *
-     * Callables will receive an instance of `\Cake\Database\Expression\WhenThenExpression`,
-     * and must return one, being it the same object, or a custom one:
-     *
-     * ```
-     * $queryExpression
-     *     .case()
-     *     .when(function (\Cake\Database\Expression\WhenThenExpression $whenThen) {
-     *         return $whenThen
-     *             .when(["Table.column": true])
-     *             .then("Yes");
-     *     })
-     *     .when(function (\Cake\Database\Expression\WhenThenExpression $whenThen) {
-     *         return $whenThen
-     *             .when(["Table.column": false])
-     *             .then("No");
-     *     })
-     *     .else("Maybe");
-     * ```
-     *
-     * ### Type handling
-     *
-     * The types provided via the `$type` argument will be merged with the
-     * type map set for this expression. When using callables for `$when`,
-     * the `\Cake\Database\Expression\WhenThenExpression`
-     * instance received by the callables will inherit that type map, however
-     * the types passed here will _not_ be merged in case of using callables,
-     * instead the types must be passed in
-     * `\Cake\Database\Expression\WhenThenExpression.when()`:
-     *
-     * ```
-     * $queryExpression
-     *     .case()
-     *     .when(function (\Cake\Database\Expression\WhenThenExpression $whenThen) {
-     *         return $whenThen
-     *             .when(["unmapped_column": true], ["unmapped_column":"bool"])
-     *             .then("Yes");
-     *     })
-     *     .when(function (\Cake\Database\Expression\WhenThenExpression $whenThen) {
-     *         return $whenThen
-     *             .when(["unmapped_column": false], ["unmapped_column":"bool"])
-     *             .then("No");
-     *     })
-     *     .else("Maybe");
-     * ```
-     *
-     * ### User data safety
-     *
-     * When passing user data, be aware that allowing a user defined array
-     * to be passed, is a potential SQL injection vulnerability, as it
-     * allows for raw SQL to slip in!
-     *
-     * The following is _unsafe_ usage that must be avoided:
-     *
-     * ```
-     * $case
-     *      .when($userData)
-     * ```
-     *
-     * A safe variant for the above would be to define a single type for
-     * the value:
-     *
-     * ```
-     * $case
-     *      .when($userData,"integer")
-     * ```
-     *
-     * This way an exception would be triggered when an array is passed for
-     * the value, thus preventing raw SQL from slipping in, and all other
-     * types of values would be forced to be bound as an integer.
-     *
-     * Another way to safely pass user data is when using a conditions
-     * array, and passing user data only on the value side of the array
-     * entries, which will cause them to be bound:
-     *
-     * ```
-     * $case
-     *      .when([
-     *         "Table.column": $userData,
-     *      ])
-     * ```
-     *
-     * Lastly, data can also be bound manually:
-     *
-     * ```
-     * $query
-     *      .select([
-     *         "val": $query.newExpr()
-     *              .case()
-     *              .when($query.newExpr(":userData"))
-     *              .then(123)
-     *      ])
-     *      .bind(":userData", $userData,"integer")
-     * ```
-     *
-     * @param uim.databases\IDTBExpression|\Closure|object|array|scalar $when The `WHEN` value. When using an
-     *  array of conditions, it must be compatible with `\Cake\Database\Query.where()`. Note that this argument is
-     *  _not_ completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in! If
-     *  you plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to
-     *  be a non-array, and then always binds the data), use a conditions array where the user data is only passed on
-     *  the value side of the array entries, or custom bindings!
-     * @param array<string, string>|string|null $type The when value type. Either an associative array when using array style
-     *  conditions, or else a string. If no type is provided, the type will be tried to be inferred from the value.
-     * @return $this
-     * @throws \LogicException In case this a closing `then()` call is required before calling this method.
-     * @throws \LogicException In case the callable doesn"t return an instance of
-     *  `\Cake\Database\Expression\WhenThenExpression`.
+     * @param uim.databases.IDBAExpression|array|string|null $value Value to set
+     * @param string|null $type Type of value
      */
-    function when($when, $type = null)
-    {
-        if ($this.whenBuffer !is null) {
-            throw new LogicException("Cannot call `when()` between `when()` and `then()`.");
+    void elseValue($value = null, Nullable!string $type = null) {
+        if (is_array($value)) {
+            end($value);
+            $value = key($value);
         }
 
-        if ($when instanceof Closure) {
-            $when = $when(new WhenThenExpression($this.getTypeMap()));
-            if (!($when instanceof WhenThenExpression)) {
-                throw new LogicException(sprintf(
-                   "`when()` callables must return an instance of `\%s`, `%s` given.",
-                    WhenThenExpression.class,
-                    getTypeName($when)
-                ));
+        if ($value != null && !$value instanceof IDBAExpression) {
+            $value = _castToExpression($value, $type);
+        }
+
+        if (!$value instanceof IDBAExpression) {
+            $value = ["value": $value, "type": $type];
+        }
+
+        _elseValue = $value;
+    }
+
+    /**
+     * Compiles the relevant parts into sql
+     *
+     * @param uim.databases.IDBAExpression|array|string $part The part to compile
+     * @param uim.databases.ValueBinder aBinder Sql generator
+     */
+    protected string _compile($part, ValueBinder aBinder) {
+        if ($part instanceof IDBAExpression) {
+            $part = $part.sql($binder);
+        } elseif (is_array($part)) {
+            $placeholder = $binder.placeholder("param");
+            $binder.bind($placeholder, $part["value"], $part["type"]);
+            $part = $placeholder;
+        }
+
+        return $part;
+    }
+
+    /**
+     * Converts the Node into a SQL string fragment.
+     *
+     * @param uim.databases.ValueBinder aBinder Placeholder generator object
+     */
+    string sql(ValueBinder aBinder) {
+        $parts = null;
+        $parts[] = "CASE";
+        foreach (_conditions as $k: $part) {
+            $value = _values[$k];
+            $parts[] = "WHEN " ~ _compile($part, $binder) ~ " THEN " ~ _compile($value, $binder);
+        }
+        if (_elseValue != null) {
+            $parts[] = "ELSE";
+            $parts[] = _compile(_elseValue, $binder);
+        }
+        $parts[] = "END";
+
+        return implode(" ", $parts);
+    }
+
+
+    O traverse(this O)(Closure $callback) {
+        foreach (["_conditions", "_values"] as $part) {
+            foreach (this.{$part} as $c) {
+                if ($c instanceof IDBAExpression) {
+                    $callback($c);
+                    $c.traverse($callback);
+                }
             }
         }
-
-        if ($when instanceof WhenThenExpression) {
-            $this.when[] = $when;
-        } else {
-            $this.whenBuffer = ["when": $when,"type": $type];
+        if (_elseValue instanceof IDBAExpression) {
+            $callback(_elseValue);
+            _elseValue.traverse($callback);
         }
 
-        return $this;
-    }
-
-    /**
-     * Sets the `THEN` result value for the last `WHEN ... THEN ...`
-     * statement that was opened using `when()`.
-     *
-     * ### Order based syntax
-     *
-     * This method can only be invoked in case `when()` was previously
-     * used with a value other than a closure or an instance of
-     * `\Cake\Database\Expression\WhenThenExpression`:
-     *
-     * ```
-     * $case
-     *     .when(["Table.column": true])
-     *     .then("Yes")
-     *     .when(["Table.column": false])
-     *     .then("No")
-     *     .else("Maybe");
-     * ```
-     *
-     * The following would all fail with an exception:
-     *
-     * ```
-     * $case
-     *     .when(["Table.column": true])
-     *     .when(["Table.column": false])
-     *     // ...
-     * ```
-     *
-     * ```
-     * $case
-     *     .when(["Table.column": true])
-     *     .else("Maybe")
-     *     // ...
-     * ```
-     *
-     * ```
-     * $case
-     *     .then("Yes")
-     *     // ...
-     * ```
-     *
-     * ```
-     * $case
-     *     .when(["Table.column": true])
-     *     .then("Yes")
-     *     .then("No")
-     *     // ...
-     * ```
-     *
-     * @param uim.databases\IDTBExpression|object|scalar|null $result The result value.
-     * @param string|null $type The result type. If no type is provided, the type will be tried to be inferred from the
-     *  value.
-     * @return $this
-     * @throws \LogicException In case `when()` wasn"t previously called with a value other than a closure or an
-     *  instance of `\Cake\Database\Expression\WhenThenExpression`.
-     */
-    function then($result, ?string $type = null)
-    {
-        if ($this.whenBuffer =is null) {
-            throw new LogicException("Cannot call `then()` before `when()`.");
-        }
-
-        $whenThen = (new WhenThenExpression($this.getTypeMap()))
-            .when($this.whenBuffer["when"], $this.whenBuffer["type"])
-            .then($result, $type);
-
-        $this.whenBuffer = null;
-
-        $this.when[] = $whenThen;
-
-        return $this;
-    }
-
-    /**
-     * Sets the `ELSE` result value.
-     *
-     * @param uim.databases\IDTBExpression|object|scalar|null $result The result value.
-     * @param string|null $type The result type. If no type is provided, the type will be tried to be inferred from the
-     *  value.
-     * @return $this
-     * @throws \LogicException In case a closing `then()` call is required before calling this method.
-     * @throws \InvalidArgumentException In case the `$result` argument is neither a scalar value, nor an object, an
-     *  instance of `\Cake\Database\IDTBExpression`, or `null`.
-     */
-    function else($result, ?string $type = null)
-    {
-        if ($this.whenBuffer !is null) {
-            throw new LogicException("Cannot call `else()` between `when()` and `then()`.");
-        }
-
-        if (
-            $result !is null &&
-            !is_scalar($result) &&
-            !(is_object($result) && !($result instanceof Closure))
-        ) {
-            throw new InvalidArgumentException(sprintf(
-               "The `$result` argument must be either `null`, a scalar value, an object," .
-               "or an instance of `\%s`, `%s` given.",
-                IDTBExpression.class,
-                getTypeName($result)
-            ));
-        }
-
-        if ($type =is null) {
-            $type = $this.inferType($result);
-        }
-
-        $this.else = $result;
-        $this.elseType = $type;
-
-        return $this;
-    }
-
-    /**
-     * Returns the abstract type that this expression will return.
-     *
-     * If no type has been explicitly set via `setReturnType()`, this
-     * method will try to obtain the type from the result types of the
-     * `then()` and `else() `calls. All types must be identical in order
-     * for this to work, otherwise the type will default to `string`.
-     *
-     * @return string
-     * @see CaseStatementExpression.then()
-     */
-    string getReturnType()
-    {
-        if ($this.returnType !is null) {
-            return $this.returnType;
-        }
-
-        $types = [];
-        foreach ($this.when as $when) {
-            $type = $when.getResultType();
-            if ($type !is null) {
-                $types[] = $type;
-            }
-        }
-
-        if ($this.elseType !is null) {
-            $types[] = $this.elseType;
-        }
-
-        $types = array_unique($types);
-        if (count($types) == 1) {
-            return $types[0];
-        }
-
-        return"string";
-    }
-
-    /**
-     * Sets the abstract type that this expression will return.
-     *
-     * If no type is being explicitly set via this method, then the
-     * `getReturnType()` method will try to infer the type from the
-     * result types of the `then()` and `else() `calls.
-     *
-     * @param string $type The type name to use.
-     * @return $this
-     */
-    function setReturnType(string $type)
-    {
-        $this.returnType = $type;
-
-        return $this;
-    }
-
-    /**
-     * Returns the available data for the given clause.
-     *
-     * ### Available clauses
-     *
-     * The following clause names are available:
-     *
-     * * `value`: The case value for a `CASE case_value WHEN ...` expression.
-     * * `when`: An array of `WHEN ... THEN ...` expressions.
-     * * `else`: The `ELSE` result value.
-     *
-     * @param string $clause The name of the clause to obtain.
-     * @return \Cake\Database\IDTBExpression|object|array<\Cake\Database\Expression\WhenThenExpression>|scalar|null
-     * @throws \InvalidArgumentException In case the given clause name is invalid.
-     */
-    function clause(string $clause)
-    {
-        if (!in_array($clause, $this.validClauseNames, true)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                   "The `$clause` argument must be one of `%s`, the given value `%s` is invalid.",
-                    implode("`, `", $this.validClauseNames),
-                    $clause
-                )
-            );
-        }
-
-        return $this.{$clause};
-    }
-
-
-    string sql(ValueBinder aValueBinder)
-    {
-        if ($this.whenBuffer !is null) {
-            throw new LogicException("Case expression has incomplete when clause. Missing `then()` after `when()`.");
-        }
-
-        if (empty($this.when)) {
-            throw new LogicException("Case expression must have at least one when statement.");
-        }
-
-        aValue ="";
-        if ($this.isSimpleVariant) {
-            aValue = $this.compileNullableValue($binder, $this.value, $this.valueType) ."";
-        }
-
-        $whenThenExpressions = [];
-        foreach ($this.when as $whenThen) {
-            $whenThenExpressions[] = $whenThen.sql($binder);
-        }
-        $whenThen = implode("", $whenThenExpressions);
-
-        $else = $this.compileNullableValue($binder, $this.else, $this.elseType);
-
-        return "CASE {aValue}{$whenThen} ELSE $else END";
-    }
-
-
-    O traverse(this O)(Closure $callback)
-    {
-        if ($this.whenBuffer !is null) {
-            throw new LogicException("Case expression has incomplete when clause. Missing `then()` after `when()`.");
-        }
-
-        if ($this.value instanceof IDTBExpression) {
-            $callback($this.value);
-            $this.value.traverse($callback);
-        }
-
-        foreach ($this.when as $when) {
-            $callback($when);
-            $when.traverse($callback);
-        }
-
-        if ($this.else instanceof IDTBExpression) {
-            $callback($this.else);
-            $this.else.traverse($callback);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Clones the inner expression objects.
-     *
-     * @return void
-     */
-    function __clone()
-    {
-        if ($this.whenBuffer !is null) {
-            throw new LogicException("Case expression has incomplete when clause. Missing `then()` after `when()`.");
-        }
-
-        if ($this.value instanceof IDTBExpression) {
-            $this.value = clone $this.value;
-        }
-
-        foreach ($this.when as $key: $when) {
-            $this.when[$key] = clone $this.when[$key];
-        }
-
-        if ($this.else instanceof IDTBExpression) {
-            $this.else = clone $this.else;
-        }
+        return this;
     }
 }

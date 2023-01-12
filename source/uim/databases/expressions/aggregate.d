@@ -1,12 +1,14 @@
-/*********************************************************************************************************
-*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
-**********************************************************************************************************/
-module uim.expressions.aggregate;
 
-@safe:
-import uim.cake;
+
+
+ *
+
+
+ * @since         4.1.0
+  */module uim.databases.Expression;
+
+import uim.databases.ValueBinder;
+use Closure;
 
 /**
  * This represents an SQL aggregate function expression in an SQL statement.
@@ -17,101 +19,94 @@ import uim.cake;
 class AggregateExpression : FunctionExpression : IWindow
 {
     /**
-     * @var \Cake\Database\Expression\QueryExpression
+     * @var DDBExpression\QueryExpression
      */
     protected $filter;
 
     /**
-     * @var \Cake\Database\Expression\WindowExpression
+     * @var DDBExpression\WindowExpression
      */
     protected $window;
 
     /**
      * Adds conditions to the FILTER clause. The conditions are the same format as
-     * `Query.where()`.
+     * `Query::where()`.
      *
-     * @param uim.databases\IDTBExpression|\Closure|array|string $conditions The conditions to filter on.
+     * @param uim.databases.IDBAExpression|\Closure|array|string $conditions The conditions to filter on.
      * @param array<string, string> $types Associative array of type names used to bind values to query
-     * @return $this
-     * @see \Cake\Database\Query.where()
+     * @return this
+     * @see uim.databases.Query::where()
      */
-    function filter($conditions, array $types = [])
-    {
-        if ($this.filter =is null) {
-            $this.filter = new QueryExpression();
+    function filter($conditions, array $types = null) {
+        if (this.filter == null) {
+            this.filter = new QueryExpression();
         }
 
         if ($conditions instanceof Closure) {
             $conditions = $conditions(new QueryExpression());
         }
 
-        $this.filter.add($conditions, someTypes);
+        this.filter.add($conditions, $types);
 
-        return $this;
+        return this;
     }
 
     /**
      * Adds an empty `OVER()` window expression or a named window epression.
      *
      * @param string|null $name Window name
-     * @return $this
+     * @return this
      */
-    function over(?string $name = null)
-    {
-        if ($this.window =is null) {
-            $this.window = new WindowExpression();
+    function over(Nullable!string aName = null) {
+        if (this.window == null) {
+            this.window = new WindowExpression();
         }
         if ($name) {
             // Set name manually in case this was chained from FunctionsBuilder wrapper
-            $this.window.name($name);
+            this.window.name($name);
         }
 
-        return $this;
+        return this;
     }
 
 
-    function partition($partitions)
-    {
-        $this.over();
-        $this.window.partition($partitions);
+    function partition($partitions) {
+        this.over();
+        this.window.partition($partitions);
 
-        return $this;
+        return this;
     }
 
 
-    function order($fields)
-    {
-        $this.over();
-        $this.window.order($fields);
+    function order($fields) {
+        this.over();
+        this.window.order($fields);
 
-        return $this;
+        return this;
     }
 
 
-    function range($start, $end = 0)
-    {
-        $this.over();
-        $this.window.range($start, $end);
+    function range($start, $end = 0) {
+        this.over();
+        this.window.range($start, $end);
 
-        return $this;
+        return this;
     }
 
 
-    function rows(?int $start, ?int $end = 0)
-    {
-        $this.over();
-        $this.window.rows($start, $end);
+    function rows(Nullable!int $start, Nullable!int $end = 0) {
+        this.over();
+        this.window.rows($start, $end);
 
-        return $this;
+        return this;
     }
 
 
-    function groups(?int $start, ?int $end = 0)
-    {
-        $this.over();
-        $this.window.groups($start, $end);
+    function groups(Nullable!int $start, Nullable!int $end = 0) {
+        this.over();
+        this.window.groups($start, $end);
 
-        return $this;
+        return this;
     }
 
 
@@ -122,97 +117,86 @@ class AggregateExpression : FunctionExpression : IWindow
         $endOffset,
         string $endDirection
     ) {
-        $this.over();
-        $this.window.frame($type, $startOffset, $startDirection, $endOffset, $endDirection);
+        this.over();
+        this.window.frame($type, $startOffset, $startDirection, $endOffset, $endDirection);
 
-        return $this;
+        return this;
     }
 
 
-    function excludeCurrent()
-    {
-        $this.over();
-        $this.window.excludeCurrent();
+    function excludeCurrent() {
+        this.over();
+        this.window.excludeCurrent();
 
-        return $this;
+        return this;
     }
 
 
-    function excludeGroup()
-    {
-        $this.over();
-        $this.window.excludeGroup();
+    function excludeGroup() {
+        this.over();
+        this.window.excludeGroup();
 
-        return $this;
+        return this;
     }
 
 
-    function excludeTies()
-    {
-        $this.over();
-        $this.window.excludeTies();
+    function excludeTies() {
+        this.over();
+        this.window.excludeTies();
 
-        return $this;
+        return this;
     }
 
 
-    string sql(ValueBinder aValueBinder)
-    {
-        mySql = parent.sql($binder);
-        if ($this.filter !is null) {
-            mySql ~=" FILTER (WHERE" . $this.filter.sql($binder) .")";
+    string sql(ValueBinder aBinder) {
+        $sql = super.sql(aBinder);
+        if (this.filter != null) {
+            $sql ~= " FILTER (WHERE " ~ this.filter.sql(aBinder) ~ ")";
         }
-        if ($this.window !is null) {
-            if ($this.window.isNamedOnly()) {
-                mySql ~=" OVER" . $this.window.sql($binder);
+        if (this.window != null) {
+            if (this.window.isNamedOnly()) {
+                $sql ~= " OVER " ~ this.window.sql(aBinder);
             } else {
-                mySql ~=" OVER (" . $this.window.sql($binder) .")";
+                $sql ~= " OVER (" ~ this.window.sql(aBinder) ~ ")";
             }
         }
 
-        return mySql;
+        return $sql;
     }
 
 
-    O traverse(this O)(Closure $callback)
-    {
-        parent.traverse($callback);
-        if ($this.filter !is null) {
-            $callback($this.filter);
-            $this.filter.traverse($callback);
+    O traverse(this O)(Closure $callback) {
+        super.traverse($callback);
+        if (this.filter != null) {
+            $callback(this.filter);
+            this.filter.traverse($callback);
         }
-        if ($this.window !is null) {
-            $callback($this.window);
-            $this.window.traverse($callback);
+        if (this.window != null) {
+            $callback(this.window);
+            this.window.traverse($callback);
         }
 
-        return $this;
+        return this;
     }
 
 
-    function count(): int
-    {
-        $count = parent.count();
-        if ($this.window !is null) {
+    size_t count() {
+        $count = super.count();
+        if (this.window != null) {
             $count = $count + 1;
         }
 
         return $count;
     }
 
-    /**
-     * Clone this object and its subtree of expressions.
-     *
-     * @return void
-     */
-    function __clone()
-    {
-        parent.__clone();
-        if ($this.filter !is null) {
-            $this.filter = clone $this.filter;
+    // Clone this object and its subtree of expressions.
+    void __clone() {
+        super.__clone();
+        if (this.filter != null) {
+            this.filter = clone this.filter;
         }
-        if ($this.window !is null) {
-            $this.window = clone $this.window;
+        if (this.window != null) {
+            this.window = clone this.window;
         }
     }
 }

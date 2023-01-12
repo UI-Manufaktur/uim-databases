@@ -1,17 +1,18 @@
-/*********************************************************************************************************
-*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
-**********************************************************************************************************/
-module uim.cake;
+module uim.databases.Expression;
 
-@safe:
-import uim.cake;
+import uim.databases.IDBAExpression;
+import uim.databases.Query;
+import uim.databases.types.ExpressionTypeCasterTrait;
+import uim.databases.TypeMap;
+import uim.databases.ValueBinder;
+use Closure;
+use InvalidArgumentException;
+use LogicException;
 
 /**
  * Represents a SQL when/then clause with a fluid API
  */
-class WhenThenExpression : IDTBExpression
+class WhenThenExpression : IDBAExpression
 {
     use CaseExpressionTrait;
     use ExpressionTypeCasterTrait;
@@ -23,22 +24,22 @@ class WhenThenExpression : IDTBExpression
      * @var array<string>
      */
     protected $validClauseNames = [
-       "when",
-       "then",
+        "when",
+        "then",
     ];
 
     /**
      * The type map to use when using an array of conditions for the
      * `WHEN` value.
      *
-     * @var \Cake\Database\TypeMap
+     * @var DDBTypeMap
      */
     protected _typeMap;
 
     /**
      * Then `WHEN` value.
      *
-     * @var \Cake\Database\IDTBExpression|object|scalar|null
+     * @var DDBIDBAExpression|object|scalar|null
      */
     protected $when = null;
 
@@ -52,34 +53,30 @@ class WhenThenExpression : IDTBExpression
     /**
      * The `THEN` value.
      *
-     * @var \Cake\Database\IDTBExpression|object|scalar|null
+     * @var DDBIDBAExpression|object|scalar|null
      */
     protected $then = null;
 
     /**
      * Whether the `THEN` value has been defined, eg whether `then()`
      * has been invoked.
-     *
-     * @var bool
      */
-    protected $hasThenBeenDefined = false;
+    protected bool $hasThenBeenDefined = false;
 
     /**
      * The `THEN` result type.
      *
-     * @var string|null
      */
-    protected $thenType = null;
+    protected Nullable!string thenType = null;
 
     /**
      * Constructor.
      *
-     * @param uim.databases\TypeMap|null $typeMap The type map to use when using an array of conditions for the `WHEN`
+     * @param uim.databases.TypeMap|null $typeMap The type map to use when using an array of conditions for the `WHEN`
      *  value.
      */
-    this(?TypeMap $typeMap = null)
-    {
-        if ($typeMap =is null) {
+    this(?TypeMap $typeMap = null) {
+        if ($typeMap == null) {
             $typeMap = new TypeMap();
         }
         _typeMap = $typeMap;
@@ -88,58 +85,57 @@ class WhenThenExpression : IDTBExpression
     /**
      * Sets the `WHEN` value.
      *
-     * @param uim.databases\IDTBExpression|object|array|scalar $when The `WHEN` value. When using an array of
-     *  conditions, it must be compatible with `\Cake\Database\Query.where()`. Note that this argument is _not_
+     * @param uim.databases.IDBAExpression|object|array|scalar $when The `WHEN` value. When using an array of
+     *  conditions, it must be compatible with `uim.databases.Query::where()`. Note that this argument is _not_
      *  completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in! If you
      *  plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to be
      *  a non-array, and then always binds the data), use a conditions array where the user data is only passed on the
      *  value side of the array entries, or custom bindings!
      * @param array<string, string>|string|null $type The when value type. Either an associative array when using array style
      *  conditions, or else a string. If no type is provided, the type will be tried to be inferred from the value.
-     * @return $this
+     * @return this
      * @throws \InvalidArgumentException In case the `$when` argument is neither a non-empty array, nor a scalar value,
-     *  an object, or an instance of `\Cake\Database\IDTBExpression`.
+     *  an object, or an instance of `uim.databases.IDBAExpression`.
      * @throws \InvalidArgumentException In case the `$type` argument is neither an array, a string, nor null.
      * @throws \InvalidArgumentException In case the `$when` argument is an array, and the `$type` argument is neither
      * an array, nor null.
      * @throws \InvalidArgumentException In case the `$when` argument is a non-array value, and the `$type` argument is
      * neither a string, nor null.
-     * @see CaseStatementExpression.when() for a more detailed usage explanation.
+     * @see CaseStatementExpression::when() for a more detailed usage explanation.
      */
-    function when($when, $type = null)
-    {
+    function when($when, $type = null) {
         if (
             !(is_array($when) && !empty($when)) &&
             !is_scalar($when) &&
             !is_object($when)
         ) {
             throw new InvalidArgumentException(sprintf(
-               "The `$when` argument must be either a non-empty array, a scalar value, an object," .
-               "or an instance of `\%s`, `%s` given.",
-                IDTBExpression.class,
-                is_array($when) ?"[]" : getTypeName($when) // @phpstan-ignore-line
+                "The `$when` argument must be either a non-empty array, a scalar value, an object, " ~
+                "or an instance of `\%s`, `%s` given.",
+                IDBAExpression::class,
+                is_array($when) ? "[]" : getTypeName($when) // @phpstan-ignore-line
             ));
         }
 
         if (
-            $type !is null &&
+            $type != null &&
             !is_array($type) &&
             !is_string($type)
         ) {
             throw new InvalidArgumentException(sprintf(
-               "The `$type` argument must be either an array, a string, or `null`, `%s` given.",
+                "The `$type` argument must be either an array, a string, or `null`, `%s` given.",
                 getTypeName($type)
             ));
         }
 
         if (is_array($when)) {
             if (
-                $type !is null &&
+                $type != null &&
                 !is_array($type)
             ) {
                 throw new InvalidArgumentException(sprintf(
-                   "When using an array for the `$when` argument, the `$type` argument must be an" .
-                   "array too, `%s` given.",
+                    "When using an array for the `$when` argument, the `$type` argument must be an " ~
+                    "array too, `%s` given.",
                     getTypeName($type)
                 ));
             }
@@ -156,75 +152,73 @@ class WhenThenExpression : IDTBExpression
             $when = new QueryExpression($when, $typeMap);
         } else {
             if (
-                $type !is null &&
+                $type != null &&
                 !is_string($type)
             ) {
                 throw new InvalidArgumentException(sprintf(
-                   "When using a non-array value for the `$when` argument, the `$type` argument must" .
-                   "be a string, `%s` given.",
+                    "When using a non-array value for the `$when` argument, the `$type` argument must " ~
+                    "be a string, `%s` given.",
                     getTypeName($type)
                 ));
             }
 
             if (
-                $type =is null &&
-                !($when instanceof IDTBExpression)
+                $type == null &&
+                !($when instanceof IDBAExpression)
             ) {
-                $type = $this.inferType($when);
+                $type = this.inferType($when);
             }
         }
 
-        $this.when = $when;
-        $this.whenType = $type;
+        this.when = $when;
+        this.whenType = $type;
 
-        return $this;
+        return this;
     }
 
     /**
      * Sets the `THEN` result value.
      *
-     * @param uim.databases\IDTBExpression|object|scalar|null $result The result value.
+     * @param uim.databases.IDBAExpression|object|scalar|null $result The result value.
      * @param string|null $type The result type. If no type is provided, the type will be inferred from the given
      *  result value.
-     * @return $this
+     * @return this
      */
-    function then($result, ?string $type = null)
-    {
+    function then($result, Nullable!string $type = null) {
         if (
-            $result !is null &&
+            $result != null &&
             !is_scalar($result) &&
             !(is_object($result) && !($result instanceof Closure))
         ) {
             throw new InvalidArgumentException(sprintf(
-               "The `$result` argument must be either `null`, a scalar value, an object," .
-               "or an instance of `\%s`, `%s` given.",
-                IDTBExpression.class,
+                "The `$result` argument must be either `null`, a scalar value, an object, " ~
+                "or an instance of `\%s`, `%s` given.",
+                IDBAExpression::class,
                 getTypeName($result)
             ));
         }
 
-        $this.then = $result;
+        this.then = $result;
 
-        if ($type =is null) {
-            $type = $this.inferType($result);
+        if ($type == null) {
+            $type = this.inferType($result);
         }
 
-        $this.thenType = $type;
+        this.thenType = $type;
 
-        $this.hasThenBeenDefined = true;
+        this.hasThenBeenDefined = true;
 
-        return $this;
+        return this;
     }
 
     /**
      * Returns the expression"s result value type.
      *
      * @return string|null
-     * @see WhenThenExpression.then()
+     * @see WhenThenExpression::then()
      */
-    function getResultType(): ?string
-    {
-        return $this.thenType;
+    Nullable!string getResultType() {
+        return this.thenType;
     }
 
     /**
@@ -238,50 +232,48 @@ class WhenThenExpression : IDTBExpression
      * * `then`: The `THEN` result value.
      *
      * @param string $clause The name of the clause to obtain.
-     * @return \Cake\Database\IDTBExpression|object|scalar|null
+     * @return uim.databases.IDBAExpression|object|scalar|null
      * @throws \InvalidArgumentException In case the given clause name is invalid.
      */
-    function clause(string $clause)
-    {
-        if (!in_array($clause, $this.validClauseNames, true)) {
+    function clause(string $clause) {
+        if (!hasAllValues($clause, this.validClauseNames, true)) {
             throw new InvalidArgumentException(
                 sprintf(
-                   "The `$clause` argument must be one of `%s`, the given value `%s` is invalid.",
-                    implode("`, `", $this.validClauseNames),
+                    "The `$clause` argument must be one of `%s`, the given value `%s` is invalid.",
+                    implode("`, `", this.validClauseNames),
                     $clause
                 )
             );
         }
 
-        return $this.{$clause};
+        return this.{$clause};
     }
 
 
-    string sql(ValueBinder aValueBinder)
-    {
-        if ($this.when =is null) {
+    string sql(ValueBinder aBinder) {
+        if (this.when == null) {
             throw new LogicException("Case expression has incomplete when clause. Missing `when()`.");
         }
 
-        if (!$this.hasThenBeenDefined) {
+        if (!this.hasThenBeenDefined) {
             throw new LogicException("Case expression has incomplete when clause. Missing `then()` after `when()`.");
         }
 
-        $when = $this.when;
+        $when = this.when;
         if (
-            is_string($this.whenType) &&
-            !($when instanceof IDTBExpression)
+            is_string(this.whenType) &&
+            !($when instanceof IDBAExpression)
         ) {
-            $when = _castToExpression($when, $this.whenType);
+            $when = _castToExpression($when, this.whenType);
         }
         if ($when instanceof Query) {
             $when = sprintf("(%s)", $when.sql($binder));
-        } elseif ($when instanceof IDTBExpression) {
+        } elseif ($when instanceof IDBAExpression) {
             $when = $when.sql($binder);
         } else {
             $placeholder = $binder.placeholder("c");
-            if (is_string($this.whenType)) {
-                $whenType = $this.whenType;
+            if (is_string(this.whenType)) {
+                $whenType = this.whenType;
             } else {
                 $whenType = null;
             }
@@ -289,40 +281,36 @@ class WhenThenExpression : IDTBExpression
             $when = $placeholder;
         }
 
-        $then = $this.compileNullableValue($binder, $this.then, $this.thenType);
+        $then = this.compileNullableValue($binder, this.then, this.thenType);
 
         return "WHEN $when THEN $then";
     }
 
 
-    O traverse(this O)(Closure $callback)
-    {
-        if ($this.when instanceof IDTBExpression) {
-            $callback($this.when);
-            $this.when.traverse($callback);
+    O traverse(this O)(Closure $callback) {
+        if (this.when instanceof IDBAExpression) {
+            $callback(this.when);
+            this.when.traverse($callback);
         }
 
-        if ($this.then instanceof IDTBExpression) {
-            $callback($this.then);
-            $this.then.traverse($callback);
+        if (this.then instanceof IDBAExpression) {
+            $callback(this.then);
+            this.then.traverse($callback);
         }
 
-        return $this;
+        return this;
     }
 
     /**
      * Clones the inner expression objects.
-     *
-     * @return void
      */
-    function __clone()
-    {
-        if ($this.when instanceof IDTBExpression) {
-            $this.when = clone $this.when;
+    void __clone() {
+        if (this.when instanceof IDBAExpression) {
+            this.when = clone this.when;
         }
 
-        if ($this.then instanceof IDTBExpression) {
-            $this.then = clone $this.then;
+        if (this.then instanceof IDBAExpression) {
+            this.then = clone this.then;
         }
     }
 }

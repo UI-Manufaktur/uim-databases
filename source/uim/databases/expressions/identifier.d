@@ -1,44 +1,84 @@
-/*********************************************************************************************************
-*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
-**********************************************************************************************************/
-module uim.cake;
+module uim.databases.Expression;
 
-@safe:
-import uim.cake;
+import uim.databases.IDBAExpression;
+import uim.databases.ValueBinder;
+use Closure;
 
 /**
  * Represents a single identifier name in the database.
  *
  * Identifier values are unsafe with user supplied data.
  * Values will be quoted when identifier quoting is enabled.
+ *
+ * @see uim.databases.Query::identifier()
  */
-class DDTBIdentifierExpression : IDTBExpression {
-  // anIdentifier - The identifier this expression represents
-  // aCollation   - The identifier collation
-  this(string anIdentifier, string aCollation = null) {
-    identifier(anIdentifier);
-    collation(aCollation);
-  }
+class IdentifierExpression : IDBAExpression
+{
+    /**
+     * Holds the identifier string
+     */
+    protected string _identifier;
 
-  mixin(OProperty!("string", "identifier"));
-  mixin(OProperty!("string", "collation"));
+    /**
+     */
+    protected Nullable!string collation;
 
-  string sql(DDTBValueBinder aValueBinder) {
-    auto result = this.identifier;
-    result ~= this.collation ? " COLLATE "~this.collation : "";
+    /**
+     * Constructor
+     *
+     * @param string $identifier The identifier this expression represents
+     * @param string|null $collation The identifier collation
+     */
+    this(string $identifier, Nullable!string $collation = null) {
+        _identifier = $identifier;
+        this.collation = $collation;
+    }
 
-    return result;
-  }
+    /**
+     * Sets the identifier this expression represents
+     *
+     * @param string $identifier The identifier
+     */
+    void setIdentifier(string $identifier) {
+        _identifier = $identifier;
+    }
 
-  O traverse(this O)(Closure aCallback) {
-    return cast(O)this;
-  }
+    /**
+     * Returns the identifier this expression represents
+     */
+    string getIdentifier() {
+        return _identifier;
+    }
+
+    /**
+     * Sets the collation.
+     *
+     * @param string $collation Identifier collation
+     */
+    void setCollation(string $collation) {
+        this.collation = $collation;
+    }
+
+    /**
+     * Returns the collation.
+     *
+     */
+    Nullable!string getCollation() {
+        return this.collation;
+    }
+
+
+    string sql(ValueBinder aBinder) {
+        $sql = _identifier;
+        if (this.collation) {
+            $sql ~= " COLLATE " ~ this.collation;
+        }
+
+        return $sql;
+    }
+
+
+    O traverse(this O)(Closure $callback) {
+        return this;
+    }
 }
-auto DTBIdentifierExpression(string anIdentifier, string aCollation = null) { return DDTBIdentifierExpression(anIdentifier, aCollation); }
-
-version(test_uim_databases) { unittest {
-  auto expression = DTBIdentifierExpression("test");
-  assert(DTBIdentifierExpression("test").sql(DTBValueBinder) == "test")
-}}

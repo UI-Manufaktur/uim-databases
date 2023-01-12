@@ -1,12 +1,11 @@
-/*********************************************************************************************************
-*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
-**********************************************************************************************************/
-module uim.cake;
+module uim.databases.Expression;
 
-@safe:
-import uim.cake;
+import uim.databases.IDBAExpression;
+import uim.databases.Query;
+import uim.databases.types.ExpressionTypeCasterTrait;
+import uim.databases.ITypedResult;
+import uim.databases.TypedResultTrait;
+import uim.databases.ValueBinder;
 
 /**
  * This class represents a function call string in a SQL statement. Calls can be
@@ -14,17 +13,15 @@ import uim.cake;
  * For security reasons, all params passed are quoted by default unless
  * explicitly told otherwise.
  */
-class FunctionExpression : QueryExpression : IDTBTypedResult
+class FunctionExpression : QueryExpression : ITypedResult
 {
     use ExpressionTypeCasterTrait;
     use TypedResultTrait;
 
     /**
      * The name of the function to be constructed when generating the SQL string
-     *
-     * @var string
      */
-    protected _name;
+    protected string _name;
 
     /**
      * Constructor. Takes a name for the function to be invoked and a list of params
@@ -36,48 +33,43 @@ class FunctionExpression : QueryExpression : IDTBTypedResult
      *
      * ### Examples:
      *
-     * `$f = new FunctionExpression("CONCAT", ["CakePHP"," rules"]);`
+     * `$f = new FunctionExpression("CONCAT", ["UIM", " rules"]);`
      *
-     * Previous line will generate `CONCAT("CakePHP"," rules")`
+     * Previous line will generate `CONCAT("UIM", " rules")`
      *
-     * `$f = new FunctionExpression("CONCAT", ["name":"literal"," rules"]);`
+     * `$f = new FunctionExpression("CONCAT", ["name": "literal", " rules"]);`
      *
-     * Will produce `CONCAT(name," rules")`
+     * Will produce `CONCAT(name, " rules")`
      *
-     * @param string $name the name of the function to be constructed
+     * @param string aName the name of the function to be constructed
      * @param array $params list of arguments to be passed to the function
-     * If associative the key would be used as argument when value is"literal"
+     * If associative the key would be used as argument when value is "literal"
      * @param array<string, string>|array<string|null> $types Associative array of types to be associated with the
      * passed arguments
      * @param string $returnType The return type of this expression
      */
-    this(string $name, array $params = [], array $types = [], string $returnType ="string")
-    {
+    this(string aName, array $params = null, array $types = null, string $returnType = "string") {
         _name = $name;
         _returnType = $returnType;
-        parent.__construct($params, someTypes,",");
+        super(($params, $types, ",");
     }
 
     /**
      * Sets the name of the SQL function to be invoke in this expression.
      *
-     * @param string $name The name of the function
-     * @return $this
+     * @param string aName The name of the function
+     * @return this
      */
-    function setName(string $name)
-    {
+    function setName(string aName) {
         _name = $name;
 
-        return $this;
+        return this;
     }
 
     /**
      * Gets the name of the SQL function to be invoke in this expression.
-     *
-     * @return string
      */
-    string getName()
-    {
+    string getName() {
         return _name;
     }
 
@@ -85,53 +77,52 @@ class FunctionExpression : QueryExpression : IDTBTypedResult
      * Adds one or more arguments for the function call.
      *
      * @param array $conditions list of arguments to be passed to the function
-     * If associative the key would be used as argument when value is"literal"
+     * If associative the key would be used as argument when value is "literal"
      * @param array<string, string> $types Associative array of types to be associated with the
      * passed arguments
      * @param bool $prepend Whether to prepend or append to the list of arguments
-     * @see \Cake\Database\Expression\FunctionExpression.__construct() for more details.
-     * @return $this
+     * @see uim.databases.Expression\FunctionExpression::__construct() for more details.
+     * @return this
      * @psalm-suppress MoreSpecificImplementedParamType
      */
-    function add($conditions, array $types = [], bool $prepend = false)
-    {
-        $put = $prepend ?"array_unshift" :"array_push";
-        $typeMap = $this.getTypeMap().setTypes($types);
+    function add($conditions, array $types = null, bool $prepend = false) {
+        $put = $prepend ? "array_unshift" : "array_push";
+        $typeMap = this.getTypeMap().setTypes($types);
         foreach ($conditions as $k: $p) {
-            if ($p =="literal") {
+            if ($p == "literal") {
                 $put(_conditions, $k);
                 continue;
             }
 
-            if ($p =="identifier") {
+            if ($p == "identifier") {
                 $put(_conditions, new IdentifierExpression($k));
                 continue;
             }
 
             $type = $typeMap.type($k);
 
-            if ($type !is null && !$p instanceof IDTBExpression) {
+            if ($type != null && !$p instanceof IDBAExpression) {
                 $p = _castToExpression($p, $type);
             }
 
-            if ($p instanceof IDTBExpression) {
+            if ($p instanceof IDBAExpression) {
                 $put(_conditions, $p);
                 continue;
             }
 
-            $put(_conditions, ["value": $p,"type": $type]);
+            $put(_conditions, ["value": $p, "type": $type]);
         }
 
-        return $this;
+        return this;
     }
 
 
-    string sql(ValueBinder aValueBinder) {
-        $parts = [];
+    string sql(ValueBinder aBinder) {
+        $parts = null;
         foreach (_conditions as $condition) {
             if ($condition instanceof Query) {
                 $condition = sprintf("(%s)", $condition.sql($binder));
-            } elseif ($condition instanceof IDTBExpression) {
+            } elseif ($condition instanceof IDBAExpression) {
                 $condition = $condition.sql($binder);
             } elseif (is_array($condition)) {
                 $p = $binder.placeholder("param");
@@ -142,19 +133,16 @@ class FunctionExpression : QueryExpression : IDTBTypedResult
         }
 
         return _name . sprintf("(%s)", implode(
-            _conjunction ."",
+            _conjunction ~ " ",
             $parts
         ));
     }
 
     /**
-     * The name of the function is in itself an expression to generate, thus
+     * The name of the bool is in itself an expression to generate, thus
      * always adding 1 to the amount of expressions stored in this object.
-     *
-     * @return int
      */
-    function count(): int
-    {
+    size_t count() {
         return 1 + count(_conditions);
     }
 }

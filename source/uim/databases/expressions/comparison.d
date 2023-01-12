@@ -1,19 +1,17 @@
-/*********************************************************************************************************
-*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
-**********************************************************************************************************/
-module uim.cake;
+module uim.databases.Expression;
 
-@safe:
-import uim.cake;
+import uim.databases.exceptions.DatabaseException;
+import uim.databases.IDBAExpression;
+import uim.databases.types.ExpressionTypeCasterTrait;
+import uim.databases.ValueBinder;
+use Closure;
 
 /**
  * A Comparison is a type of query expression that represents an operation
  * involving a field an operator and a value. In its most common form the
  * string representation of a comparison is `field = value`
  */
-class ComparisonExpression : IDTBExpression, FieldInterface
+class ComparisonExpression : IDBAExpression, FieldInterface
 {
     use ExpressionTypeCasterTrait;
     use FieldTrait;
@@ -28,65 +26,57 @@ class ComparisonExpression : IDTBExpression, FieldInterface
     /**
      * The type to be used for casting the value to a database representation
      *
-     * @var string|null
      */
-    protected _type;
+    protected Nullable!string _type;
 
     /**
      * The operator used for comparing field and value
-     *
-     * @var string
      */
-    protected _operator ="=";
+    protected string _operator = "=";
 
     /**
      * Whether the value in this expression is a traversable
-     *
-     * @var bool
      */
-    protected _isMultiple = false;
+    protected bool _isMultiple = false;
 
     /**
-     * A cached list of IDTBExpression objects that were
+     * A cached list of IDBAExpression objects that were
      * found in the value for this expression.
      *
-     * @var array<\Cake\Database\IDTBExpression>
+     * @var array<uim.databases.IDBAExpression>
      */
-    protected _valueExpressions = [];
+    protected _valueExpressions = null;
 
     /**
      * Constructor
      *
-     * @param uim.databases\IDTBExpression|string $field the field name to compare to a value
-     * aValue - The value to be used in comparison
+     * @param uim.databases.IDBAExpression|string $field the field name to compare to a value
+     * @param mixed $value The value to be used in comparison
      * @param string|null $type the type name used to cast the value
      * @param string $operator the operator used for comparing field and value
      */
-    this($field, DValue aValue, ?string $type = null, string $operator ="=")
-    {
+    this($field, $value, Nullable!string $type = null, string $operator = "=") {
         _type = $type;
-        $this.setField($field);
-        $this.setValue(DValue aValue);
+        this.setField($field);
+        this.setValue($value);
         _operator = $operator;
     }
 
     /**
      * Sets the value
      *
-     * aValue - The value to compare
-     * @return void
+     * @param mixed $value The value to compare
      */
-    function setValue(DValue aValue): void
-    {
-        aValue = _castToExpression(DValue aValue, _type);
+    void setValue($value) {
+        $value = _castToExpression($value, _type);
 
-        $isMultiple = _type && strpos(_type,"[]") != false;
+        $isMultiple = _type && strpos(_type, "[]") != false;
         if ($isMultiple) {
-            [aValue, _valueExpressions] = _collectExpressions(DValue aValue);
+            [$value, _valueExpressions] = _collectExpressions($value);
         }
 
         _isMultiple = $isMultiple;
-        _value = aValue;
+        _value = $value;
     }
 
     /**
@@ -94,7 +84,7 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      *
      * @return mixed
      */
-    DValue getValue() {
+    function getValue() {
         return _value;
     }
 
@@ -102,55 +92,48 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      * Sets the operator to use for the comparison
      *
      * @param string $operator The operator to be used for the comparison.
-     * @return void
      */
-    function setOperator(string $operator): void
-    {
+    void setOperator(string $operator) {
         _operator = $operator;
     }
 
     /**
      * Returns the operator used for comparison
-     *
-     * @return string
      */
-    string getOperator()
-    {
+    string getOperator() {
         return _operator;
     }
 
 
-    string sql(ValueBinder aValueBinder)
-    {
-        /** @var \Cake\Database\IDTBExpression|string $field */
+    string sql(ValueBinder aBinder) {
+        /** @var DDBIDBAExpression|string $field */
         $field = _field;
 
-        if ($field instanceof IDTBExpression) {
+        if ($field instanceof IDBAExpression) {
             $field = $field.sql($binder);
         }
 
         if (_value instanceof IdentifierExpression) {
-            $template ="%s %s %s";
-            aValue = _value.sql($binder);
-        } elseif (_value instanceof IDTBExpression) {
-            $template ="%s %s (%s)";
-            aValue = _value.sql($binder);
+            $template = "%s %s %s";
+            $value = _value.sql($binder);
+        } elseif (_value instanceof IDBAExpression) {
+            $template = "%s %s (%s)";
+            $value = _value.sql($binder);
         } else {
-            [$template, DValue aValue] = _stringExpression($binder);
+            [$template, $value] = _stringExpression($binder);
         }
 
-        return sprintf($template, $field, _operator, DValue aValue);
+        return sprintf($template, $field, _operator, $value);
     }
 
 
-    O traverse(this O)(Closure $callback)
-    {
-        if (_field instanceof IDTBExpression) {
+    O traverse(this O)(Closure $callback) {
+        if (_field instanceof IDBAExpression) {
             $callback(_field);
             _field.traverse($callback);
         }
 
-        if (_value instanceof IDTBExpression) {
+        if (_value instanceof IDBAExpression) {
             $callback(_value);
             _value.traverse($callback);
         }
@@ -160,21 +143,18 @@ class ComparisonExpression : IDTBExpression, FieldInterface
             $v.traverse($callback);
         }
 
-        return $this;
+        return this;
     }
 
     /**
      * Create a deep clone.
      *
      * Clones the field and value if they are expression objects.
-     *
-     * @return void
      */
-    function __clone()
-    {
-        foreach (["_value","_field"] as $prop) {
-            if ($this.{$prop} instanceof IDTBExpression) {
-                $this.{$prop} = clone $this.{$prop};
+    void __clone() {
+        foreach (["_value", "_field"] as $prop) {
+            if (this.{$prop} instanceof IDBAExpression) {
+                this.{$prop} = clone this.{$prop};
             }
         }
     }
@@ -183,53 +163,52 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      * Returns a template and a placeholder for the value after registering it
      * with the placeholder $binder
      *
-     * @param uim.databases\ValueBinder aValueBinder The value binder to use.
+     * @param uim.databases.ValueBinder aBinder The value binder to use.
      * @return array First position containing the template and the second a placeholder
      */
-    protected function _stringExpression(ValueBinder aValueBinder): array
-    {
-        $template ="%s";
+    protected array _stringExpression(ValueBinder aBinder) {
+        $template = "%s ";
 
-        if (_field instanceof IDTBExpression && !_field instanceof IdentifierExpression) {
-            $template ="(%s)";
+        if (_field instanceof IDBAExpression && !_field instanceof IdentifierExpression) {
+            $template = "(%s) ";
         }
 
         if (_isMultiple) {
-            $template ~="%s (%s)";
+            $template ~= "%s (%s)";
             $type = _type;
-            if ($type !is null) {
-                $type = str_replace("[]","", $type);
+            if ($type != null) {
+                $type = replace("[]", "", $type);
             }
-            aValue = _flattenValue(_value, $binder, $type);
+            $value = _flattenValue(_value, $binder, $type);
 
             // To avoid SQL errors when comparing a field to a list of empty values,
             // better just throw an exception here
-            if (DValue aValue =="") {
-                $field = _field instanceof IDTBExpression ? _field.sql($binder) : _field;
+            if ($value == "") {
+                $field = _field instanceof IDBAExpression ? _field.sql($binder) : _field;
                 /** @psalm-suppress PossiblyInvalidCast */
                 throw new DatabaseException(
                     "Impossible to generate condition with empty list of values for field ($field)"
                 );
             }
         } else {
-            $template ~="%s %s";
-            aValue = _bindValue(_value, $binder, _type);
+            $template ~= "%s %s";
+            $value = _bindValue(_value, $binder, _type);
         }
 
-        return [$template, DValue aValue];
+        return [$template, $value];
     }
 
     /**
      * Registers a value in the placeholder generator and returns the generated placeholder
      *
-     * @param mixed aValue The value to bind
-     * @param uim.databases\ValueBinder aValueBinder The value binder to use
-     * @param string|null $type The type of aValue
+     * @param mixed $value The value to bind
+     * @param uim.databases.ValueBinder aBinder The value binder to use
+     * @param string|null $type The type of $value
      * @return string generated placeholder
      */
-    protected string _bindValue(DValue aValue, ValueBinder aValueBinder, ?string $type = null) {
-        $placeholder = aValueBinder.placeholder("c");
-        aValueBinder.bind($placeholder, DValue aValue, $type);
+    protected string _bindValue($value, ValueBinder aBinder, Nullable!string $type = null) {
+        $placeholder = $binder.placeholder("c");
+        $binder.bind($placeholder, $value, $type);
 
         return $placeholder;
     }
@@ -238,55 +217,62 @@ class ComparisonExpression : IDTBExpression, FieldInterface
      * Converts a traversable value into a set of placeholders generated by
      * $binder and separated by `,`
      *
-     * @param iterable aValue the value to flatten
-     * @param uim.databases\ValueBinder aValueBinder The value binder to use
+     * @param iterable $value the value to flatten
+     * @param uim.databases.ValueBinder aBinder The value binder to use
      * @param string|null $type the type to cast values to
      */
-    protected string _flattenValue(iterable aValue, ValueBinder aValueBinder, ?string $type = null) {
-        $parts = [];
-        if (is_array(DValue aValue)) {
+    protected string _flattenValue(iterable $value, ValueBinder aBinder, Nullable!string $type = null) {
+        $parts = null;
+        if (is_array($value)) {
             foreach (_valueExpressions as $k: $v) {
-                $parts[$k] = $v.sql(DValue aValueBinder);
-                unset(DValue aValue[$k]);
+                $parts[$k] = $v.sql($binder);
+                unset($value[$k]);
             }
         }
 
-        if (!empty(DValue aValue)) {
-            $parts += $binder.generateManyNamed(DValue aValue, $type);
+        if (!empty($value)) {
+            $parts += $binder.generateManyNamed($value, $type);
         }
 
         return implode(",", $parts);
     }
 
     /**
-     * Returns an array with the original someValues in the first position
-     * and all IDTBExpression objects that could be found in the second
+     * Returns an array with the original $values in the first position
+     * and all IDBAExpression objects that could be found in the second
      * position.
      *
-     * @param uim.databases\IDTBExpression|iterable someValues The rows to insert
-     * @return array
+     * @param uim.databases.IDBAExpression|iterable $values The rows to insert
      */
-    protected array _collectExpressions(IDTBExpression[] someValues...) {
-      return _collectExpressions(someValues);
-    }
-    protected array _collectExpressions(IDTBExpression[] someValues) {
-      if (someValues instanceof IDTBExpression) {
-          return [someValues, []];
-      }
+    protected array _collectExpressions($values) {
+        if ($values instanceof IDBAExpression) {
+            return [$values, []];
+        }
 
-      $expressions = $result = [];
-      $result = someValues;
+        $expressions = $result = null;
+        $isArray = is_array($values);
 
-      foreach (someValues as $k: $v) {
-          if ($v instanceof IDTBExpression) {
-              $expressions[$k] = $v;
-          }
+        if ($isArray) {
+            /** @var array $result */
+            $result = $values;
+        }
 
-          if ($isArray) {
-              $result[$k] = $v;
-          }
-      }
+        foreach ($values as $k: $v) {
+            if ($v instanceof IDBAExpression) {
+                $expressions[$k] = $v;
+            }
 
-      return [$result, $expressions];
+            if ($isArray) {
+                $result[$k] = $v;
+            }
+        }
+
+        return [$result, $expressions];
     }
 }
+
+// phpcs:disable
+// Comparison will not load during instanceof checks so ensure it"s loaded here
+// @deprecated 4.1.0 Add backwards compatible alias.
+class_alias("Cake\databases.Expression\ComparisonExpression", "Cake\databases.Expression\Comparison");
+// phpcs:enable

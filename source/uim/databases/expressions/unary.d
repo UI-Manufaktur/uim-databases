@@ -1,37 +1,32 @@
-/*********************************************************************************************************
-*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
-**********************************************************************************************************/
-module uim.cake;
+module uim.databases.Expression;
 
-@safe:
-import uim.cake;
+import uim.databases.IDBAExpression;
+import uim.databases.ValueBinder;
+use Closure;
+
 /**
  * An expression object that represents an expression with only a single operand.
  */
-class UnaryExpression : IDTBExpression
+class UnaryExpression : IDBAExpression
 {
     /**
      * Indicates that the operation is in pre-order
      *
      * @var int
      */
-    public const PREFIX = 0;
+    const PREFIX = 0;
 
     /**
      * Indicates that the operation is in post-order
      *
      * @var int
      */
-    public const POSTFIX = 1;
+    const POSTFIX = 1;
 
     /**
      * The operator this unary expression represents
-     *
-     * @var string
      */
-    protected _operator;
+    protected string _operator;
 
     /**
      * Holds the value which the unary expression operates
@@ -42,59 +37,51 @@ class UnaryExpression : IDTBExpression
 
     /**
      * Where to place the operator
-     *
-     * @var int
      */
-    protected $position;
+    protected int $position;
 
     /**
      * Constructor
      *
      * @param string $operator The operator to used for the expression
-     * @param mixed aValue the value to use as the operand for the expression
-     * @param int $position either UnaryExpression.PREFIX or UnaryExpression.POSTFIX
+     * @param mixed $value the value to use as the operand for the expression
+     * @param int $position either UnaryExpression::PREFIX or UnaryExpression::POSTFIX
      */
-    this(string $operator, DValue aValue, $position = self.PREFIX)
-    {
+    this(string $operator, $value, $position = self::PREFIX) {
         _operator = $operator;
-        _value = aValue;
-        $this.position = $position;
+        _value = $value;
+        this.position = $position;
     }
 
 
-    string sql(ValueBinder aValueBinder)
-    {
+    string sql(ValueBinder aBinder) {
         $operand = _value;
-        if ($operand instanceof IDTBExpression) {
+        if ($operand instanceof IDBAExpression) {
             $operand = $operand.sql($binder);
         }
 
-        if ($this.position == self.POSTFIX) {
-            return"(" . $operand .")" . _operator;
+        if (this.position == self::POSTFIX) {
+            return "(" ~ $operand ~ ") " ~ _operator;
         }
 
-        return _operator ." (" . $operand .")";
+        return _operator ~ " (" ~ $operand ~ ")";
     }
 
 
-    O traverse(this O)(Closure $callback)
-    {
-        if (_value instanceof IDTBExpression) {
+    O traverse(this O)(Closure $callback) {
+        if (_value instanceof IDBAExpression) {
             $callback(_value);
             _value.traverse($callback);
         }
 
-        return $this;
+        return this;
     }
 
     /**
      * Perform a deep clone of the inner expression.
-     *
-     * @return void
      */
-    function __clone()
-    {
-        if (_value instanceof IDTBExpression) {
+    void __clone() {
+        if (_value instanceof IDBAExpression) {
             _value = clone _value;
         }
     }

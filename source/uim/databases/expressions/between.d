@@ -1,104 +1,118 @@
-module uim.databases.expressions.expression;
+module uim.databases.Expression;
 
-@safe:
-import uim.databases;
+module uim.databases.Expression;
+
+import uim.databases.IDBAExpression;
+import uim.databases.types.ExpressionTypeCasterTrait;
+import uim.databases.ValueBinder;
+use Closure;
 
 /**
  * An expression object that represents a SQL BETWEEN snippet
  */
-class BetweenExpression : IDBAExpression, IField {
+class BetweenExpression : IDBAExpression, FieldInterface
+{
     use ExpressionTypeCasterTrait;
     use FieldTrait;
 
-    // The first value in the expression
-    // @var mixed
-    protected DValue _fromValue;
+    /**
+     * The first value in the expression
+     *
+     * @var mixed
+     */
+    protected _from;
 
-    // The second value in the expression
-    // @var mixed
-    protected DValue _toValueValue;
+    /**
+     * The second value in the expression
+     *
+     * @var mixed
+     */
+    protected _to;
 
-    // The data type for the from and to arguments
-    // @var mixed
-    protected string _valueDatatype;
+    /**
+     * The data type for the from and to arguments
+     *
+     * @var mixed
+     */
+    protected _type;
 
     /**
      * Constructor
      *
-     * @param uim.databases\IDTBExpression|string $field The field name to compare for values inbetween the range.
+     * @param uim.databases.IDBAExpression|string $field The field name to compare for values inbetween the range.
      * @param mixed $from The initial value of the range.
      * @param mixed $to The ending value in the comparison range.
-     * @param string|null aBindDatatype The data type name to bind the values with.
+     * @param string|null $type The data type name to bind the values with.
      */
-
-    // this(IIDTBExpression field, DValue aFromValue, DValue aToValue, string $aValueDatatype = null) {
-
-    this(string aFieldName, DValue aFromValue, DValue aToValue, string aBindDatatype = null) {
-        if (DValue aValueDatatype !is null) {
-            fromValue = _castToExpression($from, $type);
-            toValue = _castToExpression($to, $type);
+    this($field, $from, $to, $type = null) {
+        if ($type != null) {
+            $from = _castToExpression($from, $type);
+            $to = _castToExpression($to, $type);
         }
 
-        _fieldName = aFieldName;
-        _fromValue = aFromValue;
-        _toValue = aToValue;
-        _valueDatatype = aBindDatatype;
+        _field = $field;
+        _from = $from;
+        _to = $to;
+        _type = $type;
     }
 
-    string sql(ValueBinder aBinder) {
-      $parts = [
-       "from": _fromValue,
-       "to": _toValue,
-      ];
 
-        /** @var \Cake\Database\IDTBExpression|string $field */
-        myFieldName = _fieldName;
-/*         if ($field instanceof IDTBExpression) {
+    string sql(ValueBinder aBinder) {
+        $parts = [
+            "from": _from,
+            "to": _to,
+        ];
+
+        /** @var DDBIDBAExpression|string $field */
+        $field = _field;
+        if ($field instanceof IDBAExpression) {
             $field = $field.sql($binder);
         }
- */
-        foreach ($name: $part; $parts) {
-/*             if ($part instanceof IDTBExpression) {
+
+        foreach ($parts as $name: $part) {
+            if ($part instanceof IDBAExpression) {
                 $parts[$name] = $part.sql($binder);
                 continue;
             }
- */            
-          $parts[$name] = _bindValue($part, $binder, _type);
+            $parts[$name] = _bindValue($part, $binder, _type);
         }
 
         return sprintf("%s BETWEEN %s AND %s", $field, $parts["from"], $parts["to"]);
     }
 
+
     O traverse(this O)(Closure $callback) {
-        foreach ([_field, _from, _toValue] as $part) {
-            if ($part instanceof IDTBExpression) {
+        foreach ([_field, _from, _to] as $part) {
+            if ($part instanceof IDBAExpression) {
                 $callback($part);
             }
         }
 
-        return $this;
+        return this;
     }
 
     /**
      * Registers a value in the placeholder generator and returns the generated placeholder
      *
-     * aValue - The value to bind
-     * @param uim.databases\ValueBinder aValueBinder The value binder to use
-     * @param string $type The type of aValue
+     * @param mixed $value The value to bind
+     * @param uim.databases.ValueBinder aBinder The value binder to use
+     * @param string $type The type of $value
      * @return string generated placeholder
      */
-    protected string _bindValue(DValue aValue, DDTBValueBinder aBinder, $type) {
-      auto myPlaceholder = aBinder.placeholder("c");
-      aBinder.bind(myPlaceholder, DValue aValue, $type);
+    protected string _bindValue($value, $binder, $type) {
+        $placeholder = $binder.placeholder("c");
+        $binder.bind($placeholder, $value, $type);
 
-      return myPlaceholder;
+        return $placeholder;
     }
 
-    // Do a deep clone of this expression.
+    /**
+     * Do a deep clone of this expression.
+     */
     void __clone() {
-        foreach (["_field","_from","_toValue"] as $part) {
-            if ($this.{$part} instanceof IDTBExpression) {
-                $this.{$part} = clone $this.{$part};
+        foreach (["_field", "_from", "_to"] as $part) {
+            if (this.{$part} instanceof IDBAExpression) {
+                this.{$part} = clone this.{$part};
             }
         }
     }
