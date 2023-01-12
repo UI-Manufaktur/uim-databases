@@ -1,24 +1,8 @@
-<?php
-declare(strict_types=1);
+module uim.databases.types;
 
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         3.6.0
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
-namespace Cake\Database\Type;
-
-use Cake\Core\Exception\CakeException;
-use Cake\Database\IDTBDriver;
-use Cake\Utility\Text;
+import uim.core.exceptions.UIMException;
+import uim.databases.IDriver;
+import uim.utilities.Text;
 use PDO;
 
 /**
@@ -26,30 +10,28 @@ use PDO;
  *
  * Use to convert binary uuid data between PHP and the database types.
  */
-class BinaryUuidType : BaseType
-{
+class BinaryUuidType : BaseType {
     /**
      * Convert binary uuid data into the database format.
      *
      * Binary data is not altered before being inserted into the database.
      * As PDO will handle reading file handles.
      *
-     * @param mixed aValue The value to convert.
-     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
+     * @param mixed $value The value to convert.
+     * @param uim.databases.IDriver aDriver The driver instance to convert with.
      * @return resource|string|null
      */
-    function toDatabase(DValue aValue, IDTBDriver aDriver)
-    {
-        if (!is_string(DValue aValue)) {
-            return aValue;
+    function toDatabase($value, IDriver aDriver) {
+        if (!is_string($value)) {
+            return $value;
         }
 
-        $length = strlen(DValue aValue);
+        $length = strlen($value);
         if ($length != 36 && $length != 32) {
             return null;
         }
 
-        return this.convertStringToBinaryUuid(DValue aValue);
+        return this.convertStringToBinaryUuid($value);
     }
 
     /**
@@ -57,43 +39,39 @@ class BinaryUuidType : BaseType
      *
      * @return string A new primary key value.
      */
-    function newId(): string
-    {
+    string newId() {
         return Text::uuid();
     }
 
     /**
      * Convert binary uuid into resource handles
      *
-     * @param mixed aValue The value to convert.
-     * @param \Cake\Database\IDTBDriver aDriver The driver instance to convert with.
+     * @param mixed $value The value to convert.
+     * @param uim.databases.IDriver aDriver The driver instance to convert with.
      * @return resource|string|null
-     * @throws \Cake\Core\Exception\CakeException
+     * @throws uim.Core\exceptions.UIMException
      */
-    function toD(DValue aValue, IDTBDriver aDriver)
-    {
-        if (DValue aValue == null) {
+    function toPHP($value, IDriver aDriver) {
+        if ($value == null) {
             return null;
         }
-        if (is_string(DValue aValue)) {
-            return this.convertBinaryUuidToString(DValue aValue);
+        if (is_string($value)) {
+            return this.convertBinaryUuidToString($value);
         }
-        if (is_resource(DValue aValue)) {
-            return aValue;
+        if (is_resource($value)) {
+            return $value;
         }
 
-        throw new CakeException(sprintf("Unable to convert %s into binary uuid.", gettype(DValue aValue)));
+        throw new UIMException(sprintf("Unable to convert %s into binary uuid.", gettype($value)));
     }
 
     /**
      * Get the correct PDO binding type for Binary data.
      *
-     * @param mixed aValue The value being bound.
-     * @param \Cake\Database\IDTBDriver aDriver The driver.
-     * @return int
+     * @param mixed $value The value being bound.
+     * @param uim.databases.IDriver aDriver The driver.
      */
-    function toStatement(DValue aValue, IDTBDriver aDriver): int
-    {
+    int toStatement($value, IDriver aDriver) {
         return PDO::PARAM_LOB;
     }
 
@@ -103,12 +81,11 @@ class BinaryUuidType : BaseType
      * Most useful for converting request data into PHP objects
      * that make sense for the rest of the ORM/Database layers.
      *
-     * @param mixed aValue The value to convert.
+     * @param mixed $value The value to convert.
      * @return mixed Converted value.
      */
-    function marshal(DValue aValue)
-    {
-        return aValue;
+    function marshal($value) {
+        return $value;
     }
 
     /**
@@ -117,8 +94,7 @@ class BinaryUuidType : BaseType
      * @param mixed $binary The value to convert.
      * @return string Converted value.
      */
-    protected function convertBinaryUuidToString($binary): string
-    {
+    protected string convertBinaryUuidToString($binary) {
         $string = unpack("H*", $binary);
 
         $string = preg_replace(
@@ -136,9 +112,8 @@ class BinaryUuidType : BaseType
      * @param string $string The value to convert.
      * @return string Converted value.
      */
-    protected function convertStringToBinaryUuid($string): string
-    {
-        $string = str_replace("-", "", $string);
+    protected string convertStringToBinaryUuid($string) {
+        $string = replace("-", "", $string);
 
         return pack("H*", $string);
     }
