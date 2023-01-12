@@ -24,11 +24,11 @@ class JsonType : BaseType, IBatchCasting
      * Convert a value data into a JSON string
      *
      * @param mixed aValue The value to convert.
-     * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDBADriver aDriver The driver instance to convert with.
      * @return string|null
      * @throws \InvalidArgumentException
      */
-    function toDatabase(DValue aValue, IDTBDriver aDriver): ?string
+    function toDatabase(DValue aValue, IDBADriver aDriver): ?string
     {
         if (is_resource(DValue aValue)) {
             throw new InvalidArgumentException("Cannot convert a resource value to JSON");
@@ -45,10 +45,10 @@ class JsonType : BaseType, IBatchCasting
      * {@inheritDoc}
      *
      * @param mixed aValue The value to convert.
-     * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDBADriver aDriver The driver instance to convert with.
      * @return array|string|null
      */
-    function toD(DValue aValue, IDTBDriver aDriver)
+    function toD(DValue aValue, IDBADriver aDriver)
     {
         if (!is_string(DValue aValue)) {
             return null;
@@ -58,7 +58,7 @@ class JsonType : BaseType, IBatchCasting
     }
 
 
-    function manytoD(array someValues, string[] someFields, IDTBDriver aDriver): array
+    function manytoD(array someValues, string[] someFields, IDBADriver aDriver): array
     {
         foreach ($fields as $field) {
             if (!isset(someValues[$field])) {
@@ -75,10 +75,10 @@ class JsonType : BaseType, IBatchCasting
      * Get the correct PDO binding type for string data.
      *
      * @param mixed aValue The value being bound.
-     * @param uim.databases.IDTBDriver aDriver The driver.
+     * @param uim.databases.IDBADriver aDriver The driver.
      * @return int
      */
-    function toStatement(DValue aValue, IDTBDriver aDriver): int
+    function toStatement(DValue aValue, IDBADriver aDriver): int
     {
         return PDO::PARAM_STR;
     }

@@ -3,7 +3,7 @@ module uim.databases.typedresults;
 @safe:
 import uim.databases.typedresults;
 
-class DDTBTypedResult {
+class DDBATypedResult {
   // The type name this expression will return when executed
   protected string _returnType = "string";
 

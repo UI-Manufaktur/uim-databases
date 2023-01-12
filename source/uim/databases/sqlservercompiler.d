@@ -3,6 +3,9 @@ module uim.databases;
 @safe:
 import uim.databases;
 
+use uim.databases.Exception\DatabaseException;
+use uim.databases.Expression\FunctionExpression;
+
 /**
  * Responsible for compiling a Query object into its SQL representation
  * for SQL Server
@@ -13,8 +16,10 @@ class SqlserverCompiler : QueryCompiler
 {
     /**
      * SQLserver does not support ORDER BY in UNION queries.
+     *
+     * @var bool
      */
-    protected bool _orderedUnion = false;
+    protected _orderedUnion = false;
 
 
     protected _templates = [
@@ -37,12 +42,14 @@ class SqlserverCompiler : QueryCompiler
      * it constructs the CTE definitions list without generating the `RECURSIVE`
      * keyword that is neither required nor valid.
      *
-     * @param array $parts List of CTEs to be transformed to string
+     * @param array someParts List of CTEs to be transformed to string
      * @param uim.databases.Query $query The query that is being compiled
-     * @param uim.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
+     * @param uim.databases.ValueBinder $binder Value binder used to generate parameter placeholder
+     * @return string
      */
-    protected string _buildWithPart(array $parts, Query $query, ValueBinder aBinder) {
-        $expressions = null;
+    protected function _buildWithPart(array someParts, Query $query, ValueBinder $binder): string
+    {
+        $expressions = [];
         foreach ($parts as $cte) {
             $expressions[] = $cte.sql($binder);
         }
@@ -57,24 +64,26 @@ class SqlserverCompiler : QueryCompiler
      * we also include an OUTPUT clause so we can ensure we get the inserted
      * row"s data back.
      *
-     * @param array $parts The parts to build
+     * @param array someParts The parts to build
      * @param uim.databases.Query $query The query that is being compiled
-     * @param uim.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
+     * @param uim.databases.ValueBinder $binder Value binder used to generate parameter placeholder
+     * @return string
      */
-    protected string _buildInsertPart(array $parts, Query $query, ValueBinder aBinder) {
+    protected function _buildInsertPart(array someParts, Query $query, ValueBinder $binder): string
+    {
         if (!isset($parts[0])) {
             throw new DatabaseException(
-                "Could not compile insert query. No table was specified~ " ~
+                "Could not compile insert query. No table was specified. "~
                 "Use `into()` to define a table."
             );
         }
         $table = $parts[0];
         $columns = _stringifyExpressions($parts[1], $binder);
-        $modifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
+        myModifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
 
         return sprintf(
             "INSERT%s INTO %s (%s) OUTPUT INSERTED.*",
-            $modifiers,
+            myModifiers,
             $table,
             implode(", ", $columns)
         );
@@ -85,8 +94,10 @@ class SqlserverCompiler : QueryCompiler
      *
      * @param int $limit the limit clause
      * @param uim.databases.Query $query The query that is being compiled
+     * @return string
      */
-    protected string _buildLimitPart(int $limit, Query $query) {
+    protected function _buildLimitPart(int $limit, Query $query): string
+    {
         if ($query.clause("offset") == null) {
             return "";
         }
@@ -99,11 +110,13 @@ class SqlserverCompiler : QueryCompiler
      * it constructs the field list taking care of aliasing and
      * converting expression objects to string.
      *
-     * @param array $parts list of fields to be transformed to string
+     * @param array someParts list of fields to be transformed to string
      * @param uim.databases.Query $query The query that is being compiled
-     * @param uim.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
+     * @param uim.databases.ValueBinder $binder Value binder used to generate parameter placeholder
+     * @return string
      */
-    protected string _buildHavingPart($parts, $query, $binder) {
+    protected function _buildHavingPart($parts, $query, $binder)
+    {
         $selectParts = $query.clause("select");
 
         foreach ($selectParts as $selectKey: $selectPart) {
@@ -115,7 +128,7 @@ class SqlserverCompiler : QueryCompiler
                     continue;
                 }
                 preg_match_all(
-                    "/\b" ~ trim($selectKey, "[]") ~ "\b/i",
+                    "/\b"~ trim($selectKey, "[]") . "\b/i",
                     $p,
                     $matches
                 );
@@ -125,7 +138,7 @@ class SqlserverCompiler : QueryCompiler
                 }
 
                 $parts[$k] = preg_replace(
-                    ["/\[|\]/", "/\b" ~ trim($selectKey, "[]") ~ "\b/i"],
+                    ["/\[|\]/", "/\b"~ trim($selectKey, "[]") . "\b/i"],
                     ["", $selectPart.sql($binder)],
                     $p
                 );

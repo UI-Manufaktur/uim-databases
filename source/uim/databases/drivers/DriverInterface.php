@@ -28,7 +28,7 @@ use Closure;
  * @method bool supports(string $feature) Checks whether a feature is supported by the driver.
  * @method bool inTransaction() Returns whether a transaction is active.
  */
-interface IDTBDriver
+interface IDBADriver
 {
     /**
      * Common Table Expressions (with clause) support.
@@ -196,7 +196,7 @@ interface IDTBDriver
      * Returns whether this driver supports save points for nested transactions.
      *
      * @return bool True if save points are supported, false otherwise.
-     * @deprecated 4.3.0 Use `supports(IDTBDriver.FEATURE_SAVEPOINT)` instead
+     * @deprecated 4.3.0 Use `supports(IDBADriver.FEATURE_SAVEPOINT)` instead
      */
     function supportsSavePoints(): bool;
 
@@ -213,7 +213,7 @@ interface IDTBDriver
      * Checks if the driver supports quoting.
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(IDTBDriver.FEATURE_QUOTE)` instead
+     * @deprecated 4.3.0 Use `supports(IDBADriver.FEATURE_QUOTE)` instead
      */
     function supportsQuoting(): bool;
 

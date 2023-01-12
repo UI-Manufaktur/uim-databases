@@ -1583,7 +1583,7 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * myIdentifier - The identifier for an expression
     */
-  IDTBExpression identifier(string anIdentifier) {
+  IDBAExpression identifier(string anIdentifier) {
     return new IdentifierExpression(anIdentifier);
   }
 

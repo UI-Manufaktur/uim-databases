@@ -1,6 +1,6 @@
 module uim.databases.Statement;
 
-use uim.databases.IDTBDriver;
+use uim.databases.IDBADriver;
 use uim.databases.statementsInterface;
 use uim.databases.TypeConverterTrait;
 use Iterator;
@@ -32,7 +32,7 @@ class BufferedStatement : Iterator, StatementInterface
     /**
      * The driver for the statement
      *
-     * @var uim.databases.IDTBDriver
+     * @var uim.databases.IDBADriver
      */
     protected _driver;
 
@@ -61,9 +61,9 @@ class BufferedStatement : Iterator, StatementInterface
      * Constructor
      *
      * @param uim.databases.StatementInterface $statement Statement implementation such as PDOStatement
-     * @param uim.databases.IDTBDriver aDriver Driver instance
+     * @param uim.databases.IDBADriver aDriver Driver instance
      */
-    public this(StatementInterface $statement, IDTBDriver aDriver)
+    public this(StatementInterface $statement, IDBADriver aDriver)
     {
         this.statement = $statement;
         this._driver = $driver;

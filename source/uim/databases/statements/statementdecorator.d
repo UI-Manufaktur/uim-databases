@@ -1,6 +1,6 @@
 module uim.databases.Statement;
 
-use uim.databases.IDTBDriver;
+use uim.databases.IDBADriver;
 use uim.databases.statementsInterface;
 use uim.databases.TypeConverterTrait;
 use Countable;
@@ -32,7 +32,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     /**
      * Reference to the driver object associated to this statement.
      *
-     * @var uim.databases.IDTBDriver
+     * @var uim.databases.IDBADriver
      */
     protected _driver;
 
@@ -48,9 +48,9 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      *
      * @param uim.databases.StatementInterface $statement Statement implementation
      *  such as PDOStatement.
-     * @param uim.databases.IDTBDriver aDriver Driver instance
+     * @param uim.databases.IDBADriver aDriver Driver instance
      */
-    public this(StatementInterface $statement, IDTBDriver aDriver)
+    public this(StatementInterface $statement, IDBADriver aDriver)
     {
         this._statement = $statement;
         this._driver = $driver;

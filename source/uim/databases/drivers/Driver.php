@@ -32,7 +32,7 @@ use PDOException;
  * Represents a database driver containing all specificities for
  * a database engine including its SQL dialect.
  */
-abstract class Driver : IDTBDriver
+abstract class Driver : IDBADriver
 {
     /**
      * @var int|null Maximum alias length or null if no limit
@@ -271,7 +271,7 @@ abstract class Driver : IDTBDriver
      * Returns true if the server supports common table expressions.
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(IDTBDriver.FEATURE_QUOTE)` instead
+     * @deprecated 4.3.0 Use `supports(IDBADriver.FEATURE_QUOTE)` instead
      */
     function supportsCTEs(): bool
     {
@@ -292,7 +292,7 @@ abstract class Driver : IDTBDriver
      * Checks if the driver supports quoting, as PDO_ODBC does not support it.
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(IDTBDriver.FEATURE_QUOTE)` instead
+     * @deprecated 4.3.0 Use `supports(IDBADriver.FEATURE_QUOTE)` instead
      */
     function supportsQuoting(): bool
     {

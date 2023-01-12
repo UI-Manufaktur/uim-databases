@@ -1,7 +1,7 @@
 module uim.databases.typedresults.interface_;
 
 // Represents an expression that is known to return a specific type
-interface IDTBTypedResult
+interface IDBATypedResult
 {
     /**
      * Return the abstract type this expression will return

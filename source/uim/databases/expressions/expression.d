@@ -3,7 +3,7 @@ module uim.databases.expressions.expression;
 @safe:
 import uim.databases;
 
-class DDTBExpression {
+class DDBAExpression {
   this() {
     initialize;
   }

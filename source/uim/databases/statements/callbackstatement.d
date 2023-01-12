@@ -1,6 +1,6 @@
 module uim.databases.Statement;
 
-use uim.databases.IDTBDriver;
+use uim.databases.IDBADriver;
 use uim.databases.statementsInterface;
 
 /**
@@ -22,10 +22,10 @@ class CallbackStatement : StatementDecorator
      * Constructor
      *
      * @param uim.databases.StatementInterface $statement The statement to decorate.
-     * @param uim.databases.IDTBDriver aDriver The driver instance used by the statement.
+     * @param uim.databases.IDBADriver aDriver The driver instance used by the statement.
      * @param callable $callback The callback to apply to results before they are returned.
      */
-    public this(StatementInterface $statement, IDTBDriver aDriver, callable $callback)
+    public this(StatementInterface $statement, IDBADriver aDriver, callable $callback)
     {
         parent::__construct($statement, $driver);
         this._callback = $callback;

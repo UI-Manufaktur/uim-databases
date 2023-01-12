@@ -12,33 +12,33 @@ import uim.databases;
 // Use to convert bool data between D and the database types.
 class BoolType : BaseType, IBatchCasting {
     // Convert bool data into the database format.
-    bool toDatabase(bool aValue, IDTBDriver aDriver) {
+    bool toDatabase(bool aValue, IDBADriver aDriver) {
       return aValue;
     }
     
     // Convert int data into the database format.
-    bool toDatabase(int aValue, IDTBDriver aDriver) {
+    bool toDatabase(int aValue, IDBADriver aDriver) {
       return (DValue aValue > 0);
     }
 
     // Convert string data into the database format.
-    bool toDatabase(string aValue, IDTBDriver aDriver) {
+    bool toDatabase(string aValue, IDBADriver aDriver) {
       return (DValue aValue == "1" || aValue.toLower == "true");
     }
 
-    bool toD(bool aValue, IDTBDriver aDriver) {
+    bool toD(bool aValue, IDBADriver aDriver) {
       return aValue;
     }
 
-    bool toD(int aValue, IDTBDriver aDriver) {
+    bool toD(int aValue, IDBADriver aDriver) {
       return (DValue aValue > 0);
     }
 
-    bool toD(string aValue, IDTBDriver aDriver) {
+    bool toD(string aValue, IDBADriver aDriver) {
       return (DValue aValue == "1" || aValue.toLower == "true");
     }
 
-    bool[string] manyToD(bool[string] someValues, string[] someFields, IDTBDriver aDriver) {
+    bool[string] manyToD(bool[string] someValues, string[] someFields, IDBADriver aDriver) {
       foreach (myField; someFields) {
           auto aValue = someValues.get(myField, null);
           if (DValue aValue == null || is_bool(DValue aValue)) {
@@ -60,10 +60,10 @@ class BoolType : BaseType, IBatchCasting {
      * Get the correct PDO binding type for bool data.
      *
      * @param mixed aValue The value being bound.
-     * @param uim.databases.IDTBDriver aDriver The driver.
+     * @param uim.databases.IDBADriver aDriver The driver.
      * @return int
      */
-    int toStatement(DValue aValue, IDTBDriver aDriver) {
+    int toStatement(DValue aValue, IDBADriver aDriver) {
         if (DValue aValue == null) {
             return PDO::PARAM_NULL;
         }

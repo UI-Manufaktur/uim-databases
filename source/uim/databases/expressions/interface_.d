@@ -7,7 +7,7 @@ import uim.databases;
 interface IDBAExpression {
   // Converts the Node into a SQL string fragment.
   // uim.databases.ValueBinder aValueBinder Parameter binder
-  string sql(DDTBValueBinder newValueBinder);
+  string sql(DDBAValueBinder newValueBinder);
 
   /**
     * Iterates over each part of the expression recursively for every

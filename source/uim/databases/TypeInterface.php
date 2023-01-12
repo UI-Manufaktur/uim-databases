@@ -26,28 +26,28 @@ interface TypeInterface
      * Casts given value from a PHP type to one acceptable by a database.
      *
      * @param mixed aValue Value to be converted to a database equivalent.
-     * @param uim.databases.IDTBDriver aDriver Object from which database preferences and configuration will be extracted.
+     * @param uim.databases.IDBADriver aDriver Object from which database preferences and configuration will be extracted.
      * @return mixed Given PHP type casted to one acceptable by a database.
      */
-    function toDatabase(DValue aValue, IDTBDriver aDriver);
+    function toDatabase(DValue aValue, IDBADriver aDriver);
 
     /**
      * Casts given value from a database type to a PHP equivalent.
      *
      * @param mixed aValue Value to be converted to PHP equivalent
-     * @param uim.databases.IDTBDriver aDriver Object from which database preferences and configuration will be extracted
+     * @param uim.databases.IDBADriver aDriver Object from which database preferences and configuration will be extracted
      * @return mixed Given value casted from a database to a PHP equivalent.
      */
-    function toD(DValue aValue, IDTBDriver aDriver);
+    function toD(DValue aValue, IDBADriver aDriver);
 
     /**
      * Casts given value to its Statement equivalent.
      *
      * @param mixed aValue Value to be converted to PDO statement.
-     * @param uim.databases.IDTBDriver aDriver Object from which database preferences and configuration will be extracted.
+     * @param uim.databases.IDBADriver aDriver Object from which database preferences and configuration will be extracted.
      * @return mixed Given value casted to its Statement equivalent.
      */
-    function toStatement(DValue aValue, IDTBDriver aDriver);
+    function toStatement(DValue aValue, IDBADriver aDriver);
 
     /**
      * Marshals flat data into PHP objects.

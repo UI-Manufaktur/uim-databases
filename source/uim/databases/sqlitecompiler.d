@@ -13,6 +13,8 @@ class SqliteCompiler : QueryCompiler
 {
     /**
      * SQLite does not support ORDER BY in UNION queries.
+     *
+     * @var bool
      */
-    protected bool _orderedUnion = false;
+    protected _orderedUnion = false;
 }

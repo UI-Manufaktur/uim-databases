@@ -33,10 +33,10 @@ class IntegerType : BaseType, IBatchCasting {
     * Convert integer data into the database format.
     *
     * @param mixed aValue The value to convert.
-    * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
+    * @param uim.databases.IDBADriver aDriver The driver instance to convert with.
     * @return int|null
     */
-  function toDatabase(DValue aValue, IDTBDriver aDriver): ?int
+  function toDatabase(DValue aValue, IDBADriver aDriver): ?int
   {
       if (DValue aValue == null || aValue == "") {
           return null;
@@ -51,10 +51,10 @@ class IntegerType : BaseType, IBatchCasting {
     * {@inheritDoc}
     *
     * @param mixed aValue The value to convert.
-    * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
+    * @param uim.databases.IDBADriver aDriver The driver instance to convert with.
     * @return int|null
     */
-  function toD(DValue aValue, IDTBDriver aDriver): ?int
+  function toD(DValue aValue, IDBADriver aDriver): ?int
   {
       if (DValue aValue == null) {
           return null;
@@ -64,7 +64,7 @@ class IntegerType : BaseType, IBatchCasting {
   }
 
 
-  function manytoD(array someValues, string[] someFields, IDTBDriver aDriver): array
+  function manytoD(array someValues, string[] someFields, IDBADriver aDriver): array
   {
       foreach ($fields as $field) {
           if (!isset(someValues[$field])) {
@@ -83,10 +83,10 @@ class IntegerType : BaseType, IBatchCasting {
     * Get the correct PDO binding type for integer data.
     *
     * @param mixed aValue The value being bound.
-    * @param uim.databases.IDTBDriver aDriver The driver.
+    * @param uim.databases.IDBADriver aDriver The driver.
     * @return int
     */
-  function toStatement(DValue aValue, IDTBDriver aDriver): int
+  function toStatement(DValue aValue, IDBADriver aDriver): int
   {
       return PDO::PARAM_INT;
   }

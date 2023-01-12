@@ -9,7 +9,7 @@ module uim.databases;
 import uim.databases;
 
 // Represents a database driver containing all specificities for a database engine including its SQL dialect.
-abstract class Driver : IDTBDriver {
+abstract class Driver : IDBADriver {
     // Maximum alias length or null if no limit
     protected const int MAX_ALIAS_LENGTH = 0;
 
@@ -221,7 +221,7 @@ abstract class Driver : IDTBDriver {
      * Returns true if the server supports common table expressions.
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(IDTBDriver.FEATURE_QUOTE)` instead
+     * @deprecated 4.3.0 Use `supports(IDBADriver.FEATURE_QUOTE)` instead
      */
     bool supportsCTEs() {
         deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
@@ -240,7 +240,7 @@ abstract class Driver : IDTBDriver {
      * Checks if the driver supports quoting, as PDO_ODBC does not support it.
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(IDTBDriver.FEATURE_QUOTE)` instead
+     * @deprecated 4.3.0 Use `supports(IDBADriver.FEATURE_QUOTE)` instead
      */
     bool supportsQuoting() {
         deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");

@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace uim.databases.Type;
 
 use Cake\Core\Exception\CakeException;
-use uim.databases.IDTBDriver;
+use uim.databases.IDBADriver;
 use PDO;
 
 /**
@@ -34,10 +34,10 @@ class BinaryType : BaseType
      * As PDO will handle reading file handles.
      *
      * @param mixed aValue The value to convert.
-     * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDBADriver aDriver The driver instance to convert with.
      * @return resource|string
      */
-    function toDatabase(DValue aValue, IDTBDriver aDriver)
+    function toDatabase(DValue aValue, IDBADriver aDriver)
     {
         return aValue;
     }
@@ -46,11 +46,11 @@ class BinaryType : BaseType
      * Convert binary into resource handles
      *
      * @param mixed aValue The value to convert.
-     * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDBADriver aDriver The driver instance to convert with.
      * @return resource|null
      * @throws uim.Core\Exception\CakeException
      */
-    function toD(DValue aValue, IDTBDriver aDriver)
+    function toD(DValue aValue, IDBADriver aDriver)
     {
         if (DValue aValue == null) {
             return null;
@@ -68,10 +68,10 @@ class BinaryType : BaseType
      * Get the correct PDO binding type for Binary data.
      *
      * @param mixed aValue The value being bound.
-     * @param uim.databases.IDTBDriver aDriver The driver.
+     * @param uim.databases.IDBADriver aDriver The driver.
      * @return int
      */
-    function toStatement(DValue aValue, IDTBDriver aDriver): int
+    function toStatement(DValue aValue, IDBADriver aDriver): int
     {
         return PDO::PARAM_LOB;
     }

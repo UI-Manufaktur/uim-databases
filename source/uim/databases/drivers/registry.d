@@ -3,12 +3,12 @@ module uim.databases.drivers.registry;
 @safe:
 import uim.databases;
 
-class DDTBDriverRegistry : DRegistry(IDTBDriver) { 
-  static DDTBDriverRegistry driverRegistry;
+class DDBADriverRegistry : DRegistry(IDBADriver) { 
+  static DDBADriverRegistry driverRegistry;
 }
-auto DTBDriverRegistry() { // Singleton
+auto DBADriverRegistry() { // Singleton
   if (driverRegistry is null) {
-    driverRegistry = new DDTBDriverRegistry;
+    driverRegistry = new DDBADriverRegistry;
   }
   return driverRegistry;
 }

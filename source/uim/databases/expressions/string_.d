@@ -9,7 +9,7 @@ module uim.expressions.string_;
 import uim.databases;
 
 // String expression with collation.
-class StringExpression : IDTBExpression {
+class StringExpression : IDBAExpression {
   protected string _string;
 
   /**

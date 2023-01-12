@@ -329,7 +329,7 @@ class QueryCompiler {
     //  uim.databases.Query myQuery The query that is being compiled
     // $binder Value binder used to generate parameter placeholder
     // SQL fragment.
-    protected string _buildInsertPart(array someParts, DDTBQuery myQuery, DDTBValueBinder aValueBinder) {
+    protected string _buildInsertPart(array someParts, DDBAQuery myQuery, DDBAValueBinder aValueBinder) {
         if (0 !in someParts[0]) {
             throw new DatabaseException(
                 "Could not compile insert query. No table was specified. "~

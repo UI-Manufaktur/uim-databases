@@ -1,6 +1,6 @@
 module uim.databases.schemas;
 
-use uim.databases.IDTBDriver;
+use uim.databases.IDBADriver;
 use uim.databases.Exception\DatabaseException;
 
 /**
@@ -322,7 +322,7 @@ class MysqlSchemaDialect : SchemaDialect
         }
 
         $out = this._driver.quoteIdentifier($name);
-        $nativeJson = this._driver.supports(IDTBDriver::FEATURE_JSON);
+        $nativeJson = this._driver.supports(IDBADriver::FEATURE_JSON);
 
         $typeMap = [
             TableSchema::TYPE_TINYINTEGER : " TINYINT",

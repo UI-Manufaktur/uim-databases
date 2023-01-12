@@ -21,10 +21,10 @@ class FloatType : BaseType, IBatchCasting {
     * Convert integer data into the database format.
     *
     * @param mixed aValue The value to convert.
-    * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
+    * @param uim.databases.IDBADriver aDriver The driver instance to convert with.
     * @return float|null
     */
-  float toDatabase(string aValue, IDTBDriver aDriver) {
+  float toDatabase(string aValue, IDBADriver aDriver) {
     if (DValue aValue == null || aValue == "") {
         return null;
     }
@@ -34,11 +34,11 @@ class FloatType : BaseType, IBatchCasting {
 
   /**
     * @param mixed aValue The value to convert.
-    * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
+    * @param uim.databases.IDBADriver aDriver The driver instance to convert with.
     * @return float|null
     * @throws uim.Core\Exception\CakeException
     */
-  float toD(string aValue, IDTBDriver aDriver) {
+  float toD(string aValue, IDBADriver aDriver) {
     if (!aValue.isNumeric) {
       return 0.0;
     }
@@ -46,7 +46,7 @@ class FloatType : BaseType, IBatchCasting {
   }
 
 
-  function manytoD(array someValues, array someFields, IDTBDriver aDriver): array
+  function manytoD(array someValues, array someFields, IDBADriver aDriver): array
   {
       foreach (someFields as $field) {
           if (!isset(someValues[$field])) {
@@ -63,10 +63,10 @@ class FloatType : BaseType, IBatchCasting {
     * Get the correct PDO binding type for float data.
     *
     * @param mixed aValue The value being bound.
-    * @param uim.databases.IDTBDriver aDriver The driver.
+    * @param uim.databases.IDBADriver aDriver The driver.
     * @return int
     */
-  function toStatement(DValue aValue, IDTBDriver aDriver): int
+  function toStatement(DValue aValue, IDBADriver aDriver): int
   {
       return PDO::PARAM_STR;
   }

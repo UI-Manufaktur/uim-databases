@@ -293,7 +293,7 @@ class Mysql : Driver
      * Returns true if the server supports common table expressions.
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(IDTBDriver::FEATURE_CTE)` instead
+     * @deprecated 4.3.0 Use `supports(IDBADriver::FEATURE_CTE)` instead
      */
     function supportsCTEs(): bool
     {
@@ -306,7 +306,7 @@ class Mysql : Driver
      * Returns true if the server supports native JSON columns
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(IDTBDriver::FEATURE_JSON)` instead
+     * @deprecated 4.3.0 Use `supports(IDBADriver::FEATURE_JSON)` instead
      */
     function supportsNativeJson(): bool
     {
@@ -319,7 +319,7 @@ class Mysql : Driver
      * Returns true if the connected server supports window functions.
      *
      * @return bool
-     * @deprecated 4.3.0 Use `supports(IDTBDriver::FEATURE_WINDOW)` instead
+     * @deprecated 4.3.0 Use `supports(IDBADriver::FEATURE_WINDOW)` instead
      */
     function supportsWindowFunctions(): bool
     {
