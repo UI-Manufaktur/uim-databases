@@ -1,1 +1,1 @@
-modeule uim.databases.exceptions;
+module uim.cake.databases.exceptions;
