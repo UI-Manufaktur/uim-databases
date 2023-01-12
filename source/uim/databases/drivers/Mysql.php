@@ -20,8 +20,8 @@ use Cake\Database\Driver;
 use Cake\Database\Query;
 use Cake\Database\Schema\MysqlSchemaDialect;
 use Cake\Database\Schema\SchemaDialect;
-use Cake\Database\Statement\MysqlStatement;
-use Cake\Database\StatementInterface;
+use uim.databases.statements\MysqlStatement;
+use uim.databases.statementsInterface;
 use PDO;
 
 /**

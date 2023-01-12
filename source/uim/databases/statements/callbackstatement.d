@@ -1,7 +1,7 @@
 module uim.databases.Statement;
 
 use Cake\Database\IDTBDriver;
-use Cake\Database\StatementInterface;
+use uim.databases.statementsInterface;
 
 /**
  * Wraps a statement in a callback that allows row results

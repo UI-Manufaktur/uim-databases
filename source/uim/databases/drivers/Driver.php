@@ -22,7 +22,7 @@ use Cake\Database\Exception\MissingConnectionException;
 use Cake\Database\Retry\ErrorCodeWaitStrategy;
 use Cake\Database\Schema\SchemaDialect;
 use Cake\Database\Schema\TableSchema;
-use Cake\Database\Statement\PDOStatement;
+use uim.databases.statements\PDOStatement;
 use Closure;
 use InvalidArgumentException;
 use PDO;

@@ -1,7 +1,7 @@
 module uim.databases.Statement;
 
 use Cake\Database\IDTBDriver;
-use Cake\Database\StatementInterface;
+use uim.databases.statementsInterface;
 use Cake\Database\TypeConverterTrait;
 use Iterator;
 
