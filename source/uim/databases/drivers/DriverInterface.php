@@ -82,7 +82,7 @@ interface IDTBDriver
     /**
      * Establishes a connection to the database server.
      *
-     * @throws uim.Database\Exception\MissingConnectionException If database connection could not be established.
+     * @throws uim.databases.Exception\MissingConnectionException If database connection could not be established.
      * @return bool True on success, false on failure.
      */
     function connect(): bool;
@@ -119,8 +119,8 @@ interface IDTBDriver
     /**
      * Prepares a sql statement to be executed.
      *
-     * @param uim.Database\Query|string $query The query to turn into a prepared statement.
-     * @return uim.Database\IStatement
+     * @param uim.databases.Query|string $query The query to turn into a prepared statement.
+     * @return uim.databases.IStatement
      */
     function prepare($query): IStatement;
 
@@ -231,13 +231,13 @@ interface IDTBDriver
     /**
      * Get the schema dialect.
      *
-     * Used by {@link uim.Database\Schema} package to reflect schema and
+     * Used by {@link uim.databases.Schema} package to reflect schema and
      * generate schema.
      *
      * If all the tables that use this Driver specify their
      * own schemas, then this may return null.
      *
-     * @return uim.Database\Schema\SchemaDialect
+     * @return uim.databases.Schema\SchemaDialect
      */
     function schemaDialect(): SchemaDialect;
 
@@ -309,8 +309,8 @@ interface IDTBDriver
      * Transforms the passed query to this Driver"s dialect and returns an instance
      * of the transformed query and the full compiled SQL string.
      *
-     * @param uim.Database\Query $query The query to compile.
-     * @param uim.Database\ValueBinder $binder The value binder to use.
+     * @param uim.databases.Query $query The query to compile.
+     * @param uim.databases.ValueBinder $binder The value binder to use.
      * @return array containing 2 entries. The first entity is the transformed query
      * and the second one the compiled SQL.
      */
@@ -319,7 +319,7 @@ interface IDTBDriver
     /**
      * Returns an instance of a QueryCompiler.
      *
-     * @return uim.Database\QueryCompiler
+     * @return uim.databases.QueryCompiler
      */
     function newCompiler(): QueryCompiler;
 
@@ -328,7 +328,7 @@ interface IDTBDriver
      *
      * @param string $table The table name.
      * @param array $columns The list of columns for the schema.
-     * @return uim.Database\Schema\TableSchema
+     * @return uim.databases.Schema\TableSchema
      */
     function newTableSchema(string $table, array $columns = []): TableSchema;
 }

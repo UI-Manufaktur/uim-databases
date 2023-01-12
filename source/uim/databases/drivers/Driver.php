@@ -441,7 +441,7 @@ abstract class Driver : IDTBDriver
     {
         $className = TableSchema.class;
         if (isset(_config["tableSchema"])) {
-            /** @var class-string<uim.Database\Schema\TableSchema> $className */
+            /** @var class-string<uim.databases.Schema\TableSchema> $className */
             $className = _config["tableSchema"];
         }
 

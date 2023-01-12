@@ -41,14 +41,14 @@ class BufferedStatement : Iterator, StatementInterface
     /**
      * The decorated statement
      *
-     * @var uim.Database\StatementInterface
+     * @var uim.databases.StatementInterface
      */
     protected $statement;
 
     /**
      * The driver for the statement
      *
-     * @var uim.Database\IDTBDriver
+     * @var uim.databases.IDTBDriver
      */
     protected _driver;
 
@@ -76,8 +76,8 @@ class BufferedStatement : Iterator, StatementInterface
     /**
      * Constructor
      *
-     * @param uim.Database\StatementInterface $statement Statement implementation such as PDOStatement
-     * @param uim.Database\IDTBDriver aDriver Driver instance
+     * @param uim.databases.StatementInterface $statement Statement implementation such as PDOStatement
+     * @param uim.databases.IDTBDriver aDriver Driver instance
      */
     public this(StatementInterface $statement, IDTBDriver aDriver)
     {
@@ -318,7 +318,7 @@ class BufferedStatement : Iterator, StatementInterface
     /**
      * Get the wrapped statement
      *
-     * @return uim.Database\StatementInterface
+     * @return uim.databases.StatementInterface
      */
     function getInnerStatement(): StatementInterface
     {

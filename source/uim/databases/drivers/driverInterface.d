@@ -36,7 +36,7 @@ interface IDTBDriver {
     /**
      * Establishes a connection to the database server.
      *
-     * @throws uim.Database\Exception\MissingConnectionException If database connection could not be established.
+     * @throws uim.databases.Exception\MissingConnectionException If database connection could not be established.
      * @return bool True on success, false on failure.
      */
     bool connect();
@@ -70,7 +70,7 @@ interface IDTBDriver {
      * Prepares a sql statement to be executed.
      *
      * @param uim.databases\Query|string myQuery The query to turn into a prepared statement.
-     * @return uim.Database\IStatement
+     * @return uim.databases.IStatement
      */
     IStatement prepare(myQuery);
 
@@ -160,13 +160,13 @@ interface IDTBDriver {
     /**
      * Get the schema dialect.
      *
-     * Used by {@link uim.Database\Schema} package to reflect schema and
+     * Used by {@link uim.databases.Schema} package to reflect schema and
      * generate schema.
      *
      * If all the tables that use this Driver specify their
      * own schemas, then this may return null.
      *
-     * @return uim.Database\Schema\SchemaDialect
+     * @return uim.databases.Schema\SchemaDialect
      */
     SchemaDialect schemaDialect();
 
@@ -234,7 +234,7 @@ interface IDTBDriver {
      *
      * @param string myTable The table name.
      * @param array $columns The list of columns for the schema.
-     * @return uim.Database\Schema\TableSchema
+     * @return uim.databases.Schema\TableSchema
      */
     TableSchema newTableSchema(string myTable, array $columns = []);
 }

@@ -33,14 +33,14 @@ class SchemaCache
     /**
      * Schema
      *
-     * @var uim.Database\Schema\CachedCollection
+     * @var uim.databases.Schema\CachedCollection
      */
     protected _schema;
 
     /**
      * Constructor
      *
-     * @param uim.Database\Connection $connection Connection name to get the schema for or a connection instance
+     * @param uim.databases.Connection $connection Connection name to get the schema for or a connection instance
      */
     public this(Connection $connection)
     {
@@ -97,8 +97,8 @@ class SchemaCache
     /**
      * Helper method to get the schema collection.
      *
-     * @param uim.Database\Connection $connection Connection object
-     * @return uim.Database\Schema\CachedCollection
+     * @param uim.databases.Connection $connection Connection object
+     * @return uim.databases.Schema\CachedCollection
      * @throws \RuntimeException If given connection object is not compatible with schema caching
      */
     function getSchema(Connection $connection): CachedCollection
@@ -108,7 +108,7 @@ class SchemaCache
             $connection.cacheMetadata(true);
         }
 
-        /** @var uim.Database\Schema\CachedCollection $schemaCollection */
+        /** @var uim.databases.Schema\CachedCollection $schemaCollection */
         $schemaCollection = $connection.getSchemaCollection();
 
         return $schemaCollection;

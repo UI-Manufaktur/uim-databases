@@ -44,8 +44,8 @@ trait TupleComparisonTranslatorTrait
      *
      * 1 = (SELECT 1 FROM a_table WHERE (a = c) AND (b = d))
      *
-     * @param uim.Database\Expression\TupleComparison $expression The expression to transform
-     * @param uim.Database\Query $query The query to update.
+     * @param uim.databases.Expression\TupleComparison $expression The expression to transform
+     * @param uim.databases.Query $query The query to update.
      * @return void
      */
     protected function _transformTupleComparison(TupleComparison $expression, Query $query): void

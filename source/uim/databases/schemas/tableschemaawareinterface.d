@@ -8,14 +8,14 @@ interface TableSchemaAwareInterface
     /**
      * Get and set the schema for this fixture.
      *
-     * @return uim.Database\Schema\ITableSchema&uim.Database\Schema\SqlGeneratorInterface
+     * @return uim.databases.Schema\ITableSchema&uim.databases.Schema\SqlGeneratorInterface
      */
     function getTableSchema();
 
     /**
      * Get and set the schema for this fixture.
      *
-     * @param uim.Database\Schema\ITableSchema&uim.Database\Schema\SqlGeneratorInterface $schema The table to set.
+     * @param uim.databases.Schema\ITableSchema&uim.databases.Schema\SqlGeneratorInterface $schema The table to set.
      * @return this
      */
     function setTableSchema($schema);

@@ -6,7 +6,7 @@ import uim.databases;
 // An interface used by Expression objects.
 interface IDBAExpression {
   // Converts the Node into a SQL string fragment.
-  // uim.Database\ValueBinder aValueBinder Parameter binder
+  // uim.databases.ValueBinder aValueBinder Parameter binder
   string sql(DDTBValueBinder newValueBinder);
 
   /**

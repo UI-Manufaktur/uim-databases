@@ -41,14 +41,14 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * Statement instance implementation, such as PDOStatement
      * or any other custom implementation.
      *
-     * @var uim.Database\StatementInterface
+     * @var uim.databases.StatementInterface
      */
     protected _statement;
 
     /**
      * Reference to the driver object associated to this statement.
      *
-     * @var uim.Database\IDTBDriver
+     * @var uim.databases.IDTBDriver
      */
     protected _driver;
 
@@ -62,9 +62,9 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     /**
      * Constructor
      *
-     * @param uim.Database\StatementInterface $statement Statement implementation
+     * @param uim.databases.StatementInterface $statement Statement implementation
      *  such as PDOStatement.
-     * @param uim.Database\IDTBDriver aDriver Driver instance
+     * @param uim.databases.IDTBDriver aDriver Driver instance
      */
     public this(StatementInterface $statement, IDTBDriver aDriver)
     {
@@ -281,7 +281,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * }
      * ```
      *
-     * @return uim.Database\StatementInterface
+     * @return uim.databases.StatementInterface
      * @psalm-suppress ImplementedReturnTypeMismatch
      */
     #[\ReturnTypeWillChange]
@@ -354,7 +354,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     /**
      * Returns the statement object that was decorated by this class.
      *
-     * @return uim.Database\StatementInterface
+     * @return uim.databases.StatementInterface
      */
     function getInnerStatement()
     {

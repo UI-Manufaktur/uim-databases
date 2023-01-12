@@ -26,7 +26,7 @@ class Query : IDBAExpression, IteratorAggregate {
   /**
     * Connection instance to be used to execute this query.
     *
-    * @var uim.Database\Connection
+    * @var uim.databases.Connection
     */
   protected _connection;
 
@@ -113,7 +113,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * The object responsible for generating query placeholders and temporarily store values
     * associated to each of those.
     *
-    * @var uim.Database\ValueBinder|null
+    * @var uim.databases.ValueBinder|null
     */
   protected _valueBinder;
 
@@ -155,7 +155,7 @@ class Query : IDBAExpression, IteratorAggregate {
   /**
     * Gets the connection instance to be used for executing and transforming this query.
     *
-    * @return uim.Database\Connection
+    * @return uim.databases.Connection
     */
   Connection getConnection() {
       return _connection;
@@ -179,7 +179,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * This method can be overridden in query subclasses to decorate behavior
     * around query execution.
     *
-    * @return uim.Database\IStatement
+    * @return uim.databases.IStatement
     */
   IStatement execute() {
       $statement = _connection.run(this);
@@ -311,7 +311,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * objects:
     *
     * ```
-    * $cte = new uim.Database\Expression\CommonTableExpression(
+    * $cte = new uim.databases.Expression\CommonTableExpression(
     *     "cte",
     *     myConnection
     *         .newQuery()
@@ -328,8 +328,8 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * ```
     * myQuery.with(function (
-    *     uim.Database\Expression\CommonTableExpression $cte,
-    *     uim.Database\Query myQuery
+    *     uim.databases.Expression\CommonTableExpression $cte,
+    *     uim.databases.Query myQuery
     *  ) {
     *     $cteQuery = myQuery
     *         .select("*")
@@ -634,7 +634,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @param array<string, mixed>|string myTables list of tables to be joined in the query
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @param bool shouldOverwrite whether to reset joins with passed list or not
-    * @see uim.Database\TypeFactory
+    * @see uim.databases.TypeFactory
     * @return this
     */
   function join(myTables, myTypes = [], shouldOverwrite = false) {
@@ -918,8 +918,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * @param uim.databases\IDBAExpression|\Closure|array|string|null $conditions The conditions to filter on.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @param bool shouldOverwrite whether to reset conditions with passed list or not
-    * @see uim.Database\TypeFactory
-    * @see uim.Database\Expression\QueryExpression
+    * @see uim.databases.TypeFactory
+    * @see uim.databases.Expression\QueryExpression
     * @return this
     */
   function where($conditions = null, array myTypes = [], bool shouldOverwrite = false) {
@@ -1114,8 +1114,8 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * @param uim.databases\IDBAExpression|\Closure|array|string conditions The conditions to add with AND.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
-    * @see uim.Database\Query.where()
-    * @see uim.Database\TypeFactory
+    * @see uim.databases.Query.where()
+    * @see uim.databases.TypeFactory
     */
   O andWhere(this O)($conditions, array myTypes = []) {
       _conjugate("where", $conditions, "AND", myTypes);
@@ -1319,7 +1319,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @param uim.databases\IDBAExpression|\Closure|array|string|null $conditions The having conditions.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @param bool shouldOverwrite whether to reset conditions with passed list or not
-    * @see uim.Database\Query.where()
+    * @see uim.databases.Query.where()
     * @return this
     */
   function having($conditions = null, myTypes = [], shouldOverwrite = false) {
@@ -1342,7 +1342,7 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * @param uim.databases\IDBAExpression|\Closure|array|string conditions The AND conditions for HAVING.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
-    * @see uim.Database\Query.andWhere()
+    * @see uim.databases.Query.andWhere()
     * @return this
     */
   function andHaving($conditions, myTypes = []) {
@@ -1598,9 +1598,9 @@ class Query : IDBAExpression, IteratorAggregate {
     * or by providing an array of value sets. Additionally myData can be a Query
     * instance to insert data from another SELECT statement.
     *
-    * @param uim.databases\Expression\ValuesExpression|uim.Database\Query|array myData The data to insert.
+    * @param uim.databases\Expression\ValuesExpression|uim.databases.Query|array myData The data to insert.
     * @return this
-    * @throws uim.Database\Exception\DatabaseException if you try to set values before declaring columns.
+    * @throws uim.databases.Exception\DatabaseException if you try to set values before declaring columns.
     *   Or if you try to set values on non-insert queries.
     */
   O values(this O)(myData) {
@@ -1760,7 +1760,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * if required.
     *
     * You can optionally pass a single raw SQL string or an array or expressions in
-    * any format accepted by uim.Database\Expression\QueryExpression:
+    * any format accepted by uim.databases.Expression\QueryExpression:
     *
     * ```
     * $expression = myQuery.newExpr(); // Returns an empty expression object
@@ -1768,7 +1768,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * ```
     *
     * @param uim.databases\IDBAExpression|array|string|null $rawExpression A string, array or anything you want wrapped in an expression object
-    * @return uim.Database\Expression\QueryExpression
+    * @return uim.databases.Expression\QueryExpression
     */
   QueryExpression newExpr($rawExpression = null) {
       $expression = new QueryExpression([], this.getTypeMap());
@@ -1791,7 +1791,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * myQuery.func().dateDiff(["2012-01-05", "2012-01-02"])
     * ```
     *
-    * @return uim.Database\FunctionsBuilder
+    * @return uim.databases.FunctionsBuilder
     */
   FunctionsBuilder func() {
       if (_functionsBuilder is null) {
@@ -1807,7 +1807,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * iterated without having to call execute() manually, thus making it look like
     * a result set instead of the query itself.
     *
-    * @return uim.Database\IStatement
+    * @return uim.databases.IStatement
     * @psalm-suppress ImplementedReturnTypeMismatch
     */
   #[\ReturnTypeWillChange]
@@ -1925,7 +1925,7 @@ class Query : IDBAExpression, IteratorAggregate {
   /**
     * Query parts traversal method used by traverseExpressions()
     *
-    * @param uim.databases\IDBAExpression|array<uim.Database\IDBAExpression> $expression Query expression or
+    * @param uim.databases\IDBAExpression|array<uim.databases.IDBAExpression> $expression Query expression or
     *   array of expressions.
     * @param \Closure $callback The callback to be executed for each IDBAExpression
     *   found inside this query.
@@ -1977,7 +1977,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * associate values to those placeholders so that they can be passed correctly
     * to the statement object.
     *
-    * @return uim.Database\ValueBinder
+    * @return uim.databases.ValueBinder
     */
   ValueBinder getValueBinder() {
     if (_valueBinder is null) {
@@ -2066,7 +2066,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * Gets the TypeMap class where the types for each of the fields in the
     * select clause are stored.
     *
-    * @return uim.Database\TypeMap
+    * @return uim.databases.TypeMap
     */
   TypeMap getSelectTypeMap() {
     if (_selectTypeMap is null) {
@@ -2124,7 +2124,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * any registered callbacks.
     *
     * @param uim.databases\IStatement aStatement to be decorated
-    * @return uim.Database\Statement\CallbackStatement|uim.Database\IStatement
+    * @return uim.databases.Statement\CallbackStatement|uim.databases.IStatement
     */
   protected auto _decorateStatement(IStatement aStatement) {
       myTypeMap = this.getSelectTypeMap();

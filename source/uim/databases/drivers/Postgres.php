@@ -59,7 +59,7 @@ class Postgres : Driver
     /**
      * The schema dialect class for this driver
      *
-     * @var uim.Database\Schema\PostgresSchemaDialect|null
+     * @var uim.databases.Schema\PostgresSchemaDialect|null
      */
     protected _schemaDialect;
 
@@ -229,7 +229,7 @@ class Postgres : Driver
     /**
      * Changes identifer expression into postgresql format.
      *
-     * @param uim.Database\Expression\IdentifierExpression $expression The expression to tranform.
+     * @param uim.databases.Expression\IdentifierExpression $expression The expression to tranform.
      * @return void
      */
     protected void _transformIdentifierExpression(IdentifierExpression $expression)
@@ -245,7 +245,7 @@ class Postgres : Driver
      * Receives a FunctionExpression and changes it so that it conforms to this
      * SQL dialect.
      *
-     * @param uim.Database\Expression\FunctionExpression $expression The function expression to convert
+     * @param uim.databases.Expression\FunctionExpression $expression The function expression to convert
      *   to postgres SQL.
      * @return void
      */
@@ -309,7 +309,7 @@ class Postgres : Driver
     /**
      * Changes string expression into postgresql format.
      *
-     * @param uim.Database\Expression\StringExpression $expression The string expression to tranform.
+     * @param uim.databases.Expression\StringExpression $expression The string expression to tranform.
      * @return void
      */
     protected void _transformStringExpression(StringExpression $expression)
@@ -321,7 +321,7 @@ class Postgres : Driver
     /**
      * {@inheritDoc}
      *
-     * @return uim.Database\PostgresCompiler
+     * @return uim.databases.PostgresCompiler
      */
     function newCompiler(): QueryCompiler
     {

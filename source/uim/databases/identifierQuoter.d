@@ -14,7 +14,7 @@ class IdentifierQuoter
     /**
      * The driver instance used to do the identifier quoting
      *
-     * @var uim.Database\Driver
+     * @var uim.databases.Driver
      */
     protected _driver;
 
@@ -32,7 +32,7 @@ class IdentifierQuoter
      * quotes them
      *
      * @param uim.databases\Query myQuery The query to have its identifiers quoted
-     * @return uim.Database\Query
+     * @return uim.databases.Query
      */
     function quote(Query myQuery): Query
     {

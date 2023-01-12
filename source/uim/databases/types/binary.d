@@ -34,7 +34,7 @@ class BinaryType : BaseType
      * As PDO will handle reading file handles.
      *
      * @param mixed aValue The value to convert.
-     * @param uim.Database\IDTBDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
      * @return resource|string
      */
     function toDatabase(DValue aValue, IDTBDriver aDriver)
@@ -46,7 +46,7 @@ class BinaryType : BaseType
      * Convert binary into resource handles
      *
      * @param mixed aValue The value to convert.
-     * @param uim.Database\IDTBDriver aDriver The driver instance to convert with.
+     * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
      * @return resource|null
      * @throws uim.Core\Exception\CakeException
      */
@@ -68,7 +68,7 @@ class BinaryType : BaseType
      * Get the correct PDO binding type for Binary data.
      *
      * @param mixed aValue The value being bound.
-     * @param uim.Database\IDTBDriver aDriver The driver.
+     * @param uim.databases.IDTBDriver aDriver The driver.
      * @return int
      */
     function toStatement(DValue aValue, IDTBDriver aDriver): int

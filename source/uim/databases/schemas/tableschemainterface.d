@@ -199,7 +199,7 @@ interface ITableSchema : SchemaInterface
      * @param array<string, mixed>|string $attrs The attributes for the index.
      *   If string it will be used as `type`.
      * @return this
-     * @throws uim.Database\Exception\DatabaseException
+     * @throws uim.databases.Exception\DatabaseException
      */
     function addIndex(string $name, $attrs);
 
@@ -238,7 +238,7 @@ interface ITableSchema : SchemaInterface
      * @param array<string, mixed>|string $attrs The attributes for the constraint.
      *   If string it will be used as `type`.
      * @return this
-     * @throws uim.Database\Exception\DatabaseException
+     * @throws uim.databases.Exception\DatabaseException
      */
     function addConstraint(string $name, $attrs);
 

@@ -37,8 +37,8 @@ class CallbackStatement : StatementDecorator
     /**
      * Constructor
      *
-     * @param uim.Database\StatementInterface $statement The statement to decorate.
-     * @param uim.Database\IDTBDriver aDriver The driver instance used by the statement.
+     * @param uim.databases.StatementInterface $statement The statement to decorate.
+     * @param uim.databases.IDTBDriver aDriver The driver instance used by the statement.
      * @param callable $callback The callback to apply to results before they are returned.
      */
     public this(StatementInterface $statement, IDTBDriver aDriver, callable $callback)

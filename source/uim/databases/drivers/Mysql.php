@@ -69,7 +69,7 @@ class Mysql : Driver
     /**
      * The schema dialect for this driver
      *
-     * @var uim.Database\Schema\MysqlSchemaDialect|null
+     * @var uim.databases.Schema\MysqlSchemaDialect|null
      */
     protected _schemaDialect;
 
@@ -184,8 +184,8 @@ class Mysql : Driver
     /**
      * Prepares a sql statement to be executed
      *
-     * @param uim.Database\Query|string $query The query to prepare.
-     * @return uim.Database\StatementInterface
+     * @param uim.databases.Query|string $query The query to prepare.
+     * @return uim.databases.StatementInterface
      */
     function prepare($query): StatementInterface
     {

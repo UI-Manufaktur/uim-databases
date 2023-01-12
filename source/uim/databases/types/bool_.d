@@ -60,7 +60,7 @@ class BoolType : BaseType, IBatchCasting {
      * Get the correct PDO binding type for bool data.
      *
      * @param mixed aValue The value being bound.
-     * @param uim.Database\IDTBDriver aDriver The driver.
+     * @param uim.databases.IDTBDriver aDriver The driver.
      * @return int
      */
     int toStatement(DValue aValue, IDTBDriver aDriver) {

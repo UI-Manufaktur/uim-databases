@@ -62,7 +62,7 @@ class Sqlite : Driver
     /**
      * The schema dialect class for this driver
      *
-     * @var uim.Database\Schema\SqliteSchemaDialect|null
+     * @var uim.databases.Schema\SqliteSchemaDialect|null
      */
     protected _schemaDialect;
 
@@ -186,8 +186,8 @@ class Sqlite : Driver
     /**
      * Prepares a sql statement to be executed
      *
-     * @param uim.Database\Query|string $query The query to prepare.
-     * @return uim.Database\StatementInterface
+     * @param uim.databases.Query|string $query The query to prepare.
+     * @return uim.databases.StatementInterface
      */
     function prepare($query): StatementInterface
     {
@@ -273,7 +273,7 @@ class Sqlite : Driver
      * Receives a FunctionExpression and changes it so that it conforms to this
      * SQL dialect.
      *
-     * @param uim.Database\Expression\FunctionExpression $expression The function expression to convert to TSQL.
+     * @param uim.databases.Expression\FunctionExpression $expression The function expression to convert to TSQL.
      * @return void
      */
     protected void _transformFunctionExpression(FunctionExpression $expression)

@@ -31,8 +31,8 @@ interface CollectionInterface
      *
      * @param string $name The name of the table to describe.
      * @param array<string, mixed> $options The options to use, see above.
-     * @return uim.Database\Schema\ITableSchema Object with column metadata.
-     * @throws uim.Database\Exception\DatabaseException when table cannot be described.
+     * @return uim.databases.Schema\ITableSchema Object with column metadata.
+     * @throws uim.databases.Exception\DatabaseException when table cannot be described.
      */
     function describe(string $name, array $options = []): ITableSchema;
 }

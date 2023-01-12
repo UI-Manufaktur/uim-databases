@@ -592,7 +592,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
      *
      * @param array<string, mixed> $attrs Attributes to set.
      * @return array<string, mixed>
-     * @throws uim.Database\Exception\DatabaseException When foreign key definition is not valid.
+     * @throws uim.databases.Exception\DatabaseException When foreign key definition is not valid.
      */
     protected function _checkForeignKey(array $attrs): array
     {

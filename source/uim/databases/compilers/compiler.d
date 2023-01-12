@@ -326,7 +326,7 @@ class QueryCompiler {
 
     // Builds the SQL fragment for INSERT INTO.
     // array someParts The insert parts.
-    //  uim.Database\Query myQuery The query that is being compiled
+    //  uim.databases.Query myQuery The query that is being compiled
     // $binder Value binder used to generate parameter placeholder
     // SQL fragment.
     protected string _buildInsertPart(array someParts, DDTBQuery myQuery, DDTBValueBinder aValueBinder) {

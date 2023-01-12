@@ -22,7 +22,7 @@ class SchemaCache {
     /**
      * Schema
      *
-     * @var uim.Database\Schema\CachedCollection
+     * @var uim.databases.Schema\CachedCollection
      */
     protected _schema;
 
@@ -84,7 +84,7 @@ class SchemaCache {
      * Helper method to get the schema collection.
      *
      * @param uim.databases\Connection myConnection Connection object
-     * @return uim.Database\Schema\CachedCollection
+     * @return uim.databases.Schema\CachedCollection
      * @throws \RuntimeException If given connection object is not compatible with schema caching
      */
     CachedCollection getSchema(Connection myConnection) {
@@ -93,7 +93,7 @@ class SchemaCache {
             myConnection.cacheMetadata(true);
         }
 
-        /** @var uim.Database\Schema\CachedCollection $schemaCollection */
+        /** @var uim.databases.Schema\CachedCollection $schemaCollection */
         $schemaCollection = myConnection.getSchemaCollection();
 
         return $schemaCollection;

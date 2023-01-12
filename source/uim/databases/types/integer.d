@@ -33,7 +33,7 @@ class IntegerType : BaseType, IBatchCasting {
     * Convert integer data into the database format.
     *
     * @param mixed aValue The value to convert.
-    * @param uim.Database\IDTBDriver aDriver The driver instance to convert with.
+    * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
     * @return int|null
     */
   function toDatabase(DValue aValue, IDTBDriver aDriver): ?int
@@ -51,7 +51,7 @@ class IntegerType : BaseType, IBatchCasting {
     * {@inheritDoc}
     *
     * @param mixed aValue The value to convert.
-    * @param uim.Database\IDTBDriver aDriver The driver instance to convert with.
+    * @param uim.databases.IDTBDriver aDriver The driver instance to convert with.
     * @return int|null
     */
   function toD(DValue aValue, IDTBDriver aDriver): ?int
@@ -83,7 +83,7 @@ class IntegerType : BaseType, IBatchCasting {
     * Get the correct PDO binding type for integer data.
     *
     * @param mixed aValue The value being bound.
-    * @param uim.Database\IDTBDriver aDriver The driver.
+    * @param uim.databases.IDTBDriver aDriver The driver.
     * @return int
     */
   function toStatement(DValue aValue, IDTBDriver aDriver): int

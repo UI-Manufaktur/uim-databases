@@ -15,21 +15,21 @@ class Collection : CollectionInterface
     /**
      * Connection object
      *
-     * @var uim.Database\Connection
+     * @var uim.databases.Connection
      */
     protected _connection;
 
     /**
      * Schema dialect instance.
      *
-     * @var uim.Database\Schema\SchemaDialect
+     * @var uim.databases.Schema\SchemaDialect
      */
     protected _dialect;
 
     /**
      * Constructor.
      *
-     * @param uim.Database\Connection $connection The connection instance.
+     * @param uim.databases.Connection $connection The connection instance.
      */
     public this(Connection $connection)
     {
@@ -88,8 +88,8 @@ class Collection : CollectionInterface
      *
      * @param string $name The name of the table to describe.
      * @param array<string, mixed> $options The options to use, see above.
-     * @return uim.Database\Schema\TableSchema Object with column metadata.
-     * @throws uim.Database\Exception\DatabaseException when table cannot be described.
+     * @return uim.databases.Schema\TableSchema Object with column metadata.
+     * @throws uim.databases.Exception\DatabaseException when table cannot be described.
      */
     function describe(string $name, array $options = []): ITableSchema
     {
@@ -117,17 +117,17 @@ class Collection : CollectionInterface
      * @param string $stage The stage name.
      * @param string $name The table name.
      * @param array<string, mixed> $config The config data.
-     * @param uim.Database\Schema\TableSchema aSchema The table schema instance.
+     * @param uim.databases.Schema\TableSchema aSchema The table schema instance.
      * @return void
-     * @throws uim.Database\Exception\DatabaseException on query failure.
-     * @uses uim.Database\Schema\SchemaDialect::describeColumnSql
-     * @uses uim.Database\Schema\SchemaDialect::describeIndexSql
-     * @uses uim.Database\Schema\SchemaDialect::describeForeignKeySql
-     * @uses uim.Database\Schema\SchemaDialect::describeOptionsSql
-     * @uses uim.Database\Schema\SchemaDialect::convertColumnDescription
-     * @uses uim.Database\Schema\SchemaDialect::convertIndexDescription
-     * @uses uim.Database\Schema\SchemaDialect::convertForeignKeyDescription
-     * @uses uim.Database\Schema\SchemaDialect::convertOptionsDescription
+     * @throws uim.databases.Exception\DatabaseException on query failure.
+     * @uses uim.databases.Schema\SchemaDialect::describeColumnSql
+     * @uses uim.databases.Schema\SchemaDialect::describeIndexSql
+     * @uses uim.databases.Schema\SchemaDialect::describeForeignKeySql
+     * @uses uim.databases.Schema\SchemaDialect::describeOptionsSql
+     * @uses uim.databases.Schema\SchemaDialect::convertColumnDescription
+     * @uses uim.databases.Schema\SchemaDialect::convertIndexDescription
+     * @uses uim.databases.Schema\SchemaDialect::convertForeignKeyDescription
+     * @uses uim.databases.Schema\SchemaDialect::convertOptionsDescription
      */
     protected function _reflect(string $stage, string $name, array aConfig, TableSchema aSchema): void
     {
