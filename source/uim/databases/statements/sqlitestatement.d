@@ -10,39 +10,43 @@ class SqliteStatement : StatementDecorator
     use BufferResultsTrait;
 
 
-    bool execute(?array $params = null) {
-        if (_statement instanceof BufferedStatement) {
-            _statement = _statement.getInnerStatement();
+    function execute(?array $params = null): bool
+    {
+        if (this._statement instanceof BufferedStatement) {
+            this._statement = this._statement.getInnerStatement();
         }
 
-        if (_bufferResults) {
-            _statement = new BufferedStatement(_statement, _driver);
+        if (this._bufferResults) {
+            this._statement = new BufferedStatement(this._statement, this._driver);
         }
 
-        return _statement.execute($params);
+        return this._statement.execute($params);
     }
 
     /**
      * Returns the number of rows returned of affected by last execution
+     *
+     * @return int
      */
-    int rowCount() {
+    function rowCount(): int
+    {
         /** @psalm-suppress NoInterfaceProperties */
         if (
-            _statement.queryString &&
-            preg_match("/^(?:DELETE|UPDATE|INSERT)/i", _statement.queryString)
+            this._statement.queryString &&
+            preg_match("/^(?:DELETE|UPDATE|INSERT)/i", this._statement.queryString)
         ) {
-            $changes = _driver.prepare("SELECT CHANGES()");
+            $changes = this._driver.prepare("SELECT CHANGES()");
             $changes.execute();
-            $row = $changes.fetch();
+            aRow = $changes.fetch();
             $changes.closeCursor();
 
-            if (!$row) {
+            if (!aRow) {
                 return 0;
             }
 
-            return (int)$row[0];
+            return (int)aRow[0];
         }
 
-        return super.rowCount();
+        return parent::rowCount();
     }
 }

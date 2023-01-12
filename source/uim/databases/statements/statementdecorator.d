@@ -1,8 +1,8 @@
 module uim.databases.Statement;
 
-import uim.databases.IDriver;
-import uim.databases.IStatement;
-import uim.databases.TypeConverterTrait;
+use Cake\Database\IDTBDriver;
+use Cake\Database\StatementInterface;
+use Cake\Database\TypeConverterTrait;
 use Countable;
 use IteratorAggregate;
 
@@ -17,7 +17,7 @@ use IteratorAggregate;
  *
  * @property-read string $queryString
  */
-class StatementDecorator : IStatement, Countable, IteratorAggregate
+class StatementDecorator : StatementInterface, Countable, IteratorAggregate
 {
     use TypeConverterTrait;
 
@@ -25,43 +25,48 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      * Statement instance implementation, such as PDOStatement
      * or any other custom implementation.
      *
-     * @var DDBIStatement
+     * @var uim.databases.StatementInterface
      */
     protected _statement;
 
     /**
      * Reference to the driver object associated to this statement.
      *
-     * @var DDBIDriver
+     * @var uim.databases.IDTBDriver
      */
     protected _driver;
 
     /**
      * Whether this statement has already been executed
+     *
+     * @var bool
      */
-    protected bool _hasExecuted = false;
+    protected _hasExecuted = false;
 
     /**
      * Constructor
      *
-     * @param uim.databases.IStatement $statement Statement implementation
+     * @param uim.databases.StatementInterface $statement Statement implementation
      *  such as PDOStatement.
-     * @param uim.databases.IDriver aDriver Driver instance
+     * @param uim.databases.IDTBDriver aDriver Driver instance
      */
-    this(IStatement $statement, IDriver aDriver) {
-        _statement = $statement;
-        _driver = $driver;
+    public this(StatementInterface $statement, IDTBDriver aDriver)
+    {
+        this._statement = $statement;
+        this._driver = $driver;
     }
 
     /**
      * Magic getter to return $queryString as read-only.
      *
      * @param string $property internal property to get
+     * @return string|null
      */
-    Nullable!string __get(string $property) {
+    function __get(string $property)
+    {
         if ($property == "queryString") {
             /** @psalm-suppress NoInterfaceProperties */
-            return _statement.queryString;
+            return this._statement.queryString;
         }
 
         return null;
@@ -83,20 +88,25 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      * ```
      *
      * @param string|int $column name or param position to be bound
-     * @param mixed $value The value to bind to variable in query
+     * @param mixed aValue The value to bind to variable in query
      * @param string|int|null $type name of configured Type class
+     * @return void
      */
-    void bindValue($column, $value, $type = "string") {
-        _statement.bindValue($column, $value, $type);
+    function bindValue($column, DValue aValue, $type = "string"): void
+    {
+        this._statement.bindValue($column, DValue aValue, $type);
     }
 
     /**
      * Closes a cursor in the database, freeing up any resources and memory
      * allocated to it. In most cases you don"t need to call this method, as it is
      * automatically called after fetching all results from the result set.
+     *
+     * @return void
      */
-    void closeCursor() {
-        _statement.closeCursor();
+    function closeCursor(): void
+    {
+        this._statement.closeCursor();
     }
 
     /**
@@ -109,9 +119,12 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      * $statement.execute();
      * echo $statement.columnCount(); // outputs 2
      * ```
+     *
+     * @return int
      */
-    int columnCount() {
-        return _statement.columnCount();
+    function columnCount(): int
+    {
+        return this._statement.columnCount();
     }
 
     /**
@@ -119,16 +132,20 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      *
      * @return string|int
      */
-    function errorCode() {
-        return _statement.errorCode();
+    function errorCode()
+    {
+        return this._statement.errorCode();
     }
 
     /**
      * Returns the error information for the last error that occurred when executing
      * this statement.
+     *
+     * @return array
      */
-    array errorInfo() {
-        return _statement.errorInfo();
+    function errorInfo(): array
+    {
+        return this._statement.errorInfo();
     }
 
     /**
@@ -140,10 +157,11 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      * @param array|null $params list of values to be bound to query
      * @return bool true on success, false otherwise
      */
-    bool execute(?array $params = null) {
-        _hasExecuted = true;
+    function execute(?array $params = null): bool
+    {
+        this._hasExecuted = true;
 
-        return _statement.execute($params);
+        return this._statement.execute($params);
     }
 
     /**
@@ -156,22 +174,26 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      * ```
      * $statement = $connection.prepare("SELECT id, title from articles");
      * $statement.execute();
-     * print_r($statement.fetch("assoc")); // will show ["id": 1, "title": "a title"]
+     * print_r($statement.fetch("assoc")); // will show ["id" : 1, "title" : "a title"]
      * ```
      *
      * @param string|int $type "num" for positional columns, assoc for named columns
      * @return mixed Result array containing columns and values or false if no results
      * are left
      */
-    function fetch($type = self::FETCH_TYPE_NUM) {
-        return _statement.fetch($type);
+    function fetch($type = self::FETCH_TYPE_NUM)
+    {
+        return this._statement.fetch($type);
     }
 
     /**
-     * Returns the next row in a result set as an associative array. Calling this bool is the same as calling
+     * Returns the next row in a result set as an associative array. Calling this function is the same as calling
      * $statement.fetch(StatementDecorator::FETCH_TYPE_ASSOC). If no results are found an empty array is returned.
+     *
+     * @return array
      */
-    array fetchAssoc() {
+    function fetchAssoc(): array
+    {
         $result = this.fetch(static::FETCH_TYPE_ASSOC);
 
         return $result ?: [];
@@ -183,7 +205,8 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      * @param int $position The numeric position of the column to retrieve in the result
      * @return mixed Returns the specific value of the column designated at $position
      */
-    function fetchColumn(int $position) {
+    function fetchColumn(int $position)
+    {
         $result = this.fetch(static::FETCH_TYPE_NUM);
         if ($result && isset($result[$position])) {
             return $result[$position];
@@ -200,14 +223,15 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      * ```
      * $statement = $connection.prepare("SELECT id, title from articles");
      * $statement.execute();
-     * print_r($statement.fetchAll("assoc")); // will show [0: ["id": 1, "title": "a title"]]
+     * print_r($statement.fetchAll("assoc")); // will show [0 : ["id" : 1, "title" : "a title"]]
      * ```
      *
      * @param string|int $type num for fetching columns as positional keys or assoc for column names as keys
      * @return array|false List of all results from database for this statement. False on failure.
      */
-    function fetchAll($type = self::FETCH_TYPE_NUM) {
-        return _statement.fetchAll($type);
+    function fetchAll($type = self::FETCH_TYPE_NUM)
+    {
+        return this._statement.fetchAll($type);
     }
 
     /**
@@ -220,9 +244,12 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      * $statement.execute();
      * print_r($statement.rowCount()); // will show 1
      * ```
+     *
+     * @return int
      */
-    int rowCount() {
-        return _statement.rowCount();
+    function rowCount(): int
+    {
+        return this._statement.rowCount();
     }
 
     /**
@@ -233,28 +260,32 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      *
      * ```
      * $statement = $connection.prepare("SELECT id, title from articles");
-     * foreach ($statement as $row) {
+     * foreach ($statement as aRow) {
      *   //do stuff
      * }
      * ```
      *
-     * @return uim.databases.IStatement
+     * @return uim.databases.StatementInterface
      * @psalm-suppress ImplementedReturnTypeMismatch
      */
     #[\ReturnTypeWillChange]
-    function getIterator() {
-        if (!_hasExecuted) {
+    function getIterator()
+    {
+        if (!this._hasExecuted) {
             this.execute();
         }
 
-        return _statement;
+        return this._statement;
     }
 
     /**
      * Statements can be passed as argument for count() to return the number
      * for affected rows from last execution.
+     *
+     * @return int
      */
-    size_t count() {
+    function count(): int
+    {
         return this.rowCount();
     }
 
@@ -263,22 +294,24 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      *
      * @param array $params list of values to be bound
      * @param array $types list of types to be used, keys should match those in $params
+     * @return void
      */
-    void bind(array $params, array $types) {
+    function bind(array $params, array $types): void
+    {
         if (empty($params)) {
             return;
         }
 
         $anonymousParams = is_int(key($params));
         $offset = 1;
-        foreach ($params as $index: $value) {
+        foreach ($params as $index : aValue) {
             $type = $types[$index] ?? null;
             if ($anonymousParams) {
                 /** @psalm-suppress InvalidOperand */
                 $index += $offset;
             }
             /** @psalm-suppress InvalidScalarArgument */
-            this.bindValue($index, $value, $type);
+            this.bindValue($index, DValue aValue, $type);
         }
     }
 
@@ -289,24 +322,26 @@ class StatementDecorator : IStatement, Countable, IteratorAggregate
      * @param string|null $column the name of the column representing the primary key
      * @return string|int
      */
-    function lastInsertId(Nullable!string $table = null, Nullable!string $column = null) {
+    function lastInsertId(?string $table = null, ?string $column = null)
+    {
         if ($column && this.columnCount()) {
-            $row = this.fetch(static::FETCH_TYPE_ASSOC);
+            aRow = this.fetch(static::FETCH_TYPE_ASSOC);
 
-            if ($row && isset($row[$column])) {
-                return $row[$column];
+            if (aRow && isset(aRow[$column])) {
+                return aRow[$column];
             }
         }
 
-        return _driver.lastInsertId($table, $column);
+        return this._driver.lastInsertId($table, $column);
     }
 
     /**
      * Returns the statement object that was decorated by this class.
      *
-     * @return uim.databases.IStatement
+     * @return uim.databases.StatementInterface
      */
-    function getInnerStatement() {
-        return _statement;
+    function getInnerStatement()
+    {
+        return this._statement;
     }
 }

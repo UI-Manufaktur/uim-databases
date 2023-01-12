@@ -16,21 +16,23 @@ class SqlserverStatement : PDOStatement
      * This overrides the PDOStatement::bindValue method in order to bind binary columns using the required attribute.
      *
      * @param string|int $column name or param position to be bound
-     * @param mixed $value The value to bind to variable in query
+     * @param mixed aValue The value to bind to variable in query
      * @param string|int|null $type PDO type or name of configured Type class
+     * @return void
      */
-    void bindValue($column, $value, $type = "string") {
+    function bindValue($column, DValue aValue, $type = "string"): void
+    {
         if ($type == null) {
             $type = "string";
         }
         if (!is_int($type)) {
-            [$value, $type] = this.cast($value, $type);
+            [aValue, $type] = this.cast(DValue aValue, $type);
         }
         if ($type == PDO::PARAM_LOB) {
             /** @psalm-suppress UndefinedConstant */
-            _statement.bindParam($column, $value, $type, 0, PDO::SQLSRV_ENCODING_BINARY);
+            this._statement.bindParam($column, DValue aValue, $type, 0, PDO::SQLSRV_ENCODING_BINARY);
         } else {
-            _statement.bindValue($column, $value, $type);
+            this._statement.bindValue($column, DValue aValue, $type);
         }
     }
 }

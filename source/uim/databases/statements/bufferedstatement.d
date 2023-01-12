@@ -1,8 +1,8 @@
 module uim.databases.Statement;
 
-import uim.databases.IDriver;
-import uim.databases.IStatement;
-import uim.databases.TypeConverterTrait;
+use Cake\Database\IDTBDriver;
+use Cake\Database\StatementInterface;
+use Cake\Database\TypeConverterTrait;
 use Iterator;
 
 /**
@@ -11,26 +11,28 @@ use Iterator;
  * This statement decorator will save fetched results in memory, allowing
  * the iterator to be rewound and reused.
  */
-class BufferedStatement : Iterator, IStatement
+class BufferedStatement : Iterator, StatementInterface
 {
     use TypeConverterTrait;
 
     /**
      * If true, all rows were fetched
+     *
+     * @var bool
      */
-    protected bool _allFetched = false;
+    protected _allFetched = false;
 
     /**
      * The decorated statement
      *
-     * @var DDBIStatement
+     * @var uim.databases.StatementInterface
      */
     protected $statement;
 
     /**
      * The driver for the statement
      *
-     * @var DDBIDriver
+     * @var uim.databases.IDTBDriver
      */
     protected _driver;
 
@@ -39,35 +41,42 @@ class BufferedStatement : Iterator, IStatement
      *
      * @var array<int, array>
      */
-    protected $buffer = null;
+    protected $buffer = [];
 
     /**
      * Whether this statement has already been executed
+     *
+     * @var bool
      */
-    protected bool _hasExecuted = false;
+    protected _hasExecuted = false;
 
     /**
      * The current iterator index.
+     *
+     * @var int
      */
-    protected int $index = 0;
+    protected $index = 0;
 
     /**
      * Constructor
      *
-     * @param uim.databases.IStatement $statement Statement implementation such as PDOStatement
-     * @param uim.databases.IDriver aDriver Driver instance
+     * @param uim.databases.StatementInterface $statement Statement implementation such as PDOStatement
+     * @param uim.databases.IDTBDriver aDriver Driver instance
      */
-    this(IStatement $statement, IDriver aDriver) {
+    public this(StatementInterface $statement, IDTBDriver aDriver)
+    {
         this.statement = $statement;
-        _driver = $driver;
+        this._driver = $driver;
     }
 
     /**
      * Magic getter to return $queryString as read-only.
      *
      * @param string $property internal property to get
+     * @return string|null
      */
-    Nullable!string __get(string $property) {
+    function __get(string $property)
+    {
         if ($property == "queryString") {
             /** @psalm-suppress NoInterfaceProperties */
             return this.statement.queryString;
@@ -77,40 +86,47 @@ class BufferedStatement : Iterator, IStatement
     }
 
 
-    void bindValue($column, $value, $type = "string") {
-        this.statement.bindValue($column, $value, $type);
+    function bindValue($column, DValue aValue, $type = "string"): void
+    {
+        this.statement.bindValue($column, DValue aValue, $type);
     }
 
 
-    void closeCursor() {
+    function closeCursor(): void
+    {
         this.statement.closeCursor();
     }
 
 
-    int columnCount() {
+    function columnCount(): int
+    {
         return this.statement.columnCount();
     }
 
 
-    function errorCode() {
+    function errorCode()
+    {
         return this.statement.errorCode();
     }
 
 
-    array errorInfo() {
+    function errorInfo(): array
+    {
         return this.statement.errorInfo();
     }
 
 
-    bool execute(?array $params = null) {
-        _reset();
-        _hasExecuted = true;
+    function execute(?array $params = null): bool
+    {
+        this._reset();
+        this._hasExecuted = true;
 
         return this.statement.execute($params);
     }
 
 
-    function fetchColumn(int $position) {
+    function fetchColumn(int $position)
+    {
         $result = this.fetch(static::FETCH_TYPE_NUM);
         if ($result != false && isset($result[$position])) {
             return $result[$position];
@@ -122,18 +138,23 @@ class BufferedStatement : Iterator, IStatement
     /**
      * Statements can be passed as argument for count() to return the number
      * for affected rows from last execution.
+     *
+     * @return int
      */
-    size_t count() {
+    function count(): int
+    {
         return this.rowCount();
     }
 
 
-    void bind(array $params, array $types) {
-        this.statement.bind($params, $types);
+    function bind(array $params, array $types): void
+    {
+        this.statement.bind($params, someTypes);
     }
 
 
-    function lastInsertId(Nullable!string $table = null, Nullable!string $column = null) {
+    function lastInsertId(?string $table = null, ?string $column = null)
+    {
         return this.statement.lastInsertId($table, $column);
     }
 
@@ -143,24 +164,25 @@ class BufferedStatement : Iterator, IStatement
      * @param string|int $type The type to fetch.
      * @return array|false
      */
-    function fetch($type = self::FETCH_TYPE_NUM) {
-        if (_allFetched) {
-            $row = false;
+    function fetch($type = self::FETCH_TYPE_NUM)
+    {
+        if (this._allFetched) {
+            aRow = false;
             if (isset(this.buffer[this.index])) {
-                $row = this.buffer[this.index];
+                aRow = this.buffer[this.index];
             }
             this.index += 1;
 
-            if ($row && $type == static::FETCH_TYPE_NUM) {
-                return array_values($row);
+            if (aRow && $type == static::FETCH_TYPE_NUM) {
+                return array_values(aRow);
             }
 
-            return $row;
+            return aRow;
         }
 
         $record = this.statement.fetch($type);
         if ($record == false) {
-            _allFetched = true;
+            this._allFetched = true;
             this.statement.closeCursor();
 
             return false;
@@ -171,31 +193,35 @@ class BufferedStatement : Iterator, IStatement
     }
 
     /**
+     * @return array
      */
-    array fetchAssoc() {
+    function fetchAssoc(): array
+    {
         $result = this.fetch(static::FETCH_TYPE_ASSOC);
 
         return $result ?: [];
     }
 
 
-    function fetchAll($type = self::FETCH_TYPE_NUM) {
-        if (_allFetched) {
+    function fetchAll($type = self::FETCH_TYPE_NUM)
+    {
+        if (this._allFetched) {
             return this.buffer;
         }
         $results = this.statement.fetchAll($type);
         if ($results != false) {
             this.buffer = array_merge(this.buffer, $results);
         }
-        _allFetched = true;
+        this._allFetched = true;
         this.statement.closeCursor();
 
         return this.buffer;
     }
 
 
-    int rowCount() {
-        if (!_allFetched) {
+    function rowCount(): int
+    {
+        if (!this._allFetched) {
             this.fetchAll(static::FETCH_TYPE_ASSOC);
         }
 
@@ -204,10 +230,13 @@ class BufferedStatement : Iterator, IStatement
 
     /**
      * Reset all properties
+     *
+     * @return void
      */
-    protected void _reset() {
-        this.buffer = null;
-        _allFetched = false;
+    protected function _reset(): void
+    {
+        this.buffer = [];
+        this._allFetched = false;
         this.index = 0;
     }
 
@@ -217,7 +246,8 @@ class BufferedStatement : Iterator, IStatement
      * @return mixed
      */
     #[\ReturnTypeWillChange]
-    function key() {
+    function key()
+    {
         return this.index;
     }
 
@@ -227,44 +257,54 @@ class BufferedStatement : Iterator, IStatement
      * @return mixed
      */
     #[\ReturnTypeWillChange]
-    function current() {
+    function current()
+    {
         return this.buffer[this.index];
     }
 
     /**
      * Rewinds the collection
+     *
+     * @return void
      */
-    void rewind() {
+    function rewind(): void
+    {
         this.index = 0;
     }
 
     /**
      * Returns whether the iterator has more elements
+     *
+     * @return bool
      */
-    bool valid() {
+    function valid(): bool
+    {
         $old = this.index;
-        $row = this.fetch(self::FETCH_TYPE_ASSOC);
+        aRow = this.fetch(self::FETCH_TYPE_ASSOC);
 
         // Restore the index as fetch() increments during
         // the cache scenario.
         this.index = $old;
 
-        return $row != false;
+        return aRow != false;
     }
 
     /**
      * Advances the iterator pointer to the next element
+     *
+     * @return void
      */
-    void next() {
+    function next(): void
+    {
         this.index += 1;
     }
 
     /**
      * Get the wrapped statement
      *
-     * @return uim.databases.IStatement
+     * @return uim.databases.StatementInterface
      */
-    function getInnerStatement(): IStatement
+    function getInnerStatement(): StatementInterface
     {
         return this.statement;
     }

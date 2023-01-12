@@ -1,13 +1,13 @@
 module uim.databases.Statement;
 
-import uim.databases.IDriver;
-import uim.databases.IStatement;
+use Cake\Database\IDTBDriver;
+use Cake\Database\StatementInterface;
 
 /**
  * Wraps a statement in a callback that allows row results
  * to be modified when being fetched.
  *
- * This is used by UIM to eagerly load association data.
+ * This is used by CakePHP to eagerly load association data.
  */
 class CallbackStatement : StatementDecorator
 {
@@ -21,13 +21,14 @@ class CallbackStatement : StatementDecorator
     /**
      * Constructor
      *
-     * @param uim.databases.IStatement $statement The statement to decorate.
-     * @param uim.databases.IDriver aDriver The driver instance used by the statement.
+     * @param uim.databases.StatementInterface $statement The statement to decorate.
+     * @param uim.databases.IDTBDriver aDriver The driver instance used by the statement.
      * @param callable $callback The callback to apply to results before they are returned.
      */
-    this(IStatement $statement, IDriver aDriver, callable $callback) {
-        super(($statement, $driver);
-        _callback = $callback;
+    public this(StatementInterface $statement, IDTBDriver aDriver, callable $callback)
+    {
+        parent::__construct($statement, $driver);
+        this._callback = $callback;
     }
 
     /**
@@ -38,11 +39,12 @@ class CallbackStatement : StatementDecorator
      * @param string|int $type Either "num" or "assoc" to indicate the result format you would like.
      * @return array|false
      */
-    function fetch($type = super.FETCH_TYPE_NUM) {
-        $callback = _callback;
-        $row = _statement.fetch($type);
+    function fetch($type = parent::FETCH_TYPE_NUM)
+    {
+        $callback = this._callback;
+        aRow = this._statement.fetch($type);
 
-        return $row == false ? $row : $callback($row);
+        return aRow == false ? aRow : $callback(aRow);
     }
 
     /**
@@ -50,9 +52,10 @@ class CallbackStatement : StatementDecorator
      *
      * Each row in the result will be processed by the callback when it is not `false.
      */
-    function fetchAll($type = super.FETCH_TYPE_NUM) {
-        $results = _statement.fetchAll($type);
+    function fetchAll($type = parent::FETCH_TYPE_NUM)
+    {
+        $results = this._statement.fetchAll($type);
 
-        return $results != false ? array_map(_callback, $results) : false;
+        return $results != false ? array_map(this._callback, $results) : false;
     }
 }

@@ -9,8 +9,10 @@ trait BufferResultsTrait
 {
     /**
      * Whether to buffer results in php
+     *
+     * @var bool
      */
-    protected bool _bufferResults = true;
+    protected _bufferResults = true;
 
     /**
      * Whether to buffer results in php
@@ -18,8 +20,9 @@ trait BufferResultsTrait
      * @param bool $buffer Toggle buffering
      * @return this
      */
-    function bufferResults(bool $buffer) {
-        _bufferResults = $buffer;
+    function bufferResults(bool $buffer)
+    {
+        this._bufferResults = $buffer;
 
         return this;
     }

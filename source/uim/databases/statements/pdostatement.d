@@ -1,7 +1,7 @@
 module uim.databases.Statement;
 
-import uim.core.exceptions.UIMException;
-import uim.databases.IDriver;
+use Cake\Core\Exception\CakeException;
+use Cake\Database\IDTBDriver;
 use PDO;
 use PDOStatement as Statement;
 
@@ -22,22 +22,25 @@ class PDOStatement : StatementDecorator
      * Constructor
      *
      * @param \PDOStatement $statement Original statement to be decorated.
-     * @param uim.databases.IDriver aDriver Driver instance.
+     * @param uim.databases.IDTBDriver aDriver Driver instance.
      */
-    this(Statement $statement, IDriver aDriver) {
-        _statement = $statement;
-        _driver = $driver;
+    public this(Statement $statement, IDTBDriver aDriver)
+    {
+        this._statement = $statement;
+        this._driver = $driver;
     }
 
     /**
      * Magic getter to return PDOStatement::$queryString as read-only.
      *
      * @param string $property internal property to get
+     * @return string|null
      */
-    Nullable!string __get(string $property) {
-        if ($property == "queryString" && isset(_statement.queryString)) {
+    function __get(string $property)
+    {
+        if ($property == "queryString" && isset(this._statement.queryString)) {
             /** @psalm-suppress NoInterfaceProperties */
-            return _statement.queryString;
+            return this._statement.queryString;
         }
 
         return null;
@@ -64,17 +67,19 @@ class PDOStatement : StatementDecorator
      * ```
      *
      * @param string|int $column name or param position to be bound
-     * @param mixed $value The value to bind to variable in query
+     * @param mixed aValue The value to bind to variable in query
      * @param string|int|null $type PDO type or name of configured Type class
+     * @return void
      */
-    void bindValue($column, $value, $type = "string") {
+    function bindValue($column, DValue aValue, $type = "string"): void
+    {
         if ($type == null) {
             $type = "string";
         }
         if (!is_int($type)) {
-            [$value, $type] = this.cast($value, $type);
+            [aValue, $type] = this.cast(DValue aValue, $type);
         }
-        _statement.bindValue($column, $value, $type);
+        this._statement.bindValue($column, DValue aValue, $type);
     }
 
     /**
@@ -87,32 +92,33 @@ class PDOStatement : StatementDecorator
      * ```
      *  $statement = $connection.prepare("SELECT id, title from articles");
      *  $statement.execute();
-     *  print_r($statement.fetch("assoc")); // will show ["id": 1, "title": "a title"]
+     *  print_r($statement.fetch("assoc")); // will show ["id" : 1, "title" : "a title"]
      * ```
      *
      * @param string|int $type "num" for positional columns, assoc for named columns
      * @return mixed Result array containing columns and values or false if no results
      * are left
      */
-    function fetch($type = super.FETCH_TYPE_NUM) {
+    function fetch($type = parent::FETCH_TYPE_NUM)
+    {
         if ($type == static::FETCH_TYPE_NUM) {
-            return _statement.fetch(PDO::FETCH_NUM);
+            return this._statement.fetch(PDO::FETCH_NUM);
         }
         if ($type == static::FETCH_TYPE_ASSOC) {
-            return _statement.fetch(PDO::FETCH_ASSOC);
+            return this._statement.fetch(PDO::FETCH_ASSOC);
         }
         if ($type == static::FETCH_TYPE_OBJ) {
-            return _statement.fetch(PDO::FETCH_OBJ);
+            return this._statement.fetch(PDO::FETCH_OBJ);
         }
 
         if (!is_int($type)) {
-            throw new UIMException(sprintf(
+            throw new CakeException(sprintf(
                 "Fetch type for PDOStatement must be an integer, found `%s` instead",
                 getTypeName($type)
             ));
         }
 
-        return _statement.fetch($type);
+        return this._statement.fetch($type);
     }
 
     /**
@@ -123,31 +129,32 @@ class PDOStatement : StatementDecorator
      * ```
      *  $statement = $connection.prepare("SELECT id, title from articles");
      *  $statement.execute();
-     *  print_r($statement.fetchAll("assoc")); // will show [0: ["id": 1, "title": "a title"]]
+     *  print_r($statement.fetchAll("assoc")); // will show [0 : ["id" : 1, "title" : "a title"]]
      * ```
      *
      * @param string|int $type num for fetching columns as positional keys or assoc for column names as keys
      * @return array|false list of all results from database for this statement, false on failure
      * @psalm-assert string $type
      */
-    function fetchAll($type = super.FETCH_TYPE_NUM) {
+    function fetchAll($type = parent::FETCH_TYPE_NUM)
+    {
         if ($type == static::FETCH_TYPE_NUM) {
-            return _statement.fetchAll(PDO::FETCH_NUM);
+            return this._statement.fetchAll(PDO::FETCH_NUM);
         }
         if ($type == static::FETCH_TYPE_ASSOC) {
-            return _statement.fetchAll(PDO::FETCH_ASSOC);
+            return this._statement.fetchAll(PDO::FETCH_ASSOC);
         }
         if ($type == static::FETCH_TYPE_OBJ) {
-            return _statement.fetchAll(PDO::FETCH_OBJ);
+            return this._statement.fetchAll(PDO::FETCH_OBJ);
         }
 
         if (!is_int($type)) {
-            throw new UIMException(sprintf(
+            throw new CakeException(sprintf(
                 "Fetch type for PDOStatement must be an integer, found `%s` instead",
                 getTypeName($type)
             ));
         }
 
-        return _statement.fetchAll($type);
+        return this._statement.fetchAll($type);
     }
 }
