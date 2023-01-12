@@ -1,23 +1,21 @@
-/*********************************************************************************************************
-* Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-* License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-* Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
-**********************************************************************************************************/
-module uim.databases.types.batchcastinginterface;
+module uim.databases.types;
 
-@safe:
-import uim.databases;
+import uim.databases.IDriver;
+
 /**
  * Denotes type objects capable of converting many values from their original
  * database representation to php values.
  */
-interface IBatchCasting {
+interface BatchCastingInterface
+{
     /**
-     * Returns an array of the values converted to the UIM representation of this type.
+     * Returns an array of the values converted to the PHP representation of
+     * this type.
      *
-     * @param array someValues The original array of values containing the fields to be casted
-     * someFields - The field keys to cast
-     * aDriver - Object from which database preferences and configuration will be extracted.
+     * @param array $values The original array of values containing the fields to be casted
+     * @param array<string> $fields The field keys to cast
+     * @param uim.databases.IDriver aDriver Object from which database preferences and configuration will be extracted.
+     * @return array<string, mixed>
      */
-    DValue[string] manytoD(DValue[] someValues, string[] someFields, IDTBDriver aDriver);
+    array manyToPHP(array $values, array $fields, IDriver aDriver);
 }
