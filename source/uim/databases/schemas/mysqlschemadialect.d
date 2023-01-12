@@ -1,7 +1,7 @@
 module uim.databases.schemas;
 
-use Cake\Database\IDTBDriver;
-use Cake\Database\Exception\DatabaseException;
+use uim.databases.IDTBDriver;
+use uim.databases.Exception\DatabaseException;
 
 /**
  * Schema generation/reflection features for MySQL
@@ -74,7 +74,7 @@ class MysqlSchemaDialect : SchemaDialect
     /**
      * Convert a MySQL column type into an abstract type.
      *
-     * The returned type will be a type that Cake\Database\TypeFactory can handle.
+     * The returned type will be a type that uim.databases.TypeFactory can handle.
      *
      * @param string $column The column type + length
      * @return array<string, mixed> Array of column information.
@@ -617,5 +617,5 @@ class MysqlSchemaDialect : SchemaDialect
 
 // phpcs:disable
 // Add backwards compatible alias.
-class_alias("Cake\Database\Schema\MysqlSchemaDialect", "Cake\Database\Schema\MysqlSchema");
+class_alias("uim.databases.Schema\MysqlSchemaDialect", "uim.databases.Schema\MysqlSchema");
 // phpcs:enable

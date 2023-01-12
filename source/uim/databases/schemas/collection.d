@@ -1,7 +1,7 @@
 module uim.databases.schemas;
 
-use Cake\Database\Connection;
-use Cake\Database\Exception\DatabaseException;
+use uim.databases.Connection;
+use uim.databases.Exception\DatabaseException;
 use PDOException;
 
 /**

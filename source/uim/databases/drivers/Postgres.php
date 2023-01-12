@@ -14,17 +14,17 @@ declare(strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Driver;
+namespace uim.databases.Driver;
 
-use Cake\Database\Driver;
-use Cake\Database\Expression\FunctionExpression;
-use Cake\Database\Expression\IdentifierExpression;
-use Cake\Database\Expression\StringExpression;
-use Cake\Database\PostgresCompiler;
-use Cake\Database\Query;
-use Cake\Database\QueryCompiler;
-use Cake\Database\Schema\PostgresSchemaDialect;
-use Cake\Database\Schema\SchemaDialect;
+use uim.databases.Driver;
+use uim.databases.Expression\FunctionExpression;
+use uim.databases.Expression\IdentifierExpression;
+use uim.databases.Expression\StringExpression;
+use uim.databases.PostgresCompiler;
+use uim.databases.Query;
+use uim.databases.QueryCompiler;
+use uim.databases.Schema\PostgresSchemaDialect;
+use uim.databases.Schema\SchemaDialect;
 use PDO;
 
 /**

@@ -14,20 +14,20 @@ declare(strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Driver;
+namespace uim.databases.Driver;
 
-use Cake\Database\Driver;
-use Cake\Database\Expression\FunctionExpression;
-use Cake\Database\Expression\OrderByExpression;
-use Cake\Database\Expression\OrderClauseExpression;
-use Cake\Database\Expression\TupleComparison;
-use Cake\Database\Expression\UnaryExpression;
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query;
-use Cake\Database\QueryCompiler;
-use Cake\Database\Schema\SchemaDialect;
-use Cake\Database\Schema\SqlserverSchemaDialect;
-use Cake\Database\SqlserverCompiler;
+use uim.databases.Driver;
+use uim.databases.Expression\FunctionExpression;
+use uim.databases.Expression\OrderByExpression;
+use uim.databases.Expression\OrderClauseExpression;
+use uim.databases.Expression\TupleComparison;
+use uim.databases.Expression\UnaryExpression;
+use uim.databases.ExpressionInterface;
+use uim.databases.Query;
+use uim.databases.QueryCompiler;
+use uim.databases.Schema\SchemaDialect;
+use uim.databases.Schema\SqlserverSchemaDialect;
+use uim.databases.SqlserverCompiler;
 use uim.databases.statements\SqlserverStatement;
 use uim.databases.statementsInterface;
 use InvalidArgumentException;

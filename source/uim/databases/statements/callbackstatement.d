@@ -1,6 +1,6 @@
 module uim.databases.Statement;
 
-use Cake\Database\IDTBDriver;
+use uim.databases.IDTBDriver;
 use uim.databases.statementsInterface;
 
 /**

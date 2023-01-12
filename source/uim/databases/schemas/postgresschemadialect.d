@@ -2,7 +2,7 @@ module uim.databases.schemas;
 
 import uim.databases.exceptions.DatabaseException;
 
-use Cake\Database\Exception\DatabaseException;
+use uim.databases.Exception\DatabaseException;
 
 /**
  * Schema management/reflection features for Postgres.
@@ -76,7 +76,7 @@ class PostgresSchemaDialect : SchemaDialect
      * Convert a column definition to the abstract types.
      *
      * The returned type will be a type that
-     * Cake\Database\TypeFactory can handle.
+     * uim.databases.TypeFactory can handle.
      *
      * @param string $column The column type + length
      * @throws uim.databases.Exception\DatabaseException when column cannot be parsed.
@@ -652,5 +652,5 @@ class PostgresSchemaDialect : SchemaDialect
 
 // phpcs:disable
 // Add backwards compatible alias.
-class_alias("Cake\Database\Schema\PostgresSchemaDialect", "Cake\Database\Schema\PostgresSchema");
+class_alias("uim.databases.Schema\PostgresSchemaDialect", "uim.databases.Schema\PostgresSchema");
 // phpcs:enable

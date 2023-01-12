@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database;
 
-use Cake\Database\Schema\CachedCollection;
+use uim.databases.Schema\CachedCollection;
 
 /**
  * Schema Cache.

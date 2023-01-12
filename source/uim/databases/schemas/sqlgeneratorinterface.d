@@ -54,7 +54,7 @@ interface ISqlGenerator
      */
     array dropConstraintSql(Connection $connection);
 }
-use Cake\Database\Connection;
+use uim.databases.Connection;
 
 /**
  * An interface used by TableSchema objects.

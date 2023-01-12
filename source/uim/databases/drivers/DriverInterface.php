@@ -16,8 +16,8 @@ declare(strict_types=1);
  */
 namespace Cake\Database;
 
-use Cake\Database\Schema\SchemaDialect;
-use Cake\Database\Schema\TableSchema;
+use uim.databases.Schema\SchemaDialect;
+use uim.databases.Schema\TableSchema;
 use Closure;
 
 /**

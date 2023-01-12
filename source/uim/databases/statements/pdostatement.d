@@ -1,7 +1,7 @@
 module uim.databases.Statement;
 
 use Cake\Core\Exception\CakeException;
-use Cake\Database\IDTBDriver;
+use uim.databases.IDTBDriver;
 use PDO;
 use PDOStatement as Statement;
 

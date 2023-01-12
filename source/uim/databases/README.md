@@ -55,7 +55,7 @@ directly in the options array:
 import DDBAConnection;
 
 myConnection = new Connection([
-	"driver":Cake\Database\Driver\Sqlite.class,
+	"driver":uim.databases.Driver\Sqlite.class,
 	"database":"/path/to/file.db"
 ]);
 ```
@@ -79,7 +79,7 @@ either to use the shorthand methods `execute()`, `insert()`, `update()`, `delete
 `newQuery()` for using a query builder.
 
 The easiest way of executing queries is by using the `execute()` method, it will return a
-`Cake\Database\IStatement` that you can use to get the data back:
+`uim.databases.IStatement` that you can use to get the data back:
 
 ```php
 $statement = myConnection.execute("SELECT * FROM articles");

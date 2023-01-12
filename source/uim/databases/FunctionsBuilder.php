@@ -16,8 +16,8 @@ declare(strict_types=1);
  */
 namespace Cake\Database;
 
-use Cake\Database\Expression\AggregateExpression;
-use Cake\Database\Expression\FunctionExpression;
+use uim.databases.Expression\AggregateExpression;
+use uim.databases.Expression\FunctionExpression;
 use InvalidArgumentException;
 
 /**

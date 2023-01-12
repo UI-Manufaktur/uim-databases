@@ -16,8 +16,8 @@ declare(strict_types=1);
  */
 namespace Cake\Database;
 
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\Expression\FunctionExpression;
+use uim.databases.Exception\DatabaseException;
+use uim.databases.Expression\FunctionExpression;
 
 /**
  * Responsible for compiling a Query object into its SQL representation

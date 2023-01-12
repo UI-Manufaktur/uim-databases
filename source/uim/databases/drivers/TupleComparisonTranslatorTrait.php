@@ -14,12 +14,12 @@ declare(strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Driver;
+namespace uim.databases.Driver;
 
-use Cake\Database\Expression\IdentifierExpression;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\Expression\TupleComparison;
-use Cake\Database\Query;
+use uim.databases.Expression\IdentifierExpression;
+use uim.databases.Expression\QueryExpression;
+use uim.databases.Expression\TupleComparison;
+use uim.databases.Query;
 use RuntimeException;
 
 /**

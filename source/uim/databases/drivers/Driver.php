@@ -18,10 +18,10 @@ namespace Cake\Database;
 
 use Cake\Core\App;
 use Cake\Core\Retry\CommandRetry;
-use Cake\Database\Exception\MissingConnectionException;
-use Cake\Database\Retry\ErrorCodeWaitStrategy;
-use Cake\Database\Schema\SchemaDialect;
-use Cake\Database\Schema\TableSchema;
+use uim.databases.Exception\MissingConnectionException;
+use uim.databases.Retry\ErrorCodeWaitStrategy;
+use uim.databases.Schema\SchemaDialect;
+use uim.databases.Schema\TableSchema;
 use uim.databases.statements\PDOStatement;
 use Closure;
 use InvalidArgumentException;
