@@ -1,67 +1,109 @@
 module uim.cake.databases.schemas;
 
-use Psr\SimpleCache\ICache;
+use Psr\SimpleCache\CacheInterface;
 
-// Decorates a schema collection and adds caching
-class CachedCollection : ICollection {
-  // The decorated schema collection
-  protected ICollection $collection;
+/**
+ * Decorates a schema collection and adds caching
+ */
+class CachedCollection : CollectionInterface
+{
+    /**
+     * Cacher instance.
+     *
+     * @var \Psr\SimpleCache\CacheInterface
+     */
+    protected $cacher;
 
-  // The cache key prefix
-  protected string $prefix;
+    /**
+     * The decorated schema collection
+     *
+     * @var \Cake\Database\Schema\CollectionInterface
+     */
+    protected $collection;
 
-  /**
-    * Constructor.
-    *
-    * @param uim.cake.databases.Schema\ICollection $collection The collection to wrap.
-    * @param string $prefix The cache key prefix to use. Typically the connection name.
-    * @param \Psr\SimpleCache\ICache $cacher Cacher instance.
-    */
-  this(ICollection aCollection, string $prefix, ICache $cacher) {
-      _collection = aCollection;
-      _prefix = $prefix;
-      _cacher = $cacher;
-  }
+    /**
+     * The cache key prefix
+     *
+     * @var string
+     */
+    protected $prefix;
+
+    /**
+     * Constructor.
+     *
+     * @param \Cake\Database\Schema\CollectionInterface $collection The collection to wrap.
+     * @param string $prefix The cache key prefix to use. Typically the connection name.
+     * @param \Psr\SimpleCache\CacheInterface $cacher Cacher instance.
+     */
+    public this(CollectionInterface $collection, string $prefix, CacheInterface $cacher)
+    {
+        this.collection = $collection;
+        this.prefix = $prefix;
+        this.cacher = $cacher;
+    }
 
 
-  array listTablesWithoutViews() {
-      return this.collection.listTablesWithoutViews();
-  }
+    function listTablesWithoutViews(): array
+    {
+        return this.collection.listTablesWithoutViews();
+    }
 
 
-  array listTables() {
-      return this.collection.listTables();
-  }
+    function listTables(): array
+    {
+        return this.collection.listTables();
+    }
 
 
-  function describe(string aName, STRINGAA someOptions = null): TableISchema
-  {
-      $options += ["forceRefresh": false];
-      $cacheKey = this.cacheKey($name);
+    function describe(string $name, array $options = []): ITableSchema
+    {
+        $options += ["forceRefresh" : false];
+        $cacheKey = this.cacheKey($name);
 
-      if (!$options["forceRefresh"]) {
-          $cached = this.cacher.get($cacheKey);
-          if ($cached != null) {
-              return $cached;
-          }
-      }
+        if (!$options["forceRefresh"]) {
+            $cached = this.cacher.get($cacheKey);
+            if ($cached != null) {
+                return $cached;
+            }
+        }
 
-      $table = this.collection.describe($name, $options);
-      this.cacher.set($cacheKey, $table);
+        $table = this.collection.describe($name, $options);
+        this.cacher.set($cacheKey, $table);
 
-      return $table;
-  }
+        return $table;
+    }
 
-  /**
-    * Get the cache key for a given name.
-    *
-    * @param string aName The name to get a cache key for.
-    * @return string The cache key.
-    */
-  string cacheKey(string aName) {
-      return this.prefix ~ "_" ~ $name;
-  }
+    /**
+     * Get the cache key for a given name.
+     *
+     * @param string $name The name to get a cache key for.
+     * @return string The cache key.
+     */
+    function cacheKey(string $name): string
+    {
+        return this.prefix . "_" . $name;
+    }
 
-  // Set and get a cacher.
-  mixin(OProperty!("ICache", "cacher"));
+    /**
+     * Set a cacher.
+     *
+     * @param \Psr\SimpleCache\CacheInterface $cacher Cacher object
+     * @return this
+     */
+    function setCacher(CacheInterface $cacher)
+    {
+        this.cacher = $cacher;
+
+        return this;
+    }
+
+    /**
+     * Get a cacher.
+     *
+     * @return \Psr\SimpleCache\CacheInterface $cacher Cacher object
+     */
+    function getCacher(): CacheInterface
+    {
+        return this.cacher;
+    }
 }

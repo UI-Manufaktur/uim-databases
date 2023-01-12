@@ -1,7 +1,7 @@
 module uim.cake.databases.schemas;
 
-import uim.cake.databases.Connection;
-import uim.cake.databases.exceptions.DatabaseException;
+use Cake\Database\Connection;
+use Cake\Database\Exception\DatabaseException;
 use PDOException;
 
 /**
@@ -10,29 +10,31 @@ use PDOException;
  * Used to access information about the tables,
  * and other data in a database.
  */
-class Collection : ICollection {
+class Collection : CollectionInterface
+{
     /**
      * Connection object
      *
-     * @var DDBConnection
+     * @var \Cake\Database\Connection
      */
     protected _connection;
 
     /**
      * Schema dialect instance.
      *
-     * @var DDBSchema\SchemaDialect
+     * @var \Cake\Database\Schema\SchemaDialect
      */
     protected _dialect;
 
     /**
      * Constructor.
      *
-     * @param uim.cake.databases.Connection $connection The connection instance.
+     * @param \Cake\Database\Connection $connection The connection instance.
      */
-    this(Connection $connection) {
-        _connection = $connection;
-        _dialect = $connection.getDriver().schemaDialect();
+    public this(Connection $connection)
+    {
+        this._connection = $connection;
+        this._dialect = $connection.getDriver().schemaDialect();
     }
 
     /**
@@ -40,12 +42,13 @@ class Collection : ICollection {
      *
      * @return array<string> The list of tables in the connected database/schema.
      */
-    array listTablesWithoutViews() {
-        [$sql, $params] = _dialect.listTablesWithoutViewsSql(_connection.config());
-        $result = null;
-        $statement = _connection.execute($sql, $params);
-        while ($row = $statement.fetch()) {
-            $result[] = $row[0];
+    function listTablesWithoutViews(): array
+    {
+        [mySql, $params] = this._dialect.listTablesWithoutViewsSql(this._connection.config());
+        $result = [];
+        $statement = this._connection.execute(mySql, $params);
+        while (aRow = $statement.fetch()) {
+            $result[] = aRow[0];
         }
         $statement.closeCursor();
 
@@ -57,12 +60,13 @@ class Collection : ICollection {
      *
      * @return array<string> The list of tables and views in the connected database/schema.
      */
-    array listTables() {
-        [$sql, $params] = _dialect.listTablesSql(_connection.config());
-        $result = null;
-        $statement = _connection.execute($sql, $params);
-        while ($row = $statement.fetch()) {
-            $result[] = $row[0];
+    function listTables(): array
+    {
+        [mySql, $params] = this._dialect.listTablesSql(this._connection.config());
+        $result = [];
+        $statement = this._connection.execute(mySql, $params);
+        while (aRow = $statement.fetch()) {
+            $result[] = aRow[0];
         }
         $statement.closeCursor();
 
@@ -82,27 +86,27 @@ class Collection : ICollection {
      * - `forceRefresh` - Set to true to force rebuilding the cached metadata.
      *   Defaults to false.
      *
-     * @param string aName The name of the table to describe.
+     * @param string $name The name of the table to describe.
      * @param array<string, mixed> $options The options to use, see above.
-     * @return uim.cake.databases.Schema\TableSchema Object with column metadata.
-     * @throws uim.cake.databases.exceptions.DatabaseException when table cannot be described.
+     * @return \Cake\Database\Schema\TableSchema Object with column metadata.
+     * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
      */
-    function describe(string aName, STRINGAA someOptions = null): TableISchema
+    function describe(string $name, array $options = []): ITableSchema
     {
-        aConfig = _connection.config();
+        $config = this._connection.config();
         if (strpos($name, ".")) {
-            [aConfig["schema"], $name] = explode(".", $name);
+            [$config["schema"], $name] = explode(".", $name);
         }
-        $table = _connection.getDriver().newTableSchema($name);
+        $table = this._connection.getDriver().newTableSchema($name);
 
-        _reflect("Column", $name, aConfig, $table);
+        this._reflect("Column", $name, $config, $table);
         if (count($table.columns()) == 0) {
             throw new DatabaseException(sprintf("Cannot describe %s. It has 0 columns.", $name));
         }
 
-        _reflect("Index", $name, aConfig, $table);
-        _reflect("ForeignKey", $name, aConfig, $table);
-        _reflect("Options", $name, aConfig, $table);
+        this._reflect("Index", $name, $config, $table);
+        this._reflect("ForeignKey", $name, $config, $table);
+        this._reflect("Options", $name, $config, $table);
 
         return $table;
     }
@@ -111,36 +115,37 @@ class Collection : ICollection {
      * Helper method for running each step of the reflection process.
      *
      * @param string $stage The stage name.
-     * @param string aName The table name.
-     * @param array<string, mixed> aConfig The config data.
-     * @param uim.cake.databases.Schema\TableSchema $schema The table schema instance.
+     * @param string $name The table name.
+     * @param array<string, mixed> $config The config data.
+     * @param \Cake\Database\Schema\TableSchema aSchema The table schema instance.
      * @return void
-     * @throws uim.cake.databases.exceptions.DatabaseException on query failure.
-     * @uses uim.cake.databases.Schema\SchemaDialect::describeColumnSql
-     * @uses uim.cake.databases.Schema\SchemaDialect::describeIndexSql
-     * @uses uim.cake.databases.Schema\SchemaDialect::describeForeignKeySql
-     * @uses uim.cake.databases.Schema\SchemaDialect::describeOptionsSql
-     * @uses uim.cake.databases.Schema\SchemaDialect::convertColumnDescription
-     * @uses uim.cake.databases.Schema\SchemaDialect::convertIndexDescription
-     * @uses uim.cake.databases.Schema\SchemaDialect::convertForeignKeyDescription
-     * @uses uim.cake.databases.Schema\SchemaDialect::convertOptionsDescription
+     * @throws \Cake\Database\Exception\DatabaseException on query failure.
+     * @uses \Cake\Database\Schema\SchemaDialect::describeColumnSql
+     * @uses \Cake\Database\Schema\SchemaDialect::describeIndexSql
+     * @uses \Cake\Database\Schema\SchemaDialect::describeForeignKeySql
+     * @uses \Cake\Database\Schema\SchemaDialect::describeOptionsSql
+     * @uses \Cake\Database\Schema\SchemaDialect::convertColumnDescription
+     * @uses \Cake\Database\Schema\SchemaDialect::convertIndexDescription
+     * @uses \Cake\Database\Schema\SchemaDialect::convertForeignKeyDescription
+     * @uses \Cake\Database\Schema\SchemaDialect::convertOptionsDescription
      */
-    protected void _reflect(string $stage, string aName, Json aConfig, TableSchema $schema) {
+    protected function _reflect(string $stage, string $name, array aConfig, TableSchema aSchema): void
+    {
         $describeMethod = "describe{$stage}Sql";
         $convertMethod = "convert{$stage}Description";
 
-        [$sql, $params] = _dialect.{$describeMethod}($name, aConfig);
-        if (empty($sql)) {
+        [mySql, $params] = this._dialect.{$describeMethod}($name, $config);
+        if (empty(mySql)) {
             return;
         }
         try {
-            $statement = _connection.execute($sql, $params);
+            $statement = this._connection.execute(mySql, $params);
         } catch (PDOException $e) {
             throw new DatabaseException($e.getMessage(), 500, $e);
         }
         /** @psalm-suppress PossiblyFalseIterator */
-        foreach ($statement.fetchAll("assoc") as $row) {
-            _dialect.{$convertMethod}($schema, $row);
+        foreach ($statement.fetchAll("assoc") as aRow) {
+            this._dialect.{$convertMethod}($schema, aRow);
         }
         $statement.closeCursor();
     }

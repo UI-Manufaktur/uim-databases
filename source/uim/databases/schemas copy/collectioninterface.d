@@ -9,13 +9,14 @@ module uim.cake.databases.schemas;
  * @method array<string> listTablesWithoutViews() Get the list of tables available in the current connection.
  * This will exclude any views in the schema.
  */
-interface ICollection {
+interface CollectionInterface
+{
     /**
      * Get the list of tables available in the current connection.
      *
      * @return array<string> The list of tables in the connected database/schema.
      */
-    array listTables();
+    function listTables(): array;
 
     /**
      * Get the column metadata for a table.
@@ -28,10 +29,10 @@ interface ICollection {
      * - `forceRefresh` - Set to true to force rebuilding the cached metadata.
      *   Defaults to false.
      *
-     * @param string aName The name of the table to describe.
+     * @param string $name The name of the table to describe.
      * @param array<string, mixed> $options The options to use, see above.
-     * @return uim.cake.databases.Schema\TableISchema Object with column metadata.
-     * @throws uim.cake.databases.exceptions.DatabaseException when table cannot be described.
+     * @return \Cake\Database\Schema\ITableSchema Object with column metadata.
+     * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
      */
-    function describe(string aName, STRINGAA someOptions = null): TableISchema;
+    function describe(string $name, array $options = []): ITableSchema;
 }
