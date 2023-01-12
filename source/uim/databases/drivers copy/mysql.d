@@ -1,11 +1,8 @@
 module uim.databases.drivers;
 
-import uim.databases.drivers;
-import uim.databases.Query;
-import uim.databases.schemas.MysqlSchemaDialect;
-import uim.databases.schemas.SchemaDialect;
-import uim.databases.statements.MysqlStatement;
-import uim.databases.IStatement;
+@safe:
+import uim.databases;
+
 use PDO;
 
 /**

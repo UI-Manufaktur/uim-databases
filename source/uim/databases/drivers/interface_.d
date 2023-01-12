@@ -1,4 +1,4 @@
-module uim.databases;
+module uim.databases.drivers.interface_;
 
 @safe:
 import uim.databases;

@@ -5,7 +5,9 @@
 **********************************************************************************************************/
 module uim.databases.expressions;
 
-import uim.databases.ValueBinder;
+@safe:
+import uim.databases;
+
 use Closure;
 
 /**

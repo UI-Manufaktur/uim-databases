@@ -5,6 +5,9 @@
 **********************************************************************************************************/
 module uim.databases;
 
+@safe:
+import uim.databases;
+
 use Closure;
 
 // An interface used by Expression objects.

@@ -5,12 +5,9 @@
 **********************************************************************************************************/
 module uim.databases.expressions;
 
-import uim.databases.IDBAExpression;
-import uim.databases.Query;
-import uim.databases.types.ExpressionTypeCasterTrait;
-import uim.databases.ITypedResult;
-import uim.databases.TypedResultTrait;
-import uim.databases.ValueBinder;
+@safe:
+import uim.databases;
+
 
 /**
  * This class represents a function call string in a SQL statement. Calls can be
