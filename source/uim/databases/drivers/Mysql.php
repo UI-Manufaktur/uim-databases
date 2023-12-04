@@ -269,10 +269,8 @@ class Mysql : Driver
 
     /**
      * Returns connected server version.
-     *
-     * @return string
      */
-    function version(): string
+    string  version(): string
     {
         if (this._version == null) {
             this.connect();

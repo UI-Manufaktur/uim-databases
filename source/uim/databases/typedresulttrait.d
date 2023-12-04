@@ -17,10 +17,8 @@ trait TypedResultTrait
 
     /**
      * Gets the type of the value this object will generate.
-     *
-     * @return string
      */
-    function getReturnType(): string
+    string  getReturnType(): string
     {
         return _returnType;
     }
