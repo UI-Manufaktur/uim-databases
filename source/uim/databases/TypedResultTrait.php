@@ -1,5 +1,5 @@
 
 
 
-module uim.databases\Database;
+module uim.databases;
 

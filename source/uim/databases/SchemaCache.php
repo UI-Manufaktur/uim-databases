@@ -13,5 +13,5 @@
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-module uim.databases\Database;
+module uim.databases;
 
