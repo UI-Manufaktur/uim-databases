@@ -1,14 +1,12 @@
 /*********************************************************************************************************
-*	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        *
-*	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  *
-*	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      *
+	Copyright: © 2015-2023 Ozan Nurettin Süel (Sicherheitsschmiede)                                        
+	License: Subject to the terms of the Apache 2.0 license, as written in the included LICENSE.txt file.  
+	Authors: Ozan Nurettin Süel (Sicherheitsschmiede)                                                      
 **********************************************************************************************************/
 module uim.databases;
 
 @safe:
 import uim.databases;
-
-use uim.databases.Schema\CachedCollection;
 
 /**
  * Schema Cache.
@@ -25,7 +23,7 @@ class SchemaCache
     /**
      * Schema
      *
-     * @var uim.databases.Schema\CachedCollection
+     * @var DDBSchema\CachedCollection
      */
     protected _schema;
 
@@ -34,8 +32,7 @@ class SchemaCache
      *
      * @param DDBAConnection $connection Connection name to get the schema for or a connection instance
      */
-    public this(Connection $connection)
-    {
+    this(Connection $connection) {
         _schema = this.getSchema($connection);
     }
 
@@ -45,8 +42,7 @@ class SchemaCache
      * @param string|null $name The name of the table to build cache data for.
      * @return array<string> Returns a list build table caches
      */
-    function build(?string $name = null): array
-    {
+    string[] build(Nullable!string aName = null) {
         if ($name) {
             $tables = [$name];
         } else {
@@ -65,10 +61,9 @@ class SchemaCache
      * Clear metadata.
      *
      * @param string|null $name The name of the table to clear cache data for.
-     * @return array<string> Returns a list of cleared table caches
+     * returns Returns a list of cleared table caches
      */
-    function clear(?string $name = null): array
-    {
+    string[] clear(Nullable!string aName = null) {
         if ($name) {
             $tables = [$name];
         } else {
@@ -95,12 +90,12 @@ class SchemaCache
      */
     function getSchema(Connection $connection): CachedCollection
     {
-        $config = $connection.config();
-        if (empty($config["cacheMetadata"])) {
+        aConfig = $connection.config();
+        if (empty(aConfig["cacheMetadata"])) {
             $connection.cacheMetadata(true);
         }
 
-        /** @var uim.databases.Schema\CachedCollection $schemaCollection */
+        /** @var DDBSchema\CachedCollection $schemaCollection */
         $schemaCollection = $connection.getSchemaCollection();
 
         return $schemaCollection;

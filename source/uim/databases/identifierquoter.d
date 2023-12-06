@@ -5,10 +5,9 @@
 **********************************************************************************************************/
 module uim.databases;
 
-@safe:
 import uim.databases;
 
-
+@safe:
 /**
  * Contains all the logic related to quoting identifiers in a Query object
  *
@@ -16,12 +15,8 @@ import uim.databases;
  */
 class IdentifierQuoter
 {
-    /**
-     * The driver instance used to do the identifier quoting
-     *
-     * @var DDBDriver
-     */
-    protected _driver;
+    // The driver instance used to do the identifier quoting
+    protected DDBDriver _driver;
 
     /**
      * Constructor
