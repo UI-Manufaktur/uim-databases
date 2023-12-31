@@ -8,12 +8,8 @@ module uim.databases.exceptions.nestedtransactionrollback;
 @safe:
 import uim.databases;
 
-use Throwable;
-
-/**
- * Class NestedTransactionRollbackException
- */
-class NestedTransactionRollbackException : UIMException {
+// Class NestedTransactionRollbackException
+class NestedTransactionRollbackException : DatabaseException {
     /**
      * Constructor
      *

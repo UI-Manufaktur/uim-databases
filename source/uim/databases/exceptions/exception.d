@@ -8,13 +8,6 @@ module uim.databases.exceptions;
 @safe:
 import uim.databases;
 
-
-/**
- * Exception for the database package.
- */
-class DatabaseException : UIMException {
+// Exception for the database package.
+class DatabaseException : DException {
 }
-
-// phpcs:disable
-class_exists("Cake\databases.exceptions");
-// phpcs:enable

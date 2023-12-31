@@ -9,6 +9,6 @@ module uim.databases.exceptions.missingconnection;
 import uim.databases;
 
 // Class MissingConnectionException
-class MissingConnectionException : UIMException {
+class MissingConnectionException : DatabaseException {
   protected string _messageTemplate = "Connection to %s could not be established: %s";
 }

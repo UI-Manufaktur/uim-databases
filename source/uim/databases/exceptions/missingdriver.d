@@ -9,7 +9,7 @@ module uim.databases.exceptions.missingdriver;
 import uim.databases;
 
 // Class MissingDriverException
-class MissingDriverException : UIMException {
+class MissingDriverException : DatabaseException {
 
     protected _messageTemplate = "Could not find driver `%s` for connection `%s`.";
 }

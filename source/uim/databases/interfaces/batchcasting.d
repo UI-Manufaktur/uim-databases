@@ -1,4 +1,4 @@
-module uim.databases.types;
+module source.uim.databases.interfaces.batchcasting;
 
 import uim.databases.IDriver;
 
