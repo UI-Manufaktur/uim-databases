@@ -5,9 +5,10 @@
 **********************************************************************************************************/
 module uim.databases.exceptions;
 
-@safe:
 import uim.databases;
 
+@safe:
 // Exception for the database package.
 class DatabaseException : DException {
+	protected string _messageTemplate = "%s";
 }

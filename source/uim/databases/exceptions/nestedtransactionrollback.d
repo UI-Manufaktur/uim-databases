@@ -10,17 +10,10 @@ import uim.databases;
 
 // Class NestedTransactionRollbackException
 class NestedTransactionRollbackException : DatabaseException {
-    /**
-     * Constructor
-     *
-     * @param string|null $message If no message is given a default meesage will be used.
-     * @param int|null $code Status code, defaults to 500.
-     * @param \Throwable|null $previous the previous exception.
-     */
-    this(Nullable!string $message = null, Nullable!int $code = 500, ?Throwable $previous = null) {
-        if ($message == null) {
-            $message = "Cannot commit transaction - rollback() has been already called in the nested transaction";
-        }
-        super(($message, $code, $previous);
+  this(string message = null, int statusCode = 500, Throwable previousException = null) {
+    if (message.isNull) {
+      message = "Cannot commit transaction - rollback() has been already called in the nested transaction";
     }
+    super(message, statusCode, previousException);
+  }
 }

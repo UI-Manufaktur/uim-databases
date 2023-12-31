@@ -10,6 +10,5 @@ import uim.databases;
 
 // Class MissingDriverException
 class MissingDriverException : DatabaseException {
-
     protected _messageTemplate = "Could not find driver `%s` for connection `%s`.";
 }

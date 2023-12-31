@@ -5,8 +5,8 @@
 **********************************************************************************************************/
 module source.uim.databases.interfaces.collection;
 
-@safe:
 import uim.databases;
+@safe:
 
 /**
  * Represents a database schema collection
@@ -17,14 +17,13 @@ import uim.databases;
  * @method array<string> listTablesWithoutViews() Get the list of tables available in the current connection.
  * This will exclude any views in the schema.
  */
-interface CollectionInterface
-{
+interface ICollection {
     /**
      * Get the list of tables available in the current connection.
      *
      * @return array<string> The list of tables in the connected database/schema.
      */
-    function listTables(): array;
+    array listTables(): ;
 
     /**
      * Get the column metadata for a table.
@@ -42,5 +41,5 @@ interface CollectionInterface
      * @return uim.databases.Schema\ITableSchema Object with column metadata.
      * @throws uim.databases.Exception\DatabaseException when table cannot be described.
      */
-    function describe(string $name, array $options = []): ITableSchema;
+    ITableSchema describe(string $name, array $options = []): ;
 }

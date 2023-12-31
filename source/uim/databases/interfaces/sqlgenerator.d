@@ -12,8 +12,7 @@ import uim.databases;
 /**
  * An interface used by TableSchema objects.
  */
-interface ISqlGenerator
-{
+interface ISqlGenerator {
     /**
      * Generate the SQL to create the Table.
      *

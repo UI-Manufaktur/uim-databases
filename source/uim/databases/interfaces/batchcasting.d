@@ -1,7 +1,8 @@
 module source.uim.databases.interfaces.batchcasting;
 
-import uim.databases.IDriver;
+import uim.databases;
 
+@safe:
 /**
  * Denotes type objects capable of converting many values from their original
  * database representation to php values.
