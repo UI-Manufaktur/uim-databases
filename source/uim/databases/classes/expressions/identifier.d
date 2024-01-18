@@ -1,4 +1,4 @@
-module uim.cake.databases.Expression;
+module uim.databases.Expression;
 
 import uim.cake;
 

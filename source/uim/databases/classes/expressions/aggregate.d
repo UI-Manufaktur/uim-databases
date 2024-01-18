@@ -1,4 +1,4 @@
-module uim.cake.databases.expressions.aggregate;
+module uim.databases.expressions.aggregate;
 
 import uim.cake;
 

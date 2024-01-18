@@ -1,4 +1,4 @@
-module uim.cake.databases.expressions.fieldinterfaces;
+module uim.databases.expressions.fieldinterfaces;
 
 import uim.cake;
 
