@@ -1,4 +1,4 @@
-module uim.cake.databases.logs.queryloggers;
+module uim.databases.logs.queryloggers;
 
 import uim.cake;
 

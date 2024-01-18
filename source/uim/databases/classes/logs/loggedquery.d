@@ -1,4 +1,4 @@
-module uim.cake.databases.Log;
+module uim.databases.Log;
 
 import uim.cake;
 

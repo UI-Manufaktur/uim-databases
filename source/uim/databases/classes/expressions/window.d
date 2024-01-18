@@ -1,4 +1,4 @@
-module uim.cake.databases.expressions.window;
+module uim.databases.expressions.window;
 
 import uim.cake;
 

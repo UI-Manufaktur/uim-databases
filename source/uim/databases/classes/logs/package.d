@@ -1,1 +1,1 @@
-module uim.cake.databases.logs;
+module uim.databases.logs;

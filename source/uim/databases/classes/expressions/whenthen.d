@@ -1,4 +1,4 @@
-module uim.cake.databases.expressions.whenthen;
+module uim.databases.expressions.whenthen;
 
 import uim.cake;
 

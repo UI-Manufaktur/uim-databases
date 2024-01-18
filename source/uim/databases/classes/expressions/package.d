@@ -1,2 +1,2 @@
-module uim.cake.databases.expressions;
+module uim.databases.expressions;
 

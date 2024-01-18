@@ -1,4 +1,4 @@
-module uim.cake.databases.expressions.unary;
+module uim.databases.expressions.unary;
 
 import uim.cake;
 
