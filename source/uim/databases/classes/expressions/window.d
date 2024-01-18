@@ -1,6 +1,6 @@
 module uim.databases.expressions.window;
 
-import uim.cake;
+import uim.databases;
 
 @safe:
 

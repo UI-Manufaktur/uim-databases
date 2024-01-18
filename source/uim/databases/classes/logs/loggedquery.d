@@ -1,6 +1,6 @@
 module uim.databases.Log;
 
-import uim.cake;
+import uim.databases;
 
 @safe:
 

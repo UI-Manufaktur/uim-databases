@@ -1,6 +1,6 @@
 module uim.databases.logs.queryloggers;
 
-import uim.cake;
+import uim.databases;
 
 @safe:
 
