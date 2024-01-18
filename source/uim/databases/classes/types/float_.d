@@ -1,4 +1,4 @@
-module uim.cake.databases.types.float_;
+module uim.databases.types.float_;
 
 import uim.cake;
 

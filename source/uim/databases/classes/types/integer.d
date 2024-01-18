@@ -1,4 +1,4 @@
-module uim.cake.databases.types.integer;
+module uim.databases.types.integer;
 
 import uim.cake;
 

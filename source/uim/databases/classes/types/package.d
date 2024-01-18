@@ -1,2 +1,2 @@
-module uim.cake.databases.types;
+module uim.databases.types;
 

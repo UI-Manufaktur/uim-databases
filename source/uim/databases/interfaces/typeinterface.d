@@ -1,4 +1,4 @@
-module uim.cake.databases;
+module uim.databases;
 import uim.cake;
 
 @safe:

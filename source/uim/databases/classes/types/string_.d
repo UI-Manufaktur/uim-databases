@@ -1,4 +1,4 @@
-module uim.cake.databases.types.string_;
+module uim.databases.types.string_;
 
 import uim.cake;
 

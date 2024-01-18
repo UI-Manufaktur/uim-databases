@@ -1,4 +1,4 @@
-module uim.cake.databases.types.uuid;
+module uim.databases.types.uuid;
 
 import uim.cake;
 

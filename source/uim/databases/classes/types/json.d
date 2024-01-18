@@ -1,4 +1,4 @@
-module uim.cake.databases.types.json;
+module uim.databases.types.json;
 
 import uim.cake;
 
