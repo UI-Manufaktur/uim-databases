@@ -236,7 +236,7 @@ class Connection : IConnection {
 
     // Gets a Schema\Collection object for this connection.
     SchemaICollection getSchemaCollection() {
-        if (_schemaCollection !isNull) {
+        if (!_schemaCollection.isNull) {
             return _schemaCollection;
         }
         if (!empty(_config["cacheMetadata"])) {

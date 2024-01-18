@@ -1,4 +1,4 @@
-module uim.databases.schemas;
+module uim.databases.classes.schemas.cachedcollectionq;
 
 import uim.databases;
 
@@ -10,7 +10,7 @@ class CachedCollection : ICollection {
   protected ICache$cacher;
 
   // The decorated schema collection
-  protected ICollection$collection;
+  protected ICollection _collection;
 
   // The cache key prefix
   protected string myprefix;
@@ -22,8 +22,8 @@ class CachedCollection : ICollection {
      * @param string aprefix The cache key prefix to use. Typically the connection name.
      * @param \Psr\SimpleCache\ICache $cacher Cacher instance.
      */
-  this(ICollection$collection, string myprefix, ICache$cacher) {
-    this.collection = $collection;
+  this(ICollection collection, string myprefix, ICache$cacher) {
+    _collection = collection;
     this.prefix = $prefix;
     this.cacher = $cacher;
   }
@@ -52,13 +52,9 @@ class CachedCollection : ICollection {
     return aTable;
   }
 
-  /**
-     * Get the cache key for a given name.
-     * Params:
-     * string aName The name to get a cache key for.
-     */
-  string cacheKey(string myname) {
-    return this.prefix ~ "_" ~ $name;
+  // Get the cache key for a given name.
+  string cacheKey(string name) {
+    return this.prefix ~ "_" ~ name;
   }
 
   // Get/Set a cacher.

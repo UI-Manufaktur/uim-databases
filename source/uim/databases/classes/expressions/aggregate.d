@@ -135,7 +135,7 @@ class AggregateExpression : FunctionExpression : WindowInterface {
     // Clone this object and its subtree of expressions.
     void __clone() {
         super.__clone();
-        if (this.filter !isNull) {
+        if (!this.filter.isNull) {
             this.filter = clone this.filter;
         }
         if (this.window !isNull) {

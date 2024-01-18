@@ -19,11 +19,6 @@ class Collection : ICollection {
     // Schema dialect instance.
     protected SchemaDialect _dialect;
 
-    /**
-     * Constructor.
-     * Params:
-     * \UIM\Database\Connection aConnection The connection instance.
-     */
     this(Connection newConnection) {
        _connection = newConnection;
        _dialect = newConnection.getDriver().schemaDialect();
@@ -35,21 +30,21 @@ class Collection : ICollection {
      */
     string[] listTablesWithoutViews() {
         [$sql, $params] = _dialect.listTablesWithoutViewsSql(_connection.getDriver().config());
-        auto result;
-        $statement = _connection.execute($sql, $params);
+        auto $statement = _connection.execute($sql, $params);
+
+        string[] result;
         while ($row = $statement.fetch()) {
             result ~= $row[0];
         }
         return result;
     }
     
-    /**
-     * Get the list of tables and views available in the current connection.
-     */
+    // Get the list of tables and views available in the current connection.
     string[] listTables() {
         [$sql, $params] = _dialect.listTablesSql(_connection.getDriver().config());
-        auto result;
         $statement = _connection.execute($sql, $params);
+        
+        string[] result;
         while ($row = $statement.fetch()) {
             result ~= $row[0];
         }
@@ -92,14 +87,9 @@ class Collection : ICollection {
     
     /**
      * Helper method for running each step of the reflection process.
-<<<<<<< HEAD
      * Params:
      * string astage The stage name.
      * @param string aName The table name.
-=======
-     *
-     * @param string astage The stage name.
->>>>>>> 6c77f0755345c40125ff261f87e4ab75fc24b38d
      * configData - The config data.
      * @param \UIM\Database\Schema\TableISchema tableSchema The table schema instance.
      * @throws \UIM\Database\Exception\DatabaseException on query failure.

@@ -857,7 +857,7 @@ abstract class Query : IExpression, Stringable {
         }
         return this.where(
             [
-                'OR": [$field ~ " NOT IN":  someValues, $field ~ " IS": null],
+                "OR": [$field ~ " NOT IN":  someValues, $field ~ " IS": null],
             ],
             $options["types"]
         );

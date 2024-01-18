@@ -80,7 +80,7 @@ class PostgresSchemaDialect : SchemaDialect {
             throw new DatabaseException("Unable to parse column type from `%s`".format(columnType));
         }
         auto $col = $matches[1].toLower;
-        $length = $precision = $scale = null;
+        auto $length = $precision = $scale = null;
         if (isSet($matches[2])) {
             $length = (int)$matches[2];
         }
