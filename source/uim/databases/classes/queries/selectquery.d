@@ -1,4 +1,4 @@
-module uim.cake.databases.Query;
+module uim.databases.Query;
 
 import uim.cake;
 

@@ -1,4 +1,4 @@
-module uim.cake.databases.Retry;
+module uim.databases.Retry;
 
 import uim.cake;
 
