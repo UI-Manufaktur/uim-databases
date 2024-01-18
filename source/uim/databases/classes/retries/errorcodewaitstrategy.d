@@ -1,6 +1,6 @@
 module uim.databases.Retry;
 
-import uim.cake;
+import uim.databases;
 
 @safe:
 

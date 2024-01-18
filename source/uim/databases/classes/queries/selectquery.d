@@ -1,6 +1,6 @@
 module uim.databases.Query;
 
-import uim.cake;
+import uim.databases;
 
 @safe:
 
