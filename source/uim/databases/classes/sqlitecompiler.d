@@ -1,6 +1,6 @@
 module uim.databases;
 
-import uim.cake;
+import uim.databases;
 
 @safe:
 // Responsible for compiling a Query object into its SQL representation for SQLite
