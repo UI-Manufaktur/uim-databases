@@ -1,4 +1,4 @@
-module uim.cake.databases.types.decimal;
+module uim.databases.types.decimal;
 
 import uim.cake;
 

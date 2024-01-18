@@ -1,4 +1,4 @@
-module uim.cake.databases.types.datetimefractional;
+module uim.databases.types.datetimefractional;
 
 import uim.cake;
 
