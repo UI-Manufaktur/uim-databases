@@ -1,4 +1,4 @@
-module uim.cake.databases.Driver;
+module uim.databases.Driver;
 
 import uim.cake;
 

@@ -1,4 +1,4 @@
-module uim.cake.databases;
+module uim.databases;
 /**
  * : default and single-use mappings for columns to their associated types
  */

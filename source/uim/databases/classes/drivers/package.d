@@ -1,2 +1,2 @@
-module uim.cake.databases.drivers;
+module uim.databases.drivers;
 
