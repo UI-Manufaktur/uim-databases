@@ -1,4 +1,4 @@
-module uim.cake.databases.Statement;
+module uim.databases.Statement;
 
 import uim.cake;
 

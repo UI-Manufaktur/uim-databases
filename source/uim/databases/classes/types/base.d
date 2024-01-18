@@ -1,4 +1,4 @@
-module uim.cake.databases.types.base;
+module uim.databases.types.base;
 
 import uim.cake;
 
