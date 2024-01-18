@@ -1,6 +1,6 @@
 module uim.databases.types.uuid;
 
-import uim.cake;
+import uim.databases;
 
 @safe:
 

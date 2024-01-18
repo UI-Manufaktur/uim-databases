@@ -1,6 +1,6 @@
 module uim.databases.types;
 
-import uim.cake;
+import uim.databases;
 
 @safe:
 

@@ -1,6 +1,6 @@
 module uim.databases.types.datetimefractional;
 
-import uim.cake;
+import uim.databases;
 
 @safe:
 
