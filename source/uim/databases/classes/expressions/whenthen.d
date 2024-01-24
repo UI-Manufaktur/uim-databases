@@ -35,10 +35,8 @@ class WhenThenExpression : IExpression {
 
     /**
      * The `WHEN` value type.
-     *
-     * @var string[]|null
      */
-    protected string[]|null $whenType = null;
+    protected string[] $whenType = null;
 
     /**
      * The `THEN` value.
@@ -53,8 +51,7 @@ class WhenThenExpression : IExpression {
      */
     protected bool $hasThenBeenDefined = false;
 
-    /**
-     * The `THEN` result type.
+    // The `THEN` result type.
      */
     protected string athenType = null;
 

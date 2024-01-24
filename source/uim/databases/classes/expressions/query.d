@@ -10,7 +10,7 @@ import uim.databases;
  * and will contain a correctly parenthesized and nested expression.
  */
 class QueryExpression : IExpression, Countable {
-    use TypeMapTrait;
+    mixin TypeMapTrait;
 
     /**
      * String to be used for joining each of the internal expressions
@@ -21,8 +21,6 @@ class QueryExpression : IExpression, Countable {
     /**
      * A list of strings or other expression objects that represent the "branches" of
      * the expression tree. For example one key of the array might look like "sum > :value"
-     *
-     * @var array
      */
     protected array _conditions = [];
 

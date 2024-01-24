@@ -28,19 +28,19 @@ class InsertQuery : Query {
      * Note calling this method will reset any data previously set
      * with Query.values().
      * Params:
-     * array someColumns The columns to insert into.
+     * array columnsToInsert The columns to insert into.
      * @param array<int|string, string> $types A map between columns & their datatypes.
      */
-    void insert(array someColumns, array $types = []) {
-        if (isEmpty(someColumns)) {
+    void insert(array columnsToInsert, array $types = []) {
+        if (isEmpty(columnsToInsert)) {
             throw new InvalidArgumentException("At least 1 column is required to perform an insert.");
         }
        _dirty();
-       _parts["insert"][1] = someColumns;
+       _parts["insert"][1] = columnsToInsert;
         if (!_parts["values"]) {
-           _parts["values"] = new ValuesExpression(someColumns, this.getTypeMap().setTypes($types));
+           _parts["values"] = new ValuesExpression(columnsToInsert, this.getTypeMap().setTypes($types));
         } else {
-           _parts["values"].setColumns(someColumns);
+           _parts["values"].setColumns(columnsToInsert);
         }
     }
     

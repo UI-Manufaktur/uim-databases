@@ -4,9 +4,7 @@ import uim.databases;
 
 @safe:
 
-/**
- * An expression object for ORDER BY clauses
- */
+// An expression object for ORDER BY clauses
 class OrderByExpression : QueryExpression {
     /**
      * Constructor

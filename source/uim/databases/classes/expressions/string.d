@@ -4,19 +4,12 @@ import uim.databases;
 
 @safe:
 
-/*
-/**
- * String expression with collation.
- */
+// String expression with collation.
 class StringExpression : IExpression {
     protected string astring;
 
     protected string aCollation;
 
-    /**
-     * @param string astring String value
-     * @param string aCollation String collation
-     */
     this(string astring, string aCollation) {
         this.string = $string;
         this.collation = aCollation;

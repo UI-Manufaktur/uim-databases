@@ -4,16 +4,10 @@ import uim.databases;
 
 @safe:
 
-/*
-
- */
-
 //Factory class for generating instances of Select, Insert, Update, Delete queries.
 class QueryFactory {
     
-    this(
-        protected Connection aConnection,
-    ) {
+    this(Connection aConnection) {
     }
     
     /**
@@ -28,14 +22,13 @@ class QueryFactory {
         string[] atable = [],
         STRINGAA typesForCasting = []
     ) {
-        aQuery = new SelectQuery(this.connection);
-
-        aQuery
-            .select($fields)
-            .from(aTable)
-            .setDefaultTypes(typesForCasting);
-
-        return aQuery;
+        auto selectQuery = new SelectQuery(this.connection);
+        with (selectQuery) {
+            select($fields);
+            from(aTable);
+            setDefaultTypes(typesForCasting);
+        }
+        return selectQuery;
     }
     
     /**

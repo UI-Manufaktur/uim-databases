@@ -11,11 +11,8 @@ import uim.databases;
 class TupleComparison : ComparisonExpression {
     /**
      * The type to be used for casting the value to a database representation
-     *
-     * @var array<string|null>
-     * @psalm-suppress NonInvariantDocblockPropertyType
      */
-    protected array $types;
+    protected string[] $types;
 
     /**
      * Constructor
@@ -68,21 +65,20 @@ class TupleComparison : ComparisonExpression {
     }
  
     string sql(ValueBinder aBinder) {
-        $template = "(%s) %s (%s)";
-        string[] fields;
         $originalFields = this.getFieldNames();
-
         if (!isArray($originalFields)) {
             $originalFields = [$originalFields];
         }
+        string[] fields;
         $originalFields.each!(field => fields ~= cast(IExpression)field  
                 ? field.sql(aBinder)
                 : field;
         }
-        someValues = _stringifyValues(aBinder);
 
-        $field = fields.join(", ");
-        return $template.format($field, _operator,  someValues);
+        string result = "(%s) %s (%s)"
+            .format(fields.join(", "), _operator,_stringifyValues(aBinder));
+
+        return result;
     }
 
     /**

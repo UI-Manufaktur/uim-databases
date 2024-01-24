@@ -28,8 +28,6 @@ class DeleteQuery : Query {
      *
      * Can be combined with from(), where() and other methods to
      * create delete queries with specific conditions.
-     * Params:
-     * string|null aTable The table to use when deleting.
      */
     void delete(string atable = null) {
        _dirty();

@@ -4,17 +4,13 @@ import uim.databases;
 
 @safe:
 
-/*
-
-/**
- * An expression that represents a common table expression definition.
- */
+// An expression that represents a common table expression definition.
 class CommonTableExpression : IExpression {
     // The CTE name.
     protected IdentifierExpression _cteName;
 
     // The field names to use for the CTE.
-    protected IdentifierExpression[] $fields = [];
+    protected IdentifierExpression[] _fields;
 
     // The CTE query definition.
     protected IExpression aQuery = null;
@@ -25,16 +21,17 @@ class CommonTableExpression : IExpression {
     // Whether the CTE is recursive.
     protected bool $recursive = false;
 
-    /**
-     * Constructor.
-     * Params:
-     * string cteName The CTE name.
-     * @param \UIM\Database\IExpression|\Closure|null aQuery CTE query
-     */
-    this(string cteName = "", IExpression|Closure|null aQuery = null) {
+    this(string cteName = "", IExpression cteQuery = null) {
        _cteName = new IdentifierExpression(cteName);
-        if (aQuery) {
-            this.query(aQuery);
+        if (cteQuery) {
+            this.query(cteQuery);
+        }
+    }
+
+    this(string cteName = "", Closure cteQuery) {
+       _cteName = new IdentifierExpression(cteName);
+        if (cteQuery) {
+            this.query(cteQuery);
         }
     }
     
@@ -43,11 +40,9 @@ class CommonTableExpression : IExpression {
      *
      * This is the named you used to reference the expression
      * in select, insert, etc queries.
-     * Params:
-     * string cteName The CTE name.
      */
     void name(string cteName) {
-        this.name = new IdentifierExpression(cteName);
+        _name = new IdentifierExpression(cteName);
     }
     
     /**
@@ -56,11 +51,13 @@ class CommonTableExpression : IExpression {
      * \UIM\Database\IExpression|\Closure aQuery CTE query
      */
     void query(IExpression|Closure aQuery) {
+    }
+    void query(IExpression|Closure aQuery) {
         if (cast(Closure)aQuery) {
             aQuery = aQuery();
             if (!(cast(IExpression)aQuery)) {
                 throw new DatabaseException(
-                    'You must return an `IExpression` from a Closure passed to `query()`.'
+                    "You must return an `IExpression` from a Closure passed to `query()`."
                 );
             }
         }
@@ -73,16 +70,15 @@ class CommonTableExpression : IExpression {
      * \UIM\Database\Expression\IdentifierExpression|array<\UIM\Database\Expression\IdentifierExpression>|string[]|string afields Field names
      */
     void field(IdentifierExpression|string[] afields) {
-        $fields = (array)$fields;
+        auto $fields = (array)$fields;
         /** @var array<string|\UIM\Database\Expression\IdentifierExpression> $fields */
-        foreach ($fields as &$field) {
+        $fields.each!((field) {
             if (!(cast(IdentifierExpression)$field)) {
                 $field = new IdentifierExpression($field);
             }
-        }
+        });
         /** @var array<\UIM\Database\Expression\IdentifierExpression> $mergedFields */
-        $mergedFields = array_merge(this.fields, $fields);
-        this.fields = $mergedFields;
+        this.fields = chain(this.fields, $fields);
     }
 
     // Sets this CTE as materialized.
@@ -111,13 +107,13 @@ class CommonTableExpression : IExpression {
             someExpressions = array_map(fn (IdentifierExpression  anException):  anException.sql(aBinder), this.fields);
             myFields = "(%s)".format(join(", ", someExpressions));
         }
-        $suffix = this.materialized ? this.materialized ~ " " : "";
 
+        strng suffix = this.materialized ? this.materialized ~ " " : "";
         return 
             "%s%s AS %s(%s)".format(
             this.name.sql(aBinder),
             myFields,
-            $suffix,
+            suffix,
             this.query ? this.query.sql(aBinder): ""
         );
     }
