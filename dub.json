@@ -1,0 +1,25 @@
+{
+	"name": "uim-datasources",
+	"authors": [
+		"Ozan Nurettin Süel"
+	],
+	"copyright": "Copyright © 2015-2023, Ozan Nurettin Süel (Sicherheitsschmiede)",
+	"targetType": "library",
+	"description": "datasources",
+	"dependencies": {
+		"colored": "~>0.0.31",
+		"vibe-d": "~>0.9.7",
+		"uim": "~>24.1.1"
+	},
+	"configurations": [
+		{
+			"name": "offline"
+		},
+		{
+			"name": "libTest",
+			"versions": [
+				"test_uim_datasources"
+			]
+		}
+	]
+}
