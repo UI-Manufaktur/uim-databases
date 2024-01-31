@@ -6,7 +6,16 @@ import uim.databases;
 
 // DateTimeType with support for time zones.
 class DateTimeTimezoneType : DateTimeType {
- 
+     mixin(TypeThis!("DateTimeTimezoneType"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+        return true;
+    }
+
     protected string _format = "Y-m-d H:i:s.uP";
 
     protected string[] _marshalFormats = [

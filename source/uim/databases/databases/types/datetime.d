@@ -9,7 +9,7 @@ import uim.cake;
  *
  * Use to convert datetime instances to strings & back.
  */
-class DateTimeType : BaseType : IBatchCasting {
+class DateTimeType : BaseType, IBatchCasting {
     // The DateTime format used when converting to string.
     protected string _format = "Y-m-d H:i:s";
 

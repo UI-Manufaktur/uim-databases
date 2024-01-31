@@ -10,6 +10,16 @@ import uim.databases;
  * Use to convert decimal data between PHP and the database types.
  */
 class DecimalType : BaseType, IBatchCasting {
+    mixin(TypeThis!("DecimalType"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+        return true;
+    }
+
     // The class to use for representing number objects
     static string anumberClass = Number.classname;
 

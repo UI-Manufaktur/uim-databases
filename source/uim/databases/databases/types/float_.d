@@ -11,7 +11,7 @@ import uim.cake;
  *
  * Use to convert float/decimal data between PHP and the database types.
  */
-class FloatType : BaseType : IBatchCasting {
+class FloatType : BaseType, IBatchCasting {
     // The class to use for representing number objects
     static string anumberClass = Number.classname;
 

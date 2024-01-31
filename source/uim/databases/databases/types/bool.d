@@ -9,7 +9,7 @@ import uim.cake;
  *
  * Use to convert bool data between PHP and the database types.
  */
-class BoolType : BaseType : IBatchCasting {
+class BoolType : BaseType, IBatchCasting {
     /**
      * Convert bool data into the database format.
      * Params:

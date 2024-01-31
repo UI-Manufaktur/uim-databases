@@ -10,6 +10,16 @@ import uim.databases;
  * Use to convert string data between PHP and the database types.
  */
 class EnumType : BaseType {
+    mixin(TypeThis!("EnumType"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+        return true;
+    }
+
     // The type of the enum which is either string or int
     protected string _backingType;
 

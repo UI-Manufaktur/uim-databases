@@ -10,6 +10,16 @@ import uim.databases;
  * Use to convert integer data between PHP and the database types.
  */
 class IntegerType : BaseType, IBatchCasting {
+    mixin(TypeThis!("IntegerType"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+        return true;
+    }
+
     // Checks if the value is not a numeric value
     protected void checkNumeric(Json valueToCheck) {
         if (!isNumeric(valueToCheck) && !isBool(valueToCheck)) {

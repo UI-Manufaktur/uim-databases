@@ -6,6 +6,15 @@ import uim.databases;
 
 // DateTimeType with support for fractional seconds up to microseconds.
 class DateTimeFractionalType : DateTimeType {
+    mixin(TypeThis!("DateTimeFractionalType"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+        return true;
+    }
  
     protected string _format = "Y-m-d H:i:s.u";
 

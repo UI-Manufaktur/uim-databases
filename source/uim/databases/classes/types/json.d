@@ -4,9 +4,6 @@ import uim.databases;
 
 @safe:
 
-/*
-use InvalidArgumentException;
-
 /**
  * JSON type converter.
  * Use to convert JSON data between PHP and the database types.

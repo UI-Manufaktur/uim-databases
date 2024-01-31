@@ -4,8 +4,6 @@ import uim.databases;
 
 @safe:
 
-/*
-
 /**
  * Float type converter.
  *
