@@ -9,7 +9,7 @@ import uim.cake;
 /**
  * Float type converter.
  *
- * Use to convert float/decimal data between PHP and the database types.
+ * Use to convert float/decimal data between D and the database types.
  */
 class FloatType : BaseType, IBatchCasting {
     // The class to use for representing number objects
@@ -57,7 +57,7 @@ class FloatType : BaseType, IBatchCasting {
     }
     
     /**
-     * Marshals request data into PHP floats.
+     * Marshals request data into D floats.
      * Params:
      * Json valueToConvert The value to convert.
      */

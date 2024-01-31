@@ -7,7 +7,7 @@ import uim.cake;
 /**
  * String type converter.
  *
- * Use to convert string data between PHP and the database types.
+ * Use to convert string data between D and the database types.
  */
 class StringType : BaseType, IOptionalConvert {
     /**
@@ -34,7 +34,7 @@ class StringType : BaseType, IOptionalConvert {
     }
     
     /**
-     * Convert string values to PHP strings.
+     * Convert string values to D strings.
      * Params:
      * Json valueToConvert The value to convert.
      * @param \UIM\Database\Driver driver The driver instance to convert with.
@@ -50,7 +50,7 @@ class StringType : BaseType, IOptionalConvert {
         return PDO.PARAM_STR;
     }
     
-    // Marshals request data into PHP strings.
+    // Marshals request data into D strings.
     string marshal(Json valueToConvert) {
         if (valueToConvert.isNull || isArray(valueToConvert)) {
             return null;

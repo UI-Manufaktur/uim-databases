@@ -7,7 +7,7 @@ import uim.cake;
 /**
  * Enum type converter.
  *
- * Use to convert string data between PHP and the database types.
+ * Use to convert string data between D and the database types.
  */
 class EnumType : BaseType {
     // The type of the enum which is either string or int

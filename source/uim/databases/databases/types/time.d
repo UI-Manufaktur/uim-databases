@@ -13,7 +13,7 @@ use InvalidArgumentException;
  * Use to convert time instances to strings & back.
  */
 class TimeType : BaseType, IBatchCasting {
-    // The PHP Time format used when converting to string.
+    // The D Time format used when converting to string.
     protected string _format = "H:i:s";
 
     /**
@@ -119,7 +119,7 @@ class TimeType : BaseType, IBatchCasting {
     }
     
     /**
-     * Convert time values to PHP time instances
+     * Convert time values to D time instances
      * Params:
      * Json aValue The value to convert.
      * @param \UIM\Database\Driver driver The driver instance to convert with.
