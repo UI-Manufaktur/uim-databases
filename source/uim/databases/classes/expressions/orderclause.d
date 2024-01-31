@@ -6,7 +6,7 @@ import uim.databases;
 
 // An expression object for complex ORDER BY clauses
 class OrderClauseExpression : IExpression, IField {
-  use FieldTrait;
+  mixin FieldTrait;
 
   // The direction of sorting.
   protected string _direction;
@@ -17,7 +17,7 @@ class OrderClauseExpression : IExpression, IField {
      * \UIM\Database\IExpression|string afield The field to order on.
      */
   this(IExpression afield, string sortDirection) {
-    // TODO                         ^^^^  	                                    
+    // TODO  	                                    
   }
 
   this(string fieldName, string sortDirection) {
