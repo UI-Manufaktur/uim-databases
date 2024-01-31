@@ -5,6 +5,14 @@ import uim.databases;
 @safe:
 
 class SqlserverDriver : Driver {
+    mixin(DriverThis!("SqlserverDriver"));
+    
+  	override bool initialize(IConfigData[string] configData = null) {
+		if (!super.initialize(configData)) { return false; }
+		
+		return true;
+	}
+
     use TupleComparisonTranslatorTrait;
 
     protected const MAX_ALIAS_LENGTH = 128;

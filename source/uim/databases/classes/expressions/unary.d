@@ -4,7 +4,6 @@ import uim.databases;
 
 @safe:
 
-/* */
 // An expression object that represents an expression with only a single operand.
 class UnaryExpression : IExpression {
     // Indicates that the operation is in pre-order

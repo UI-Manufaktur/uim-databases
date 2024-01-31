@@ -5,36 +5,7 @@ import uim.cake;
 @safe:
 
 class Postgres : Driver {
-     mixin(DriverThis!("Postgres"));
-    
-  	override bool initialize(IConfigData[string] configData = null) {
-		if (!super.initialize(configData)) { return false; }
-		
-		return true;
-	}
-
-    protected const MAX_ALIAS_LENGTH = 63;
-
-    // Base configuration settings for Postgres driver
-    protected Json[string] _baseConfig = [
-        "persistent": true,
-        "host":  "localhost",
-        "username": "root",
-        "password": "",
-        "database":  "uim",
-        "schema":  "public",
-        "port": 5432,
-        "encoding":  "utf8",
-        "timezone": null,
-        "flags": [],
-        "init": [],
-    ];
-
-    // String used to start a database identifier quoting to make it safe
-    protected string _startQuote = """;
-
     // String used to end a database identifier quoting to make it safe
-    protected string _endQuote = """;
 
     void connect() {
         if (isSet(this.pdo)) {
@@ -47,17 +18,6 @@ class Postgres : Driver {
             PDO.ATTR_ERRMODE: PDO.ERRMODE_EXCEPTION,
         ];
 
-        string dsn = isEmpty(configData("unix_socket"])
-            ? `pgsql:host={configData("host"]};port={configData("port"]};dbname={configData("database"]}`
-            : `pgsql:dbname={configData("database"]}`;
-        }
-        this.pdo = this.createPdo($dsn, configData);
-        if (!empty(configData("encoding"])) {
-            this.setEncoding(configData("encoding"]);
-        }
-        if (!empty(configData("schema"])) {
-            this.setSchema(configData("schema"]);
-        }
         if (!empty(configData("timezone"])) {
             configData("init"] ~= "SET timezone = %s".format(this.getPdo().quote(configData("timezone"]));
         }

@@ -11,23 +11,22 @@ class MysqlDriver : Driver {
 		if (!super.initialize(configData)) { return false; }
 		
             // Base configuration settings for MySQL driver
-            _baseConfig = [
-        "persistent": true,
-        "host": "localhost",
-        "username": "root",
-        "password": "",
-        "database": "uim",
-        "port": "3306",
-        "flags": [],
-        "encoding": "utf8mb4",
-        "timezone": null,
-        "init": [],
-    ];
+        _baseConfig = [
+                "persistent": BoolData(true),
+                "host": StringData("localhost"),
+                "username": StringData("root"),
+                "password": StringData(""),
+                "database": StringData("uim"),
+                "port": StringData("3306"),
+                "flags": ArrayData,
+                "encoding": StringData("utf8mb4"),
+                "timezone": NullData(null),
+                "init": ArrayData,
+            ];
     
 		return true;
 	}
  
-    protected Json _baseConfig;
 
     protected const MAX_ALIAS_LENGTH = 256;
 
@@ -36,20 +35,6 @@ class MysqlDriver : Driver {
 
     // Server type MariaDB
     protected const string SERVER_TYPE_MARIADB = "mariadb";
-
-    // Base configuration settings for MySQL driver
-    protected Json _baseConfig = [
-        "persistent": true,
-        "host": "localhost",
-        "username": "root",
-        "password": "",
-        "database": "uim",
-        "port": "3306",
-        "flags": [],
-        "encoding": "utf8mb4",
-        "timezone": null,
-        "init": [],
-    ];
 
     // String used to start a database identifier quoting to make it safe
     protected string _startQuote = "`";
@@ -63,7 +48,7 @@ class MysqlDriver : Driver {
      * If the underlying server is MariaDB, its value will get set to `'mariadb'`
      * after `currentVersion()` method is called.
      */
-    protected string aserverType = self.SERVER_TYPE_MYSQL;
+    protected string serverType = SERVER_TYPE_MYSQL;
 
     // Mapping of feature to db server version for feature availability checks.
     protected Json _featureVersions = [

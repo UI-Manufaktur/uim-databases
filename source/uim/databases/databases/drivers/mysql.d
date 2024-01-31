@@ -5,65 +5,6 @@ import uim.cake;
 @safe:
 
 class Mysql : Driver {
-    mixin(DriverThis!("Mysq"));
-
-  	override bool initialize(IConfigData[string] configData = null) {
-		if (!super.initialize(configData)) { return false; }
-		
-            // Base configuration settings for MySQL driver
-    protected Json _baseConfig = [
-        "persistent": true,
-        "host": "localhost",
-        "username": "root",
-        "password": "",
-        "database": "uim",
-        "port": "3306",
-        "flags": [],
-        "encoding": "utf8mb4",
-        "timezone": null,
-        "init": [],
-    ];
-    
-		return true;
-	}
- 
-    protected const MAX_ALIAS_LENGTH = 256;
-
-    // Server type MySQL
-    protected const string SERVER_TYPE_MYSQL = "mysql";
-
-    // Server type MariaDB
-    protected const string SERVER_TYPE_MARIADB = "mariadb";
-
-    // String used to start a database identifier quoting to make it safe
-    protected string _startQuote = "`";
-
-    // String used to end a database identifier quoting to make it safe
-    protected string _endQuote = "`";
-
-    /**
-     * Server type.
-     *
-     * If the underlying server is MariaDB, its value will get set to `'mariadb'`
-     * after `currentVersion()` method is called.
-     */
-    protected string aserverType = self.SERVER_TYPE_MYSQL;
-
-    // Mapping of feature to db server version for feature availability checks.
-    protected Json _featureVersions = [
-        "mysql": [
-            "json": "5.7.0",
-            "cte": "8.0.0",
-            "window": "8.0.0",
-        ],
-        "mariadb": [
-            "json": "10.2.7",
-            "cte": "10.2.1",
-            "window": "10.2.0",
-        ],
-    ];
-
- 
     void connect() {
         if (this.pdo.isSet) {
             return;

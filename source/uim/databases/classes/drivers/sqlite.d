@@ -5,15 +5,11 @@ import uim.databases;
 @safe:
 
 class SqliteDriver : Driver {
-    use TupleComparisonTranslatorTrait;
+    mixin(DriverThis!("SqliteDriver"));
+    
+  	override bool initialize(IConfigData[string] configData = null) {
+		if (!super.initialize(configData)) { return false; }
 
-    protected const STATEMENT_CLASS = SqliteStatement.classname;
-
-    /**
-     * Base configuration settings for Sqlite driver
-     *
-     * - `mask` The mask used for created database
-     */
     protected Json _baseConfig = [
         "persistent": false,
         "username": null,
@@ -26,6 +22,19 @@ class SqliteDriver : Driver {
         "flags": [],
         "init": [],
     ];
+
+		return true;
+	}
+
+    use TupleComparisonTranslatorTrait;
+
+    protected const STATEMENT_CLASS = SqliteStatement.classname;
+
+    /**
+     * Base configuration settings for Sqlite driver
+     *
+     * - `mask` The mask used for created database
+     */
 
     // Whether the connected server supports window functions
     protected bool _supportsWindowFunctions = null;

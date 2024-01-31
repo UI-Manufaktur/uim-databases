@@ -5,13 +5,6 @@ import uim.cake;
 @safe:
 
 class Sqlserver : Driver {
-    mixin(DriverThis!("Sqlserver"));
-    
-  	override bool initialize(IConfigData[string] configData = null) {
-		if (!super.initialize(configData)) { return false; }
-		
-		return true;
-	}
 
     mixin TupleComparisonTranslatorTemplate();
 

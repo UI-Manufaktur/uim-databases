@@ -1,4 +1,4 @@
-module uim.databases;
+module uim.databases.classes.driver;
 
 import uim.databases;
 
@@ -9,7 +9,12 @@ import uim.databases;
  * a database engine including its SQL dialect.
  */
 abstract class Driver {
-    use LoggerAwareTrait;
+    mixin LoggerAwareTrait;
+
+ 	override bool initialize(IConfigData[string] configData = null) {
+        _config = Configuration; 
+        _baseConfig = Configuration; 
+    }
 
     /**
      * @var int Maximum alias length or null if no limit
@@ -27,13 +32,13 @@ abstract class Driver {
     protected PDO $pdo = null;
 
     // Configuration data.
-    protected Json[string] _config = [];
+    protected IConfiguration _config;
 
     /**
      * Base configuration that is merged into the user
      * supplied configuration data.
      */
-    protected Json _baseConfig = [];
+    protected IConfiguration _baseConfig;
 
     /**
      * Indicates whether the driver is doing automatic identifier quoting
