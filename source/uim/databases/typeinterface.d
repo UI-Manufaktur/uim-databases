@@ -9,26 +9,26 @@ module uim.databases;
 import uim.databases;
 
 /**
- * Encapsulates all conversion functions for values coming from a database into PHP and
- * going from PHP into a database.
+ * Encapsulates all conversion functions for values coming from a database into D and
+ * going from D into a database.
  */
 interface TypeInterface
 {
     /**
-     * Casts given value from a PHP type to one acceptable by a database.
+     * Casts given value from a D type to one acceptable by a database.
      *
      * @param mixed $value Value to be converted to a database equivalent.
      * @param uim.databases.IDriver aDriver Object from which database preferences and configuration will be extracted.
-     * @return mixed Given PHP type casted to one acceptable by a database.
+     * @return mixed Given D type casted to one acceptable by a database.
      */
     function toDatabase($value, IDriver aDriver);
 
     /**
-     * Casts given value from a database type to a PHP equivalent.
+     * Casts given value from a database type to a D equivalent.
      *
-     * @param mixed $value Value to be converted to PHP equivalent
+     * @param mixed $value Value to be converted to D equivalent
      * @param uim.databases.IDriver aDriver Object from which database preferences and configuration will be extracted
-     * @return mixed Given value casted from a database to a PHP equivalent.
+     * @return mixed Given value casted from a database to a D equivalent.
      */
     function toPHP($value, IDriver aDriver);
 
@@ -42,9 +42,9 @@ interface TypeInterface
     function toStatement($value, IDriver aDriver);
 
     /**
-     * Marshals flat data into PHP objects.
+     * Marshals flat data into D objects.
      *
-     * Most useful for converting request data into PHP objects,
+     * Most useful for converting request data into D objects,
      * that make sense for the rest of the ORM/Database layers.
      *
      * @param mixed $value The value to convert.

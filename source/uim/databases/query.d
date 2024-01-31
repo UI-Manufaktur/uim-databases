@@ -2091,7 +2091,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * Enables result casting.
     *
     * When enabled, the fields in the results returned by this Query will be
-    * cast to their corresponding PHP data type.
+    * cast to their corresponding D data type.
     *
     * @return this
     */
@@ -2105,7 +2105,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * Returns whether result casting is enabled/disabled.
     *
     * When enabled, the fields in the results returned by this Query will be
-    * casted to their corresponding PHP data type.
+    * casted to their corresponding D data type.
     *
     * When disabled, the fields will be returned as received from the database
     * driver (which in most environments means they are being returned as
