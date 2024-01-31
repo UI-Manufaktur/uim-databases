@@ -7,7 +7,7 @@ use PDO;
 /**
  * Binary type converter.
  *
- * Use to convert binary data between PHP and the database types.
+ * Use to convert binary data between D and the database types.
  */
 class BinaryType : BaseType {
     /**
@@ -56,9 +56,9 @@ class BinaryType : BaseType {
     }
 
     /**
-     * Marshals flat data into PHP objects.
+     * Marshals flat data into D objects.
      *
-     * Most useful for converting request data into PHP objects
+     * Most useful for converting request data into D objects
      * that make sense for the rest of the ORM/Database layers.
      *
      * @param mixed $value The value to convert.

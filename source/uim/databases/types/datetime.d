@@ -186,7 +186,7 @@ class DateTimeType : BaseType : BatchCastingInterface
     /**
      * {@inheritDoc}
      *
-     * @param mixed $value Value to be converted to PHP equivalent
+     * @param mixed $value Value to be converted to D equivalent
      * @param uim.databases.IDriver aDriver Object from which database preferences and configuration will be extracted
      * @return \DateTimeInterface|null
      */

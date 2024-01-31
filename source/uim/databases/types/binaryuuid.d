@@ -8,7 +8,7 @@ use PDO;
 /**
  * Binary UUID type converter.
  *
- * Use to convert binary uuid data between PHP and the database types.
+ * Use to convert binary uuid data between D and the database types.
  */
 class BinaryUuidType : BaseType {
     /**
@@ -76,9 +76,9 @@ class BinaryUuidType : BaseType {
     }
 
     /**
-     * Marshals flat data into PHP objects.
+     * Marshals flat data into D objects.
      *
-     * Most useful for converting request data into PHP objects
+     * Most useful for converting request data into D objects
      * that make sense for the rest of the ORM/Database layers.
      *
      * @param mixed $value The value to convert.

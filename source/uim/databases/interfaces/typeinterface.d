@@ -3,12 +3,12 @@ import uim.databases;
 
 @safe:
 /**
- * Encapsulates all conversion functions for values coming from a database into PHP and
- * going from PHP into a database.
+ * Encapsulates all conversion functions for values coming from a database into D and
+ * going from D into a database.
  */
 interface IType {
     /**
-     * Casts given value from a PHP type to one acceptable by a database.
+     * Casts given value from a D type to one acceptable by a database.
      * Params:
      * Json aValue Value to be converted to a database equivalent.
      * @param \UIM\Database\Driver $driver Object from which database preferences and configuration will be extracted.
@@ -16,9 +16,9 @@ interface IType {
     Json toDatabase(Json aValue, Driver $driver) ;
 
     /**
-     * Casts given value from a database type to a PHP equivalent.
+     * Casts given value from a database type to a D equivalent.
      * Params:
-     * Json aValue Value to be converted to PHP equivalent
+     * Json aValue Value to be converted to D equivalent
      * @param \UIM\Database\Driver $driver Object from which database preferences and configuration will be extracted
      */
     Json ToD(Json aValue, Driver $driver);
@@ -32,9 +32,9 @@ interface IType {
     int toStatement(Json aValue, Driver $driver);
 
     /**
-     * Marshals flat data into PHP objects.
+     * Marshals flat data into D objects.
      *
-     * Most useful for converting request data into PHP objects,
+     * Most useful for converting request data into D objects,
      * that make sense for the rest of the ORM/Database layers.
      * Params:
      * Json aValue The value to convert.

@@ -136,7 +136,7 @@ class Connection : IConnection {
      * @param uim.databases.IDriver|string $driver The driver instance to use.
      * @param array<string, mixed> aConfig Config for a new driver.
      * @throws uim.databases.exceptions.MissingDriverException When a driver class is missing.
-     * @throws uim.databases.exceptions.MissingExtensionException When a driver's PHP extension is missing.
+     * @throws uim.databases.exceptions.MissingExtensionException When a driver's D extension is missing.
      * @return this
      * @deprecated 4.4.0 Setting the driver is deprecated. Use the connection config instead.
      */
@@ -155,7 +155,7 @@ class Connection : IConnection {
      * @param Json aConfig Driver config if $name is not an instance.
      * @return uim.databases.IDriver
      * @throws uim.databases.exceptions.MissingDriverException When a driver class is missing.
-     * @throws uim.databases.exceptions.MissingExtensionException When a driver's PHP extension is missing.
+     * @throws uim.databases.exceptions.MissingExtensionException When a driver's D extension is missing.
      */
     protected function createDriver($name, Json aConfig = Json(null): IDriver
     {

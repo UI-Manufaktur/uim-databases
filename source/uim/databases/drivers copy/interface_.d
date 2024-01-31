@@ -77,7 +77,7 @@ interface IDriver
     function setConnection($connection);
 
     /**
-     * Returns whether php is able to use this driver for connecting to database.
+     * Returns whether D is able to use this driver for connecting to database.
      *
      * @return bool True if it is valid to use this driver.
      */
