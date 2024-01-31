@@ -121,7 +121,7 @@ class Sqlite : Driver
 
         if ($params) {
             if (PHP_VERSION_ID < 80100) {
-                throw new RuntimeException("SQLite URI support requires PHP 8.1.");
+                throw new RuntimeException("SQLite URI support requires D 8.1.");
             }
             $dsn = "sqlite:file:" ~ aConfig["database"] ~ "?" ~ implode("&", $params);
         } else {
@@ -145,7 +145,7 @@ class Sqlite : Driver
     }
 
     /**
-     * Returns whether php is able to use this driver for connecting to database
+     * Returns whether D is able to use this driver for connecting to database
      *
      * @return bool true if it is valid to use this driver
      */

@@ -72,7 +72,7 @@ class BoolType : BaseType, IBatchCasting {
     }
 
     /**
-     * Marshals request data into PHP booleans.
+     * Marshals request data into D booleans.
      *
      * @param mixed aValue The value to convert.
      * @return bool|null Converted value.

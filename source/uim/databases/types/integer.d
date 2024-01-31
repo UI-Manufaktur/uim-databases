@@ -10,7 +10,7 @@ import uim.databases;
 
 /**
  * Integer type converter.
- * Use to convert integer data between PHP and the database types.
+ * Use to convert integer data between D and the database types.
  */
 class IntegerType : BaseType, IBatchCasting {
   /**
@@ -92,7 +92,7 @@ class IntegerType : BaseType, IBatchCasting {
   }
 
   /**
-    * Marshals request data into PHP integers.
+    * Marshals request data into D integers.
     *
     * @param mixed aValue The value to convert.
     * @return int|null Converted value.

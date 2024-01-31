@@ -5,18 +5,18 @@
 **********************************************************************************************************/
 module uim.databases.types.interface_;
 
-// Encapsulates all conversion functions for values coming from a database into PHP and going from PHP into a database.
+// Encapsulates all conversion functions for values coming from a database into D and going from D into a database.
 interface IType {
-  // Casts given value from a PHP type to one acceptable by a database.
+  // Casts given value from a D type to one acceptable by a database.
   // mixed myValue Value to be converted to a database equivalent.
   // uim.databases.IDBADriver myDriver Object from which database preferences and configuration will be extracted.
-  // @return mixed Given PHP type casted to one acceptable by a database.
+  // @return mixed Given D type casted to one acceptable by a database.
   function toDatabase(myValue, IDBADriver myDriver);
 
-  // Casts given value from a database type to a PHP equivalent.
-  // mixed myValue Value to be converted to PHP equivalent
+  // Casts given value from a database type to a D equivalent.
+  // mixed myValue Value to be converted to D equivalent
   // uim.databases.IDBADriver myDriver Object from which database preferences and configuration will be extracted
-  // @return mixed Given value casted from a database to a PHP equivalent.
+  // @return mixed Given value casted from a database to a D equivalent.
   function toD(myValue, IDBADriver myDriver);
 
   // Casts given value to its Statement equivalent.
@@ -25,8 +25,8 @@ interface IType {
   // @return mixed Given value casted to its Statement equivalent.
   function toStatement(myValue, IDBADriver myDriver);
 
-  // Marshals flat data into PHP objects.
-  // Most useful for converting request data into PHP objects, that make sense for the rest of the ORM/Database layers.
+  // Marshals flat data into D objects.
+  // Most useful for converting request data into D objects, that make sense for the rest of the ORM/Database layers.
   // mixed myValue The value to convert.
   // @return mixed Converted value.
   function marshal(myValue);

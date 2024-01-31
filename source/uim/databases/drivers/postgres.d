@@ -99,7 +99,7 @@ class Postgres : Driver
     }
 
     /**
-     * Returns whether php is able to use this driver for connecting to database
+     * Returns whether D is able to use this driver for connecting to database
      *
      * @return bool true if it is valid to use this driver
      */

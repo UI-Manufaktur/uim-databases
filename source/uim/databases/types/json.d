@@ -11,7 +11,7 @@ import uim.databases;
 /**
  * JSON type converter.
  *
- * Use to convert JSON data between PHP and the database types.
+ * Use to convert JSON data between D and the database types.
  */
 class JsonType : BaseType, IBatchCasting
 {
