@@ -19,24 +19,24 @@ class UnaryExpression : IExpression {
     protected Json _value;
 
     // Where to place the operator
-    protected int $position;
+    protected int _position;
 
     /**
      * Constructor
      * Params:
-     * string aoperator The operator to used for the expression
+     * string expressionOperator The operator to used for the expression
      * @param Json aValue the value to use as the operand for the expression
      * @param int $position either UnaryExpression.PREFIX or UnaryExpression.POSTFIX
      */
-    this(string aoperator, Json aValue, int $position = self.PREFIX) {
-       _operator = $operator;
-       _value = aValue;
-        this.position = $position;
+    this(string expressionOperator, Json aValue, int$position = self.PREFIX) {
+        _operator = expressionOperator;
+        _value = aValue;
+        _position = $position;
     }
-    
+
     string sql(ValueBinder aBinder) {
         auto operand = _value;
-        if (cast(IExpression)operand ) {
+        if (cast(IExpression) operand) {
             operand = operand.sql(aBinder);
         }
         if (this.position == self.POSTFIX) {
@@ -44,18 +44,18 @@ class UnaryExpression : IExpression {
         }
         return _operator ~ " (" ~ operand ~ ")";
     }
- 
+
     void traverse(Closure aCallback) {
-        if (cast(IExpression)_value ) {
+        if (cast(IExpression) _value) {
             aCallback(_value);
-           _value.traverse(aCallback);
+            _value.traverse(aCallback);
         }
     }
-    
+
     // Perform a deep clone of the inner expression.
     void __clone() {
-        if (cast(IExpression)_value ) {
-           _value = clone _value;
+        if (cast(IExpression) _value) {
+            _value = clone _value;
         }
     }
 }

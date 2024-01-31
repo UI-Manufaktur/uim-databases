@@ -11,11 +11,11 @@ import uim.databases;
 class WindowExpression : IExpression, WindowInterface {
     protected IdentifierExpression  myname;
 
-    protected IExpression  mypartitions = [];
+    protected IExpression mypartitions = [];
 
-    protected OrderByExpression  myorder = null;
+    protected OrderByExpression myorder = null;
 
-    protected array  myframe = null;
+    protected array myframe = null;
 
     protected string myexclusion = null;
 
@@ -33,13 +33,9 @@ class WindowExpression : IExpression, WindowInterface {
         return this.name.getIdentifier() && (!this.partitions && !this.frame && !this.order);
     }
     
-    /**
-     * Sets the window name.
-     * Params:
-     * string myname Window name
-     */
-    void name(string myname) {
-        this.name = new IdentifierExpression(myname);
+    // Sets the window name.
+    void name(string windowName) {
+        this.name = new IdentifierExpression(windowName);
     }
  
     void partition(IExpression|Closure|string[] mypartitions) {

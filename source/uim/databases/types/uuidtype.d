@@ -8,7 +8,7 @@ import uim.utilities.Text;
  */
 class UuidType : StringType {
     /**
-     * Casts given value from a PHP type to one acceptable by database
+     * Casts given value from a D type to one acceptable by database
      *
      * @param mixed $value value to be converted to database equivalent
      * @param uim.databases.IDriver aDriver object from which database preferences and configuration will be extracted
@@ -31,7 +31,7 @@ class UuidType : StringType {
     }
 
     /**
-     * Marshals request data into a PHP string
+     * Marshals request data into a D string
      *
      * @param mixed $value The value to convert.
      * @return string|null Converted value.

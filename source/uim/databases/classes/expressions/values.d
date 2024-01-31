@@ -11,26 +11,19 @@ import uim.databases;
  * values correctly into the statement.
  */
 class ValuesExpression : IExpression {
-    use ExpressionTypeCasterTrait;
-    use TypeMapTrait;
+    mixin ExpressionTypeCasterTrait;
+    mixin TypeMapTrait;
 
-    /**
-     * Array of values to insert.
-     */
+    // Array of values to insert.
     protected array _values = [];
 
-    /**
-     * List of columns to ensure are part of the insert.
-     */
+    // List of columns to ensure are part of the insert.
     protected array _columns = [];
 
     // The Query object to use as a values expression
     protected Query _query = null;
 
-    /**
-     * Whether values have been casted to expressions
-     * already.
-     */
+    // Whether values have been casted to expression already.
     protected bool _castedExpressions = false;
 
     /**
@@ -53,17 +46,11 @@ class ValuesExpression : IExpression {
      */
     void add(Query|array  someValues) {
         if (
-            (
-                count(_values) &&
-                 cast(Query)someValues
-            ) ||
-            (
-               _query &&
-                isArray(someValues)
-            )
+            (count(_values) && cast(Query)someValues) ||
+            (_query && isArray(someValues))
         ) {
             throw new DatabaseException(
-                'You cannot mix subqueries and array values in inserts.'
+                "You cannot mix subqueries and array values in inserts."
             );
         }
         if (cast(Query)someValues) {
@@ -97,13 +84,9 @@ class ValuesExpression : IExpression {
      * need to strip the identifiers off of the columns.
      */
     protected array _columnNames() {
-        someColumns = [];
-        foreach ($col; _columns) {
-            if (isString($col)) {
-                $col = trim($col, "`[]'");
-            }
-            someColumns ~= $col;
-        }
+        auto someColumns = _columns
+            .map!(col => isString(col) ? trim(col, "`[]'") : col);
+
         return someColumns;
     }
 
@@ -125,14 +108,15 @@ class ValuesExpression : IExpression {
     mixin(TProperty!("Query", "query"));
  
     string sql(ValueBinder aBinder) {
-        if (isEmpty(_values) && empty(_query)) {
+        if (_values.isEmpty && _query.isEmpty) {
             return "";
         }
         if (!_castedExpressions) {
            _processExpressions();
         }
-        someColumns = _columnNames();
-        $defaults = array_fill_keys(someColumns, null);
+        
+        auto colNames = _columnNames();
+        $defaults = array_fill_keys(colNames, null);
         $placeholders = [];
 
         $types = [];
@@ -144,7 +128,7 @@ class ValuesExpression : IExpression {
             $row += $defaults;
             $rowPlaceholders = [];
 
-            foreach ($column; someColumns) {
+            foreach ($column; colNames) {
                 auto aValue = $row[$column];
 
                 if (cast(IExpression)aValue ) {
@@ -204,7 +188,8 @@ class ValuesExpression : IExpression {
             return;
         }
         foreach (_values as $row:  someValues) {
-            foreach ($types as $col: $type) {
+            $types.byKeyValue
+                .each!($col: $type)
                 /** @var \UIM\Database\Type\IExpressionType $type */
                _values[$row][$col] = $type.toExpression(someValues[$col]);
             }

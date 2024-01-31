@@ -12,7 +12,7 @@ use PDO;
 /**
  * String type converter.
  *
- * Use to convert string data between PHP and the database types.
+ * Use to convert string data between D and the database types.
  */
 class StringType : BaseType : OptionalConvertInterface
 {
@@ -42,7 +42,7 @@ class StringType : BaseType : OptionalConvertInterface
     }
 
     /**
-     * Convert string values to PHP strings.
+     * Convert string values to D strings.
      *
      * @param mixed $value The value to convert.
      * @param uim.databases.IDriver aDriver The driver instance to convert with.
@@ -66,7 +66,7 @@ class StringType : BaseType : OptionalConvertInterface
     }
 
     /**
-     * Marshals request data into PHP strings.
+     * Marshals request data into D strings.
      *
      * @param mixed $value The value to convert.
      * @return string|null Converted value.

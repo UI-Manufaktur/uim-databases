@@ -15,11 +15,14 @@ class OrderClauseExpression : IExpression, IField {
      * Constructor
      * Params:
      * \UIM\Database\IExpression|string afield The field to order on.
-     * @param string adirection The direction to sort on.
      */
-  this(IExpression | string afield, string adirection) {
-    _field = $field;
-    _direction = $direction.toLower == "asc" ? "ASC" : "DESC";
+  this(IExpression afield, string sortDirection) {
+    // TODO
+  }
+
+  this(string fieldName, string sortDirection) {
+    _field = fieldName;
+    _direction = sortDirection.toLower == "asc" ? "ASC" : "DESC";
   }
 
   string sql(ValueBinder aBinder) {

@@ -10,8 +10,8 @@ import uim.databases;
  * string representation of a comparison is `field = value`
  */
 class ComparisonExpression : IExpression, IField {
-    use ExpressionTypeCasterTrait;
-    use FieldTrait;
+    mixin ExpressionTypeCasterTrait;
+    mixin FieldTrait;
 
     // The value to be used in the right hand side of the operation
     protected Json _value;
@@ -36,19 +36,17 @@ class ComparisonExpression : IExpression, IField {
      * Params:
      * \UIM\Database\IExpression|string afield the field name to compare to a value
      * @param Json aValue The value to be used in comparison
-     * @param string|null $type the type name used to cast the value
-     * @param string aoperator the operator used for comparing field and value
      */
     this(
         IExpression|string afield,
         Json aValue,
         string typeName = null,
-        string aoperator = "="
+        string operator = "="
     ) {
-       _type = $type;
+       _type = typeName;
         this.setFieldNames($field);
         this.setValue(aValue);
-       _operator = $operator;
+       _operator = operator;
     }
     
     /**
@@ -67,25 +65,17 @@ class ComparisonExpression : IExpression, IField {
        _value = aValue;
     }
     
-    /**
-     * Returns the value used for comparison
-    */
+    // Returns the value used for comparison
     Json getValue() {
         return _value;
     }
     
-    /**
-     * Sets the operator to use for the comparison
-     * Params:
-     * string aoperator The operator to be used for the comparison.
-     */
-    void setOperator(string aoperator) {
-       _operator = $operator;
+    // Sets the operator to use for the comparison
+    void setOperator(string operator) {
+       _operator = operator;
     }
     
-    /**
-     * Returns the operator used for comparison
-     */
+    // Returns the operator used for comparison
     string getOperator() {
         return _operator;
     }

@@ -20,10 +20,7 @@ class WhenThenExpression : IExpression {
         "then",
     ];
 
-    /**
-     * The type map to use when using an array of conditions for the
-     * `WHEN` value.
-     */
+    // The type map to use when using an array of conditions for the `WHEN` value.
     protected TypeMap _typeMap;
 
     /**
@@ -33,9 +30,7 @@ class WhenThenExpression : IExpression {
      */
     protected Json $when = null;
 
-    /**
-     * The `WHEN` value type.
-     */
+    // The `WHEN` value type.
     protected string[] $whenType = null;
 
     /**
@@ -52,7 +47,6 @@ class WhenThenExpression : IExpression {
     protected bool $hasThenBeenDefined = false;
 
     // The `THEN` result type.
-     */
     protected string athenType = null;
 
     /**

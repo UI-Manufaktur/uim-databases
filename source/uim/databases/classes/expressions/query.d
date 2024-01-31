@@ -51,9 +51,7 @@ class QueryExpression : IExpression, Countable {
         }
     }
     
-    /**
-     * Changes the conjunction for the conditions at this level of the expression tree.
-     */
+    // Changes the conjunction for the conditions at this level of the expression tree.
     void setConjunction(string valueForJoiningConditions) {
        _conjunction = valueForJoiningConditions.toUpper;
     }
@@ -101,7 +99,7 @@ class QueryExpression : IExpression, Countable {
      * will be created, one per each value in the array.
      */
     auto eq(IExpression|string afield, Json aValue, string atype = null) {
-        $type ??= _calculateType($field);
+        auto $type ??= _calculateType($field);
 
         return this.add(new ComparisonExpression($field, aValue, $type, "="));
     }
@@ -116,7 +114,7 @@ class QueryExpression : IExpression, Countable {
      * will be created, one per each value in the array.
      */
     auto notEq(IExpression|string afield, Json aValue, string atype = null) {
-        $type ??= _calculateType($field);
+        auto $type ??= _calculateType($field);
 
         return this.add(new ComparisonExpression($field, aValue, $type, "!="));
     }
@@ -129,7 +127,7 @@ class QueryExpression : IExpression, Countable {
      * @param string|null $type the type name for aValue as configured using the Type map.
      */
     auto gt(IExpression|string afield, Json aValue, string atype = null) {
-        $type ??= _calculateType($field);
+        auto $type ??= _calculateType($field);
 
         return this.add(new ComparisonExpression($field, aValue, $type, ">"));
     }
