@@ -6,11 +6,13 @@ import uim.databases;
 
 // This class is used to generate DELETE queries for the relational database.
 class DeleteQuery : Query {
-    // Type of this query.
-    protected string _type = self.TYPE_DELETE;
+    mixin(QueryThis!("DeleteQuery"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+		if (!super.initialize(configData)) { return false; }
 
     // List of SQL parts that will be used to build this query.
-    protected Json[string] _parts = [
+    _parts = [
         "comment": null,
         "with": [],
         "delete": true,
@@ -22,6 +24,11 @@ class DeleteQuery : Query {
         "limit": null,
         "epilog": null,
     ];
+
+return true;
+    }
+    // Type of this query.
+    protected string _type = self.TYPE_DELETE;
 
     /**
      * Create a delete query.

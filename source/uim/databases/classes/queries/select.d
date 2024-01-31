@@ -11,7 +11,8 @@ import uim.databases;
  * @implements \IteratorAggregate<T>
  */
 class SelectQuery : Query, IteratorAggregate {
-    mixin()
+    mixin(QueryThis!("SelectQuery"));
+
     override bool initialize(IConfigData[string] configData = null) {
         if (!super.initialize(configData)) {
             return false;

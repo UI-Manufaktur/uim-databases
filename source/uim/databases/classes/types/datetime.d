@@ -10,6 +10,16 @@ import uim.databases;
  * Use to convert datetime instances to strings & back.
  */
 class DateTimeType : BaseType, IBatchCasting {
+    mixin(TypeThis!("DateTimeType"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+        return true;
+    }
+
     // The DateTime format used when converting to string.
     protected string _format = "Y-m-d H:i:s";
 

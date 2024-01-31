@@ -9,6 +9,15 @@ import uim.databases;
  * Use to convert binary data between PHP and the database types.
  */
 class BinaryType : BaseTyp {
+    mixin(TypeThis!("BinaryType"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+        return true;
+    }
     /**
      * Convert binary data into the database format.
      *

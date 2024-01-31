@@ -4,8 +4,6 @@ import uim.databases;
 
 @safe:
 
-/*
-
 /**
  * Makes sure the connection to the database is alive before authorizing
  * the retry of an action.

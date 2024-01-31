@@ -9,13 +9,14 @@ import uim.databases;
 
 // This class is used to generate UPDATE queries for the relational database.
 class UpdateQuery : Query {
-    // Type of this query.
-    protected string _type = self.TYPE_UPDATE;
+    mixin(QueryThis!("UpdateQuery"));
 
-    /**
-     * List of SQL parts that will be used to build this query.
-     */
-    protected Json[string] _parts = [
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+    _parts = [
         "comment": null,
         "with": [],
         "update": [],
@@ -27,6 +28,11 @@ class UpdateQuery : Query {
         "limit": null,
         "epilog": null,
     ];
+
+    return true;
+    }
+    // Type of this query.
+    protected string _type = self.TYPE_UPDATE;
 
     /**
      * Create an update query.

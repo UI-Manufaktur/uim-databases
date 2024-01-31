@@ -10,6 +10,16 @@ import uim.databases;
  * Use to convert bool data between PHP and the database types.
  */
 class BoolType : BaseType, IBatchCasting {
+    mixin(TypeThis!("BoolType"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Convert bool data into the database format.
      * Params:

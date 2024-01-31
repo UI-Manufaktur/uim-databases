@@ -12,6 +12,15 @@ import uim.databases;
  * Use to convert binary uuid data between PHP and the database types.
  */
 class BinaryUuidType : BaseType {
+    mixin(TypeThis!("BinaryUuidType"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+        return true;
+    }
     /**
      * Convert binary uuid data into the database format.
      *

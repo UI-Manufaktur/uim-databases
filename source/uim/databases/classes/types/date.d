@@ -5,6 +5,16 @@ import uim.databases;
 @safe:
 
 class DateType : BaseType, IBatchCasting {
+    mixin(TypeThis!("DateType"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+        return true;
+    }
+
     protected string _format = "Y-m-d";
 
     protected strinh[] _marshalFormats = [

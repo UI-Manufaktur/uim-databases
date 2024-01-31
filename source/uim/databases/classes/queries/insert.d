@@ -9,11 +9,12 @@ use InvalidArgumentException; */
 
 // This class is used to generate INSERT queries for the relational database.
 class InsertQuery : Query {
-    // Type of this query.
-    protected string _type = self.TYPE_INSERT;
+    mixin(QueryThis!("InsertQuery"));
 
-    // List of SQL parts that will be used to build this query.
-    protected Json[string] _parts = [
+    override bool initialize(IConfigData[string] configData = null) {
+		if (!super.initialize(configData)) { return false; }
+
+    _parts = [
         "comment": null,
         "with": [],
         "insert": [],
@@ -21,6 +22,12 @@ class InsertQuery : Query {
         "values": [],
         "epilog": null,
     ];
+
+return true;
+    }
+    // Type of this query.
+    protected string _type = self.TYPE_INSERT;
+
 
     /**
      * Create an insert query.
