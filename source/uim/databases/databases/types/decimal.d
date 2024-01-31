@@ -7,7 +7,7 @@ import uim.cake;
 /**
  * Decimal type converter.
  *
- * Use to convert decimal data between PHP and the database types.
+ * Use to convert decimal data between D and the database types.
  */
 class DecimalType : BaseType, IBatchCasting {
     // The class to use for representing number objects

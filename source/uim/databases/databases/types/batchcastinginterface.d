@@ -6,11 +6,11 @@ import uim.cake;
 
 /**
  * Denotes type objects capable of converting many values from their original
- * database representation to php values.
+ * database representation to D values.
  */
 interface IBatchCasting {
     /**
-     * Returns an array of the values converted to the PHP representation of
+     * Returns an array of the values converted to the D representation of
      * this type.
      * Params:
      * array  someValues The original array of values containing the fields to be casted

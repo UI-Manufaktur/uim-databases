@@ -7,7 +7,7 @@ import uim.cake;
 /**
  * Bool type converter.
  *
- * Use to convert bool data between PHP and the database types.
+ * Use to convert bool data between D and the database types.
  */
 class BoolType : BaseType, IBatchCasting {
     /**
@@ -31,7 +31,7 @@ class BoolType : BaseType, IBatchCasting {
     }
     
     /**
-     * Convert bool values to PHP booleans
+     * Convert bool values to D booleans
      * Params:
      * Json aValue The value to convert.
      * @param \UIM\Database\Driver aDriver The driver instance to convert with.
@@ -68,7 +68,7 @@ class BoolType : BaseType, IBatchCasting {
         return PDO.PARAM_BOOL;
     }
     
-    // Marshals request data into PHP booleans.
+    // Marshals request data into D booleans.
     bool marshal(Json valueToConvert) {
         if (valueToConvert.isNull || valueToConvert.isEmpty) {
             return null;

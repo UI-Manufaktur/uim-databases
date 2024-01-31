@@ -138,7 +138,7 @@ class DateTimeType : BaseType, IBatchCasting {
     
     /**
  Params:
-     * Json aValue Value to be converted to PHP equivalent
+     * Json aValue Value to be converted to D equivalent
      * @param \UIM\Database\Driver driver Object from which database preferences and configuration will be extracted
      */
     DateTime|DateTimeImmutable|null ToD(Json aValue, Driver driver) {
