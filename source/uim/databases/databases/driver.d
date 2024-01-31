@@ -151,7 +151,7 @@ abstract class Driver {
         return this.getPdo().exec(sqlQuery);
     }
     
-    // Returns whether php is able to use this driver for connecting to database.
+    // Returns whether D is able to use this driver for connecting to database.
     abstract bool enabled();
 
     /**

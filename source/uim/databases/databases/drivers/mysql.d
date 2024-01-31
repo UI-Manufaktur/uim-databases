@@ -47,7 +47,7 @@ class Mysql : Driver {
     }
     
     /**
-     * Returns whether php is able to use this driver for connecting to database
+     * Returns whether D is able to use this driver for connecting to database
      */
     bool enabled() {
         return in_array("mysql", PDO.getAvailableDrivers(), true);

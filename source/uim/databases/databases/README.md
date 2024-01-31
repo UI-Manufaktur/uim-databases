@@ -8,14 +8,14 @@ databases such as keeping connections to the server, building queries,
 preventing SQL injections, inspecting and altering schemas, and with debugging and
 profiling queries sent to the database.
 
-It adopts the API from the native PDO extension in PHP for familiarity, but solves many of the
+It adopts the API from the native PDO extension in D for familiarity, but solves many of the
 inconsistencies PDO has, while also providing several features that extend PDO`s capabilities.
 
 A distinguishing factor of this library when compared to similar database connection packages,
-is that it takes the concept of "data types" to its core. It lets you work with complex PHP objects
+is that it takes the concept of "data types" to its core. It lets you work with complex D objects
 or structures that can be passed as query conditions or to be inserted in the database.
 
-The typing system will intelligently convert the PHP structures when passing them to the database, and
+The typing system will intelligently convert the D structures when passing them to the database, and
 convert them back when retrieving.
 
 

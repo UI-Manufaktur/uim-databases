@@ -7,7 +7,7 @@ import uim.databases;
 /**
  * Integer type converter.
  *
- * Use to convert integer data between PHP and the database types.
+ * Use to convert integer data between D and the database types.
  */
 class IntegerType : BaseType, IBatchCasting {
     mixin(TypeThis!("IntegerType"));
@@ -70,7 +70,7 @@ class IntegerType : BaseType, IBatchCasting {
     }
     
     /**
-     * Marshals request data into PHP integers.
+     * Marshals request data into D integers.
      * Params:
      * Json valueToConvert The value to convert.
      */
