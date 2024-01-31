@@ -14,18 +14,17 @@ class QueryFactory {
      * Create a new SelectQuery instance.
      * Params:
      * \UIM\Database\IExpression|\Closure|string[]|float|int $fields Fields/columns list for the query.
-     * @param string[] atable List of tables to query.
      * typesForCasting Associative array containing the types to be used for casting.
      */
     SelectQuery select(
         IExpression|Closure|string[]|float|int $fields = [],
-        string[] atable = [],
-        STRINGAA typesForCasting = []
+        string[] tableNames = null,
+        STRINGAA typesForCasting = null
     ) {
         auto selectQuery = new SelectQuery(this.connection);
         with (selectQuery) {
             select($fields);
-            from(aTable);
+            from(tableNames);
             setDefaultTypes(typesForCasting);
         }
         return selectQuery;
@@ -34,15 +33,15 @@ class QueryFactory {
     /**
      * Create a new InsertQuery instance.
      * Params:
-     * string|null aTable The table to insert rows into.
+     * string|null tableName The table to insert rows into.
      * @param array  someValues Associative array of column: value to be inserted.
      * typesForCasting Associative array containing the types to be used for casting.
      */
-    InsertQuery insert(string atable = null, array  someValues = [], STRINGAA typesForCasting = []) {
+    InsertQuery insert(string tableName = null, array  someValues = [], STRINGAA typesForCasting = []) {
         aQuery = new InsertQuery(this.connection);
 
-        if (aTable) {
-            aQuery.into(aTable);
+        if (tableName) {
+            aQuery.into(tableName);
         }
         if (someValues) {
             someColumns = array_keys(someValues);
@@ -88,9 +87,9 @@ class QueryFactory {
      * @param array $conditions Conditions to be set for the delete statement.
      * typesForCasting Associative array containing the types to be used for casting.
      */
-    DeleteQuery delete(string atable = null, array $conditions = [], STRINGAA typesForCasting = []) {
+    DeleteQuery delete(string tableName = null, array $conditions = [], STRINGAA typesForCasting = []) {
         aQuery = (new DeleteQuery(this.connection))
-            .delete(aTable);
+            .delete(tableName);
 
         if ($conditions) {
             aQuery.where($conditions, typesForCasting);

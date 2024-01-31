@@ -4,8 +4,6 @@ import uim.databases;
 
 @safe:
 
-/*
-
 /**
  * Binary type converter.
  * Use to convert binary data between PHP and the database types.

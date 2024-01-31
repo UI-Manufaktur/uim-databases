@@ -11,11 +11,13 @@ import uim.databases;
  * @implements \IteratorAggregate<T>
  */
 class SelectQuery : Query, IteratorAggregate {
-    // Type of this query.
-    protected string _type = self.TYPE_SELECT;
+    mixin()
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
 
-    // List of SQL parts that will be used to build this query.
-    protected Json[string] _parts = [
+    _parts = [
         "comment": null,
         "modifier": [],
         "with": [],
@@ -33,6 +35,13 @@ class SelectQuery : Query, IteratorAggregate {
         "union": [],
         "epilog": null,
     ];
+
+        return true;
+    }
+    // Type of this query.
+    protected string _type = self.TYPE_SELECT;
+
+    // List of SQL parts that will be used to build this query.
 
     /**
      * A list of callbacks to be called to alter each row from resulting
@@ -105,7 +114,7 @@ class SelectQuery : Query, IteratorAggregate {
      * \UIM\Database\IExpression|\Closure|string[]|float|int $fields fields to be added to the list.
      * @param bool $overwrite whether to reset fields with passed list or not
      */
-    auto select(IExpression|Closure|string[]|float|int $fields = [], bool $overwrite = false) {
+    void select(IExpression|Closure|string[]|float|int $fields = [], bool $overwrite = false) {
         if (!isString($fields) && cast(Closure)$fieldsClosure) {
             $fields = $fields(this);
         }
@@ -116,8 +125,6 @@ class SelectQuery : Query, IteratorAggregate {
         _parts["select"] = $overwrite ? $fields : array_merge(_parts["select"], $fields);
 
        _dirty();
-
-        return this;
     }
     
     /**
@@ -147,7 +154,7 @@ class SelectQuery : Query, IteratorAggregate {
      * or list of fields to be filtered on
      * @param bool $overwrite whether to reset fields with passed list or not
      */
-    auto distinct(IExpression|string[]|bool $on = [], bool $overwrite = false) {
+    void distinct(IExpression|string[]|bool $on = [], bool $overwrite = false) {
         if ($on == []) {
             $on = true;
         } elseif (isString($on)) {
@@ -162,8 +169,6 @@ class SelectQuery : Query, IteratorAggregate {
         }
        _parts["distinct"] = $on;
        _dirty();
-
-        return this;
     }
     
     /**

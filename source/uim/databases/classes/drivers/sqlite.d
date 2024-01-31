@@ -10,7 +10,7 @@ class SqliteDriver : Driver {
   	override bool initialize(IConfigData[string] configData = null) {
 		if (!super.initialize(configData)) { return false; }
 
-    protected Json _baseConfig = [
+        _baseConfig.data([
         "persistent": false,
         "username": null,
         "password": null,
@@ -21,7 +21,7 @@ class SqliteDriver : Driver {
         "mode": null,
         "flags": [],
         "init": [],
-    ];
+    ]);
 
 		return true;
 	}

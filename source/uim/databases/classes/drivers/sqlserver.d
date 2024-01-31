@@ -9,23 +9,8 @@ class SqlserverDriver : Driver {
     
   	override bool initialize(IConfigData[string] configData = null) {
 		if (!super.initialize(configData)) { return false; }
-		
-		return true;
-	}
 
-    use TupleComparisonTranslatorTrait;
-
-    protected const MAX_ALIAS_LENGTH = 128;
- 
-    protected const RETRY_ERROR_CODES = [
-        40613, // Azure Sql Database paused
-    ];
-
- 
-    protected const STATEMENT_CLASS = SqlserverStatement.classname;
-
-    // Base configuration settings for Sqlserver driver
-    protected Json[string] _baseConfig = [
+_baseConfig = [
         "host": "localhost\SQLEXPRESS",
         "username": "",
         "password": "",
@@ -45,6 +30,20 @@ class SqlserverDriver : Driver {
         "encrypt": null,
         "trustServerCertificate": null,
     ];
+
+		return true;
+	}
+
+    mixin TupleComparisonTranslatorTemplate();
+
+    protected const MAX_ALIAS_LENGTH = 128;
+ 
+    protected const RETRY_ERROR_CODES = [
+        40613, // Azure Sql Database paused
+    ];
+
+ 
+    protected const STATEMENT_CLASS = SqlserverStatement.classname;
 
     // String used to start a database identifier quoting to make it safe
     protected string _startQuote = "[";
@@ -66,25 +65,25 @@ class SqlserverDriver : Driver {
         if (isSet(this.pdo)) {
             return;
         }
-        auto configData = _config;
 
-        if (isSet(configData["persistent"]) && configData["persistent"]) {
+        if (configuration.hasKey("persistent") && configData("persistent")) {
             throw new InvalidArgumentException(
-                'Config setting "persistent" cannot be set to true, "
-                ~ "as the Sqlserver PDO driver does not support PDO.ATTR_PERSISTENT'
+                "Config setting 'persistent' cannot be set to true, "
+                ~ "as the Sqlserver PDO driver does not support PDO.ATTR_PERSISTENT"
             );
         }
-        configData["flags"] += [
+        configData("flags").data([
             PDO.ATTR_ERRMODE: PDO.ERRMODE_EXCEPTION,
-        ];
+        ]);
 
-        if (!empty(configData["encoding"])) {
-            configData["flags"][PDO.SQLSRV_ATTR_ENCODING] = configData["encoding"];
+        if (!configData("encoding").isEmpty) {
+            configData("flags"][PDO.SQLSRV_ATTR_ENCODING] = configData("encoding"];
         }
-        $port = "";
-        if (configData["port"]) {
-            $port = "," ~ configData["port"];
+        string port = configuration.data("port")
+            ? "," ~ configuration.data("port")
+            : "";
         }
+
         string dsn = "sqlsrv:Server={configData["host"]}{$port};Database={configData["database"]};MultipleActiveResultSets=false";
         dsn ~= !configData["app"].isNull ? ";APP=%s".format(configData["app"]) : null;
         dsn ~= !configData["connectionPooling"].isNull ? ";ConnectionPooling={configData["connectionPooling"]}" : null;
@@ -109,9 +108,7 @@ class SqlserverDriver : Driver {
         }
     }
     
-    /**
-     * Returns whether PHP is able to use this driver for connecting to database
-     */
+    // Returns whether PHP is able to use this driver for connecting to database
     bool enabled() {
         return in_array("sqlsrv", PDO.getAvailableDrivers(), true);
     }
@@ -131,7 +128,7 @@ class SqlserverDriver : Driver {
     IStatement prepare(string queryToPrepare) {
         string sql = queryToPrepare;
 
-        $statement = this.getPdo().prepare(
+       statement = this.getPdo().prepare(
             sql,
             [
                 PDO.ATTR_CURSOR: PDO.CURSOR_SCROLL,
@@ -139,13 +136,13 @@ class SqlserverDriver : Driver {
             ]
         );
 
-        $typeMap = null;
+        typeMap = null;
         if (cast(SelectQuery)aQuery  && aQuery.isResultsCastingEnabled()) {
-            $typeMap = aQuery.getSelectTypeMap();
+            typeMap = aQuery.getSelectTypeMap();
         }
 
-        return new (STATEMENT_CLASS)($statement, this, $typeMap);
-    }
+        return new (STATEMENT_CLASS)($statement, this, typeMap);
+     }
 
     string savePointSQL($name) {
         return "SAVE TRANSACTION t" ~ $name;
@@ -189,8 +186,7 @@ class SqlserverDriver : Driver {
         return new SqlserverCompiler();
     }
  
-    protected auto _selectQueryTranslator(SelectQuery aQuery): SelectQuery
-    {
+    protected SelectQuery _selectQueryTranslator(SelectQuery aQuery) {
         aLimit = aQuery.clause("limit");
          anOffset = aQuery.clause("offset");
 
@@ -275,8 +271,7 @@ class SqlserverDriver : Driver {
         return $outer;
     }
  
-    protected auto _transformDistinct(SelectQuery aQuery): SelectQuery
-    {
+    protected SelectQuery _transformDistinct(SelectQuery aQuery) {
         if (!isArray(aQuery.clause("distinct"))) {
             return aQuery;
         }
@@ -297,7 +292,7 @@ class SqlserverDriver : Driver {
                     .setConjunction(" ");
 
                 return [
-                    '_cake_distinct_pivot_": $over,
+                    "_cake_distinct_pivot_": $over,
                 ];
             })
             .limit(null)
@@ -323,8 +318,8 @@ class SqlserverDriver : Driver {
  
     protected array _expressionTranslators() {
         return [
-            FunctionExpression.classname: '_transformFunctionExpression",
-            TupleComparison.classname: '_transformTupleComparison",
+            FunctionExpression.classname: "_transformFunctionExpression",
+            TupleComparison.classname: "_transformTupleComparison",
         ];
     }
     
@@ -351,16 +346,16 @@ class SqlserverDriver : Driver {
                 $expression.iterateParts($visitor);
 
                 if (!$hasDay) {
-                    $expression.add(["day": 'literal"], [], true);
+                    $expression.add(["day": "literal"], [], true);
                 }
                 break;
             case "CURRENT_DATE":
                 $time = new FunctionExpression("GETUTCDATE");
-                $expression.name("CONVERT").add(["date": 'literal", $time]);
+                $expression.name("CONVERT").add(["date": "literal", $time]);
                 break;
             case "CURRENT_TIME":
                 $time = new FunctionExpression("GETUTCDATE");
-                $expression.name("CONVERT").add(["time": 'literal", $time]);
+                $expression.name("CONVERT").add(["time": "literal", $time]);
                 break;
             case "NOW":
                 $expression.name("GETUTCDATE");
@@ -389,15 +384,15 @@ class SqlserverDriver : Driver {
                     .setConjunction(",")
                     .iterateParts($visitor)
                     .iterateParts($manipulator)
-                    .add([$params[2]: 'literal"]);
+                    .add([$params[2]: "literal"]);
                 break;
             case "DAYOFWEEK":
                 $expression
                     .name("DATEPART")
                     .setConjunction(" ")
-                    .add(["weekday, ": 'literal"], [], true);
+                    .add(["weekday, ": "literal"], [], true);
                 break;
-            case `sUBSTR":
+            case "SUBSTR":
                 $expression.name("SUBSTRING");
                 if (count($expression) < 4) {
                     $params = [];

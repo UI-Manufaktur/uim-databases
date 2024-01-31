@@ -11,7 +11,7 @@ class MysqlDriver : Driver {
 		if (!super.initialize(configData)) { return false; }
 		
             // Base configuration settings for MySQL driver
-        _baseConfig = [
+        _baseConfig.data([
                 "persistent": BoolData(true),
                 "host": StringData("localhost"),
                 "username": StringData("root"),
@@ -22,7 +22,7 @@ class MysqlDriver : Driver {
                 "encoding": StringData("utf8mb4"),
                 "timezone": NullData(null),
                 "init": ArrayData,
-            ];
+            ]);
     
 		return true;
 	}
