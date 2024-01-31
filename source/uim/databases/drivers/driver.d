@@ -16,27 +16,17 @@ abstract class Driver : IDBADriver {
     // DB-specific error codes that allow connect retry
     protected const int[] RETRY_ERROR_CODES;
 
-    /**
-     * Instance of PDO.
-     *
-     * @var \PDO
-     */
-    protected _connection;
+    // Instance of PDO.
+    protected PDO _connection;
 
-    /**
-     * Configuration data.
-     *
-     * @var array<string, mixed>
-     */
-    protected _config;
+    // Configuration data.
+    protected IConfiguration _config;
 
     /**
      * Base configuration that is merged into the user
      * supplied configuration data.
-     *
-     * @var array<string, mixed>
      */
-    protected _baseConfig = [];
+    protected IConfiguration _baseConfig;
 
     // Indicates whether the driver is doing automatic identifier quoting for all queries
     protected bool _autoQuoting = false;
@@ -104,7 +94,6 @@ abstract class Driver : IDBADriver {
 
     
     abstract bool connect();
-
     
     function disconnect(): void
     {
@@ -113,9 +102,7 @@ abstract class Driver : IDBADriver {
         _version = null;
     }
 
-    /**
-     * Returns connected server version.
-     */
+    // Returns connected server version.
     string version() {
         if (_version is null) {
             this.connect();

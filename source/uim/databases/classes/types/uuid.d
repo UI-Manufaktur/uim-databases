@@ -8,6 +8,16 @@ import uim.databases;
  * Provides behavior for the UUID type
  */
 class UuidType : StringType {
+    mixin(TypeThis!("UuidType"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+        if (!super.initialize(configData)) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Casts given value from a PHP type to one acceptable by database
      * Params:

@@ -4,9 +4,6 @@ import uim.databases;
 
 @safe:
 
-/*
-use IDateTime;
-use InvalidArgumentException;
 /**
  * Time type converter.
  *

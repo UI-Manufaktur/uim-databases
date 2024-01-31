@@ -5,10 +5,6 @@
 **********************************************************************************************************/
 module uim.databases.Retry;
 
-import uim.core.Retry\RetryStrategyInterface;
-use Exception;
-use PDOException;
-
 /**
  * : retry strategy based on db error codes and wait interval.
  *

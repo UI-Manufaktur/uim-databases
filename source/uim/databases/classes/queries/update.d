@@ -16,20 +16,20 @@ class UpdateQuery : Query {
             return false;
         }
 
-    _parts = [
-        "comment": null,
-        "with": [],
-        "update": [],
-        "modifier": [],
-        "join": [],
-        "set": [],
-        "where": null,
-        "order": null,
-        "limit": null,
-        "epilog": null,
-    ];
+        _parts = [
+            "comment": null,
+            "with": [],
+            "update": [],
+            "modifier": [],
+            "join": [],
+            "set": [],
+            "where": null,
+            "order": null,
+            "limit": null,
+            "epilog": null,
+        ];
 
-    return true;
+        return true;
     }
     // Type of this query.
     protected string _type = self.TYPE_UPDATE;
@@ -41,12 +41,12 @@ class UpdateQuery : Query {
      * Params:
      * \UIM\Database\IExpression|string atable The table you want to update.
      */
-    void update(IExpression|string atable) {
-       _dirty();
-       _parts["update"][0] = aTable;
-Y>    }
-    
-    /**
+    void update(IExpression | string atable) {
+        _dirty();
+        _parts["update"][0] = aTable;
+        Y > }
+
+        /**
      * Set one or many fields to update.
      *
      * ### Examples
@@ -79,25 +79,26 @@ Y>    }
      *   used as $types instead.
      * @param STRINGAA|string atypes The column types to treat data as.
      */
-    void set(QueryExpression|Closure|string[] aKey, Json aValue = null, string[] atypes = []) {
-        if (isEmpty(_parts["set"])) {
-           _parts["set"] = this.newExpr().setConjunction(",");
-        }
-        if (cast(Closure)aKey) {
-            $exp = this.newExpr().setConjunction(",");
-           _parts["set"].add(aKey($exp));
+        void set(QueryExpression | Closure | string[] aKey, Json aValue = null, string[] atypes = []) {
+            if (isEmpty(_parts["set"])) {
+                _parts["set"] = this.newExpr().setConjunction(",");
+            }
 
-            return ;
-        }
-        if (isArray(aKey) || cast(IExpression)aKey ) {
-            $types = (array)aValue;
-           _parts["set"].add(aKey, $types);
+            if (cast(Closure) aKey) {
+                $exp = this.newExpr().setConjunction(",");
+                _parts["set"].add(aKey($exp));
 
-            return ;
+                return;
+            }
+            if (isArray(aKey) || cast(IExpression) aKey) {
+                $types = (array) aValue;
+                _parts["set"].add(aKey, $types);
+
+                return;
+            }
+            if (!isString($types)) {
+                $types = null;
+            }
+            _parts["set"].eq(aKey, aValue, $types);
         }
-        if (!isString($types)) {
-            $types = null;
-        }
-       _parts["set"].eq(aKey, aValue, $types);
     }
-}

@@ -8,19 +8,13 @@ use PDO;
 /**
  * MySQL Driver
  */
-class Mysql : Driver
-{
+class MysqlDriver : Driver {
     use SqlDialectTrait;
-
 
     protected const MAX_ALIAS_LENGTH = 256;
 
-    /**
-     * Server type MySQL
-     *
-     * @var string
-     */
-    protected const SERVER_TYPE_MYSQL = "mysql";
+    // Server type MySQL
+    protected const string SERVER_TYPE_MYSQL = "mysql";
 
     /**
      * Server type MariaDB

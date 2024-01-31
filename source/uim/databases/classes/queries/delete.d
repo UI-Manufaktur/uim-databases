@@ -36,10 +36,10 @@ return true;
      * Can be combined with from(), where() and other methods to
      * create delete queries with specific conditions.
      */
-    void delete(string atable = null) {
+    void delete(string tableName = null) {
        _dirty();
-        if (!aTable.isNull) {
-            this.from(aTable);
+        if (!tableName.isNull) {
+            this.from(tableName);
         }
     }
 }
