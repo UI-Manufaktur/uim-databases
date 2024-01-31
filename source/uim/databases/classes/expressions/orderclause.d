@@ -17,7 +17,7 @@ class OrderClauseExpression : IExpression, IField {
      * \UIM\Database\IExpression|string afield The field to order on.
      */
   this(IExpression afield, string sortDirection) {
-    // TODO
+    // TODO                         ^^^^  	                                    
   }
 
   this(string fieldName, string sortDirection) {
