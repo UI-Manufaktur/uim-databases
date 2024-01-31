@@ -4,7 +4,7 @@ import uim.databases;
 
 @safe:
 
-class Sqlite : Driver {
+class SqliteDriver : Driver {
     use TupleComparisonTranslatorTrait;
 
     protected const STATEMENT_CLASS = SqliteStatement.classname;

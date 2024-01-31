@@ -26,10 +26,10 @@ class StringExpression : IExpression {
     }
  
     string sql(ValueBinder aBinder) {
-        $placeholder = aBinder.placeholder("c");
-        aBinder.bind($placeholder, this.string, "string");
+        auto placeholder = aBinder.placeholder("c");
+        aBinder.bind(placeholder, this.string, "string");
 
-        return $placeholder ~ " COLLATE " ~ this.collation;
+        return placeholder ~ " COLLATE " ~ this.collation;
     }
  
     void traverse(Closure aCallback) {

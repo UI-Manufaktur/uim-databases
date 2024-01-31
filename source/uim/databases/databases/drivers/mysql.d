@@ -35,8 +35,6 @@ class Mysql : Driver {
     // Server type MariaDB
     protected const string SERVER_TYPE_MARIADB = "mariadb";
 
-
-
     // String used to start a database identifier quoting to make it safe
     protected string _startQuote = "`";
 

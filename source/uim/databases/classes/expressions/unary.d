@@ -36,14 +36,14 @@ class UnaryExpression : IExpression {
     }
     
     string sql(ValueBinder aBinder) {
-        $operand = _value;
-        if (cast(IExpression)$operand ) {
-            $operand = $operand.sql(aBinder);
+        auto operand = _value;
+        if (cast(IExpression)operand ) {
+            operand = operand.sql(aBinder);
         }
         if (this.position == self.POSTFIX) {
-            return "(" ~ $operand ~ ") " ~ _operator;
+            return "(" ~ operand ~ ") " ~ _operator;
         }
-        return _operator ~ " (" ~ $operand ~ ")";
+        return _operator ~ " (" ~ operand ~ ")";
     }
  
     void traverse(Closure aCallback) {

@@ -1,4 +1,4 @@
-module source.uim.databases.classes.drivers.mysqlx;
+module uim.databases.classes.drivers.mysql;
 
 import uim.databases;
 

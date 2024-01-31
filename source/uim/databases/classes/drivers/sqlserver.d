@@ -4,7 +4,7 @@ import uim.databases;
 
 @safe:
 
-class Sqlserver : Driver {
+class SqlserverDriver : Driver {
     use TupleComparisonTranslatorTrait;
 
     protected const MAX_ALIAS_LENGTH = 128;

@@ -3,7 +3,7 @@ module source.uim.databases.classes.drivers.postgresx;
 import uim.databases;
 
 @safe:
-class Postgres : Driver {
+class PostgresDriver : Driver {
  
     protected const MAX_ALIAS_LENGTH = 63;
 

@@ -4,8 +4,6 @@ import uim.databases;
 
 @safe:
 
-/*
-
 /**
  * A Comparison is a type of query expression that represents an operation
  * involving a field an operator and a value. In its most common form the

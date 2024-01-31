@@ -4,18 +4,11 @@ import uim.databases;
 
 @safe:
 
-/*
-
-
-/**
- * An expression object for complex ORDER BY clauses
- */
+// An expression object for complex ORDER BY clauses
 class OrderClauseExpression : IExpression, IField {
   use FieldTrait;
 
-  /**
-     * The direction of sorting.
-     */
+  // The direction of sorting.
   protected string _direction;
 
   /**
