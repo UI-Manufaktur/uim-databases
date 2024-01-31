@@ -4,9 +4,7 @@ import uim.databases;
 
 @safe:
 
-/**
- * Represents a SQL case statement with a fluid API
- */
+// Represents a SQL case statement with a fluid API
 class CaseStatementExpression : IExpression, ITypedResult {
     use CaseExpressionTrait;
     use ExpressionTypeCasterTrait;

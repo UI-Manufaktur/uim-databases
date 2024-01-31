@@ -1,11 +1,34 @@
-module uim.databases.Driver;
+module source.uim.databases.classes.drivers.mysqlx;
 
 import uim.databases;
 
 @safe:
 
-class Mysql : Driver {
+class MysqlDriver : Driver {
+    mixin(DriverThis!("MysqlDriver"));
+
+    override bool initialize(IConfigData[string] configData = null) {
+		if (!super.initialize(configData)) { return false; }
+		
+            // Base configuration settings for MySQL driver
+            _baseConfig = [
+        "persistent": true,
+        "host": "localhost",
+        "username": "root",
+        "password": "",
+        "database": "uim",
+        "port": "3306",
+        "flags": [],
+        "encoding": "utf8mb4",
+        "timezone": null,
+        "init": [],
+    ];
+    
+		return true;
+	}
  
+    protected Json _baseConfig;
+
     protected const MAX_ALIAS_LENGTH = 256;
 
     // Server type MySQL
