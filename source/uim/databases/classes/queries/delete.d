@@ -1,4 +1,4 @@
-module uim.databases.Query;
+module source.uim.databases.classes.queries.delete;
 
 import uim.databases;
 

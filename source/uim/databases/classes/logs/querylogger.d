@@ -4,8 +4,6 @@ import uim.databases;
 
 @safe:
 
-/*
-use Stringable;
 /**
  * This class is a bridge used to write LoggedQuery objects into a real log.
  * by default this class use the built-in UIM Log class to accomplish this
