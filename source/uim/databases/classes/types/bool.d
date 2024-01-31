@@ -7,7 +7,7 @@ import uim.databases;
 /**
  * Bool type converter.
  *
- * Use to convert bool data between PHP and the database types.
+ * Use to convert bool data between D and the database types.
  */
 class BoolType : BaseType, IBatchCasting {
     mixin(TypeThis!("BoolType"));
@@ -41,7 +41,7 @@ class BoolType : BaseType, IBatchCasting {
     }
     
     /**
-     * Convert bool values to PHP booleans
+     * Convert bool values to D booleans
      * Params:
      * Json aValue The value to convert.
      * @param \UIM\Database\Driver aDriver The driver instance to convert with.
@@ -79,7 +79,7 @@ class BoolType : BaseType, IBatchCasting {
     }
     
     /**
-     * Marshals request data into PHP booleans.
+     * Marshals request data into D booleans.
      * Params:
      * Json aValue The value to convert.
      */

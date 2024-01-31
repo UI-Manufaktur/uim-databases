@@ -6,7 +6,7 @@ import uim.databases;
 
 /**
  * An invokable class to be used for processing each of the rows in a statement
- * result, so that the values are converted to the right PHP types.
+ * result, so that the values are converted to the right D types.
  *
  * @internal
  */
