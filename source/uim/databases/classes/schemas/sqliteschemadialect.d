@@ -128,10 +128,10 @@ class SqliteSchemaDialect : SchemaDialect {
     /**
      * Generate the SQL to list the tables, excluding all views.
      * Params:
-     * Json[string] configData The connection configuration to use for
+     * IData[string] configData The connection configuration to use for
      *   getting tables from.
      */
-    Json[] listTablesWithoutViewsSql(Json[string] configData = null) {
+    Json[] listTablesWithoutViewsSql(IData[string] configData = null) {
         return [
             "sELECT name FROM sqlite_master WHERE type="table" " ~
             "AND name != "sqlite_sequence" ORDER BY name",
@@ -139,7 +139,7 @@ class SqliteSchemaDialect : SchemaDialect {
         ];
     }
  
-    array describeColumnSql(string atableName, Json[string] configData) {
+    array describeColumnSql(string atableName, IData[string] configData) {
         $sql = "PRAGMA table_info(%s)".format(_driver.quoteIdentifier(aTableName)
         );
 
@@ -194,7 +194,7 @@ class SqliteSchemaDialect : SchemaDialect {
         return $default;
     }
  
-    array describeIndexSql(string atableName, Json[string] configData) {
+    array describeIndexSql(string atableName, IData[string] configData) {
         string sql = "PRAGMA index_list(%s)"
             .format(_driver.quoteIdentifier(aTableName)
         );
@@ -309,7 +309,7 @@ class SqliteSchemaDialect : SchemaDialect {
         }
     }
  
-    array describeForeignKeySql(string atableName, Json[string] configData)
+    array describeForeignKeySql(string atableName, IData[string] configData)
     {
         string sql = 
             "SELECT id FROM pragma_foreign_key_list(%s) GROUP BY id"

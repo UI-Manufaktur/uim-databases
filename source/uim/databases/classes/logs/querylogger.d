@@ -10,7 +10,7 @@ import uim.databases;
  */
 class QueryLogger : BaseLog {
 
-  this(Json[string] configData = null) {
+  this(IData[string] configData = null) {
    _defaultConfig["scopes"] = ["queriesLog", "cake.database.queries"];
    _defaultConfig["connection"] = "";
 

@@ -79,7 +79,7 @@ abstract class Driver {
      * configData - The configuration for the driver.
      * @throws \InvalidArgumentException
      */
-    this(Json[string] configData = null) {
+    this(IData[string] configData = null) {
         if (isEmpty(configData["username"]) && !empty(configData["login"])) {
             throw new InvalidArgumentException(
                 'Please pass "username" instead of "login" for connecting to the database'
@@ -109,7 +109,7 @@ abstract class Driver {
      * string adsn A Driver-specific PDO-DSN
      * configData - configuration to be used for creating connection
      */
-    protected PDO createPdo(string adsn, Json[string] configData = null) {
+    protected PDO createPdo(string adsn, IData[string] configData = null) {
         $action = fn (): new PDO(
             $dsn,
             configData["username"] ?: null,

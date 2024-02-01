@@ -10,7 +10,7 @@ import uim.databases;
  * This class contains methods that are common across
  * the various SQL dialects.
  *
- * @method array<mixed> listTablesWithoutViewsSql(Json[string] configData = null) Generate the SQL to list the tables, excluding all views.
+ * @method array<mixed> listTablesWithoutViewsSql(IData[string] configData = null) Generate the SQL to list the tables, excluding all views.
  */
 abstract class SchemaDialect
 {
@@ -137,26 +137,26 @@ abstract class SchemaDialect
     /**
      * Generate the SQL to list the tables.
      * Params:
-     * Json[string] configData The connection configuration to use for
+     * IData[string] configData The connection configuration to use for
      *   getting tables from.
      */
-    abstract array listTablesSql(Json[string] configData = null);
+    abstract array listTablesSql(IData[string] configData = null);
 
     /**
      * Generate the SQL to describe a table.
      * Params:
      * string atableName The table name to get information on.
-     * @param Json[string] configData The connection configuration.
+     * @param IData[string] configData The connection configuration.
      */
-    abstract array describeColumnSql(string atableName, Json[string] configData);
+    abstract array describeColumnSql(string atableName, IData[string] configData);
 
     /**
      * Generate the SQL to describe the indexes in a table.
      * Params:
      * string atableName The table name to get information on.
-     * @param Json[string] configData The connection configuration.
+     * @param IData[string] configData The connection configuration.
      */
-    abstract array describeIndexSql(string atableName, Json[string] configData = null);
+    abstract array describeIndexSql(string atableName, IData[string] configData = null);
 
     /**
      * Generate the SQL to describe the foreign keys in a table.
@@ -164,7 +164,7 @@ abstract class SchemaDialect
      * string atableName The table name to get information on.
      * configData - The connection configuration.
      */
-    abstract array describeForeignKeySql(string atableName, Json[string] configData);
+    abstract array describeForeignKeySql(string atableName, IData[string] configData);
 
     /**
      * Generate the SQL to describe table options
@@ -172,7 +172,7 @@ abstract class SchemaDialect
      * string atableName Table name.
      * configData - The connection configuration.
      */
-    array describeOptionsSql(string atableName, Json[string] configData) {
+    array describeOptionsSql(string atableName, IData[string] configData) {
         return ["", ""];
     }
     
