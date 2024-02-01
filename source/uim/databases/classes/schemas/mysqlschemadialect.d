@@ -9,8 +9,7 @@ import uim.databases;
  *
  * @internal
  */
-class MysqlSchemaDialect : SchemaDialect
-{
+class MysqlSchemaDialect : SchemaDialect {
     /**
      * Generate the SQL to list the tables and views.
      *

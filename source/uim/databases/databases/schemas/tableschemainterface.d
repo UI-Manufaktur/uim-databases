@@ -6,14 +6,10 @@ import uim.cake;
 
 // An interface used by database TableSchema objects.
 interface TableISchema : ISchema {
-    /**
-     * Binary column type
-     */
+    // Binary column type
     const string TYPE_BINARY = "binary";
 
-    /**
-     * Binary UUID column type
-     */
+    // Binary UUID column type
     const string TYPE_BINARY_UUID = "binaryuuid";
 
     // Date column type

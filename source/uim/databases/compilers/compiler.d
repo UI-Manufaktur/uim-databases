@@ -228,7 +228,7 @@ class QueryCompiler {
     protected string _buildJoinPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $joins = "";
         foreach (someParts as $join) {
-            if (!isset($join["table"])) {
+            if (!$join.isSet("table")) {
                 throw new DatabaseException(
                     "Could not compile join clause for alias `%s`. No table was specified. "~
                     "Use the `table` key to define a table.".format(

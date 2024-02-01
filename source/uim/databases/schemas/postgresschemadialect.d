@@ -82,88 +82,87 @@ class PostgresSchemaDialect : SchemaDialect
      * @throws uim.databases.Exception\DatabaseException when column cannot be parsed.
      * @return array<string, mixed> Array of column information.
      */
-    protected function _convertColumn(string $column): array
-    {
+    protected array _convertColumn(string $column) {
         preg_match("/([a-z\s]+)(?:\(([0-9,]+)\))?/i", $column, $matches);
         if (empty($matches)) {
             throw new DatabaseException(sprintf("Unable to parse column type from "%s"", $column));
         }
 
-        $col = strtolower($matches[1]);
+        string colType = strtolower($matches[1]);
         $length = $precision = $scale = null;
         if (isset($matches[2])) {
             $length = (int)$matches[2];
         }
 
         $type = this._applyTypeSpecificColumnConversion(
-            $col,
+            colType,
             compact("length", "precision", "scale")
         );
         if ($type != null) {
             return $type;
         }
 
-        if (in_array($col, ["date", "time", "boolean"], true)) {
-            return ["type" : $col, "length" : null];
+        if (colType.isIn(["date", "time", "boolean"])) {
+            return ["type" : colType, "length" : null];
         }
-        if (in_array($col, ["timestamptz", "timestamp with time zone"], true)) {
-            return ["type" : TableSchema::TYPE_TIMESTAMP_TIMEZONE, "length" : null];
+        if (colType.isIn(["timestamptz", "timestamp with time zone"])) {
+            return ["type" : TableTypes.TIMESTAMP_TIMEZONE, "length" : null];
         }
-        if (strpos($col, "timestamp") != false) {
-            return ["type" : TableSchema::TYPE_TIMESTAMP_FRACTIONAL, "length" : null];
+        if (strpos(colType, "timestamp") != false) {
+            return ["type" : TableTypes.TIMESTAMP_FRACTIONAL, "length" : null];
         }
-        if (strpos($col, "time") != false) {
-            return ["type" : TableSchema::TYPE_TIME, "length" : null];
+        if (strpos(colType, "time") != false) {
+            return ["type" : TableTypes.TIME, "length" : null];
         }
-        if ($col == "serial" || $col == "integer") {
-            return ["type" : TableSchema::TYPE_INTEGER, "length" : 10];
+        if (colType == "serial" || colType == "integer") {
+            return ["type" : TableTypes.INTEGER, "length" : 10];
         }
-        if ($col == "bigserial" || $col == "bigint") {
-            return ["type" : TableSchema::TYPE_BIGINTEGER, "length" : 20];
+        if (colType == "bigserial" || colType == "bigint") {
+            return ["type" : TableTypes.BIGINTEGER, "length" : 20];
         }
-        if ($col == "smallint") {
-            return ["type" : TableSchema::TYPE_SMALLINTEGER, "length" : 5];
+        if (colType == "smallint") {
+            return ["type" : TableTypes.SMALLINTEGER, "length" : 5];
         }
-        if ($col == "inet") {
-            return ["type" : TableSchema::TYPE_STRING, "length" : 39];
+        if (colType == "inet") {
+            return ["type" : TableTypes.STRING, "length" : 39];
         }
-        if ($col == "uuid") {
-            return ["type" : TableSchema::TYPE_UUID, "length" : null];
+        if (colType == "uuid") {
+            return ["type" : TableTypes.UUID, "length" : null];
         }
-        if ($col == "char") {
-            return ["type" : TableSchema::TYPE_CHAR, "length" : $length];
+        if (colType == "char") {
+            return ["type" : TableTypes.CHAR, "length" : $length];
         }
-        if (strpos($col, "character") != false) {
-            return ["type" : TableSchema::TYPE_STRING, "length" : $length];
+        if (strpos(colType, "character") != false) {
+            return ["type" : TableTypes.STRING, "length" : $length];
         }
         // money is "string" as it includes arbitrary text content
         // before the number value.
-        if (strpos($col, "money") != false || $col == "string") {
-            return ["type" : TableSchema::TYPE_STRING, "length" : $length];
+        if (strpos(colType, "money") != false || colType == "string") {
+            return ["type" : TableTypes.STRING, "length" : $length];
         }
-        if (strpos($col, "text") != false) {
-            return ["type" : TableSchema::TYPE_TEXT, "length" : null];
+        if (strpos(colType, "text") != false) {
+            return ["type" : TableTypes.TEXT, "length" : null];
         }
-        if ($col == "bytea") {
-            return ["type" : TableSchema::TYPE_BINARY, "length" : null];
+        if (colType == "bytea") {
+            return ["type" : TableTypes.BINARY, "length" : null];
         }
-        if ($col == "real" || strpos($col, "double") != false) {
-            return ["type" : TableSchema::TYPE_FLOAT, "length" : null];
+        if (colType == "real" || strpos(colType, "double") != false) {
+            return ["type" : TableTypes.FLOAT, "length" : null];
         }
         if (
-            strpos($col, "numeric") != false ||
-            strpos($col, "decimal") != false
+            strpos(colType, "numeric") != false ||
+            strpos(colType, "decimal") != false
         ) {
-            return ["type" : TableSchema::TYPE_DECIMAL, "length" : null];
+            return ["type" : TableTypes.DECIMAL, "length" : null];
         }
 
-        if (strpos($col, "json") != false) {
-            return ["type" : TableSchema::TYPE_JSON, "length" : null];
+        if (strpos(colType, "json") != false) {
+            return ["type" : TableTypes.JSON, "length" : null];
         }
 
         $length = is_numeric($length) ? $length : null;
 
-        return ["type" : TableSchema::TYPE_STRING, "length" : $length];
+        return ["type" : TableTypes.STRING, "length" : $length];
     }
 
 
@@ -171,7 +170,7 @@ class PostgresSchemaDialect : SchemaDialect
     {
         $field = this._convertColumn(aRow["type"]);
 
-        if ($field["type"] == TableSchema::TYPE_BOOLEAN) {
+        if ($field["type"] == TableTypes.BOOLEAN) {
             if (aRow["default"] == "true") {
                 aRow["default"] = 1;
             }
@@ -196,14 +195,14 @@ class PostgresSchemaDialect : SchemaDialect
             $field["precision"] = aRow["column_scale"] ?: null;
         }
 
-        if ($field["type"] == TableSchema::TYPE_TIMESTAMP_FRACTIONAL) {
+        if ($field["type"] == TableTypes.TIMESTAMP_FRACTIONAL) {
             $field["precision"] = aRow["datetime_precision"];
             if ($field["precision"] == 0) {
-                $field["type"] = TableSchema::TYPE_TIMESTAMP;
+                $field["type"] = TableTypes.TIMESTAMP;
             }
         }
 
-        if ($field["type"] == TableSchema::TYPE_TIMESTAMP_TIMEZONE) {
+        if ($field["type"] == TableTypes.TIMESTAMP_TIMEZONE) {
             $field["precision"] = aRow["datetime_precision"];
         }
 
@@ -374,8 +373,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    function columnSql(TableSchema aSchema, string $name): string
-    {
+    string columnSql(TableSchema aSchema, string $name) {
         /** @var array $data */
         $data = $schema.getColumn($name);
 
@@ -384,54 +382,54 @@ class PostgresSchemaDialect : SchemaDialect
             return mySql;
         }
 
-        $out = this._driver.quoteIdentifier($name);
+        string $out = this._driver.quoteIdentifier($name);
         $typeMap = [
-            TableSchema::TYPE_TINYINTEGER : " SMALLINT",
-            TableSchema::TYPE_SMALLINTEGER : " SMALLINT",
-            TableSchema::TYPE_BINARY_UUID : " UUID",
-            TableSchema::TYPE_BOOLEAN : " BOOLEAN",
-            TableSchema::TYPE_FLOAT : " FLOAT",
-            TableSchema::TYPE_DECIMAL : " DECIMAL",
-            TableSchema::TYPE_DATE : " DATE",
-            TableSchema::TYPE_TIME : " TIME",
-            TableSchema::TYPE_DATETIME : " TIMESTAMP",
-            TableSchema::TYPE_DATETIME_FRACTIONAL : " TIMESTAMP",
-            TableSchema::TYPE_TIMESTAMP : " TIMESTAMP",
-            TableSchema::TYPE_TIMESTAMP_FRACTIONAL : " TIMESTAMP",
-            TableSchema::TYPE_TIMESTAMP_TIMEZONE : " TIMESTAMPTZ",
-            TableSchema::TYPE_UUID : " UUID",
-            TableSchema::TYPE_CHAR : " CHAR",
-            TableSchema::TYPE_JSON : " JSONB",
+            TableTypes.TINYINTEGER : " SMALLINT",
+            TableTypes.SMALLINTEGER : " SMALLINT",
+            TableTypes.BINARY_UUID : " UUID",
+            TableTypes.BOOLEAN : " BOOLEAN",
+            TableTypes.FLOAT : " FLOAT",
+            TableTypes.DECIMAL : " DECIMAL",
+            TableTypes.DATE : " DATE",
+            TableTypes.TIME : " TIME",
+            TableTypes.DATETIME : " TIMESTAMP",
+            TableTypes.DATETIME_FRACTIONAL : " TIMESTAMP",
+            TableTypes.TIMESTAMP : " TIMESTAMP",
+            TableTypes.TIMESTAMP_FRACTIONAL : " TIMESTAMP",
+            TableTypes.TIMESTAMP_TIMEZONE : " TIMESTAMPTZ",
+            TableTypes.UUID : " UUID",
+            TableTypes.CHAR : " CHAR",
+            TableTypes.JSON : " JSONB",
         ];
 
         if (isset($typeMap[$data["type"]])) {
             $out ~= $typeMap[$data["type"]];
         }
 
-        if ($data["type"] == TableSchema::TYPE_INTEGER || $data["type"] == TableSchema::TYPE_BIGINTEGER) {
-            $type = $data["type"] == TableSchema::TYPE_INTEGER ? " INTEGER" : " BIGINT";
+        if ($data["type"] == TableTypes.INTEGER || $data["type"] == TableTypes.BIGINTEGER) {
+            $type = $data["type"] == TableTypes.INTEGER ? " INTEGER" : " BIGINT";
             if ($schema.getPrimaryKey() == [$name] || $data["autoIncrement"] == true) {
-                $type = $data["type"] == TableSchema::TYPE_INTEGER ? " SERIAL" : " BIGSERIAL";
+                $type = $data["type"] == TableTypes.INTEGER ? " SERIAL" : " BIGSERIAL";
                 unset($data["null"], $data["default"]);
             }
             $out ~= $type;
         }
 
-        if ($data["type"] == TableSchema::TYPE_TEXT && $data["length"] != TableSchema::LENGTH_TINY) {
+        if ($data["type"] == TableTypes.TEXT && $data["length"] != TableSchema::LENGTH_TINY) {
             $out ~= " TEXT";
         }
-        if ($data["type"] == TableSchema::TYPE_BINARY) {
+        if ($data["type"] == TableTypes.BINARY) {
             $out ~= " BYTEA";
         }
 
-        if ($data["type"] == TableSchema::TYPE_CHAR) {
+        if ($data["type"] == TableTypes.CHAR) {
             $out ~= "(" . $data["length"] . ")";
         }
 
         if (
-            $data["type"] == TableSchema::TYPE_STRING ||
+            $data["type"] == TableTypes.STRING ||
             (
-                $data["type"] == TableSchema::TYPE_TEXT &&
+                $data["type"] == TableTypes.TEXT &&
                 $data["length"] == TableSchema::LENGTH_TINY
             )
         ) {
@@ -441,25 +439,25 @@ class PostgresSchemaDialect : SchemaDialect
             }
         }
 
-        $hasCollate = [TableSchema::TYPE_TEXT, TableSchema::TYPE_STRING, TableSchema::TYPE_CHAR];
+        $hasCollate = [TableTypes.TEXT, TableTypes.STRING, TableTypes.CHAR];
         if (in_array($data["type"], $hasCollate, true) && isset($data["collate"]) && $data["collate"] != "") {
             $out ~= " COLLATE "" . $data["collate"] . """;
         }
 
         $hasPrecision = [
-            TableSchema::TYPE_FLOAT,
-            TableSchema::TYPE_DATETIME,
-            TableSchema::TYPE_DATETIME_FRACTIONAL,
-            TableSchema::TYPE_TIMESTAMP,
-            TableSchema::TYPE_TIMESTAMP_FRACTIONAL,
-            TableSchema::TYPE_TIMESTAMP_TIMEZONE,
+            TableTypes.FLOAT,
+            TableTypes.DATETIME,
+            TableTypes.DATETIME_FRACTIONAL,
+            TableTypes.TIMESTAMP,
+            TableTypes.TIMESTAMP_FRACTIONAL,
+            TableTypes.TIMESTAMP_TIMEZONE,
         ];
         if (in_array($data["type"], $hasPrecision) && isset($data["precision"])) {
             $out ~= "(" . $data["precision"] . ")";
         }
 
         if (
-            $data["type"] == TableSchema::TYPE_DECIMAL &&
+            $data["type"] == TableTypes.DECIMAL &&
             (
                 isset($data["length"]) ||
                 isset($data["precision"])
@@ -473,11 +471,11 @@ class PostgresSchemaDialect : SchemaDialect
         }
 
         $datetimeTypes = [
-            TableSchema::TYPE_DATETIME,
-            TableSchema::TYPE_DATETIME_FRACTIONAL,
-            TableSchema::TYPE_TIMESTAMP,
-            TableSchema::TYPE_TIMESTAMP_FRACTIONAL,
-            TableSchema::TYPE_TIMESTAMP_TIMEZONE,
+            TableTypes.DATETIME,
+            TableTypes.DATETIME_FRACTIONAL,
+            TableTypes.TIMESTAMP,
+            TableTypes.TIMESTAMP_FRACTIONAL,
+            TableTypes.TIMESTAMP_TIMEZONE,
         ];
         if (
             isset($data["default"]) &&

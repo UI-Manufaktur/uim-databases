@@ -115,46 +115,46 @@ class SqlserverSchemaDialect : SchemaDialect
 
         if ($col == "datetime") {
             // datetime cannot parse more than 3 digits of precision and isn"t accurate
-            return ["type": TableSchema::TYPE_DATETIME, "length": null];
+            return ["type": TableTypes.DATETIME, "length": null];
         }
         if (strpos($col, "datetime") != false) {
-            $typeName = TableSchema::TYPE_DATETIME;
+            $typeName = TableTypes.DATETIME;
             if ($scale > 0) {
-                $typeName = TableSchema::TYPE_DATETIME_FRACTIONAL;
+                $typeName = TableTypes.DATETIME_FRACTIONAL;
             }
 
             return ["type": $typeName, "length": null, "precision": $scale];
         }
 
         if ($col == "char") {
-            return ["type": TableSchema::TYPE_CHAR, "length": $length];
+            return ["type": TableTypes.CHAR, "length": $length];
         }
 
         if ($col == "tinyint") {
-            return ["type": TableSchema::TYPE_TINYINTEGER, "length": $precision ?: 3];
+            return ["type": TableTypes.TINYINTEGER, "length": $precision ?: 3];
         }
         if ($col == "smallint") {
-            return ["type": TableSchema::TYPE_SMALLINTEGER, "length": $precision ?: 5];
+            return ["type": TableTypes.SMALLINTEGER, "length": $precision ?: 5];
         }
         if ($col == "int" || $col == "integer") {
-            return ["type": TableSchema::TYPE_INTEGER, "length": $precision ?: 10];
+            return ["type": TableTypes.INTEGER, "length": $precision ?: 10];
         }
         if ($col == "bigint") {
-            return ["type": TableSchema::TYPE_BIGINTEGER, "length": $precision ?: 20];
+            return ["type": TableTypes.BIGINTEGER, "length": $precision ?: 20];
         }
         if ($col == "bit") {
-            return ["type": TableSchema::TYPE_BOOLEAN, "length": null];
+            return ["type": TableTypes.BOOLEAN, "length": null];
         }
         if (
             strpos($col, "numeric") != false ||
             strpos($col, "money") != false ||
             strpos($col, "decimal") != false
         ) {
-            return ["type": TableSchema::TYPE_DECIMAL, "length": $precision, "precision": $scale];
+            return ["type": TableTypes.DECIMAL, "length": $precision, "precision": $scale];
         }
 
         if ($col == "real" || $col == "float") {
-            return ["type": TableSchema::TYPE_FLOAT, "length": null];
+            return ["type": TableTypes.FLOAT, "length": null];
         }
         // SqlServer schema reflection returns double length for unicode
         // columns because internally it uses UTF16/UCS2
@@ -162,19 +162,19 @@ class SqlserverSchemaDialect : SchemaDialect
             $length /= 2;
         }
         if (strpos($col, "varchar") != false && $length < 0) {
-            return ["type": TableSchema::TYPE_TEXT, "length": null];
+            return ["type": TableTypes.TEXT, "length": null];
         }
 
         if (strpos($col, "varchar") != false) {
-            return ["type": TableSchema::TYPE_STRING, "length": $length ?: 255];
+            return ["type": TableTypes.STRING, "length": $length ?: 255];
         }
 
         if (strpos($col, "char") != false) {
-            return ["type": TableSchema::TYPE_CHAR, "length": $length];
+            return ["type": TableTypes.CHAR, "length": $length];
         }
 
         if (strpos($col, "text") != false) {
-            return ["type": TableSchema::TYPE_TEXT, "length": null];
+            return ["type": TableTypes.TEXT, "length": null];
         }
 
         if ($col == "image" || strpos($col, "binary") != false) {
@@ -183,14 +183,14 @@ class SqlserverSchemaDialect : SchemaDialect
                 $length = TableSchema::LENGTH_LONG;
             }
 
-            return ["type": TableSchema::TYPE_BINARY, "length": $length];
+            return ["type": TableTypes.BINARY, "length": $length];
         }
 
         if ($col == "uniqueidentifier") {
-            return ["type": TableSchema::TYPE_UUID];
+            return ["type": TableTypes.UUID];
         }
 
-        return ["type": TableSchema::TYPE_STRING, "length": null];
+        return ["type": TableTypes.STRING, "length": null];
     }
 
 
@@ -239,7 +239,7 @@ class SqlserverSchemaDialect : SchemaDialect
             return null;
         }
 
-        if ($type == TableSchema::TYPE_BOOLEAN) {
+        if ($type == TableTypes.BOOLEAN) {
             return (int)$default;
         }
 
@@ -378,46 +378,46 @@ class SqlserverSchemaDialect : SchemaDialect
 
         $out = _driver.quoteIdentifier($name);
         $typeMap = [
-            TableSchema::TYPE_TINYINTEGER: " TINYINT",
-            TableSchema::TYPE_SMALLINTEGER: " SMALLINT",
-            TableSchema::TYPE_INTEGER: " INTEGER",
-            TableSchema::TYPE_BIGINTEGER: " BIGINT",
-            TableSchema::TYPE_BINARY_UUID: " UNIQUEIDENTIFIER",
-            TableSchema::TYPE_BOOLEAN: " BIT",
-            TableSchema::TYPE_CHAR: " NCHAR",
-            TableSchema::TYPE_FLOAT: " FLOAT",
-            TableSchema::TYPE_DECIMAL: " DECIMAL",
-            TableSchema::TYPE_DATE: " DATE",
-            TableSchema::TYPE_TIME: " TIME",
-            TableSchema::TYPE_DATETIME: " DATETIME2",
-            TableSchema::TYPE_DATETIME_FRACTIONAL: " DATETIME2",
-            TableSchema::TYPE_TIMESTAMP: " DATETIME2",
-            TableSchema::TYPE_TIMESTAMP_FRACTIONAL: " DATETIME2",
-            TableSchema::TYPE_TIMESTAMP_TIMEZONE: " DATETIME2",
-            TableSchema::TYPE_UUID: " UNIQUEIDENTIFIER",
-            TableSchema::TYPE_JSON: " NVARCHAR(MAX)",
+            TableTypes.TINYINTEGER: " TINYINT",
+            TableTypes.SMALLINTEGER: " SMALLINT",
+            TableTypes.INTEGER: " INTEGER",
+            TableTypes.BIGINTEGER: " BIGINT",
+            TableTypes.BINARY_UUID: " UNIQUEIDENTIFIER",
+            TableTypes.BOOLEAN: " BIT",
+            TableTypes.CHAR: " NCHAR",
+            TableTypes.FLOAT: " FLOAT",
+            TableTypes.DECIMAL: " DECIMAL",
+            TableTypes.DATE: " DATE",
+            TableTypes.TIME: " TIME",
+            TableTypes.DATETIME: " DATETIME2",
+            TableTypes.DATETIME_FRACTIONAL: " DATETIME2",
+            TableTypes.TIMESTAMP: " DATETIME2",
+            TableTypes.TIMESTAMP_FRACTIONAL: " DATETIME2",
+            TableTypes.TIMESTAMP_TIMEZONE: " DATETIME2",
+            TableTypes.UUID: " UNIQUEIDENTIFIER",
+            TableTypes.JSON: " NVARCHAR(MAX)",
         ];
 
         if (isset($typeMap[$data["type"]])) {
             $out ~= $typeMap[$data["type"]];
         }
 
-        if ($data["type"] == TableSchema::TYPE_INTEGER || $data["type"] == TableSchema::TYPE_BIGINTEGER) {
+        if ($data["type"] == TableTypes.INTEGER || $data["type"] == TableTypes.BIGINTEGER) {
             if ($schema.getPrimaryKeys() == [$name] || $data["autoIncrement"] == true) {
                 unset($data["null"], $data["default"]);
                 $out ~= " IDENTITY(1, 1)";
             }
         }
 
-        if ($data["type"] == TableSchema::TYPE_TEXT && $data["length"] != TableSchema::LENGTH_TINY) {
+        if ($data["type"] == TableTypes.TEXT && $data["length"] != TableSchema::LENGTH_TINY) {
             $out ~= " NVARCHAR(MAX)";
         }
 
-        if ($data["type"] == TableSchema::TYPE_CHAR) {
+        if ($data["type"] == TableTypes.CHAR) {
             $out ~= "(" ~ $data["length"] ~ ")";
         }
 
-        if ($data["type"] == TableSchema::TYPE_BINARY) {
+        if ($data["type"] == TableTypes.BINARY) {
             if (
                 !isset($data["length"])
                 || hasAllValues($data["length"], [TableSchema::LENGTH_MEDIUM, TableSchema::LENGTH_LONG], true)
@@ -435,9 +435,9 @@ class SqlserverSchemaDialect : SchemaDialect
         }
 
         if (
-            $data["type"] == TableSchema::TYPE_STRING ||
+            $data["type"] == TableTypes.STRING ||
             (
-                $data["type"] == TableSchema::TYPE_TEXT &&
+                $data["type"] == TableTypes.TEXT &&
                 $data["length"] == TableSchema::LENGTH_TINY
             )
         ) {
@@ -446,24 +446,24 @@ class SqlserverSchemaDialect : SchemaDialect
             $out ~= sprintf("%s(%d)", $type, $length);
         }
 
-        $hasCollate = [TableSchema::TYPE_TEXT, TableSchema::TYPE_STRING, TableSchema::TYPE_CHAR];
+        $hasCollate = [TableTypes.TEXT, TableTypes.STRING, TableTypes.CHAR];
         if (hasAllValues($data["type"], $hasCollate, true) && isset($data["collate"]) && $data["collate"] != "") {
             $out ~= " COLLATE " ~ $data["collate"];
         }
 
         $precisionTypes = [
-            TableSchema::TYPE_FLOAT,
-            TableSchema::TYPE_DATETIME,
-            TableSchema::TYPE_DATETIME_FRACTIONAL,
-            TableSchema::TYPE_TIMESTAMP,
-            TableSchema::TYPE_TIMESTAMP_FRACTIONAL,
+            TableTypes.FLOAT,
+            TableTypes.DATETIME,
+            TableTypes.DATETIME_FRACTIONAL,
+            TableTypes.TIMESTAMP,
+            TableTypes.TIMESTAMP_FRACTIONAL,
         ];
         if (hasAllValues($data["type"], $precisionTypes, true) && isset($data["precision"])) {
             $out ~= "(" ~ (int)$data["precision"] ~ ")";
         }
 
         if (
-            $data["type"] == TableSchema::TYPE_DECIMAL &&
+            $data["type"] == TableTypes.DECIMAL &&
             (
                 isset($data["length"]) ||
                 isset($data["precision"])
@@ -477,10 +477,10 @@ class SqlserverSchemaDialect : SchemaDialect
         }
 
         $dateTimeTypes = [
-            TableSchema::TYPE_DATETIME,
-            TableSchema::TYPE_DATETIME_FRACTIONAL,
-            TableSchema::TYPE_TIMESTAMP,
-            TableSchema::TYPE_TIMESTAMP_FRACTIONAL,
+            TableTypes.DATETIME,
+            TableTypes.DATETIME_FRACTIONAL,
+            TableTypes.TIMESTAMP,
+            TableTypes.TIMESTAMP_FRACTIONAL,
         ];
         $dateTimeDefaults = [
             "current_timestamp",

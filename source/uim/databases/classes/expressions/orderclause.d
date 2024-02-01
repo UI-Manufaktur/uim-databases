@@ -17,7 +17,7 @@ class OrderClauseExpression : IExpression, IField {
      * \UIM\Database\IExpression|string afield The field to order on.
      */
   this(IExpression afield, string sortDirection) {
-    // TODO  	                                    
+    // TODO
   }
 
   this(string fieldName, string sortDirection) {
@@ -45,9 +45,7 @@ class OrderClauseExpression : IExpression, IField {
     }
   }
 
-  /**
-     * Create a deep clone of the order clause.
-     */
+  // Create a deep clone of the order clause.
   void __clone() {
     if (cast(IExpression) _field) {
       _field = clone _field;

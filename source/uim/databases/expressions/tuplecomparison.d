@@ -123,7 +123,7 @@ class TupleComparison : ComparisonExpression
                 $bound = null;
                 foreach ($value as $k: $val) {
                     /** @var string $valType */
-                    $valType = $type && isset($type[$k]) ? $type[$k] : $type;
+                    $valType = $type && isset($type.isSet($k) ? $type[$k] : $type;
                     $bound[] = _bindValue($val, $binder, $valType);
                 }
 
@@ -132,7 +132,7 @@ class TupleComparison : ComparisonExpression
             }
 
             /** @var string $valType */
-            $valType = $type && isset($type[$i]) ? $type[$i] : $type;
+            $valType = $type && $type[$i]) ? $type[$i] : $type;
             $values[] = _bindValue($value, $binder, $valType);
         }
 
