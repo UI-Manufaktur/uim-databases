@@ -36,5 +36,5 @@ interface ICollection {
      * returns Object with column metadata.
      * @throws \UIM\Database\Exception\DatabaseException when table cannot be described.
      */
-    TableISchema describe(string tableName, Json[string] options = null);
+    TableISchema describe(string tableName, IData[string] options = null);
 }

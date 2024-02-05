@@ -799,7 +799,7 @@ abstract class Query : IExpression, Stringable {
      * string afield Field
      * @param array  someValues Array of values
      */
-    auto whereInList(string afield, array  someValues, Json[string] options = null) {
+    auto whereInList(string afield, array  someValues, IData[string] options = null) {
         options["types"] = Json.emptyArray;
         options["allowEmpty"] = Json(false);
 
@@ -821,7 +821,7 @@ abstract class Query : IExpression, Stringable {
      * @param array  someValues Array of values
      * @param Json[string] $options Options
      */
-    auto whereNotInList(string afield, array someValues, Json[string] options = null) {
+    auto whereNotInList(string afield, array someValues, IData[string] options = null) {
         auto myOptions = $options.update([
             "types": Json.emptyArray,
             "allowEmpty": Json(false)
@@ -846,7 +846,7 @@ abstract class Query : IExpression, Stringable {
      * @param array  someValues Array of values
      * @param Json[string] $options Options
      */
-    auto whereNotInListOrNull(string afield, array  someValues, Json[string] options = null) {
+    auto whereNotInListOrNull(string afield, array  someValues, IData[string] options = null) {
         auto options = $options.update() [
             "types": Json.emptyArray,
             "allowEmpty": Json(false),

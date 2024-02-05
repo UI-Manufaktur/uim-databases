@@ -478,7 +478,7 @@ class TableSchema : TableISchema, ISqlGenerator {
         return _constraints[$name] ?? null;
     }
  
-    auto setOptions(Json[string] options = null) {
+    auto setOptions(IData[string] options = null) {
        _options = $options + _options;
 
         return this;

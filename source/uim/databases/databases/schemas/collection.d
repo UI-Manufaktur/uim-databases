@@ -70,9 +70,9 @@ class Collection : ICollection {
      *  Defaults to false.
      * Params:
      * string aName The name of the table to describe.
-     * @param Json[string] options The options to use, see above.
+     * @param IData[string] options The options to use, see above.
      */
-    TableISchema describe(string aName, Json[string] options = null) {
+    TableISchema describe(string aName, IData[string] options = null) {
         configData = _connection.config();
         if ($name.has(".")) {
             [configData("schema"], name] = split(".", name);

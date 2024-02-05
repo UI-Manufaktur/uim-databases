@@ -32,9 +32,9 @@ interface ICollection {
      *  Defaults to false.
      * Params:
      * string aName The name of the table to describe.
-     * @param Json[string] options The options to use, see above.
+     * @param IData[string] options The options to use, see above.
      * returns Object with column metadata.
      * @throws \UIM\Database\Exception\DatabaseException when table cannot be described.
      */
-    TableISchema describe(string tableName, Json[string] options = null);
+    TableISchema describe(string tableName, IData[string] options = null);
 }
