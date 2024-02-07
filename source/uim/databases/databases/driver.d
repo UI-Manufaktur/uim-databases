@@ -25,7 +25,7 @@ abstract class Driver {
     protected PDO pdo = null;
 
     // Configuration data.
-    protected Json[string] _config = [];
+    protected IData[string] _config = [];
 
     // Base configuration that is merged into the user supplied configuration data.
     protected Json _baseConfig = [];
@@ -77,7 +77,7 @@ abstract class Driver {
     }
     
     // Get the configuration data used to create the driver.
-    Json[string] config() {
+    IData[string] config() {
         return _config;
     }
     
@@ -663,7 +663,7 @@ abstract class Driver {
     }
 
     // Returns an array that can be used to describe the internal state of this object.
-    Json[string] debugInfo() {
+    IData[string] debugInfo() {
         return [
             "connected": !this.pdo.isNull,
             "role": this.getRole(),

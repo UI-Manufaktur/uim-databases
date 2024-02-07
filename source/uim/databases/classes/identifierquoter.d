@@ -136,9 +136,9 @@ class IdentifierQuoter {
     /**
      * A generic identifier quoting auto used for various parts of the query
      *
-     * @param Json[string] $part the part of the query to quote
+     * @param IData[string] $part the part of the query to quote
      */
-    protected Json[string] _basicQuoter(array $part) {
+    protected IData[string] _basicQuoter(array $part) {
         result = [];
         foreach ($part as $alias: $value) {
             $value = !isString($value) ? $value : this.quoteIdentifier($value);

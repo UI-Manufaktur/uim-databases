@@ -103,7 +103,7 @@ class ValueBinder {
     }
     
     // Get verbose debugging data.
-    Json[string] debugInfo() {
+    IData[string] debugInfo() {
         return [
             "bindings": this.bindings(),
         ];

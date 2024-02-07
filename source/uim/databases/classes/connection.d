@@ -7,7 +7,7 @@ import uim.databases;
 // Represents a connection with a database server.
 class Connection : IConnection {
     // Contains the configuration params for this connection.
-    protected Json[string] _config;
+    protected IData[string] _config;
 
     protected Driver $readDriver;
 
@@ -542,7 +542,7 @@ class Connection : IConnection {
     }
 
     // Returns an array that can be used to describe the internal state of this object.
-    Json[string] debugInfo() {
+    IData[string] debugInfo() {
         $secrets = [
             "password": "*****",
             "username": "*****",

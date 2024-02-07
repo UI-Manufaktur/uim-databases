@@ -252,7 +252,7 @@ class SelectQuery : Query, IteratorAggregate {
      * aQuery.join(["something": 'different_table"], [], true); // resets joins list
      * ```
      * Params:
-     * Json[string]|string atables list of tables to be joined in the query
+     * IData[string]|string atables list of tables to be joined in the query
      * typeNames Associative array of type names used to bind values to query
      * @param bool $overwrite whether to reset joins with passed list or not
      * @see \UIM\Database\TypeFactory
@@ -327,7 +327,7 @@ class SelectQuery : Query, IteratorAggregate {
      *
      * See `join()` for further details on conditions and types.
      * Params:
-     * Json[string]|string atable The table to join with
+     * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
      * @param array $types a list of types associated to the conditions used for converting
@@ -349,7 +349,7 @@ class SelectQuery : Query, IteratorAggregate {
      * The arguments of this method are identical to the `leftJoin()` shorthand, please refer
      * to that methods description for further details.
      * Params:
-     * Json[string]|string atable The table to join with
+     * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
      * @param array $types a list of types associated to the conditions used for converting
@@ -373,7 +373,7 @@ class SelectQuery : Query, IteratorAggregate {
      * The arguments of this method are identical to the `leftJoin()` shorthand, please refer
      * to that method`s description for further details.
      * Params:
-     * Json[string]|string atable The table to join with
+     * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
      * @param STRINGAA $types a list of types associated to the conditions used for converting
@@ -390,7 +390,7 @@ class SelectQuery : Query, IteratorAggregate {
     /**
      * Returns an array that can be passed to the join method describing a single join clause
      * Params:
-     * Json[string]|string atable The table to join with
+     * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
      * @param string atype the join type to use
@@ -748,7 +748,7 @@ class SelectQuery : Query, IteratorAggregate {
      * Returns an array that can be used to describe the internal state of this
      * object.
      */
-    Json[string] debugInfo() {
+    IData[string] debugInfo() {
         result = super.__debugInfo();
         result["decorators"] = count(_resultDecorators);
 

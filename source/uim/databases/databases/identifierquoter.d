@@ -130,10 +130,10 @@ class IdentifierQuoter {
     
     /**
      * A generic identifier quoting auto used for various parts of the query
-     * @param Json[string] part the part of the query to quote
+     * @param IData[string] part the part of the query to quote
      */
-    protected Json[string] _basicQuoter(Json[string] part) {
-        Json[string] result = [];
+    protected IData[string] _basicQuoter(IData[string] part) {
+        IData[string] result = [];
         part.byKeyValue
             .each!((aliasValue) {
             aliasValue.value = !isString(aliasValue.value) ? aliasValue.value : this.quoteIdentifier(aliasValue.value);

@@ -37,7 +37,7 @@ abstract class Query : IExpression, Stringable {
     protected string _type;
 
     // List of SQL parts that will be used to build this query.
-    protected Json[string] _parts = [
+    protected IData[string] _parts = [
         "comment": null,
         "delete": true,
         "update": [],
@@ -439,7 +439,7 @@ abstract class Query : IExpression, Stringable {
      * aQuery.join(["something": 'different_table"], [], true); // resets joins list
      * ```
      * Params:
-     * Json[string]|string atables list of tables to be joined in the query
+     * IData[string]|string atables list of tables to be joined in the query
      * @param STRINGAA types Associative array of type names used to bind values to query
      * @param bool overwrite whether to reset joins with passed list or not
      * @see \UIM\Database\TypeFactory
@@ -512,7 +512,7 @@ abstract class Query : IExpression, Stringable {
      *
      * See `join()` for further details on conditions and types.
      * Params:
-     * Json[string]|string atable The table to join with
+     * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
      * @param array types a list of types associated to the conditions used for converting
@@ -536,7 +536,7 @@ abstract class Query : IExpression, Stringable {
      * The arguments of this method are identical to the `leftJoin()` shorthand, please refer
      * to that methods description for further details.
      * Params:
-     * Json[string]|string atable The table to join with
+     * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
      * @param array types a list of types associated to the conditions used for converting
@@ -558,7 +558,7 @@ abstract class Query : IExpression, Stringable {
      * The arguments of this method are identical to the `leftJoin()` shorthand, please refer
      * to that method`s description for further details.
      * Params:
-     * Json[string]|string atable The table to join with
+     * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
      * @param STRINGAA types a list of types associated to the conditions used for converting
@@ -577,7 +577,7 @@ abstract class Query : IExpression, Stringable {
     /**
      * Returns an array that can be passed to the join method describing a single join clause
      * Params:
-     * Json[string]|string atable The table to join with
+     * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
      * @param string atype the join type to use
@@ -1463,7 +1463,7 @@ abstract class Query : IExpression, Stringable {
     }
     
     // Returns an array that can be used to describe the internal state of this object.
-    Json[string] debugInfo() {
+    IData[string] debugInfo() {
         auto mySql = "SQL could not be generated for this query as it is incomplete.";
         params = [];
         try {

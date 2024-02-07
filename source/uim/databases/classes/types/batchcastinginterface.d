@@ -17,5 +17,5 @@ interface IBatchCasting {
      * @param string[] $fields The field keys to cast
      * @param \UIM\Database\Driver $driver Object from which database preferences and configuration will be extracted.
      */
-    Json[string] manyToD(array  someValues, array $fields, Driver $driver);
+    IData[string] manyToD(array  someValues, array $fields, Driver $driver);
 }

@@ -99,7 +99,7 @@ abstract class Driver {
      * Get the configuration data used to create the driver.
      
      */
-    Json[string] config() {
+    IData[string] config() {
         return _config;
     }
     
@@ -685,7 +685,7 @@ abstract class Driver {
     }
 
     // Returns an array that can be used to describe the internal state of this object.
-    Json[string] debugInfo() {
+    IData[string] debugInfo() {
         return [
             "connected": !this.pdo.isNull,
             "role": this.getRole(),
