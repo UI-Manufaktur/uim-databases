@@ -74,7 +74,7 @@ class PostgresSchemaDialect : SchemaDialect {
      * @throws \UIM\Database\Exception\DatabaseException when column cannot be parsed.
      * returns Array of column information.
      */
-    protected Json[string] _convertColumn(string columnType) {
+    protected IData[string] _convertColumn(string columnType) {
         preg_match("/([a-z\s]+)(?:\(([0-9,]+)\))?/i", columnType, matches);
         if ($matches.isEmpty) {
             throw new DatabaseException("Unable to parse column type from `%s`".format(columnType));
@@ -515,7 +515,7 @@ class PostgresSchemaDialect : SchemaDialect {
      * Helper method for generating key SQL snippets.
      * Params:
      * string aprefix The key prefix
-     * @param Json[string] someData Key data.
+     * @param IData[string] someData Key data.
      */
     protected string _keySql(string aprefix, array data) {
         someColumns = array_map(

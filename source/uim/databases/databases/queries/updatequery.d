@@ -15,7 +15,7 @@ class UpdateQuery : Query {
     /**
      * List of SQL parts that will be used to build this query.
      */
-    protected Json[string] _parts = [
+    protected IData[string] _parts = [
         "comment": null,
         "with": [],
         "update": [],

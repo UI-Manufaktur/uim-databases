@@ -33,12 +33,12 @@ class TableSchema : TableISchema, ISqlGenerator {
     /**
      * Constraints in the table.
      */
-    protected Json[string][string] _constraints;
+    protected IData[string][string] _constraints;
 
     /**
      * Options for the table.
      */
-    protected Json[string] _options = [];
+    protected IData[string] _options = [];
 
     /**
      * Whether the table is temporary
@@ -75,7 +75,7 @@ class TableSchema : TableISchema, ISqlGenerator {
      * The valid keys that can be used in a column
      * definition.
      */
-    protected static Json[string] _columnKeys = [
+    protected static IData[string] _columnKeys = [
         "type": null,
         "baseType": null,
         "length": null,
@@ -124,7 +124,7 @@ class TableSchema : TableISchema, ISqlGenerator {
      * The valid keys that can be used in an index
      * definition.
      *
-     * @var Json[string]
+     * @var IData[string]
      */
     protected static array _indexKeys = [
         "type": null,
@@ -288,7 +288,7 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     array defaultValues() {
-        Json[string] defaults;
+        IData[string] defaults;
         foreach (_columns as name: someData) {
             if (!array_key_exists("default", someData)) {
                 continue;
@@ -426,9 +426,9 @@ class TableSchema : TableISchema, ISqlGenerator {
     /**
      * Helper method to check/validate foreign keys.
      * Params:
-     * Json[string] attrs Attributes to set.
+     * IData[string] attrs Attributes to set.
      */
-    protected Json[string] _checkForeignKey(array attrs) {
+    protected IData[string] _checkForeignKey(array attrs) {
         if (count($attrs["references"]) < 2) {
             throw new DatabaseException("References must contain a table and column.");
         }
@@ -517,7 +517,7 @@ class TableSchema : TableISchema, ISqlGenerator {
     /**
      * Returns an array of the table schema.
      */
-    Json[string] debugInfo() {
+    IData[string] debugInfo() {
         return [
             'table": _table,
             'columns": _columns,

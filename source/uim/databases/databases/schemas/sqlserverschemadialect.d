@@ -81,7 +81,7 @@ class SqlserverSchemaDialect : SchemaDialect {
      * @param int scale The column scale
      * @link https://technet.microsoft.com/en-us/library/ms187752.aspx
      */
-    protected Json[string] _convertColumn(
+    protected IData[string] _convertColumn(
         string columnType,
         ?size_t aLength = null,
         int precision = null,
