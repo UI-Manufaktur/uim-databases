@@ -139,7 +139,7 @@ interface TableISchema : ISchema {
      * - `columns` The columns in the index.
      * Params:
      * string aName The name of the index.
-     * @param Json[string]|string aattrs The attributes for the index.
+     * @param IData[string]|string aattrs The attributes for the index.
      *  If string it will be used as `type`.
      */
     void addIndex(string aName, string[] aattrs);
@@ -149,7 +149,7 @@ interface TableISchema : ISchema {
      * Params:
      * string aName The name of the index.
      */
-    Json[string] getIndex(string indexName);
+    IData[string] getIndex(string indexName);
 
     /**
      * Get the names of all the indexes in the table.
@@ -173,7 +173,7 @@ interface TableISchema : ISchema {
      * The default for 'update' & 'delete' is 'cascade'.
      * Params:
      * string aName The name of the constraint.
-     * @param Json[string]|string aattrs The attributes for the constraint.
+     * @param IData[string]|string aattrs The attributes for the constraint.
      *  If string it will be used as `type`.
      */
     void addConstraint(string aName, string[] aattrs);
@@ -183,7 +183,7 @@ interface TableISchema : ISchema {
      * Params:
      * string aName The name of the constraint.
      */
-    Json[string] getConstraint(string aName);
+    IData[string] getConstraint(string aName);
 
     // Remove a constraint.
     auto dropConstraint(string constraintName);

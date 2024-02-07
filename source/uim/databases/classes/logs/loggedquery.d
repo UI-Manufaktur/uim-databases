@@ -67,7 +67,7 @@ class LoggedQuery : JsonSerializable, Stringable {
     }
     
     // Get the logging context data for a query.
-    Json[string] getContext() {
+    IData[string] getContext() {
         return [
             "query": this.query,
             "numRows": this.numRows,
@@ -79,13 +79,13 @@ class LoggedQuery : JsonSerializable, Stringable {
     }
     
     // Set logging context for this query.
-    void setContext(Json[string] loggingContext) {
+    void setContext(IData[string] loggingContext) {
         loggingContext.byKeyValue
             each!(kv => this.{kv.key} = kv.value);
     }
     
     // Returns data that will be serialized as JSON
-    Json[string] jsonSerialize() {
+    IData[string] jsonSerialize() {
         $error = this.error;
         if ($error !isNull) {
             $error = [

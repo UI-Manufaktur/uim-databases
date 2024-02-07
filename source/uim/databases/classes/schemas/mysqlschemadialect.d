@@ -60,7 +60,7 @@ class MysqlSchemaDialect : SchemaDialect {
      * string acolumn The column type + length
      * @throws \UIM\Database\Exception\DatabaseException When column type cannot be parsed.
      */
-    protected Json[string] _convertColumn(string acolumn) {
+    protected IData[string] _convertColumn(string acolumn) {
         preg_match("/([a-z]+)(?:\(([0-9,]+)\))?\s*([a-z]+)?/i", $column, $matches);
         if (isEmpty($matches)) {
             throw new DatabaseException("Unable to parse column type from `%s`".format($column));

@@ -36,7 +36,7 @@ class CachedCollection : ICollection {
     return this.collection.listTables();
   }
 
-  TableISchema describe(string myname, Json[string] optionData = null) {
+  TableISchema describe(string myname, IData[string] optionData = null) {
     $options += ["forceRefresh": false];
     $cacheKey = this.cacheKey($name);
 

@@ -22,7 +22,7 @@ class SqliteSchemaDialect : SchemaDialect {
      * string acolumn The column type + length
      * @throws \UIM\Database\Exception\DatabaseException when unable to parse column type
      */
-    protected Json[string] _convertColumn(string aColumn) {
+    protected IData[string] _convertColumn(string aColumn) {
         if (aColumn.isEmpty) {
             return ["type": TableISchema.TYPE_TEXT, "length": null];
         }
@@ -116,7 +116,7 @@ class SqliteSchemaDialect : SchemaDialect {
      * Generate the SQL to list the tables and views.
      * Params:
      */
-    array listTablesSql(Json[string] connectionConfig = null) {
+    array listTablesSql(IData[string] connectionConfig = null) {
         return [
             "SELECT name FROM sqlite_master " ~
             "WHERE (type=\"table\" OR type=\"view\") " ~
