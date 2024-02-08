@@ -822,15 +822,15 @@ abstract class Query : IExpression, Stringable {
      * @param IData[string] options Options
      */
     auto whereNotInList(string afield, array someValues, IData[string] options = null) {
-        auto myOptions = options.update([
+        auto options = options.update([
             "types": Json.emptyArray,
             "allowEmpty": Json(false)
         ];
 
-        if (myOptions["allowEmpty"] && !someValues) {
+        if (options["allowEmpty"] && !someValues) {
             return this.where([$field ~ " IS NOT": null]);
         }
-        return this.where([$field ~ " NOT IN":  someValues], myOptions["types"]);
+        return this.where([$field ~ " NOT IN":  someValues], options["types"]);
     }
     
     /**

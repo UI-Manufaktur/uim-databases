@@ -984,20 +984,20 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * @param string myField Field
     * @param array myValues Array of values
-    * @param array<string, mixed> myOptions Options
+    * @param array<string, mixed> options Options
     * @return this
     */
-  function whereInList(string myField, array myValues, IData[string] options = []) {
-      myOptions.add([
+  function whereInList(string fieldName, array myValues, IData[string] options = []) {
+      options.add([
           "types": ArrayData,
           "allowEmpty": BoolData(false)
       ]);
 
-      if (myOptions["allowEmpty"] && !myValues) {
+      if (options.get("allowEmpty", BoolData(false)) && !myValues.isEmpty) {
           return this.where("1=0");
       }
 
-      return cast(O)this.where([myField . " IN":myValues], myOptions["types"]);
+      return cast(O)this.where([fieldName . " IN":myValues], options["types"]);
   }
 
   /**
@@ -1010,20 +1010,20 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * @param string myField Field
     * @param array myValues Array of values
-    * @param array<string, mixed> myOptions Options
+    * @param array<string, mixed> options Options
     * @return this
     */
   function whereNotInList(string myField, array myValues, IData[string] options = []) {
-      myOptions += [
-          "types":[],
-          "allowEmpty":false,
-      ];
+      options.add([
+          "types": ArrayData,
+          "allowEmpty": BoolData,
+      ]);
 
-      if (myOptions["allowEmpty"] && !myValues) {
+      if (options["allowEmpty"] && !myValues) {
           return this.where([myField . " IS NOT":null]);
       }
 
-      return cast(O)this.where([myField . " NOT IN":myValues], myOptions["types"]);
+      return cast(O)this.where([myField . " NOT IN":myValues], options["types"]);
   }
 
   /**
@@ -1037,16 +1037,16 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * @param string myField Field
     * @param array myValues Array of values
-    * @param array<string, mixed> myOptions Options
+    * @param array<string, mixed> options Options
     * @return this
     */
   function whereNotInListOrNull(string myField, array myValues, IData[string] options = []) {
-      myOptions += [
+      options += [
           "types":[],
           "allowEmpty":false,
       ];
 
-      if (myOptions["allowEmpty"] && !myValues) {
+      if (options["allowEmpty"] && !myValues) {
           return this.where([myField . " IS NOT":null]);
       }
 
@@ -1054,7 +1054,7 @@ class Query : IDBAExpression, IteratorAggregate {
           [
               "OR":[myField . " NOT IN":myValues, myField . " IS":null],
           ],
-          myOptions["types"]
+          options["types"]
       );
   }
 
