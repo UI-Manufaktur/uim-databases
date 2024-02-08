@@ -987,11 +987,11 @@ class Query : IDBAExpression, IteratorAggregate {
     * @param array<string, mixed> myOptions Options
     * @return this
     */
-  function whereInList(string myField, array myValues, array myOptions = []) {
-      myOptions += [
-          "types":[],
-          "allowEmpty":false,
-      ];
+  function whereInList(string myField, array myValues, IData[string] options = []) {
+      myOptions.add([
+          "types": ArrayData,
+          "allowEmpty": BoolData(false)
+      ]);
 
       if (myOptions["allowEmpty"] && !myValues) {
           return this.where("1=0");
@@ -1013,7 +1013,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @param array<string, mixed> myOptions Options
     * @return this
     */
-  function whereNotInList(string myField, array myValues, array myOptions = []) {
+  function whereNotInList(string myField, array myValues, IData[string] options = []) {
       myOptions += [
           "types":[],
           "allowEmpty":false,
@@ -1040,7 +1040,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @param array<string, mixed> myOptions Options
     * @return this
     */
-  function whereNotInListOrNull(string myField, array myValues, array myOptions = []) {
+  function whereNotInListOrNull(string myField, array myValues, IData[string] options = []) {
       myOptions += [
           "types":[],
           "allowEmpty":false,
