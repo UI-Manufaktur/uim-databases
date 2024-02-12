@@ -60,12 +60,12 @@ class JsonType : BaseType, IBatchCasting
 
     function manytoD(array someValues, string[] someFields, IDBADriver aDriver): array
     {
-        foreach ($fields as $field) {
-            if (!isset(someValues[$field])) {
+        foreach (fields as field) {
+            if (!isset(someValues[field])) {
                 continue;
             }
 
-            someValues[$field] = json_decode(someValues[$field], true);
+            someValues[field] = json_decode(someValues[field], true);
         }
 
         return someValues;
@@ -97,13 +97,13 @@ class JsonType : BaseType, IBatchCasting
     /**
      * Set json_encode options.
      *
-     * @param int $options Encoding flags. Use JSON_* flags. Set `0` to reset.
+     * @param int options Encoding flags. Use JSON_* flags. Set `0` to reset.
      * @return this
      * @see https://www.php.net/manual/en/function.json-encode.php
      */
-    function setEncodingOptions(int $options)
+    function setEncodingOptions(int options)
     {
-        this._encodingOptions = $options;
+        this._encodingOptions = options;
 
         return this;
     }

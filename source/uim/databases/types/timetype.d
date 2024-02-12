@@ -25,10 +25,10 @@ class TimeType : DateTimeType {
 
     protected function _parseLocaleValue(string aValue): ?I18nDateTimeInterface
     {
-        /** @psalm-var class-string<uim.I18n\I18nDateTimeInterface> $class */
-        $class = _className;
+        /** @psalm-var class-string<uim.I18n\I18nDateTimeInterface> class */
+        class = _className;
 
         /** @psalm-suppress PossiblyInvalidArgument */
-        return $class::parseTime($value, _localeMarshalFormat);
+        return class::parseTime(value, _localeMarshalFormat);
     }
 }

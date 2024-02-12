@@ -66,14 +66,14 @@ class IntegerType : BaseType, IBatchCasting {
 
   function manytoD(array someValues, string[] someFields, IDBADriver aDriver): array
   {
-      foreach ($fields as $field) {
-          if (!isset(someValues[$field])) {
+      foreach (fields as field) {
+          if (!isset(someValues[field])) {
               continue;
           }
 
-          this.checkNumeric(someValues[$field]);
+          this.checkNumeric(someValues[field]);
 
-          someValues[$field] = (int)someValues[$field];
+          someValues[field] = (int)someValues[field];
       }
 
       return someValues;

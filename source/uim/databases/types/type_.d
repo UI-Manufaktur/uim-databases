@@ -18,10 +18,10 @@ abstract class BaseType : TypeInterface
     /**
      * Constructor
      *
-     * @param string|null $name The name identifying this type
+     * @param string|null name The name identifying this type
      */
     this(Nullable!string aName = null) {
-        _name = $name;
+        _name = name;
     }
 
 
@@ -35,8 +35,8 @@ abstract class BaseType : TypeInterface
     }
 
 
-    function toStatement($value, IDriver aDriver) {
-        if ($value == null) {
+    function toStatement(value, IDriver aDriver) {
+        if (value == null) {
             return PDO::PARAM_NULL;
         }
 

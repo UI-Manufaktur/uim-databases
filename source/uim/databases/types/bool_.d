@@ -46,7 +46,7 @@ class BoolType : BaseType, IBatchCasting {
           }
 
           if (!is_numeric(DValue aValue)) {
-              someValues[$field] = strtolower(DValue aValue) == "true";
+              someValues[field] = strtolower(DValue aValue) == "true";
               continue;
           }
 

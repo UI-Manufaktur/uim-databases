@@ -10,15 +10,15 @@ class UuidType : StringType {
     /**
      * Casts given value from a D type to one acceptable by database
      *
-     * @param mixed $value value to be converted to database equivalent
+     * @param mixed value value to be converted to database equivalent
      * @param uim.databases.IDriver aDriver object from which database preferences and configuration will be extracted
      */
-    Nullable!string toDatabase($value, IDriver aDriver) {
-        if ($value == null || $value == "" || $value == false) {
+    Nullable!string toDatabase(value, IDriver aDriver) {
+        if (value == null || value == "" || value == false) {
             return null;
         }
 
-        return super.toDatabase($value, $driver);
+        return super.toDatabase(value, driver);
     }
 
     /**
@@ -33,14 +33,14 @@ class UuidType : StringType {
     /**
      * Marshals request data into a D string
      *
-     * @param mixed $value The value to convert.
+     * @param mixed value The value to convert.
      * @return string|null Converted value.
      */
-    Nullable!string marshal($value) {
-        if ($value == null || $value == "" || is_array($value)) {
+    Nullable!string marshal(value) {
+        if (value == null || value == "" || is_array(value)) {
             return null;
         }
 
-        return (string)$value;
+        return (string)value;
     }
 }
