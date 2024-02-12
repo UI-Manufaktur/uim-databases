@@ -26,7 +26,7 @@ class DateTimeType : BaseType : BatchCastingInterface
      *
      * This is primarily to avoid subclasses needing to re-implement the same functionality.
      */
-    protected bool $setToDateStart = false;
+    protected bool setToDateStart = false;
 
     /**
      * The DateTime format used when converting to string.
@@ -73,34 +73,34 @@ class DateTimeType : BaseType : BatchCastingInterface
      *
      * @var \DateTimeZone|null
      */
-    protected $dbTimezone;
+    protected dbTimezone;
 
     /**
      * User time zone.
      *
      * @var \DateTimeZone|null
      */
-    protected $userTimezone;
+    protected userTimezone;
 
     /**
      * Default time zone.
      *
      * @var \DateTimeZone
      */
-    protected $defaultTimezone;
+    protected defaultTimezone;
 
     /**
      * Whether database time zone is kept when converting
      */
-    protected bool $keepDatabaseTimezone = false;
+    protected bool keepDatabaseTimezone = false;
 
     /**
      * {@inheritDoc}
      *
-     * @param string|null $name The name identifying this type
+     * @param string|null name The name identifying this type
      */
     this(Nullable!string aName = null) {
-        super(($name);
+        super((name);
 
         this.defaultTimezone = new DateTimeZone(date_default_timezone_get());
         _setClassName(FrozenTime::class, DateTimeImmutable::class);
@@ -109,42 +109,42 @@ class DateTimeType : BaseType : BatchCastingInterface
     /**
      * Convert DateTime instance into strings.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed value The value to convert.
      * @param uim.databases.IDriver aDriver The driver instance to convert with.
      */
-    Nullable!string toDatabase($value, IDriver aDriver) {
-        if ($value == null || is_string($value)) {
-            return $value;
+    Nullable!string toDatabase(value, IDriver aDriver) {
+        if (value == null || is_string(value)) {
+            return value;
         }
-        if (is_int($value)) {
-            $class = _className;
-            $value = new $class("@" ~ $value);
+        if (is_int(value)) {
+            class = _className;
+            value = new class("@" ~ value);
         }
 
         if (
             this.dbTimezone != null
-            && this.dbTimezone.getName() != $value.getTimezone().getName()
+            && this.dbTimezone.getName() != value.getTimezone().getName()
         ) {
-            if (!$value instanceof DateTimeImmutable) {
-                $value = clone $value;
+            if (!value instanceof DateTimeImmutable) {
+                value = clone value;
             }
-            $value = $value.setTimezone(this.dbTimezone);
+            value = value.setTimezone(this.dbTimezone);
         }
 
-        return $value.format(_format);
+        return value.format(_format);
     }
 
     /**
      * Alias for `setDatabaseTimezone()`.
      *
-     * @param \DateTimeZone|string|null $timezone Database timezone.
+     * @param \DateTimeZone|string|null timezone Database timezone.
      * @return this
      * @deprecated 4.1.0 Use {@link setDatabaseTimezone()} instead.
      */
-    function setTimezone($timezone) {
+    function setTimezone(timezone) {
         deprecationWarning("DateTimeType::setTimezone() is deprecated. Use setDatabaseTimezone() instead.");
 
-        return this.setDatabaseTimezone($timezone);
+        return this.setDatabaseTimezone(timezone);
     }
 
     /**
@@ -154,14 +154,14 @@ class DateTimeType : BaseType : BatchCastingInterface
      * instances and converting DateTime instances to database strings.
      *
      * @see DateTimeType::setKeepDatabaseTimezone
-     * @param \DateTimeZone|string|null $timezone Database timezone.
+     * @param \DateTimeZone|string|null timezone Database timezone.
      * @return this
      */
-    function setDatabaseTimezone($timezone) {
-        if (is_string($timezone)) {
-            $timezone = new DateTimeZone($timezone);
+    function setDatabaseTimezone(timezone) {
+        if (is_string(timezone)) {
+            timezone = new DateTimeZone(timezone);
         }
-        this.dbTimezone = $timezone;
+        this.dbTimezone = timezone;
 
         return this;
     }
@@ -171,14 +171,14 @@ class DateTimeType : BaseType : BatchCastingInterface
      *
      * This is the time zone used when marshalling strings to DateTime instances.
      *
-     * @param \DateTimeZone|string|null $timezone User timezone.
+     * @param \DateTimeZone|string|null timezone User timezone.
      * @return this
      */
-    function setUserTimezone($timezone) {
-        if (is_string($timezone)) {
-            $timezone = new DateTimeZone($timezone);
+    function setUserTimezone(timezone) {
+        if (is_string(timezone)) {
+            timezone = new DateTimeZone(timezone);
         }
-        this.userTimezone = $timezone;
+        this.userTimezone = timezone;
 
         return this;
     }
@@ -186,37 +186,37 @@ class DateTimeType : BaseType : BatchCastingInterface
     /**
      * {@inheritDoc}
      *
-     * @param mixed $value Value to be converted to D equivalent
+     * @param mixed value Value to be converted to D equivalent
      * @param uim.databases.IDriver aDriver Object from which database preferences and configuration will be extracted
      * @return \DateTimeInterface|null
      */
-    function toPHP($value, IDriver aDriver) {
-        if ($value == null) {
+    function toPHP(value, IDriver aDriver) {
+        if (value == null) {
             return null;
         }
 
-        $class = _className;
-        if (is_int($value)) {
-            $instance = new $class("@" ~ $value);
+        class = _className;
+        if (is_int(value)) {
+            instance = new class("@" ~ value);
         } else {
-            if (strpos($value, "0000-00-00") == 0) {
+            if (strpos(value, "0000-00-00") == 0) {
                 return null;
             }
-            $instance = new $class($value, this.dbTimezone);
+            instance = new class(value, this.dbTimezone);
         }
 
         if (
             !this.keepDatabaseTimezone &&
-            $instance.getTimezone().getName() != this.defaultTimezone.getName()
+            instance.getTimezone().getName() != this.defaultTimezone.getName()
         ) {
-            $instance = $instance.setTimezone(this.defaultTimezone);
+            instance = instance.setTimezone(this.defaultTimezone);
         }
 
         if (this.setToDateStart) {
-            $instance = $instance.setTime(0, 0, 0);
+            instance = instance.setTime(0, 0, 0);
         }
 
-        return $instance;
+        return instance;
     }
 
     /**
@@ -229,155 +229,155 @@ class DateTimeType : BaseType : BatchCastingInterface
      * When false, datetime timezones are converted to default time zone.
      * This is default behavior.
      *
-     * @param bool $keep If true, database time zone is kept when converting
+     * @param bool keep If true, database time zone is kept when converting
      *      to DateTime instances.
      * @return this
      */
-    function setKeepDatabaseTimezone(bool $keep) {
-        this.keepDatabaseTimezone = $keep;
+    function setKeepDatabaseTimezone(bool keep) {
+        this.keepDatabaseTimezone = keep;
 
         return this;
     }
 
 
-    array manyToPHP(array $values, array $fields, IDriver aDriver) {
-        foreach ($fields as $field) {
-            if (!isset($values[$field])) {
+    array manyToPHP(array values, array fields, IDriver aDriver) {
+        foreach (fields as field) {
+            if (!isset(values[field])) {
                 continue;
             }
 
-            $value = $values[$field];
-            if (strpos($value, "0000-00-00") == 0) {
-                $values[$field] = null;
+            value = values[field];
+            if (strpos(value, "0000-00-00") == 0) {
+                values[field] = null;
                 continue;
             }
 
-            $class = _className;
-            if (is_int($value)) {
-                $instance = new $class("@" ~ $value);
+            class = _className;
+            if (is_int(value)) {
+                instance = new class("@" ~ value);
             } else {
-                $instance = new $class($value, this.dbTimezone);
+                instance = new class(value, this.dbTimezone);
             }
 
             if (
                 !this.keepDatabaseTimezone &&
-                $instance.getTimezone().getName() != this.defaultTimezone.getName()
+                instance.getTimezone().getName() != this.defaultTimezone.getName()
             ) {
-                $instance = $instance.setTimezone(this.defaultTimezone);
+                instance = instance.setTimezone(this.defaultTimezone);
             }
 
             if (this.setToDateStart) {
-                $instance = $instance.setTime(0, 0, 0);
+                instance = instance.setTime(0, 0, 0);
             }
 
-            $values[$field] = $instance;
+            values[field] = instance;
         }
 
-        return $values;
+        return values;
     }
 
     /**
      * Convert request data into a datetime object.
      *
-     * @param mixed $value Request data
+     * @param mixed value Request data
      * @return \DateTimeInterface|null
      */
-    function marshal($value): ?DateTimeInterface
+    function marshal(value): ?DateTimeInterface
     {
-        if ($value instanceof DateTimeInterface) {
-            if ($value instanceof DateTime) {
-                $value = clone $value;
+        if (value instanceof DateTimeInterface) {
+            if (value instanceof DateTime) {
+                value = clone value;
             }
 
-            /** @var \Datetime|\DateTimeImmutable $value */
-            return $value.setTimezone(this.defaultTimezone);
+            /** @var \Datetime|\DateTimeImmutable value */
+            return value.setTimezone(this.defaultTimezone);
         }
 
-        /** @var class-string<\DateTimeInterface> $class */
-        $class = _className;
+        /** @var class-string<\DateTimeInterface> class */
+        class = _className;
         try {
-            if ($value == "" || $value == null || is_bool($value)) {
+            if (value == "" || value == null || is_bool(value)) {
                 return null;
             }
 
-            if (is_int($value) || (is_string($value) && ctype_digit($value))) {
-                /** @var \DateTime|\DateTimeImmutable $dateTime */
-                $dateTime = new $class("@" ~ $value);
+            if (is_int(value) || (is_string(value) && ctype_digit(value))) {
+                /** @var \DateTime|\DateTimeImmutable dateTime */
+                dateTime = new class("@" ~ value);
 
-                return $dateTime.setTimezone(this.defaultTimezone);
+                return dateTime.setTimezone(this.defaultTimezone);
             }
 
-            if (is_string($value)) {
+            if (is_string(value)) {
                 if (_useLocaleMarshal) {
-                    $dateTime = _parseLocaleValue($value);
+                    dateTime = _parseLocaleValue(value);
                 } else {
-                    $dateTime = _parseValue($value);
+                    dateTime = _parseValue(value);
                 }
 
-                /** @var \DateTime|\DateTimeImmutable $dateTime */
-                if ($dateTime != null) {
-                    $dateTime = $dateTime.setTimezone(this.defaultTimezone);
+                /** @var \DateTime|\DateTimeImmutable dateTime */
+                if (dateTime != null) {
+                    dateTime = dateTime.setTimezone(this.defaultTimezone);
                 }
 
-                return $dateTime;
+                return dateTime;
             }
-        } catch (Exception $e) {
+        } catch (Exception e) {
             return null;
         }
 
-        if (is_array($value) && implode("", $value) == "") {
+        if (is_array(value) && implode("", value) == "") {
             return null;
         }
-        $value += ["hour": 0, "minute": 0, "second": 0, "microsecond": 0];
+        value += ["hour": 0, "minute": 0, "second": 0, "microsecond": 0];
 
-        $format = "";
+        format = "";
         if (
-            isset($value["year"], $value["month"], $value["day"]) &&
+            isset(value["year"], value["month"], value["day"]) &&
             (
-                is_numeric($value["year"]) &&
-                is_numeric($value["month"]) &&
-                is_numeric($value["day"])
+                is_numeric(value["year"]) &&
+                is_numeric(value["month"]) &&
+                is_numeric(value["day"])
             )
         ) {
-            $format ~= sprintf("%d-%02d-%02d", $value["year"], $value["month"], $value["day"]);
+            format ~= sprintf("%d-%02d-%02d", value["year"], value["month"], value["day"]);
         }
 
-        if (isset($value["meridian"]) && (int)$value["hour"] == 12) {
-            $value["hour"] = 0;
+        if (isset(value["meridian"]) && (int)value["hour"] == 12) {
+            value["hour"] = 0;
         }
-        if (isset($value["meridian"])) {
-            $value["hour"] = strtolower($value["meridian"]) == "am" ? $value["hour"] : $value["hour"] + 12;
+        if (isset(value["meridian"])) {
+            value["hour"] = strtolower(value["meridian"]) == "am" ? value["hour"] : value["hour"] + 12;
         }
-        $format ~= sprintf(
+        format ~= sprintf(
             "%s%02d:%02d:%02d.%06d",
-            empty($format) ? "" : " ",
-            $value["hour"],
-            $value["minute"],
-            $value["second"],
-            $value["microsecond"]
+            empty(format) ? "" : " ",
+            value["hour"],
+            value["minute"],
+            value["second"],
+            value["microsecond"]
         );
 
-        /** @var \DateTime|\DateTimeImmutable $dateTime */
-        $dateTime = new $class($format, $value["timezone"] ?? this.userTimezone);
+        /** @var \DateTime|\DateTimeImmutable dateTime */
+        dateTime = new class(format, value["timezone"] ?? this.userTimezone);
 
-        return $dateTime.setTimezone(this.defaultTimezone);
+        return dateTime.setTimezone(this.defaultTimezone);
     }
 
     /**
      * Sets whether to parse strings passed to `marshal()` using
      * the locale-aware format set by `setLocaleFormat()`.
      *
-     * @param bool $enable Whether to enable
+     * @param bool enable Whether to enable
      * @return this
      */
-    function useLocaleParser(bool $enable = true) {
-        if ($enable == false) {
-            _useLocaleMarshal = $enable;
+    function useLocaleParser(bool enable = true) {
+        if (enable == false) {
+            _useLocaleMarshal = enable;
 
             return this;
         }
         if (is_subclass_of(_className, I18nDateTimeInterface::class)) {
-            _useLocaleMarshal = $enable;
+            _useLocaleMarshal = enable;
 
             return this;
         }
@@ -391,12 +391,12 @@ class DateTimeType : BaseType : BatchCastingInterface
      *
      * See `Cake\I18n\Time::parseDateTime()` for accepted formats.
      *
-     * @param array|string $format The locale-aware format
+     * @param array|string format The locale-aware format
      * @see uim.I18n\Time::parseDateTime()
      * @return this
      */
-    function setLocaleFormat($format) {
-        _localeMarshalFormat = $format;
+    function setLocaleFormat(format) {
+        _localeMarshalFormat = format;
 
         return this;
     }
@@ -421,17 +421,17 @@ class DateTimeType : BaseType : BatchCastingInterface
     /**
      * Set the classname to use when building objects.
      *
-     * @param string $class The classname to use.
-     * @param string $fallback The classname to use when the preferred class does not exist.
+     * @param string class The classname to use.
+     * @param string fallback The classname to use when the preferred class does not exist.
      * @return void
-     * @psalm-param class-string<\DateTime>|class-string<\DateTimeImmutable> $class
-     * @psalm-param class-string<\DateTime>|class-string<\DateTimeImmutable> $fallback
+     * @psalm-param class-string<\DateTime>|class-string<\DateTimeImmutable> class
+     * @psalm-param class-string<\DateTime>|class-string<\DateTimeImmutable> fallback
      */
-    protected void _setClassName(string $class, string $fallback) {
-        if (!class_exists($class)) {
-            $class = $fallback;
+    protected void _setClassName(string class, string fallback) {
+        if (!class_exists(class)) {
+            class = fallback;
         }
-        _className = $class;
+        _className = class;
     }
 
     /**
@@ -470,10 +470,10 @@ class DateTimeType : BaseType : BatchCastingInterface
      */
     protected function _parseLocaleValue(string aValue): ?I18nDateTimeInterface
     {
-        /** @psalm-var class-string<uim.I18n\I18nDateTimeInterface> $class */
-        $class = _className;
+        /** @psalm-var class-string<uim.I18n\I18nDateTimeInterface> class */
+        class = _className;
 
-        return $class::parseDateTime($value, _localeMarshalFormat, this.userTimezone);
+        return class::parseDateTime(value, _localeMarshalFormat, this.userTimezone);
     }
 
     /**
@@ -485,16 +485,16 @@ class DateTimeType : BaseType : BatchCastingInterface
      */
     protected function _parseValue(string aValue): ?DateTimeInterface
     {
-        $class = _className;
+        class = _className;
 
-        foreach (_marshalFormats as $format) {
+        foreach (_marshalFormats as format) {
             try {
-                $dateTime = $class::createFromFormat($format, $value, this.userTimezone);
+                dateTime = class::createFromFormat(format, value, this.userTimezone);
                 // Check for false in case DateTime is used directly
-                if ($dateTime != false) {
-                    return $dateTime;
+                if (dateTime != false) {
+                    return dateTime;
                 }
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException e) {
                 // Chronos wraps DateTime::createFromFormat and throws
                 // exception if parse fails.
                 continue;
@@ -507,11 +507,11 @@ class DateTimeType : BaseType : BatchCastingInterface
     /**
      * Casts given value to Statement equivalent
      *
-     * @param mixed $value value to be converted to PDO statement
+     * @param mixed value value to be converted to PDO statement
      * @param uim.databases.IDriver aDriver object from which database preferences and configuration will be extracted
      * @return mixed
      */
-    function toStatement($value, IDriver aDriver) {
+    function toStatement(value, IDriver aDriver) {
         return PDO::PARAM_STR;
     }
 }

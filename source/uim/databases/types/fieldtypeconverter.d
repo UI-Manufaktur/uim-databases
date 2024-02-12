@@ -33,7 +33,7 @@ class FieldTypeConverter
      *
      * @var array<string, array>
      */
-    protected $batchingTypeMap;
+    protected batchingTypeMap;
 
     /**
      * An array containing all the types registered in the Type system
@@ -42,7 +42,7 @@ class FieldTypeConverter
      *
      * @var array<uim.databases.TypeInterface|uim.databases.types.BatchCastingInterface>
      */
-    protected $types;
+    protected types;
 
     /**
      * The driver object to be used in the type conversion
@@ -54,79 +54,79 @@ class FieldTypeConverter
     /**
      * Builds the type map
      *
-     * @param uim.databases.TypeMap $typeMap Contains the types to use for converting results
+     * @param uim.databases.TypeMap typeMap Contains the types to use for converting results
      * @param uim.databases.IDriver aDriver The driver to use for the type conversion
      */
-    this(TypeMap $typeMap, IDriver aDriver) {
-        _driver = $driver;
-        $map = $typeMap.toArray();
-        $types = TypeFactory::buildAll();
+    this(TypeMap typeMap, IDriver aDriver) {
+        _driver = driver;
+        map = typeMap.toArray();
+        types = TypeFactory::buildAll();
 
-        $simpleMap = $batchingMap = null;
-        $simpleResult = $batchingResult = null;
+        simpleMap = batchingMap = null;
+        simpleResult = batchingResult = null;
 
-        foreach ($types as $k: $type) {
-            if ($type instanceof OptionalConvertInterface && !$type.requiresToPhpCast()) {
+        foreach (types as k: type) {
+            if (type instanceof OptionalConvertInterface && !type.requiresToPhpCast()) {
                 continue;
             }
 
-            if ($type instanceof BatchCastingInterface) {
-                $batchingMap[$k] = $type;
+            if (type instanceof BatchCastingInterface) {
+                batchingMap[k] = type;
                 continue;
             }
 
-            $simpleMap[$k] = $type;
+            simpleMap[k] = type;
         }
 
-        foreach ($map as $field: $type) {
-            if (isset($simpleMap[$type])) {
-                $simpleResult[$field] = $simpleMap[$type];
+        foreach (map as field: type) {
+            if (isset(simpleMap[type])) {
+                simpleResult[field] = simpleMap[type];
                 continue;
             }
-            if (isset($batchingMap[$type])) {
-                $batchingResult[$type][] = $field;
+            if (isset(batchingMap[type])) {
+                batchingResult[type][] = field;
             }
         }
 
         // Using batching when there is only a couple for the type is actually slower,
         // so, let"s check for that case here.
-        foreach ($batchingResult as $type: $fields) {
-            if (count($fields) > 2) {
+        foreach (batchingResult as type: fields) {
+            if (count(fields) > 2) {
                 continue;
             }
 
-            foreach ($fields as $f) {
-                $simpleResult[$f] = $batchingMap[$type];
+            foreach (fields as f) {
+                simpleResult[f] = batchingMap[type];
             }
-            unset($batchingResult[$type]);
+            unset(batchingResult[type]);
         }
 
-        this.types = $types;
-        _typeMap = $simpleResult;
-        this.batchingTypeMap = $batchingResult;
+        this.types = types;
+        _typeMap = simpleResult;
+        this.batchingTypeMap = batchingResult;
     }
 
     /**
      * Converts each of the fields in the array that are present in the type map
      * using the corresponding Type class.
      *
-     * @param array $row The array with the fields to be casted
+     * @param array row The array with the fields to be casted
      * @return array<string, mixed>
      */
-    array __invoke(array $row) {
+    array __invoke(array row) {
         if (!empty(_typeMap)) {
-            foreach (_typeMap as $field: $type) {
-                $row[$field] = $type.toPHP($row[$field], _driver);
+            foreach (_typeMap as field: type) {
+                row[field] = type.toPHP(row[field], _driver);
             }
         }
 
         if (!empty(this.batchingTypeMap)) {
-            foreach (this.batchingTypeMap as $t: $fields) {
+            foreach (this.batchingTypeMap as t: fields) {
                 /** @psalm-suppress PossiblyUndefinedMethod */
-                $row = this.types[$t].manyToPHP($row, $fields, _driver);
+                row = this.types[t].manyToPHP(row, fields, _driver);
             }
         }
 
-        return $row;
+        return row;
     }
 }

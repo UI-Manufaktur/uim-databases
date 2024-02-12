@@ -23,11 +23,11 @@ class DateType : DateTimeType {
      * In this class we want Date objects to  have their time
      * set to the beginning of the day.
      */
-    protected bool $setToDateStart = true;
+    protected bool setToDateStart = true;
 
 
     this(Nullable!string aName = null) {
-        super(($name);
+        super((name);
 
         _setClassName(FrozenDate::class, DateTimeImmutable::class);
     }
@@ -69,27 +69,27 @@ class DateType : DateTimeType {
     /**
      * Convert request data into a datetime object.
      *
-     * @param mixed $value Request data
+     * @param mixed value Request data
      * @return \DateTimeInterface|null
      */
-    function marshal($value): ?DateTimeInterface
+    function marshal(value): ?DateTimeInterface
     {
-        $date = super.marshal($value);
-        /** @psalm-var \DateTime|\DateTimeImmutable|null $date */
-        if ($date && !$date instanceof I18nDateTimeInterface) {
+        date = super.marshal(value);
+        /** @psalm-var \DateTime|\DateTimeImmutable|null date */
+        if (date && !date instanceof I18nDateTimeInterface) {
             // Clear time manually when I18n types aren"t available and raw DateTime used
-            $date = $date.setTime(0, 0, 0);
+            date = date.setTime(0, 0, 0);
         }
 
-        return $date;
+        return date;
     }
 
 
     protected function _parseLocaleValue(string aValue): ?I18nDateTimeInterface
     {
-        /** @psalm-var class-string<uim.I18n\I18nDateTimeInterface> $class */
-        $class = _className;
+        /** @psalm-var class-string<uim.I18n\I18nDateTimeInterface> class */
+        class = _className;
 
-        return $class::parseDate($value, _localeMarshalFormat);
+        return class::parseDate(value, _localeMarshalFormat);
     }
 }

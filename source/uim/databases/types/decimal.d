@@ -23,7 +23,7 @@ class DecimalType : BaseType : BatchCastingInterface
      *
      * @var string
      */
-    static $numberClass = Number::class;
+    static numberClass = Number::class;
 
     /**
      * Whether numbers should be parsed using a locale aware parser
@@ -34,89 +34,89 @@ class DecimalType : BaseType : BatchCastingInterface
     /**
      * Convert decimal strings into the database format.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed value The value to convert.
      * @param uim.databases.IDriver aDriver The driver instance to convert with.
      * @return string|float|int|null
      * @throws \InvalidArgumentException
      */
-    function toDatabase($value, IDriver aDriver) {
-        if ($value == null || $value == "") {
+    function toDatabase(value, IDriver aDriver) {
+        if (value == null || value == "") {
             return null;
         }
 
-        if (is_numeric($value)) {
-            return $value;
+        if (is_numeric(value)) {
+            return value;
         }
 
         if (
-            is_object($value)
-            && method_exists($value, "__toString")
-            && is_numeric(strval($value))
+            is_object(value)
+            && method_exists(value, "__toString")
+            && is_numeric(strval(value))
         ) {
-            return strval($value);
+            return strval(value);
         }
 
         throw new InvalidArgumentException(sprintf(
             "Cannot convert value of type `%s` to a decimal",
-            getTypeName($value)
+            getTypeName(value)
         ));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param mixed $value The value to convert.
+     * @param mixed value The value to convert.
      * @param uim.databases.IDriver aDriver The driver instance to convert with.
      */
-    Nullable!string toPHP($value, IDriver aDriver) {
-        if ($value == null) {
+    Nullable!string toPHP(value, IDriver aDriver) {
+        if (value == null) {
             return null;
         }
 
-        return (string)$value;
+        return (string)value;
     }
 
 
-    array manyToPHP(array $values, array $fields, IDriver aDriver) {
-        foreach ($fields as $field) {
-            if (!isset($values[$field])) {
+    array manyToPHP(array values, array fields, IDriver aDriver) {
+        foreach (fields as field) {
+            if (!isset(values[field])) {
                 continue;
             }
 
-            $values[$field] = (string)$values[$field];
+            values[field] = (string)values[field];
         }
 
-        return $values;
+        return values;
     }
 
     /**
      * Get the correct PDO binding type for decimal data.
      *
-     * @param mixed $value The value being bound.
+     * @param mixed value The value being bound.
      * @param uim.databases.IDriver aDriver The driver.
      */
-    int toStatement($value, IDriver aDriver) {
+    int toStatement(value, IDriver aDriver) {
         return PDO::PARAM_STR;
     }
 
     /**
      * Marshalls request data into decimal strings.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed value The value to convert.
      * @return string|null Converted value.
      */
-    Nullable!string marshal($value) {
-        if ($value == null || $value == "") {
+    Nullable!string marshal(value) {
+        if (value == null || value == "") {
             return null;
         }
-        if (is_string($value) && _useLocaleParser) {
-            return _parseValue($value);
+        if (is_string(value) && _useLocaleParser) {
+            return _parseValue(value);
         }
-        if (is_numeric($value)) {
-            return (string)$value;
+        if (is_numeric(value)) {
+            return (string)value;
         }
-        if (is_string($value) && preg_match("/^[0-9,. ]+$/", $value)) {
-            return $value;
+        if (is_string(value) && preg_match("/^[0-9,. ]+/", value)) {
+            return value;
         }
 
         return null;
@@ -126,26 +126,26 @@ class DecimalType : BaseType : BatchCastingInterface
      * Sets whether to parse numbers passed to the marshal() function
      * by using a locale aware parser.
      *
-     * @param bool $enable Whether to enable
+     * @param bool enable Whether to enable
      * @return this
      * @throws \RuntimeException
      */
-    function useLocaleParser(bool $enable = true) {
-        if ($enable == false) {
-            _useLocaleParser = $enable;
+    function useLocaleParser(bool enable = true) {
+        if (enable == false) {
+            _useLocaleParser = enable;
 
             return this;
         }
         if (
-            static::$numberClass == Number::class ||
-            is_subclass_of(static::$numberClass, Number::class)
+            static::numberClass == Number::class ||
+            is_subclass_of(static::numberClass, Number::class)
         ) {
-            _useLocaleParser = $enable;
+            _useLocaleParser = enable;
 
             return this;
         }
         throw new RuntimeException(
-            sprintf("Cannot use locale parsing with the %s class", static::$numberClass)
+            sprintf("Cannot use locale parsing with the %s class", static::numberClass)
         );
     }
 
@@ -156,9 +156,9 @@ class DecimalType : BaseType : BatchCastingInterface
      * @param string aValue The value to parse and convert to an float.
      */
     protected string _parseValue(string aValue) {
-        /** @var uim.I18n\Number $class */
-        $class = static::$numberClass;
+        /** @var uim.I18n\Number class */
+        class = static::numberClass;
 
-        return (string)$class::parseFloat($value);
+        return (string)class::parseFloat(value);
     }
 }

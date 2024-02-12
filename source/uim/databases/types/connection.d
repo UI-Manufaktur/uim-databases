@@ -60,7 +60,7 @@ class Connection : IConnection {
      *
      * @var \Psr\SimpleCache\ICache|null
      */
-    protected $cacher;
+    protected cacher;
 
     /**
      * The schema collection object
@@ -75,7 +75,7 @@ class Connection : IConnection {
      *
      * @var DDBexceptions.NestedTransactionRollbackException|null
      */
-    protected $nestedTransactionRollbackException;
+    protected nestedTransactionRollbackException;
 
     /**
      * Constructor.
@@ -94,14 +94,14 @@ class Connection : IConnection {
     this(Json aConfig = Json(null) {
         _config = aConfig;
 
-        $driverConfig = array_diff_key(aConfig, array_flip([
+        driverConfig = array_diff_key(aConfig, array_flip([
             'name',
             'driver',
             'log',
             'cacheMetaData',
             'cacheKeyPrefix',
         ]));
-        _driver = this.createDriver(aConfig['driver'] ?? '', $driverConfig);
+        _driver = this.createDriver(aConfig['driver'] ?? '', driverConfig);
 
         if (!empty(aConfig['log'])) {
             this.enableQueryLogging((bool)aConfig['log']);
@@ -133,17 +133,17 @@ class Connection : IConnection {
      * Sets the driver instance. If a string is passed it will be treated
      * as a class name and will be instantiated.
      *
-     * @param uim.databases.IDriver|string $driver The driver instance to use.
+     * @param uim.databases.IDriver|string driver The driver instance to use.
      * @param array<string, mixed> aConfig Config for a new driver.
      * @throws uim.databases.exceptions.MissingDriverException When a driver class is missing.
      * @throws uim.databases.exceptions.MissingExtensionException When a driver's D extension is missing.
      * @return this
      * @deprecated 4.4.0 Setting the driver is deprecated. Use the connection config instead.
      */
-    function setDriver($driver, aConfig = null) {
+    function setDriver(driver, aConfig = null) {
         deprecationWarning('Setting the driver is deprecated. Use the connection config instead.');
 
-        _driver = this.createDriver($driver, aConfig);
+        _driver = this.createDriver(driver, aConfig);
 
         return this;
     }
@@ -152,28 +152,28 @@ class Connection : IConnection {
      * Creates driver from name, class name or instance.
      *
      * @param uim.databases.IDriver|string aName Driver name, class name or instance.
-     * @param Json aConfig Driver config if $name is not an instance.
+     * @param Json aConfig Driver config if name is not an instance.
      * @return uim.databases.IDriver
      * @throws uim.databases.exceptions.MissingDriverException When a driver class is missing.
      * @throws uim.databases.exceptions.MissingExtensionException When a driver's D extension is missing.
      */
-    protected function createDriver($name, Json aConfig = Json(null): IDriver
+    protected function createDriver(name, Json aConfig = Json(null): IDriver
     {
-        $driver = $name;
-        if (is_string($driver)) {
-            /** @psalm-var class-string<uim.databases.IDriver>|null $className */
-            $className = App::className($driver, 'Database/Driver');
-            if ($className == null) {
-                throw new MissingDriverException(['driver': $driver, 'connection': this.configName()]);
+        driver = name;
+        if (is_string(driver)) {
+            /** @psalm-var class-string<uim.databases.IDriver>|null className */
+            className = App::className(driver, 'Database/Driver');
+            if (className == null) {
+                throw new MissingDriverException(['driver': driver, 'connection': this.configName()]);
             }
-            $driver = new $className(aConfig);
+            driver = new className(aConfig);
         }
 
-        if (!$driver.enabled()) {
-            throw new MissingExtensionException(['driver': get_class($driver), 'name': this.configName()]);
+        if (!driver.enabled()) {
+            throw new MissingExtensionException(['driver': get_class(driver), 'name': this.configName()]);
         }
 
-        return $driver;
+        return driver;
     }
 
     /**
@@ -206,16 +206,16 @@ class Connection : IConnection {
     bool connect() {
         try {
             return _driver.connect();
-        } catch (MissingConnectionException $e) {
-            throw $e;
-        } catch (Throwable $e) {
+        } catch (MissingConnectionException e) {
+            throw e;
+        } catch (Throwable e) {
             throw new MissingConnectionException(
                 [
                     'driver': App::shortName(get_class(_driver), 'Database/Driver'),
-                    'reason': $e.getMessage(),
+                    'reason': e.getMessage(),
                 ],
                 null,
-                $e
+                e
             );
         }
     }
@@ -237,41 +237,41 @@ class Connection : IConnection {
     /**
      * Prepares a SQL statement to be executed.
      *
-     * @param uim.databases.Query|string $query The SQL to convert into a prepared statement.
+     * @param uim.databases.Query|string query The SQL to convert into a prepared statement.
      * @return uim.databases.IStatement
      */
-    function prepare($query): IStatement
+    function prepare(query): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($query) {
-            $statement = _driver.prepare($query);
+        return this.getDisconnectRetry().run(function () use (query) {
+            statement = _driver.prepare(query);
 
             if (_logQueries) {
-                $statement = _newLogger($statement);
+                statement = _newLogger(statement);
             }
 
-            return $statement;
+            return statement;
         });
     }
 
     /**
-     * Executes a query using $params for interpolating values and $types as a hint for each
+     * Executes a query using params for interpolating values and types as a hint for each
      * those params.
      *
-     * @param string $sql SQL to be executed and interpolated with $params
-     * @param array $params list or associative array of params to be interpolated in $sql as values
-     * @param array $types list or associative array of types to be used for casting values in query
+     * @param string sql SQL to be executed and interpolated with params
+     * @param array params list or associative array of params to be interpolated in sql as values
+     * @param array types list or associative array of types to be used for casting values in query
      * @return uim.databases.IStatement executed statement
      */
-    function execute(string $sql, array $params = null, array $types = null): IStatement
+    function execute(string sql, array params = null, array types = null): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($sql, $params, $types) {
-            $statement = this.prepare($sql);
-            if (!empty($params)) {
-                $statement.bind($params, $types);
+        return this.getDisconnectRetry().run(function () use (sql, params, types) {
+            statement = this.prepare(sql);
+            if (!empty(params)) {
+                statement.bind(params, types);
             }
-            $statement.execute();
+            statement.execute();
 
-            return $statement;
+            return statement;
         });
     }
 
@@ -279,44 +279,44 @@ class Connection : IConnection {
      * Compiles a Query object into a SQL string according to the dialect for this
      * connection's driver
      *
-     * @param uim.databases.Query $query The query to be compiled
+     * @param uim.databases.Query query The query to be compiled
      * @param uim.databases.ValueBinder aBinder Value binder
      */
-    string compileQuery(Query $query, ValueBinder aBinder) {
-        return this.getDriver().compileQuery($query, $binder)[1];
+    string compileQuery(Query query, ValueBinder aBinder) {
+        return this.getDriver().compileQuery(query, binder)[1];
     }
 
     /**
      * Executes the provided query after compiling it for the specific driver
      * dialect and returns the executed Statement object.
      *
-     * @param uim.databases.Query $query The query to be executed
+     * @param uim.databases.Query query The query to be executed
      * @return uim.databases.IStatement executed statement
      */
-    function run(Query $query): IStatement
+    function run(Query query): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($query) {
-            $statement = this.prepare($query);
-            $query.getValueBinder().attachTo($statement);
-            $statement.execute();
+        return this.getDisconnectRetry().run(function () use (query) {
+            statement = this.prepare(query);
+            query.getValueBinder().attachTo(statement);
+            statement.execute();
 
-            return $statement;
+            return statement;
         });
     }
 
     /**
      * Executes a SQL statement and returns the Statement object as result.
      *
-     * @param string $sql The SQL query to execute.
+     * @param string sql The SQL query to execute.
      * @return uim.databases.IStatement
      */
-    function query(string $sql): IStatement
+    function query(string sql): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($sql) {
-            $statement = this.prepare($sql);
-            $statement.execute();
+        return this.getDisconnectRetry().run(function () use (sql) {
+            statement = this.prepare(sql);
+            statement.execute();
 
-            return $statement;
+            return statement;
         });
     }
 
@@ -333,11 +333,11 @@ class Connection : IConnection {
     /**
      * Sets a Schema\Collection object for this connection.
      *
-     * @param uim.databases.Schema\ICollection $collection The schema collection object
+     * @param uim.databases.Schema\ICollection collection The schema collection object
      * @return this
      */
-    function setSchemaCollection(SchemaICollection $collection) {
-        _schemaCollection = $collection;
+    function setSchemaCollection(SchemaICollection collection) {
+        _schemaCollection = collection;
 
         return this;
     }
@@ -367,19 +367,19 @@ class Connection : IConnection {
     /**
      * Executes an INSERT query on the specified table.
      *
-     * @param string $table the table to insert values in
-     * @param array $values values to be inserted
-     * @param array<int|string, string> $types Array containing the types to be used for casting
+     * @param string table the table to insert values in
+     * @param array values values to be inserted
+     * @param array<int|string, string> types Array containing the types to be used for casting
      * @return uim.databases.IStatement
      */
-    function insert(string $table, array $values, array $types = null): IStatement
+    function insert(string table, array values, array types = null): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($table, $values, $types) {
-            $columns = array_keys($values);
+        return this.getDisconnectRetry().run(function () use (table, values, types) {
+            columns = array_keys(values);
 
-            return this.newQuery().insert($columns, $types)
-                .into($table)
-                .values($values)
+            return this.newQuery().insert(columns, types)
+                .into(table)
+                .values(values)
                 .execute();
         });
     }
@@ -387,18 +387,18 @@ class Connection : IConnection {
     /**
      * Executes an UPDATE statement on the specified table.
      *
-     * @param string $table the table to update rows from
-     * @param array $values values to be updated
-     * @param array $conditions conditions to be set for update statement
-     * @param array<string> $types list of associative array containing the types to be used for casting
+     * @param string table the table to update rows from
+     * @param array values values to be updated
+     * @param array conditions conditions to be set for update statement
+     * @param array<string> types list of associative array containing the types to be used for casting
      * @return uim.databases.IStatement
      */
-    function update(string $table, array $values, array $conditions = null, array $types = null): IStatement
+    function update(string table, array values, array conditions = null, array types = null): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($table, $values, $conditions, $types) {
-            return this.newQuery().update($table)
-                .set($values, $types)
-                .where($conditions, $types)
+        return this.getDisconnectRetry().run(function () use (table, values, conditions, types) {
+            return this.newQuery().update(table)
+                .set(values, types)
+                .where(conditions, types)
                 .execute();
         });
     }
@@ -406,16 +406,16 @@ class Connection : IConnection {
     /**
      * Executes a DELETE statement on the specified table.
      *
-     * @param string $table the table to delete rows from
-     * @param array $conditions conditions to be set for delete statement
-     * @param array<string> $types list of associative array containing the types to be used for casting
+     * @param string table the table to delete rows from
+     * @param array conditions conditions to be set for delete statement
+     * @param array<string> types list of associative array containing the types to be used for casting
      * @return uim.databases.IStatement
      */
-    function delete(string $table, array $conditions = null, array $types = null): IStatement
+    function delete(string table, array conditions = null, array types = null): IStatement
     {
-        return this.getDisconnectRetry().run(function () use ($table, $conditions, $types) {
-            return this.newQuery().delete($table)
-                .where($conditions, $types)
+        return this.getDisconnectRetry().run(function () use (table, conditions, types) {
+            return this.newQuery().delete(table)
+                .where(conditions, types)
                 .execute();
         });
     }
@@ -458,10 +458,10 @@ class Connection : IConnection {
 
         if (_transactionLevel == 0) {
             if (this.wasNestedTransactionRolledback()) {
-                /** @var DDBexceptions.NestedTransactionRollbackException $e */
-                $e = this.nestedTransactionRollbackException;
+                /** @var DDBexceptions.NestedTransactionRollbackException e */
+                e = this.nestedTransactionRollbackException;
                 this.nestedTransactionRollbackException = null;
-                throw $e;
+                throw e;
             }
 
             _transactionStarted = false;
@@ -484,19 +484,19 @@ class Connection : IConnection {
     /**
      * Rollback current transaction.
      *
-     * @param bool|null $toBeginning Whether the transaction should be rolled back to the
+     * @param bool|null toBeginning Whether the transaction should be rolled back to the
      * beginning of it. Defaults to false if using savepoints, or true if not.
      */
-    bool rollback(?bool $toBeginning = null) {
+    bool rollback(?bool toBeginning = null) {
         if (!_transactionStarted) {
             return false;
         }
 
-        $useSavePoint = this.isSavePointsEnabled();
-        if ($toBeginning == null) {
-            $toBeginning = !$useSavePoint;
+        useSavePoint = this.isSavePointsEnabled();
+        if (toBeginning == null) {
+            toBeginning = !useSavePoint;
         }
-        if (_transactionLevel == 0 || $toBeginning) {
+        if (_transactionLevel == 0 || toBeginning) {
             _transactionLevel = 0;
             _transactionStarted = false;
             this.nestedTransactionRollbackException = null;
@@ -508,9 +508,9 @@ class Connection : IConnection {
             return true;
         }
 
-        $savePoint = _transactionLevel--;
-        if ($useSavePoint) {
-            this.rollbackSavepoint($savePoint);
+        savePoint = _transactionLevel--;
+        if (useSavePoint) {
+            this.rollbackSavepoint(savePoint);
         } elseif (this.nestedTransactionRollbackException == null) {
             this.nestedTransactionRollbackException = new NestedTransactionRollbackException();
         }
@@ -524,11 +524,11 @@ class Connection : IConnection {
      * If you are trying to enable this feature, make sure you check
      * `isSavePointsEnabled()` to verify that savepoints were enabled successfully.
      *
-     * @param bool $enable Whether save points should be used.
+     * @param bool enable Whether save points should be used.
      * @return this
      */
-    function enableSavePoints(bool $enable = true) {
-        if ($enable == false) {
+    function enableSavePoints(bool enable = true) {
+        if (enable == false) {
             _useSavePoints = false;
         } else {
             _useSavePoints = _driver.supports(IDriver::FEATURE_SAVEPOINT);
@@ -560,31 +560,31 @@ class Connection : IConnection {
     /**
      * Creates a new save point for nested transactions.
      *
-     * @param string|int $name Save point name or id
+     * @param string|int name Save point name or id
      */
-    void createSavePoint($name) {
-        this.execute(_driver.savePointSQL($name)).closeCursor();
+    void createSavePoint(name) {
+        this.execute(_driver.savePointSQL(name)).closeCursor();
     }
 
     /**
      * Releases a save point by its name.
      *
-     * @param string|int $name Save point name or id
+     * @param string|int name Save point name or id
      */
-    void releaseSavePoint($name) {
-        $sql = _driver.releaseSavePointSQL($name);
-        if ($sql) {
-            this.execute($sql).closeCursor();
+    void releaseSavePoint(name) {
+        sql = _driver.releaseSavePointSQL(name);
+        if (sql) {
+            this.execute(sql).closeCursor();
         }
     }
 
     /**
      * Rollback a save point by its name.
      *
-     * @param string|int $name Save point name or id
+     * @param string|int name Save point name or id
      */
-    void rollbackSavepoint($name) {
-        this.execute(_driver.rollbackSavePointSQL($name)).closeCursor();
+    void rollbackSavepoint(name) {
+        this.execute(_driver.rollbackSavePointSQL(name)).closeCursor();
     }
 
     /**
@@ -617,17 +617,17 @@ class Connection : IConnection {
     }
 
 
-    function transactional(callable $callback) {
+    function transactional(callable callback) {
         this.begin();
 
         try {
-            $result = $callback(this);
-        } catch (Throwable $e) {
+            result = callback(this);
+        } catch (Throwable e) {
             this.rollback(false);
-            throw $e;
+            throw e;
         }
 
-        if ($result == false) {
+        if (result == false) {
             this.rollback(false);
 
             return false;
@@ -635,12 +635,12 @@ class Connection : IConnection {
 
         try {
             this.commit();
-        } catch (NestedTransactionRollbackException $e) {
+        } catch (NestedTransactionRollbackException e) {
             this.rollback(false);
-            throw $e;
+            throw e;
         }
 
-        return $result;
+        return result;
     }
 
     /**
@@ -651,17 +651,17 @@ class Connection : IConnection {
     }
 
 
-    function disableConstraints(callable $callback) {
-        return this.getDisconnectRetry().run(function () use ($callback) {
+    function disableConstraints(callable callback) {
+        return this.getDisconnectRetry().run(function () use (callback) {
             this.disableForeignKeys();
 
             try {
-                $result = $callback(this);
+                result = callback(this);
             } finally {
                 this.enableForeignKeys();
             }
 
-            return $result;
+            return result;
         });
     }
 
@@ -679,14 +679,14 @@ class Connection : IConnection {
      *
      * This uses `PDO::quote()` and requires `supportsQuoting()` to work.
      *
-     * @param mixed $value The value to quote.
-     * @param uim.databases.TypeInterface|string|int $type Type to be used for determining kind of quoting to perform
+     * @param mixed value The value to quote.
+     * @param uim.databases.TypeInterface|string|int type Type to be used for determining kind of quoting to perform
      * @return string Quoted value
      */
-    string quote($value, $type = 'string') {
-        [$value, $type] = this.cast($value, $type);
+    string quote(value, type = 'string') {
+        [value, type] = this.cast(value, type);
 
-        return _driver.quote($value, $type);
+        return _driver.quote(value, type);
     }
 
     /**
@@ -704,10 +704,10 @@ class Connection : IConnection {
      *
      * This does not require `supportsQuoting()` to work.
      *
-     * @param string $identifier The identifier to quote.
+     * @param string identifier The identifier to quote.
      */
-    string quoteIdentifier(string $identifier) {
-        return _driver.quoteIdentifier($identifier);
+    string quoteIdentifier(string identifier) {
+        return _driver.quoteIdentifier(identifier);
     }
 
     /**
@@ -715,20 +715,20 @@ class Connection : IConnection {
      *
      * Changing this setting will not modify existing schema collections objects.
      *
-     * @param string|bool $cache Either boolean false to disable metadata caching, or
+     * @param string|bool cache Either boolean false to disable metadata caching, or
      *   true to use `_cake_model_` or the name of the cache config to use.
      */
-    void cacheMetadata($cache) {
+    void cacheMetadata(cache) {
         _schemaCollection = null;
-        _config['cacheMetadata'] = $cache;
-        if (is_string($cache)) {
+        _config['cacheMetadata'] = cache;
+        if (is_string(cache)) {
             this.cacher = null;
         }
     }
 
 
-    function setCacher(ICache $cacher) {
-        this.cacher = $cacher;
+    function setCacher(ICache cacher) {
+        this.cacher = cacher;
 
         return this;
     }
@@ -740,9 +740,9 @@ class Connection : IConnection {
             return this.cacher;
         }
 
-        $configName = _config['cacheMetadata'] ?? '_cake_model_';
-        if (!is_string($configName)) {
-            $configName = '_cake_model_';
+        configName = _config['cacheMetadata'] ?? '_cake_model_';
+        if (!is_string(configName)) {
+            configName = '_cake_model_';
         }
 
         if (!class_exists(Cache::class)) {
@@ -752,17 +752,17 @@ class Connection : IConnection {
             );
         }
 
-        return this.cacher = Cache::pool($configName);
+        return this.cacher = Cache::pool(configName);
     }
 
     /**
      * Enable/disable query logging
      *
-     * @param bool $enable Enable/disable query logging
+     * @param bool enable Enable/disable query logging
      * @return this
      */
-    function enableQueryLogging(bool $enable = true) {
-        _logQueries = $enable;
+    function enableQueryLogging(bool enable = true) {
+        _logQueries = enable;
 
         return this;
     }
@@ -788,12 +788,12 @@ class Connection : IConnection {
     /**
      * Sets a logger
      *
-     * @param \Psr\logs.LoggerInterface $logger Logger object
+     * @param \Psr\logs.LoggerInterface logger Logger object
      * @return this
      * @psalm-suppress ImplementedReturnTypeMismatch
      */
-    function setLogger(LoggerInterface $logger) {
-        _logger = $logger;
+    function setLogger(LoggerInterface logger) {
+        _logger = logger;
 
         return this;
     }
@@ -822,27 +822,27 @@ class Connection : IConnection {
     /**
      * Logs a Query string using the configured logger object.
      *
-     * @param string $sql string to be logged
+     * @param string sql string to be logged
      */
-    void log(string $sql) {
-        $query = new LoggedQuery();
-        $query.query = $sql;
-        this.getLogger().debug((string)$query, ['query': $query]);
+    void log(string sql) {
+        query = new LoggedQuery();
+        query.query = sql;
+        this.getLogger().debug((string)query, ['query': query]);
     }
 
     /**
      * Returns a new statement object that will log the activity
      * for the passed original statement instance.
      *
-     * @param uim.databases.IStatement $statement the instance to be decorated
+     * @param uim.databases.IStatement statement the instance to be decorated
      * @return uim.databases.logs.LoggingStatement
      */
-    protected function _newLogger(IStatement $statement): LoggingStatement
+    protected function _newLogger(IStatement statement): LoggingStatement
     {
-        $log = new LoggingStatement($statement, _driver);
-        $log.setLogger(this.getLogger());
+        log = new LoggingStatement(statement, _driver);
+        log.setLogger(this.getLogger());
 
-        return $log;
+        return log;
     }
 
     /**
@@ -852,15 +852,15 @@ class Connection : IConnection {
      * @return array<string, mixed>
      */
     array __debugInfo() {
-        $secrets = [
+        secrets = [
             'password': '*****',
             'username': '*****',
             'host': '*****',
             'database': '*****',
             'port': '*****',
         ];
-        $replace = array_intersect_key($secrets, _config);
-        aConfig = $replace + _config;
+        replace = array_intersect_key(secrets, _config);
+        aConfig = replace + _config;
 
         return [
             'config': aConfig,

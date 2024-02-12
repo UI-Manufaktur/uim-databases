@@ -18,30 +18,30 @@ trait ExpressionTypeCasterTrait
      * if the type class : the ExpressionTypeInterface. Otherwise,
      * returns the value unmodified.
      *
-     * @param mixed $value The value to convert to IDBAExpression
-     * @param string|null $type The type name
+     * @param mixed value The value to convert to IDBAExpression
+     * @param string|null type The type name
      * @return mixed
      */
-    protected function _castToExpression($value, Nullable!string $type = null) {
-        if ($type == null) {
-            return $value;
+    protected function _castToExpression(value, Nullable!string type = null) {
+        if (type == null) {
+            return value;
         }
 
-        $baseType = replace("[]", "", $type);
-        $converter = TypeFactory::build($baseType);
+        baseType = replace("[]", "", type);
+        converter = TypeFactory::build(baseType);
 
-        if (!$converter instanceof ExpressionTypeInterface) {
-            return $value;
+        if (!converter instanceof ExpressionTypeInterface) {
+            return value;
         }
 
-        $multi = $type != $baseType;
+        multi = type != baseType;
 
-        if ($multi) {
-            /** @var DDBtypes.ExpressionTypeInterface $converter */
-            return array_map([$converter, "toExpression"], $value);
+        if (multi) {
+            /** @var DDBtypes.ExpressionTypeInterface converter */
+            return array_map([converter, "toExpression"], value);
         }
 
-        return $converter.toExpression($value);
+        return converter.toExpression(value);
     }
 
     /**
@@ -49,18 +49,18 @@ trait ExpressionTypeCasterTrait
      * be casted to expressions, out of the list of type names
      * passed as parameter.
      *
-     * @param array $types List of type names
+     * @param array types List of type names
      */
-    protected array _requiresToExpressionCasting(array $types) {
-        $result = null;
-        $types = array_filter($types);
-        foreach ($types as $k: $type) {
-            $object = TypeFactory::build($type);
-            if ($object instanceof ExpressionTypeInterface) {
-                $result[$k] = $object;
+    protected array _requiresToExpressionCasting(array types) {
+        result = null;
+        types = array_filter(types);
+        foreach (types as k: type) {
+            object = TypeFactory::build(type);
+            if (object instanceof ExpressionTypeInterface) {
+                result[k] = object;
             }
         }
 
-        return $result;
+        return result;
     }
 }

@@ -48,12 +48,12 @@ class FloatType : BaseType, IBatchCasting {
 
   function manytoD(array someValues, array someFields, IDBADriver aDriver): array
   {
-      foreach (someFields as $field) {
-          if (!isset(someValues[$field])) {
+      foreach (someFields as field) {
+          if (!isset(someValues[field])) {
               continue;
           }
 
-          someValues[$field] = (float)someValues[$field];
+          someValues[field] = (float)someValues[field];
       }
 
       return someValues;
@@ -88,7 +88,7 @@ class FloatType : BaseType, IBatchCasting {
       if (isNumeric(DValue aValue)) {
           return (float)aValue;
       }
-      if (is_string(DValue aValue) && preg_match("/^[0-9,. ]+$/", DValue aValue)) {
+      if (is_string(DValue aValue) && preg_match("/^[0-9,. ]+/", DValue aValue)) {
           return aValue;
       }
 
@@ -131,8 +131,8 @@ class FloatType : BaseType, IBatchCasting {
     * @return float
     */
   protected float _parseValue(string aValue) {
-      $class = static::_numberClass;
+      class = static::_numberClass;
 
-      return $class::parseFloat(DValue aValue);
+      return class::parseFloat(DValue aValue);
   }
 }

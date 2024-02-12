@@ -60,7 +60,7 @@ class DDBSTypeFactory {
 
     // Set IType instance capable of converting a type identified by myName
     // myName The type identifier you want to set.
-    // uim.databases.IType $instance The type instance you want to set.
+    // uim.databases.IType instance The type instance you want to set.
     static void set(string myName, IType typeInstance) {
         static._builtTypes[myName] = typeInstance;
         static._types[myName] = get_class(typeInstance);
@@ -81,11 +81,11 @@ class DDBSTypeFactory {
     /**
      * Set type to classname mapping.
      *
-     * @param $map List of types to be mapped.
-     * @psalm-param array<string, class-string<uim.databases.IType>> $map
+     * @param map List of types to be mapped.
+     * @psalm-param array<string, class-string<uim.databases.IType>> map
      */
-    static void setMap(string[] $map) {
-        static._types = $map;
+    static void setMap(string[] map) {
+        static._types = map;
         static._builtTypes = [];
     }
 

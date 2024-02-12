@@ -20,8 +20,8 @@ interface ExpressionTypeInterface
      * Returns an IDBAExpression object for the given value that can
      * be used in queries.
      *
-     * @param mixed $value The value to be converted to an expression
+     * @param mixed value The value to be converted to an expression
      * @return uim.databases.IDBAExpression
      */
-    function toExpression($value): IDBAExpression;
+    function toExpression(value): IDBAExpression;
 }
