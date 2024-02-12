@@ -164,10 +164,10 @@ interface ITableSchema : SchemaInterface
     /**
      * Sets whether the table is temporary in the database.
      *
-     * @param bool $temporary Whether the table is to be temporary.
+     * @param bool temporary Whether the table is to be temporary.
      * @return this
      */
-    function setTemporary(bool $temporary);
+    function setTemporary(bool temporary);
 
     /**
      * Gets whether the table is temporary in the database.
@@ -195,21 +195,21 @@ interface ITableSchema : SchemaInterface
      * - `type` The type of index being added.
      * - `columns` The columns in the index.
      *
-     * @param string $name The name of the index.
-     * @param array<string, mixed>|string $attrs The attributes for the index.
+     * @param string name The name of the index.
+     * @param array<string, mixed>|string attrs The attributes for the index.
      *   If string it will be used as `type`.
      * @return this
      * @throws uim.databases.Exception\DatabaseException
      */
-    function addIndex(string $name, $attrs);
+    function addIndex(string name, attrs);
 
     /**
      * Read information about an index based on name.
      *
-     * @param string $name The name of the index.
+     * @param string name The name of the index.
      * @return array<string, mixed>|null Array of index data, or null
      */
-    function getIndex(string $name): ?array;
+    function getIndex(string name): ?array;
 
     /**
      * Get the names of all the indexes in the table.
@@ -234,29 +234,29 @@ interface ITableSchema : SchemaInterface
      *
      * The default for "update" & "delete" is "cascade".
      *
-     * @param string $name The name of the constraint.
-     * @param array<string, mixed>|string $attrs The attributes for the constraint.
+     * @param string name The name of the constraint.
+     * @param array<string, mixed>|string attrs The attributes for the constraint.
      *   If string it will be used as `type`.
      * @return this
      * @throws uim.databases.Exception\DatabaseException
      */
-    function addConstraint(string $name, $attrs);
+    function addConstraint(string name, attrs);
 
     /**
      * Read information about a constraint based on name.
      *
-     * @param string $name The name of the constraint.
+     * @param string name The name of the constraint.
      * @return array<string, mixed>|null Array of constraint data, or null
      */
-    function getConstraint(string $name): ?array;
+    function getConstraint(string name): ?array;
 
     /**
      * Remove a constraint.
      *
-     * @param string $name Name of the constraint to remove
+     * @param string name Name of the constraint to remove
      * @return this
      */
-    function dropConstraint(string $name);
+    function dropConstraint(string name);
 
     /**
      * Get the names of all the constraints in the table.

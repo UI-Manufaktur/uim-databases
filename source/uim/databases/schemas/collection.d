@@ -35,12 +35,12 @@ class Collection : CollectionInterface
     /**
      * Constructor.
      *
-     * @param DDBAConnection $connection The connection instance.
+     * @param DDBAConnection connection The connection instance.
      */
-    public this(Connection $connection)
+    public this(Connection connection)
     {
-        this._connection = $connection;
-        this._dialect = $connection.getDriver().schemaDialect();
+        this._connection = connection;
+        this._dialect = connection.getDriver().schemaDialect();
     }
 
     /**
@@ -50,15 +50,15 @@ class Collection : CollectionInterface
      */
     function listTablesWithoutViews(): array
     {
-        [mySql, $params] = this._dialect.listTablesWithoutViewsSql(this._connection.config());
-        $result = [];
-        $statement = this._connection.execute(mySql, $params);
-        while (aRow = $statement.fetch()) {
-            $result[] = aRow[0];
+        [mySql, params] = this._dialect.listTablesWithoutViewsSql(this._connection.config());
+        result = [];
+        statement = this._connection.execute(mySql, params);
+        while (aRow = statement.fetch()) {
+            result[] = aRow[0];
         }
-        $statement.closeCursor();
+        statement.closeCursor();
 
-        return $result;
+        return result;
     }
 
     /**
@@ -68,15 +68,15 @@ class Collection : CollectionInterface
      */
     function listTables(): array
     {
-        [mySql, $params] = this._dialect.listTablesSql(this._connection.config());
-        $result = [];
-        $statement = this._connection.execute(mySql, $params);
-        while (aRow = $statement.fetch()) {
-            $result[] = aRow[0];
+        [mySql, params] = this._dialect.listTablesSql(this._connection.config());
+        result = [];
+        statement = this._connection.execute(mySql, params);
+        while (aRow = statement.fetch()) {
+            result[] = aRow[0];
         }
-        $statement.closeCursor();
+        statement.closeCursor();
 
-        return $result;
+        return result;
     }
 
     /**
@@ -92,37 +92,37 @@ class Collection : CollectionInterface
      * - `forceRefresh` - Set to true to force rebuilding the cached metadata.
      *   Defaults to false.
      *
-     * @param string $name The name of the table to describe.
-     * @param array<string, mixed> $options The options to use, see above.
+     * @param string name The name of the table to describe.
+     * @param array<string, mixed> options The options to use, see above.
      * @return uim.databases.Schema\TableSchema Object with column metadata.
      * @throws uim.databases.Exception\DatabaseException when table cannot be described.
      */
-    function describe(string $name, array $options = []): ITableSchema
+    function describe(string name, array options = []): ITableSchema
     {
-        $config = this._connection.config();
-        if (strpos($name, ".")) {
-            [$config["schema"], $name] = explode(".", $name);
+        config = this._connection.config();
+        if (strpos(name, ".")) {
+            [config["schema"], name] = explode(".", name);
         }
-        $table = this._connection.getDriver().newTableSchema($name);
+        table = this._connection.getDriver().newTableSchema(name);
 
-        this._reflect("Column", $name, $config, $table);
-        if (count($table.columns()) == 0) {
-            throw new DatabaseException(sprintf("Cannot describe %s. It has 0 columns.", $name));
+        this._reflect("Column", name, config, table);
+        if (count(table.columns()) == 0) {
+            throw new DatabaseException(sprintf("Cannot describe %s. It has 0 columns.", name));
         }
 
-        this._reflect("Index", $name, $config, $table);
-        this._reflect("ForeignKey", $name, $config, $table);
-        this._reflect("Options", $name, $config, $table);
+        this._reflect("Index", name, config, table);
+        this._reflect("ForeignKey", name, config, table);
+        this._reflect("Options", name, config, table);
 
-        return $table;
+        return table;
     }
 
     /**
      * Helper method for running each step of the reflection process.
      *
-     * @param string $stage The stage name.
-     * @param string $name The table name.
-     * @param array<string, mixed> $config The config data.
+     * @param string stage The stage name.
+     * @param string name The table name.
+     * @param array<string, mixed> config The config data.
      * @param uim.databases.Schema\TableSchema aSchema The table schema instance.
      * @return void
      * @throws uim.databases.Exception\DatabaseException on query failure.
@@ -135,24 +135,24 @@ class Collection : CollectionInterface
      * @uses uim.databases.Schema\SchemaDialect::convertForeignKeyDescription
      * @uses uim.databases.Schema\SchemaDialect::convertOptionsDescription
      */
-    protected function _reflect(string $stage, string $name, array aConfig, TableSchema aSchema): void
+    protected function _reflect(string stage, string name, array aConfig, TableSchema aSchema): void
     {
-        $describeMethod = "describe{$stage}Sql";
-        $convertMethod = "convert{$stage}Description";
+        describeMethod = "describe{stage}Sql";
+        convertMethod = "convert{stage}Description";
 
-        [mySql, $params] = this._dialect.{$describeMethod}($name, $config);
+        [mySql, params] = this._dialect.{describeMethod}(name, config);
         if (empty(mySql)) {
             return;
         }
         try {
-            $statement = this._connection.execute(mySql, $params);
-        } catch (PDOException $e) {
-            throw new DatabaseException($e.getMessage(), 500, $e);
+            statement = this._connection.execute(mySql, params);
+        } catch (PDOException e) {
+            throw new DatabaseException(e.getMessage(), 500, e);
         }
         /** @psalm-suppress PossiblyFalseIterator */
-        foreach ($statement.fetchAll("assoc") as aRow) {
-            this._dialect.{$convertMethod}($schema, aRow);
+        foreach (statement.fetchAll("assoc") as aRow) {
+            this._dialect.{convertMethod}(schema, aRow);
         }
-        $statement.closeCursor();
+        statement.closeCursor();
     }
 }

@@ -27,14 +27,14 @@ class SqlserverSchemaDialect : SchemaDialect
      * @return array An array of (sql, params) to execute.
      */
     array listTablesSql(Json aConfig = Json(null) {
-        $sql = "SELECT TABLE_NAME
+        sql = "SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
             WHERE TABLE_SCHEMA = ?
             AND (TABLE_TYPE = "BASE TABLE" OR TABLE_TYPE = "VIEW")
             ORDER BY TABLE_NAME";
-        $schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
+        schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
 
-        return [$sql, [$schema]];
+        return [sql, [schema]];
     }
 
     /**
@@ -45,19 +45,19 @@ class SqlserverSchemaDialect : SchemaDialect
      * @return array<mixed> An array of (sql, params) to execute.
      */
     array listTablesWithoutViewsSql(Json aConfig = Json(null) {
-        $sql = "SELECT TABLE_NAME
+        sql = "SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
             WHERE TABLE_SCHEMA = ?
             AND (TABLE_TYPE = "BASE TABLE")
             ORDER BY TABLE_NAME";
-        $schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
+        schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
 
-        return [$sql, [$schema]];
+        return [sql, [schema]];
     }
 
 
-    array describeColumnSql(string $tableName, Json aConfig = Json(null) {
-        $sql = "SELECT DISTINCT
+    array describeColumnSql(string tableName, Json aConfig = Json(null) {
+        sql = "SELECT DISTINCT
             AC.column_id AS [column_id],
             AC.name AS [name],
             TY.name AS [type],
@@ -75,9 +75,9 @@ class SqlserverSchemaDialect : SchemaDialect
             WHERE T.[name] = ? AND S.[name] = ?
             ORDER BY column_id";
 
-        $schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
+        schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
 
-        return [$sql, [$tableName, $schema]];
+        return [sql, [tableName, schema]];
     }
 
     /**
@@ -86,107 +86,107 @@ class SqlserverSchemaDialect : SchemaDialect
      * The returned type will be a type that
      * Cake\databases.TypeFactory  can handle.
      *
-     * @param string $col The column type
-     * @param int|null $length the column length
-     * @param int|null $precision The column precision
-     * @param int|null $scale The column scale
+     * @param string col The column type
+     * @param int|null length the column length
+     * @param int|null precision The column precision
+     * @param int|null scale The column scale
      * @return array<string, mixed> Array of column information.
      * @link https://technet.microsoft.com/en-us/library/ms187752.aspx
      */
     protected array _convertColumn(
-        string $col,
-        Nullable!int $length = null,
-        Nullable!int $precision = null,
-        Nullable!int $scale = null
+        string col,
+        Nullable!int length = null,
+        Nullable!int precision = null,
+        Nullable!int scale = null
     ) {
-        $col = strtolower($col);
+        col = strtolower(col);
 
-        $type = _applyTypeSpecificColumnConversion(
-            $col,
+        type = _applyTypeSpecificColumnConversion(
+            col,
             compact("length", "precision", "scale")
         );
-        if ($type != null) {
-            return $type;
+        if (type != null) {
+            return type;
         }
 
-        if (hasAllValues($col, ["date", "time"])) {
-            return ["type": $col, "length": null];
+        if (hasAllValues(col, ["date", "time"])) {
+            return ["type": col, "length": null];
         }
 
-        if ($col == "datetime") {
+        if (col == "datetime") {
             // datetime cannot parse more than 3 digits of precision and isn"t accurate
             return ["type": TableTypes.DATETIME, "length": null];
         }
-        if (strpos($col, "datetime") != false) {
-            $typeName = TableTypes.DATETIME;
-            if ($scale > 0) {
-                $typeName = TableTypes.DATETIME_FRACTIONAL;
+        if (strpos(col, "datetime") != false) {
+            typeName = TableTypes.DATETIME;
+            if (scale > 0) {
+                typeName = TableTypes.DATETIME_FRACTIONAL;
             }
 
-            return ["type": $typeName, "length": null, "precision": $scale];
+            return ["type": typeName, "length": null, "precision": scale];
         }
 
-        if ($col == "char") {
-            return ["type": TableTypes.CHAR, "length": $length];
+        if (col == "char") {
+            return ["type": TableTypes.CHAR, "length": length];
         }
 
-        if ($col == "tinyint") {
-            return ["type": TableTypes.TINYINTEGER, "length": $precision ?: 3];
+        if (col == "tinyint") {
+            return ["type": TableTypes.TINYINTEGER, "length": precision ?: 3];
         }
-        if ($col == "smallint") {
-            return ["type": TableTypes.SMALLINTEGER, "length": $precision ?: 5];
+        if (col == "smallint") {
+            return ["type": TableTypes.SMALLINTEGER, "length": precision ?: 5];
         }
-        if ($col == "int" || $col == "integer") {
-            return ["type": TableTypes.INTEGER, "length": $precision ?: 10];
+        if (col == "int" || col == "integer") {
+            return ["type": TableTypes.INTEGER, "length": precision ?: 10];
         }
-        if ($col == "bigint") {
-            return ["type": TableTypes.BIGINTEGER, "length": $precision ?: 20];
+        if (col == "bigint") {
+            return ["type": TableTypes.BIGINTEGER, "length": precision ?: 20];
         }
-        if ($col == "bit") {
+        if (col == "bit") {
             return ["type": TableTypes.BOOLEAN, "length": null];
         }
         if (
-            strpos($col, "numeric") != false ||
-            strpos($col, "money") != false ||
-            strpos($col, "decimal") != false
+            strpos(col, "numeric") != false ||
+            strpos(col, "money") != false ||
+            strpos(col, "decimal") != false
         ) {
-            return ["type": TableTypes.DECIMAL, "length": $precision, "precision": $scale];
+            return ["type": TableTypes.DECIMAL, "length": precision, "precision": scale];
         }
 
-        if ($col == "real" || $col == "float") {
+        if (col == "real" || col == "float") {
             return ["type": TableTypes.FLOAT, "length": null];
         }
         // SqlServer schema reflection returns double length for unicode
         // columns because internally it uses UTF16/UCS2
-        if ($col == "nvarchar" || $col == "nchar" || $col == "ntext") {
-            $length /= 2;
+        if (col == "nvarchar" || col == "nchar" || col == "ntext") {
+            length /= 2;
         }
-        if (strpos($col, "varchar") != false && $length < 0) {
+        if (strpos(col, "varchar") != false && length < 0) {
             return ["type": TableTypes.TEXT, "length": null];
         }
 
-        if (strpos($col, "varchar") != false) {
-            return ["type": TableTypes.STRING, "length": $length ?: 255];
+        if (strpos(col, "varchar") != false) {
+            return ["type": TableTypes.STRING, "length": length ?: 255];
         }
 
-        if (strpos($col, "char") != false) {
-            return ["type": TableTypes.CHAR, "length": $length];
+        if (strpos(col, "char") != false) {
+            return ["type": TableTypes.CHAR, "length": length];
         }
 
-        if (strpos($col, "text") != false) {
+        if (strpos(col, "text") != false) {
             return ["type": TableTypes.TEXT, "length": null];
         }
 
-        if ($col == "image" || strpos($col, "binary") != false) {
+        if (col == "image" || strpos(col, "binary") != false) {
             // -1 is the value for MAX which we treat as a "long" binary
-            if ($length == -1) {
-                $length = TableSchema::LENGTH_LONG;
+            if (length == -1) {
+                length = TableSchema::LENGTH_LONG;
             }
 
-            return ["type": TableTypes.BINARY, "length": $length];
+            return ["type": TableTypes.BINARY, "length": length];
         }
 
-        if ($col == "uniqueidentifier") {
+        if (col == "uniqueidentifier") {
             return ["type": TableTypes.UUID];
         }
 
@@ -194,24 +194,24 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    void convertColumnDescription(TableSchema $schema, array $row) {
-        $field = _convertColumn(
-            $row["type"],
-            $row["char_length"] != null ? (int)$row["char_length"] : null,
-            $row["precision"] != null ? (int)$row["precision"] : null,
-            $row["scale"] != null ? (int)$row["scale"] : null
+    void convertColumnDescription(TableSchema schema, array row) {
+        field = _convertColumn(
+            row["type"],
+            row["char_length"] != null ? (int)row["char_length"] : null,
+            row["precision"] != null ? (int)row["precision"] : null,
+            row["scale"] != null ? (int)row["scale"] : null
         );
 
-        if (!empty($row["autoincrement"])) {
-            $field["autoIncrement"] = true;
+        if (!empty(row["autoincrement"])) {
+            field["autoIncrement"] = true;
         }
 
-        $field += [
-            "null": $row["null"] == "1",
-            "default": _defaultValue($field["type"], $row["default"]),
-            "collate": $row["collation_name"],
+        field += [
+            "null": row["null"] == "1",
+            "default": _defaultValue(field["type"], row["default"]),
+            "collate": row["collation_name"],
         ];
-        $schema.addColumn($row["name"], $field);
+        schema.addColumn(row["name"], field);
     }
 
     /**
@@ -220,40 +220,40 @@ class SqlserverSchemaDialect : SchemaDialect
      * Removes () wrapping default values, extracts strings from
      * N"" wrappers and collation text and converts NULL strings.
      *
-     * @param string $type The schema type
-     * @param string|null $default The default value.
+     * @param string type The schema type
+     * @param string|null default The default value.
      * @return string|int|null
      */
-    protected function _defaultValue($type, $default) {
-        if ($default == null) {
+    protected function _defaultValue(type, default) {
+        if (default == null) {
             return null;
         }
 
         // remove () surrounding value (NULL) but leave () at the end of functions
         // integers might have two ((0)) wrapping value
-        if (preg_match("/^\(+(.*?(\(\))?)\)+$/", $default, $matches)) {
-            $default = $matches[1];
+        if (preg_match("/^\(+(.*?(\(\))?)\)+/", default, matches)) {
+            default = matches[1];
         }
 
-        if ($default == "NULL") {
+        if (default == "NULL") {
             return null;
         }
 
-        if ($type == TableTypes.BOOLEAN) {
-            return (int)$default;
+        if (type == TableTypes.BOOLEAN) {
+            return (int)default;
         }
 
         // Remove quotes
-        if (preg_match("/^\(?N?"(.*)"\)?/", $default, $matches)) {
-            return replace("""", """, $matches[1]);
+        if (preg_match("/^\(?N?"(.*)"\)?/", default, matches)) {
+            return replace("""", """, matches[1]);
         }
 
-        return $default;
+        return default;
     }
 
 
-    array describeIndexSql(string $tableName, Json aConfig = Json(null) {
-        $sql = "SELECT
+    array describeIndexSql(string tableName, Json aConfig = Json(null) {
+        sql = "SELECT
                 I.[name] AS [index_name],
                 IC.[index_column_id] AS [index_order],
                 AC.[name] AS [column_name],
@@ -267,51 +267,51 @@ class SqlserverSchemaDialect : SchemaDialect
             WHERE T.[is_ms_shipped] = 0 AND I.[type_desc] <> "HEAP" AND T.[name] = ? AND S.[name] = ?
             ORDER BY I.[index_id], IC.[index_column_id]";
 
-        $schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
+        schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
 
-        return [$sql, [$tableName, $schema]];
+        return [sql, [tableName, schema]];
     }
 
 
-    void convertIndexDescription(TableSchema $schema, array $row) {
-        $type = TableSchema::INDEX_INDEX;
-        $name = $row["index_name"];
-        if ($row["is_primary_key"]) {
-            $name = $type = TableSchema::CONSTRAINT_PRIMARY;
+    void convertIndexDescription(TableSchema schema, array row) {
+        type = TableSchema::INDEX_INDEX;
+        name = row["index_name"];
+        if (row["is_primary_key"]) {
+            name = type = TableSchema::CONSTRAINT_PRIMARY;
         }
-        if ($row["is_unique_constraint"] && $type == TableSchema::INDEX_INDEX) {
-            $type = TableSchema::CONSTRAINT_UNIQUE;
+        if (row["is_unique_constraint"] && type == TableSchema::INDEX_INDEX) {
+            type = TableSchema::CONSTRAINT_UNIQUE;
         }
 
-        if ($type == TableSchema::INDEX_INDEX) {
-            $existing = $schema.getIndex($name);
+        if (type == TableSchema::INDEX_INDEX) {
+            existing = schema.getIndex(name);
         } else {
-            $existing = $schema.getConstraint($name);
+            existing = schema.getConstraint(name);
         }
 
-        $columns = [$row["column_name"]];
-        if (!empty($existing)) {
-            $columns = array_merge($existing["columns"], $columns);
+        columns = [row["column_name"]];
+        if (!empty(existing)) {
+            columns = array_merge(existing["columns"], columns);
         }
 
-        if ($type == TableSchema::CONSTRAINT_PRIMARY || $type == TableSchema::CONSTRAINT_UNIQUE) {
-            $schema.addConstraint($name, [
-                "type": $type,
-                "columns": $columns,
+        if (type == TableSchema::CONSTRAINT_PRIMARY || type == TableSchema::CONSTRAINT_UNIQUE) {
+            schema.addConstraint(name, [
+                "type": type,
+                "columns": columns,
             ]);
 
             return;
         }
-        $schema.addIndex($name, [
-            "type": $type,
-            "columns": $columns,
+        schema.addIndex(name, [
+            "type": type,
+            "columns": columns,
         ]);
     }
 
 
-    array describeForeignKeySql(string $tableName, Json aConfig = Json(null) {
+    array describeForeignKeySql(string tableName, Json aConfig = Json(null) {
         // phpcs:disable Generic.Files.LineLength
-        $sql = "SELECT FK.[name] AS [foreign_key_name], FK.[delete_referential_action_desc] AS [delete_type],
+        sql = "SELECT FK.[name] AS [foreign_key_name], FK.[delete_referential_action_desc] AS [delete_type],
                 FK.[update_referential_action_desc] AS [update_type], C.name AS [column], RT.name AS [reference_table],
                 RC.name AS [reference_column]
             FROM sys.foreign_keys FK
@@ -325,34 +325,34 @@ class SqlserverSchemaDialect : SchemaDialect
             ORDER BY FKC.constraint_column_id";
         // phpcs:enable Generic.Files.LineLength
 
-        $schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
+        schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
 
-        return [$sql, [$tableName, $schema]];
+        return [sql, [tableName, schema]];
     }
 
 
-    void convertForeignKeyDescription(TableSchema $schema, array $row) {
-        $data = [
+    void convertForeignKeyDescription(TableSchema schema, array row) {
+        data = [
             "type": TableSchema::CONSTRAINT_FOREIGN,
-            "columns": [$row["column"]],
-            "references": [$row["reference_table"], $row["reference_column"]],
-            "update": _convertOnClause($row["update_type"]),
-            "delete": _convertOnClause($row["delete_type"]),
+            "columns": [row["column"]],
+            "references": [row["reference_table"], row["reference_column"]],
+            "update": _convertOnClause(row["update_type"]),
+            "delete": _convertOnClause(row["delete_type"]),
         ];
-        $name = $row["foreign_key_name"];
-        $schema.addConstraint($name, $data);
+        name = row["foreign_key_name"];
+        schema.addConstraint(name, data);
     }
 
 
-    protected string _foreignOnClause(string $on) {
-        $parent = super._foreignOnClause($on);
+    protected string _foreignOnClause(string on) {
+        parent = super._foreignOnClause(on);
 
-        return $parent == "RESTRICT" ? super._foreignOnClause(TableSchema::ACTION_NO_ACTION) : $parent;
+        return parent == "RESTRICT" ? super._foreignOnClause(TableSchema::ACTION_NO_ACTION) : parent;
     }
 
 
-    protected string _convertOnClause(string $clause) {
-        switch ($clause) {
+    protected string _convertOnClause(string clause) {
+        switch (clause) {
             case "NO_ACTION":
                 return TableSchema::ACTION_NO_ACTION;
             case "CASCADE":
@@ -367,17 +367,17 @@ class SqlserverSchemaDialect : SchemaDialect
     }
 
 
-    string columnSql(TableSchema $schema, string aName) {
-        /** @var array $data */
-        $data = $schema.getColumn($name);
+    string columnSql(TableSchema schema, string aName) {
+        /** @var array data */
+        data = schema.getColumn(name);
 
-        $sql = _getTypeSpecificColumnSql($data["type"], $schema, $name);
-        if ($sql != null) {
-            return $sql;
+        sql = _getTypeSpecificColumnSql(data["type"], schema, name);
+        if (sql != null) {
+            return sql;
         }
 
-        $out = _driver.quoteIdentifier($name);
-        $typeMap = [
+        out = _driver.quoteIdentifier(name);
+        typeMap = [
             TableTypes.TINYINTEGER: " TINYINT",
             TableTypes.SMALLINTEGER: " SMALLINT",
             TableTypes.INTEGER: " INTEGER",
@@ -398,91 +398,91 @@ class SqlserverSchemaDialect : SchemaDialect
             TableTypes.JSON: " NVARCHAR(MAX)",
         ];
 
-        if (isset($typeMap[$data["type"]])) {
-            $out ~= $typeMap[$data["type"]];
+        if (isset(typeMap[data["type"]])) {
+            out ~= typeMap[data["type"]];
         }
 
-        if ($data["type"] == TableTypes.INTEGER || $data["type"] == TableTypes.BIGINTEGER) {
-            if ($schema.getPrimaryKeys() == [$name] || $data["autoIncrement"] == true) {
-                unset($data["null"], $data["default"]);
-                $out ~= " IDENTITY(1, 1)";
+        if (data["type"] == TableTypes.INTEGER || data["type"] == TableTypes.BIGINTEGER) {
+            if (schema.getPrimaryKeys() == [name] || data["autoIncrement"] == true) {
+                unset(data["null"], data["default"]);
+                out ~= " IDENTITY(1, 1)";
             }
         }
 
-        if ($data["type"] == TableTypes.TEXT && $data["length"] != TableSchema::LENGTH_TINY) {
-            $out ~= " NVARCHAR(MAX)";
+        if (data["type"] == TableTypes.TEXT && data["length"] != TableSchema::LENGTH_TINY) {
+            out ~= " NVARCHAR(MAX)";
         }
 
-        if ($data["type"] == TableTypes.CHAR) {
-            $out ~= "(" ~ $data["length"] ~ ")";
+        if (data["type"] == TableTypes.CHAR) {
+            out ~= "(" ~ data["length"] ~ ")";
         }
 
-        if ($data["type"] == TableTypes.BINARY) {
+        if (data["type"] == TableTypes.BINARY) {
             if (
-                !isset($data["length"])
-                || hasAllValues($data["length"], [TableSchema::LENGTH_MEDIUM, TableSchema::LENGTH_LONG], true)
+                !isset(data["length"])
+                || hasAllValues(data["length"], [TableSchema::LENGTH_MEDIUM, TableSchema::LENGTH_LONG], true)
             ) {
-                $data["length"] = "MAX";
+                data["length"] = "MAX";
             }
 
-            if ($data["length"] == 1) {
-                $out ~= " BINARY(1)";
+            if (data["length"] == 1) {
+                out ~= " BINARY(1)";
             } else {
-                $out ~= " VARBINARY";
+                out ~= " VARBINARY";
 
-                $out ~= sprintf("(%s)", $data["length"]);
+                out ~= sprintf("(%s)", data["length"]);
             }
         }
 
         if (
-            $data["type"] == TableTypes.STRING ||
+            data["type"] == TableTypes.STRING ||
             (
-                $data["type"] == TableTypes.TEXT &&
-                $data["length"] == TableSchema::LENGTH_TINY
+                data["type"] == TableTypes.TEXT &&
+                data["length"] == TableSchema::LENGTH_TINY
             )
         ) {
-            $type = " NVARCHAR";
-            $length = $data["length"] ?? TableSchema::LENGTH_TINY;
-            $out ~= sprintf("%s(%d)", $type, $length);
+            type = " NVARCHAR";
+            length = data["length"] ?? TableSchema::LENGTH_TINY;
+            out ~= sprintf("%s(%d)", type, length);
         }
 
-        $hasCollate = [TableTypes.TEXT, TableTypes.STRING, TableTypes.CHAR];
-        if (hasAllValues($data["type"], $hasCollate, true) && isset($data["collate"]) && $data["collate"] != "") {
-            $out ~= " COLLATE " ~ $data["collate"];
+        hasCollate = [TableTypes.TEXT, TableTypes.STRING, TableTypes.CHAR];
+        if (hasAllValues(data["type"], hasCollate, true) && isset(data["collate"]) && data["collate"] != "") {
+            out ~= " COLLATE " ~ data["collate"];
         }
 
-        $precisionTypes = [
+        precisionTypes = [
             TableTypes.FLOAT,
             TableTypes.DATETIME,
             TableTypes.DATETIME_FRACTIONAL,
             TableTypes.TIMESTAMP,
             TableTypes.TIMESTAMP_FRACTIONAL,
         ];
-        if (hasAllValues($data["type"], $precisionTypes, true) && isset($data["precision"])) {
-            $out ~= "(" ~ (int)$data["precision"] ~ ")";
+        if (hasAllValues(data["type"], precisionTypes, true) && isset(data["precision"])) {
+            out ~= "(" ~ (int)data["precision"] ~ ")";
         }
 
         if (
-            $data["type"] == TableTypes.DECIMAL &&
+            data["type"] == TableTypes.DECIMAL &&
             (
-                isset($data["length"]) ||
-                isset($data["precision"])
+                isset(data["length"]) ||
+                isset(data["precision"])
             )
         ) {
-            $out ~= "(" ~ (int)$data["length"] ~ "," ~ (int)$data["precision"] ~ ")";
+            out ~= "(" ~ (int)data["length"] ~ "," ~ (int)data["precision"] ~ ")";
         }
 
-        if (isset($data["null"]) && $data["null"] == false) {
-            $out ~= " NOT NULL";
+        if (isset(data["null"]) && data["null"] == false) {
+            out ~= " NOT NULL";
         }
 
-        $dateTimeTypes = [
+        dateTimeTypes = [
             TableTypes.DATETIME,
             TableTypes.DATETIME_FRACTIONAL,
             TableTypes.TIMESTAMP,
             TableTypes.TIMESTAMP_FRACTIONAL,
         ];
-        $dateTimeDefaults = [
+        dateTimeDefaults = [
             "current_timestamp",
             "getdate()",
             "getutcdate()",
@@ -491,152 +491,152 @@ class SqlserverSchemaDialect : SchemaDialect
             "sysdatetimeoffset()",
         ];
         if (
-            isset($data["default"]) &&
-            hasAllValues($data["type"], $dateTimeTypes, true) &&
-            hasAllValues(strtolower($data["default"]), $dateTimeDefaults, true)
+            isset(data["default"]) &&
+            hasAllValues(data["type"], dateTimeTypes, true) &&
+            hasAllValues(strtolower(data["default"]), dateTimeDefaults, true)
         ) {
-            $out ~= " DEFAULT " ~ strtoupper($data["default"]);
-        } elseif (isset($data["default"])) {
-            $default = is_bool($data["default"])
-                ? (int)$data["default"]
-                : _driver.schemaValue($data["default"]);
-            $out ~= " DEFAULT " ~ $default;
-        } elseif (isset($data["null"]) && $data["null"] != false) {
-            $out ~= " DEFAULT NULL";
+            out ~= " DEFAULT " ~ strtoupper(data["default"]);
+        } elseif (isset(data["default"])) {
+            default = is_bool(data["default"])
+                ? (int)data["default"]
+                : _driver.schemaValue(data["default"]);
+            out ~= " DEFAULT " ~ default;
+        } elseif (isset(data["null"]) && data["null"] != false) {
+            out ~= " DEFAULT NULL";
         }
 
-        return $out;
+        return out;
     }
 
 
-    array addConstraintSql(TableSchema $schema) {
-        $sqlPattern = "ALTER TABLE %s ADD %s;";
-        $sql = null;
+    array addConstraintSql(TableSchema schema) {
+        sqlPattern = "ALTER TABLE %s ADD %s;";
+        sql = null;
 
-        foreach ($schema.constraints() as $name) {
-            /** @var array $constraint */
-            $constraint = $schema.getConstraint($name);
-            if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
-                $tableName = _driver.quoteIdentifier($schema.name());
-                $sql[] = sprintf($sqlPattern, $tableName, this.constraintSql($schema, $name));
+        foreach (schema.constraints() as name) {
+            /** @var array constraint */
+            constraint = schema.getConstraint(name);
+            if (constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
+                tableName = _driver.quoteIdentifier(schema.name());
+                sql[] = sprintf(sqlPattern, tableName, this.constraintSql(schema, name));
             }
         }
 
-        return $sql;
+        return sql;
     }
 
 
-    array dropConstraintSql(TableSchema $schema) {
-        $sqlPattern = "ALTER TABLE %s DROP CONSTRAINT %s;";
-        $sql = null;
+    array dropConstraintSql(TableSchema schema) {
+        sqlPattern = "ALTER TABLE %s DROP CONSTRAINT %s;";
+        sql = null;
 
-        foreach ($schema.constraints() as $name) {
-            /** @var array $constraint */
-            $constraint = $schema.getConstraint($name);
-            if ($constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
-                $tableName = _driver.quoteIdentifier($schema.name());
-                $constraintName = _driver.quoteIdentifier($name);
-                $sql[] = sprintf($sqlPattern, $tableName, $constraintName);
+        foreach (schema.constraints() as name) {
+            /** @var array constraint */
+            constraint = schema.getConstraint(name);
+            if (constraint["type"] == TableSchema::CONSTRAINT_FOREIGN) {
+                tableName = _driver.quoteIdentifier(schema.name());
+                constraintName = _driver.quoteIdentifier(name);
+                sql[] = sprintf(sqlPattern, tableName, constraintName);
             }
         }
 
-        return $sql;
+        return sql;
     }
 
 
-    string indexSql(TableSchema $schema, string aName) {
-        /** @var array $data */
-        $data = $schema.getIndex($name);
-        $columns = array_map(
+    string indexSql(TableSchema schema, string aName) {
+        /** @var array data */
+        data = schema.getIndex(name);
+        columns = array_map(
             [_driver, "quoteIdentifier"],
-            $data["columns"]
+            data["columns"]
         );
 
         return sprintf(
             "CREATE INDEX %s ON %s (%s)",
-            _driver.quoteIdentifier($name),
-            _driver.quoteIdentifier($schema.name()),
-            implode(", ", $columns)
+            _driver.quoteIdentifier(name),
+            _driver.quoteIdentifier(schema.name()),
+            implode(", ", columns)
         );
     }
 
 
-    string constraintSql(TableSchema $schema, string aName) {
-        /** @var array $data */
-        $data = $schema.getConstraint($name);
-        $out = "CONSTRAINT " ~ _driver.quoteIdentifier($name);
-        if ($data["type"] == TableSchema::CONSTRAINT_PRIMARY) {
-            $out = "PRIMARY KEY";
+    string constraintSql(TableSchema schema, string aName) {
+        /** @var array data */
+        data = schema.getConstraint(name);
+        out = "CONSTRAINT " ~ _driver.quoteIdentifier(name);
+        if (data["type"] == TableSchema::CONSTRAINT_PRIMARY) {
+            out = "PRIMARY KEY";
         }
-        if ($data["type"] == TableSchema::CONSTRAINT_UNIQUE) {
-            $out ~= " UNIQUE";
+        if (data["type"] == TableSchema::CONSTRAINT_UNIQUE) {
+            out ~= " UNIQUE";
         }
 
-        return _keySql($out, $data);
+        return _keySql(out, data);
     }
 
     /**
      * Helper method for generating key SQL snippets.
      *
-     * @param string $prefix The key prefix
-     * @param array $data Key data.
+     * @param string prefix The key prefix
+     * @param array data Key data.
      */
-    protected string _keySql(string $prefix, array $data) {
-        $columns = array_map(
+    protected string _keySql(string prefix, array data) {
+        columns = array_map(
             [_driver, "quoteIdentifier"],
-            $data["columns"]
+            data["columns"]
         );
-        if ($data["type"] == TableSchema::CONSTRAINT_FOREIGN) {
-            return $prefix . sprintf(
+        if (data["type"] == TableSchema::CONSTRAINT_FOREIGN) {
+            return prefix . sprintf(
                 " FOREIGN KEY (%s) REFERENCES %s (%s) ON UPDATE %s ON DELETE %s",
-                implode(", ", $columns),
-                _driver.quoteIdentifier($data["references"][0]),
-                _convertConstraintColumns($data["references"][1]),
-                _foreignOnClause($data["update"]),
-                _foreignOnClause($data["delete"])
+                implode(", ", columns),
+                _driver.quoteIdentifier(data["references"][0]),
+                _convertConstraintColumns(data["references"][1]),
+                _foreignOnClause(data["update"]),
+                _foreignOnClause(data["delete"])
             );
         }
 
-        return $prefix ~ " (" ~ implode(", ", $columns) ~ ")";
+        return prefix ~ " (" ~ implode(", ", columns) ~ ")";
     }
 
 
-    array createTableSql(TableSchema $schema, array $columns, array $constraints, array $indexes) {
-        $content = array_merge($columns, $constraints);
-        $content = implode(",\n", array_filter($content));
-        $tableName = _driver.quoteIdentifier($schema.name());
-        $out = null;
-        $out[] = sprintf("CREATE TABLE %s (\n%s\n)", $tableName, $content);
-        foreach ($indexes as $index) {
-            $out[] = $index;
+    array createTableSql(TableSchema schema, array columns, array constraints, array indexes) {
+        content = array_merge(columns, constraints);
+        content = implode(",\n", array_filter(content));
+        tableName = _driver.quoteIdentifier(schema.name());
+        out = null;
+        out[] = sprintf("CREATE TABLE %s (\n%s\n)", tableName, content);
+        foreach (indexes as index) {
+            out[] = index;
         }
 
-        return $out;
+        return out;
     }
 
 
-    array truncateTableSql(TableSchema $schema) {
-        $name = _driver.quoteIdentifier($schema.name());
-        $queries = [
-            sprintf("DELETE FROM %s", $name),
+    array truncateTableSql(TableSchema schema) {
+        name = _driver.quoteIdentifier(schema.name());
+        queries = [
+            sprintf("DELETE FROM %s", name),
         ];
 
         // Restart identity sequences
-        $pk = $schema.getPrimaryKeys();
-        if (count($pk) == 1) {
-            /** @var array $column */
-            $column = $schema.getColumn($pk[0]);
-            if (hasAllValues($column["type"], ["integer", "biginteger"])) {
-                $queries[] = sprintf(
+        pk = schema.getPrimaryKeys();
+        if (count(pk) == 1) {
+            /** @var array column */
+            column = schema.getColumn(pk[0]);
+            if (hasAllValues(column["type"], ["integer", "biginteger"])) {
+                queries[] = sprintf(
                     "IF EXISTS (SELECT * FROM sys.identity_columns WHERE OBJECT_NAME(OBJECT_ID) = '%s' AND " ~
                     "last_value IS NOT NULL) DBCC CHECKIDENT('%s', RESEED, 0)",
-                    $schema.name(),
-                    $schema.name()
+                    schema.name(),
+                    schema.name()
                 );
             }
         }
 
-        return $queries;
+        return queries;
     }
 }
 
