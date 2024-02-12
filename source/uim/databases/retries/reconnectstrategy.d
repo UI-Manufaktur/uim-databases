@@ -24,7 +24,7 @@ class ReconnectStrategy : RetryStrategyInterface
      *
      * @var array<string>
      */
-    protected static $causes = [
+    protected static causes = [
         "gone away",
         "Lost connection",
         "Transaction() on null",
@@ -46,17 +46,17 @@ class ReconnectStrategy : RetryStrategyInterface
      *
      * @var DDBConnection
      */
-    protected $connection;
+    protected connection;
 
     /**
      * Creates the ReconnectStrategy object by storing a reference to the
      * passed connection. This reference will be used to automatically
      * reconnect to the server in case of failure.
      *
-     * @param DDBAConnection $connection The connection to check
+     * @param DDBAConnection connection The connection to check
      */
-    this(Connection $connection) {
-        this.connection = $connection;
+    this(Connection connection) {
+        this.connection = connection;
     }
 
     /**
@@ -65,11 +65,11 @@ class ReconnectStrategy : RetryStrategyInterface
      * Checks whether the exception was caused by a lost connection,
      * and returns true if it was able to successfully reconnect.
      */
-    bool shouldRetry(Exception $exception, int $retryCount) {
-        $message = $exception.getMessage();
+    bool shouldRetry(Exception exception, int retryCount) {
+        message = exception.getMessage();
 
-        foreach (static::$causes as $cause) {
-            if (strstr($message, $cause) != false) {
+        foreach (static::causes as cause) {
+            if (strstr(message, cause) != false) {
                 return this.reconnect();
             }
         }
@@ -91,7 +91,7 @@ class ReconnectStrategy : RetryStrategyInterface
         try {
             // Make sure we free any resources associated with the old connection
             this.connection.disconnect();
-        } catch (Exception $e) {
+        } catch (Exception e) {
         }
 
         try {
@@ -101,7 +101,7 @@ class ReconnectStrategy : RetryStrategyInterface
             }
 
             return true;
-        } catch (Exception $e) {
+        } catch (Exception e) {
             // If there was an error connecting again, don"t report it back,
             // let the retry handler do it.
             return false;

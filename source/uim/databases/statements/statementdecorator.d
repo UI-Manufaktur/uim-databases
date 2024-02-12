@@ -15,7 +15,7 @@ use IteratorAggregate;
  * This class is but a decorator of an actual statement implementation, such as
  * PDOStatement.
  *
- * @property-read string $queryString
+ * @property-read string queryString
  */
 class StatementDecorator : StatementInterface, Countable, IteratorAggregate
 {
@@ -46,25 +46,25 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     /**
      * Constructor
      *
-     * @param uim.databases.StatementInterface $statement Statement implementation
+     * @param uim.databases.StatementInterface statement Statement implementation
      *  such as PDOStatement.
      * @param uim.databases.IDBADriver aDriver Driver instance
      */
-    public this(StatementInterface $statement, IDBADriver aDriver)
+    public this(StatementInterface statement, IDBADriver aDriver)
     {
-        this._statement = $statement;
-        this._driver = $driver;
+        this._statement = statement;
+        this._driver = driver;
     }
 
     /**
-     * Magic getter to return $queryString as read-only.
+     * Magic getter to return queryString as read-only.
      *
-     * @param string $property internal property to get
+     * @param string property internal property to get
      * @return string|null
      */
-    function __get(string $property)
+    function __get(string property)
     {
-        if ($property == "queryString") {
+        if (property == "queryString") {
             /** @psalm-suppress NoInterfaceProperties */
             return this._statement.queryString;
         }
@@ -82,19 +82,19 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Examples:
      *
      * ```
-     * $statement.bindValue(1, "a title");
-     * $statement.bindValue("active", true, "boolean");
-     * $statement.bindValue(5, new \DateTime(), "date");
+     * statement.bindValue(1, "a title");
+     * statement.bindValue("active", true, "boolean");
+     * statement.bindValue(5, new \DateTime(), "date");
      * ```
      *
-     * @param string|int $column name or param position to be bound
+     * @param string|int column name or param position to be bound
      * @param mixed aValue The value to bind to variable in query
-     * @param string|int|null $type name of configured Type class
+     * @param string|int|null type name of configured Type class
      * @return void
      */
-    function bindValue($column, DValue aValue, $type = "string"): void
+    function bindValue(column, DValue aValue, type = "string"): void
     {
-        this._statement.bindValue($column, DValue aValue, $type);
+        this._statement.bindValue(column, DValue aValue, type);
     }
 
     /**
@@ -115,9 +115,9 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Example:
      *
      * ```
-     * $statement = $connection.prepare("SELECT id, title from articles");
-     * $statement.execute();
-     * echo $statement.columnCount(); // outputs 2
+     * statement = connection.prepare("SELECT id, title from articles");
+     * statement.execute();
+     * echo statement.columnCount(); // outputs 2
      * ```
      *
      * @return int
@@ -154,14 +154,14 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * that binding parameters from this method will not perform any custom type conversion
      * as it would normally happen when calling `bindValue`.
      *
-     * @param array|null $params list of values to be bound to query
+     * @param array|null params list of values to be bound to query
      * @return bool true on success, false otherwise
      */
-    function execute(?array $params = null): bool
+    function execute(?array params = null): bool
     {
         this._hasExecuted = true;
 
-        return this._statement.execute($params);
+        return this._statement.execute(params);
     }
 
     /**
@@ -172,44 +172,44 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Example:
      *
      * ```
-     * $statement = $connection.prepare("SELECT id, title from articles");
-     * $statement.execute();
-     * print_r($statement.fetch("assoc")); // will show ["id" : 1, "title" : "a title"]
+     * statement = connection.prepare("SELECT id, title from articles");
+     * statement.execute();
+     * print_r(statement.fetch("assoc")); // will show ["id" : 1, "title" : "a title"]
      * ```
      *
-     * @param string|int $type "num" for positional columns, assoc for named columns
+     * @param string|int type "num" for positional columns, assoc for named columns
      * @return mixed Result array containing columns and values or false if no results
      * are left
      */
-    function fetch($type = self::FETCH_TYPE_NUM)
+    function fetch(type = self::FETCH_TYPE_NUM)
     {
-        return this._statement.fetch($type);
+        return this._statement.fetch(type);
     }
 
     /**
      * Returns the next row in a result set as an associative array. Calling this function is the same as calling
-     * $statement.fetch(StatementDecorator::FETCH_TYPE_ASSOC). If no results are found an empty array is returned.
+     * statement.fetch(StatementDecorator::FETCH_TYPE_ASSOC). If no results are found an empty array is returned.
      *
      * @return array
      */
     function fetchAssoc(): array
     {
-        $result = this.fetch(static::FETCH_TYPE_ASSOC);
+        result = this.fetch(static::FETCH_TYPE_ASSOC);
 
-        return $result ?: [];
+        return result ?: [];
     }
 
     /**
      * Returns the value of the result at position.
      *
-     * @param int $position The numeric position of the column to retrieve in the result
-     * @return mixed Returns the specific value of the column designated at $position
+     * @param int position The numeric position of the column to retrieve in the result
+     * @return mixed Returns the specific value of the column designated at position
      */
-    function fetchColumn(int $position)
+    function fetchColumn(int position)
     {
-        $result = this.fetch(static::FETCH_TYPE_NUM);
-        if ($result && isset($result[$position])) {
-            return $result[$position];
+        result = this.fetch(static::FETCH_TYPE_NUM);
+        if (result && isset(result[position])) {
+            return result[position];
         }
 
         return false;
@@ -221,17 +221,17 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Example:
      *
      * ```
-     * $statement = $connection.prepare("SELECT id, title from articles");
-     * $statement.execute();
-     * print_r($statement.fetchAll("assoc")); // will show [0 : ["id" : 1, "title" : "a title"]]
+     * statement = connection.prepare("SELECT id, title from articles");
+     * statement.execute();
+     * print_r(statement.fetchAll("assoc")); // will show [0 : ["id" : 1, "title" : "a title"]]
      * ```
      *
-     * @param string|int $type num for fetching columns as positional keys or assoc for column names as keys
+     * @param string|int type num for fetching columns as positional keys or assoc for column names as keys
      * @return array|false List of all results from database for this statement. False on failure.
      */
-    function fetchAll($type = self::FETCH_TYPE_NUM)
+    function fetchAll(type = self::FETCH_TYPE_NUM)
     {
-        return this._statement.fetchAll($type);
+        return this._statement.fetchAll(type);
     }
 
     /**
@@ -240,9 +240,9 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Example:
      *
      * ```
-     * $statement = $connection.prepare("SELECT id, title from articles");
-     * $statement.execute();
-     * print_r($statement.rowCount()); // will show 1
+     * statement = connection.prepare("SELECT id, title from articles");
+     * statement.execute();
+     * print_r(statement.rowCount()); // will show 1
      * ```
      *
      * @return int
@@ -259,8 +259,8 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      * ### Example:
      *
      * ```
-     * $statement = $connection.prepare("SELECT id, title from articles");
-     * foreach ($statement as aRow) {
+     * statement = connection.prepare("SELECT id, title from articles");
+     * foreach (statement as aRow) {
      *   //do stuff
      * }
      * ```
@@ -292,47 +292,47 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     /**
      * Binds a set of values to statement object with corresponding type.
      *
-     * @param array $params list of values to be bound
-     * @param array $types list of types to be used, keys should match those in $params
+     * @param array params list of values to be bound
+     * @param array types list of types to be used, keys should match those in params
      * @return void
      */
-    function bind(array $params, array $types): void
+    function bind(array params, array types): void
     {
-        if (empty($params)) {
+        if (empty(params)) {
             return;
         }
 
-        $anonymousParams = is_int(key($params));
-        $offset = 1;
-        foreach ($params as $index : aValue) {
-            $type = $types[$index] ?? null;
-            if ($anonymousParams) {
+        anonymousParams = is_int(key(params));
+        offset = 1;
+        foreach (params as index : aValue) {
+            type = types[index] ?? null;
+            if (anonymousParams) {
                 /** @psalm-suppress InvalidOperand */
-                $index += $offset;
+                index += offset;
             }
             /** @psalm-suppress InvalidScalarArgument */
-            this.bindValue($index, DValue aValue, $type);
+            this.bindValue(index, DValue aValue, type);
         }
     }
 
     /**
      * Returns the latest primary inserted using this statement.
      *
-     * @param string|null $table table name or sequence to get last insert value from
-     * @param string|null $column the name of the column representing the primary key
+     * @param string|null table table name or sequence to get last insert value from
+     * @param string|null column the name of the column representing the primary key
      * @return string|int
      */
-    function lastInsertId(?string $table = null, ?string $column = null)
+    function lastInsertId(?string table = null, ?string column = null)
     {
-        if ($column && this.columnCount()) {
+        if (column && this.columnCount()) {
             aRow = this.fetch(static::FETCH_TYPE_ASSOC);
 
-            if (aRow && isset(aRow[$column])) {
-                return aRow[$column];
+            if (aRow && isset(aRow[column])) {
+                return aRow[column];
             }
         }
 
-        return this._driver.lastInsertId($table, $column);
+        return this._driver.lastInsertId(table, column);
     }
 
     /**

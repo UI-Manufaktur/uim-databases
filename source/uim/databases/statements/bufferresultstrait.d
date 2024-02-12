@@ -20,12 +20,12 @@ trait BufferResultsTrait
     /**
      * Whether to buffer results in php
      *
-     * @param bool $buffer Toggle buffering
+     * @param bool buffer Toggle buffering
      * @return this
      */
-    function bufferResults(bool $buffer)
+    function bufferResults(bool buffer)
     {
-        this._bufferResults = $buffer;
+        this._bufferResults = buffer;
 
         return this;
     }

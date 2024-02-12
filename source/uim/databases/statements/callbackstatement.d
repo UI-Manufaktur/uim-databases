@@ -22,14 +22,14 @@ class CallbackStatement : StatementDecorator
     /**
      * Constructor
      *
-     * @param uim.databases.StatementInterface $statement The statement to decorate.
+     * @param uim.databases.StatementInterface statement The statement to decorate.
      * @param uim.databases.IDBADriver aDriver The driver instance used by the statement.
-     * @param callable $callback The callback to apply to results before they are returned.
+     * @param callable callback The callback to apply to results before they are returned.
      */
-    public this(StatementInterface $statement, IDBADriver aDriver, callable $callback)
+    public this(StatementInterface statement, IDBADriver aDriver, callable callback)
     {
-        parent::__construct($statement, $driver);
-        this._callback = $callback;
+        parent::__construct(statement, driver);
+        this._callback = callback;
     }
 
     /**
@@ -37,15 +37,15 @@ class CallbackStatement : StatementDecorator
      *
      * The result will be processed by the callback when it is not `false`.
      *
-     * @param string|int $type Either "num" or "assoc" to indicate the result format you would like.
+     * @param string|int type Either "num" or "assoc" to indicate the result format you would like.
      * @return array|false
      */
-    function fetch($type = parent::FETCH_TYPE_NUM)
+    function fetch(type = parent::FETCH_TYPE_NUM)
     {
-        $callback = this._callback;
-        aRow = this._statement.fetch($type);
+        callback = this._callback;
+        aRow = this._statement.fetch(type);
 
-        return aRow == false ? aRow : $callback(aRow);
+        return aRow == false ? aRow : callback(aRow);
     }
 
     /**
@@ -53,10 +53,10 @@ class CallbackStatement : StatementDecorator
      *
      * Each row in the result will be processed by the callback when it is not `false.
      */
-    function fetchAll($type = parent::FETCH_TYPE_NUM)
+    function fetchAll(type = parent::FETCH_TYPE_NUM)
     {
-        $results = this._statement.fetchAll($type);
+        results = this._statement.fetchAll(type);
 
-        return $results != false ? array_map(this._callback, $results) : false;
+        return results != false ? array_map(this._callback, results) : false;
     }
 }

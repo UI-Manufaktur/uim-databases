@@ -32,7 +32,7 @@ class BufferedStatement : Iterator, StatementInterface
      *
      * @var uim.databases.StatementInterface
      */
-    protected $statement;
+    protected statement;
 
     /**
      * The driver for the statement
@@ -46,7 +46,7 @@ class BufferedStatement : Iterator, StatementInterface
      *
      * @var array<int, array>
      */
-    protected $buffer = [];
+    protected buffer = [];
 
     /**
      * Whether this statement has already been executed
@@ -60,29 +60,29 @@ class BufferedStatement : Iterator, StatementInterface
      *
      * @var int
      */
-    protected $index = 0;
+    protected index = 0;
 
     /**
      * Constructor
      *
-     * @param uim.databases.StatementInterface $statement Statement implementation such as PDOStatement
+     * @param uim.databases.StatementInterface statement Statement implementation such as PDOStatement
      * @param uim.databases.IDBADriver aDriver Driver instance
      */
-    public this(StatementInterface $statement, IDBADriver aDriver)
+    public this(StatementInterface statement, IDBADriver aDriver)
     {
-        this.statement = $statement;
-        this._driver = $driver;
+        this.statement = statement;
+        this._driver = driver;
     }
 
     /**
-     * Magic getter to return $queryString as read-only.
+     * Magic getter to return queryString as read-only.
      *
-     * @param string $property internal property to get
+     * @param string property internal property to get
      * @return string|null
      */
-    function __get(string $property)
+    function __get(string property)
     {
-        if ($property == "queryString") {
+        if (property == "queryString") {
             /** @psalm-suppress NoInterfaceProperties */
             return this.statement.queryString;
         }
@@ -91,9 +91,9 @@ class BufferedStatement : Iterator, StatementInterface
     }
 
 
-    function bindValue($column, DValue aValue, $type = "string"): void
+    function bindValue(column, DValue aValue, type = "string"): void
     {
-        this.statement.bindValue($column, DValue aValue, $type);
+        this.statement.bindValue(column, DValue aValue, type);
     }
 
 
@@ -121,20 +121,20 @@ class BufferedStatement : Iterator, StatementInterface
     }
 
 
-    function execute(?array $params = null): bool
+    function execute(?array params = null): bool
     {
         this._reset();
         this._hasExecuted = true;
 
-        return this.statement.execute($params);
+        return this.statement.execute(params);
     }
 
 
-    function fetchColumn(int $position)
+    function fetchColumn(int position)
     {
-        $result = this.fetch(static::FETCH_TYPE_NUM);
-        if ($result != false && isset($result[$position])) {
-            return $result[$position];
+        result = this.fetch(static::FETCH_TYPE_NUM);
+        if (result != false && isset(result[position])) {
+            return result[position];
         }
 
         return false;
@@ -152,24 +152,24 @@ class BufferedStatement : Iterator, StatementInterface
     }
 
 
-    function bind(array $params, array $types): void
+    function bind(array params, array types): void
     {
-        this.statement.bind($params, someTypes);
+        this.statement.bind(params, someTypes);
     }
 
 
-    function lastInsertId(?string $table = null, ?string $column = null)
+    function lastInsertId(?string table = null, ?string column = null)
     {
-        return this.statement.lastInsertId($table, $column);
+        return this.statement.lastInsertId(table, column);
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param string|int $type The type to fetch.
+     * @param string|int type The type to fetch.
      * @return array|false
      */
-    function fetch($type = self::FETCH_TYPE_NUM)
+    function fetch(type = self::FETCH_TYPE_NUM)
     {
         if (this._allFetched) {
             aRow = false;
@@ -178,23 +178,23 @@ class BufferedStatement : Iterator, StatementInterface
             }
             this.index += 1;
 
-            if (aRow && $type == static::FETCH_TYPE_NUM) {
+            if (aRow && type == static::FETCH_TYPE_NUM) {
                 return array_values(aRow);
             }
 
             return aRow;
         }
 
-        $record = this.statement.fetch($type);
-        if ($record == false) {
+        record = this.statement.fetch(type);
+        if (record == false) {
             this._allFetched = true;
             this.statement.closeCursor();
 
             return false;
         }
-        this.buffer[] = $record;
+        this.buffer[] = record;
 
-        return $record;
+        return record;
     }
 
     /**
@@ -202,20 +202,20 @@ class BufferedStatement : Iterator, StatementInterface
      */
     function fetchAssoc(): array
     {
-        $result = this.fetch(static::FETCH_TYPE_ASSOC);
+        result = this.fetch(static::FETCH_TYPE_ASSOC);
 
-        return $result ?: [];
+        return result ?: [];
     }
 
 
-    function fetchAll($type = self::FETCH_TYPE_NUM)
+    function fetchAll(type = self::FETCH_TYPE_NUM)
     {
         if (this._allFetched) {
             return this.buffer;
         }
-        $results = this.statement.fetchAll($type);
-        if ($results != false) {
-            this.buffer = array_merge(this.buffer, $results);
+        results = this.statement.fetchAll(type);
+        if (results != false) {
+            this.buffer = array_merge(this.buffer, results);
         }
         this._allFetched = true;
         this.statement.closeCursor();
@@ -284,12 +284,12 @@ class BufferedStatement : Iterator, StatementInterface
      */
     function valid(): bool
     {
-        $old = this.index;
+        old = this.index;
         aRow = this.fetch(self::FETCH_TYPE_ASSOC);
 
         // Restore the index as fetch() increments during
         // the cache scenario.
-        this.index = $old;
+        this.index = old;
 
         return aRow != false;
     }
