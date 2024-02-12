@@ -178,8 +178,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * @return uim.databases.IStatement
     */
   IStatement execute() {
-      $statement = _connection.run(this);
-      _iterator = _decorateStatement($statement);
+      statement = _connection.run(this);
+      _iterator = _decorateStatement(statement);
       _dirty = false;
 
       return _iterator;
@@ -205,11 +205,11 @@ class Query : IDBAExpression, IteratorAggregate {
     * records that were updated.
     */
   int rowCountAndClose() {
-      $statement = this.execute();
+      statement = this.execute();
       try {
-          return $statement.rowCount();
+          return statement.rowCount();
       } finally {
-          $statement.closeCursor();
+          statement.closeCursor();
       }
   }
 
@@ -225,16 +225,16 @@ class Query : IDBAExpression, IteratorAggregate {
     * values when the query is executed, hence it is most suitable to use with
     * prepared statements.
     *
-    * @param uim.databases\ValueBinder|null $binder Value binder that generates parameter placeholders
+    * @param uim.databases\ValueBinder|null binder Value binder that generates parameter placeholders
     * @return string
     */
   function sql(?ValueBinder aValueBinder = null) {
-      if (!$binder) {
-          $binder = this.getValueBinder();
-          $binder.resetCount();
+      if (!binder) {
+          binder = this.getValueBinder();
+          binder.resetCount();
       }
 
-      return this.getConnection().compileQuery(this, $binder);
+      return this.getConnection().compileQuery(this, binder);
   }
 
   /**
@@ -248,19 +248,19 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * ### Example
     * ```
-    * myQuery.select(["title"]).from("articles").traverse(function (myValue, $clause) {
-    *     if ($clause == "select") {
+    * myQuery.select(["title"]).from("articles").traverse(function (myValue, clause) {
+    *     if (clause == "select") {
     *         var_dump(myValue);
     *     }
     * });
     * ```
     *
-    * @param callable $callback A function or callable to be executed for each part
+    * @param callable callback A function or callable to be executed for each part
     * @return this
     */
-  O traverse(this O)($callback) {
-      foreach (_parts as myName: $part) {
-          $callback($part, myName);
+  O traverse(this O)(callback) {
+      foreach (_parts as myName: part) {
+          callback(part, myName);
       }
 
       return cast(O)this;
@@ -279,20 +279,20 @@ class Query : IDBAExpression, IteratorAggregate {
     * ### Example
     *
     * ```
-    * myQuery.select(["title"]).from("articles").traverse(function (myValue, $clause) {
-    *     if ($clause == "select") {
+    * myQuery.select(["title"]).from("articles").traverse(function (myValue, clause) {
+    *     if (clause == "select") {
     *         var_dump(myValue);
     *     }
     * }, ["select", "from"]);
     * ```
     *
-    * @param callable $visitor A function or callable to be executed for each part
-    * @param $parts The list of query parts to traverse
+    * @param callable visitor A function or callable to be executed for each part
+    * @param parts The list of query parts to traverse
     * @return this
     */
-  function traverseParts(callable $visitor, string[] $parts) {
-      foreach ($parts as myName) {
-          $visitor(_parts[myName], myName);
+  function traverseParts(callable visitor, string[] parts) {
+      foreach (parts as myName) {
+          visitor(_parts[myName], myName);
       }
 
       return cast(O)this;
@@ -307,7 +307,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * objects:
     *
     * ```
-    * $cte = new uim.databases.Expression\CommonTableExpression(
+    * cte = new uim.databases.Expression\CommonTableExpression(
     *     "cte",
     *     myConnection
     *         .newQuery()
@@ -315,7 +315,7 @@ class Query : IDBAExpression, IteratorAggregate {
     *         .from("articles")
     * );
     *
-    * myQuery.with($cte);
+    * myQuery.with(cte);
     * ```
     *
     * or returned from a closure, which will receive a new common table expression
@@ -324,39 +324,39 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * ```
     * myQuery.with(function (
-    *     uim.databases.Expression\CommonTableExpression $cte,
+    *     uim.databases.Expression\CommonTableExpression cte,
     *     uim.databases.Query myQuery
     *  ) {
-    *     $cteQuery = myQuery
+    *     cteQuery = myQuery
     *         .select("*")
     *         .from("articles");
     *
-    *     return $cte
+    *     return cte
     *         .name("cte")
-    *         .query($cteQuery);
+    *         .query(cteQuery);
     * });
     * ```
     *
-    * @param uim.databases\Expression\CommonTableExpression|\Closure $cte The CTE to add.
+    * @param uim.databases\Expression\CommonTableExpression|\Closure cte The CTE to add.
     * @param bool shouldOverwrite Whether to reset the list of CTEs.
     * @return this
     */
-  function with($cte, bool shouldOverwrite = false) {
+  function with(cte, bool shouldOverwrite = false) {
       if (shouldOverwrite) {
           _parts["with"] = [];
       }
 
-      if ($cte instanceof Closure) {
+      if (cte instanceof Closure) {
           myQuery = this.getConnection().newQuery();
-          $cte = $cte(new CommonTableExpression(), myQuery);
-          if (!($cte instanceof CommonTableExpression)) {
+          cte = cte(new CommonTableExpression(), myQuery);
+          if (!(cte instanceof CommonTableExpression)) {
               throw new RuntimeException(
                   "You must return a `CommonTableExpression` from a Closure passed to `with()`."
               );
           }
       }
 
-      _parts["with"][] = $cte;
+      _parts["with"][] = cte;
       _dirty();
 
       return cast(O)this;
@@ -441,27 +441,27 @@ class Query : IDBAExpression, IteratorAggregate {
     * myQuery.distinct("name", true);
     * ```
     *
-    * @param uim.databases\IDBAExpression|array|string|bool $on Enable/disable distinct class
+    * @param uim.databases\IDBAExpression|array|string|bool on Enable/disable distinct class
     * or list of fields to be filtered on
     * @param bool shouldOverwrite whether to reset fields with passed list or not
     * @return this
     */
-  function distinct($on = [], shouldOverwrite = false) {
-      if ($on == []) {
-          $on = true;
-      } elseif (is_string($on)) {
-          $on = [$on];
+  function distinct(on = [], shouldOverwrite = false) {
+      if (on == []) {
+          on = true;
+      } elseif (is_string(on)) {
+          on = [on];
       }
 
-      if (is_array($on)) {
+      if (is_array(on)) {
           myMerge = [];
           if (is_array(_parts["distinct"])) {
               myMerge = _parts["distinct"];
           }
-          $on = shouldOverwrite ? array_values($on) : array_merge(myMerge, array_values($on));
+          on = shouldOverwrite ? array_values(on) : array_merge(myMerge, array_values(on));
       }
 
-      _parts["distinct"] = $on;
+      _parts["distinct"] = on;
       _dirty();
 
       return cast(O)this;
@@ -638,28 +638,28 @@ class Query : IDBAExpression, IteratorAggregate {
           myTables = [myTables];
       }
 
-      $joins = [];
-      $i = count(_parts["join"]);
-      foreach (myTables as myAlias: $t) {
-          if (!is_array($t)) {
-              $t = ["table":$t, "conditions":this.newExpr()];
+      joins = [];
+      i = count(_parts["join"]);
+      foreach (myTables as myAlias: t) {
+          if (!is_array(t)) {
+              t = ["table":t, "conditions":this.newExpr()];
           }
 
-          if (!is_string($t["conditions"]) && is_callable($t["conditions"])) {
-              $t["conditions"] = $t["conditions"](this.newExpr(), this);
+          if (!is_string(t["conditions"]) && is_callable(t["conditions"])) {
+              t["conditions"] = t["conditions"](this.newExpr(), this);
           }
 
-          if (!($t["conditions"] instanceof IDBAExpression)) {
-              $t["conditions"] = this.newExpr().add($t["conditions"], myTypes);
+          if (!(t["conditions"] instanceof IDBAExpression)) {
+              t["conditions"] = this.newExpr().add(t["conditions"], myTypes);
           }
           myAlias = is_string(myAlias) ? myAlias : null;
-          $joins[myAlias ?: $i++] = $t + ["type":static.JOIN_TYPE_INNER, "alias":myAlias];
+          joins[myAlias ?: i++] = t + ["type":static.JOIN_TYPE_INNER, "alias":myAlias];
       }
 
       if (shouldOverwrite) {
-          _parts["join"] = $joins;
+          _parts["join"] = joins;
       } else {
-          _parts["join"] = array_merge(_parts["join"], $joins);
+          _parts["join"] = array_merge(_parts["join"], joins);
       }
 
       _dirty();
@@ -720,8 +720,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * values to the corresponding database representation.
     * @return this
     */
-  function leftJoin(myTable, $conditions = [], myTypes = []) {
-      this.join(_makeJoin(myTable, $conditions, static.JOIN_TYPE_LEFT), myTypes);
+  function leftJoin(myTable, conditions = [], myTypes = []) {
+      this.join(_makeJoin(myTable, conditions, static.JOIN_TYPE_LEFT), myTypes);
 
       return cast(O)this;
   }
@@ -741,8 +741,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * values to the corresponding database representation.
     * @return this
     */
-  function rightJoin(myTable, $conditions = [], myTypes = []) {
-      this.join(_makeJoin(myTable, $conditions, static.JOIN_TYPE_RIGHT), myTypes);
+  function rightJoin(myTable, conditions = [], myTypes = []) {
+      this.join(_makeJoin(myTable, conditions, static.JOIN_TYPE_RIGHT), myTypes);
 
       return cast(O)this;
   }
@@ -762,8 +762,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * values to the corresponding database representation.
     * @return this
     */
-  function innerJoin(myTable, $conditions = [], myTypes = []) {
-      this.join(_makeJoin(myTable, $conditions, static.JOIN_TYPE_INNER), myTypes);
+  function innerJoin(myTable, conditions = [], myTypes = []) {
+      this.join(_makeJoin(myTable, conditions, static.JOIN_TYPE_INNER), myTypes);
 
       return cast(O)this;
   }
@@ -777,7 +777,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @param string myType the join type to use
     * @psalm-suppress InvalidReturnType
     */
-  protected array _makeJoin(myTable, $conditions, myType) {
+  protected array _makeJoin(myTable, conditions, myType) {
       myAlias = myTable;
 
       if (is_array(myTable)) {
@@ -792,7 +792,7 @@ class Query : IDBAExpression, IteratorAggregate {
       return [
           myAlias: [
               "table":myTable,
-              "conditions":$conditions,
+              "conditions":conditions,
               "type":myType,
           ],
       ];
@@ -862,8 +862,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * ### Using expressions objects:
     *
     * ```
-    * $exp = myQuery.newExpr().add(["id !=":100, "author_id" != 1]).tieWith("OR");
-    * myQuery.where(["published":true], ["published":"boolean"]).where($exp);
+    * exp = myQuery.newExpr().add(["id !=":100, "author_id" != 1]).tieWith("OR");
+    * myQuery.where(["published":true], ["published":"boolean"]).where(exp);
     * ```
     *
     * The previous example produces:
@@ -882,10 +882,10 @@ class Query : IDBAExpression, IteratorAggregate {
     * ```
     * myQuery
     *   .where(["title !=":"Hello World"])
-    *   .where(function ($exp, myQuery) {
-    *     $or = $exp.or(["id":1]);
-    *     $and = $exp.and(["id >":2, "id <":10]);
-    *    return $or.add($and);
+    *   .where(function (exp, myQuery) {
+    *     or = exp.or(["id":1]);
+    *     and = exp.and(["id >":2, "id <":10]);
+    *    return or.add(and);
     *   });
     * ```
     *
@@ -911,18 +911,18 @@ class Query : IDBAExpression, IteratorAggregate {
     * If you use string conditions make sure that your values are correctly quoted.
     * The safest thing you can do is to never use string conditions.
     *
-    * @param uim.databases\IDBAExpression|\Closure|array|string|null $conditions The conditions to filter on.
+    * @param uim.databases\IDBAExpression|\Closure|array|string|null conditions The conditions to filter on.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @param bool shouldOverwrite whether to reset conditions with passed list or not
     * @see uim.databases.TypeFactory
     * @see uim.databases.Expression\QueryExpression
     * @return this
     */
-  function where($conditions = null, array myTypes = [], bool shouldOverwrite = false) {
+  function where(conditions = null, array myTypes = [], bool shouldOverwrite = false) {
       if (shouldOverwrite) {
           _parts["where"] = this.newExpr();
       }
-      _conjugate("where", $conditions, "AND", myTypes);
+      _conjugate("where", conditions, "AND", myTypes);
 
       return cast(O)this;
   }
@@ -939,13 +939,13 @@ class Query : IDBAExpression, IteratorAggregate {
           myFields = [myFields];
       }
 
-      $exp = this.newExpr();
+      exp = this.newExpr();
 
       foreach (myFields as myField) {
-          $exp.isNotNull(myField);
+          exp.isNotNull(myField);
       }
 
-      return cast(O)this.where($exp);
+      return cast(O)this.where(exp);
   }
 
   /**
@@ -960,13 +960,13 @@ class Query : IDBAExpression, IteratorAggregate {
           myFields = [myFields];
       }
 
-      $exp = this.newExpr();
+      exp = this.newExpr();
 
       foreach (myFields as myField) {
-          $exp.isNull(myField);
+          exp.isNull(myField);
       }
 
-      return cast(O)this.where($exp);
+      return cast(O)this.where(exp);
   }
 
   /**
@@ -1097,8 +1097,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * ```
     * myQuery
     *   .where(["title":"Foo"])
-    *   .andWhere(function ($exp, myQuery) {
-    *     return $exp
+    *   .andWhere(function (exp, myQuery) {
+    *     return exp
     *       .or(["author_id":1])
     *       .add(["author_id":2]);
     *   });
@@ -1113,8 +1113,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * @see uim.databases.Query.where()
     * @see uim.databases.TypeFactory
     */
-  O andWhere(this O)($conditions, array myTypes = []) {
-      _conjugate("where", $conditions, "AND", myTypes);
+  O andWhere(this O)(conditions, array myTypes = []) {
+      _conjugate("where", conditions, "AND", myTypes);
 
       return cast(O)this;
   }
@@ -1153,15 +1153,15 @@ class Query : IDBAExpression, IteratorAggregate {
     * `ORDER BY title DESC NULLS FIRST, author_id`
     *
     * ```
-    * $expression = myQuery.newExpr().add(["id % 2 = 0"]);
-    * myQuery.order($expression).order(["title":"ASC"]);
+    * expression = myQuery.newExpr().add(["id % 2 = 0"]);
+    * myQuery.order(expression).order(["title":"ASC"]);
     * ```
     *
     * and
     *
     * ```
-    * myQuery.order(function ($exp, myQuery) {
-    *     return [$exp.add(["id % 2 = 0"]), "title":"ASC"];
+    * myQuery.order(function (exp, myQuery) {
+    *     return [exp.add(["id % 2 = 0"]), "title":"ASC"];
     * });
     * ```
     *
@@ -1312,17 +1312,17 @@ class Query : IDBAExpression, IteratorAggregate {
     * Having fields are not suitable for use with user supplied data as they are
     * not sanitized by the query builder.
     *
-    * @param uim.databases\IDBAExpression|\Closure|array|string|null $conditions The having conditions.
+    * @param uim.databases\IDBAExpression|\Closure|array|string|null conditions The having conditions.
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     * @param bool shouldOverwrite whether to reset conditions with passed list or not
     * @see uim.databases.Query.where()
     * @return this
     */
-  function having($conditions = null, myTypes = [], shouldOverwrite = false) {
+  function having(conditions = null, myTypes = [], shouldOverwrite = false) {
       if (shouldOverwrite) {
           _parts["having"] = this.newExpr();
       }
-      _conjugate("having", $conditions, "AND", myTypes);
+      _conjugate("having", conditions, "AND", myTypes);
 
       return cast(O)this;
   }
@@ -1341,8 +1341,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * @see uim.databases.Query.andWhere()
     * @return this
     */
-  function andHaving($conditions, myTypes = []) {
-      _conjugate("having", $conditions, "AND", myTypes);
+  function andHaving(conditions, myTypes = []) {
+      _conjugate("having", conditions, "AND", myTypes);
 
       return cast(O)this;
   }
@@ -1353,23 +1353,23 @@ class Query : IDBAExpression, IteratorAggregate {
     * You are responsible for adding windows in the order your database requires.
     *
     * @param string myName Window name
-    * @param uim.databases\Expression\WindowExpression|\Closure $window Window expression
+    * @param uim.databases\Expression\WindowExpression|\Closure window Window expression
     * @param bool shouldOverwrite Clear all previous query window expressions
     * @return this
     */
-  function window(string myName, $window, bool shouldOverwrite = false) {
+  function window(string myName, window, bool shouldOverwrite = false) {
       if (shouldOverwrite) {
           _parts["window"] = [];
       }
 
-      if ($window instanceof Closure) {
-          $window = $window(new WindowExpression(), this);
-          if (!($window instanceof WindowExpression)) {
+      if (window instanceof Closure) {
+          window = window(new WindowExpression(), this);
+          if (!(window instanceof WindowExpression)) {
               throw new RuntimeException("You must return a `WindowExpression` from a Closure passed to `window()`.");
           }
       }
 
-      _parts["window"][] = ["name":new IdentifierExpression(myName), "window":$window];
+      _parts["window"][] = ["name":new IdentifierExpression(myName), "window":window];
       _dirty();
 
       return cast(O)this;
@@ -1384,29 +1384,29 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * Pages must start at 1.
     *
-    * @param int $num The page number you want.
-    * @param int|null $limit The number of rows you want in the page. If null
+    * @param int num The page number you want.
+    * @param int|null limit The number of rows you want in the page. If null
     *  the current limit clause will be used.
     * @return this
     * @throws \InvalidArgumentException If page number < 1.
     */
-  function page(int $num, Nullable!int $limit = null) {
-      if ($num < 1) {
+  function page(int num, Nullable!int limit = null) {
+      if (num < 1) {
           throw new InvalidArgumentException("Pages must start at 1.");
       }
-      if ($limit  !is null) {
-          this.limit($limit);
+      if (limit  !is null) {
+          this.limit(limit);
       }
-      $limit = this.clause("limit");
-      if ($limit is null) {
-          $limit = 25;
-          this.limit($limit);
+      limit = this.clause("limit");
+      if (limit is null) {
+          limit = 25;
+          this.limit(limit);
       }
-      $offset = ($num - 1) * $limit;
-      if (PHP_INT_MAX <= $offset) {
-          $offset = PHP_INT_MAX;
+      offset = (num - 1) * limit;
+      if (PHP_INT_MAX <= offset) {
+          offset = PHP_INT_MAX;
       }
-      this.offset((int)$offset);
+      this.offset((int)offset);
 
       return cast(O)this;
   }
@@ -1424,12 +1424,12 @@ class Query : IDBAExpression, IteratorAggregate {
     * myQuery.limit(myQuery.newExpr().add(["1 + 1"])); // LIMIT (1 + 1)
     * ```
     *
-    * @param uim.databases\IDBAExpression|int|null $limit number of records to be returned
+    * @param uim.databases\IDBAExpression|int|null limit number of records to be returned
     * @return this
     */
-  O limit(this O)($limit) {
+  O limit(this O)(limit) {
       _dirty();
-      _parts["limit"] = $limit;
+      _parts["limit"] = limit;
 
       return cast(O)this;
   }
@@ -1449,12 +1449,12 @@ class Query : IDBAExpression, IteratorAggregate {
     * myQuery.offset(myQuery.newExpr().add(["1 + 1"])); // OFFSET (1 + 1)
     * ```
     *
-    * @param uim.databases\IDBAExpression|int|null $offset number of records to be skipped
+    * @param uim.databases\IDBAExpression|int|null offset number of records to be skipped
     * @return this
     */
-  O offset(this O)($offset) {
+  O offset(this O)(offset) {
       _dirty();
-      _parts["offset"] = $offset;
+      _parts["offset"] = offset;
 
       return cast(O)this;
   }
@@ -1471,8 +1471,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * ### Examples
     *
     * ```
-    * $union = (new Query($conn)).select(["id", "title"]).from(["a":"articles"]);
-    * myQuery.select(["id", "name"]).from(["d":"things"]).union($union);
+    * union = (new Query(conn)).select(["id", "title"]).from(["a":"articles"]);
+    * myQuery.select(["id", "name"]).from(["d":"things"]).union(union);
     * ```
     *
     * Will produce:
@@ -1505,8 +1505,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * Unlike UNION, UNION ALL will not remove duplicate rows.
     *
     * ```
-    * $union = (new Query($conn)).select(["id", "title"]).from(["a":"articles"]);
-    * myQuery.select(["id", "name"]).from(["d":"things"]).unionAll($union);
+    * union = (new Query(conn)).select(["id", "title"]).from(["a":"articles"]);
+    * myQuery.select(["id", "name"]).from(["d":"things"]).unionAll(union);
     * ```
     *
     * Will produce:
@@ -1536,22 +1536,22 @@ class Query : IDBAExpression, IteratorAggregate {
     * Note calling this method will reset any data previously set
     * with Query.values().
     *
-    * @param array $columns The columns to insert into.
+    * @param array columns The columns to insert into.
     * @param array<string, string> myTypes A map between columns & their datatypes.
     * @return this
     * @throws \RuntimeException When there are 0 columns.
     */
-  O insert(this O)(array $columns, array myTypes = []) {
-      if (empty($columns)) {
+  O insert(this O)(array columns, array myTypes = []) {
+      if (empty(columns)) {
           throw new RuntimeException("At least 1 column is required to perform an insert.");
       }
       _dirty();
       _type = "insert";
-      _parts["insert"][1] = $columns;
+      _parts["insert"][1] = columns;
       if (!_parts["values"]) {
-          _parts["values"] = new ValuesExpression($columns, this.getTypeMap().setTypes(myTypes));
+          _parts["values"] = new ValuesExpression(columns, this.getTypeMap().setTypes(myTypes));
       } else {
-          _parts["values"].setColumns($columns);
+          _parts["values"].setColumns(columns);
       }
 
       return cast(O)this;
@@ -1660,8 +1660,8 @@ class Query : IDBAExpression, IteratorAggregate {
     * Passing a callable:
     *
     * ```
-    * myQuery.update("articles").set(function ($exp) {
-    *   return $exp.eq("title", "The title", "string");
+    * myQuery.update("articles").set(function (exp) {
+    *   return exp.eq("title", "The title", "string");
     * });
     * ```
     *
@@ -1680,8 +1680,8 @@ class Query : IDBAExpression, IteratorAggregate {
       }
 
       if (myKey instanceof Closure) {
-          $exp = this.newExpr().setConjunction(",");
-          _parts["set"].add(myKey($exp));
+          exp = this.newExpr().setConjunction(",");
+          _parts["set"].add(myKey(exp));
 
           return cast(O)this;
       }
@@ -1734,12 +1734,12 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * Epliog content is raw SQL and not suitable for use with user supplied data.
     *
-    * @param uim.databases\IDBAExpression|string|null $expression The expression to be appended
+    * @param uim.databases\IDBAExpression|string|null expression The expression to be appended
     * @return this
     */
-  O epilog(this O)($expression = null) {
+  O epilog(this O)(expression = null) {
       _dirty();
-      _parts["epilog"] = $expression;
+      _parts["epilog"] = expression;
 
       return cast(O)this;
   }
@@ -1759,21 +1759,21 @@ class Query : IDBAExpression, IteratorAggregate {
     * any format accepted by uim.databases.Expression\QueryExpression:
     *
     * ```
-    * $expression = myQuery.newExpr(); // Returns an empty expression object
-    * $expression = myQuery.newExpr("Table.column = Table2.column"); // Return a raw SQL expression
+    * expression = myQuery.newExpr(); // Returns an empty expression object
+    * expression = myQuery.newExpr("Table.column = Table2.column"); // Return a raw SQL expression
     * ```
     *
-    * @param uim.databases\IDBAExpression|array|string|null $rawExpression A string, array or anything you want wrapped in an expression object
+    * @param uim.databases\IDBAExpression|array|string|null rawExpression A string, array or anything you want wrapped in an expression object
     * @return uim.databases.Expression\QueryExpression
     */
-  QueryExpression newExpr($rawExpression = null) {
-      $expression = new QueryExpression([], this.getTypeMap());
+  QueryExpression newExpr(rawExpression = null) {
+      expression = new QueryExpression([], this.getTypeMap());
 
-      if ($rawExpression  !is null) {
-          $expression.add($rawExpression);
+      if (rawExpression  !is null) {
+          expression.add(rawExpression);
       }
 
-      return $expression;
+      return expression;
   }
 
   /**
@@ -1849,8 +1849,8 @@ class Query : IDBAExpression, IteratorAggregate {
     */
   function clause(string myName) {
       if (!array_key_exists(myName, _parts)) {
-          $clauses = implode(", ", array_keys(_parts));
-          throw new InvalidArgumentException("The "myName" clause is not defined. Valid clauses are: $clauses");
+          clauses = implode(", ", array_keys(_parts));
+          throw new InvalidArgumentException("The "myName" clause is not defined. Valid clauses are: clauses");
       }
 
       return _parts[myName];
@@ -1880,16 +1880,16 @@ class Query : IDBAExpression, IteratorAggregate {
     * });
     * ```
     *
-    * @param callable|null $callback The callback to invoke when results are fetched.
+    * @param callable|null callback The callback to invoke when results are fetched.
     * @param bool shouldOverwrite Whether this should append or replace all existing decorators.
     */
-  O decorateResults(this O)(?callable $callback, bool shouldOverwrite = false) {
+  O decorateResults(this O)(?callable callback, bool shouldOverwrite = false) {
       if (shouldOverwrite) {
           _resultDecorators = [];
       }
 
-      if ($callback  !is null) {
-          _resultDecorators[] = $callback;
+      if (callback  !is null) {
+          _resultDecorators[] = callback;
       }
 
       return cast(O)this;
@@ -1903,16 +1903,16 @@ class Query : IDBAExpression, IteratorAggregate {
     *
     * Callback will receive as first parameter the currently visited expression.
     *
-    * @param callable $callback the function to be executed for each IDBAExpression
+    * @param callable callback the function to be executed for each IDBAExpression
     *   found inside this query.
     */
-  O traverseExpressions(this O)(callable $callback) {
-      if (!$callback instanceof Closure) {
-          $callback = Closure.fromCallable($callback);
+  O traverseExpressions(this O)(callable callback) {
+      if (!callback instanceof Closure) {
+          callback = Closure.fromCallable(callback);
       }
 
-      foreach (_parts as $part) {
-          _expressionsVisitor($part, $callback);
+      foreach (_parts as part) {
+          _expressionsVisitor(part, callback);
       }
 
       return cast(O)this;
@@ -1921,27 +1921,27 @@ class Query : IDBAExpression, IteratorAggregate {
   /**
     * Query parts traversal method used by traverseExpressions()
     *
-    * @param uim.databases\IDBAExpression|array<uim.databases.IDBAExpression> $expression Query expression or
+    * @param uim.databases\IDBAExpression|array<uim.databases.IDBAExpression> expression Query expression or
     *   array of expressions.
-    * @param \Closure $callback The callback to be executed for each IDBAExpression
+    * @param \Closure callback The callback to be executed for each IDBAExpression
     *   found inside this query.
     */
-  protected void _expressionsVisitor($expression, Closure $callback) {
-    if (is_array($expression)) {
-      foreach ($expression as $e) {
-          _expressionsVisitor($e, $callback);
+  protected void _expressionsVisitor(expression, Closure callback) {
+    if (is_array(expression)) {
+      foreach (expression as e) {
+          _expressionsVisitor(e, callback);
       }
 
       return;
     }
 
-    if ($expression instanceof IDBAExpression) {
-      $expression.traverse(function ($exp) use ($callback) {
-          _expressionsVisitor($exp, $callback);
+    if (expression instanceof IDBAExpression) {
+      expression.traverse(function (exp) use (callback) {
+          _expressionsVisitor(exp, callback);
       });
 
-      if (!$expression instanceof self) {
-          $callback($expression);
+      if (!expression instanceof self) {
+          callback(expression);
       }
     }
   }
@@ -1953,15 +1953,15 @@ class Query : IDBAExpression, IteratorAggregate {
     * myQuery.bind(":id", 1, "integer");
     * ```
     *
-    * @param string|int $param placeholder to be replaced with quoted version
+    * @param string|int param placeholder to be replaced with quoted version
     *   of myValue
     * @param mixed myValue The value to be bound
     * @param string|int|null myType the mapped type name, used for casting when sending
     *   to database
     * @return this
     */
-  function bind($param, myValue, myType = null) {
-    this.getValueBinder().bind($param, myValue, myType);
+  function bind(param, myValue, myType = null) {
+    this.getValueBinder().bind(param, myValue, myType);
 
     return cast(O)this;
   }
@@ -1990,7 +1990,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * associate values to those placeholders so that they can be passed correctly
     * to the statement object.
     *
-    * @param uim.databases\ValueBinder|null $binder The binder or null to disable binding.
+    * @param uim.databases\ValueBinder|null binder The binder or null to disable binding.
     */
   O setValueBinder(this O)(ValueBinder aValueBinder) {
     _valueBinder = aValueBinder;
@@ -2127,46 +2127,46 @@ class Query : IDBAExpression, IteratorAggregate {
       myDriver = this.getConnection().getDriver();
 
       if (this.typeCastEnabled && myTypeMap.toArray()) {
-          $statement = new CallbackStatement($statement, myDriver, new FieldTypeConverter(myTypeMap, myDriver));
+          statement = new CallbackStatement(statement, myDriver, new FieldTypeConverter(myTypeMap, myDriver));
       }
 
-      foreach (_resultDecorators as $f) {
-          $statement = new CallbackStatement($statement, myDriver, $f);
+      foreach (_resultDecorators as f) {
+          statement = new CallbackStatement(statement, myDriver, f);
       }
 
-      return $statement;
+      return statement;
   }
 
   /**
     * Helper function used to build conditions by composing QueryExpression objects.
     *
     * @param string part Name of the query part to append the new part to
-    * @param uim.databases\IDBAExpression|\Closure|array|string|null $append Expression or builder function to append.
+    * @param uim.databases\IDBAExpression|\Closure|array|string|null append Expression or builder function to append.
     *   to append.
     * @param string conjunction type of conjunction to be used to operate part
     * @param array<string, string> myTypes Associative array of type names used to bind values to query
     */
-  protected void _conjugate(string part, $append, $conjunction, array myTypes) {
-      $expression = _parts[$part] ?: this.newExpr();
-      if (empty($append)) {
-          _parts[$part] = $expression;
+  protected void _conjugate(string part, append, conjunction, array myTypes) {
+      expression = _parts[part] ?: this.newExpr();
+      if (empty(append)) {
+          _parts[part] = expression;
 
           return;
       }
 
-      if ($append instanceof Closure) {
-          $append = $append(this.newExpr(), this);
+      if (append instanceof Closure) {
+          append = append(this.newExpr(), this);
       }
 
-      if ($expression.getConjunction() == $conjunction) {
-          $expression.add($append, myTypes);
+      if (expression.getConjunction() == conjunction) {
+          expression.add(append, myTypes);
       } else {
-          $expression = this.newExpr()
-              .setConjunction($conjunction)
-              .add([$expression, $append], myTypes);
+          expression = this.newExpr()
+              .setConjunction(conjunction)
+              .add([expression, append], myTypes);
       }
 
-      _parts[$part] = $expression;
+      _parts[part] = expression;
       _dirty();
   }
 
@@ -2191,27 +2191,27 @@ class Query : IDBAExpression, IteratorAggregate {
       if (_selectTypeMap  !is null) {
           _selectTypeMap = clone _selectTypeMap;
       }
-      foreach (_parts as myName: $part) {
-          if (empty($part)) {
+      foreach (_parts as myName: part) {
+          if (empty(part)) {
               continue;
           }
-          if (is_array($part)) {
-              foreach ($part as $i: $piece) {
-                  if (is_array($piece)) {
-                      foreach ($piece as $j: myValue) {
+          if (is_array(part)) {
+              foreach (part as i: piece) {
+                  if (is_array(piece)) {
+                      foreach (piece as j: myValue) {
                           if (myValue instanceof IDBAExpression) {
                               /** @psalm-suppress PossiblyUndefinedMethod */
-                              _parts[myName][$i][$j] = clone myValue;
+                              _parts[myName][i][j] = clone myValue;
                           }
                       }
-                  } elseif ($piece instanceof IDBAExpression) {
+                  } elseif (piece instanceof IDBAExpression) {
                       /** @psalm-suppress PossiblyUndefinedMethod */
-                      _parts[myName][$i] = clone $piece;
+                      _parts[myName][i] = clone piece;
                   }
               }
           }
-          if ($part instanceof IDBAExpression) {
-              _parts[myName] = clone $part;
+          if (part instanceof IDBAExpression) {
+              _parts[myName] = clone part;
           }
       }
   }
@@ -2233,14 +2233,14 @@ class Query : IDBAExpression, IteratorAggregate {
     try {
         set_error_handler(
             /** @return no-return */
-            function ($errno, $errstr) {
-                throw new RuntimeException($errstr, $errno);
+            function (errno, errstr) {
+                throw new RuntimeException(errstr, errno);
             },
             E_ALL
         );
         mySql = this.sql();
         myParams = this.getValueBinder().bindings();
-    } catch (RuntimeException $e) {
+    } catch (RuntimeException e) {
         mySql = "SQL could not be generated for this query as it is incomplete.";
         myParams = [];
     } finally {

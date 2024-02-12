@@ -26,12 +26,12 @@ trait TypedResultTrait
     /**
      * Sets the type of the value this object will generate.
      *
-     * @param string $type The name of the type that is to be returned
+     * @param string type The name of the type that is to be returned
      * @return this
      */
-    function setReturnType(string $type)
+    function setReturnType(string type)
     {
-        _returnType = $type;
+        _returnType = type;
 
         return this;
     }

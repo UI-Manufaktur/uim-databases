@@ -40,39 +40,39 @@ class PostgresCompiler : QueryCompiler
      * it constructs the field list taking care of aliasing and
      * converting expression objects to string.
      *
-     * @param array $parts list of fields to be transformed to string
-     * @param uim.databases.Query $query The query that is being compiled
+     * @param array parts list of fields to be transformed to string
+     * @param uim.databases.Query query The query that is being compiled
      * @param uim.databases.ValueBinder aBinder Value binder used to generate parameter placeholder
      */
-    protected string _buildHavingPart($parts, $query, $binder) {
-        $selectParts = $query.clause("select");
+    protected string _buildHavingPart(parts, query, binder) {
+        selectParts = query.clause("select");
 
-        foreach ($selectParts as $selectKey: $selectPart) {
-            if (!$selectPart instanceof FunctionExpression) {
+        foreach (selectParts as selectKey: selectPart) {
+            if (!selectPart instanceof FunctionExpression) {
                 continue;
             }
-            foreach ($parts as $k: $p) {
-                if (!is_string($p)) {
+            foreach (parts as k: p) {
+                if (!is_string(p)) {
                     continue;
                 }
                 preg_match_all(
-                    "/\b" ~ trim($selectKey, """) ~ "\b/i",
-                    $p,
-                    $matches
+                    "/\b" ~ trim(selectKey, """) ~ "\b/i",
+                    p,
+                    matches
                 );
 
-                if (empty($matches[0])) {
+                if (empty(matches[0])) {
                     continue;
                 }
 
-                $parts[$k] = preg_replace(
-                    ["/"/", "/\b" ~ trim($selectKey, """) ~ "\b/i"],
-                    ["", $selectPart.sql($binder)],
-                    $p
+                parts[k] = preg_replace(
+                    ["/"/", "/\b" ~ trim(selectKey, """) ~ "\b/i"],
+                    ["", selectPart.sql(binder)],
+                    p
                 );
             }
         }
 
-        return sprintf(" HAVING %s", implode(", ", $parts));
+        return sprintf(" HAVING %s", implode(", ", parts));
     }
 }

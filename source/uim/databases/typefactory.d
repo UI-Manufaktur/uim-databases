@@ -58,14 +58,14 @@ class TypeFactory
      */
     static function build(string aName): TypeInterface
     {
-        if (isset(static::_builtTypes[$name])) {
-            return static::_builtTypes[$name];
+        if (isset(static::_builtTypes[name])) {
+            return static::_builtTypes[name];
         }
-        if (!isset(static::_types[$name])) {
-            throw new InvalidArgumentException(sprintf("Unknown type '%s'", $name));
+        if (!isset(static::_types[name])) {
+            throw new InvalidArgumentException(sprintf("Unknown type '%s'", name));
         }
 
-        return static::_builtTypes[$name] = new static::_types[$name]($name);
+        return static::_builtTypes[name] = new static::_types[name](name);
     }
 
     /**
@@ -74,62 +74,62 @@ class TypeFactory
      * @return array<uim.databases.TypeInterface>
      */
     static array buildAll() {
-        $result = null;
-        foreach (static::_types as $name: $type) {
-            $result[$name] = static::_builtTypes[$name] ?? static::build($name);
+        result = null;
+        foreach (static::_types as name: type) {
+            result[name] = static::_builtTypes[name] ?? static::build(name);
         }
 
-        return $result;
+        return result;
     }
 
     /**
-     * Set TypeInterface instance capable of converting a type identified by $name
+     * Set TypeInterface instance capable of converting a type identified by name
      *
      * @param string aName The type identifier you want to set.
-     * @param uim.databases.TypeInterface $instance The type instance you want to set.
+     * @param uim.databases.TypeInterface instance The type instance you want to set.
      */
-    static void set(string aName, TypeInterface $instance) {
-        static::_builtTypes[$name] = $instance;
-        static::_types[$name] = get_class($instance);
+    static void set(string aName, TypeInterface instance) {
+        static::_builtTypes[name] = instance;
+        static::_types[name] = get_class(instance);
     }
 
     /**
      * Registers a new type identifier and maps it to a fully namespaced classname.
      *
-     * @param string $type Name of type to map.
-     * @param string $className The classname to register.
+     * @param string type Name of type to map.
+     * @param string className The classname to register.
      * @return void
-     * @psalm-param class-string<uim.databases.TypeInterface> $className
+     * @psalm-param class-string<uim.databases.TypeInterface> className
      */
-    static void map(string $type, string $className) {
-        static::_types[$type] = $className;
-        unset(static::_builtTypes[$type]);
+    static void map(string type, string className) {
+        static::_types[type] = className;
+        unset(static::_builtTypes[type]);
     }
 
     /**
      * Set type to classname mapping.
      *
-     * @param array<string> $map List of types to be mapped.
+     * @param array<string> map List of types to be mapped.
      * @return void
-     * @psalm-param array<string, class-string<uim.databases.TypeInterface>> $map
+     * @psalm-param array<string, class-string<uim.databases.TypeInterface>> map
      */
-    static void setMap(array $map) {
-        static::_types = $map;
+    static void setMap(array map) {
+        static::_types = map;
         static::_builtTypes = null;
     }
 
     /**
      * Get mapped class name for given type or map array.
      *
-     * @param string|null $type Type name to get mapped class for or null to get map array.
-     * @return array<string>|string|null Configured class name for given $type or map array.
+     * @param string|null type Type name to get mapped class for or null to get map array.
+     * @return array<string>|string|null Configured class name for given type or map array.
      */
-    static function getMap(Nullable!string $type = null) {
-        if ($type == null) {
+    static function getMap(Nullable!string type = null) {
+        if (type == null) {
             return static::_types;
         }
 
-        return static::_types[$type] ?? null;
+        return static::_types[type] ?? null;
     }
 
     /**

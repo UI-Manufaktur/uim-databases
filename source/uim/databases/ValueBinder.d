@@ -29,10 +29,10 @@ class ValueBinder {
     /**
      * Associates a query placeholder to a value and a type
      *
-     * @param string|int $param placeholder to be replaced with quoted version
+     * @param string|int param placeholder to be replaced with quoted version
      * of aValue
      * @param mixed aValue The value to be bound
-     * @param string|int|null $type the mapped type name, used for casting when sending
+     * @param string|int|null type the mapped type name, used for casting when sending
      * to database
      * @return void
      */
@@ -64,7 +64,7 @@ class ValueBinder {
      * and binds them with the specified type.
      *
      * @param iterable someValues The list of values to be bound
-     * @param string|int|null $type The type with which all values will be bound
+     * @param string|int|null type The type with which all values will be bound
      * @return array with the placeholders to insert in the query
      */
     STRINGAA generateManyNamed(DValue[string] values, aType = null) {

@@ -82,17 +82,17 @@ The easiest way of executing queries is by using the `execute()` method, it will
 `uim.databases.IStatement` that you can use to get the data back:
 
 ```php
-$statement = myConnection.execute("SELECT * FROM articles");
+statement = myConnection.execute("SELECT * FROM articles");
 
-while(aRow = $statement.fetch("assoc")) {
+while(aRow = statement.fetch("assoc")) {
 	echo aRow["title"] . PHP_EOL;
 }
 ```
 Binding values to parametrized arguments is also possible with the execute function:
 
 ```php
-$statement = myConnection.execute("SELECT * FROM articles WHERE id = :id", ["id":1], ["id":"integer"]);
-myResults = $statement.fetch("assoc");
+statement = myConnection.execute("SELECT * FROM articles WHERE id = :id", ["id":1], ["id":"integer"]);
+myResults = statement.fetch("assoc");
 ```
 
 The third parameter is the types the passed values should be converted to when passed to the database. If
@@ -101,9 +101,9 @@ no types are passed, all arguments will be interpreted as a string.
 Alternatively you can construct a statement manually and then fetch rows from it:
 
 ```php
-$statement = myConnection.prepare("SELECT * from articles WHERE id != :id");
-$statement.bind(["id":1], ["id":"integer"]);
-myResults = $statement.fetchAll("assoc");
+statement = myConnection.prepare("SELECT * from articles WHERE id != :id");
+statement.bind(["id":1], ["id":"integer"]);
+myResults = statement.fetchAll("assoc");
 ```
 
 The default types that are understood by this library and can be passed to the `bind()` function or to `execute()`
@@ -125,12 +125,12 @@ More types can be added dynamically in a bit.
 Statements can be reused by binding new values to the parameters in the query:
 
 ```php
-$statement = myConnection.prepare("SELECT * from articles WHERE id = :id");
-$statement.bind(["id":1], ["id":"integer"]);
-myResults = $statement.fetchAll("assoc");
+statement = myConnection.prepare("SELECT * from articles WHERE id = :id");
+statement.bind(["id":1], ["id":"integer"]);
+myResults = statement.fetchAll("assoc");
 
-$statement.bind(["id":1], ["id":"integer"]);
-myResults = $statement.fetchAll("assoc");
+statement.bind(["id":1], ["id":"integer"]);
+myResults = statement.fetchAll("assoc");
 ```
 
 ### Updating Rows
@@ -246,8 +246,8 @@ myQuery.where(["OR":["id >":1, "title":"My title"]]);
 For even more complex conditions you can use closures and expression objects:
 
 ```php
-myQuery.where(function ($exp) {
-        return $exp
+myQuery.where(function (exp) {
+        return exp
             .eq("author_id", 2)
             .eq("published", true)
             .notEq("spam", true)
@@ -269,11 +269,11 @@ WHERE
 Combining expressions is also possible:
 
 ```php
-myQuery.where(function ($exp) {
-        $orConditions = $exp.or(["author_id":2])
+myQuery.where(function (exp) {
+        orConditions = exp.or(["author_id":2])
             .eq("author_id", 5);
-        return $exp
-            .not($orConditions)
+        return exp
+            .not(orConditions)
             .lte("view_count", 10);
     });
 ```
@@ -327,11 +327,11 @@ parameters allow you to reference columns or other SQL literals. Bound parameter
 For example:
 
 ```php
-$concat = myQuery.func().concat([
+concat = myQuery.func().concat([
     "title":"literal",
     " NEW"
 ]);
-myQuery.select(["title":$concat]);
+myQuery.select(["title":concat]);
 ```
 
 The above generates:

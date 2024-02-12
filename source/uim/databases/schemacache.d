@@ -30,74 +30,74 @@ class SchemaCache
     /**
      * Constructor
      *
-     * @param DDBAConnection $connection Connection name to get the schema for or a connection instance
+     * @param DDBAConnection connection Connection name to get the schema for or a connection instance
      */
-    this(Connection $connection) {
-        _schema = this.getSchema($connection);
+    this(Connection connection) {
+        _schema = this.getSchema(connection);
     }
 
     /**
      * Build metadata.
      *
-     * @param string|null $name The name of the table to build cache data for.
+     * @param string|null name The name of the table to build cache data for.
      * @return array<string> Returns a list build table caches
      */
     string[] build(Nullable!string aName = null) {
-        if ($name) {
-            $tables = [$name];
+        if (name) {
+            tables = [name];
         } else {
-            $tables = _schema.listTables();
+            tables = _schema.listTables();
         }
 
-        foreach ($tables as $table) {
+        foreach (tables as table) {
             /** @psalm-suppress PossiblyNullArgument */
-            _schema.describe($table, ["forceRefresh": true]);
+            _schema.describe(table, ["forceRefresh": true]);
         }
 
-        return $tables;
+        return tables;
     }
 
     /**
      * Clear metadata.
      *
-     * @param string|null $name The name of the table to clear cache data for.
+     * @param string|null name The name of the table to clear cache data for.
      * returns Returns a list of cleared table caches
      */
     string[] clear(Nullable!string aName = null) {
-        if ($name) {
-            $tables = [$name];
+        if (name) {
+            tables = [name];
         } else {
-            $tables = _schema.listTables();
+            tables = _schema.listTables();
         }
 
-        $cacher = _schema.getCacher();
+        cacher = _schema.getCacher();
 
-        foreach ($tables as $table) {
+        foreach (tables as table) {
             /** @psalm-suppress PossiblyNullArgument */
-            $key = _schema.cacheKey($table);
-            $cacher.delete($key);
+            key = _schema.cacheKey(table);
+            cacher.delete(key);
         }
 
-        return $tables;
+        return tables;
     }
 
     /**
      * Helper method to get the schema collection.
      *
-     * @param DDBAConnection $connection Connection object
+     * @param DDBAConnection connection Connection object
      * @return uim.databases.Schema\CachedCollection
      * @throws \RuntimeException If given connection object is not compatible with schema caching
      */
-    function getSchema(Connection $connection): CachedCollection
+    function getSchema(Connection connection): CachedCollection
     {
-        aConfig = $connection.config();
+        aConfig = connection.config();
         if (empty(aConfig["cacheMetadata"])) {
-            $connection.cacheMetadata(true);
+            connection.cacheMetadata(true);
         }
 
-        /** @var DDBSchema\CachedCollection $schemaCollection */
-        $schemaCollection = $connection.getSchemaCollection();
+        /** @var DDBSchema\CachedCollection schemaCollection */
+        schemaCollection = connection.getSchemaCollection();
 
-        return $schemaCollection;
+        return schemaCollection;
     }
 }

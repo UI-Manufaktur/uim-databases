@@ -43,18 +43,18 @@ class TypeMap
     /**
      * Creates an instance with the given defaults
      *
-     * @param array<int|string, string> $defaults The defaults to use.
+     * @param array<int|string, string> defaults The defaults to use.
      */
-    public this(array $defaults = [])
+    public this(array defaults = [])
     {
-        this.setDefaults($defaults);
+        this.setDefaults(defaults);
     }
 
     /**
      * Configures a map of fields and associated type.
      *
      * These values will be used as the default mapping of types for every function
-     * in this instance that supports a `$types` param.
+     * in this instance that supports a `types` param.
      *
      * This method is useful when you want to avoid repeating type definitions
      * as setting types overwrites the last set of types.
@@ -62,19 +62,19 @@ class TypeMap
      * ### Example
      *
      * ```
-     * $query.setDefaults(["created": "datetime", "is_visible": "boolean"]);
+     * query.setDefaults(["created": "datetime", "is_visible": "boolean"]);
      * ```
      *
      * This method will replace all the existing default mappings with the ones provided.
      * To add into the mappings use `addDefaults()`.
      *
-     * @param array<int|string, string> $defaults Array where keys are field names / positions and values
+     * @param array<int|string, string> defaults Array where keys are field names / positions and values
      * are the correspondent type.
      * @return this
      */
-    function setDefaults(array $defaults)
+    function setDefaults(array defaults)
     {
-        _defaults = $defaults;
+        _defaults = defaults;
 
         return this;
     }
@@ -94,12 +94,12 @@ class TypeMap
      *
      * If a key already exists it will not be overwritten.
      *
-     * @param array<int|string, string> $types The additional types to add.
+     * @param array<int|string, string> types The additional types to add.
      * @return void
      */
-    function addDefaults(array $types): void
+    function addDefaults(array types): void
     {
-        _defaults += $types;
+        _defaults += types;
     }
 
     /**
@@ -108,18 +108,18 @@ class TypeMap
      * ### Example
      *
      * ```
-     * $query.setTypes(["created": "time"]);
+     * query.setTypes(["created": "time"]);
      * ```
      *
      * This method will replace all the existing type maps with the ones provided.
      *
-     * @param array<int|string, string> $types Array where keys are field names / positions and values
+     * @param array<int|string, string> types Array where keys are field names / positions and values
      * are the correspondent type.
      * @return this
      */
-    function setTypes(array $types)
+    function setTypes(array types)
     {
-        _types = $types;
+        _types = types;
 
         return this;
     }
@@ -139,12 +139,12 @@ class TypeMap
      * the column type will be looked for inside the default mapping. If neither exist,
      * null will be returned.
      *
-     * @param string|int $column The type for a given column
+     * @param string|int column The type for a given column
      * @return string|null
      */
-    function type($column): ?string
+    function type(column): ?string
     {
-        return _types[$column] ?? _defaults[$column] ?? null;
+        return _types[column] ?? _defaults[column] ?? null;
     }
 
     /**

@@ -14,14 +14,14 @@ trait TypeMapTrait
     protected _typeMap;
 
     /**
-     * Creates a new TypeMap if $typeMap is an array, otherwise exchanges it for the given one.
+     * Creates a new TypeMap if typeMap is an array, otherwise exchanges it for the given one.
      *
-     * @param uim.databases.TypeMap|array $typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
+     * @param uim.databases.TypeMap|array typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
      * @return this
      */
-    function setTypeMap($typeMap)
+    function setTypeMap(typeMap)
     {
-        _typeMap = is_array($typeMap) ? new TypeMap($typeMap) : $typeMap;
+        _typeMap = is_array(typeMap) ? new TypeMap(typeMap) : typeMap;
 
         return this;
     }
@@ -50,13 +50,13 @@ trait TypeMapTrait
      * To add a default without overwriting existing ones
      * use `getTypeMap().addDefaults()`
      *
-     * @param array<int|string, string> $types The array of types to set.
+     * @param array<int|string, string> types The array of types to set.
      * @return this
      * @see uim.databases.TypeMap.setDefaults()
      */
-    function setDefaultTypes(array $types)
+    function setDefaultTypes(array types)
     {
-        this.getTypeMap().setDefaults($types);
+        this.getTypeMap().setDefaults(types);
 
         return this;
     }

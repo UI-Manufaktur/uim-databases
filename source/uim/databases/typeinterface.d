@@ -17,29 +17,29 @@ interface TypeInterface
     /**
      * Casts given value from a D type to one acceptable by a database.
      *
-     * @param mixed $value Value to be converted to a database equivalent.
+     * @param mixed value Value to be converted to a database equivalent.
      * @param uim.databases.IDriver aDriver Object from which database preferences and configuration will be extracted.
      * @return mixed Given D type casted to one acceptable by a database.
      */
-    function toDatabase($value, IDriver aDriver);
+    function toDatabase(value, IDriver aDriver);
 
     /**
      * Casts given value from a database type to a D equivalent.
      *
-     * @param mixed $value Value to be converted to D equivalent
+     * @param mixed value Value to be converted to D equivalent
      * @param uim.databases.IDriver aDriver Object from which database preferences and configuration will be extracted
      * @return mixed Given value casted from a database to a D equivalent.
      */
-    function toPHP($value, IDriver aDriver);
+    function toPHP(value, IDriver aDriver);
 
     /**
      * Casts given value to its Statement equivalent.
      *
-     * @param mixed $value Value to be converted to PDO statement.
+     * @param mixed value Value to be converted to PDO statement.
      * @param uim.databases.IDriver aDriver Object from which database preferences and configuration will be extracted.
      * @return mixed Given value casted to its Statement equivalent.
      */
-    function toStatement($value, IDriver aDriver);
+    function toStatement(value, IDriver aDriver);
 
     /**
      * Marshals flat data into D objects.
@@ -47,10 +47,10 @@ interface TypeInterface
      * Most useful for converting request data into D objects,
      * that make sense for the rest of the ORM/Database layers.
      *
-     * @param mixed $value The value to convert.
+     * @param mixed value The value to convert.
      * @return mixed Converted value.
      */
-    function marshal($value);
+    function marshal(value);
 
     /**
      * Returns the base type name that this class is inheriting.

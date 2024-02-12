@@ -13,8 +13,8 @@ interface ITypedResult
     /**
      * Set the return type of the expression
      *
-     * @param string $type The type name to use.
+     * @param string type The type name to use.
      * @return this
      */
-    function setReturnType(string $type);
+    function setReturnType(string type);
 }

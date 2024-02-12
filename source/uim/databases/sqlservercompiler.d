@@ -43,18 +43,18 @@ class SqlserverCompiler : QueryCompiler
      * keyword that is neither required nor valid.
      *
      * @param array someParts List of CTEs to be transformed to string
-     * @param uim.databases.Query $query The query that is being compiled
-     * @param uim.databases.ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases.Query query The query that is being compiled
+     * @param uim.databases.ValueBinder binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildWithPart(array someParts, Query $query, ValueBinder $binder): string
+    protected function _buildWithPart(array someParts, Query query, ValueBinder binder): string
     {
-        $expressions = [];
-        foreach ($parts as $cte) {
-            $expressions[] = $cte.sql($binder);
+        expressions = [];
+        foreach (parts as cte) {
+            expressions[] = cte.sql(binder);
         }
 
-        return sprintf("WITH %s ", implode(", ", $expressions));
+        return sprintf("WITH %s ", implode(", ", expressions));
     }
 
     /**
@@ -65,44 +65,44 @@ class SqlserverCompiler : QueryCompiler
      * row"s data back.
      *
      * @param array someParts The parts to build
-     * @param uim.databases.Query $query The query that is being compiled
-     * @param uim.databases.ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases.Query query The query that is being compiled
+     * @param uim.databases.ValueBinder binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildInsertPart(array someParts, Query $query, ValueBinder $binder): string
+    protected function _buildInsertPart(array someParts, Query query, ValueBinder binder): string
     {
-        if (!isset($parts[0])) {
+        if (!isset(parts[0])) {
             throw new DatabaseException(
                 "Could not compile insert query. No table was specified. "~
                 "Use `into()` to define a table."
             );
         }
-        $table = $parts[0];
-        $columns = _stringifyExpressions($parts[1], $binder);
-        myModifiers = _buildModifierPart($query.clause("modifier"), $query, $binder);
+        table = parts[0];
+        columns = _stringifyExpressions(parts[1], binder);
+        myModifiers = _buildModifierPart(query.clause("modifier"), query, binder);
 
         return sprintf(
             "INSERT%s INTO %s (%s) OUTPUT INSERTED.*",
             myModifiers,
-            $table,
-            implode(", ", $columns)
+            table,
+            implode(", ", columns)
         );
     }
 
     /**
      * Generates the LIMIT part of a SQL query
      *
-     * @param int $limit the limit clause
-     * @param uim.databases.Query $query The query that is being compiled
+     * @param int limit the limit clause
+     * @param uim.databases.Query query The query that is being compiled
      * @return string
      */
-    protected function _buildLimitPart(int $limit, Query $query): string
+    protected function _buildLimitPart(int limit, Query query): string
     {
-        if ($query.clause("offset") == null) {
+        if (query.clause("offset") == null) {
             return "";
         }
 
-        return sprintf(" FETCH FIRST %d ROWS ONLY", $limit);
+        return sprintf(" FETCH FIRST %d ROWS ONLY", limit);
     }
 
     /**
@@ -111,40 +111,40 @@ class SqlserverCompiler : QueryCompiler
      * converting expression objects to string.
      *
      * @param array someParts list of fields to be transformed to string
-     * @param uim.databases.Query $query The query that is being compiled
-     * @param uim.databases.ValueBinder $binder Value binder used to generate parameter placeholder
+     * @param uim.databases.Query query The query that is being compiled
+     * @param uim.databases.ValueBinder binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildHavingPart($parts, $query, $binder)
+    protected function _buildHavingPart(parts, query, binder)
     {
-        $selectParts = $query.clause("select");
+        selectParts = query.clause("select");
 
-        foreach ($selectParts as $selectKey: $selectPart) {
-            if (!$selectPart instanceof FunctionExpression) {
+        foreach (selectParts as selectKey: selectPart) {
+            if (!selectPart instanceof FunctionExpression) {
                 continue;
             }
-            foreach ($parts as $k: $p) {
-                if (!is_string($p)) {
+            foreach (parts as k: p) {
+                if (!is_string(p)) {
                     continue;
                 }
                 preg_match_all(
-                    "/\b"~ trim($selectKey, "[]") . "\b/i",
-                    $p,
-                    $matches
+                    "/\b"~ trim(selectKey, "[]") . "\b/i",
+                    p,
+                    matches
                 );
 
-                if (empty($matches[0])) {
+                if (empty(matches[0])) {
                     continue;
                 }
 
-                $parts[$k] = preg_replace(
-                    ["/\[|\]/", "/\b"~ trim($selectKey, "[]") . "\b/i"],
-                    ["", $selectPart.sql($binder)],
-                    $p
+                parts[k] = preg_replace(
+                    ["/\[|\]/", "/\b"~ trim(selectKey, "[]") . "\b/i"],
+                    ["", selectPart.sql(binder)],
+                    p
                 );
             }
         }
 
-        return sprintf(" HAVING %s", implode(", ", $parts));
+        return sprintf(" HAVING %s", implode(", ", parts));
     }
 }
