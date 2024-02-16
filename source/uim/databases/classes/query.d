@@ -460,7 +460,7 @@ abstract class Query : IExpression, Stringable {
             if (!cast(IExpression)$t["conditions"]) {
                 $t["conditions"] = this.newExpr().add($t["conditions"], $types);
             }
-            $alias = isString($alias) ? $alias : null;
+            $alias = isString($alias) ? alias : null;
             $joins[$alias ?:  anI++] = $t ~ ["type": JOIN_TYPE_INNER, "alias": $alias];
         }
         _parts["join"] = $overwrite ? $joins : array_merge(_parts["join"], $joins);

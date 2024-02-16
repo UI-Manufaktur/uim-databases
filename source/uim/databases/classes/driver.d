@@ -110,7 +110,7 @@ abstract class Driver {
      * configData - configuration to be used for creating connection
      */
     protected PDO createPdo(string adsn, IData[string] configData = null) {
-        $action = fn (): new PDO(
+        action = fn (): new PDO(
             $dsn,
             configData["username"] ?: null,
             configData["password"] ?: null,

@@ -38,7 +38,7 @@ class Statement : IStatement {
         if (isEmpty($params)) {
             return;
         }
-        $anonymousParams = isInt(key($params));
+        anonymousParams = isInt(key($params));
          anOffset = 1;
         foreach ($params as  anIndex: aValue) {
             $type = $types[anIndex] ?? null;

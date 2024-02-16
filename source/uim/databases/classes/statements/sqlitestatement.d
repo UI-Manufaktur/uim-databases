@@ -6,7 +6,7 @@ import uim.databases;
 
 // Statement class meant to be used by an Sqlite driver
 class SqliteStatement : Statement {
-    protected  int $affectedRows = null;
+    protected  int affectedRows = null;
 
     bool execute(? array myparams = null) {
         this.affectedRows = null;

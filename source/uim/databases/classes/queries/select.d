@@ -400,7 +400,7 @@ class SelectQuery : Query, IteratorAggregate {
         IExpression|Closure|string[] aconditions,
         string atype
     ) {
-        $alias = aTable;
+        alias = aTable;
 
         if (isArray(aTable)) {
             $alias = key(aTable);

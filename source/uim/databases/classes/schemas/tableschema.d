@@ -239,7 +239,7 @@ class TableSchema : TableISchema, ISqlGenerator {
             $valid += _columnExtras[$attrs["type"]];
         }
         $attrs = array_intersect_key($attrs, $valid);
-       _columns[$name] = $attrs + $valid;
+       _columns[$name] = attrs + $valid;
        _typeMap[$name] = _columns[$name]["type"];
     }
  

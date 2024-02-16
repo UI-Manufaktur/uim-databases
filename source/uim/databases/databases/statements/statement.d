@@ -18,7 +18,7 @@ class Statement : IStatement {
     protected FieldTypeConverter typeConverter;
 
     // Cached bound parameters used for logging
-    protected Json params = [];
+    protected Json params;
 
     /**
      * @param \PDOStatement statement PDO statement
@@ -98,10 +98,9 @@ class Statement : IStatement {
         if ($row == false) {
             return false;
         }
-        if (this.typeConverter !isNull) {
-            return (this.typeConverter)($row);
-        }
-        return row;
+        return !this.typeConverter.isNull
+            ? (this.typeConverter)($row)
+            : row;
     }
  
     array fetchAssoc() {
