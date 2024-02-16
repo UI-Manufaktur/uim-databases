@@ -88,7 +88,7 @@ class PostgresSchemaDialect : SchemaDialect
             throw new DatabaseException(sprintf("Unable to parse column type from "%s"", column));
         }
 
-        string colType = strtolower(matches[1]);
+        string colType = matches[1].toLower;
         length = precision = scale = null;
         if (isset(matches[2])) {
             length = (int)matches[2];

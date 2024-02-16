@@ -99,7 +99,7 @@ class SqlserverSchemaDialect : SchemaDialect
         Nullable!int precision = null,
         Nullable!int scale = null
     ) {
-        col = strtolower(col);
+        col = col.toLower;
 
         type = _applyTypeSpecificColumnConversion(
             col,

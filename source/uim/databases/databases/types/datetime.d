@@ -259,7 +259,7 @@ class DateTimeType : BaseType, IBatchCasting {
             myRequestData["hour"] = 0;
         }
         if (isSet(myRequestData["meridian"])) {
-            myRequestData["hour"] = strtolower(myRequestData["meridian"]) == "am" ? myRequestData["hour"] : myRequestData["hour"] + 12;
+            myRequestData["hour"] = myRequestData["meridian"].toLower == "am" ? myRequestData["hour"] : myRequestData["hour"] + 12;
         }
         format = 
             "%d-%02d-%02d %02d:%02d:%02d.%06d"
@@ -273,7 +273,7 @@ class DateTimeType : BaseType, IBatchCasting {
                 myRequestData["microsecond"]
             );
 
-        dateTime = new className($format, myRequestData["timezone"] ?? this.userTimezone);
+        dateTime = new className($format, myRequestData.get("timezone", this.userTimezone);
 
         return dateTime.setTimezone(this.defaultTimezone);
     }

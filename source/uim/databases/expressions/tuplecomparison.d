@@ -195,6 +195,6 @@ class TupleComparison : ComparisonExpression
      * itself
      */
     bool isMulti() {
-        return hasAllValues(strtolower(_operator), ["in", "not in"]);
+        return hasAllValues(_operator.toLower, ["in", "not in"]);
     }
 }

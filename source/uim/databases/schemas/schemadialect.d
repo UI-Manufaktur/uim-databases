@@ -72,7 +72,7 @@ abstract class SchemaDialect
      */
     protected string _convertOnClause(string clause) {
         if (clause == "CASCADE" || clause == "RESTRICT") {
-            return strtolower(clause);
+            return clause.toLower;
         }
         if (clause == "NO ACTION") {
             return TableSchema::ACTION_NO_ACTION;

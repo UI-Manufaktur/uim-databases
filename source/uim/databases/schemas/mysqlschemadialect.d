@@ -93,7 +93,7 @@ class MysqlSchemaDialect : SchemaDialect
             throw new DatabaseException(sprintf("Unable to parse column type from "%s"", column));
         }
 
-        col = strtolower(matches[1]);
+        string col = matches[1].toLower;
         length = precision = scale = null;
         if (isset(matches[2]) && strlen(matches[2])) {
             length = matches[2];
