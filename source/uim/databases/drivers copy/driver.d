@@ -126,10 +126,10 @@ abstract class Driver : IDriver
     }
 
 
-    string quote($value, $type = PDO::PARAM_STR) {
+    string quote($value, type = PDO::PARAM_STR) {
         this.connect();
 
-        return _connection.quote((string)$value, $type);
+        return _connection.quote((string)$value, type);
     }
 
     /**
@@ -145,7 +145,7 @@ abstract class Driver : IDriver
     }
 
 
-    abstract function queryTranslator(string $type): Closure;
+    abstract function queryTranslator(string type): Closure;
 
 
     abstract function schemaDialect(): SchemaDialect;
@@ -192,7 +192,7 @@ abstract class Driver : IDriver
     }
 
 
-    function lastInsertId(Nullable!string $table = null, Nullable!string $column = null) {
+    function lastInsertId(Nullable!string table = null, Nullable!string $column = null) {
         this.connect();
 
         if (_connection instanceof PDO) {
@@ -257,8 +257,8 @@ abstract class Driver : IDriver
 
     array compileQuery(Query $query, ValueBinder aBinder) {
         $processor = this.newCompiler();
-        $translator = this.queryTranslator($query.type());
-        $query = $translator($query);
+        translator = this.queryTranslator($query.type());
+        $query = translator($query);
 
         return [$query, $processor.compile($query, $binder)];
     }
@@ -270,7 +270,7 @@ abstract class Driver : IDriver
     }
 
 
-    function newTableSchema(string $table, array $columns = null): TableSchema
+    function newTableSchema(string table, array $columns = null): TableSchema
     {
         $className = TableSchema::class;
         if (isset(_config["tableSchema"])) {

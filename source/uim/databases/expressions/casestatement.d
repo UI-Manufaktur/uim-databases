@@ -103,10 +103,10 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * case expression variant!
      *
      * @param uim.databases.IDBAExpression|object|scalar|null $value The case value.
-     * @param string|null $type The case value type. If no type is provided, the type will be tried to be inferred
+     * @param string|null type The case value type. If no type is provided, the type will be tried to be inferred
      *  from the value.
      */
-    this($value = null, Nullable!string $type = null) {
+    this($value = null, Nullable!string type = null) {
         if (func_num_args() > 0) {
             if (
                 $value != null &&
@@ -125,12 +125,12 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
 
             if (
                 $value != null &&
-                $type == null &&
+                type == null &&
                 !($value instanceof IDBAExpression)
             ) {
-                $type = this.inferType($value);
+                type = this.inferType($value);
             }
-            this.valueType = $type;
+            this.valueType = type;
 
             this.isSimpleVariant = true;
         }
@@ -267,14 +267,14 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      *  you plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to
      *  be a non-array, and then always binds the data), use a conditions array where the user data is only passed on
      *  the value side of the array entries, or custom bindings!
-     * @param array<string, string>|string|null $type The when value type. Either an associative array when using array style
+     * @param array<string, string>|string|null type The when value type. Either an associative array when using array style
      *  conditions, or else a string. If no type is provided, the type will be tried to be inferred from the value.
      * @return this
      * @throws \LogicException In case this a closing `then()` call is required before calling this method.
      * @throws \LogicException In case the callable doesn"t return an instance of
      *  `uim.databases.Expression\WhenThenExpression`.
      */
-    function when($when, $type = null) {
+    function when($when, type = null) {
         if (this.whenBuffer != null) {
             throw new LogicException("Cannot call `when()` between `when()` and `then()`.");
         }
@@ -293,7 +293,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
         if ($when instanceof WhenThenExpression) {
             this.when[] = $when;
         } else {
-            this.whenBuffer = ["when": $when, "type": $type];
+            this.whenBuffer = ["when": $when, "type": type];
         }
 
         return this;
@@ -349,20 +349,20 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * ```
      *
      * @param uim.databases.IDBAExpression|object|scalar|null $result The result value.
-     * @param string|null $type The result type. If no type is provided, the type will be tried to be inferred from the
+     * @param string|null type The result type. If no type is provided, the type will be tried to be inferred from the
      *  value.
      * @return this
      * @throws \LogicException In case `when()` wasn"t previously called with a value other than a closure or an
      *  instance of `uim.databases.Expression\WhenThenExpression`.
      */
-    function then($result, Nullable!string $type = null) {
+    function then($result, Nullable!string type = null) {
         if (this.whenBuffer == null) {
             throw new LogicException("Cannot call `then()` before `when()`.");
         }
 
         $whenThen = (new WhenThenExpression(this.getTypeMap()))
             .when(this.whenBuffer["when"], this.whenBuffer["type"])
-            .then($result, $type);
+            .then($result, type);
 
         this.whenBuffer = null;
 
@@ -375,14 +375,14 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * Sets the `ELSE` result value.
      *
      * @param uim.databases.IDBAExpression|object|scalar|null $result The result value.
-     * @param string|null $type The result type. If no type is provided, the type will be tried to be inferred from the
+     * @param string|null type The result type. If no type is provided, the type will be tried to be inferred from the
      *  value.
      * @return this
      * @throws \LogicException In case a closing `then()` call is required before calling this method.
      * @throws \InvalidArgumentException In case the `$result` argument is neither a scalar value, nor an object, an
      *  instance of `uim.databases.IDBAExpression`, or `null`.
      */
-    function else($result, Nullable!string $type = null) {
+    function else($result, Nullable!string type = null) {
         if (this.whenBuffer != null) {
             throw new LogicException("Cannot call `else()` between `when()` and `then()`.");
         }
@@ -401,11 +401,11 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
         }
 
         if ($type == null) {
-            $type = this.inferType($result);
+            type = this.inferType($result);
         }
 
         this.else = $result;
-        this.elseType = $type;
+        this.elseType = type;
 
         return this;
     }
@@ -426,21 +426,21 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
             return this.returnType;
         }
 
-        $types = null;
+        types = null;
         foreach (this.when as $when) {
-            $type = $when.getResultType();
+            type = $when.getResultType();
             if ($type != null) {
-                $types[] = $type;
+                types[] = type;
             }
         }
 
         if (this.elseType != null) {
-            $types[] = this.elseType;
+            types[] = this.elseType;
         }
 
-        $types = array_unique($types);
+        types = array_unique($types);
         if (count($types) == 1) {
-            return $types[0];
+            return types[0];
         }
 
         return "string";
@@ -453,11 +453,11 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * `getReturnType()` method will try to infer the type from the
      * result types of the `then()` and `else() `calls.
      *
-     * @param string $type The type name to use.
+     * @param string type The type name to use.
      * @return this
      */
-    function setReturnType(string $type) {
-        this.returnType = $type;
+    function setReturnType(string type) {
+        this.returnType = type;
 
         return this;
     }

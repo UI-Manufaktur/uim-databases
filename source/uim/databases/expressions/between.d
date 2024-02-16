@@ -44,19 +44,19 @@ class BetweenExpression : IDBAExpression, FieldInterface
      *
      * @param uim.databases.IDBAExpression|string $field The field name to compare for values inbetween the range.
      * @param mixed $from The initial value of the range.
-     * @param mixed $to The ending value in the comparison range.
-     * @param string|null $type The data type name to bind the values with.
+     * @param mixed to The ending value in the comparison range.
+     * @param string|null type The data type name to bind the values with.
      */
-    this($field, $from, $to, $type = null) {
+    this($field, $from, to, type = null) {
         if ($type != null) {
-            $from = _castToExpression($from, $type);
-            $to = _castToExpression($to, $type);
+            $from = _castToExpression($from, type);
+            to = _castToExpression($to, type);
         }
 
         _field = $field;
         _from = $from;
-        _to = $to;
-        _type = $type;
+        _to = to;
+        _type = type;
     }
 
 
@@ -99,12 +99,12 @@ class BetweenExpression : IDBAExpression, FieldInterface
      *
      * @param mixed $value The value to bind
      * @param uim.databases.ValueBinder aBinder The value binder to use
-     * @param string $type The type of $value
+     * @param string type The type of $value
      * @return string generated placeholder
      */
-    protected string _bindValue($value, $binder, $type) {
+    protected string _bindValue($value, $binder, type) {
         $placeholder = $binder.placeholder("c");
-        $binder.bind($placeholder, $value, $type);
+        $binder.bind($placeholder, $value, type);
 
         return $placeholder;
     }

@@ -44,12 +44,12 @@ class SqliteSchemaDialect : SchemaDialect {
             columnLength = (int)columnLength;
             $precision = (int)$precision;
         }
-        $type = _applyTypeSpecificColumnConversion(
+        type = _applyTypeSpecificColumnConversion(
             $col,
             compact("length", "precision", "scale")
         );
         if ($type !isNull) {
-            return $type;
+            return type;
         }
         if ($col == "bigint") {
             return ["type": TableISchema.TYPE_BIGINTEGER, "length": columnLength, "unsigned": isUnsigned];
@@ -365,7 +365,7 @@ class SqliteSchemaDialect : SchemaDialect {
         if ($sql !isNull) {
             return $sql;
         }
-        $typeMap = [
+        typeMap = [
             TableISchema.TYPE_BINARY_UUID: ' BINARY(16)",
             TableISchema.TYPE_UUID: ' CHAR(36)",
             TableISchema.TYPE_CHAR: ' CHAR",
@@ -406,7 +406,7 @@ class SqliteSchemaDialect : SchemaDialect {
             }
         }
         if (isSet($typeMap[someData["type"]])) {
-             result ~= $typeMap[someData["type"]];
+             result ~= typeMap[someData["type"]];
         }
         if (someData["type"] == TableISchema.TYPE_TEXT && someData["length"] != TableSchema.LENGTH_TINY) {
              result ~= " TEXT";
@@ -469,14 +469,14 @@ class SqliteSchemaDialect : SchemaDialect {
                 }
             }
         }
-        $timestampTypes = [
+        timestampTypes = [
             TableISchema.TYPE_DATETIME,
             TableISchema.TYPE_DATETIME_FRACTIONAL,
             TableISchema.TYPE_TIMESTAMP,
             TableISchema.TYPE_TIMESTAMP_FRACTIONAL,
             TableISchema.TYPE_TIMESTAMP_TIMEZONE,
         ];
-        if (isSet(someData["null"]) && someData["null"] == true && in_array(someData["type"], $timestampTypes, true)) {
+        if (isSet(someData["null"]) && someData["null"] == true && in_array(someData["type"], timestampTypes, true)) {
              result ~= " DEFAULT NULL";
         }
         if (isSet(someData["default"])) {
@@ -508,15 +508,15 @@ class SqliteSchemaDialect : SchemaDialect {
             return "";
         }
         $clause = "";
-        $type = "";
+        type = "";
         if (someData["type"] == TableSchema.CONSTRAINT_PRIMARY) {
-            $type = "PRIMARY KEY";
+            type = "PRIMARY KEY";
         }
         if (someData["type"] == TableSchema.CONSTRAINT_UNIQUE) {
-            $type = "UNIQUE";
+            type = "UNIQUE";
         }
         if (someData["type"] == TableSchema.CONSTRAINT_FOREIGN) {
-            $type = "FOREIGN KEY";
+            type = "FOREIGN KEY";
 
             $clause = sprintf(
                 " REFERENCES %s (%s) ON UPDATE %s ON DELETE %s",
@@ -534,7 +534,7 @@ class SqliteSchemaDialect : SchemaDialect {
         return 
             "CONSTRAINT %s %s (%s)%s"
             .format(_driver.quoteIdentifier($name),
-            $type,
+            type,
             join(", ", someColumns),
             $clause
         );

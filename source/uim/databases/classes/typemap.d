@@ -63,10 +63,10 @@ class TypeMap {
      *
      * If a key already exists it will not be overwritten.
      * Params:
-     * array<int|string, string> $types The additional types to add.
+     * array<int|string, string> types The additional types to add.
      */
-    void addDefaults(array $types) {
-       _defaults += $types;
+    void addDefaults(array types) {
+       _defaults += types;
     }
     
     /**
@@ -80,11 +80,11 @@ class TypeMap {
      *
      * This method will replace all the existing type maps with the ones provided.
      * Params:
-     * array<int|string, string> $types Array where keys are field names / positions and values
+     * array<int|string, string> types Array where keys are field names / positions and values
      * are the correspondent type.
      */
-    void setTypes(array $types) {
-       _types = $types;
+    void setTypes(array types) {
+       _types = types;
     }
     
     /**

@@ -89,12 +89,12 @@ class SqlserverSchemaDialect : SchemaDialect {
     ) {
         string loweredColumnType = columnType.toLower;
 
-        $type = _applyTypeSpecificColumnConversion(
+        type = _applyTypeSpecificColumnConversion(
             loweredColumnType,
             compact("length", "precision", "scale")
         );
         if ($type !isNull) {
-            return $type;
+            return type;
         }
         if (in_array(loweredColumnType, ["date", "time"])) {
             return ["type": loweredColumnType, "length": null];
@@ -104,11 +104,11 @@ class SqlserverSchemaDialect : SchemaDialect {
             return ["type": TableISchema.TYPE_DATETIME, "length": null];
         }
         if (loweredColumnType.has("datetime")) {
-            auto $typeName = TableISchema.TYPE_DATETIME;
+            auto typeName = TableISchema.TYPE_DATETIME;
             if ($scale > 0) {
-                $typeName = TableISchema.TYPE_DATETIME_FRACTIONAL;
+                typeName = TableISchema.TYPE_DATETIME_FRACTIONAL;
             }
-            return ["type": $typeName, "length": null, "precision": $scale];
+            return ["type": typeName, "length": null, "precision": $scale];
         }
         if (loweredColumnType == "char") {
             return ["type": TableISchema.TYPE_CHAR, "length": $length];
@@ -238,16 +238,16 @@ class SqlserverSchemaDialect : SchemaDialect {
     }
  
     void convertIndexDescription(TableSchema tableSchema, array $row) {
-        auto $type = TableSchema.INDEX_INDEX;
+        auto type = TableSchema.INDEX_INDEX;
         auto $name = $row["index_name"];
         if ($row["isPrimaryKey"]) {
-            $name = $type = TableSchema.CONSTRAINT_PRIMARY;
+            $name = type = TableSchema.CONSTRAINT_PRIMARY;
         }
-        if (($row["is_unique"] || $row["is_unique_constraint"]) && $type == TableSchema.INDEX_INDEX) {
-            $type = TableSchema.CONSTRAINT_UNIQUE;
+        if (($row["is_unique"] || $row["is_unique_constraint"]) && type == TableSchema.INDEX_INDEX) {
+            type = TableSchema.CONSTRAINT_UNIQUE;
         }
 
-        auto $existing = $type == TableSchema.INDEX_INDEX 
+        auto $existing = type == TableSchema.INDEX_INDEX 
             ? tableSchema.getIndex($name)
             : tableSchema.getConstraint($name);
         
@@ -255,16 +255,16 @@ class SqlserverSchemaDialect : SchemaDialect {
         if (!empty($existing)) {
             someColumns = array_merge($existing["columns"], someColumns);
         }
-        if ($type == TableSchema.CONSTRAINT_PRIMARY || $type == TableSchema.CONSTRAINT_UNIQUE) {
+        if ($type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
             tablSchema.addConstraint($name, [
-                "type": $type,
+                "type": type,
                 "columns": someColumns,
             ]);
 
             return;
         }
         tableSchema.addIndex($name, [
-            "type": $type,
+            "type": type,
             "columns": someColumns,
         ]);
     }
@@ -327,7 +327,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             return $sql;
         }
          result = _driver.quoteIdentifier($name);
-        $typeMap = [
+        typeMap = [
             TableISchema.TYPE_TINYINTEGER: ' TINYINT",
             TableISchema.TYPE_SMALLINTEGER: ' SMALLINT",
             TableISchema.TYPE_INTEGER: ' INTEGER",
@@ -349,7 +349,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         ];
 
         if (isSet($typeMap[someData["type"]])) {
-             result ~= $typeMap[someData["type"]];
+             result ~= typeMap[someData["type"]];
         }
         autoIncrementTypes = [
             TableISchema.TYPE_TINYINTEGER,
@@ -358,7 +358,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             TableISchema.TYPE_BIGINTEGER,
         ];
         if (
-            in_array(someData["type"], $autoIncrementTypes, true) &&
+            in_array(someData["type"], autoIncrementTypes, true) &&
             (
                 (tableSchema.getPrimaryKey() == [$name] && $name == "id") || someData["autoIncrement"]
             )
@@ -394,7 +394,7 @@ class SqlserverSchemaDialect : SchemaDialect {
                 someData["length"] == TableSchema.LENGTH_TINY
             )
         ) {
-            $type = " NVARCHAR";
+            type = " NVARCHAR";
             $length = someData["length"] ?? TableSchema.LENGTH_TINY;
              result ~= "%s(%d)".format($type, $length);
         }

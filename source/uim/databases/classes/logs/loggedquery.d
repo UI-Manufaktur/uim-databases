@@ -16,7 +16,7 @@ class LoggedQuery : JsonSerializable, Stringable {
     protected string aquery = "";
 
     // Number of milliseconds this query took to complete
-    protected float $took = 0;
+    protected float took = 0;
 
     // Associative array with the params bound to the query string
     protected array $params = [];

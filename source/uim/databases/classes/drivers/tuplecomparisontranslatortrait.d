@@ -42,7 +42,7 @@ trait TupleComparisonTranslatorTrait {
             );
         }
         aValue = $expression.getValue();
-        $true = new QueryExpression("1");
+        true = new QueryExpression("1");
 
         if (cast(SelectQuery) aValue) {
             string[]$selected = aValue.clause("select").values;
@@ -57,10 +57,10 @@ trait TupleComparisonTranslatorTrait {
         }
         auto myType = $expression.getType();
         if (myType) {
-            /** @var STRINGAA $typeMap */
-            $typeMap = array_combine($fields, myType) ?  : [];
+            /** @var STRINGAA typeMap */
+            typeMap = array_combine($fields, myType) ?  : [];
         } else {
-            $typeMap = [];
+            typeMap = [];
         }
         $surrogate = aQuery.getConnection()
             .selectQuery()
@@ -74,7 +74,7 @@ trait TupleComparisonTranslatorTrait {
             auto items = []; foreach (anI : $value2; tuple.values) {
                 items ~= [$fields[anI]: $value2];}
                 $conditions["OR"] ~= items;});
-                $surrogate.where($conditions, $typeMap);
+                $surrogate.where($conditions, typeMap);
 
                 $expression.setFieldNames($true);
                 $expression.setValue($surrogate);

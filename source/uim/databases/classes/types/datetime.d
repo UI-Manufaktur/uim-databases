@@ -123,13 +123,13 @@ class DateTimeType : BaseType, IBatchCasting {
      * instances and converting DateTime instances to database strings.
      *
      * @see DateTimeType.setKeepDatabaseTimezone
-     * @param \DateTimeZone|string|null $timezone Database timezone.
+     * @param \DateTimeZone|string|null timezone Database timezone.
      */
-    void setDatabaseTimezone(DateTimeZone|string|null $timezone) {
+    void setDatabaseTimezone(DateTimeZone|string|null timezone) {
         if (isString($timezone)) {
-            $timezone = new DateTimeZone($timezone);
+            timezone = new DateTimeZone($timezone);
         }
-        this.dbTimezone = $timezone;
+        this.dbTimezone = timezone;
     }
     
     /**
@@ -137,13 +137,13 @@ class DateTimeType : BaseType, IBatchCasting {
      *
      * This is the time zone used when marshalling strings to DateTime instances.
      * Params:
-     * \DateTimeZone|string|null $timezone User timezone.
+     * \DateTimeZone|string|null timezone User timezone.
      */
-    void setUserTimezone(DateTimeZone|string|null $timezone) {
+    void setUserTimezone(DateTimeZone|string|null timezone) {
         if (isString($timezone)) {
-            $timezone = new DateTimeZone($timezone);
+            timezone = new DateTimeZone($timezone);
         }
-        this.userTimezone = $timezone;
+        this.userTimezone = timezone;
     }
     
     /**

@@ -37,7 +37,7 @@ class LoggedQuery : JsonSerializable
      *
      * @var float
      */
-    $took = 0;
+    took = 0;
 
     /**
      * Associative array with the params bound to the query string

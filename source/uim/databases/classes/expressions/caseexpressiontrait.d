@@ -16,35 +16,35 @@ trait CaseExpressionTrait {
      * Json aValue The value for which to infer the type.
      */
     protected string inferType(Json aValue) {
-        auto $type = null;
+        auto type = null;
 
         /** @psalm-suppress RedundantCondition */
         if (isString(aValue)) {
-            $type = "String";
+            type = "String";
         } elseif (isInt(aValue)) {
-            $type = "integer";
+            type = "integer";
         } elseif (isFloat(aValue)) {
-            $type = "float";
+            type = "float";
         } elseif (isBool(aValue)) {
-            $type = "boolean";
+            type = "boolean";
         } elseif (cast(ChronosDate)aValue) {
-            $type = "date";
+            type = "date";
         } elseif (cast(IDateTime)aValue) {
-            $type = "datetime";
+            type = "datetime";
         } elseif (
             isObject(aValue) &&
             cast(Stringable)aValue
         ) {
-            $type = "String";
+            type = "String";
         } elseif (
            _typeMap !isNull &&
             cast(IdentifierExpression)aValue 
         ) {
-            $type = _typeMap.type(aValue.getIdentifier());
+            type = _typeMap.type(aValue.getIdentifier());
         } elseif (aValue  ITypedResult) {
-            $type = aValue.getReturnType();
+            type = aValue.getReturnType();
         }
-        return $type;
+        return type;
     }
     
     /**
@@ -52,14 +52,14 @@ trait CaseExpressionTrait {
      * Params:
      * \UIM\Database\ValueBinder aBinder The value binder to use.
      * @param \UIM\Database\IExpression|object|scalar|null aValue The value to compile.
-     * @param string|null $type The value type.
+     * @param string|null type The value type.
      */
     protected string compileNullableValue(ValueBinder aBinder, Json aValue, string atype = null) {
         if (
-            $type !isNull &&
+            type !isNull &&
             !(cast(IExpression)aValue )
         ) {
-            aValue = _castToExpression(aValue, $type);
+            aValue = _castToExpression(aValue, type);
         }
         if (aValue.isNull) {
             aValue = "NULL";
@@ -69,7 +69,7 @@ trait CaseExpressionTrait {
             aValue = aValue.sql(aBinder);
         } else {
             $placeholder = aBinder.placeholder("c");
-            aBinder.bind($placeholder, aValue, $type);
+            aBinder.bind($placeholder, aValue, type);
             aValue = $placeholder;
         }
         return aValue;

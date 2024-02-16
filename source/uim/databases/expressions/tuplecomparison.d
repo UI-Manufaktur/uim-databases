@@ -29,12 +29,12 @@ class TupleComparison : ComparisonExpression
      *
      * @param uim.databases.IDBAExpression|array|string $fields the fields to use to form a tuple
      * @param uim.databases.IDBAExpression|array $values the values to use to form a tuple
-     * @param array<string|null> $types the types names to use for casting each of the values, only
+     * @param array<string|null> types the types names to use for casting each of the values, only
      * one type per position in the value array in needed
      * @param string $conjunction the operator used for comparing field and value
      */
-    this($fields, $values, array $types = null, string $conjunction = "=") {
-        _type = $types;
+    this($fields, $values, array types = null, string $conjunction = "=") {
+        _type = types;
         this.setField($fields);
         _operator = $conjunction;
         this.setValue($values);
@@ -74,7 +74,7 @@ class TupleComparison : ComparisonExpression
 
 
     string sql(ValueBinder aBinder) {
-        $template = "(%s) %s (%s)";
+        template = "(%s) %s (%s)";
         $fields = null;
         $originalFields = this.getField();
 
@@ -107,23 +107,23 @@ class TupleComparison : ComparisonExpression
             return $parts.sql($binder);
         }
 
-        foreach ($parts as $i: $value) {
+        foreach ($parts as i: $value) {
             if ($value instanceof IDBAExpression) {
                 $values[] = $value.sql($binder);
                 continue;
             }
 
-            $type = _type;
-            $isMultiOperation = this.isMulti();
+            type = _type;
+            isMultiOperation = this.isMulti();
             if (empty($type)) {
-                $type = null;
+                type = null;
             }
 
             if ($isMultiOperation) {
                 $bound = null;
                 foreach ($value as $k: $val) {
                     /** @var string $valType */
-                    $valType = $type && isset($type.isSet($k) ? $type[$k] : $type;
+                    $valType = type && isset($type.isSet($k) ? type[$k] : type;
                     $bound[] = _bindValue($val, $binder, $valType);
                 }
 
@@ -132,7 +132,7 @@ class TupleComparison : ComparisonExpression
             }
 
             /** @var string $valType */
-            $valType = $type && $type[$i]) ? $type[$i] : $type;
+            $valType = type && type[$i]) ? type[$i] : type;
             $values[] = _bindValue($value, $binder, $valType);
         }
 
@@ -140,9 +140,9 @@ class TupleComparison : ComparisonExpression
     }
 
 
-    protected string _bindValue($value, ValueBinder aBinder, Nullable!string $type = null) {
+    protected string _bindValue($value, ValueBinder aBinder, Nullable!string type = null) {
         $placeholder = $binder.placeholder("tuple");
-        $binder.bind($placeholder, $value, $type);
+        $binder.bind($placeholder, $value, type);
 
         return $placeholder;
     }

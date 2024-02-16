@@ -55,9 +55,9 @@ class ValuesExpression : IDBAExpression {
      * Constructor
      *
      * @param array $columns The list of columns that are going to be part of the values.
-     * @param uim.databases.TypeMap $typeMap A dictionary of column . type names
+     * @param uim.databases.TypeMap typeMap A dictionary of column . type names
      */
-    this(array $columns, TypeMap $typeMap) {
+    this(array $columns, TypeMap typeMap) {
         _columns = $columns;
         this.setTypeMap($typeMap);
     }
@@ -195,10 +195,10 @@ class ValuesExpression : IDBAExpression {
         $defaults = array_fill_keys($columns, null);
         $placeholders = null;
 
-        $types = null;
-        $typeMap = this.getTypeMap();
+        types = null;
+        typeMap = this.getTypeMap();
         foreach ($defaults as $col: $v) {
-            $types[$col] = $typeMap.type($col);
+            types[$col] = typeMap.type($col);
         }
 
         foreach (_values as $row) {
@@ -215,7 +215,7 @@ class ValuesExpression : IDBAExpression {
 
                 $placeholder = $binder.placeholder("c");
                 $rowPlaceholders[] = $placeholder;
-                $binder.bind($placeholder, $value, $types[$column]);
+                $binder.bind($placeholder, $value, types[$column]);
             }
 
             $placeholders[] = implode(", ", $rowPlaceholders);
@@ -261,27 +261,27 @@ class ValuesExpression : IDBAExpression {
      * Converts values that need to be casted to expressions
      */
     protected void _processExpressions() {
-        $types = null;
-        $typeMap = this.getTypeMap();
+        types = null;
+        typeMap = this.getTypeMap();
 
         $columns = _columnNames();
         foreach ($columns as $c) {
             if (!is_string($c) && !is_int($c)) {
                 continue;
             }
-            $types[$c] = $typeMap.type($c);
+            types[$c] = typeMap.type($c);
         }
 
-        $types = _requiresToExpressionCasting($types);
+        types = _requiresToExpressionCasting($types);
 
         if (empty($types)) {
             return;
         }
 
         foreach (_values as $row: $values) {
-            foreach ($types as $col: $type) {
-                /** @var DDBtypes.ExpressionTypeInterface $type */
-                _values[$row][$col] = $type.toExpression($values[$col]);
+            foreach ($types as $col: type) {
+                /** @var DDBtypes.ExpressionTypeInterface type */
+                _values[$row][$col] = type.toExpression($values[$col]);
             }
         }
         _castedExpressions = true;

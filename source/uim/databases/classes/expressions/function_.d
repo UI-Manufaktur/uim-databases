@@ -38,14 +38,14 @@ class FunctionExpression : QueryExpression, ITypedResult {
      * string aName the name of the auto to be constructed
      * @param array $params list of arguments to be passed to the function
      * If associative the key would be used as argument when value is 'literal'
-     * @param STRINGAA|array<string|null> $types Associative array of types to be associated with the
+     * @param STRINGAA|array<string|null> types Associative array of types to be associated with the
      * passed arguments
      * @param string resultType The return type of this expression
      */
-    this(string aName, array $params = [], array $types = [], string resultType = "string") {
+    this(string aName, array $params = [], array types = [], string resultType = "string") {
        _name = $name;
        _returnType = resultType;
-        super($params, $types, ",");
+        super($params, types, ",");
     }
 
     /**
@@ -53,16 +53,16 @@ class FunctionExpression : QueryExpression, ITypedResult {
      * Params:
      * \UIM\Database\IExpression|string[] aconditions list of arguments to be passed to the function
      * If associative the key would be used as argument when value is 'literal'
-     * @param STRINGAA $types Associative array of types to be associated with the
+     * @param STRINGAA types Associative array of types to be associated with the
      * passed arguments
      * @param bool $prepend Whether to prepend or append to the list of arguments
      * @see \UIM\Database\Expression\FunctionExpression.__construct() for more details.
 
      * @psalm-suppress MoreSpecificImplementedParamType
      */
-    void add(IExpression|string[] aconditions, array $types = [], bool $prepend = false) {
+    void add(IExpression|string[] aconditions, array types = [], bool $prepend = false) {
         $put = $prepend ? "array_unshift' : 'array_push";
-        $typeMap = this.getTypeMap().setTypes($types);
+        typeMap = this.getTypeMap().setTypes($types);
 
         $conditions.byKeyValue
             .each!(kv => addCondtion(conditions, kv.key, kv.value));
@@ -77,16 +77,16 @@ class FunctionExpression : QueryExpression, ITypedResult {
                 $put(_conditions, new IdentifierExpression(key));
                 return;
             }
-            $type = $typeMap.type(myKey);
+            type = typeMap.type(myKey);
 
             if ($type !isNull && !cast(IExpression)$p ) {
-                condition = _castToExpression($p, $type);
+                condition = _castToExpression($p, type);
             }
             if (cast(IExpression)condition) {
                 $put(_conditions, condition);
                 return;
             }
-            $put(_conditions, ["value": condition, "type": $type]);
+            $put(_conditions, ["value": condition, "type": type]);
     }
  
     string sql(ValueBinder aBinder) {

@@ -101,11 +101,11 @@ abstract class SchemaDialect
         if (!TypeFactory.getMap($columnType)) {
             return null;
         }
-        $type = TypeFactory.build($columnType);
+        type = TypeFactory.build($columnType);
         if (!(cast(IColumnSchemaAware)$type)) {
             return null;
         }
-        return $type.getColumnSql(tableSchema, $column, _driver);
+        return type.getColumnSql(tableSchema, $column, _driver);
     }
     
     /**
@@ -119,11 +119,11 @@ abstract class SchemaDialect
         if (!TypeFactory.getMap($columnType)) {
             return null;
         }
-        $type = TypeFactory.build($columnType);
+        type = TypeFactory.build($columnType);
         if (!(cast(IColumnSchemaAware)$type)) {
             return null;
         }
-        return $type.convertColumnDefinition($definition, _driver);
+        return type.convertColumnDefinition($definition, _driver);
     }
     
     // Generate the SQL to drop a table.

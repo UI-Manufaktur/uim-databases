@@ -129,14 +129,14 @@ class WindowExpression : IDBAExpression, IWindow
 
 
     function frame(
-        string $type,
+        string type,
         $startOffset,
         string $startDirection,
         $endOffset,
         string $endDirection
     ) {
         this.frame = [
-            "type": $type,
+            "type": type,
             "start": [
                 "offset": $startOffset,
                 "direction": $startDirection,

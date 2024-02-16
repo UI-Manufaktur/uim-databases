@@ -440,12 +440,12 @@ class Sqlserver : Driver
                 }
                 break;
             case "CURRENT_DATE":
-                $time = new FunctionExpression("GETUTCDATE");
-                $expression.setName("CONVERT").add(["date": "literal", $time]);
+                time = new FunctionExpression("GETUTCDATE");
+                $expression.setName("CONVERT").add(["date": "literal", time]);
                 break;
             case "CURRENT_TIME":
-                $time = new FunctionExpression("GETUTCDATE");
-                $expression.setName("CONVERT").add(["time": "literal", $time]);
+                time = new FunctionExpression("GETUTCDATE");
+                $expression.setName("CONVERT").add(["time": "literal", time]);
                 break;
             case "NOW":
                 $expression.setName("GETUTCDATE");

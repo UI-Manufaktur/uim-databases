@@ -60,7 +60,7 @@ class WhenThenExpression : IDBAExpression
      *
      * @var DDBIDBAExpression|object|scalar|null
      */
-    protected $then = null;
+    protected then = null;
 
     /**
      * Whether the `THEN` value has been defined, eg whether `then()`
@@ -77,14 +77,14 @@ class WhenThenExpression : IDBAExpression
     /**
      * Constructor.
      *
-     * @param uim.databases.TypeMap|null $typeMap The type map to use when using an array of conditions for the `WHEN`
+     * @param uim.databases.TypeMap|null typeMap The type map to use when using an array of conditions for the `WHEN`
      *  value.
      */
-    this(?TypeMap $typeMap = null) {
+    this(?TypeMap typeMap = null) {
         if ($typeMap == null) {
-            $typeMap = new TypeMap();
+            typeMap = new TypeMap();
         }
-        _typeMap = $typeMap;
+        _typeMap = typeMap;
     }
 
     /**
@@ -96,7 +96,7 @@ class WhenThenExpression : IDBAExpression
      *  plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to be
      *  a non-array, and then always binds the data), use a conditions array where the user data is only passed on the
      *  value side of the array entries, or custom bindings!
-     * @param array<string, string>|string|null $type The when value type. Either an associative array when using array style
+     * @param array<string, string>|string|null type The when value type. Either an associative array when using array style
      *  conditions, or else a string. If no type is provided, the type will be tried to be inferred from the value.
      * @return this
      * @throws \InvalidArgumentException In case the `$when` argument is neither a non-empty array, nor a scalar value,
@@ -108,7 +108,7 @@ class WhenThenExpression : IDBAExpression
      * neither a string, nor null.
      * @see CaseStatementExpression::when() for a more detailed usage explanation.
      */
-    function when($when, $type = null) {
+    function when($when, type = null) {
         if (
             !(is_array($when) && !empty($when)) &&
             !is_scalar($when) &&
@@ -123,7 +123,7 @@ class WhenThenExpression : IDBAExpression
         }
 
         if (
-            $type != null &&
+            type != null &&
             !is_array($type) &&
             !is_string($type)
         ) {
@@ -135,7 +135,7 @@ class WhenThenExpression : IDBAExpression
 
         if (is_array($when)) {
             if (
-                $type != null &&
+                type != null &&
                 !is_array($type)
             ) {
                 throw new InvalidArgumentException(sprintf(
@@ -146,18 +146,18 @@ class WhenThenExpression : IDBAExpression
             }
 
             // avoid dirtying the type map for possible consecutive `when()` calls
-            $typeMap = clone _typeMap;
+            typeMap = clone _typeMap;
             if (
                 is_array($type) &&
                 count($type) > 0
             ) {
-                $typeMap = $typeMap.setTypes($type);
+                typeMap = typeMap.setTypes($type);
             }
 
-            $when = new QueryExpression($when, $typeMap);
+            $when = new QueryExpression($when, typeMap);
         } else {
             if (
-                $type != null &&
+                type != null &&
                 !is_string($type)
             ) {
                 throw new InvalidArgumentException(sprintf(
@@ -168,15 +168,15 @@ class WhenThenExpression : IDBAExpression
             }
 
             if (
-                $type == null &&
+                type == null &&
                 !($when instanceof IDBAExpression)
             ) {
-                $type = this.inferType($when);
+                type = this.inferType($when);
             }
         }
 
         this.when = $when;
-        this.whenType = $type;
+        this.whenType = type;
 
         return this;
     }
@@ -185,11 +185,11 @@ class WhenThenExpression : IDBAExpression
      * Sets the `THEN` result value.
      *
      * @param uim.databases.IDBAExpression|object|scalar|null $result The result value.
-     * @param string|null $type The result type. If no type is provided, the type will be inferred from the given
+     * @param string|null type The result type. If no type is provided, the type will be inferred from the given
      *  result value.
      * @return this
      */
-    function then($result, Nullable!string $type = null) {
+    function then($result, Nullable!string type = null) {
         if (
             $result != null &&
             !is_scalar($result) &&
@@ -206,10 +206,10 @@ class WhenThenExpression : IDBAExpression
         this.then = $result;
 
         if ($type == null) {
-            $type = this.inferType($result);
+            type = this.inferType($result);
         }
 
-        this.thenType = $type;
+        this.thenType = type;
 
         this.hasThenBeenDefined = true;
 
@@ -286,9 +286,9 @@ class WhenThenExpression : IDBAExpression
             $when = $placeholder;
         }
 
-        $then = this.compileNullableValue($binder, this.then, this.thenType);
+        then = this.compileNullableValue($binder, this.then, this.thenType);
 
-        return "WHEN $when THEN $then";
+        return "WHEN $when THEN then";
     }
 
 

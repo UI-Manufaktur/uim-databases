@@ -15,7 +15,7 @@ class Statement : IStatement {
 
     protected PDOStatement $statement;
 
-    protected FieldTypeConverter $typeConverter;
+    protected FieldTypeConverter typeConverter;
 
     // Cached bound parameters used for logging
     protected Json $params = [];
@@ -23,48 +23,48 @@ class Statement : IStatement {
     /**
      * @param \PDOStatement $statement PDO statement
      * @param \UIM\Database\Driver $driver Database driver
-     * @param \UIM\Database\TypeMap|null $typeMap Results type map
+     * @param \UIM\Database\TypeMap|null typeMap Results type map
      */
     this(
         PDOStatement $statement,
         Driver $driver,
-        ?TypeMap $typeMap = null,
+        ?TypeMap typeMap = null,
     ) {
        _driver = $driver;
         this.statement = $statement;
-        this.typeConverter = $typeMap !isNull ? new FieldTypeConverter($typeMap, $driver): null;
+        this.typeConverter = typeMap !isNull ? new FieldTypeConverter($typeMap, $driver): null;
     }
-    void bind(array $params, array $types) {
+    void bind(array $params, array types) {
         if (isEmpty($params)) {
             return;
         }
         anonymousParams = isInt(key($params));
          anOffset = 1;
         foreach ($params as  anIndex: aValue) {
-            $type = $types[anIndex] ?? null;
+            type = types[anIndex] ?? null;
             if ($anonymousParams) {
                 /** @psalm-suppress InvalidOperand */
                  anIndex +=  anOffset;
             }
             /** @psalm-suppress PossiblyInvalidArgument */
-            this.bindValue(anIndex, aValue, $type);
+            this.bindValue(anIndex, aValue, type);
         }
     }
  
-    void bindValue(string|int $column, Json aValue, string|int $type = "string") {
-        $type ??= "string";
+    void bindValue(string|int $column, Json aValue, string|int type = "string") {
+        type ??= "string";
         if (!isInt($type)) {
-            [aValue, $type] = this.castType(aValue, $type);
+            [aValue, type] = this.castType(aValue, type);
         }
         this.params[$column] = aValue;
-        this.performBind($column, aValue, $type);
+        this.performBind($column, aValue, type);
     }
     
     /**
      * Converts a give value to a suitable database value based on type and
      * return relevant internal statement type.
      * Params:
-     * @param \UIM\Database\IType|string|int $type The type name or type instance to use.
+     * @param \UIM\Database\IType|string|int type The type name or type instance to use.
      */
     protected array castType(Json valueToCast, string typeName = "String") {
         IType type;
@@ -73,20 +73,20 @@ class Statement : IStatement {
         }
         return castType(Value, type = "String");
     }
-    protected array castType(Json valueToCast, IType|string|int $type = "String") {
+    protected array castType(Json valueToCast, IType|string|int type = "String") {
         if (cast(IType)$type) {
-            valueToCast = $type.toDatabase(valueToCast, _driver);
-            $type = $type.toStatement(valueToCast, _driver);
+            valueToCast = type.toDatabase(valueToCast, _driver);
+            type = type.toStatement(valueToCast, _driver);
         }
-        return [valueToCast, $type];
+        return [valueToCast, type];
     }
  
     array getBoundParams() {
         return this.params;
     }
     
-    protected void performBind(string|int $column, Json aValue, int $type) {
-        this.statement.bindValue($column, aValue, $type);
+    protected void performBind(string|int $column, Json aValue, int type) {
+        this.statement.bindValue($column, aValue, type);
     }
  
     bool execute(array $params = null) {

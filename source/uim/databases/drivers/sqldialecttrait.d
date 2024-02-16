@@ -74,11 +74,11 @@ trait SqlDialectTrait
      * This function, in turn, will return an instance of a Query object that has been
      * transformed to accommodate any specificities of the SQL dialect in use.
      *
-     * @param string $type the type of query to be transformed
+     * @param string type the type of query to be transformed
      * (select, insert, update, delete)
      * @return \Closure
      */
-    function queryTranslator(string $type): Closure
+    function queryTranslator(string type): Closure
     {
         return function ($query) use ($type) {
             if (this.isAutoQuotingEnabled()) {
@@ -86,8 +86,8 @@ trait SqlDialectTrait
             }
 
             /** @var DORMQuery $query */
-            $query = this.{"_" ~ $type ~ "QueryTranslator"}($query);
-            $translators = _expressionTranslators();
+            $query = this.{"_" ~ type ~ "QueryTranslator"}($query);
+            translators = _expressionTranslators();
             if (!$translators) {
                 return $query;
             }
@@ -159,12 +159,12 @@ trait SqlDialectTrait
     protected function _deleteQueryTranslator(Query $query): Query
     {
         $hadAlias = false;
-        $tables = null;
-        foreach ($query.clause("from") as alias: $table) {
+        tables = null;
+        foreach ($query.clause("from") as alias: table) {
             if (is_string($alias)) {
                 $hadAlias = true;
             }
-            $tables[] = $table;
+            tables[] = table;
         }
         if ($hadAlias) {
             $query.from($tables, true);

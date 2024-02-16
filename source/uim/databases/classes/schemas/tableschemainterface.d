@@ -115,9 +115,9 @@ interface TableISchema : ISchema {
     /**
      * Sets whether the table is temporary in the database.
      * Params:
-     * bool $temporary Whether the table is to be temporary.
+     * bool temporary Whether the table is to be temporary.
      */
-    auto setTemporary(bool $temporary);
+    auto setTemporary(bool temporary);
 
     // Gets whether the table is temporary in the database.
     bool isTemporary();

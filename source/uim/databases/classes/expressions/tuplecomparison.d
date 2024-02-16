@@ -12,24 +12,24 @@ class TupleComparison : ComparisonExpression {
     /**
      * The type to be used for casting the value to a database representation
      */
-    protected string[] $types;
+    protected string[] types;
 
     /**
      * Constructor
      * Params:
      * \UIM\Database\IExpression|string[] afields the fields to use to form a tuple
      * @param \UIM\Database\IExpression|array  someValues the values to use to form a tuple
-     * @param array<string|null> $types the types names to use for casting each of the values, only
+     * @param array<string|null> types the types names to use for casting each of the values, only
      * one type per position in the value array in needed
      * @param string aconjunction the operator used for comparing field and value
      */
     this(
         IExpression|string[] afields,
         IExpression|array  someValues,
-        array $types = [],
+        array types = [],
         string aconjunction = "="
     ) {
-        this.types = $types;
+        this.types = types;
         this.setFieldNames($fields);
        _operator = $conjunction;
         this.setValue(someValues);
@@ -99,16 +99,16 @@ class TupleComparison : ComparisonExpression {
                  someValues ~= aValue.sql(aBinder);
                 continue;
             }
-            $type = this.types;
+            type = this.types;
              isMultiOperation = this.isMulti();
             if (isEmpty($type)) {
-                $type = null;
+                type = null;
             }
             if (isMultiOperation) {
                 string[] $bound = [];
                 aValue.byKeyValue
                     .each!((kv) {
-                        auto $valType = $type && isSet($type[myKey]) ? $type[myKey] : $type;
+                        auto $valType = type && isSet($type[myKey]) ? type[myKey] : type;
                         assert($valType.isNull || isScalar($valType));
                         $bound ~= _bindValue($val, aBinder, $valType);
                     });
@@ -116,7 +116,7 @@ class TupleComparison : ComparisonExpression {
                 someValues ~= "(%s)".format($bound.join(","));
                 continue;
             }
-            $valType = $type && isSet($type[anI]) ? $type[anI] : $type;
+            $valType = type && isSet($type[anI]) ? type[anI] : type;
             assert($valType.isNull || isScalar($valType));
              someValues ~= _bindValue(aValue, aBinder, $valType);
         }
@@ -125,7 +125,7 @@ class TupleComparison : ComparisonExpression {
  
     protected string _bindValue(Json aValue, ValueBinder aBinder, string atype = null) {
         $placeholder = aBinder.placeholder("tuple");
-        aBinder.bind($placeholder, aValue, $type);
+        aBinder.bind($placeholder, aValue, type);
 
         return $placeholder;
     }

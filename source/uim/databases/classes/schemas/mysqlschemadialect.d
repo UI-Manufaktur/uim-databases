@@ -75,22 +75,22 @@ class MysqlSchemaDialect : SchemaDialect {
             $length = (int)$length;
             $precision = (int)$precision;
         }
-        $type = _applyTypeSpecificColumnConversion(
+        type = _applyTypeSpecificColumnConversion(
             $col,
             compact("length", "precision", "scale")
         );
         if (!$type.isNull) {
-            return $type;
+            return type;
         }
         if (in_array($col, ["date", "time"])) {
             return ["type": $col, "length": null];
         }
         if (in_array($col, ["datetime", "timestamp"])) {
-            $typeName = $col;
+            typeName = $col;
             if ($length > 0) {
-                $typeName = $col ~ "fractional";
+                typeName = $col ~ "fractional";
             }
-            return ["type": $typeName, "length": null, "precision": $length];
+            return ["type": typeName, "length": null, "precision": $length];
         }
         if (($col == "tinyint" && $length == 1) || $col == "boolean") {
             return ["type": TableISchema.TYPE_BOOLEAN, "length": null];
@@ -170,29 +170,29 @@ class MysqlSchemaDialect : SchemaDialect {
     }
  
     void convertIndexDescription(TableSchema tableSchema, array $row) {
-        auto $type = null;
+        auto type = null;
         someColumns = $length = [];
 
         auto keyName = $row["Key_name"];
         if (keyName == "PRIMARY") {
-            keyName = $type = TableSchema.CONSTRAINT_PRIMARY;
+            keyName = type = TableSchema.CONSTRAINT_PRIMARY;
         }
         if (!empty($row["Column_name"])) {
             someColumns ~= $row["Column_name"];
         }
         if ($row["Index_type"] == "FULLTEXT") {
-            $type = TableSchema.INDEX_FULLTEXT;
-        } elseif ((int)$row["Non_unique"] == 0 && $type != "primary") {
-            $type = TableSchema.CONSTRAINT_UNIQUE;
+            type = TableSchema.INDEX_FULLTEXT;
+        } elseif ((int)$row["Non_unique"] == 0 && type != "primary") {
+            type = TableSchema.CONSTRAINT_UNIQUE;
         } elseif ($type != "primary") {
-            $type = TableSchema.INDEX_INDEX;
+            type = TableSchema.INDEX_INDEX;
         }
         if (!$row["Sub_part"])) {
             $length[$row["Column_name"]] = $row["Sub_part"];
         }
          isIndex = (
-            $type == TableSchema.INDEX_INDEX ||
-            $type == TableSchema.INDEX_FULLTEXT
+            type == TableSchema.INDEX_INDEX ||
+            type == TableSchema.INDEX_FULLTEXT
         );
         if (isIndex) {
             $existing = tableSchema.getIndex($name);
@@ -206,13 +206,13 @@ class MysqlSchemaDialect : SchemaDialect {
         }
         if (isIndex) {
             tableSchema.addIndex($name, [
-                "type": $type,
+                "type": type,
                 "columns": someColumns,
                 "length": $length,
             ]);
         } else {
             tableSchema.addConstraint(keyName, [
-                "type": $type,
+                "type": type,
                 "columns": someColumns,
                 "length": $length,
             ]);
@@ -250,7 +250,7 @@ class MysqlSchemaDialect : SchemaDialect {
  
     array createTableSql(TableSchema tableSchema, array someColumns, array $constraints, array  anIndexes) {
         $content = join(",\n", array_merge(someColumns, $constraints,  anIndexes));
-        $temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
+        temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
         $content = "CREATE%sTABLE `%s` (\n%s\n)".format($temporary, tableSchema.name(), $content);
         $options = tableSchema.getOptions();
         if (isSet($options["engine"])) {
@@ -276,7 +276,7 @@ class MysqlSchemaDialect : SchemaDialect {
          result = _driver.quoteIdentifier($name);
         $nativeJson = _driver.supports(DriverFeatures.JSON);
 
-        $typeMap = [
+        typeMap = [
             TableISchema.TYPE_TINYINTEGER: " TINYINT",
             TableISchema.TYPE_SMALLINTEGER: " SMALLINT",
             TableISchema.TYPE_INTEGER: " INTEGER",
@@ -303,7 +303,7 @@ class MysqlSchemaDialect : SchemaDialect {
             "binary": true,
         ];
         if (isSet($typeMap[someData["type"]])) {
-             result ~= $typeMap[someData["type"]];
+             result ~= typeMap[someData["type"]];
         }
         if (isSet($specialMap[someData["type"]])) {
             switch (someData["type"]) {
@@ -403,7 +403,7 @@ class MysqlSchemaDialect : SchemaDialect {
             TableISchema.TYPE_BIGINTEGER,
         ];
         if (
-            in_array(someData["type"], $autoIncrementTypes, true) &&
+            in_array(someData["type"], autoIncrementTypes, true) &&
             (
                 (tableSchema.getPrimaryKey() == [$name] && $name == "id") || someData["autoIncrement"]
             )
@@ -411,12 +411,12 @@ class MysqlSchemaDialect : SchemaDialect {
              result ~= " AUTO_INCREMENT";
             unset(someData["default"]);
         }
-        $timestampTypes = [
+        timestampTypes = [
             TableISchema.TYPE_TIMESTAMP,
             TableISchema.TYPE_TIMESTAMP_FRACTIONAL,
             TableISchema.TYPE_TIMESTAMP_TIMEZONE,
         ];
-        if (isSet(someData["null"]) && someData["null"] == true && in_array(someData["type"], $timestampTypes, true)) {
+        if (isSet(someData["null"]) && someData["null"] == true && in_array(someData["type"], timestampTypes, true)) {
              result ~= " NULL";
             unset(someData["default"]);
         }

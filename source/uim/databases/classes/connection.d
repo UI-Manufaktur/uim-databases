@@ -332,16 +332,16 @@ class Connection : IConnection {
     /**
      * Rollback current transaction.
      * Params:
-     * bool|null $toBeginning Whether the transaction should be rolled back to the
+     * bool|null toBeginning Whether the transaction should be rolled back to the
      * beginning of it. Defaults to false if using savepoints, or true if not.
      */
-    bool rollback(?bool $toBeginning = null) {
+    bool rollback(?bool toBeginning = null) {
         if (!_transactionStarted) {
             return false;
         }
         $useSavePoint = this.isSavePointsEnabled();
-        $toBeginning ??= !$useSavePoint;
-        if (_transactionLevel == 0 || $toBeginning) {
+        toBeginning ??= !$useSavePoint;
+        if (_transactionLevel == 0 || toBeginning) {
            _transactionLevel = 0;
            _transactionStarted = false;
             this.nestedTransactionRollbackException = null;

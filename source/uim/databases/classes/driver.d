@@ -177,17 +177,17 @@ abstract class Driver {
     abstract bool enabled();
 
     /**
-     * Executes a query using $params for interpolating values and $types as a hint for each
+     * Executes a query using $params for interpolating values and types as a hint for each
      * those params.
      * Params:
      * string asql SQL to be executed and interpolated with $params
      * @param array $params List or associative array of params to be interpolated in $sql as values.
-     * @param array $types List or associative array of types to be used for casting values in query.
+     * @param array types List or associative array of types to be used for casting values in query.
      */
-    IStatement execute(string asql, array $params = [], array $types = []) {
+    IStatement execute(string asql, array $params = [], array types = []) {
         $statement = this.prepare($sql);
         if (!empty($params)) {
-            $statement.bind($params, $types);
+            $statement.bind($params, types);
         }
         this.executeStatement($statement);
 
@@ -221,12 +221,12 @@ abstract class Driver {
             return;
         }
         auto $exception = null;
-        auto $took = 0.0;
+        auto took = 0.0;
 
         try {
             $start = microtime(true);
             statementToExecute.execute($params);
-            $took = (float)number_format((microtime(true) - $start) * 1000, 1);
+            took = (float)number_format((microtime(true) - $start) * 1000, 1);
         } catch (PDOException  anException) {
             $exception =  anException;
         }
@@ -237,7 +237,7 @@ abstract class Driver {
         ];
         if (!$exception) {
             $logContext["numRows"] = statementToExecute.rowCount();
-            $logContext["took"] = $took;
+            $logContext["took"] = took;
         }
         this.log(statementToExecute.queryString(), $logContext);
 
@@ -254,12 +254,12 @@ abstract class Driver {
     IStatement prepare(Query|string aquery) {
         $statement = this.getPdo().prepare(cast(Query)aQuery  ? aQuery.sql(): aQuery);
 
-        $typeMap = null;
+        typeMap = null;
         if (cast(SelectQuery)aQuery  && aQuery.isResultsCastingEnabled()) {
-            $typeMap = aQuery.getSelectTypeMap();
+            typeMap = aQuery.getSelectTypeMap();
         }
         /** @var \UIM\Database\IStatement */
-        return new (STATEMENT_CLASS)($statement, this, $typeMap);
+        return new (STATEMENT_CLASS)($statement, this, typeMap);
     }
     
     /**
@@ -360,7 +360,7 @@ abstract class Driver {
             ),
         };
 
-        $translators = _expressionTranslators();
+        translators = _expressionTranslators();
         if (!$translators) {
             return aQuery;
         }

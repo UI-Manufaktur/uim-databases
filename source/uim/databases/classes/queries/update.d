@@ -76,7 +76,7 @@ class UpdateQuery : Query {
      *   It can also be a Closure, that is required to return an expression object.
      * @param Json aValue The value to update aKey to. Can be null if aKey is an
      *   array or QueryExpression. When aKey is an array, this parameter will be
-     *   used as $types instead.
+     *   used as types instead.
      * @param STRINGAA|string atypes The column types to treat data as.
      */
         void set(QueryExpression | Closure | string[] aKey, Json aValue = null, string[] atypes = []) {
@@ -91,14 +91,14 @@ class UpdateQuery : Query {
                 return;
             }
             if (isArray(aKey) || cast(IExpression) aKey) {
-                $types = (array) aValue;
-                _parts["set"].add(aKey, $types);
+                types = (array) aValue;
+                _parts["set"].add(aKey, types);
 
                 return;
             }
             if (!isString($types)) {
-                $types = null;
+                types = null;
             }
-            _parts["set"].eq(aKey, aValue, $types);
+            _parts["set"].eq(aKey, aValue, types);
         }
     }

@@ -84,12 +84,12 @@ class PostgresSchemaDialect : SchemaDialect {
         if (isSet($matches[2])) {
             $length = (int)$matches[2];
         }
-        $type = _applyTypeSpecificColumnConversion(
+        type = _applyTypeSpecificColumnConversion(
             $col,
             compact("length", "precision", "scale")
         );
         if ($type !isNull) {
-            return $type;
+            return type;
         }
         if (in_array($col, ["date", "time", "boolean"], true)) {
             return ["type": $col, "length": null];
@@ -238,23 +238,23 @@ class PostgresSchemaDialect : SchemaDialect {
     }
  
     void convertIndexDescription(TableSchema tableSchema, array $row) {
-        $type = TableSchema.INDEX_INDEX;
+        type = TableSchema.INDEX_INDEX;
         $name = $row["relname"];
         if ($row["indisprimary"]) {
-            $name = $type = TableSchema.CONSTRAINT_PRIMARY;
+            $name = type = TableSchema.CONSTRAINT_PRIMARY;
         }
-        if ($row["indisunique"] && $type == TableSchema.INDEX_INDEX) {
-            $type = TableSchema.CONSTRAINT_UNIQUE;
+        if ($row["indisunique"] && type == TableSchema.INDEX_INDEX) {
+            type = TableSchema.CONSTRAINT_UNIQUE;
         }
-        if ($type == TableSchema.CONSTRAINT_PRIMARY || $type == TableSchema.CONSTRAINT_UNIQUE) {
-           _convertConstraint(tableSchema, $name, $type, $row);
+        if ($type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
+           _convertConstraint(tableSchema, $name, type, $row);
 
             return;
         }
          anIndex = tableSchema.getIndex($name);
         if (!anIndex) {
              anIndex = [
-                "type": $type,
+                "type": type,
                 "columns": [],
             ];
         }
@@ -274,7 +274,7 @@ class PostgresSchemaDialect : SchemaDialect {
         $constraint = tableSchema.getConstraint($name);
         if (!$constraint) {
             $constraint = [
-                "type": $type,
+                "type": type,
                 "columns": [],
             ];
         }
@@ -337,7 +337,7 @@ class PostgresSchemaDialect : SchemaDialect {
             return mySql;
         }
          result = _driver.quoteIdentifier($name);
-        $typeMap = [
+        typeMap = [
             TableISchema.TYPE_TINYINTEGER: " SMALLINT",
             TableISchema.TYPE_SMALLINTEGER: " SMALLINT",
             TableISchema.TYPE_INTEGER: " INT",
@@ -365,16 +365,16 @@ class PostgresSchemaDialect : SchemaDialect {
             TableISchema.TYPE_BIGINTEGER,
         ];
         if (
-            in_array(someData["type"], $autoIncrementTypes, true) &&
+            in_array(someData["type"], autoIncrementTypes, true) &&
             (
                 (tableSchema.getPrimaryKey() == [$name] && $name == "id") || someData["autoIncrement"]
             )
         ) {
-            $typeMap[someData["type"]] = $typeMap[someData["type"]].replace("INT", "SERIAL");
+            typeMap[someData["type"]] = typeMap[someData["type"]].replace("INT", "SERIAL");
             unset(someData["default"]);
         }
         if (isSet($typeMap[someData["type"]])) {
-             result ~= $typeMap[someData["type"]];
+             result ~= typeMap[someData["type"]];
         }
         if (someData["type"] == TableISchema.TYPE_TEXT && someData["length"] != TableSchema.LENGTH_TINY) {
              result ~= " TEXT";
@@ -543,7 +543,7 @@ class PostgresSchemaDialect : SchemaDialect {
         if ($dbSchema != "public") {
             aTableName = _driver.quoteIdentifier($dbSchema) ~ "." ~ aTableName;
         }
-        $temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
+        temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
          auto result;
          result ~= "CREATE%sTABLE %s (\n%s\n)".format($temporary, aTableName, $content);
         foreach (anIndexes as  anIndex) {

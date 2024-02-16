@@ -164,9 +164,9 @@ interface IDriver
      * Returns a value in a safe representation to be used in a query string
      *
      * @param mixed $value The value to quote.
-     * @param int $type Must be one of the \PDO::PARAM_* constants
+     * @param int type Must be one of the \PDO::PARAM_* constants
      */
-    string quote($value, $type);
+    string quote($value, type);
 
     /**
      * Checks if the driver supports quoting.
@@ -181,11 +181,11 @@ interface IDriver
      * This function, in turn, will return an instance of a Query object that has been
      * transformed to accommodate any specificities of the SQL dialect in use.
      *
-     * @param string $type The type of query to be transformed
+     * @param string type The type of query to be transformed
      * (select, insert, update, delete).
      * @return \Closure
      */
-    function queryTranslator(string $type): Closure;
+    function queryTranslator(string type): Closure;
 
     /**
      * Get the schema dialect.
@@ -224,11 +224,11 @@ interface IDriver
     /**
      * Returns last id generated for a table or sequence in database.
      *
-     * @param string|null $table table name or sequence to get last insert value from.
+     * @param string|null table table name or sequence to get last insert value from.
      * @param string|null $column the name of the column representing the primary key.
      * @return string|int
      */
-    function lastInsertId(Nullable!string $table = null, Nullable!string $column = null);
+    function lastInsertId(Nullable!string table = null, Nullable!string $column = null);
 
     /**
      * Checks whether the driver is connected.
@@ -278,9 +278,9 @@ interface IDriver
     /**
      * Constructs new TableSchema.
      *
-     * @param string $table The table name.
+     * @param string table The table name.
      * @param array $columns The list of columns for the schema.
      * @return uim.databases.Schema\TableSchema
      */
-    function newTableSchema(string $table, array $columns = null): TableSchema;
+    function newTableSchema(string table, array $columns = null): TableSchema;
 }

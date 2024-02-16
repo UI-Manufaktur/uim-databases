@@ -10,15 +10,15 @@ class OrderByExpression : QueryExpression {
      * Constructor
      * Params:
      * \UIM\Database\IExpression|string[] aconditions The sort columns
-     * @param \UIM\Database\TypeMap|STRINGAA $types The types for each column.
+     * @param \UIM\Database\TypeMap|STRINGAA types The types for each column.
      * @param string aconjunction The glue used to join conditions together.
      */
     this(
         IExpression|string[] aconditions = [],
-        TypeMap|array $types = [],
+        TypeMap|array types = [],
         string aConjunction = ""
     ) {
-        super($conditions, $types, aConjunction);
+        super($conditions, types, aConjunction);
     }
     string sql(ValueBinder aBinder) {
         string[] sqlOrders;
@@ -38,9 +38,9 @@ class OrderByExpression : QueryExpression {
      * New order by expressions are merged to existing ones
      * Params:
      * array $conditions list of order by expressions
-     * @param array $types list of types associated on fields referenced in $conditions
+     * @param array types list of types associated on fields referenced in $conditions
      */
-    protected void _addConditions(array $conditions, array $types) {
+    protected void _addConditions(array $conditions, array types) {
         foreach ( aKey: $val; $conditions) {
             if (
                 isString(aKey) &&

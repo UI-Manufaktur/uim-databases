@@ -33,11 +33,11 @@ class AggregateExpression : FunctionExpression : IWindow
      * `Query::where()`.
      *
      * @param uim.databases.IDBAExpression|\Closure|array|string $conditions The conditions to filter on.
-     * @param array<string, string> $types Associative array of type names used to bind values to query
+     * @param array<string, string> types Associative array of type names used to bind values to query
      * @return this
      * @see uim.databases.Query::where()
      */
-    function filter($conditions, array $types = null) {
+    function filter($conditions, array types = null) {
         if (this.filter == null) {
             this.filter = new QueryExpression();
         }
@@ -46,7 +46,7 @@ class AggregateExpression : FunctionExpression : IWindow
             $conditions = $conditions(new QueryExpression());
         }
 
-        this.filter.add($conditions, $types);
+        this.filter.add($conditions, types);
 
         return this;
     }
@@ -111,7 +111,7 @@ class AggregateExpression : FunctionExpression : IWindow
 
 
     function frame(
-        string $type,
+        string type,
         $startOffset,
         string $startDirection,
         $endOffset,

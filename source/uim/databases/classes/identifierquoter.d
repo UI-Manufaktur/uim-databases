@@ -142,7 +142,7 @@ class IdentifierQuoter {
         result = [];
         foreach ($part as alias: $value) {
             $value = !isString($value) ? $value : this.quoteIdentifier($value);
-            $alias = isNumeric($alias) ? $alias : this.quoteIdentifier($alias);
+            alias = isNumeric($alias) ? alias : this.quoteIdentifier($alias);
             result[$alias] = aValue;
         }
         return result;

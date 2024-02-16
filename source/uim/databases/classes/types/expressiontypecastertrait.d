@@ -15,19 +15,19 @@ trait ExpressionTypeCasterTrait {
      * returns the value unmodified.
      * Params:
      * Json aValue The value to convert to IExpression
-     * @param string|null $type The type name
+     * @param string|null type The type name
      */
     protected Json _castToExpression(Json aValue, string atype = null) {
         if ($type.isNull) {
             return aValue;
         }
-        $baseType = $type.replace("[]", "");
+        $baseType = type.replace("[]", "");
         $converter = TypeFactory.build($baseType);
 
         if (!cast(IExpression)$converter Type) {
             return aValue;
         }
-        $multi = $type != $baseType;
+        $multi = type != $baseType;
 
         if ($multi) {
             /** @var \UIM\Database\Type\IExpressionType $converter */
@@ -41,12 +41,12 @@ trait ExpressionTypeCasterTrait {
      * be casted to expressions, out of the list of type names
      * passed as parameter.
      * Params:
-     * array $types List of type names
+     * array types List of type names
      */
     protected array _requiresToExpressionCasting(string[] typeNames) {
         auto result;
-        auto $types = array_filter(typeNames);
-        $types.byKeyValue
+        auto types = array_filter(typeNames);
+        types.byKeyValue
             .each!((keyType) {
             auto $object = TypeFactory.build(keyType.value);
             if (cast(IExpression)$object Type) {

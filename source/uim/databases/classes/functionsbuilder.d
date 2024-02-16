@@ -19,74 +19,74 @@ class FunctionsBuilder {
      * Returns a AggregateExpression representing a call to SQL SUM function.
      * Params:
      * \UIM\Database\IExpression|string aexpression the auto argument
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
-    AggregateExpression sum(IExpression|string aexpression, array $types = []) {
+    AggregateExpression sum(IExpression|string aexpression, array types = []) {
         resultType = "float";
         if (current($types) == "integer") {
             resultType = "integer";
         }
-        return this.aggregate("SUM", this.toLiteralParam($expression), $types, resultType);
+        return this.aggregate("SUM", this.toLiteralParam($expression), types, resultType);
     }
     
     /**
      * Returns a AggregateExpression representing a call to SQL AVG function.
      * Params:
      * \UIM\Database\IExpression|string aexpression the auto argument
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
-    AggregateExpression avg(IExpression|string aexpression, array $types = []) {
-        return this.aggregate("AVG", this.toLiteralParam($expression), $types, "float");
+    AggregateExpression avg(IExpression|string aexpression, array types = []) {
+        return this.aggregate("AVG", this.toLiteralParam($expression), types, "float");
     }
     
     /**
      * Returns a AggregateExpression representing a call to SQL MAX function.
      * Params:
      * \UIM\Database\IExpression|string aexpression the auto argument
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
-    AggregateExpression max(IExpression|string aexpression, array $types = []) {
-        return this.aggregate("MAX", this.toLiteralParam($expression), $types, current($types) ?: "float");
+    AggregateExpression max(IExpression|string aexpression, array types = []) {
+        return this.aggregate("MAX", this.toLiteralParam($expression), types, current($types) ?: "float");
     }
     
     /**
      * Returns a AggregateExpression representing a call to SQL MIN function.
      * Params:
      * \UIM\Database\IExpression|string aexpression the auto argument
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
-    AggregateExpression min(IExpression|string aexpression, array $types = []) {
-        return this.aggregate("MIN", this.toLiteralParam($expression), $types, current($types) ?: "float");
+    AggregateExpression min(IExpression|string aexpression, array types = []) {
+        return this.aggregate("MIN", this.toLiteralParam($expression), types, current($types) ?: "float");
     }
     
     /**
      * Returns a AggregateExpression representing a call to SQL COUNT function.
      * Params:
      * \UIM\Database\IExpression|string aexpression the auto argument
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
-    AggregateExpression count(IExpression|string aexpression, array $types = []) {
-        return this.aggregate("COUNT", this.toLiteralParam($expression), $types, "integer");
+    AggregateExpression count(IExpression|string aexpression, array types = []) {
+        return this.aggregate("COUNT", this.toLiteralParam($expression), types, "integer");
     }
     
     /**
      * Returns a FunctionExpression representing a string concatenation
      * Params:
      * array someArguments List of strings or expressions to concatenate
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
-    FunctionExpression concat(array someArguments, array $types = []) {
-        return new FunctionExpression("CONCAT", someArguments, $types, "string");
+    FunctionExpression concat(array someArguments, array types = []) {
+        return new FunctionExpression("CONCAT", someArguments, types, "string");
     }
     
     /**
      * Returns a FunctionExpression representing a call to SQL COALESCE function.
      * Params:
      * array someArguments List of expressions to evaluate as auto parameters
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
-    FunctionExpression coalesce(array someArguments, array $types = []) {
-        return new FunctionExpression("COALESCE", someArguments, $types, current($types) ?: "string");
+    FunctionExpression coalesce(array someArguments, array types = []) {
+        return new FunctionExpression("COALESCE", someArguments, types, current($types) ?: "string");
     }
     
     /**
@@ -110,10 +110,10 @@ class FunctionsBuilder {
      * two dates.
      * Params:
      * array someArguments List of expressions to obtain the difference in days.
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
-    FunctionExpression dateDiff(array someArguments, array $types = []) {
-        return new FunctionExpression("DATEDIFF", someArguments, $types, "integer");
+    FunctionExpression dateDiff(array someArguments, array types = []) {
+        return new FunctionExpression("DATEDIFF", someArguments, types, "integer");
     }
     
     /**
@@ -121,14 +121,14 @@ class FunctionsBuilder {
      * Params:
      * string apart Part of the date to return.
      * @param \UIM\Database\IExpression|string aexpression Expression to obtain the date part from.
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
     FunctionExpression datePart(
         string apart,
         IExpression|string aexpression,
-        array $types = []
+        array types = []
     ) {
-        return this.extract($part, $expression, $types);
+        return this.extract($part, $expression, types);
     }
     
     /**
@@ -136,10 +136,10 @@ class FunctionsBuilder {
      * Params:
      * string apart Part of the date to return.
      * @param \UIM\Database\IExpression|string aexpression Expression to obtain the date part from.
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
-    FunctionExpression extract(string apart, IExpression|string aexpression, array $types = []) {
-        auto functionExpression = new FunctionExpression("EXTRACT", this.toLiteralParam(aexpression), $types, "integer");
+    FunctionExpression extract(string apart, IExpression|string aexpression, array types = []) {
+        auto functionExpression = new FunctionExpression("EXTRACT", this.toLiteralParam(aexpression), types, "integer");
         functionExpression.setConjunction(" FROM").add([$part: "literal"], [], true);
 
         return functionExpression;
@@ -151,19 +151,19 @@ class FunctionsBuilder {
      * \UIM\Database\IExpression|string aexpression Expression to obtain the date part from.
      * @param string|int aValue Value to be added. Use negative to subtract.
      * @param string aunit Unit of the value e.g. hour or day.
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
     FunctionExpression dateAdd(
         IExpression|string aexpression,
         string|int aValue,
         string aunit,
-        array $types = []
+        array types = []
     ) {
         if (!isNumeric(aValue)) {
             aValue = 0;
         }
          anInterval = aValue ~ " " ~ $unit;
-        $expression = new FunctionExpression("DATE_ADD", this.toLiteralParam($expression), $types, "datetime");
+        $expression = new FunctionExpression("DATE_ADD", this.toLiteralParam($expression), types, "datetime");
         $expression.setConjunction(", INTERVAL").add([anInterval: "literal"]);
 
         return $expression;
@@ -174,10 +174,10 @@ class FunctionsBuilder {
      * 1 - Sunday, 2 - Monday, 3 - Tuesday...
      * Params:
      * \UIM\Database\IExpression|string aexpression the auto argument
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
-    FunctionExpression dayOfWeek(IExpression|string aexpression, array $types = []) {
-        return new FunctionExpression("DAYOFWEEK", this.toLiteralParam($expression), $types, "integer");
+    FunctionExpression dayOfWeek(IExpression|string aexpression, array types = []) {
+        return new FunctionExpression("DAYOFWEEK", this.toLiteralParam($expression), types, "integer");
     }
     
     /**
@@ -185,10 +185,10 @@ class FunctionsBuilder {
      * 1 - Sunday, 2 - Monday, 3 - Tuesday...
      * Params:
      * \UIM\Database\IExpression|string aexpression the auto argument
-     * @param array $types list of types to bind to the arguments
+     * @param array types list of types to bind to the arguments
      */
-    FunctionExpression weekday(IExpression|string aexpression, array $types = []) {
-        return this.dayOfWeek($expression, $types);
+    FunctionExpression weekday(IExpression|string aexpression, array types = []) {
+        return this.dayOfWeek($expression, types);
     }
     
     /**
@@ -208,7 +208,7 @@ class FunctionsBuilder {
         if ($type == "time") {
             return new FunctionExpression("CURRENT_TIME", [], [], "time");
         }
-        throw new InvalidArgumentException("Invalid argument for FunctionsBuilder.now(): " ~ $type);
+        throw new InvalidArgumentException("Invalid argument for FunctionsBuilder.now(): " ~ type);
     }
     
     /**
@@ -224,7 +224,7 @@ class FunctionsBuilder {
      * \UIM\Database\IExpression|string aexpression The value evaluated at offset
      * @param int anOffset The row offset
      * @param Json defaultValue The default value if offset doesn`t exist
-     * @param string|null $type The output type of the lag expression. Defaults to float.
+     * @param string|null type The output type of the lag expression. Defaults to float.
      */
     AggregateExpression lag(
         IExpression|string aexpression,
@@ -236,11 +236,11 @@ class FunctionsBuilder {
         if ($default !isNull) {
             $params ~= $default;
         }
-        $types = [];
+        types = [];
         if (!outputType.isNull) {
-            $types = [outputType, "integer", outputType];
+            types = [outputType, "integer", outputType];
         }
-        return (new AggregateExpression("LAG", $params, $types, outputType ?? "float")).over();
+        return (new AggregateExpression("LAG", $params, types, outputType ?? "float")).over();
     }
     
     /**
@@ -261,11 +261,11 @@ class FunctionsBuilder {
         if ($default !isNull) {
             $params ~= $default;
         }
-        $types = [];
+        types = [];
         if (outputType !isNull) {
-            $types = [outputType, "integer", outputType];
+            types = [outputType, "integer", outputType];
         }
-        return (new AggregateExpression("LEAD", $params, $types, outputType ?? "float")).over();
+        return (new AggregateExpression("LEAD", $params, types, outputType ?? "float")).over();
     }
     
     /**
@@ -274,17 +274,17 @@ class FunctionsBuilder {
      * @param array $params Array of arguments to be passed to the function.
      *    Can be an associative array with the literal value or identifier:
      *    `["value": "literal"]` or `["value": 'identifier"]
-     * @param array $types Array of types that match the names used in `$params`:
+     * @param array types Array of types that match the names used in `$params`:
      *    `["name": 'type"]`
      * @param string result Return type of the entire expression. Defaults to float.
      */
     AggregateExpression aggregate(
         string sqlName,
         array $params = [],
-        array $types = [],
+        array types = [],
         string result = "float"
     ) {
-        return new AggregateExpression(sqlName, $params, $types, result);
+        return new AggregateExpression(sqlName, $params, types, result);
     }
     
     /**

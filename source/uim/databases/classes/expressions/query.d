@@ -33,15 +33,15 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string[] aconditions Tree like array structure
      * containing all the conditions to be added or nested inside this expression object.
-     * @param \UIM\Database\TypeMap|array $types Associative array of types to be associated with the values
+     * @param \UIM\Database\TypeMap|array types Associative array of types to be associated with the values
      * passed in $conditions.
      * @param string aconjunction the glue that will join all the string conditions at this
      * level of the expression tree. For example "AND", "OR", "XOR"...
-     * @see \UIM\Database\Expression\QueryExpression.add() for more details on $conditions and $types
+     * @see \UIM\Database\Expression\QueryExpression.add() for more details on $conditions and types
      */
     this(
         IExpression|string[] aconditions = [],
-        TypeMap|array $types = [],
+        TypeMap|array types = [],
         string aconjunction = "AND"
     ) {
         this.setTypeMap($types);
@@ -76,17 +76,17 @@ class QueryExpression : IExpression, Countable {
      * be added. When using an array and the key is 'OR' or 'AND' a new expression
      * object will be created with that conjunction and internal array value passed
      * as conditions.
-     * @param array<int|string, string> $types Associative array of fields pointing to the type of the
+     * @param array<int|string, string> types Associative array of fields pointing to the type of the
      * values that are being passed. Used for correctly binding values to statements.
      * @see \UIM\Database\Query.where() for examples on conditions
      */
-    void add(IExpression|string[] aconditions, array $types = []) {
+    void add(IExpression|string[] aconditions, array types = []) {
         if (isString($conditions) || cast(IExpression)$conditions ) {
            _conditions ~= $conditions;
 
             return;
         }
-       _addConditions($conditions, $types);
+       _addConditions($conditions, types);
     }
 
     /**
@@ -94,14 +94,14 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield Database field to be compared against value
      * @param Json aValue The value to be bound to $field for comparison
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param string|null type the type name for aValue as configured using the Type map.
      * If it is suffixed with "[]" and the value is an array then multiple placeholders
      * will be created, one per each value in the array.
      */
     auto eq(IExpression|string afield, Json aValue, string atype = null) {
-        auto $type ??= _calculateType($field);
+        auto type ??= _calculateType($field);
 
-        return this.add(new ComparisonExpression($field, aValue, $type, "="));
+        return this.add(new ComparisonExpression($field, aValue, type, "="));
     }
 
     /**
@@ -109,14 +109,14 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield Database field to be compared against value
      * @param Json aValue The value to be bound to $field for comparison
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param string|null type the type name for aValue as configured using the Type map.
      * If it is suffixed with "[]" and the value is an array then multiple placeholders
      * will be created, one per each value in the array.
      */
     auto notEq(IExpression|string afield, Json aValue, string atype = null) {
-        auto $type ??= _calculateType($field);
+        auto type ??= _calculateType($field);
 
-        return this.add(new ComparisonExpression($field, aValue, $type, "!="));
+        return this.add(new ComparisonExpression($field, aValue, type, "!="));
     }
     
     /**
@@ -124,12 +124,12 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield Database field to be compared against value
      * @param Json aValue The value to be bound to $field for comparison
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param string|null type the type name for aValue as configured using the Type map.
      */
     auto gt(IExpression|string afield, Json aValue, string atype = null) {
-        auto $type ??= _calculateType($field);
+        auto type ??= _calculateType($field);
 
-        return this.add(new ComparisonExpression($field, aValue, $type, ">"));
+        return this.add(new ComparisonExpression($field, aValue, type, ">"));
     }
     
     /**
@@ -137,12 +137,12 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield Database field to be compared against value
      * @param Json aValue The value to be bound to $field for comparison
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param string|null type the type name for aValue as configured using the Type map.
      */
     auto lt(IExpression|string afield, Json aValue, string atype = null) {
-        $type ??= _calculateType($field);
+        type ??= _calculateType($field);
 
-        return this.add(new ComparisonExpression($field, aValue, $type, "<"));
+        return this.add(new ComparisonExpression($field, aValue, type, "<"));
     }
     
     /**
@@ -150,12 +150,12 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield Database field to be compared against value
      * @param Json aValue The value to be bound to $field for comparison
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param string|null type the type name for aValue as configured using the Type map.
      */
     auto gte(IExpression|string afield, Json aValue, string atype = null) {
-        $type ??= _calculateType($field);
+        type ??= _calculateType($field);
 
-        return this.add(new ComparisonExpression($field, aValue, $type, ">="));
+        return this.add(new ComparisonExpression($field, aValue, type, ">="));
     }
     
     /**
@@ -163,12 +163,12 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield Database field to be compared against value
      * @param Json aValue The value to be bound to $field for comparison
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param string|null type the type name for aValue as configured using the Type map.
      */
     auto lte(IExpression|string afield, Json aValue, string atype = null) {
-        $type ??= _calculateType($field);
+        type ??= _calculateType($field);
 
-        return this.add(new ComparisonExpression($field, aValue, $type, "<="));
+        return this.add(new ComparisonExpression($field, aValue, type, "<="));
     }
     
     /**
@@ -201,12 +201,12 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield Database field to be compared against value
      * @param Json aValue The value to be bound to $field for comparison
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param string|null type the type name for aValue as configured using the Type map.
      */
     auto like(IExpression|string afield, Json aValue, string atype = null) {
-        $type ??= _calculateType($field);
+        type ??= _calculateType($field);
 
-        return this.add(new ComparisonExpression($field, aValue, $type, "LIKE"));
+        return this.add(new ComparisonExpression($field, aValue, type, "LIKE"));
     }
     
     /**
@@ -214,12 +214,12 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield Database field to be compared against value
      * @param Json aValue The value to be bound to $field for comparison
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param string|null type the type name for aValue as configured using the Type map.
      */
     auto notLike(IExpression|string afield, Json aValue, string atype = null) {
-        $type ??= _calculateType($field);
+        type ??= _calculateType($field);
 
-        return this.add(new ComparisonExpression($field, aValue, $type, "NOT LIKE"));
+        return this.add(new ComparisonExpression($field, aValue, type, "NOT LIKE"));
     }
     
     /**
@@ -228,19 +228,19 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield Database field to be compared against value
      * @param \UIM\Database\IExpression|string[] avalues the value to be bound to $field for comparison
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param string|null type the type name for aValue as configured using the Type map.
      */
     auto in(
         IExpression|string afield,
         IExpression|string[] avalues,
         string atype = null
     ) {
-        $type ??= _calculateType($field);
-        $type = $type ?: "string";
-        $type ~= "[]";
+        type ??= _calculateType($field);
+        type = type ?: "string";
+        type ~= "[]";
          someValues =  cast(IExpression)someValues  ?  someValues : (array) someValues;
 
-        return this.add(new ComparisonExpression($field,  someValues, $type, "IN"));
+        return this.add(new ComparisonExpression($field,  someValues, type, "IN"));
     }
     
     /**
@@ -260,12 +260,12 @@ class QueryExpression : IExpression, Countable {
      * case expression variant!
      * Params:
      * \UIM\Database\IExpression|object|scalar|null aValue The case value.
-     * @param string|null $type The case value type. If no type is provided, the type will be tried to be inferred
+     * @param string|null type The case value type. If no type is provided, the type will be tried to be inferred
      * from the value.
      */
     CaseStatementExpression case(Json aValue = null, string atype = null) {
         auto caseExpression = (func_num_args() > 0) 
-            ? new CaseStatementExpression(aValue, $type);
+            ? new CaseStatementExpression(aValue, type);
             : new CaseStatementExpression();
         
         return caseExpression.setTypeMap(this.getTypeMap());
@@ -277,19 +277,19 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield Database field to be compared against value
      * @param \UIM\Database\IExpression|string[] avalues the value to be bound to $field for comparison
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param string|null type the type name for aValue as configured using the Type map.
      */
     auto notIn(
         IExpression|string afield,
         IExpression|string[] avalues,
         string atype = null
     ) {
-        $type ??= _calculateType($field);
-        $type = $type ?: "string";
-        $type ~= "[]";
+        type ??= _calculateType($field);
+        type = type ?: "string";
+        type ~= "[]";
          someValues =  cast(IExpression)someValues  ?  someValues : (array) someValues;
 
-        return this.add(new ComparisonExpression($field,  someValues, $type, "NOT IN"));
+        return this.add(new ComparisonExpression($field,  someValues, type, "NOT IN"));
     }
     
     /**
@@ -298,7 +298,7 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield Database field to be compared against value
      * @param \UIM\Database\IExpression|string[] avalues the value to be bound to $field for comparison
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param string|null type the type name for aValue as configured using the Type map.
      */
     auto notInOrNull(
         IExpression|string afield,
@@ -307,7 +307,7 @@ class QueryExpression : IExpression, Countable {
     ) {
         $or = new static([], [], "OR");
         $or
-            .notIn($field,  someValues, $type)
+            .notIn($field,  someValues, type)
             .isNull($field);
 
         return this.add($or);
@@ -337,13 +337,13 @@ class QueryExpression : IExpression, Countable {
      * Params:
      * \UIM\Database\IExpression|string afield The field name to compare for values inbetween the range.
      * @param Json $from The initial value of the range.
-     * @param Json $to The ending value in the comparison range.
-     * @param string|null $type the type name for aValue as configured using the Type map.
+     * @param Json to The ending value in the comparison range.
+     * @param string|null type the type name for aValue as configured using the Type map.
      */
-    auto between(IExpression|string afield, Json $from, Json $to, string atype = null) {
-        $type ??= _calculateType($field);
+    auto between(IExpression|string afield, Json $from, Json to, string atype = null) {
+        type ??= _calculateType($field);
 
-        return this.add(new BetweenExpression($field, $from, $to, $type));
+        return this.add(new BetweenExpression($field, $from, to, type));
     }
     
     /**
@@ -421,7 +421,7 @@ class QueryExpression : IExpression, Countable {
             return "";
         }
         $conjunction = _conjunction;
-        $template = $len == 1 ? "%s' : '(%s)";
+        template = $len == 1 ? "%s' : '(%s)";
         someParts = [];
         foreach (_conditions as $part) {
             if (cast(Query)$part) {
@@ -433,7 +433,7 @@ class QueryExpression : IExpression, Countable {
                 someParts ~= $part;
             }
         }
-        return $template.format(join(" $conjunction ", someParts));
+        return template.format(join(" $conjunction ", someParts));
     }
 
     void traverse(Closure aCallback) {
@@ -496,13 +496,13 @@ class QueryExpression : IExpression, Countable {
     protected void _addConditions(array $conditions, STRINGAA fieldTypes) {
         $operators = ["and", "or", "xor"];
 
-        $typeMap = this.getTypeMap().setTypes(fieldTypes);
+        typeMap = this.getTypeMap().setTypes(fieldTypes);
 
         foreach (myKey: $c; $conditions) {
             $numericKey = isNumeric(myKey);
 
             if (cast(Closure)$c) {
-                $expr = new static([], $typeMap);
+                $expr = new static([], typeMap);
                 $c = $c($expr, this);
             }
             if ($numericKey && empty($c)) {
@@ -527,11 +527,11 @@ class QueryExpression : IExpression, Countable {
                 continue;
             }
             if ($numericKey &&  isArray ||  isOperator) {
-               _conditions ~= new static($c, $typeMap, $numericKey ? "AND" : myKey);
+               _conditions ~= new static($c, typeMap, $numericKey ? "AND" : myKey);
                 continue;
             }
             if (isNot) {
-               _conditions ~= new UnaryExpression("NOT", new static($c, $typeMap));
+               _conditions ~= new UnaryExpression("NOT", new static($c, typeMap));
                 continue;
             }
             if (!$numericKey) {
@@ -575,16 +575,16 @@ class QueryExpression : IExpression, Countable {
         }
         $operator = strtoupper(trim($operator));
 
-        $type = this.getTypeMap().type($expression);
-        $typeMultiple = (isString($type) && $type.has("[]"));
-        if (in_array($operator, ["IN", "NOT IN"]) || $typeMultiple) {
-            $type = $type ?: "string";
+        type = this.getTypeMap().type($expression);
+        typeMultiple = (isString($type) && type.has("[]"));
+        if (in_array($operator, ["IN", "NOT IN"]) || typeMultiple) {
+            type = type ?: "string";
             if (!$typeMultiple) {
-                $type ~= "[]";
+                type ~= "[]";
             }
             $operator = $operator == "=" ? "IN" : $operator;
             $operator = $operator == "!=" ? "NOT IN" : $operator;
-            $typeMultiple = true;
+            typeMultiple = true;
         }
 
         if ($typeMultiple) {
@@ -615,7 +615,7 @@ class QueryExpression : IExpression, Countable {
                 "Expression `%s` is missing operator (IS, IS NOT) with `null` value.".format($expression)
             );
         }
-        return new ComparisonExpression($expression, aValue, $type, $operator);
+        return new ComparisonExpression($expression, aValue, type, $operator);
     }
     
     /**

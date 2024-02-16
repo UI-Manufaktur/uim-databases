@@ -162,7 +162,7 @@ class Sqlite : Driver
     function prepare($query): IStatement
     {
         this.connect();
-        $isObject = $query instanceof Query;
+        isObject = $query instanceof Query;
         /**
          * @psalm-suppress PossiblyInvalidMethodCall
          * @psalm-suppress PossiblyInvalidArgument

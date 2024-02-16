@@ -36,9 +36,9 @@ return true;
      * with Query.values().
      * Params:
      * array columnsToInsert The columns to insert into.
-     * @param array<int|string, string> $types A map between columns & their datatypes.
+     * @param array<int|string, string> types A map between columns & their datatypes.
      */
-    void insert(array columnsToInsert, array $types = []) {
+    void insert(array columnsToInsert, array types = []) {
         if (isEmpty(columnsToInsert)) {
             throw new InvalidArgumentException("At least 1 column is required to perform an insert.");
         }

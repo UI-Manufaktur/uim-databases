@@ -440,28 +440,28 @@ abstract class Query : IExpression, Stringable {
      * ```
      * Params:
      * IData[string]|string atables list of tables to be joined in the query
-     * @param STRINGAA $types Associative array of type names used to bind values to query
+     * @param STRINGAA types Associative array of type names used to bind values to query
      * @param bool $overwrite whether to reset joins with passed list or not
      * @see \UIM\Database\TypeFactory
      */
-    auto join(string[] atables, array $types = [], bool $overwrite = false) {
+    auto join(string[] atables, array types = [], bool $overwrite = false) {
         if (isString(aTables) || isSet(aTables["table"])) {
             aTables = [aTables];
         }
         $joins = [];
          anI = count(_parts["join"]);
-        foreach ($alias, $t; aTables) {
+        foreach ($alias, t; aTables) {
             if (!isArray($t)) {
-                $t = ["table": $t, "conditions": this.newExpr()];
+                t = ["table": t, "conditions": this.newExpr()];
             }
             if (cast(Closure)$t["conditions"]) {
-                $t["conditions"] = $t["conditions"](this.newExpr(), this);
+                t["conditions"] = t["conditions"](this.newExpr(), this);
             }
             if (!cast(IExpression)$t["conditions"]) {
-                $t["conditions"] = this.newExpr().add($t["conditions"], $types);
+                t["conditions"] = this.newExpr().add($t["conditions"], types);
             }
-            $alias = isString($alias) ? alias : null;
-            $joins[$alias ?:  anI++] = $t ~ ["type": JOIN_TYPE_INNER, "alias": $alias];
+            alias = isString($alias) ? alias : null;
+            $joins[$alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": $alias];
         }
         _parts["join"] = $overwrite ? $joins : array_merge(_parts["join"], $joins);
 
@@ -515,15 +515,15 @@ abstract class Query : IExpression, Stringable {
      * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
-     * @param array $types a list of types associated to the conditions used for converting
+     * @param array types a list of types associated to the conditions used for converting
      * values to the corresponding database representation.
      */
     auto leftJoin(
         string[] atable,
         IExpression|Closure|string[] aconditions = [],
-        array $types = []
+        array types = []
     ) {
-        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_LEFT), $types);
+        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_LEFT), types);
 
         return this;
     }
@@ -539,15 +539,15 @@ abstract class Query : IExpression, Stringable {
      * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
-     * @param array $types a list of types associated to the conditions used for converting
+     * @param array types a list of types associated to the conditions used for converting
      * values to the corresponding database representation.
      */
     void rightJoin(
         string[] atable,
         IExpression|Closure|string[] aconditions = [],
-        array $types = []
+        array types = []
     ) {
-        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_RIGHT), $types);
+        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_RIGHT), types);
     }
     
     /**
@@ -561,15 +561,15 @@ abstract class Query : IExpression, Stringable {
      * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
-     * @param STRINGAA $types a list of types associated to the conditions used for converting
+     * @param STRINGAA types a list of types associated to the conditions used for converting
      * values to the corresponding database representation.
      */
     auto innerJoin(
         string[] atable,
         IExpression|Closure|string[] aconditions = [],
-        array $types = []
+        array types = []
     ) {
-        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_INNER), $types);
+        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_INNER), types);
 
         return this;
     }
@@ -601,7 +601,7 @@ abstract class Query : IExpression, Stringable {
             $alias: [
                 'table": aTable,
                 'conditions": $conditions,
-                'type": $type,
+                'type": type,
             ],
         ];
     }
@@ -733,20 +733,20 @@ abstract class Query : IExpression, Stringable {
      * If $category is `null` - it will actually convert that into `category_id isNull` - if it`s `4` it will convert it into `category_id = 4`
      * Params:
      * \UIM\Database\IExpression|\Closure|string[]|null $conditions The conditions to filter on.
-     * @param STRINGAA $types Associative array of type names used to bind values to query
+     * @param STRINGAA types Associative array of type names used to bind values to query
      * @param bool $overwrite whether to reset conditions with passed list or not
      * @see \UIM\Database\TypeFactory
      * @see \UIM\Database\Expression\QueryExpression
      */
     auto where(
         IExpression|Closure|string[]|null $conditions = null,
-        array $types = [],
+        array types = [],
         bool $overwrite = false
     ) {
         if ($overwrite) {
            _parts["where"] = this.newExpr();
         }
-       _conjugate("where", $conditions, "AND", $types);
+       _conjugate("where", $conditions, "AND", types);
 
         return this;
     }
@@ -914,12 +914,12 @@ abstract class Query : IExpression, Stringable {
      * `WHERE (title = "Foo") AND (author_id = 1 OR author_id = 2)`
      * Params:
      * \UIM\Database\IExpression|\Closure|string[] aconditions The conditions to add with AND.
-     * @param STRINGAA $types Associative array of type names used to bind values to query
+     * @param STRINGAA types Associative array of type names used to bind values to query
      * @see \UIM\Database\Query.where()
      * @see \UIM\Database\TypeFactory
      */
-    auto andWhere(IExpression|Closure|string[] aconditions, array $types = []) {
-       _conjugate("where", $conditions, "AND", $types);
+    auto andWhere(IExpression|Closure|string[] aconditions, array types = []) {
+       _conjugate("where", $conditions, "AND", types);
 
         return this;
     }
@@ -1347,11 +1347,11 @@ abstract class Query : IExpression, Stringable {
      * string|int $param placeholder to be replaced with quoted version
      *  of aValue
      * @param Json aValue The value to be bound
-     * @param string|int $type the mapped type name, used for casting when sending
+     * @param string|int type the mapped type name, used for casting when sending
      *  to database
      */
-    auto bind(string|int $param, Json aValue, string|int $type = null) {
-        this.getValueBinder().bind($param, aValue, $type);
+    auto bind(string|int $param, Json aValue, string|int type = null) {
+        this.getValueBinder().bind($param, aValue, type);
 
         return this;
     }
@@ -1389,13 +1389,13 @@ abstract class Query : IExpression, Stringable {
      * @param \UIM\Database\IExpression|\Closure|string[]|null $append Expression or builder auto to append.
      *  to append.
      * @param string aconjunction type of conjunction to be used to operate part
-     * @param STRINGAA $types Associative array of type names used to bind values to query
+     * @param STRINGAA types Associative array of type names used to bind values to query
      */
     protected void _conjugate(
         string apart,
         IExpression|Closure|string[]|null $append,
         string aconjunction,
-        array $types
+        array types
     ) {
         $expression = _parts[$part] ?: this.newExpr();
         if (isEmpty($append)) {
@@ -1407,11 +1407,11 @@ abstract class Query : IExpression, Stringable {
             $append = $append(this.newExpr(), this);
         }
         if ($expression.getConjunction() == $conjunction) {
-            $expression.add($append, $types);
+            $expression.add($append, types);
         } else {
             $expression = this.newExpr()
                 .setConjunction($conjunction)
-                .add([$expression, $append], $types);
+                .add([$expression, $append], types);
         }
        _parts[$part] = $expression;
        _dirty();

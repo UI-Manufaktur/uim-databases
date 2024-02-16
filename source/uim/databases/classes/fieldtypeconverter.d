@@ -19,20 +19,20 @@ class FieldTypeConverter {
     /**
      * Builds the type map
      * Params:
-     * \UIM\Database\TypeMap $typeMap Contains the types to use for converting results
+     * \UIM\Database\TypeMap typeMap Contains the types to use for converting results
      * @param \UIM\Database\Driver $driver The driver to use for the type conversion
      */
-    this(TypeMap $typeMap, Driver $driver) {
+    this(TypeMap typeMap, Driver $driver) {
         this.driver = $driver;
 
-        $types = TypeFactory.buildAll();
-        foreach ($field: $typeName; $typeMap.toArray()) {
-            $type = $types.get($typeName, null);
+        types = TypeFactory.buildAll();
+        foreach ($field: typeName; typeMap.toArray()) {
+            type = types.get($typeName, null);
             if (!$type || (cast(IOptionalConvert)$type && !$type.requiresToDCast())) {
                 continue;
             }
             this.conversions[$typeName] ??= [
-                "type": $type,
+                "type": type,
                 "hasBatch": cas(IBatchCasting)$type ,
                 "fields": [],
             ];

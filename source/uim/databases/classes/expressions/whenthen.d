@@ -38,7 +38,7 @@ class WhenThenExpression : IExpression {
      *
      * @var \UIM\Database\IExpression|object|scalar|null
      */
-    protected Json $then = null;
+    protected Json then = null;
 
     /**
      * Whether the `THEN` value has been defined, eg whether `then()`
@@ -52,11 +52,11 @@ class WhenThenExpression : IExpression {
     /**
      * Constructor.
      * Params:
-     * \UIM\Database\TypeMap|null $typeMap The type map to use when using an array of conditions for the `WHEN`
+     * \UIM\Database\TypeMap|null typeMap The type map to use when using an array of conditions for the `WHEN`
      * value.
      */
-    this(TypeMap $typeMap = null) {
-       _typeMap = $typeMap ?? new TypeMap();
+    this(TypeMap typeMap = null) {
+       _typeMap = typeMap ?? new TypeMap();
     }
     
     /**
@@ -68,7 +68,7 @@ class WhenThenExpression : IExpression {
      * plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to be
      * a non-array, and then always binds the data), use a conditions array where the user data is only passed on the
      * value side of the array entries, or custom bindings!
-     * @param STRINGAA|string|null $type The when value type. Either an associative array when using array style
+     * @param STRINGAA|string|null type The when value type. Either an associative array when using array style
      * conditions, or else a string. If no type is provided, the type will be tried to be inferred from the value.
 
      * @throws \InvalidArgumentException In case the `$when` argument is an empty array.
@@ -78,13 +78,13 @@ class WhenThenExpression : IExpression {
      * neither a string, nor null.
      * @see CaseStatementExpression.when() for a more detailed usage explanation.
      */
-    void when(object|string[]|float|int|bool $when, string[]|null $type = null) {
+    void when(object|string[]|float|int|bool $when, string[]|null type = null) {
         if (isArray($when)) {
             if (isEmpty($when)) {
                 throw new InvalidArgumentException("The `$when` argument must be a non-empty array");
             }
             if (
-                $type !isNull &&
+                type !isNull &&
                 !isArray($type)
             ) {
                 throw new InvalidArgumentException(
@@ -93,17 +93,17 @@ class WhenThenExpression : IExpression {
                 ));
             }
             // avoid dirtying the type map for possible consecutive `when()` calls
-            $typeMap = clone _typeMap;
+            typeMap = clone _typeMap;
             if (
                 isArray($type) &&
                 count($type) > 0
             ) {
-                $typeMap = $typeMap.setTypes($type);
+                typeMap = typeMap.setTypes($type);
             }
-            $when = new QueryExpression($when, $typeMap);
+            $when = new QueryExpression($when, typeMap);
         } else {
             if (
-                $type !isNull &&
+                type !isNull &&
                 !isString($type)
             ) {
                 throw new InvalidArgumentException(
@@ -112,21 +112,21 @@ class WhenThenExpression : IExpression {
                 );
             }
             if (
-                $type.isNull &&
+                type.isNull &&
                 !(cast(IExpression)$when )
             ) {
-                $type = this.inferType($when);
+                type = this.inferType($when);
             }
         }
         this.when = $when;
-        this.whenType = $type;
+        this.whenType = type;
     }
     
     /**
      * Sets the `THEN` result value.
      * Params:
      * \UIM\Database\IExpression|object|scalar|null result The result value.
-     * @param string|null $type The result type. If no type is provided, the type will be inferred from the given
+     * @param string|null type The result type. If no type is provided, the type will be inferred from the given
      * result value.
      */
     void then(Json result, string atype = null) {
@@ -144,7 +144,7 @@ class WhenThenExpression : IExpression {
         }
         this.then = result;
 
-        this.thenType = $type ?? this.inferType(result);
+        this.thenType = type ?? this.inferType(result);
 
         this.hasThenBeenDefined = true;
     }
@@ -206,9 +206,9 @@ class WhenThenExpression : IExpression {
             aBinder.bind($placeholder, $when, $whenType);
             $when = $placeholder;
         }
-        $then = this.compileNullableValue(aBinder, this.then, this.thenType);
+        then = this.compileNullableValue(aBinder, this.then, this.thenType);
 
-        return "WHEN $when THEN $then";
+        return "WHEN $when THEN then";
     }
  
     void traverse(Closure aCallback) {

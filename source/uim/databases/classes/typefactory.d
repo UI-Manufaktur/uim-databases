@@ -97,7 +97,7 @@ class TypeFactory {
     /**
      * Get mapped class name for given type or map array.
      * Params:
-     * string|null $type Type name to get mapped class for or null to get map array.
+     * string|null type Type name to get mapped class for or null to get map array.
      */
     static  string[] getMap(string typeName = null) {
         if (typeName.isNull) {

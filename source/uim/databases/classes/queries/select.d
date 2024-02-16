@@ -60,7 +60,7 @@ class SelectQuery : Query, IteratorAggregate {
     protected TypeMap _selectTypeMap = null;
 
     // Tracking flag to disable casting
-    protected bool $typeCastEnabled = true;
+    protected bool typeCastEnabled = true;
 
     /**
      * Executes query and returns set of decorated results.
@@ -263,18 +263,18 @@ class SelectQuery : Query, IteratorAggregate {
         }
         $joins = [];
         anI = count(_parts["join"]);
-        foreach ($alias: $t; aTables) {
+        foreach ($alias: t; aTables) {
             if (!isArray($t)) {
-                $t = ["table": $t, "conditions": this.newExpr()];
+                t = ["table": t, "conditions": this.newExpr()];
             }
             if (!isString($t["conditions"]) && cast(Closure)$t["conditions"]) {
-                $t["conditions"] = $t["conditions"](this.newExpr(), this);
+                t["conditions"] = t["conditions"](this.newExpr(), this);
             }
             if (!(cast(IExpression)$t["conditions"] )) {
-                $t["conditions"] = this.newExpr().add($t["conditions"], typeNames);
+                t["conditions"] = this.newExpr().add($t["conditions"], typeNames);
             }
-            $alias = isString($alias) ? alias : null;
-            $joins[$alias ?:  anI++] = $t ~ ["type": JOIN_TYPE_INNER, "alias": $alias];
+            alias = isString($alias) ? alias : null;
+            $joins[$alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": $alias];
         }
 
         _parts["join"] = $overwrite 
@@ -330,15 +330,15 @@ class SelectQuery : Query, IteratorAggregate {
      * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
-     * @param array $types a list of types associated to the conditions used for converting
+     * @param array types a list of types associated to the conditions used for converting
      * values to the corresponding database representation.
      */
     void leftJoin(
         string[] atable,
         IExpression|Closure|string[] aconditions = [],
-        array $types = []
+        array types = []
     ) {
-        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_LEFT), $types);
+        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_LEFT), types);
     }
 
     /**
@@ -352,15 +352,15 @@ class SelectQuery : Query, IteratorAggregate {
      * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
-     * @param array $types a list of types associated to the conditions used for converting
+     * @param array types a list of types associated to the conditions used for converting
      * values to the corresponding database representation.
      */
     auto rightJoin(
         string[] atable,
         IExpression|Closure|string[] aconditions = [],
-        array $types = []
+        array types = []
     ) {
-        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_RIGHT), $types);
+        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_RIGHT), types);
 
         return this;
     }
@@ -376,15 +376,15 @@ class SelectQuery : Query, IteratorAggregate {
      * IData[string]|string atable The table to join with
      * @param \UIM\Database\IExpression|\Closure|string[] aconditions The conditions
      * to use for joining.
-     * @param STRINGAA $types a list of types associated to the conditions used for converting
+     * @param STRINGAA types a list of types associated to the conditions used for converting
      * values to the corresponding database representation.
      */
     void innerJoin(
         string[] atable,
         IExpression|Closure|string[] aconditions = [],
-        array $types = []
+        array types = []
     ) {
-        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_INNER), $types);
+        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_INNER), types);
     }
 
     /**
@@ -411,7 +411,7 @@ class SelectQuery : Query, IteratorAggregate {
             $alias: [
                 'table": aTable,
                 'conditions": $conditions,
-                'type": $type,
+                'type": type,
             ],
         ];
     }
@@ -463,19 +463,19 @@ class SelectQuery : Query, IteratorAggregate {
      * not sanitized by the query builder.
      * Params:
      * \UIM\Database\IExpression|\Closure|string[]|null $conditions The having conditions.
-     * $types Associative array of type names used to bind values to query
+     * types Associative array of type names used to bind values to query
      * @param bool $overwrite whether to reset conditions with passed list or not
      * @see \UIM\Database\Query.where()
      */
     auto having(
         IExpression|Closure|string[]|null $conditions = null,
-        STRINGAA $types = [],
+        STRINGAA types = [],
         bool $overwrite = false
     ) {
         if ($overwrite) {
            _parts["having"] = this.newExpr();
         }
-       _conjugate("having", $conditions, "AND", $types);
+       _conjugate("having", $conditions, "AND", types);
 
         return this;
     }
@@ -490,11 +490,11 @@ class SelectQuery : Query, IteratorAggregate {
      * not sanitized by the query builder.
      * Params:
      * \UIM\Database\IExpression|\Closure|string[] aconditions The AND conditions for HAVING.
-     * @param STRINGAA $types Associative array of type names used to bind values to query
+     * @param STRINGAA types Associative array of type names used to bind values to query
      * @see \UIM\Database\Query.andWhere()
      */
-    auto andHaving(IExpression|Closure|string[] aconditions, array $types = []) {
-       _conjugate("having", $conditions, "AND", $types);
+    auto andHaving(IExpression|Closure|string[] aconditions, array types = []) {
+       _conjugate("having", $conditions, "AND", types);
 
         return this;
     }
@@ -680,10 +680,10 @@ class SelectQuery : Query, IteratorAggregate {
      * Sets the TypeMap class where the types for each of the fields in the
      * select clause are stored.
      * Params:
-     * \UIM\Database\TypeMap|array $typeMap Creates a TypeMap if array, otherwise sets the given TypeMap.
+     * \UIM\Database\TypeMap|array typeMap Creates a TypeMap if array, otherwise sets the given TypeMap.
      */
-    auto setSelectTypeMap(TypeMap|array $typeMap) {
-       _selectTypeMap = isArray($typeMap) ? new TypeMap($typeMap): $typeMap;
+    auto setSelectTypeMap(TypeMap|array typeMap) {
+       _selectTypeMap = isArray($typeMap) ? new TypeMap($typeMap): typeMap;
        _dirty();
 
         return this;

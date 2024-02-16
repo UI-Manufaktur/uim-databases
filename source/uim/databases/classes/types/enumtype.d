@@ -161,11 +161,11 @@ class EnumType : BaseType {
      * class-string<\BackedEnum> enumClassName The enum class name
      */
     static string from(string enumClassName) {
-        $typeName = "enum-" ~ (Text.slug(enumClassName).toLower);
+        typeName = "enum-" ~ (Text.slug(enumClassName).toLower);
          anInstance = new EnumType($typeName, enumClassName);
         TypeFactory.set($typeName,  anInstance);
 
-        return $typeName;
+        return typeName;
     }
     
     string getEnumClassName() {

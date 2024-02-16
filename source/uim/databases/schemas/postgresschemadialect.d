@@ -166,7 +166,7 @@ class PostgresSchemaDialect : SchemaDialect
     }
 
 
-    void convertColumnDescription(TableSchema aSchema, array aRow) {
+    void convertColumnDescription(TableSchema aSchema, array aRow) t{
         field = this._convertColumn(aRow["type"]);
 
         if (field["type"] == TableTypes.BOOLEAN) {

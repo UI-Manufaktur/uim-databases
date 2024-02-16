@@ -50,22 +50,22 @@ class CaseExpression : IDBAExpression
      * @param uim.databases.IDBAExpression|array $values Associative array of values to be associated with the
      * conditions passed in $conditions. If there are more $values than $conditions,
      * the last $value is used as the `ELSE` value.
-     * @param array<string> $types Associative array of types to be associated with the values
+     * @param array<string> types Associative array of types to be associated with the values
      * passed in $values
      */
-    this($conditions = null, $values = null, $types = null) {
+    this($conditions = null, $values = null, types = null) {
         $conditions = is_array($conditions) ? $conditions : [$conditions];
         $values = is_array($values) ? $values : [$values];
-        $types = is_array($types) ? $types : [$types];
+        types = is_array($types) ? types : [$types];
 
         if (!empty($conditions)) {
-            this.add($conditions, $values, $types);
+            this.add($conditions, $values, types);
         }
 
         if (count($values) > count($conditions)) {
             end($values);
             $key = key($values);
-            this.elseValue($values[$key], $types[$key] ?? null);
+            this.elseValue($values[$key], types[$key] ?? null);
         }
     }
 
@@ -77,15 +77,15 @@ class CaseExpression : IDBAExpression
      * @param uim.databases.IDBAExpression|array $conditions Must be a IDBAExpression instance,
      *   or an array of IDBAExpression instances.
      * @param uim.databases.IDBAExpression|array $values Associative array of values of each condition
-     * @param array<string> $types Associative array of types to be associated with the values
+     * @param array<string> types Associative array of types to be associated with the values
      * @return this
      */
-    function add($conditions = null, $values = null, $types = null) {
+    function add($conditions = null, $values = null, types = null) {
         $conditions = is_array($conditions) ? $conditions : [$conditions];
         $values = is_array($values) ? $values : [$values];
-        $types = is_array($types) ? $types : [$types];
+        types = is_array($types) ? types : [$types];
 
-        _addExpressions($conditions, $values, $types);
+        _addExpressions($conditions, $values, types);
 
         return this;
     }
@@ -96,9 +96,9 @@ class CaseExpression : IDBAExpression
      *
      * @param array $conditions Array of IDBAExpression instances.
      * @param array<mixed> $values Associative array of values of each condition
-     * @param array<string> $types Associative array of types to be associated with the values
+     * @param array<string> types Associative array of types to be associated with the values
      */
-    protected void _addExpressions(array $conditions, array $values, array $types) {
+    protected void _addExpressions(array $conditions, array $values, array types) {
         $rawValues = array_values($values);
         $keyValues = array_keys($values);
 
@@ -130,10 +130,10 @@ class CaseExpression : IDBAExpression
                 continue;
             }
 
-            $type = $types[$k] ?? null;
+            type = types[$k] ?? null;
 
             if ($type != null && !$value instanceof IDBAExpression) {
-                $value = _castToExpression($value, $type);
+                $value = _castToExpression($value, type);
             }
 
             if ($value instanceof IDBAExpression) {
@@ -141,7 +141,7 @@ class CaseExpression : IDBAExpression
                 continue;
             }
 
-            _values[] = ["value": $value, "type": $type];
+            _values[] = ["value": $value, "type": type];
         }
     }
 
@@ -149,20 +149,20 @@ class CaseExpression : IDBAExpression
      * Sets the default value
      *
      * @param uim.databases.IDBAExpression|array|string|null $value Value to set
-     * @param string|null $type Type of value
+     * @param string|null type Type of value
      */
-    void elseValue($value = null, Nullable!string $type = null) {
+    void elseValue($value = null, Nullable!string type = null) {
         if (is_array($value)) {
             end($value);
             $value = key($value);
         }
 
         if ($value != null && !$value instanceof IDBAExpression) {
-            $value = _castToExpression($value, $type);
+            $value = _castToExpression($value, type);
         }
 
         if (!$value instanceof IDBAExpression) {
-            $value = ["value": $value, "type": $type];
+            $value = ["value": $value, "type": type];
         }
 
         _elseValue = $value;

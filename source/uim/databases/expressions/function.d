@@ -46,14 +46,14 @@ class FunctionExpression : QueryExpression : ITypedResult
      * @param string aName the name of the function to be constructed
      * @param array $params list of arguments to be passed to the function
      * If associative the key would be used as argument when value is "literal"
-     * @param array<string, string>|array<string|null> $types Associative array of types to be associated with the
+     * @param array<string, string>|array<string|null> types Associative array of types to be associated with the
      * passed arguments
      * @param string $returnType The return type of this expression
      */
-    this(string aName, array $params = null, array $types = null, string $returnType = "string") {
+    this(string aName, array $params = null, array types = null, string $returnType = "string") {
         _name = $name;
         _returnType = $returnType;
-        super(($params, $types, ",");
+        super(($params, types, ",");
     }
 
     /**
@@ -80,16 +80,16 @@ class FunctionExpression : QueryExpression : ITypedResult
      *
      * @param array $conditions list of arguments to be passed to the function
      * If associative the key would be used as argument when value is "literal"
-     * @param array<string, string> $types Associative array of types to be associated with the
+     * @param array<string, string> types Associative array of types to be associated with the
      * passed arguments
      * @param bool $prepend Whether to prepend or append to the list of arguments
      * @see uim.databases.Expression\FunctionExpression::__construct() for more details.
      * @return this
      * @psalm-suppress MoreSpecificImplementedParamType
      */
-    function add($conditions, array $types = null, bool $prepend = false) {
+    function add($conditions, array types = null, bool $prepend = false) {
         $put = $prepend ? "array_unshift" : "array_push";
-        $typeMap = this.getTypeMap().setTypes($types);
+        typeMap = this.getTypeMap().setTypes($types);
         foreach ($conditions as $k: $p) {
             if ($p == "literal") {
                 $put(_conditions, $k);
@@ -101,10 +101,10 @@ class FunctionExpression : QueryExpression : ITypedResult
                 continue;
             }
 
-            $type = $typeMap.type($k);
+            type = typeMap.type($k);
 
             if ($type != null && !$p instanceof IDBAExpression) {
-                $p = _castToExpression($p, $type);
+                $p = _castToExpression($p, type);
             }
 
             if ($p instanceof IDBAExpression) {
@@ -112,7 +112,7 @@ class FunctionExpression : QueryExpression : ITypedResult
                 continue;
             }
 
-            $put(_conditions, ["value": $p, "type": $type]);
+            $put(_conditions, ["value": $p, "type": type]);
         }
 
         return this;

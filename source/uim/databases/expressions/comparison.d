@@ -57,11 +57,11 @@ class ComparisonExpression : IDBAExpression, FieldInterface
      *
      * @param uim.databases.IDBAExpression|string $field the field name to compare to a value
      * @param mixed $value The value to be used in comparison
-     * @param string|null $type the type name used to cast the value
+     * @param string|null type the type name used to cast the value
      * @param string $operator the operator used for comparing field and value
      */
-    this($field, $value, Nullable!string $type = null, string $operator = "=") {
-        _type = $type;
+    this($field, $value, Nullable!string type = null, string $operator = "=") {
+        _type = type;
         this.setField($field);
         this.setValue($value);
         _operator = $operator;
@@ -119,10 +119,10 @@ class ComparisonExpression : IDBAExpression, FieldInterface
         }
 
         if (_value instanceof IdentifierExpression) {
-            $template = "%s %s %s";
+            template = "%s %s %s";
             $value = _value.sql($binder);
         } elseif (_value instanceof IDBAExpression) {
-            $template = "%s %s (%s)";
+            template = "%s %s (%s)";
             $value = _value.sql($binder);
         } else {
             [$template, $value] = _stringExpression($binder);
@@ -172,19 +172,19 @@ class ComparisonExpression : IDBAExpression, FieldInterface
      * @return array First position containing the template and the second a placeholder
      */
     protected array _stringExpression(ValueBinder aBinder) {
-        $template = "%s ";
+        template = "%s ";
 
         if (_field instanceof IDBAExpression && !_field instanceof IdentifierExpression) {
-            $template = "(%s) ";
+            template = "(%s) ";
         }
 
         if (_isMultiple) {
-            $template ~= "%s (%s)";
-            $type = _type;
+            template ~= "%s (%s)";
+            type = _type;
             if ($type != null) {
-                $type = replace("[]", "", $type);
+                type = replace("[]", "", type);
             }
-            $value = _flattenValue(_value, $binder, $type);
+            $value = _flattenValue(_value, $binder, type);
 
             // To avoid SQL errors when comparing a field to a list of empty values,
             // better just throw an exception here
@@ -196,7 +196,7 @@ class ComparisonExpression : IDBAExpression, FieldInterface
                 );
             }
         } else {
-            $template ~= "%s %s";
+            template ~= "%s %s";
             $value = _bindValue(_value, $binder, _type);
         }
 
@@ -208,12 +208,12 @@ class ComparisonExpression : IDBAExpression, FieldInterface
      *
      * @param mixed $value The value to bind
      * @param uim.databases.ValueBinder aBinder The value binder to use
-     * @param string|null $type The type of $value
+     * @param string|null type The type of $value
      * @return string generated placeholder
      */
-    protected string _bindValue($value, ValueBinder aBinder, Nullable!string $type = null) {
+    protected string _bindValue($value, ValueBinder aBinder, Nullable!string type = null) {
         $placeholder = $binder.placeholder("c");
-        $binder.bind($placeholder, $value, $type);
+        $binder.bind($placeholder, $value, type);
 
         return $placeholder;
     }
@@ -224,9 +224,9 @@ class ComparisonExpression : IDBAExpression, FieldInterface
      *
      * @param iterable $value the value to flatten
      * @param uim.databases.ValueBinder aBinder The value binder to use
-     * @param string|null $type the type to cast values to
+     * @param string|null type the type to cast values to
      */
-    protected string _flattenValue(iterable $value, ValueBinder aBinder, Nullable!string $type = null) {
+    protected string _flattenValue(iterable $value, ValueBinder aBinder, Nullable!string type = null) {
         $parts = null;
         if (is_array($value)) {
             foreach (_valueExpressions as $k: $v) {
@@ -236,7 +236,7 @@ class ComparisonExpression : IDBAExpression, FieldInterface
         }
 
         if (!empty($value)) {
-            $parts += $binder.generateManyNamed($value, $type);
+            $parts += $binder.generateManyNamed($value, type);
         }
 
         return implode(",", $parts);

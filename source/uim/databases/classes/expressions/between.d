@@ -27,18 +27,18 @@ class BetweenExpression : IExpression, IField {
      * Params:
      * \UIM\Database\IExpression|string afield The field name to compare for values inbetween the range.
      * @param Json $from The initial value of the range.
-     * @param Json $to The ending value in the comparison range.
-     * @param string|null $type The data type name to bind the values with.
+     * @param Json to The ending value in the comparison range.
+     * @param string|null type The data type name to bind the values with.
      */
-    this(IExpression|string afield, Json $from, Json $to, string atype = null) {
+    this(IExpression|string afield, Json $from, Json to, string atype = null) {
         if (!$type.isNull) {
-            $from = _castToExpression($from, $type);
-            $to = _castToExpression($to, $type);
+            $from = _castToExpression($from, type);
+            to = _castToExpression($to, type);
         }
        _field = $field;
        _from = $from;
-       _to = $to;
-       _type = $type;
+       _to = to;
+       _type = type;
     }
  
     string sql(ValueBinder aValueBinder) {
@@ -78,7 +78,7 @@ class BetweenExpression : IExpression, IField {
      */
     protected string _bindValue(Json aValue, ValueBinder aValueBinder, string atype) {
         $placeholder = aValueBinder.placeholder("c");
-        aValueBinder.bind($placeholder, aValue, $type);
+        aValueBinder.bind($placeholder, aValue, type);
 
         return $placeholder;
     }

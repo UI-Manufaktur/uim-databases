@@ -176,11 +176,11 @@ protected void _transformFunctionExpression(FunctionExpression expressionToConve
                     }
 );
                     break;
-    case "CURRENT_DATE" : $time = new FunctionExpression("LOCALTIMESTAMP", [" 0 ": "literal"]);
+    case "CURRENT_DATE" : time = new FunctionExpression("LOCALTIMESTAMP", [" 0 ": "literal"]);
                     expressionToConvert.name("CAST").setConjunction(" AS ")
                         .add([$time, "date": "literal"]);
                     break;
-    case "CURRENT_TIME" : $time = new FunctionExpression("LOCALTIMESTAMP", [" 0 ": "literal"]);
+    case "CURRENT_TIME" : time = new FunctionExpression("LOCALTIMESTAMP", [" 0 ": "literal"]);
                     expressionToConvert.name("CAST").setConjunction(" AS ")
                         .add([$time, "time": "literal"]);
                     break;

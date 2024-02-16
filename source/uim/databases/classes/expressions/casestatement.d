@@ -76,7 +76,7 @@ class CaseStatementExpression : IExpression, ITypedResult {
      * case expression variant!
      * Params:
      * \UIM\Database\IExpression|object|scalar|null aValue The case value.
-     * @param string|null $type The case value type. If no type is provided, the type will be tried to be inferred
+     * @param string|null type The case value type. If no type is provided, the type will be tried to be inferred
      * from the value.
      */
     this(Json aValue = null, string atype = null) {
@@ -97,12 +97,12 @@ class CaseStatementExpression : IExpression, ITypedResult {
 
             if (
                 aValue !isNull &&
-                $type.isNull &&
+                type.isNull &&
                 !(cast(IExpression)aValue )
             ) {
-                $type = this.inferType(aValue);
+                type = this.inferType(aValue);
             }
-            this.valueType = $type;
+            this.valueType = type;
 
             this.isSimpleVariant = true;
         }
@@ -239,14 +239,14 @@ class CaseStatementExpression : IExpression, ITypedResult {
      * you plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to
      * be a non-array, and then always binds the data), use a conditions array where the user data is only passed on
      * the value side of the array entries, or custom bindings!
-     * @param STRINGAA|string|null $type The when value type. Either an associative array when using array style
+     * @param STRINGAA|string|null type The when value type. Either an associative array when using array style
      * conditions, or else a string. If no type is provided, the type will be tried to be inferred from the value.
 
      * @throws \LogicException In case this a closing `then()` call is required before calling this method.
      * @throws \LogicException In case the callable doesn`t return an instance of
      * `\UIM\Database\Expression\WhenThenExpression`.
      */
-    void when(Json $when, string[]|null $type = null) {
+    void when(Json $when, string[]|null type = null) {
         if (!this.whenBuffer.isNull) {
             throw new LogicException("Cannot call `when()` between `when()` and `then()`.");
         }
@@ -262,7 +262,7 @@ class CaseStatementExpression : IExpression, ITypedResult {
         if (cast(WhenThenExpression)$when) {
             this.when ~= $when;
         } else {
-            this.whenBuffer = ["when": $when, "type": $type];
+            this.whenBuffer = ["when": $when, "type": type];
         }
     }
 
@@ -316,7 +316,7 @@ class CaseStatementExpression : IExpression, ITypedResult {
      * ```
      * Params:
      * \UIM\Database\IExpression|object|scalar|null result The result value.
-     * @param string|null $type The result type. If no type is provided, the type will be tried to be inferred from the
+     * @param string|null type The result type. If no type is provided, the type will be tried to be inferred from the
      * value.
 
      * @throws \LogicException In case `when()` wasn`t previously called with a value other than a closure or an
@@ -328,7 +328,7 @@ class CaseStatementExpression : IExpression, ITypedResult {
         }
         $whenThen = (new WhenThenExpression(this.getTypeMap()))
             .when(this.whenBuffer["when"], this.whenBuffer["type"])
-            .then(result, $type);
+            .then(result, type);
 
         this.whenBuffer = null;
 
@@ -339,7 +339,7 @@ class CaseStatementExpression : IExpression, ITypedResult {
      * Sets the `ELSE` result value.
      * Params:
      * \UIM\Database\IExpression|object|scalar|null result The result value.
-     * @param string|null $type The result type. If no type is provided, the type will be tried to be inferred from the
+     * @param string|null type The result type. If no type is provided, the type will be tried to be inferred from the
      * value.
 
      * @throws \LogicException In case a closing `then()` call is required before calling this method.
@@ -362,10 +362,10 @@ class CaseStatementExpression : IExpression, ITypedResult {
                 get_debug_type(result)
             ));
         }
-        $type ??= this.inferType(result);
+        type ??= this.inferType(result);
 
         this.else = result;
-        this.elseType = $type;
+        this.elseType = type;
     }
     
     /**
@@ -383,19 +383,19 @@ class CaseStatementExpression : IExpression, ITypedResult {
             return this.returnType;
         }
         
-        auto $types = [];
+        auto types = [];
         foreach ($when; this.when as) {
-            $type = $when.getResultType();
+            type = $when.getResultType();
             if ($type !isNull) {
-                $types ~= $type;
+                types ~= type;
             }
         }
         if (this.elseType !isNull) {
-            $types ~= this.elseType;
+            types ~= this.elseType;
         }
-        $types = array_unique($types);
+        types = array_unique($types);
         if (count($types) == 1) {
-            return $types[0];
+            return types[0];
         }
         return "string";
     }
@@ -410,7 +410,7 @@ class CaseStatementExpression : IExpression, ITypedResult {
      * string atype The type name to use.
      */
     void setReturnType(string atype) {
-        this.returnType = $type;
+        this.returnType = type;
     }
     
     /**

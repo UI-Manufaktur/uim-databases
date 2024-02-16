@@ -35,9 +35,9 @@ interface IStatement {
      * Params:
      * string|int $column name or param position to be bound
      * @param Json aValue The value to bind to variable in query
-     * @param string|int $type name of configured Type class
+     * @param string|int type name of configured Type class
      */
-    void bindValue(string|int $column, Json aValue, string|int $type = "string");
+    void bindValue(string|int $column, Json aValue, string|int type = "string");
 
     /**
      * Closes the cursor, enabling the statement to be executed again.
@@ -128,9 +128,9 @@ interface IStatement {
      * Binds a set of values to statement object with corresponding type.
      * Params:
      * array $params list of values to be bound
-     * @param array $types list of types to be used, keys should match those in $params
+     * @param array types list of types to be used, keys should match those in $params
      */
-    void bind(array $params, array $types);
+    void bind(array $params, array types);
 
     /**
      * Returns the latest primary inserted using this statement.

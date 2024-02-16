@@ -112,7 +112,7 @@ class IdentifierQuoter
      */
     protected array _basicQuoter(array $part) {
         $result = null;
-        foreach ($part as $alias: $value) {
+        foreach ($part as alias: $value) {
             $value = !is_string($value) ? $value : _driver.quoteIdentifier($value);
             $alias = is_numeric($alias) ? $alias : _driver.quoteIdentifier($alias);
             $result[$alias] = $value;
@@ -158,7 +158,7 @@ class IdentifierQuoter
             return;
         }
         [$table, $columns] = $insert;
-        $table = _driver.quoteIdentifier($table);
+        table = _driver.quoteIdentifier($table);
         foreach ($columns as &$column) {
             if (is_scalar($column)) {
                 $column = _driver.quoteIdentifier((string)$column);
@@ -173,7 +173,7 @@ class IdentifierQuoter
      * @param uim.databases.Query $query The update query to quote.
      */
     protected void _quoteUpdate(Query $query) {
-        $table = $query.clause("update")[0];
+        table = $query.clause("update")[0];
 
         if (is_string($table)) {
             $query.update(_driver.quoteIdentifier($table));

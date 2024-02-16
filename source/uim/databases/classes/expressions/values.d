@@ -30,9 +30,9 @@ class ValuesExpression : IExpression {
      * Constructor
      * Params:
      * array someColumns The list of columns that are going to be part of the values.
-     * @param \UIM\Database\TypeMap $typeMap A dictionary of column ~ type names
+     * @param \UIM\Database\TypeMap typeMap A dictionary of column ~ type names
      */
-    this(array someColumns, TypeMap $typeMap) {
+    this(array someColumns, TypeMap typeMap) {
        _columns = someColumns;
         this.setTypeMap($typeMap);
     }
@@ -119,10 +119,10 @@ class ValuesExpression : IExpression {
         $defaults = array_fill_keys(colNames, null);
         $placeholders = [];
 
-        $types = [];
-        $typeMap = this.getTypeMap();
+        types = [];
+        typeMap = this.getTypeMap();
         $defaults.byKeyValue
-            .each!(kv => $types[kv.key] = $typeMap.type(kv.key));
+            .each!(kv => types[kv.key] = typeMap.type(kv.key));
 
         foreach ($row; _values ) {
             $row += $defaults;
@@ -137,7 +137,7 @@ class ValuesExpression : IExpression {
                 }
                 auto $placeholder = aBinder.placeholder("c");
                 auto $rowPlaceholders ~= $placeholder;
-                aBinder.bind($placeholder, aValue, $types[$column]);
+                aBinder.bind($placeholder, aValue, types[$column]);
             }
             $placeholders ~= join(", ", $rowPlaceholders);
         }
@@ -174,24 +174,24 @@ class ValuesExpression : IExpression {
     
     // Converts values that need to be casted to expressions
     protected void _processExpressions() {
-        auto $types = [];
-        auto $typeMap = this.getTypeMap();
+        auto types = [];
+        auto typeMap = this.getTypeMap();
 
         auto someColumns = _columnNames();
         someColumns
             .filter!(colName => isString(colName) || isInt(colName))
-            .each!(colName => $types[colName] = $typeMap.type(colName));
+            .each!(colName => types[colName] = typeMap.type(colName));
 
-        $types = _requiresToExpressionCasting($types);
+        types = _requiresToExpressionCasting($types);
 
         if (isEmpty($types)) {
             return;
         }
         foreach (_values as $row:  someValues) {
-            $types.byKeyValue
-                .each!($col: $type)
-                /** @var \UIM\Database\Type\IExpressionType $type */
-               _values[$row][$col] = $type.toExpression(someValues[$col]);
+            types.byKeyValue
+                .each!($col: type)
+                /** @var \UIM\Database\Type\IExpressionType type */
+               _values[$row][$col] = type.toExpression(someValues[$col]);
             }
         }
        _castedExpressions = true;

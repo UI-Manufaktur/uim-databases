@@ -49,7 +49,7 @@ trait TupleComparisonTranslatorTrait
         }
 
         $value = $expression.getValue();
-        $true = new QueryExpression("1");
+        true = new QueryExpression("1");
 
         if ($value instanceof Query) {
             $selected = array_values($value.clause("select"));
@@ -63,12 +63,12 @@ trait TupleComparisonTranslatorTrait
             return;
         }
 
-        $type = $expression.getType();
+        type = $expression.getType();
         if ($type) {
-            /** @var array<string, string> $typeMap */
-            $typeMap = array_combine($fields, $type) ?: [];
+            /** @var array<string, string> typeMap */
+            typeMap = array_combine($fields, type) ?: [];
         } else {
-            $typeMap = null;
+            typeMap = null;
         }
 
         $surrogate = $query.getConnection()
@@ -80,14 +80,14 @@ trait TupleComparisonTranslatorTrait
         }
 
         $conditions = ["OR": []];
-        foreach ($value as $tuple) {
+        foreach ($value as tuple) {
             $item = null;
             foreach (array_values($tuple) as $i: $value2) {
                 $item[] = [$fields[$i]: $value2];
             }
             $conditions["OR"][] = $item;
         }
-        $surrogate.where($conditions, $typeMap);
+        $surrogate.where($conditions, typeMap);
 
         $expression.setField($true);
         $expression.setValue($surrogate);

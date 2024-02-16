@@ -102,19 +102,19 @@ interface IWindow {
      *  - `0` - "CURRENT ROW"
      *  - `null` - "UNBOUNDED"
      *
-     * @param string $type Frame type
+     * @param string type Frame type
      * @param uim.databases.IDBAExpression|string|int|null $startOffset Frame start offset
      * @param string $startDirection Frame start direction
      * @param uim.databases.IDBAExpression|string|int|null $endOffset Frame end offset
      * @param string $endDirection Frame end direction
      * @return this
      * @throws \InvalidArgumentException WHen offsets are negative.
-     * @psalm-param self::RANGE|self::ROWS|self::GROUPS $type
+     * @psalm-param self::RANGE|self::ROWS|self::GROUPS type
      * @psalm-param self::PRECEDING|self::FOLLOWING $startDirection
      * @psalm-param self::PRECEDING|self::FOLLOWING $endDirection
      */
     function frame(
-        string $type,
+        string type,
         $startOffset,
         string $startDirection,
         $endOffset,

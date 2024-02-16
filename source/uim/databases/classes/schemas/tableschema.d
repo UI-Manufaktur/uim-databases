@@ -272,8 +272,8 @@ class TableSchema : TableISchema, ISqlGenerator {
         if (!isSet(_columns[$name])) {
             return this;
         }
-       _columns[$name]["type"] = $type;
-       _typeMap[$name] = $type;
+       _columns[$name]["type"] = type;
+       _typeMap[$name] = type;
 
         unset(_columns[$name]["baseType"]);
 
@@ -288,15 +288,15 @@ class TableSchema : TableISchema, ISqlGenerator {
         if (isSet(_columns[$column]["baseType"])) {
             return _columns[$column]["baseType"];
         }
-        $type = this.getColumnType($column);
+        type = this.getColumnType($column);
 
         if ($type.isNull) {
             return null;
         }
         if (TypeFactory.getMap($type)) {
-            $type = TypeFactory.build($type).getBaseType();
+            type = TypeFactory.build($type).getBaseType();
         }
-        return _columns[$column]["baseType"] = $type;
+        return _columns[$column]["baseType"] = type;
     }
  
     array typeMap() {
@@ -423,7 +423,7 @@ class TableSchema : TableISchema, ISqlGenerator {
                 return this;
             }
         } else {
-            unset($attrs["references"], $attrs["update"], $attrs["delete"]);
+            unset($attrs["references"], $attrs["update"], attrs["delete"]);
         }
        _constraints[$name] = $attrs;
 
@@ -488,8 +488,8 @@ class TableSchema : TableISchema, ISqlGenerator {
         return _options;
     }
  
-    auto setTemporary(bool $temporary) {
-       _temporary = $temporary;
+    auto setTemporary(bool temporary) {
+       _temporary = temporary;
 
         return this;
     }

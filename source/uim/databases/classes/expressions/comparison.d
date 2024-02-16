@@ -87,17 +87,17 @@ class ComparisonExpression : IExpression, IField {
             $field = $field.sql(aBinder);
         }
         if (cast(IdentifierExpression)_value) {
-            $template = "%s %s %s";
+            template = "%s %s %s";
             aValue = _value.sql(aBinder);
         } elseif (cast(IExpression)_value ) {
-            $template = "%s %s (%s)";
+            template = "%s %s (%s)";
             aValue = _value.sql(aBinder);
         } else {
             [$template, aValue] = _stringExpression(aBinder);
         }
         assert(isString($field));
 
-        return $template.format($field, _operator, aValue);
+        return template.format($field, _operator, aValue);
     }
  
     void traverse(Closure aCallback) {
@@ -129,18 +129,18 @@ class ComparisonExpression : IExpression, IField {
      * \UIM\Database\ValueBinder aBinder The value binder to use.
      */
     protected array _stringExpression(ValueBinder valueBinder) {
-        auto $template = "%s ";
+        auto template = "%s ";
 
         if (cast(IExpression)_field  && !cast(IdentifierExpression)_field) {
-            $template = "(%s) ";
+            template = "(%s) ";
         }
         if (_isMultiple) {
-            $template ~= "%s (%s)";
-            $type = _type;
+            template ~= "%s (%s)";
+            type = _type;
             if ($type !isNull) {
-                $type = $type.replace("[]", "");
+                type = type.replace("[]", "");
             }
-            aValue = _flattenValue(_value, valueBinder, $type);
+            aValue = _flattenValue(_value, valueBinder, type);
 
             // To avoid SQL errors when comparing a field to a list of empty values,
             // better just throw an exception here
@@ -151,7 +151,7 @@ class ComparisonExpression : IExpression, IField {
                 );
             }
         } else {
-            $template ~= "%s %s";
+            template ~= "%s %s";
             aValue = _bindValue(_value, valueBinder, _type);
         }
         return [$template, aValue];
@@ -162,7 +162,7 @@ class ComparisonExpression : IExpression, IField {
      * Params:
      * Json aValue The value to bind
      * @param \UIM\Database\ValueBinder valueBinder The value binder to use
-     * @param string|null $type The type of aValue
+     * @param string|null type The type of aValue
      */
     protected string _bindValue(Json aValue, ValueBinder valueBinder, string valueType = null) {
         auto placeholder = valueBinder.placeholder("c");
@@ -177,7 +177,7 @@ class ComparisonExpression : IExpression, IField {
      * Params:
      * iterable aValue the value to flatten
      * @param \UIM\Database\ValueBinder aBinder The value binder to use
-     * @param string|null $type the type to cast values to
+     * @param string|null type the type to cast values to
      */
     protected string _flattenValue(iterable aValue, ValueBinder aBinder, string atype = null) {
         STRINGAA someParts;
@@ -190,7 +190,7 @@ class ComparisonExpression : IExpression, IField {
         }
 
         if (!aValue.isEmpty) {
-            someParts += aBinder.generateManyNamed(aValue, $type);
+            someParts += aBinder.generateManyNamed(aValue, type);
         }
         return someParts.join(","); // ??
     }

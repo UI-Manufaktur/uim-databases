@@ -9,12 +9,12 @@ trait TypeMapTrait {
     protected TypeMap _typeMap = null;
 
     /**
-     * Creates a new TypeMap if $typeMap is an array, otherwise exchanges it for the given one.
+     * Creates a new TypeMap if typeMap is an array, otherwise exchanges it for the given one.
      * Params:
-     * \UIM\Database\TypeMap|array $typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
+     * \UIM\Database\TypeMap|array typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
      */
-    void setTypeMap(TypeMap|array $typeMap) {
-       _typeMap = isArray($typeMap) ? new TypeMap($typeMap): $typeMap;
+    void setTypeMap(TypeMap|array typeMap) {
+       _typeMap = isArray($typeMap) ? new TypeMap($typeMap): typeMap;
     }
     
     // Returns the existing type map.
@@ -32,11 +32,11 @@ trait TypeMapTrait {
      * To add a default without overwriting existing ones
      * use `getTypeMap().addDefaults()`
      * Params:
-     * array<int|string, string> $types The array of types to set.
+     * array<int|string, string> types The array of types to set.
 
      * @see \UIM\Database\TypeMap.setDefaults()
      */
-    void setDefaultTypes(array $types) {
+    void setDefaultTypes(array types) {
         this.getTypeMap().setDefaults($types);
     }
     
