@@ -590,7 +590,7 @@ abstract class Query : IExpression, Stringable {
         $alias = aTable;
 
         if (isArray(aTable)) {
-            $alias = key(aTable);
+            alias = key(aTable);
             aTable = current(aTable);
         }
         /**

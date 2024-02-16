@@ -396,7 +396,7 @@ class MysqlSchemaDialect : SchemaDialect {
         if (isSet(someData["null"]) && someData["null"] == false) {
              result ~= " NOT NULL";
         }
-        $autoIncrementTypes = [
+        autoIncrementTypes = [
             TableISchema.TYPE_TINYINTEGER,
             TableISchema.TYPE_SMALLINTEGER,
             TableISchema.TYPE_INTEGER,

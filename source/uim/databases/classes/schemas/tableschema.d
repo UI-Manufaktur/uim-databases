@@ -230,7 +230,7 @@ class TableSchema : TableISchema, ISqlGenerator {
         return _table;
     }
  
-    void addColumn(string aName, $attrs) {
+    void addColumn(string aName, attrs) {
         if (isString($attrs)) {
             $attrs = ["type": $attrs];
         }
@@ -451,7 +451,7 @@ class TableSchema : TableISchema, ISqlGenerator {
      * Params:
      * IData[string] $attrs Attributes to set.
      */
-    protected IData[string] _checkForeignKey(array $attrs) {
+    protected IData[string] _checkForeignKey(array attrs) {
         if (count($attrs["references"]) < 2) {
             throw new DatabaseException("References must contain a table and column.");
         }

@@ -114,7 +114,7 @@ class IdentifierQuoter
         $result = null;
         foreach ($part as $alias: $value) {
             $value = !is_string($value) ? $value : _driver.quoteIdentifier($value);
-            alias = is_numeric($alias) ? $alias : _driver.quoteIdentifier($alias);
+            $alias = is_numeric($alias) ? $alias : _driver.quoteIdentifier($alias);
             $result[$alias] = $value;
         }
 

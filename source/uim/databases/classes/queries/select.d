@@ -273,7 +273,7 @@ class SelectQuery : Query, IteratorAggregate {
             if (!(cast(IExpression)$t["conditions"] )) {
                 $t["conditions"] = this.newExpr().add($t["conditions"], typeNames);
             }
-            $alias = isString($alias) ? $alias : null;
+            $alias = isString($alias) ? alias : null;
             $joins[$alias ?:  anI++] = $t ~ ["type": JOIN_TYPE_INNER, "alias": $alias];
         }
 

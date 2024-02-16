@@ -358,7 +358,7 @@ class PostgresSchemaDialect : SchemaDialect {
             TableISchema.TYPE_JSON: " JSONB",
         ];
 
-        $autoIncrementTypes = [
+        autoIncrementTypes = [
             TableISchema.TYPE_TINYINTEGER,
             TableISchema.TYPE_SMALLINTEGER,
             TableISchema.TYPE_INTEGER,

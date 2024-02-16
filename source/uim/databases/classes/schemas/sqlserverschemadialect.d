@@ -351,7 +351,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         if (isSet($typeMap[someData["type"]])) {
              result ~= $typeMap[someData["type"]];
         }
-        $autoIncrementTypes = [
+        autoIncrementTypes = [
             TableISchema.TYPE_TINYINTEGER,
             TableISchema.TYPE_SMALLINTEGER,
             TableISchema.TYPE_INTEGER,

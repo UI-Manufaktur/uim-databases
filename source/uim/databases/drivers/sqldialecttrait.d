@@ -160,7 +160,7 @@ trait SqlDialectTrait
     {
         $hadAlias = false;
         $tables = null;
-        foreach ($query.clause("from") as $alias: $table) {
+        foreach ($query.clause("from") as alias: $table) {
             if (is_string($alias)) {
                 $hadAlias = true;
             }
