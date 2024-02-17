@@ -274,9 +274,9 @@ class Sqlite : Driver
                     .setConjunction(" ,")
                     .iterateParts(function ($p, $key) {
                         if ($key == 0) {
-                            $value = rtrim($p.toLower, "s");
-                            if (isset(_dateParts[$value])) {
-                                p = ["value": "%" ~ _dateParts[$value], "type": null];
+                            value = rtrim($p.toLower, "s");
+                            if (isset(_dateParts[value])) {
+                                p = ["value": "%" ~ _dateParts[value], "type": null];
                             }
                         }
 

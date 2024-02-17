@@ -369,9 +369,9 @@ _baseConfig = [
                     if (aKey == 0) {
                         $params[2] = $p;
                     } else {
-                        string[] $valueUnit = split(" ", $p);
-                        $params[0] = rtrim($valueUnit[1], "s");
-                        $params[1] = $valueUnit[0];
+                        string[] valueUnit = split(" ", $p);
+                        $params[0] = rtrim(valueUnit[1], "s");
+                        $params[1] = valueUnit[0];
                     }
                     return $p;
                 };

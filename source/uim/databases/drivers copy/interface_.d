@@ -163,10 +163,10 @@ interface IDriver
     /**
      * Returns a value in a safe representation to be used in a query string
      *
-     * @param mixed $value The value to quote.
+     * @param mixed value The value to quote.
      * @param int type Must be one of the \PDO::PARAM_* constants
      */
-    string quote($value, type);
+    string quote(value, type);
 
     /**
      * Checks if the driver supports quoting.
@@ -211,10 +211,10 @@ interface IDriver
     /**
      * Escapes values for use in schema definitions.
      *
-     * @param mixed $value The value to escape.
+     * @param mixed value The value to escape.
      * @return string String for use in schema definitions.
      */
-    string schemaValue($value);
+    string schemaValue(value);
 
     /**
      * Returns the schema name that"s being used.

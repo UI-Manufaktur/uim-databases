@@ -140,8 +140,8 @@ class IdentifierQuoter {
      */
     protected IData[string] _basicQuoter(array $part) {
         result = [];
-        foreach ($part as alias: $value) {
-            $value = !isString($value) ? $value : this.quoteIdentifier($value);
+        foreach ($part as alias: value) {
+            value = !isString(value) ? value : this.quoteIdentifier(value);
             alias = isNumeric($alias) ? alias : this.quoteIdentifier($alias);
             result[$alias] = aValue;
         }

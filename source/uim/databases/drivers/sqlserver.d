@@ -132,13 +132,13 @@ class Sqlserver : Driver
             }
         }
         if (!empty(aConfig["settings"]) && is_array(aConfig["settings"])) {
-            foreach (aConfig["settings"] as $key: $value) {
-                $connection.exec("SET {$key} {$value}");
+            foreach (aConfig["settings"] as $key: value) {
+                $connection.exec("SET {$key} {value}");
             }
         }
         if (!empty(aConfig["attributes"]) && is_array(aConfig["attributes"])) {
-            foreach (aConfig["attributes"] as $key: $value) {
-                $connection.setAttribute($key, $value);
+            foreach (aConfig["attributes"] as $key: value) {
+                $connection.setAttribute($key, value);
             }
         }
 
@@ -337,8 +337,8 @@ class Sqlserver : Driver
             $outer.where(["field > " ~ $offset]);
         }
         if ($limit) {
-            $value = (int)$offset + $limit;
-            $outer.where(["field <= $value"]);
+            value = (int)$offset + $limit;
+            $outer.where(["field <= value"]);
         }
 
         // Decorate the original query as that is what the
@@ -426,12 +426,12 @@ class Sqlserver : Driver
             case "DATEDIFF":
                 /** @var bool $hasDay */
                 $hasDay = false;
-                $visitor = function ($value) use (&$hasDay) {
-                    if ($value == "day") {
+                $visitor = function (value) use (&$hasDay) {
+                    if (value == "day") {
                         $hasDay = true;
                     }
 
-                    return $value;
+                    return value;
                 };
                 $expression.iterateParts($visitor);
 
@@ -459,9 +459,9 @@ class Sqlserver : Driver
                     if ($key == 0) {
                         $params[2] = $p;
                     } else {
-                        $valueUnit = explode(" ", $p);
-                        $params[0] = rtrim($valueUnit[1], "s");
-                        $params[1] = $valueUnit[0];
+                        valueUnit = explode(" ", $p);
+                        $params[0] = rtrim(valueUnit[1], "s");
+                        $params[1] = valueUnit[0];
                     }
 
                     return $p;
