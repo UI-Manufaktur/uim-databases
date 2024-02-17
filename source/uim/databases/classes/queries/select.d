@@ -274,7 +274,7 @@ class SelectQuery : Query, IteratorAggregate {
                 t["conditions"] = this.newExpr().add($t["conditions"], typeNames);
             }
             alias = isString($alias) ? alias : null;
-            $joins[$alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": $alias];
+            $joins[$alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": alias];
         }
 
         _parts["join"] = $overwrite 
@@ -403,12 +403,12 @@ class SelectQuery : Query, IteratorAggregate {
         alias = aTable;
 
         if (isArray(aTable)) {
-            $alias = key(aTable);
+            alias = key(aTable);
             aTable = current(aTable);
         }
         /** @var string aalias */
         return [
-            $alias: [
+            alias: [
                 'table": aTable,
                 'conditions": $conditions,
                 'type": type,

@@ -85,9 +85,9 @@ trait CaseExpressionTrait
         } elseif ($value instanceof IDBAExpression) {
             $value = $value.sql($binder);
         } else {
-            $placeholder = $binder.placeholder("c");
+            placeholder = $binder.placeholder("c");
             $binder.bind($placeholder, $value, type);
-            $value = $placeholder;
+            $value = placeholder;
         }
 
         return $value;

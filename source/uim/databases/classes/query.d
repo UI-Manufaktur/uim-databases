@@ -461,7 +461,7 @@ abstract class Query : IExpression, Stringable {
                 t["conditions"] = this.newExpr().add($t["conditions"], types);
             }
             alias = isString($alias) ? alias : null;
-            $joins[$alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": $alias];
+            $joins[$alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": alias];
         }
         _parts["join"] = $overwrite ? $joins : array_merge(_parts["join"], $joins);
 
@@ -587,7 +587,7 @@ abstract class Query : IExpression, Stringable {
         IExpression|Closure|string[] aconditions,
         string atype
     ) {
-        $alias = aTable;
+        alias = aTable;
 
         if (isArray(aTable)) {
             alias = key(aTable);
@@ -598,7 +598,7 @@ abstract class Query : IExpression, Stringable {
          * @psalm-suppress InvalidArrayOffset
          */
         return [
-            $alias: [
+            alias: [
                 'table": aTable,
                 'conditions": $conditions,
                 'type": type,
@@ -692,7 +692,7 @@ abstract class Query : IExpression, Stringable {
      *  .where(["title !=": 'Hello World"])
      *  .where(function ($exp, aQuery) {
      *    $or = $exp.or(["id": 1]);
-     *    $and = $exp.and(["id >": 2, "id <": 10]);
+     *    and = $exp.and(["id >": 2, "id <": 10]);
      *   return $or.add($and);
      *  });
      * ```
@@ -1386,14 +1386,14 @@ abstract class Query : IExpression, Stringable {
      * Helper auto used to build conditions by composing QueryExpression objects.
      * Params:
      * string apart Name of the query part to append the new part to
-     * @param \UIM\Database\IExpression|\Closure|string[]|null $append Expression or builder auto to append.
+     * @param \UIM\Database\IExpression|\Closure|string[]|null append Expression or builder auto to append.
      *  to append.
      * @param string aconjunction type of conjunction to be used to operate part
      * @param STRINGAA types Associative array of type names used to bind values to query
      */
     protected void _conjugate(
         string apart,
-        IExpression|Closure|string[]|null $append,
+        IExpression|Closure|string[]|null append,
         string aconjunction,
         array types
     ) {
@@ -1404,14 +1404,14 @@ abstract class Query : IExpression, Stringable {
             return;
         }
         if (cast(Closure)$append) {
-            $append = $append(this.newExpr(), this);
+            append = append(this.newExpr(), this);
         }
         if ($expression.getConjunction() == $conjunction) {
             $expression.add($append, types);
         } else {
             $expression = this.newExpr()
                 .setConjunction($conjunction)
-                .add([$expression, $append], types);
+                .add([$expression, append], types);
         }
        _parts[$part] = $expression;
        _dirty();

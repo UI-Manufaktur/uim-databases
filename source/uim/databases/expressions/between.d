@@ -61,7 +61,7 @@ class BetweenExpression : IDBAExpression, FieldInterface
 
 
     string sql(ValueBinder aBinder) {
-        $parts = [
+        parts = [
             "from": _from,
             "to": _to,
         ];
@@ -72,20 +72,20 @@ class BetweenExpression : IDBAExpression, FieldInterface
             $field = $field.sql($binder);
         }
 
-        foreach ($parts as $name: $part) {
+        foreach ($parts as $name: part) {
             if ($part instanceof IDBAExpression) {
-                $parts[$name] = $part.sql($binder);
+                parts[$name] = part.sql($binder);
                 continue;
             }
-            $parts[$name] = _bindValue($part, $binder, _type);
+            parts[$name] = _bindValue($part, $binder, _type);
         }
 
-        return sprintf("%s BETWEEN %s AND %s", $field, $parts["from"], $parts["to"]);
+        return sprintf("%s BETWEEN %s AND %s", $field, parts["from"], parts["to"]);
     }
 
 
     O traverse(this O)(Closure $callback) {
-        foreach ([_field, _from, _to] as $part) {
+        foreach ([_field, _from, _to] as part) {
             if ($part instanceof IDBAExpression) {
                 $callback($part);
             }
@@ -103,17 +103,17 @@ class BetweenExpression : IDBAExpression, FieldInterface
      * @return string generated placeholder
      */
     protected string _bindValue($value, $binder, type) {
-        $placeholder = $binder.placeholder("c");
+        placeholder = $binder.placeholder("c");
         $binder.bind($placeholder, $value, type);
 
-        return $placeholder;
+        return placeholder;
     }
 
     /**
      * Do a deep clone of this expression.
      */
     void __clone() {
-        foreach (["_field", "_from", "_to"] as $part) {
+        foreach (["_field", "_from", "_to"] as part) {
             if (this.{$part} instanceof IDBAExpression) {
                 this.{$part} = clone this.{$part};
             }

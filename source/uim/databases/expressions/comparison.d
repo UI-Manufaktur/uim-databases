@@ -157,7 +157,7 @@ class ComparisonExpression : IDBAExpression, FieldInterface
      * Clones the field and value if they are expression objects.
      */
     void __clone() {
-        foreach (["_value", "_field"] as $prop) {
+        foreach (["_value", "_field"] as prop) {
             if (this.{$prop} instanceof IDBAExpression) {
                 this.{$prop} = clone this.{$prop};
             }
@@ -212,10 +212,10 @@ class ComparisonExpression : IDBAExpression, FieldInterface
      * @return string generated placeholder
      */
     protected string _bindValue($value, ValueBinder aBinder, Nullable!string type = null) {
-        $placeholder = $binder.placeholder("c");
+        placeholder = $binder.placeholder("c");
         $binder.bind($placeholder, $value, type);
 
-        return $placeholder;
+        return placeholder;
     }
 
     /**
@@ -227,19 +227,19 @@ class ComparisonExpression : IDBAExpression, FieldInterface
      * @param string|null type the type to cast values to
      */
     protected string _flattenValue(iterable $value, ValueBinder aBinder, Nullable!string type = null) {
-        $parts = null;
+        parts = null;
         if (is_array($value)) {
             foreach (_valueExpressions as $k: $v) {
-                $parts[$k] = $v.sql($binder);
+                parts[$k] = $v.sql($binder);
                 unset($value[$k]);
             }
         }
 
         if (!empty($value)) {
-            $parts += $binder.generateManyNamed($value, type);
+            parts += $binder.generateManyNamed($value, type);
         }
 
-        return implode(",", $parts);
+        return implode(",", parts);
     }
 
     /**

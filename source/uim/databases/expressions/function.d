@@ -44,13 +44,13 @@ class FunctionExpression : QueryExpression : ITypedResult
      * Will produce `CONCAT(name, " rules")`
      *
      * @param string aName the name of the function to be constructed
-     * @param array $params list of arguments to be passed to the function
+     * @param array params list of arguments to be passed to the function
      * If associative the key would be used as argument when value is "literal"
      * @param array<string, string>|array<string|null> types Associative array of types to be associated with the
      * passed arguments
      * @param string $returnType The return type of this expression
      */
-    this(string aName, array $params = null, array types = null, string $returnType = "string") {
+    this(string aName, array params = null, array types = null, string $returnType = "string") {
         _name = $name;
         _returnType = $returnType;
         super(($params, types, ",");
@@ -82,37 +82,37 @@ class FunctionExpression : QueryExpression : ITypedResult
      * If associative the key would be used as argument when value is "literal"
      * @param array<string, string> types Associative array of types to be associated with the
      * passed arguments
-     * @param bool $prepend Whether to prepend or append to the list of arguments
+     * @param bool prepend Whether to prepend or append to the list of arguments
      * @see uim.databases.Expression\FunctionExpression::__construct() for more details.
      * @return this
      * @psalm-suppress MoreSpecificImplementedParamType
      */
-    function add($conditions, array types = null, bool $prepend = false) {
-        $put = $prepend ? "array_unshift" : "array_push";
+    function add($conditions, array types = null, bool prepend = false) {
+        put = prepend ? "array_unshift" : "array_push";
         typeMap = this.getTypeMap().setTypes($types);
-        foreach ($conditions as $k: $p) {
+        foreach ($conditions as $k: p) {
             if ($p == "literal") {
-                $put(_conditions, $k);
+                put(_conditions, $k);
                 continue;
             }
 
             if ($p == "identifier") {
-                $put(_conditions, new IdentifierExpression($k));
+                put(_conditions, new IdentifierExpression($k));
                 continue;
             }
 
             type = typeMap.type($k);
 
             if ($type != null && !$p instanceof IDBAExpression) {
-                $p = _castToExpression($p, type);
+                p = _castToExpression($p, type);
             }
 
             if ($p instanceof IDBAExpression) {
-                $put(_conditions, $p);
+                put(_conditions, p);
                 continue;
             }
 
-            $put(_conditions, ["value": $p, "type": type]);
+            put(_conditions, ["value": p, "type": type]);
         }
 
         return this;
@@ -120,23 +120,23 @@ class FunctionExpression : QueryExpression : ITypedResult
 
 
     string sql(ValueBinder aBinder) {
-        $parts = null;
+        parts = null;
         foreach (_conditions as $condition) {
             if ($condition instanceof Query) {
                 $condition = sprintf("(%s)", $condition.sql($binder));
             } elseif ($condition instanceof IDBAExpression) {
                 $condition = $condition.sql($binder);
             } elseif (is_array($condition)) {
-                $p = $binder.placeholder("param");
+                p = $binder.placeholder("param");
                 $binder.bind($p, $condition["value"], $condition["type"]);
-                $condition = $p;
+                $condition = p;
             }
-            $parts[] = $condition;
+            parts[] = $condition;
         }
 
         return _name . sprintf("(%s)", implode(
             _conjunction ~ " ",
-            $parts
+            parts
         ));
     }
 

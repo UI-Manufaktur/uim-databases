@@ -24,7 +24,7 @@ class StringExpression : IDBAExpression {
   mixin(OProperty!("string", "collation"));
 
   string sql(ValueBinder aValueBinder) {
-    $placeholder = aValueBinder.placeholder("c");
+    placeholder = aValueBinder.placeholder("c");
     aValueBinder.bind($placeholder, this.string,"string");
 
     return $placeholder ~ " COLLATE " ~ this.collation;

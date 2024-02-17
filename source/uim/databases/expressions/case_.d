@@ -171,19 +171,19 @@ class CaseExpression : IDBAExpression
     /**
      * Compiles the relevant parts into sql
      *
-     * @param uim.databases.IDBAExpression|array|string $part The part to compile
+     * @param uim.databases.IDBAExpression|array|string part The part to compile
      * @param uim.databases.ValueBinder aBinder Sql generator
      */
     protected string _compile($part, ValueBinder aBinder) {
         if ($part instanceof IDBAExpression) {
-            $part = $part.sql($binder);
+            part = part.sql($binder);
         } elseif (is_array($part)) {
-            $placeholder = $binder.placeholder("param");
-            $binder.bind($placeholder, $part["value"], $part["type"]);
-            $part = $placeholder;
+            placeholder = $binder.placeholder("param");
+            $binder.bind($placeholder, part["value"], part["type"]);
+            part = placeholder;
         }
 
-        return $part;
+        return part;
     }
 
     /**
@@ -192,24 +192,24 @@ class CaseExpression : IDBAExpression
      * @param uim.databases.ValueBinder aBinder Placeholder generator object
      */
     string sql(ValueBinder aBinder) {
-        $parts = null;
-        $parts[] = "CASE";
-        foreach (_conditions as $k: $part) {
+        parts = null;
+        parts[] = "CASE";
+        foreach (_conditions as $k: part) {
             $value = _values[$k];
-            $parts[] = "WHEN " ~ _compile($part, $binder) ~ " THEN " ~ _compile($value, $binder);
+            parts[] = "WHEN " ~ _compile($part, $binder) ~ " THEN " ~ _compile($value, $binder);
         }
         if (_elseValue != null) {
-            $parts[] = "ELSE";
-            $parts[] = _compile(_elseValue, $binder);
+            parts[] = "ELSE";
+            parts[] = _compile(_elseValue, $binder);
         }
-        $parts[] = "END";
+        parts[] = "END";
 
-        return implode(" ", $parts);
+        return implode(" ", parts);
     }
 
 
     O traverse(this O)(Closure $callback) {
-        foreach (["_conditions", "_values"] as $part) {
+        foreach (["_conditions", "_values"] as part) {
             foreach (this.{$part} as $c) {
                 if ($c instanceof IDBAExpression) {
                     $callback($c);

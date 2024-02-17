@@ -111,19 +111,19 @@ class Sqlite : Driver
             $chmodFile = !file_exists(aConfig["database"]);
         }
 
-        $params = null;
+        params = null;
         if (aConfig["cache"]) {
-            $params[] = "cache=" ~ aConfig["cache"];
+            params[] = "cache=" ~ aConfig["cache"];
         }
         if (aConfig["mode"]) {
-            $params[] = "mode=" ~ aConfig["mode"];
+            params[] = "mode=" ~ aConfig["mode"];
         }
 
         if ($params) {
             if (PHP_VERSION_ID < 80100) {
                 throw new RuntimeException("SQLite URI support requires D 8.1.");
             }
-            $dsn = "sqlite:file:" ~ aConfig["database"] ~ "?" ~ implode("&", $params);
+            $dsn = "sqlite:file:" ~ aConfig["database"] ~ "?" ~ implode("&", params);
         } else {
             $dsn = "sqlite:" ~ aConfig["database"];
         }
@@ -276,11 +276,11 @@ class Sqlite : Driver
                         if ($key == 0) {
                             $value = rtrim($p.toLower, "s");
                             if (isset(_dateParts[$value])) {
-                                $p = ["value": "%" ~ _dateParts[$value], "type": null];
+                                p = ["value": "%" ~ _dateParts[$value], "type": null];
                             }
                         }
 
-                        return $p;
+                        return p;
                     });
                 break;
             case "DATE_ADD":
@@ -289,10 +289,10 @@ class Sqlite : Driver
                     .setConjunction(",")
                     .iterateParts(function ($p, $key) {
                         if ($key == 1) {
-                            $p = ["value": $p, "type": null];
+                            p = ["value": p, "type": null];
                         }
 
-                        return $p;
+                        return p;
                     });
                 break;
             case "DAYOFWEEK":

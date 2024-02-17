@@ -232,13 +232,13 @@ class TableSchema : TableISchema, ISqlGenerator {
  
     void addColumn(string aName, attrs) {
         if (isString($attrs)) {
-            $attrs = ["type": $attrs];
+            attrs = ["type": attrs];
         }
         $valid = _columnKeys;
         if (isSet(_columnExtras[$attrs["type"]])) {
             $valid += _columnExtras[$attrs["type"]];
         }
-        $attrs = array_intersect_key($attrs, $valid);
+        attrs = array_intersect_key($attrs, $valid);
        _columns[$name] = attrs + $valid;
        _typeMap[$name] = _columns[$name]["type"];
     }
@@ -324,13 +324,13 @@ class TableSchema : TableISchema, ISqlGenerator {
         return $defaults;
     }
  
-    auto addIndex(string aName, $attrs) {
+    auto addIndex(string aName, attrs) {
         if (isString($attrs)) {
-            $attrs = ["type": $attrs];
+            attrs = ["type": attrs];
         }
-        $attrs = array_intersect_key($attrs, _indexKeys);
-        $attrs += _indexKeys;
-        unset($attrs["references"], $attrs["update"], $attrs["delete"]);
+        attrs = array_intersect_key($attrs, _indexKeys);
+        attrs += _indexKeys;
+        unset($attrs["references"], attrs["update"], attrs["delete"]);
 
         if (!in_array($attrs["type"], _validIndexTypes, true)) {
             throw new DatabaseException(
@@ -340,7 +340,7 @@ class TableSchema : TableISchema, ISqlGenerator {
                _table
             ));
         }
-        $attrs["columns"] = (array)$attrs["columns"];
+        attrs["columns"] = (array)$attrs["columns"];
         foreach ($attrs["columns"] as $field) {
             if (isEmpty(_columns[$field])) {
                 $message = 
@@ -350,7 +350,7 @@ class TableSchema : TableISchema, ISqlGenerator {
                 throw new DatabaseException($message);
             }
         }
-       _indexNames[$name] = $attrs;
+       _indexNames[$name] = attrs;
 
         return this;
     }
@@ -376,12 +376,12 @@ class TableSchema : TableISchema, ISqlGenerator {
         return null;
     }
  
-    auto addConstraint(string aName, $attrs) {
+    auto addConstraint(string aName, attrs) {
         if (isString($attrs)) {
-            $attrs = ["type": $attrs];
+            attrs = ["type": attrs];
         }
-        $attrs = array_intersect_key($attrs, _indexKeys);
-        $attrs += _indexKeys;
+        attrs = array_intersect_key($attrs, _indexKeys);
+        attrs += _indexKeys;
         if (!in_array($attrs["type"], _validConstraintTypes, true)) {
             throw new DatabaseException(
                 "Invalid constraint type `%s` in table `%s`."
@@ -394,7 +394,7 @@ class TableSchema : TableISchema, ISqlGenerator {
                 .format(_table
             ));
         }
-        $attrs["columns"] = (array)$attrs["columns"];
+        attrs["columns"] = (array)$attrs["columns"];
         foreach ($attrs["columns"] as $field) {
             if (isEmpty(_columns[$field])) {
                 $message = "Columns used in constraints must be added to the Table schema first. ' ~
@@ -406,12 +406,12 @@ class TableSchema : TableISchema, ISqlGenerator {
             }
         }
         if ($attrs["type"] == CONSTRAINT_FOREIGN) {
-            $attrs = _checkForeignKey($attrs);
+            attrs = _checkForeignKey($attrs);
 
             if (isSet(_constraints[$name])) {
                _constraints[$name]["columns"] = array_unique(array_merge(
                    _constraints[$name]["columns"],
-                    $attrs["columns"]
+                    attrs["columns"]
                 ));
 
                 if (isSet(_constraints[$name]["references"])) {
@@ -423,9 +423,9 @@ class TableSchema : TableISchema, ISqlGenerator {
                 return this;
             }
         } else {
-            unset($attrs["references"], $attrs["update"], attrs["delete"]);
+            unset($attrs["references"], attrs["update"], attrs["delete"]);
         }
-       _constraints[$name] = $attrs;
+       _constraints[$name] = attrs;
 
         return this;
     }
@@ -449,7 +449,7 @@ class TableSchema : TableISchema, ISqlGenerator {
     /**
      * Helper method to check/validate foreign keys.
      * Params:
-     * IData[string] $attrs Attributes to set.
+     * IData[string] attrs Attributes to set.
      */
     protected IData[string] _checkForeignKey(array attrs) {
         if (count($attrs["references"]) < 2) {
@@ -467,7 +467,7 @@ class TableSchema : TableISchema, ISqlGenerator {
                 .format(join(",", _validForeignKeyActions))
             );
         }
-        return $attrs;
+        return attrs;
     }
  
     array constraints() {

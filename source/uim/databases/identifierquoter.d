@@ -114,7 +114,7 @@ class IdentifierQuoter
         $result = null;
         foreach ($part as alias: $value) {
             $value = !is_string($value) ? $value : _driver.quoteIdentifier($value);
-            $alias = is_numeric($alias) ? $alias : _driver.quoteIdentifier($alias);
+            alias = is_numeric($alias) ? alias : _driver.quoteIdentifier($alias);
             $result[$alias] = $value;
         }
 
@@ -131,10 +131,10 @@ class IdentifierQuoter
     protected array _quoteJoins(array $joins) {
         $result = null;
         foreach ($joins as $value) {
-            $alias = "";
+            alias = "";
             if (!empty($value["alias"])) {
-                $alias = _driver.quoteIdentifier($value["alias"]);
-                $value["alias"] = $alias;
+                alias = _driver.quoteIdentifier($value["alias"]);
+                $value["alias"] = alias;
             }
 
             if (is_string($value["table"])) {
