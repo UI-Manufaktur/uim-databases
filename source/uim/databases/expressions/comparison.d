@@ -55,14 +55,14 @@ class ComparisonExpression : IDBAExpression, FieldInterface
     /**
      * Constructor
      *
-     * @param uim.databases.IDBAExpression|string $field the field name to compare to a value
+     * @param uim.databases.IDBAExpression|string field the field name to compare to a value
      * @param mixed $value The value to be used in comparison
      * @param string|null type the type name used to cast the value
      * @param string $operator the operator used for comparing field and value
      */
-    this($field, $value, Nullable!string type = null, string $operator = "=") {
+    this(field, $value, Nullable!string type = null, string $operator = "=") {
         _type = type;
-        this.setField($field);
+        this.setField(field);
         this.setValue($value);
         _operator = $operator;
     }
@@ -111,11 +111,11 @@ class ComparisonExpression : IDBAExpression, FieldInterface
 
 
     string sql(ValueBinder aBinder) {
-        /** @var DDBIDBAExpression|string $field */
-        $field = _field;
+        /** @var DDBIDBAExpression|string field */
+        field = _field;
 
-        if ($field instanceof IDBAExpression) {
-            $field = $field.sql($binder);
+        if (field instanceof IDBAExpression) {
+            field = field.sql($binder);
         }
 
         if (_value instanceof IdentifierExpression) {
@@ -128,7 +128,7 @@ class ComparisonExpression : IDBAExpression, FieldInterface
             [$template, $value] = _stringExpression($binder);
         }
 
-        return sprintf($template, $field, _operator, $value);
+        return sprintf($template, field, _operator, $value);
     }
 
 
@@ -189,10 +189,10 @@ class ComparisonExpression : IDBAExpression, FieldInterface
             // To avoid SQL errors when comparing a field to a list of empty values,
             // better just throw an exception here
             if ($value == "") {
-                $field = _field instanceof IDBAExpression ? _field.sql($binder) : _field;
+                field = _field instanceof IDBAExpression ? _field.sql($binder) : _field;
                 /** @psalm-suppress PossiblyInvalidCast */
                 throw new DatabaseException(
-                    "Impossible to generate condition with empty list of values for field ($field)"
+                    "Impossible to generate condition with empty list of values for field (field)"
                 );
             }
         } else {

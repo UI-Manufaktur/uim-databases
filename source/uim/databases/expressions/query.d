@@ -118,183 +118,183 @@ class QueryExpression : IDBAExpression, Countable
     /**
      * Adds a new condition to the expression object in the form "field = value".
      *
-     * @param uim.databases.IDBAExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
+     * @param uim.databases.IDBAExpression|string field Database field to be compared against value
+     * @param mixed $value The value to be bound to field for comparison
      * @param string|null type the type name for $value as configured using the Type map.
      * If it is suffixed with "[]" and the value is an array then multiple placeholders
      * will be created, one per each value in the array.
      * @return this
      */
-    function eq($field, $value, Nullable!string type = null) {
+    function eq(field, $value, Nullable!string type = null) {
         if ($type == null) {
-            type = _calculateType($field);
+            type = _calculateType(field);
         }
 
-        return this.add(new ComparisonExpression($field, $value, type, "="));
+        return this.add(new ComparisonExpression(field, $value, type, "="));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field != value".
      *
-     * @param uim.databases.IDBAExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
+     * @param uim.databases.IDBAExpression|string field Database field to be compared against value
+     * @param mixed $value The value to be bound to field for comparison
      * @param string|null type the type name for $value as configured using the Type map.
      * If it is suffixed with "[]" and the value is an array then multiple placeholders
      * will be created, one per each value in the array.
      * @return this
      */
-    function notEq($field, $value, type = null) {
+    function notEq(field, $value, type = null) {
         if ($type == null) {
-            type = _calculateType($field);
+            type = _calculateType(field);
         }
 
-        return this.add(new ComparisonExpression($field, $value, type, "!="));
+        return this.add(new ComparisonExpression(field, $value, type, "!="));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field > value".
      *
-     * @param uim.databases.IDBAExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
+     * @param uim.databases.IDBAExpression|string field Database field to be compared against value
+     * @param mixed $value The value to be bound to field for comparison
      * @param string|null type the type name for $value as configured using the Type map.
      * @return this
      */
-    function gt($field, $value, type = null) {
+    function gt(field, $value, type = null) {
         if ($type == null) {
-            type = _calculateType($field);
+            type = _calculateType(field);
         }
 
-        return this.add(new ComparisonExpression($field, $value, type, ">"));
+        return this.add(new ComparisonExpression(field, $value, type, ">"));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field < value".
      *
-     * @param uim.databases.IDBAExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
+     * @param uim.databases.IDBAExpression|string field Database field to be compared against value
+     * @param mixed $value The value to be bound to field for comparison
      * @param string|null type the type name for $value as configured using the Type map.
      * @return this
      */
-    function lt($field, $value, type = null) {
+    function lt(field, $value, type = null) {
         if ($type == null) {
-            type = _calculateType($field);
+            type = _calculateType(field);
         }
 
-        return this.add(new ComparisonExpression($field, $value, type, "<"));
+        return this.add(new ComparisonExpression(field, $value, type, "<"));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field >= value".
      *
-     * @param uim.databases.IDBAExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
+     * @param uim.databases.IDBAExpression|string field Database field to be compared against value
+     * @param mixed $value The value to be bound to field for comparison
      * @param string|null type the type name for $value as configured using the Type map.
      * @return this
      */
-    function gte($field, $value, type = null) {
+    function gte(field, $value, type = null) {
         if ($type == null) {
-            type = _calculateType($field);
+            type = _calculateType(field);
         }
 
-        return this.add(new ComparisonExpression($field, $value, type, ">="));
+        return this.add(new ComparisonExpression(field, $value, type, ">="));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field <= value".
      *
-     * @param uim.databases.IDBAExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
+     * @param uim.databases.IDBAExpression|string field Database field to be compared against value
+     * @param mixed $value The value to be bound to field for comparison
      * @param string|null type the type name for $value as configured using the Type map.
      * @return this
      */
-    function lte($field, $value, type = null) {
+    function lte(field, $value, type = null) {
         if ($type == null) {
-            type = _calculateType($field);
+            type = _calculateType(field);
         }
 
-        return this.add(new ComparisonExpression($field, $value, type, "<="));
+        return this.add(new ComparisonExpression(field, $value, type, "<="));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field IS NULL".
      *
-     * @param uim.databases.IDBAExpression|string $field database field to be
+     * @param uim.databases.IDBAExpression|string field database field to be
      * tested for null
      * @return this
      */
-    bool isNull($field) {
-        if (!($field instanceof IDBAExpression)) {
-            $field = new IdentifierExpression($field);
+    bool isNull(field) {
+        if (!(field instanceof IDBAExpression)) {
+            field = new IdentifierExpression(field);
         }
 
-        return this.add(new UnaryExpression("IS NULL", $field, UnaryExpression::POSTFIX));
+        return this.add(new UnaryExpression("IS NULL", field, UnaryExpression::POSTFIX));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field IS NOT NULL".
      *
-     * @param uim.databases.IDBAExpression|string $field database field to be
+     * @param uim.databases.IDBAExpression|string field database field to be
      * tested for not null
      * @return this
      */
-    bool isNotNull($field) {
-        if (!($field instanceof IDBAExpression)) {
-            $field = new IdentifierExpression($field);
+    bool isNotNull(field) {
+        if (!(field instanceof IDBAExpression)) {
+            field = new IdentifierExpression(field);
         }
 
-        return this.add(new UnaryExpression("IS NOT NULL", $field, UnaryExpression::POSTFIX));
+        return this.add(new UnaryExpression("IS NOT NULL", field, UnaryExpression::POSTFIX));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field LIKE value".
      *
-     * @param uim.databases.IDBAExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
+     * @param uim.databases.IDBAExpression|string field Database field to be compared against value
+     * @param mixed $value The value to be bound to field for comparison
      * @param string|null type the type name for $value as configured using the Type map.
      * @return this
      */
-    function like($field, $value, type = null) {
+    function like(field, $value, type = null) {
         if ($type == null) {
-            type = _calculateType($field);
+            type = _calculateType(field);
         }
 
-        return this.add(new ComparisonExpression($field, $value, type, "LIKE"));
+        return this.add(new ComparisonExpression(field, $value, type, "LIKE"));
     }
 
     /**
      * Adds a new condition to the expression object in the form "field NOT LIKE value".
      *
-     * @param uim.databases.IDBAExpression|string $field Database field to be compared against value
-     * @param mixed $value The value to be bound to $field for comparison
+     * @param uim.databases.IDBAExpression|string field Database field to be compared against value
+     * @param mixed $value The value to be bound to field for comparison
      * @param string|null type the type name for $value as configured using the Type map.
      * @return this
      */
-    function notLike($field, $value, type = null) {
+    function notLike(field, $value, type = null) {
         if ($type == null) {
-            type = _calculateType($field);
+            type = _calculateType(field);
         }
 
-        return this.add(new ComparisonExpression($field, $value, type, "NOT LIKE"));
+        return this.add(new ComparisonExpression(field, $value, type, "NOT LIKE"));
     }
 
     /**
      * Adds a new condition to the expression object in the form
      * "field IN (value1, value2)".
      *
-     * @param uim.databases.IDBAExpression|string $field Database field to be compared against value
-     * @param uim.databases.IDBAExpression|array|string aValues the value to be bound to $field for comparison
+     * @param uim.databases.IDBAExpression|string field Database field to be compared against value
+     * @param uim.databases.IDBAExpression|array|string aValues the value to be bound to field for comparison
      * @param string|null type the type name for $value as configured using the Type map.
      * @return this
      */
-    function in($field, $values, type = null) {
+    function in(field, $values, type = null) {
         if ($type == null) {
-            type = _calculateType($field);
+            type = _calculateType(field);
         }
         type = type ?: "string";
         type ~= "[]";
         $values = $values instanceof IDBAExpression ? $values : (array)$values;
 
-        return this.add(new ComparisonExpression($field, $values, type, "IN"));
+        return this.add(new ComparisonExpression(field, $values, type, "IN"));
     }
 
     /**
@@ -352,36 +352,36 @@ class QueryExpression : IDBAExpression, Countable
      * Adds a new condition to the expression object in the form
      * "field NOT IN (value1, value2)".
      *
-     * @param uim.databases.IDBAExpression|string $field Database field to be compared against value
-     * @param uim.databases.IDBAExpression|array|string aValues the value to be bound to $field for comparison
+     * @param uim.databases.IDBAExpression|string field Database field to be compared against value
+     * @param uim.databases.IDBAExpression|array|string aValues the value to be bound to field for comparison
      * @param string|null type the type name for $value as configured using the Type map.
      * @return this
      */
-    function notIn($field, $values, type = null) {
+    function notIn(field, $values, type = null) {
         if ($type == null) {
-            type = _calculateType($field);
+            type = _calculateType(field);
         }
         type = type ?: "string";
         type ~= "[]";
         $values = $values instanceof IDBAExpression ? $values : (array)$values;
 
-        return this.add(new ComparisonExpression($field, $values, type, "NOT IN"));
+        return this.add(new ComparisonExpression(field, $values, type, "NOT IN"));
     }
 
     /**
      * Adds a new condition to the expression object in the form
      * "(field NOT IN (value1, value2) OR field IS NULL".
      *
-     * @param uim.databases.IDBAExpression|string $field Database field to be compared against value
-     * @param uim.databases.IDBAExpression|array|string aValues the value to be bound to $field for comparison
+     * @param uim.databases.IDBAExpression|string field Database field to be compared against value
+     * @param uim.databases.IDBAExpression|array|string aValues the value to be bound to field for comparison
      * @param string|null type the type name for $value as configured using the Type map.
      * @return this
      */
-    function notInOrNull($field, $values, Nullable!string type = null) {
+    function notInOrNull(field, $values, Nullable!string type = null) {
         $or = new static([], [], "OR");
         $or
-            .notIn($field, $values, type)
-            .isNull($field);
+            .notIn(field, $values, type)
+            .isNull(field);
 
         return this.add($or);
     }
@@ -410,18 +410,18 @@ class QueryExpression : IDBAExpression, Countable
      * Adds a new condition to the expression object in the form
      * "field BETWEEN from AND to".
      *
-     * @param uim.databases.IDBAExpression|string $field The field name to compare for values inbetween the range.
+     * @param uim.databases.IDBAExpression|string field The field name to compare for values inbetween the range.
      * @param mixed $from The initial value of the range.
      * @param mixed to The ending value in the comparison range.
      * @param string|null type the type name for $value as configured using the Type map.
      * @return this
      */
-    function between($field, $from, to, type = null) {
+    function between(field, $from, to, type = null) {
         if ($type == null) {
-            type = _calculateType($field);
+            type = _calculateType(field);
         }
 
-        return this.add(new BetweenExpression($field, $from, to, type));
+        return this.add(new BetweenExpression(field, $from, to, type));
     }
 
     /**
@@ -526,12 +526,12 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function equalFields(string $leftField, string $rightField) {
-        $wrapIdentifier = function ($field) {
-            if ($field instanceof IDBAExpression) {
-                return $field;
+        $wrapIdentifier = function (field) {
+            if (field instanceof IDBAExpression) {
+                return field;
             }
 
-            return new IdentifierExpression($field);
+            return new IdentifierExpression(field);
         };
 
         return this.eq($wrapIdentifier($leftField), $wrapIdentifier($rightField));
@@ -709,25 +709,25 @@ class QueryExpression : IDBAExpression, Countable
      * generating the placeholders and replacing the values by them, while storing
      * the value elsewhere for future binding.
      *
-     * @param string $field The value from which the actual field and operator will
+     * @param string field The value from which the actual field and operator will
      * be extracted.
      * @param mixed $value The value to be bound to a placeholder for the field
      * @return uim.databases.IDBAExpression
      * @throws \InvalidArgumentException If operator is invalid or missing on NULL usage.
      */
-    protected function _parseCondition(string $field, $value) {
-        $field = trim($field);
+    protected function _parseCondition(string field, $value) {
+        field = trim(field);
         $operator = "=";
-        $expression = $field;
+        $expression = field;
 
-        $spaces = substr_count($field, " ");
+        $spaces = substr_count(field, " ");
         // Handle field values that contain multiple spaces, such as
         // operators with a space in them like `field IS NOT` and
         // `field NOT LIKE`, or combinations with function expressions
         // like `CONCAT(first_name, " ", last_name) IN`.
         if ($spaces > 1) {
-            $parts = explode(" ", $field);
-            if (preg_match("/(is not|not \w+)$/i", $field)) {
+            $parts = explode(" ", field);
+            if (preg_match("/(is not|not \w+)$/i", field)) {
                 $last = array_pop($parts);
                 $second = array_pop($parts);
                 $parts[] = "{$second} {$last}";
@@ -735,7 +735,7 @@ class QueryExpression : IDBAExpression, Countable
             $operator = array_pop($parts);
             $expression = implode(" ", $parts);
         } elseif ($spaces == 1) {
-            $parts = explode(" ", $field, 2);
+            $parts = explode(" ", field, 2);
             [$expression, $operator] = $parts;
         }
         $operator = strtolower(trim($operator));
@@ -792,13 +792,13 @@ class QueryExpression : IDBAExpression, Countable
     /**
      * Returns the type name for the passed field if it was stored in the typeMap
      *
-     * @param uim.databases.IDBAExpression|string $field The field name to get a type for.
+     * @param uim.databases.IDBAExpression|string field The field name to get a type for.
      * @return string|null The computed type or null, if the type is unknown.
      */
-    protected Nullable!string _calculateType($field) {
-        $field = $field instanceof IdentifierExpression ? $field.getIdentifier() : $field;
-        if (is_string($field)) {
-            return this.getTypeMap().type($field);
+    protected Nullable!string _calculateType(field) {
+        field = field instanceof IdentifierExpression ? field.getIdentifier() : field;
+        if (is_string(field)) {
+            return this.getTypeMap().type(field);
         }
 
         return null;

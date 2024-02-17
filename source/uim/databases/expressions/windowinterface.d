@@ -38,10 +38,10 @@ interface IWindow {
     /**
      * Adds one or more order clauses to the window.
      *
-     * @param uim.databases.IDBAExpression|\Closure|array<uim.databases.IDBAExpression|string>|string $fields Order expressions
+     * @param uim.databases.IDBAExpression|\Closure|array<uim.databases.IDBAExpression|string>|string fields Order expressions
      * @return this
      */
-    function order($fields);
+    function order(fields);
 
     /**
      * Adds a simple range frame to the window.

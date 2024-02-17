@@ -27,7 +27,7 @@ class CommonTableExpression : IDBAExpression
      *
      * @var array<uim.databases.Expression\IdentifierExpression>
      */
-    protected $fields = null;
+    protected fields = null;
 
     /**
      * The CTE query definition.
@@ -98,17 +98,17 @@ class CommonTableExpression : IDBAExpression
     /**
      * Adds one or more fields (arguments) to the CTE.
      *
-     * @param uim.databases.Expression\IdentifierExpression|array<uim.databases.Expression\IdentifierExpression>|array<string>|string $fields Field names
+     * @param uim.databases.Expression\IdentifierExpression|array<uim.databases.Expression\IdentifierExpression>|array<string>|string fields Field names
      * @return this
      */
-    function field($fields) {
-        $fields = (array)$fields;
-        foreach ($fields as &$field) {
-            if (!($field instanceof IdentifierExpression)) {
-                $field = new IdentifierExpression($field);
+    function field(fields) {
+        fields = (array)fields;
+        foreach (fields as &field) {
+            if (!(field instanceof IdentifierExpression)) {
+                field = new IdentifierExpression(field);
             }
         }
-        this.fields = array_merge(this.fields, $fields);
+        this.fields = array_merge(this.fields, fields);
 
         return this;
     }
@@ -155,12 +155,12 @@ class CommonTableExpression : IDBAExpression
 
 
     string sql(ValueBinder aBinder) {
-        $fields = "";
+        fields = "";
         if (this.fields) {
             $expressions = array_map(function (IdentifierExpression $e) use ($binder) {
                 return $e.sql($binder);
             }, this.fields);
-            $fields = sprintf("(%s)", implode(", ", $expressions));
+            fields = sprintf("(%s)", implode(", ", $expressions));
         }
 
         $suffix = this.materialized ? this.materialized ~ " " : "";
@@ -168,7 +168,7 @@ class CommonTableExpression : IDBAExpression
         return sprintf(
             "%s%s AS %s(%s)",
             this.name.sql($binder),
-            $fields,
+            fields,
             $suffix,
             this.query ? this.query.sql($binder) : ""
         );
@@ -177,9 +177,9 @@ class CommonTableExpression : IDBAExpression
 
     O traverse(this O)(Closure $callback) {
         $callback(this.name);
-        foreach (this.fields as $field) {
-            $callback($field);
-            $field.traverse($callback);
+        foreach (this.fields as field) {
+            $callback(field);
+            field.traverse($callback);
         }
 
         if (this.query) {
@@ -199,8 +199,8 @@ class CommonTableExpression : IDBAExpression
             this.query = clone this.query;
         }
 
-        foreach (this.fields as $key: $field) {
-            this.fields[$key] = clone $field;
+        foreach (this.fields as $key: field) {
+            this.fields[$key] = clone field;
         }
     }
 }

@@ -94,8 +94,8 @@ class WindowExpression : IDBAExpression, IWindow
     }
 
 
-    function order($fields) {
-        if (!$fields) {
+    function order(fields) {
+        if (!fields) {
             return this;
         }
 
@@ -103,11 +103,11 @@ class WindowExpression : IDBAExpression, IWindow
             this.order = new OrderByExpression();
         }
 
-        if ($fields instanceof Closure) {
-            $fields = $fields(new QueryExpression([], [], ""));
+        if (fields instanceof Closure) {
+            fields = fields(new QueryExpression([], [], ""));
         }
 
-        this.order.add($fields);
+        this.order.add(fields);
 
         return this;
     }

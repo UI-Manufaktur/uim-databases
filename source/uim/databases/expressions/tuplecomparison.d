@@ -27,15 +27,15 @@ class TupleComparison : ComparisonExpression
     /**
      * Constructor
      *
-     * @param uim.databases.IDBAExpression|array|string $fields the fields to use to form a tuple
+     * @param uim.databases.IDBAExpression|array|string fields the fields to use to form a tuple
      * @param uim.databases.IDBAExpression|array $values the values to use to form a tuple
      * @param array<string|null> types the types names to use for casting each of the values, only
      * one type per position in the value array in needed
      * @param string $conjunction the operator used for comparing field and value
      */
-    this($fields, $values, array types = null, string $conjunction = "=") {
+    this(fields, $values, array types = null, string $conjunction = "=") {
         _type = types;
-        this.setField($fields);
+        this.setField(fields);
         _operator = $conjunction;
         this.setValue($values);
     }
@@ -75,22 +75,22 @@ class TupleComparison : ComparisonExpression
 
     string sql(ValueBinder aBinder) {
         template = "(%s) %s (%s)";
-        $fields = null;
+        fields = null;
         $originalFields = this.getField();
 
         if (!is_array($originalFields)) {
             $originalFields = [$originalFields];
         }
 
-        foreach ($originalFields as $field) {
-            $fields[] = $field instanceof IDBAExpression ? $field.sql($binder) : $field;
+        foreach ($originalFields as field) {
+            fields[] = field instanceof IDBAExpression ? field.sql($binder) : field;
         }
 
         $values = _stringifyValues($binder);
 
-        $field = implode(", ", $fields);
+        field = implode(", ", fields);
 
-        return sprintf($template, $field, _operator, $values);
+        return sprintf($template, field, _operator, $values);
     }
 
     /**
@@ -149,10 +149,10 @@ class TupleComparison : ComparisonExpression
 
 
     O traverse(this O)(Closure $callback) {
-        /** @var array<string> $fields */
-        $fields = this.getField();
-        foreach ($fields as $field) {
-            _traverseValue($field, $callback);
+        /** @var array<string> fields */
+        fields = this.getField();
+        foreach (fields as field) {
+            _traverseValue(field, $callback);
         }
 
         $value = this.getValue();

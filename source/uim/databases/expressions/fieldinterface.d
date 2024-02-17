@@ -14,9 +14,9 @@ interface FieldInterface
     /**
      * Sets the field name
      *
-     * @param uim.databases.IDBAExpression|array|string $field The field to compare with.
+     * @param uim.databases.IDBAExpression|array|string field The field to compare with.
      */
-    void setField($field);
+    void setField(field);
 
     /**
      * Returns the field name

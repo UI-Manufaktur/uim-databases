@@ -293,7 +293,7 @@ class Sqlserver : Driver
      */
     protected function _pagingSubquery(Query $original, Nullable!int $limit, Nullable!int $offset): Query
     {
-        $field = "_cake_paging_._cake_page_rownum_";
+        field = "_cake_paging_._cake_page_rownum_";
 
         if ($original.clause("order")) {
             // SQL server does not support column aliases in OVER clauses.  But
@@ -334,11 +334,11 @@ class Sqlserver : Driver
             .from(["_cake_paging_": $query]);
 
         if ($offset) {
-            $outer.where(["$field > " ~ $offset]);
+            $outer.where(["field > " ~ $offset]);
         }
         if ($limit) {
             $value = (int)$offset + $limit;
-            $outer.where(["$field <= $value"]);
+            $outer.where(["field <= $value"]);
         }
 
         // Decorate the original query as that is what the

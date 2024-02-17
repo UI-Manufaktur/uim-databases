@@ -20,10 +20,10 @@ trait FieldTrait
     /**
      * Sets the field name
      *
-     * @param uim.databases.IDBAExpression|array|string $field The field to compare with.
+     * @param uim.databases.IDBAExpression|array|string field The field to compare with.
      */
-    void setField($field) {
-        _field = $field;
+    void setField(field) {
+        _field = field;
     }
 
     /**

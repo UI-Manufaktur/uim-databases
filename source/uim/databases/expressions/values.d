@@ -246,10 +246,10 @@ class ValuesExpression : IDBAExpression {
             if (!is_array($v)) {
                 continue;
             }
-            foreach ($v as $field) {
-                if ($field instanceof IDBAExpression) {
-                    $callback($field);
-                    $field.traverse($callback);
+            foreach ($v as field) {
+                if (field instanceof IDBAExpression) {
+                    $callback(field);
+                    field.traverse($callback);
                 }
             }
         }

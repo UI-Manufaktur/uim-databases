@@ -25,25 +25,25 @@ class OrderClauseExpression : IDBAExpression, FieldInterface
     /**
      * Constructor
      *
-     * @param uim.databases.IDBAExpression|string $field The field to order on.
+     * @param uim.databases.IDBAExpression|string field The field to order on.
      * @param string $direction The direction to sort on.
      */
-    this($field, $direction) {
-        _field = $field;
+    this(field, $direction) {
+        _field = field;
         _direction = strtolower($direction) == "asc" ? "ASC" : "DESC";
     }
 
 
     string sql(ValueBinder aBinder) {
-        /** @var DDBIDBAExpression|string $field */
-        $field = _field;
-        if ($field instanceof Query) {
-            $field = sprintf("(%s)", $field.sql($binder));
-        } elseif ($field instanceof IDBAExpression) {
-            $field = $field.sql($binder);
+        /** @var DDBIDBAExpression|string field */
+        field = _field;
+        if (field instanceof Query) {
+            field = sprintf("(%s)", field.sql($binder));
+        } elseif (field instanceof IDBAExpression) {
+            field = field.sql($binder);
         }
 
-        return sprintf("%s %s", $field, _direction);
+        return sprintf("%s %s", field, _direction);
     }
 
 

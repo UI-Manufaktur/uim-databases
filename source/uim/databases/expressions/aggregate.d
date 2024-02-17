@@ -78,9 +78,9 @@ class AggregateExpression : FunctionExpression : IWindow
     }
 
 
-    function order($fields) {
+    function order(fields) {
         this.over();
-        this.window.order($fields);
+        this.window.order(fields);
 
         return this;
     }

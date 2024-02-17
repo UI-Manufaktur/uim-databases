@@ -42,18 +42,18 @@ class BetweenExpression : IDBAExpression, FieldInterface
     /**
      * Constructor
      *
-     * @param uim.databases.IDBAExpression|string $field The field name to compare for values inbetween the range.
+     * @param uim.databases.IDBAExpression|string field The field name to compare for values inbetween the range.
      * @param mixed $from The initial value of the range.
      * @param mixed to The ending value in the comparison range.
      * @param string|null type The data type name to bind the values with.
      */
-    this($field, $from, to, type = null) {
+    this(field, $from, to, type = null) {
         if ($type != null) {
             $from = _castToExpression($from, type);
             to = _castToExpression($to, type);
         }
 
-        _field = $field;
+        _field = field;
         _from = $from;
         _to = to;
         _type = type;
@@ -66,10 +66,10 @@ class BetweenExpression : IDBAExpression, FieldInterface
             "to": _to,
         ];
 
-        /** @var DDBIDBAExpression|string $field */
-        $field = _field;
-        if ($field instanceof IDBAExpression) {
-            $field = $field.sql($binder);
+        /** @var DDBIDBAExpression|string field */
+        field = _field;
+        if (field instanceof IDBAExpression) {
+            field = field.sql($binder);
         }
 
         foreach ($parts as $name: part) {
@@ -80,7 +80,7 @@ class BetweenExpression : IDBAExpression, FieldInterface
             parts[$name] = _bindValue($part, $binder, _type);
         }
 
-        return sprintf("%s BETWEEN %s AND %s", $field, parts["from"], parts["to"]);
+        return sprintf("%s BETWEEN %s AND %s", field, parts["from"], parts["to"]);
     }
 
 
