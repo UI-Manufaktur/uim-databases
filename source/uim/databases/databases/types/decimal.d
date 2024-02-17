@@ -60,7 +60,7 @@ class DecimalType : BaseType, IBatchCasting {
  
     array manyToD(array  someValues, array fields, Driver driver) {
         fields
-            .filter!(field => someValues.isSet($field))
+            .filter!(field => someValues.isSet(field))
             .each!(field => someValues[field] = to!string(someValues[field]));
 
         return someValues;

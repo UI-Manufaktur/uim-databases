@@ -95,9 +95,9 @@ class TimeType : BaseType, IBatchCasting {
     }
     array manyToD(array  someValues, array fields, Driver driver) {
         fields
-            .filter!(field => someValues.isSet($field))
+            .filter!(field => someValues.isSet(field))
             .each!((field) {
-                auto value =  someValues[$field];
+                auto value =  someValues[field];
                 instance = new _className(value);
                 someValues[field] =  instance;
             });

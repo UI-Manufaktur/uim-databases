@@ -181,7 +181,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         }
         field += [
             "null": row["null"] == "1",
-            "default": _defaultValue($field["type"], row["default"]),
+            "default": _defaultValue(field["type"], row["default"]),
             "collate": row["collation_name"],
         ];
         tableSchema.addColumn($row["name"], field);

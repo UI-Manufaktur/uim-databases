@@ -44,7 +44,7 @@ class JsonType : BaseType, IBatchCasting {
  
     array manyToD(array  someValues, array fields, Driver driver) {
         fields
-            .filter!(field => isSet(someValues[$field]))
+            .filter!(field => isSet(someValues[field]))
             .each!(field => someValues[field] = json_decode(someValues[field], true));
 
         return someValues;

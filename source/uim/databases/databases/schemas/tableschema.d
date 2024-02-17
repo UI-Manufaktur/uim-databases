@@ -319,7 +319,7 @@ class TableSchema : TableISchema, ISqlGenerator {
         }
         attrs["columns"] = (array)$attrs["columns"];
         foreach ($attrs["columns"] as field) {
-            if (isEmpty(_columns[$field])) {
+            if (isEmpty(_columns[field])) {
                 message = 
                     "Columns used in index `%s` in table `%s` must be added to the Table schema first. " ~
                     "The column `%s` was not found."
@@ -373,7 +373,7 @@ class TableSchema : TableISchema, ISqlGenerator {
         }
         attrs["columns"] = (array)$attrs["columns"];
         foreach ($attrs["columns"] as field) {
-            if (isEmpty(_columns[$field])) {
+            if (isEmpty(_columns[field])) {
                 message = "Columns used in constraints must be added to the Table schema first. ' ~
                     "The column `%s` was not found in table `%s`.".format(
                     field,

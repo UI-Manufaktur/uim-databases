@@ -32,9 +32,9 @@ trait TupleComparisonTranslatorTrait
      * @param uim.databases.Query $query The query to update.
      */
     protected void _transformTupleComparison(TupleComparison $expression, Query $query) {
-        $fields = $expression.getField();
+        fields = $expression.getField();
 
-        if (!is_array($fields)) {
+        if (!is_array(fields)) {
             return;
         }
 
@@ -53,8 +53,8 @@ trait TupleComparisonTranslatorTrait
 
         if ($value instanceof Query) {
             $selected = array_values($value.clause("select"));
-            foreach ($fields as $i: $field) {
-                $value.andWhere([$field: new IdentifierExpression($selected[$i])]);
+            foreach (fields as $i: field) {
+                $value.andWhere([field: new IdentifierExpression($selected[$i])]);
             }
             $value.select($true, true);
             $expression.setField($true);
@@ -66,7 +66,7 @@ trait TupleComparisonTranslatorTrait
         type = $expression.getType();
         if ($type) {
             /** @var array<string, string> typeMap */
-            typeMap = array_combine($fields, type) ?: [];
+            typeMap = array_combine(fields, type) ?: [];
         } else {
             typeMap = null;
         }
@@ -83,7 +83,7 @@ trait TupleComparisonTranslatorTrait
         foreach ($value as tuple) {
             $item = null;
             foreach (array_values($tuple) as $i: $value2) {
-                $item[] = [$fields[$i]: $value2];
+                $item[] = [fields[$i]: $value2];
             }
             $conditions["OR"][] = $item;
         }

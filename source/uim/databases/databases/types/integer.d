@@ -44,13 +44,13 @@ class IntegerType : BaseType, IBatchCasting {
     }
  
     array manyToD(array  someValues, array fields, Driver driver) {
-        foreach ($fields as field) {
-            if (!isSet(someValues[$field])) {
+        foreach (fields as field) {
+            if (!isSet(someValues[field])) {
                 continue;
             }
-            this.checkNumeric(someValues[$field]);
+            this.checkNumeric(someValues[field]);
 
-             someValues[$field] = (int) someValues[$field];
+             someValues[field] = (int) someValues[field];
         }
         return someValues;
     }

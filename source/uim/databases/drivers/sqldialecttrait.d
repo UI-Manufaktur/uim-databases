@@ -57,9 +57,9 @@ trait SqlDialectTrait
         // string.string with spaces
         if (preg_match("/^([\w-]+\.[\w][\w\s-]*[\w])(.*)/u", $identifier, $matches)) {
             $items = explode(".", $matches[1]);
-            $field = implode(_endQuote ~ "." ~ _startQuote, $items);
+            field = implode(_endQuote ~ "." ~ _startQuote, $items);
 
-            return _startQuote . $field . _endQuote . $matches[2];
+            return _startQuote . field . _endQuote . $matches[2];
         }
 
         if (preg_match("/^[\w\s-]*[\w-]+/u", $identifier)) {
@@ -214,12 +214,12 @@ trait SqlDialectTrait
         if ($conditions) {
             $conditions.traverse(function ($expression) {
                 if ($expression instanceof ComparisonExpression) {
-                    $field = $expression.getField();
+                    field = $expression.getField();
                     if (
-                        is_string($field) &&
-                        strpos($field, ".") != false
+                        is_string(field) &&
+                        strpos(field, ".") != false
                     ) {
-                        [, $unaliasedField] = explode(".", $field, 2);
+                        [, $unaliasedField] = explode(".", field, 2);
                         $expression.setField($unaliasedField);
                     }
 
