@@ -205,17 +205,7 @@ abstract class Driver : IDBADriver {
         return _connection.quote((string)myValue, myType);
     }
 
-    /**
-     * Checks if the driver supports quoting, as PDO_ODBC does not support it.
-     *
-     * @return bool
-     * @deprecated 4.3.0 Use `supports(IDBADriver.FEATURE_QUOTE)` instead
-     */
-    bool supportsQuoting() {
-        deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
-
-        return this.supports(static.FEATURE_QUOTE);
-    }
+    
 
     
     abstract Closure queryTranslator(string myType);
@@ -315,7 +305,6 @@ abstract class Driver : IDBADriver {
      * Defaults to true for FEATURE_QUOTE and FEATURE_SAVEPOINT.
      *
      * @param string feature Driver feature name
-     * @return bool
      */
     bool supports(string feature) {
         switch ($feature) {

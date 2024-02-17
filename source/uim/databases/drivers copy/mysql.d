@@ -244,30 +244,4 @@ class MysqlDriver : Driver {
 
         return _version;
     }
-
-
-
-    /**
-     * Returns true if the server supports native JSON columns
-     *
-     * @return bool
-     * @deprecated 4.3.0 Use `supports(IDriver::FEATURE_JSON)` instead
-     */
-    bool supportsNativeJson() {
-        deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
-
-        return this.supports(static::FEATURE_JSON);
-    }
-
-    /**
-     * Returns true if the connected server supports window functions.
-     *
-     * @return bool
-     * @deprecated 4.3.0 Use `supports(IDriver::FEATURE_WINDOW)` instead
-     */
-    bool supportsWindowFunctions() {
-        deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
-
-        return this.supports(static::FEATURE_WINDOW);
-    }
 }

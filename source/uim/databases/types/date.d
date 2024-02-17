@@ -50,23 +50,6 @@ class DateType : DateTimeType {
     }
 
     /**
-     * Change the preferred class name to the mutable Date implementation.
-     *
-     * @return this
-     * @deprecated 4.3.0 Using mutable datetime objects is deprecated.
-     */
-    function useMutable() {
-        deprecationWarning(
-            "Configuring immutable or mutable classes is deprecated and immutable"
-            ~ " classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary."
-        );
-
-        _setClassName(Date::class, DateTime::class);
-
-        return this;
-    }
-
-    /**
      * Convert request data into a datetime object.
      *
      * @param mixed value Request data
