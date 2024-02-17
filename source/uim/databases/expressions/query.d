@@ -462,22 +462,6 @@ class QueryExpression : IDBAExpression, Countable
 
     /**
      * Returns a new QueryExpression object containing all the conditions passed
-     * and set up the conjunction to be "AND"
-     *
-     * @param uim.databases.IDBAExpression|\Closure|array|string $conditions to be joined with AND
-     * @param array<string, string> types Associative array of fields pointing to the type of the
-     * values that are being passed. Used for correctly binding values to statements.
-     * @return uim.databases.Expression\QueryExpression
-     * @deprecated 4.0.0 Use {@link and()} instead.
-     */
-    function and_($conditions, types = null) {
-        deprecationWarning("QueryExpression::and_() is deprecated use and() instead.");
-
-        return this.and($conditions, types);
-    }
-
-    /**
-     * Returns a new QueryExpression object containing all the conditions passed
      * and set up the conjunction to be "OR"
      *
      * @param uim.databases.IDBAExpression|\Closure|array|string $conditions to be joined with OR

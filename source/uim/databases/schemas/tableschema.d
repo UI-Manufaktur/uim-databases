@@ -17,12 +17,8 @@ use uim.databases.TypeFactory;
  */
 class TableSchema : ITableSchema, SqlGeneratorInterface
 {
-    /**
-     * The name of the table
-     *
-     * @var string
-     */
-    protected _table;
+    // The name of the table
+    protected string _table;
 
     /**
      * Columns in the table.

@@ -12,26 +12,14 @@ use Psr\SimpleCache\CacheInterface;
  */
 class CachedCollection : CollectionInterface
 {
-    /**
-     * Cacher instance.
-     *
-     * @var \Psr\SimpleCache\CacheInterface
-     */
-    protected cacher;
+    // Cacher instance.
+    protected CacheInterface cacher;
 
-    /**
-     * The decorated schema collection
-     *
-     * @var uim.databases.Schema\CollectionInterface
-     */
-    protected collection;
+    // The decorated schema collection
+    protected CollectionInterface collection;
 
-    /**
-     * The cache key prefix
-     *
-     * @var string
-     */
-    protected prefix;
+    // The cache key prefix
+    protected string prefix;
 
     /**
      * Constructor.
@@ -48,14 +36,12 @@ class CachedCollection : CollectionInterface
     }
 
 
-    function listTablesWithoutViews(): array
-    {
+    array listTablesWithoutViews() {
         return this.collection.listTablesWithoutViews();
     }
 
 
-    function listTables(): array
-    {
+    array listTables() {
         return this.collection.listTables();
     }
 

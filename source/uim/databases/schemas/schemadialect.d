@@ -154,11 +154,8 @@ abstract class SchemaDialect
      * @param uim.databases.Schema\TableSchema schema Schema instance
      * @return array SQL statements to drop a table.
      */
-    array dropTableSql(TableSchema schema) {
-        sql = sprintf(
-            "DROP TABLE %s",
-            _driver.quoteIdentifier(schema.name())
-        );
+    string[] dropTableSql(TableSchema schema) {
+        string sql = "DROP TABLE %s".format(_driver.quoteIdentifier(schema.name()));
 
         return [sql];
     }

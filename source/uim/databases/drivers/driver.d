@@ -199,19 +199,6 @@ abstract class Driver : IDBADriver {
         return this.supports(static.FEATURE_SAVEPOINT);
     }
 
-    /**
-     * Returns true if the server supports common table expressions.
-     *
-     * @return bool
-     * @deprecated 4.3.0 Use `supports(IDBADriver.FEATURE_QUOTE)` instead
-     */
-    bool supportsCTEs() {
-        deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
-
-        return this.supports(static.FEATURE_CTE);
-    }
-
-    
     string quote(myValue, myType = PDO.PARAM_STR) {
         this.connect();
 

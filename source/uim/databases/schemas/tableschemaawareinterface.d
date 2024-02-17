@@ -1,8 +1,6 @@
 module uim.databases.schemas;
 
-/**
- * Defines the interface for getting the schema.
- */
+// Defines the interface for getting the schema.
 interface TableSchemaAwareInterface
 {
     /**

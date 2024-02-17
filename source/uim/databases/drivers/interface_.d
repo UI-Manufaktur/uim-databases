@@ -113,14 +113,7 @@ interface IDBADriver {
     // Get the SQL for enabling foreign keys.
     string enableForeignKeySQL();
 
-    /**
-     * Returns whether the driver supports adding or dropping constraints
-     * to already created tables.
-     *
-     * @return bool True if driver supports dynamic constraints.
-     * @deprecated 4.3.0 Fixtures no longer dynamically drop and create constraints.
-     */
-    bool supportsDynamicConstraints();
+
 
     /**
      * Returns whether this driver supports save points for nested transactions.

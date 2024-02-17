@@ -129,24 +129,7 @@ class Connection : IConnection {
         return _config['name'] ?? '';
     }
 
-    /**
-     * Sets the driver instance. If a string is passed it will be treated
-     * as a class name and will be instantiated.
-     *
-     * @param uim.databases.IDriver|string driver The driver instance to use.
-     * @param array<string, mixed> aConfig Config for a new driver.
-     * @throws uim.databases.exceptions.MissingDriverException When a driver class is missing.
-     * @throws uim.databases.exceptions.MissingExtensionException When a driver's D extension is missing.
-     * @return this
-     * @deprecated 4.4.0 Setting the driver is deprecated. Use the connection config instead.
-     */
-    function setDriver(driver, aConfig = null) {
-        deprecationWarning('Setting the driver is deprecated. Use the connection config instead.');
 
-        _driver = this.createDriver(driver, aConfig);
-
-        return this;
-    }
 
     /**
      * Creates driver from name, class name or instance.
