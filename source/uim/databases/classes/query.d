@@ -758,12 +758,12 @@ abstract class Query : IExpression, Stringable {
      * that should be not null.
      */
     auto whereNotNull(IExpression|string[] afields) {
-        if (!isArray($fields)) {
-            $fields = [$fields];
+        if (!isArray(fields)) {
+            fields = [fields];
         }
         auto newExpression = this.newExpr();
 
-        $fields.each!(field => newExpression.isNotNull(field));
+        fields.each!(field => newExpression.isNotNull(field));
         return this.where(newExpression);
     }
     
@@ -774,12 +774,12 @@ abstract class Query : IExpression, Stringable {
      *  that should be null.
      */
     auto whereNull(IExpression|string[] afields) {
-        if (!isArray($fields)) {
-            $fields = [$fields];
+        if (!isArray(fields)) {
+            fields = [fields];
         }
 
         auto newExpression = this.newExpr();
-        $fields.each!(field => newExpression.isNull(field));
+        fields.each!(field => newExpression.isNull(field));
         return this.where(newExpression);
     }
     
@@ -806,7 +806,7 @@ abstract class Query : IExpression, Stringable {
         if (options["allowEmpty"].get!bool && !someValues) {
             return this.where("1=0");
         }
-        return this.where([$field ~ " IN":  someValues], options["types"]);
+        return this.where([field ~ " IN":  someValues], options["types"]);
     }
     
     /**
@@ -828,9 +828,9 @@ abstract class Query : IExpression, Stringable {
         ];
 
         if (options["allowEmpty"] && !someValues) {
-            return this.where([$field ~ " IS NOT": null]);
+            return this.where([field ~ " IS NOT": null]);
         }
-        return this.where([$field ~ " NOT IN":  someValues], options["types"]);
+        return this.where([field ~ " NOT IN":  someValues], options["types"]);
     }
     
     /**
@@ -853,11 +853,11 @@ abstract class Query : IExpression, Stringable {
         ];
 
         if ($options["allowEmpty"] && !someValues) {
-            return this.where([$field ~ " IS NOT": null]);
+            return this.where([field ~ " IS NOT": null]);
         }
         return this.where(
             [
-                "OR": [$field ~ " NOT IN":  someValues, $field ~ " IS": null],
+                "OR": [field ~ " NOT IN":  someValues, field ~ " IS": null],
             ],
             $options["types"]
         );
@@ -989,13 +989,13 @@ abstract class Query : IExpression, Stringable {
         if ($overwrite) {
            _parts["order"] = null;
         }
-        if (!$fields) {
+        if (!fields) {
             return this;
         }
         if (!_parts["order"]) {
            _parts["order"] = new OrderByExpression();
         }
-       _conjugate("order", $fields, "", []);
+       _conjugate("order", fields, "", []);
 
         return this;
     }
@@ -1016,16 +1016,16 @@ abstract class Query : IExpression, Stringable {
         if ($overwrite) {
            _parts["order"] = null;
         }
-        if (!$field) {
+        if (!field) {
             return this;
         }
-        if (cast(Closure)$field) {
-            $field = $field(this.newExpr(), this);
+        if (cast(Closure)field) {
+            field = field(this.newExpr(), this);
         }
         if (!_parts["order"]) {
            _parts["order"] = new OrderByExpression();
         }
-       _parts["order"].add(new OrderClauseExpression($field, "ASC"));
+       _parts["order"].add(new OrderClauseExpression(field, "ASC"));
 
         return this;
     }
@@ -1046,16 +1046,16 @@ abstract class Query : IExpression, Stringable {
         if ($overwrite) {
            _parts["order"] = null;
         }
-        if (!$field) {
+        if (!field) {
             return this;
         }
-        if (cast8Closure)$field) {
-            $field = $field(this.newExpr(), this);
+        if (cast8Closure)field) {
+            field = field(this.newExpr(), this);
         }
         if (!_parts["order"]) {
            _parts["order"] = new OrderByExpression();
         }
-       _parts["order"].add(new OrderClauseExpression($field, "DESC"));
+       _parts["order"].add(new OrderClauseExpression(field, "DESC"));
 
         return this;
     }

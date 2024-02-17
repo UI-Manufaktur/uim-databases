@@ -213,7 +213,7 @@ _baseConfig = [
      * @param int  anOffset The number of rows to offset.
      */
     protected SelectQuery _pagingSubquery(SelectQuery $original, int aLimit, int anOffset) {
-        auto $field = "_cake_paging_._cake_page_rownum_";
+        auto field = "_cake_paging_._cake_page_rownum_";
 
         if ($original.clause("order")) {
             // SQL server does not support column aliases in OVER clauses.  But
@@ -253,11 +253,11 @@ _baseConfig = [
             .from(["_cake_paging_": aQuery]);
 
         if (anOffset) {
-            $outer.where(["$field > " ~  anOffset]);
+            $outer.where(["field > " ~  anOffset]);
         }
         if (aLimit) {
             aValue = (int) anOffset + aLimit;
-            $outer.where(["$field <= aValue"]);
+            $outer.where(["field <= aValue"]);
         }
         // Decorate the original query as that is what the
         // end developer will be calling execute() on originally.

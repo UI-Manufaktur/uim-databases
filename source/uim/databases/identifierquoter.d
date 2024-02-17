@@ -186,17 +186,17 @@ class IdentifierQuoter
      * @param uim.databases.Expression\FieldInterface $expression The expression to quote.
      */
     protected void _quoteComparison(FieldInterface $expression) {
-        $field = $expression.getField();
-        if (is_string($field)) {
-            $expression.setField(_driver.quoteIdentifier($field));
-        } elseif (is_array($field)) {
+        field = $expression.getField();
+        if (is_string(field)) {
+            $expression.setField(_driver.quoteIdentifier(field));
+        } elseif (is_array(field)) {
             $quoted = null;
-            foreach ($field as $f) {
+            foreach (field as $f) {
                 $quoted[] = _driver.quoteIdentifier($f);
             }
             $expression.setField($quoted);
-        } elseif ($field instanceof IDBAExpression) {
-            this.quoteExpression($field);
+        } elseif (field instanceof IDBAExpression) {
+            this.quoteExpression(field);
         }
     }
 
@@ -209,9 +209,9 @@ class IdentifierQuoter
      * @param uim.databases.Expression\OrderByExpression $expression The expression to quote.
      */
     protected void _quoteOrderBy(OrderByExpression $expression) {
-        $expression.iterateParts(function ($part, &$field) {
-            if (is_string($field)) {
-                $field = _driver.quoteIdentifier($field);
+        $expression.iterateParts(function ($part, &field) {
+            if (is_string(field)) {
+                field = _driver.quoteIdentifier(field);
 
                 return $part;
             }

@@ -29,9 +29,9 @@ trait TupleComparisonTranslatorTrait {
      * @param \UIM\Database\Query aQuery The query to update.
      */
     protected void _transformTupleComparison(TupleComparison$expression, Query aQuery) {
-        $fields = $expression.getFieldNames();
+        fields = $expression.getFieldNames();
 
-        if (!isArray($fields)) {
+        if (!isArray(fields)) {
             return;
         }
         $operator = strtoupper($expression.getOperator());
@@ -46,8 +46,8 @@ trait TupleComparisonTranslatorTrait {
 
         if (cast(SelectQuery) aValue) {
             string[]$selected = aValue.clause("select").values;
-            foreach (anI : $field; $fields) {
-                aValue.andWhere([$field: new IdentifierExpression($selected[anI])]);
+            foreach (anI : field; fields) {
+                aValue.andWhere([field: new IdentifierExpression($selected[anI])]);
             }
             aValue.select($true, true);
             $expression.setFieldNames($true);
@@ -58,7 +58,7 @@ trait TupleComparisonTranslatorTrait {
         auto myType = $expression.getType();
         if (myType) {
             /** @var STRINGAA typeMap */
-            typeMap = array_combine($fields, myType) ?  : [];
+            typeMap = array_combine(fields, myType) ?  : [];
         } else {
             typeMap = [];
         }
@@ -72,7 +72,7 @@ trait TupleComparisonTranslatorTrait {
         $conditions = ["OR": []];
         aValue.each!((tuple) {
             auto items = []; foreach (anI : $value2; tuple.values) {
-                items ~= [$fields[anI]: $value2];}
+                items ~= [fields[anI]: $value2];}
                 $conditions["OR"] ~= items;});
                 $surrogate.where($conditions, typeMap);
 

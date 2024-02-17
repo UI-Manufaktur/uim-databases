@@ -174,16 +174,16 @@ class Connection : IConnection {
     /**
      * Create a new SelectQuery instance for this connection.
      * Params:
-     * \UIM\Database\IExpression|\Closure|string[]|float|int $fields Fields/columns list for the query.
+     * \UIM\Database\IExpression|\Closure|string[]|float|int fields Fields/columns list for the query.
      * @param string[] atable The table or list of tables to query.
      * typesForCasting - Associative array containing the types to be used for casting.
      */
     SelectQuery<mixed> selectQuery(
-        IExpression|Closure|string[]|float|int $fields = [],
+        IExpression|Closure|string[]|float|int fields = [],
         string[] atable = [],
         STRINGAA typesForCasting = []
     ) {
-        return this.queryFactory().select($fields, aTable, typesForCasting);
+        return this.queryFactory().select(fields, aTable, typesForCasting);
     }
     
     /**

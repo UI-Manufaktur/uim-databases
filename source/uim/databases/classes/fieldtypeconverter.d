@@ -26,7 +26,7 @@ class FieldTypeConverter {
         this.driver = $driver;
 
         types = TypeFactory.buildAll();
-        foreach ($field: typeName; typeMap.toArray()) {
+        foreach (field: typeName; typeMap.toArray()) {
             type = types.get($typeName, null);
             if (!$type || (cast(IOptionalConvert)$type && !$type.requiresToDCast())) {
                 continue;
@@ -36,7 +36,7 @@ class FieldTypeConverter {
                 "hasBatch": cas(IBatchCasting)$type ,
                 "fields": [],
             ];
-            this.conversions[$typeName]["fields"] ~= $field;
+            this.conversions[$typeName]["fields"] ~= field;
         }
     }
     

@@ -460,12 +460,12 @@ abstract class Driver {
         if ($conditions) {
             $conditions.traverse(function ($expression) {
                 if (cast(ComparisonExpression)$expression) {
-                    $field = $expression.getFieldNames();
+                    field = $expression.getFieldNames();
                     if (
-                        isString($field) &&
-                        $field.has(".")
+                        isString(field) &&
+                        field.has(".")
                     ) {
-                        [, $unaliasedField] = split(".", $field, 2);
+                        [, $unaliasedField] = split(".", field, 2);
                         $expression.setFieldNames($unaliasedField);
                     }
                     return $expression;

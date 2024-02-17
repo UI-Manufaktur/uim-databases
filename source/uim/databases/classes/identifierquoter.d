@@ -61,9 +61,9 @@ class IdentifierQuoter {
         if (preg_match("/^([\w-]+\.[\w][\w\s-]*[\w])(.*)/u", myIdentifier, $matches)) {
             
             string[] someItems = $matches[1].split(".");
-            $field = join(this.endQuote ~ "." ~ this.startQuote,  someItems);
+            field = join(this.endQuote ~ "." ~ this.startQuote,  someItems);
 
-            return this.startQuote ~ $field ~ this.endQuote ~ $matches[2];
+            return this.startQuote ~ field ~ this.endQuote ~ $matches[2];
         }
         if (preg_match("/^[\w\s-]*[\w-]+/u", myIdentifier)) {
             return this.startQuote ~ myIdentifier ~ this.endQuote;
@@ -255,9 +255,9 @@ class IdentifierQuoter {
      * \UIM\Database\Expression\OrderByExpression expressionToQuote The expression to quote.
      */
     protected void _quoteOrderBy(OrderByExpression expressionToQuote) {
-        expressionToQuote.iterateParts(function ($part, &$field) {
-            if (isString($field)) {
-                $field = this.quoteIdentifier($field);
+        expressionToQuote.iterateParts(function ($part, &field) {
+            if (isString(field)) {
+                field = this.quoteIdentifier(field);
 
                 return $part;
             }
