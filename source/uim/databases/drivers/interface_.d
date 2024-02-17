@@ -115,13 +115,6 @@ interface IDBADriver {
 
 
 
-    /**
-     * Returns whether this driver supports save points for nested transactions.
-     *
-     * @return bool True if save points are supported, false otherwise.
-     * @deprecated 4.3.0 Use `supports(IDBADriver.FEATURE_SAVEPOINT)` instead
-     */
-    bool supportsSavePoints();
 
     /**
      * Returns a value in a safe representation to be used in a query string
@@ -131,13 +124,6 @@ interface IDBADriver {
      */
     string quote(myValue, myType);
 
-    /**
-     * Checks if the driver supports quoting.
-     *
-     * @return bool
-     * @deprecated 4.3.0 Use `supports(IDBADriver.FEATURE_QUOTE)` instead
-     */
-    bool supportsQuoting();
 
     /**
      * Returns a callable function that will be used to transform a passed Query object.

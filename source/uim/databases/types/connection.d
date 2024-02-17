@@ -588,16 +588,7 @@ class Connection : IConnection {
         });
     }
 
-    /**
-     * Returns whether the driver supports adding or dropping constraints
-     * to already created tables.
-     *
-     * @return bool true if driver supports dynamic constraints
-     * @deprecated 4.3.0 Fixtures no longer dynamically drop and create constraints.
-     */
-    bool supportsDynamicConstraints() {
-        return _driver.supportsDynamicConstraints();
-    }
+
 
 
     function transactional(callable callback) {

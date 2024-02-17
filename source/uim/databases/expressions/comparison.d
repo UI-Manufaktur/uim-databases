@@ -276,8 +276,3 @@ class ComparisonExpression : IDBAExpression, FieldInterface
     }
 }
 
-// phpcs:disable
-// Comparison will not load during instanceof checks so ensure it"s loaded here
-// @deprecated 4.1.0 Add backwards compatible alias.
-class_alias("Cake\databases.Expression\ComparisonExpression", "Cake\databases.Expression\Comparison");
-// phpcs:enable

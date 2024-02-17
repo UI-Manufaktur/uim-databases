@@ -297,24 +297,7 @@ class QueryExpression : IDBAExpression, Countable
         return this.add(new ComparisonExpression(field, values, type, "IN"));
     }
 
-    /**
-     * Adds a new case expression to the expression object
-     *
-     * @param uim.databases.IDBAExpression|array $conditions The conditions to test. Must be a IDBAExpression
-     * instance, or an array of IDBAExpression instances.
-     * @param uim.databases.IDBAExpression|array values Associative array of values to be associated with the
-     * conditions passed in $conditions. If there are more values than $conditions,
-     * the last value is used as the `ELSE` value.
-     * @param array<string> types Associative array of types to be associated with the values
-     * passed in values
-     * @return this
-     * @deprecated 4.3.0 Use QueryExpression::case() or CaseStatementExpression instead
-     */
-    function addCase($conditions, values = null, types = null) {
-        deprecationWarning("QueryExpression::addCase() is deprecated, use case() instead.");
 
-        return this.add(new CaseExpression($conditions, values, types));
-    }
 
     /**
      * Returns a new case expression object.
@@ -585,28 +568,7 @@ class QueryExpression : IDBAExpression, Countable
         return this;
     }
 
-    /**
-     * Check whether a callable is acceptable.
-     *
-     * We don"t accept ["class", "method"] style callbacks,
-     * as they often contain user input and arrays of strings
-     * are easy to sneak in.
-     *
-     * @param uim.databases.IDBAExpression|callable|array|string $callable The callable to check.
-     * @return bool Valid callable.
-     * @deprecated 4.2.0 This method is unused.
-     * @codeCoverageIgnore
-     */
-    bool isCallable($callable) {
-        if (is_string($callable)) {
-            return false;
-        }
-        if (is_object($callable) && is_callable($callable)) {
-            return true;
-        }
 
-        return is_array($callable) && isset($callable[0]) && is_object($callable[0]) && is_callable($callable);
-    }
 
     /**
      * Returns true if this expression contains any other nested

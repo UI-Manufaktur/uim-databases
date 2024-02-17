@@ -401,24 +401,7 @@ class DateTimeType : BaseType : BatchCastingInterface
         return this;
     }
 
-    /**
-     * Change the preferred class name to the FrozenTime implementation.
-     *
-     * @return this
-     * @deprecated 4.3.0 This method is no longer needed as using immutable datetime class is the default behavior.
-     */
-    function useImmutable() {
-        deprecationWarning(
-            "Configuring immutable or mutable classes is deprecated and immutable"
-            ~ " classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary."
-        );
-
-        _setClassName(FrozenTime::class, DateTimeImmutable::class);
-
-        return this;
-    }
-
-    /**
+        /**
      * Set the classname to use when building objects.
      *
      * @param string class The classname to use.

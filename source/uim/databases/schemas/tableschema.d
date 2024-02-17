@@ -470,19 +470,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
         return this._indexes[name];
     }
 
-    /**
-     * Get the column(s) used for the primary key.
-     *
-     * @return array Column name(s) for the primary key. An
-     *   empty list will be returned when the table has no primary key.
-     * @deprecated 4.0.0 Renamed to {@link getPrimaryKey()}.
-     */
-    function primaryKey(): array
-    {
-        deprecationWarning("`TableSchema::primaryKey()` is deprecated. Use `TableSchema::getPrimaryKey()`.");
 
-        return this.getPrimarykey();
-    }
 
 
     function getPrimaryKey(): array

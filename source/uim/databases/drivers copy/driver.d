@@ -132,17 +132,7 @@ abstract class Driver : IDriver
         return _connection.quote((string)value, type);
     }
 
-    /**
-     * Checks if the driver supports quoting, as PDO_ODBC does not support it.
-     *
-     * @return bool
-     * @deprecated 4.3.0 Use `supports(IDriver::FEATURE_QUOTE)` instead
-     */
-    bool supportsQuoting() {
-        deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
 
-        return this.supports(static::FEATURE_QUOTE);
-    }
 
 
     abstract function queryTranslator(string type): Closure;
