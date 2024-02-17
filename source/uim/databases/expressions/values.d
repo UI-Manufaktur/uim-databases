@@ -65,32 +65,32 @@ class ValuesExpression : IDBAExpression {
     /**
      * Add a row of data to be inserted.
      *
-     * @param uim.databases.Query|array $values Array of data to append into the insert, or
+     * @param uim.databases.Query|array values Array of data to append into the insert, or
      *   a query for doing INSERT INTO .. SELECT style commands
      * @return void
      * @throws uim.databases.exceptions.DatabaseException When mixing array + Query data types.
      */
-    void add($values) {
+    void add(values) {
         if (
             (
                 count(_values) &&
-                $values instanceof Query
+                values instanceof Query
             ) ||
             (
                 _query &&
-                is_array($values)
+                is_array(values)
             )
         ) {
             throw new DatabaseException(
                 "You cannot mix subqueries and array values in inserts."
             );
         }
-        if ($values instanceof Query) {
-            this.setQuery($values);
+        if (values instanceof Query) {
+            this.setQuery(values);
 
             return;
         }
-        _values[] = $values;
+        _values[] = values;
         _castedExpressions = false;
     }
 
@@ -136,11 +136,11 @@ class ValuesExpression : IDBAExpression {
     /**
      * Sets the values to be inserted.
      *
-     * @param array $values Array with values to be inserted.
+     * @param array values Array with values to be inserted.
      * @return this
      */
-    function setValues(array $values) {
-        _values = $values;
+    function setValues(array values) {
+        _values = values;
         _castedExpressions = false;
 
         return this;
@@ -206,16 +206,16 @@ class ValuesExpression : IDBAExpression {
             $rowPlaceholders = null;
 
             foreach ($columns as $column) {
-                $value = $row[$column];
+                value = $row[$column];
 
-                if ($value instanceof IDBAExpression) {
-                    $rowPlaceholders[] = "(" ~ $value.sql($binder) ~ ")";
+                if (value instanceof IDBAExpression) {
+                    $rowPlaceholders[] = "(" ~ value.sql($binder) ~ ")";
                     continue;
                 }
 
                 $placeholder = $binder.placeholder("c");
                 $rowPlaceholders[] = $placeholder;
-                $binder.bind($placeholder, $value, types[$column]);
+                $binder.bind($placeholder, value, types[$column]);
             }
 
             $placeholders[] = implode(", ", $rowPlaceholders);
@@ -278,10 +278,10 @@ class ValuesExpression : IDBAExpression {
             return;
         }
 
-        foreach (_values as $row: $values) {
+        foreach (_values as $row: values) {
             foreach ($types as $col: type) {
                 /** @var DDBtypes.ExpressionTypeInterface type */
-                _values[$row][$col] = type.toExpression($values[$col]);
+                _values[$row][$col] = type.toExpression(values[$col]);
             }
         }
         _castedExpressions = true;

@@ -45,7 +45,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      *
      * @var DDBIDBAExpression|object|scalar|null
      */
-    protected $value = null;
+    protected value = null;
 
     /**
      * The case value type.
@@ -102,33 +102,33 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * only be passed if you actually want to create the simple
      * case expression variant!
      *
-     * @param uim.databases.IDBAExpression|object|scalar|null $value The case value.
+     * @param uim.databases.IDBAExpression|object|scalar|null value The case value.
      * @param string|null type The case value type. If no type is provided, the type will be tried to be inferred
      *  from the value.
      */
-    this($value = null, Nullable!string type = null) {
+    this(value = null, Nullable!string type = null) {
         if (func_num_args() > 0) {
             if (
-                $value != null &&
-                !is_scalar($value) &&
-                !(is_object($value) && !($value instanceof Closure))
+                value != null &&
+                !is_scalar(value) &&
+                !(is_object(value) && !(value instanceof Closure))
             ) {
                 throw new InvalidArgumentException(sprintf(
-                    "The `$value` argument must be either `null`, a scalar value, an object, " ~
+                    "The `value` argument must be either `null`, a scalar value, an object, " ~
                     "or an instance of `\%s`, `%s` given.",
                     IDBAExpression::class,
-                    getTypeName($value)
+                    getTypeName(value)
                 ));
             }
 
-            this.value = $value;
+            this.value = value;
 
             if (
-                $value != null &&
+                value != null &&
                 type == null &&
-                !($value instanceof IDBAExpression)
+                !(value instanceof IDBAExpression)
             ) {
-                type = this.inferType($value);
+                type = this.inferType(value);
             }
             this.valueType = type;
 
@@ -501,9 +501,9 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
             throw new LogicException("Case expression must have at least one when statement.");
         }
 
-        $value = "";
+        value = "";
         if (this.isSimpleVariant) {
-            $value = this.compileNullableValue($binder, this.value, this.valueType) ~ " ";
+            value = this.compileNullableValue($binder, this.value, this.valueType) ~ " ";
         }
 
         $whenThenExpressions = null;
@@ -514,7 +514,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
 
         $else = this.compileNullableValue($binder, this.else, this.elseType);
 
-        return "CASE {$value}{$whenThen} ELSE $else END";
+        return "CASE {value}{$whenThen} ELSE $else END";
     }
 
 

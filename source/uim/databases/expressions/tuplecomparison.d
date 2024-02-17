@@ -28,16 +28,16 @@ class TupleComparison : ComparisonExpression
      * Constructor
      *
      * @param uim.databases.IDBAExpression|array|string fields the fields to use to form a tuple
-     * @param uim.databases.IDBAExpression|array $values the values to use to form a tuple
+     * @param uim.databases.IDBAExpression|array values the values to use to form a tuple
      * @param array<string|null> types the types names to use for casting each of the values, only
      * one type per position in the value array in needed
      * @param string $conjunction the operator used for comparing field and value
      */
-    this(fields, $values, array types = null, string $conjunction = "=") {
+    this(fields, values, array types = null, string $conjunction = "=") {
         _type = types;
         this.setField(fields);
         _operator = $conjunction;
-        this.setValue($values);
+        this.setValue(values);
     }
 
     /**
@@ -52,24 +52,24 @@ class TupleComparison : ComparisonExpression
     /**
      * Sets the value
      *
-     * @param mixed $value The value to compare
+     * @param mixed value The value to compare
      */
-    void setValue($value) {
+    void setValue(value) {
         if (this.isMulti()) {
-            if (is_array($value) && !is_array(current($value))) {
+            if (is_array(value) && !is_array(current(value))) {
                 throw new InvalidArgumentException(
                     "Multi-tuple comparisons require a multi-tuple value, single-tuple given."
                 );
             }
         } else {
-            if (is_array($value) && is_array(current($value))) {
+            if (is_array(value) && is_array(current(value))) {
                 throw new InvalidArgumentException(
                     "Single-tuple comparisons require a single-tuple value, multi-tuple given."
                 );
             }
         }
 
-        _value = $value;
+        _value = value;
     }
 
 
@@ -86,11 +86,11 @@ class TupleComparison : ComparisonExpression
             fields[] = field instanceof IDBAExpression ? field.sql($binder) : field;
         }
 
-        $values = _stringifyValues($binder);
+        values = _stringifyValues($binder);
 
         field = implode(", ", fields);
 
-        return sprintf($template, field, _operator, $values);
+        return sprintf($template, field, _operator, values);
     }
 
     /**
@@ -100,16 +100,16 @@ class TupleComparison : ComparisonExpression
      * @param uim.databases.ValueBinder aBinder The value binder to convert expressions with.
      */
     protected string _stringifyValues(ValueBinder aBinder) {
-        $values = null;
+        values = null;
         parts = this.getValue();
 
         if ($parts instanceof IDBAExpression) {
             return parts.sql($binder);
         }
 
-        foreach ($parts as i: $value) {
-            if ($value instanceof IDBAExpression) {
-                $values[] = $value.sql($binder);
+        foreach ($parts as i: value) {
+            if (value instanceof IDBAExpression) {
+                values[] = value.sql($binder);
                 continue;
             }
 
@@ -121,28 +121,28 @@ class TupleComparison : ComparisonExpression
 
             if ($isMultiOperation) {
                 $bound = null;
-                foreach ($value as $k: $val) {
+                foreach (value as $k: $val) {
                     /** @var string $valType */
                     $valType = type && isset($type.isSet($k) ? type[$k] : type;
                     $bound[] = _bindValue($val, $binder, $valType);
                 }
 
-                $values[] = sprintf("(%s)", implode(",", $bound));
+                values[] = sprintf("(%s)", implode(",", $bound));
                 continue;
             }
 
             /** @var string $valType */
             $valType = type && type[$i]) ? type[$i] : type;
-            $values[] = _bindValue($value, $binder, $valType);
+            values[] = _bindValue(value, $binder, $valType);
         }
 
-        return implode(", ", $values);
+        return implode(", ", values);
     }
 
 
-    protected string _bindValue($value, ValueBinder aBinder, Nullable!string type = null) {
+    protected string _bindValue(value, ValueBinder aBinder, Nullable!string type = null) {
         placeholder = $binder.placeholder("tuple");
-        $binder.bind($placeholder, $value, type);
+        $binder.bind($placeholder, value, type);
 
         return placeholder;
     }
@@ -155,15 +155,15 @@ class TupleComparison : ComparisonExpression
             _traverseValue(field, $callback);
         }
 
-        $value = this.getValue();
-        if ($value instanceof IDBAExpression) {
-            $callback($value);
-            $value.traverse($callback);
+        value = this.getValue();
+        if (value instanceof IDBAExpression) {
+            $callback(value);
+            value.traverse($callback);
 
             return this;
         }
 
-        foreach ($value as $val) {
+        foreach (value as $val) {
             if (this.isMulti()) {
                 foreach ($val as $v) {
                     _traverseValue($v, $callback);
@@ -180,13 +180,13 @@ class TupleComparison : ComparisonExpression
      * Conditionally executes the callback for the passed value if
      * it is an IDBAExpression
      *
-     * @param mixed $value The value to traverse
+     * @param mixed value The value to traverse
      * @param \Closure $callback The callable to use when traversing
      */
-    protected void _traverseValue($value, Closure $callback) {
-        if ($value instanceof IDBAExpression) {
-            $callback($value);
-            $value.traverse($callback);
+    protected void _traverseValue(value, Closure $callback) {
+        if (value instanceof IDBAExpression) {
+            $callback(value);
+            value.traverse($callback);
         }
     }
 

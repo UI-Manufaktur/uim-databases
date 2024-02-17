@@ -97,14 +97,14 @@ class BetweenExpression : IDBAExpression, FieldInterface
     /**
      * Registers a value in the placeholder generator and returns the generated placeholder
      *
-     * @param mixed $value The value to bind
+     * @param mixed value The value to bind
      * @param uim.databases.ValueBinder aBinder The value binder to use
-     * @param string type The type of $value
+     * @param string type The type of value
      * @return string generated placeholder
      */
-    protected string _bindValue($value, $binder, type) {
+    protected string _bindValue(value, $binder, type) {
         placeholder = $binder.placeholder("c");
-        $binder.bind($placeholder, $value, type);
+        $binder.bind($placeholder, value, type);
 
         return placeholder;
     }

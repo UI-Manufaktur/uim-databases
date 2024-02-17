@@ -13,8 +13,8 @@ interface IBatchCasting
      * Returns an array of the values converted to the D representation of
      * this type.
      *
-     * @param array $values The original array of values containing the fields to be casted
+     * @param array values The original array of values containing the fields to be casted
      * @return array<string, mixed>
      */
-    array manyToPHP(array $values, string[] fields, IDriver driver);
+    array manyToPHP(array values, string[] fields, IDriver driver);
 }
