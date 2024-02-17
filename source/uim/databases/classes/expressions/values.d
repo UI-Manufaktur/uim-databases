@@ -163,10 +163,10 @@ class ValuesExpression : IExpression {
                 continue;
             }
             value
-                .filter!(field => cast(IExpression)$field)
+                .filter!(field => cast(IExpression)field)
                 .each!((field) {
-                    aCallback($field);
-                    $field.traverse(aCallback);
+                    aCallback(field);
+                    field.traverse(aCallback);
                 });
             });
         }

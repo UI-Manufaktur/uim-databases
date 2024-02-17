@@ -70,15 +70,15 @@ class CommonTableExpression : IExpression {
      * \UIM\Database\Expression\IdentifierExpression|array<\UIM\Database\Expression\IdentifierExpression>|string[]|string afields Field names
      */
     void field(IdentifierExpression|string[] afields) {
-        auto $fields = (array)$fields;
-        /** @var array<string|\UIM\Database\Expression\IdentifierExpression> $fields */
-        $fields.each!((field) {
-            if (!(cast(IdentifierExpression)$field)) {
-                $field = new IdentifierExpression($field);
+        auto fields = (array)fields;
+        /** @var array<string|\UIM\Database\Expression\IdentifierExpression> fields */
+        fields.each!((field) {
+            if (!(cast(IdentifierExpression)field)) {
+                field = new IdentifierExpression(field);
             }
         });
         /** @var array<\UIM\Database\Expression\IdentifierExpression> $mergedFields */
-        this.fields = chain(this.fields, $fields);
+        this.fields = chain(this.fields, fields);
     }
 
     // Sets this CTE as materialized.
@@ -137,8 +137,8 @@ class CommonTableExpression : IExpression {
         if (this.query) {
             this.query = clone this.query;
         }
-        foreach (aKey: $field; this.fields) {
-            this.fields[aKey] = clone $field;
+        foreach (aKey: field; this.fields) {
+            this.fields[aKey] = clone field;
         }
     }
 }

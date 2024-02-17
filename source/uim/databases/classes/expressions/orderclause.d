@@ -26,16 +26,16 @@ class OrderClauseExpression : IExpression, IField {
   }
 
   string sql(ValueBinder aBinder) {
-    $field = _field;
-    if (cast(Query)$field) {
-      $field = "(%s)".format($field.sql(aBinder));
+    field = _field;
+    if (cast(Query)field) {
+      field = "(%s)".format(field.sql(aBinder));
     }
-    elseif(cast(IExpression)$field) {
-      $field = $field.sql(aBinder);
+    elseif(cast(IExpression)field) {
+      field = field.sql(aBinder);
     }
-    assert(isString($field));
+    assert(isString(field));
 
-    return "%s %s".format($field, _direction);
+    return "%s %s".format(field, _direction);
   }
 
   void traverse(Closure aCallback) {

@@ -30,7 +30,7 @@ class TupleComparison : ComparisonExpression {
         string aconjunction = "="
     ) {
         this.types = types;
-        this.setFieldNames($fields);
+        this.setFieldNames(fields);
        _operator = $conjunction;
         this.setValue(someValues);
     }
@@ -131,8 +131,8 @@ class TupleComparison : ComparisonExpression {
     }
  
     void traverse(Closure aCallback) {
-        $fields = (array)this.getFieldNames();
-        $fields.each!(field => _traverseValue(field, aCallback));
+        fields = (array)this.getFieldNames();
+        fields.each!(field => _traverseValue(field, aCallback));
 
         auto myValue = this.getValue();
         if (cast(IExpression)myValue ) {

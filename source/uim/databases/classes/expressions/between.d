@@ -35,7 +35,7 @@ class BetweenExpression : IExpression, IField {
             $from = _castToExpression($from, type);
             to = _castToExpression($to, type);
         }
-       _field = $field;
+       _field = field;
        _from = $from;
        _to = to;
        _type = type;
@@ -47,9 +47,9 @@ class BetweenExpression : IExpression, IField {
             "to": _to,
         ];
 
-        auto $field = _field;
-        if (cast(IExpression)$field ) {
-            $field = $field.sql(aValueBinder);
+        auto field = _field;
+        if (cast(IExpression)field ) {
+            field = field.sql(aValueBinder);
         }
         foreach ($name: $part; someParts) {
             if (cast(IExpression)$part) {
@@ -58,9 +58,9 @@ class BetweenExpression : IExpression, IField {
             }
             someParts[$name] = _bindValue($part, aValueBinder, _type);
         }
-        assert(isString($field));
+        assert(isString(field));
 
-        return "%s BETWEEN %s AND %s".format($field, someParts["from"], someParts["to"]);
+        return "%s BETWEEN %s AND %s".format(field, someParts["from"], someParts["to"]);
     }
  
     void traverse(Closure aCallback) {

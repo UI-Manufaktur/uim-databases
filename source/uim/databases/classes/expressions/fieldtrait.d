@@ -19,7 +19,7 @@ trait FieldTrait {
      * \UIM\Database\IExpression|string[] afield The field to compare with.
      */
     void setFieldNames(IExpression|string[] afield) {
-       _field = $field;
+       _field = field;
     }
     
     // Returns the field name

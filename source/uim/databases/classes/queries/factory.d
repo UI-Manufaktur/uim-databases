@@ -13,17 +13,17 @@ class QueryFactory {
     /**
      * Create a new SelectQuery instance.
      * Params:
-     * \UIM\Database\IExpression|\Closure|string[]|float|int $fields Fields/columns list for the query.
+     * \UIM\Database\IExpression|\Closure|string[]|float|int fields Fields/columns list for the query.
      * typesForCasting Associative array containing the types to be used for casting.
      */
     SelectQuery select(
-        IExpression|Closure|string[]|float|int $fields = [],
+        IExpression|Closure|string[]|float|int fields = [],
         string[] tableNames = null,
         STRINGAA typesForCasting = null
     ) {
         auto selectQuery = new SelectQuery(this.connection);
         with (selectQuery) {
-            select($fields);
+            select(fields);
             from(tableNames);
             setDefaultTypes(typesForCasting);
         }

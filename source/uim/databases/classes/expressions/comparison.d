@@ -44,7 +44,7 @@ class ComparisonExpression : IExpression, IField {
         string operator = "="
     ) {
        _type = typeName;
-        this.setFieldNames($field);
+        this.setFieldNames(field);
         this.setValue(aValue);
        _operator = operator;
     }
@@ -81,10 +81,10 @@ class ComparisonExpression : IExpression, IField {
     }
  
     string sql(ValueBinder aBinder) {
-        auto $field = _field;
+        auto field = _field;
 
-        if (cast(IExpression)$field ) {
-            $field = $field.sql(aBinder);
+        if (cast(IExpression)field ) {
+            field = field.sql(aBinder);
         }
         if (cast(IdentifierExpression)_value) {
             template = "%s %s %s";
@@ -95,9 +95,9 @@ class ComparisonExpression : IExpression, IField {
         } else {
             [$template, aValue] = _stringExpression(aBinder);
         }
-        assert(isString($field));
+        assert(isString(field));
 
-        return template.format($field, _operator, aValue);
+        return template.format(field, _operator, aValue);
     }
  
     void traverse(Closure aCallback) {
