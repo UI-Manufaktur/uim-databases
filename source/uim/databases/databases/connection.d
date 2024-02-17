@@ -183,7 +183,7 @@ class Connection : IConnection {
         string[] atable = [],
         STRINGAA typesForCasting = []
     ) {
-        return this.queryFactory().select($fields, aTable, typesForCasting);
+        return this.queryFactory().select(fields, aTable, typesForCasting);
     }
     
     /**

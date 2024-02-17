@@ -26,7 +26,7 @@ class FieldTypeConverter {
         this.driver = driver;
 
         auto types = TypeFactory.buildAll();
-        foreach ($field: typeName; typesToUse.toArray()) {
+        foreach (field: typeName; typesToUse.toArray()) {
             type = types.get($typeName, null);
             if (!type || (cast(IOptionalConvert)type && !type.requiresToDCast())) {
                 continue;

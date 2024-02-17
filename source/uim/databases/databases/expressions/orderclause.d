@@ -31,15 +31,15 @@ class OrderClauseExpression : UimExpression, IField {
 
   string sql(ValueBinder aBinder) {
     field = _field;
-    if (cast(Query)$field) {
-      field = "(%s)".format($field.sql(aBinder));
+    if (cast(Query)field) {
+      field = "(%s)".format(field.sql(aBinder));
     }
-    else if(cast(IExpression)$field) {
+    else if(cast(IExpression)field) {
       field = field.sql(aBinder);
     }
-    assert(isString($field));
+    assert(isString(field));
 
-    return "%s %s".format($field, _direction);
+    return "%s %s".format(field, _direction);
   }
 
   void traverse(Closure aCallback) {

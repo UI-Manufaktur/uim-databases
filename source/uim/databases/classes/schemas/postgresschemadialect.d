@@ -150,9 +150,9 @@ class PostgresSchemaDialect : SchemaDialect {
     }
  
     void convertColumnDescription(TableSchema tableSchema, array $row) {
-        $field = _convertColumn($row["type"]);
+        field = _convertColumn($row["type"]);
 
-        if ($field["type"] == TableISchema.TYPE_BOOLEAN) {
+        if (field["type"] == TableISchema.TYPE_BOOLEAN) {
             if ($row["default"] == "true") {
                 $row["default"] = 1;
             }
@@ -161,30 +161,30 @@ class PostgresSchemaDialect : SchemaDialect {
             }
         }
         if (!empty($row["has_serial"])) {
-            $field["autoIncrement"] = true;
+            field["autoIncrement"] = true;
         }
-        $field += [
+        field += [
             "default": _defaultValue($row["default"]),
             "null": $row["null"] == "YES",
             "collate": $row["collation_name"],
             "comment": $row["comment"],
         ];
-        $field["length"] = $row["char_length"] ?: $field["length"];
+        field["length"] = $row["char_length"] ?: field["length"];
 
-        if ($field["type"] == "numeric" || $field["type"] == "decimal") {
-            $field["length"] = $row["column_precision"];
-            $field["precision"] = $row["column_scale"] ?: null;
+        if (field["type"] == "numeric" || field["type"] == "decimal") {
+            field["length"] = $row["column_precision"];
+            field["precision"] = $row["column_scale"] ?: null;
         }
-        if ($field["type"] == TableISchema.TYPE_TIMESTAMP_FRACTIONAL) {
-            $field["precision"] = $row["datetime_precision"];
-            if ($field["precision"] == 0) {
-                $field["type"] = TableISchema.TYPE_TIMESTAMP;
+        if (field["type"] == TableISchema.TYPE_TIMESTAMP_FRACTIONAL) {
+            field["precision"] = $row["datetime_precision"];
+            if (field["precision"] == 0) {
+                field["type"] = TableISchema.TYPE_TIMESTAMP;
             }
         }
-        if ($field["type"] == TableISchema.TYPE_TIMESTAMP_TIMEZONE) {
-            $field["precision"] = $row["datetime_precision"];
+        if (field["type"] == TableISchema.TYPE_TIMESTAMP_TIMEZONE) {
+            field["precision"] = $row["datetime_precision"];
         }
-        tableSchema.addColumn($row["name"], $field);
+        tableSchema.addColumn($row["name"], field);
     }
     
     /**

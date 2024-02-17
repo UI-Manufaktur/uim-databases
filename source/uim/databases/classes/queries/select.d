@@ -112,18 +112,18 @@ class SelectQuery : Query, IteratorAggregate {
      * fields you should also call `UIM\ORM\Query.enableAutoFields()` to select the default fields
      * from the table.
      * Params:
-     * \UIM\Database\IExpression|\Closure|string[]|float|int $fields fields to be added to the list.
+     * \UIM\Database\IExpression|\Closure|string[]|float|int fields fields to be added to the list.
      * @param bool $overwrite whether to reset fields with passed list or not
      */
-    void select(IExpression|Closure|string[]|float|int $fields = [], bool $overwrite = false) {
-        if (!isString($fields) && cast(Closure)$fieldsClosure) {
-            $fields = $fields(this);
+    void select(IExpression|Closure|string[]|float|int fields = [], bool $overwrite = false) {
+        if (!isString(fields) && cast(Closure)fieldsClosure) {
+            fields = fields(this);
         }
-        if (!isArray($fields)) {
-            $fields = [$fields];
+        if (!isArray(fields)) {
+            fields = [fields];
         }
 
-        _parts["select"] = $overwrite ? $fields : array_merge(_parts["select"], $fields);
+        _parts["select"] = $overwrite ? fields : array_merge(_parts["select"], fields);
 
        _dirty();
     }
@@ -444,10 +444,10 @@ class SelectQuery : Query, IteratorAggregate {
         if ($overwrite) {
            _parts["group"] = [];
         }
-        if (!isArray($fields)) {
-            $fields = [$fields];
+        if (!isArray(fields)) {
+            fields = [fields];
         }
-       _parts["group"] = array_merge(_parts["group"], $fields.values);
+       _parts["group"] = array_merge(_parts["group"], fields.values);
        _dirty();
 
         return this;

@@ -440,7 +440,7 @@ abstract class Driver {
                 if (cast(ComparisonExpression)$expression) {
                     field = expression.getFieldNames();
                     if (
-                        isString($field) &&
+                        isString(field) &&
                         field.has(".")
                     ) {
                         [, unaliasedField] = split(".", field, 2);

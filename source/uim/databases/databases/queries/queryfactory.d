@@ -27,7 +27,7 @@ class QueryFactory {
         aQuery = new SelectQuery(this.connection);
 
         aQuery
-            .select($fields)
+            .select(fields)
             .from(aTable)
             .setDefaultTypes(typesForCasting);
 

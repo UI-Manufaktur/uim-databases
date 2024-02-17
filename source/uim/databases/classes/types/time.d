@@ -90,14 +90,14 @@ class TimeType : BaseType, IBatchCasting {
 
         return new _className($format);
     }
-    array manyToD(array  someValues, array $fields, Driver driver) {
-        foreach ($fields as $field) {
-            if (!someValues.isSet($field)) {
+    array manyToD(array  someValues, array fields, Driver driver) {
+        foreach (fields as field) {
+            if (!someValues.isSet(field)) {
                 continue;
             }
-            aValue =  someValues[$field];
+            aValue =  someValues[field];
              anInstance = new _className(aValue);
-             someValues[$field] =  anInstance;
+             someValues[field] =  anInstance;
         }
         return someValues;
     }

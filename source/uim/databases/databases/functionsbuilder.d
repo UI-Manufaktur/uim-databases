@@ -103,7 +103,7 @@ class FunctionsBuilder {
      * @param string sqlDatatype The SQL data type
      */
     FunctionExpression cast(IExpression|string afield, string sqlDatatype) {
-        expression = new FunctionExpression("CAST", this.toLiteralParam($field));
+        expression = new FunctionExpression("CAST", this.toLiteralParam(field));
         expression.setConjunction(" AS").add([sqlDatatype: "literal"]);
 
         return expression;

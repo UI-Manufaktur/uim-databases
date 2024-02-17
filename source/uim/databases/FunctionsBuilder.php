@@ -131,26 +131,26 @@ class FunctionsBuilder
      * The `$type` parameter is a SQL type. The return type for the returned expression
      * is the default type name. Use `setReturnType()` to update it.
      *
-     * @param uim.databases.ExpressionInterface|string $field Field or expression to cast.
+     * @param uim.databases.ExpressionInterface|string field Field or expression to cast.
      * @param string $type The SQL data type
      * @return uim.databases.Expression\FunctionExpression
      */
-    function cast($field, string $type = ""): FunctionExpression
+    function cast(field, string $type = ""): FunctionExpression
     {
-        if (is_array($field)) {
+        if (is_array(field)) {
             deprecationWarning(
                 "Build cast function by FunctionsBuilder.cast(array $args) is deprecated. " .
-                "Use FunctionsBuilder.cast($field, string $type) instead."
+                "Use FunctionsBuilder.cast(field, string $type) instead."
             );
 
-            return new FunctionExpression("CAST", $field);
+            return new FunctionExpression("CAST", field);
         }
 
         if (empty($type)) {
             throw new InvalidArgumentException("The `$type` in a cast cannot be empty.");
         }
 
-        $expression = new FunctionExpression("CAST", this.toLiteralParam($field));
+        $expression = new FunctionExpression("CAST", this.toLiteralParam(field));
         $expression.setConjunction(" AS").add([$type: "literal"]);
 
         return $expression;

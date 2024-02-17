@@ -104,11 +104,11 @@ class SelectQuery : Query, IteratorAggregate {
      * @param bool overwrite whether to reset fields with passed list or not
      */
     auto select(IExpression|Closure|string[]|float|int fields = [], bool overwrite = false) {
-        if (!isString($fields) && cast(Closure)$fieldsClosure) {
+        if (!isString(fields) && cast(Closure)fieldsClosure) {
             fields = fields(this);
         }
-        if (!isArray($fields)) {
-            fields = [$fields];
+        if (!isArray(fields)) {
+            fields = [fields];
         }
 
         _parts["select"] = overwrite ? fields : chain(_parts["select"], fields);
@@ -437,8 +437,8 @@ class SelectQuery : Query, IteratorAggregate {
         if ($overwrite) {
            _parts["group"] = [];
         }
-        if (!isArray($fields)) {
-            fields = [$fields];
+        if (!isArray(fields)) {
+            fields = [fields];
         }
        _parts["group"] = array_merge(_parts["group"], fields.values);
        _dirty();
