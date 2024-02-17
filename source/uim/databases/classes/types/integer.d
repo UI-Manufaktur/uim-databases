@@ -53,14 +53,14 @@ class IntegerType : BaseType, IBatchCasting {
         return (int)valueToConvert;
     }
  
-    array manyToD(array  someValues, array $fields, Driver $driver) {
-        foreach ($fields as $field) {
-            if (!isSet(someValues[$field])) {
+    array manyToD(array  someValues, array fields, Driver $driver) {
+        foreach (fields as field) {
+            if (!isSet(someValues[field])) {
                 continue;
             }
-            this.checkNumeric(someValues[$field]);
+            this.checkNumeric(someValues[field]);
 
-             someValues[$field] = (int) someValues[$field];
+             someValues[field] = (int) someValues[field];
         }
         return someValues;
     }

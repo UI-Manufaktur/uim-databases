@@ -169,7 +169,7 @@ class SqlserverSchemaDialect : SchemaDialect {
     }
  
     void convertColumnDescription(TableSchema tableSchema, array $row) {
-        auto $field = _convertColumn(
+        auto field = _convertColumn(
             $row["type"],
             $row["char_length"] !isNull ? (int)$row["char_length"] : null,
             $row["precision"] !isNull ? (int)$row["precision"] : null,
@@ -177,14 +177,14 @@ class SqlserverSchemaDialect : SchemaDialect {
         );
 
         if (!empty($row["autoincrement"])) {
-            $field["autoIncrement"] = true;
+            field["autoIncrement"] = true;
         }
-        $field += [
+        field += [
             "null": $row["null"] == "1",
-            "default": _defaultValue($field["type"], $row["default"]),
+            "default": _defaultValue(field["type"], $row["default"]),
             "collate": $row["collation_name"],
         ];
-        tableSchema.addColumn($row["name"], $field);
+        tableSchema.addColumn($row["name"], field);
     }
     
     /**

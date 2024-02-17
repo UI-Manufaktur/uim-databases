@@ -86,23 +86,23 @@ class DateType : BaseType, IBatchCasting {
         return anInstance;
     }
  
-    array manyToD(array  someValues, array $fields, Driver $driver) {
-        foreach ($field; $fields) {
-            if (!someValues.isSet($field)) {
+    array manyToD(array  someValues, array fields, Driver $driver) {
+        foreach (field; fields) {
+            if (!someValues.isSet(field)) {
                 continue;
             }
-            aValue =  someValues[$field];
+            aValue =  someValues[field];
 
              className = _className;
             if (isInt(aValue)) {
                  anInstance = new  className("@" ~ aValue);
             } elseif (aValue.startsWith("0000-00-00")) {
-                 someValues[$field] = null;
+                 someValues[field] = null;
                 continue;
             } else {
                  anInstance = new  className(aValue);
             }
-             someValues[$field] =  anInstance;
+             someValues[field] =  anInstance;
         }
         return someValues;
     }

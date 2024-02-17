@@ -221,8 +221,8 @@ class TableSchema : TableISchema, ISqlGenerator {
      */
     this(string atable, array someColumns = []) {
        _table = aTable;
-        foreach (someColumns as $field: $definition) {
-            this.addColumn($field, $definition);
+        foreach (someColumns as field: $definition) {
+            this.addColumn(field, $definition);
         }
     }
  
@@ -341,12 +341,12 @@ class TableSchema : TableISchema, ISqlGenerator {
             ));
         }
         attrs["columns"] = (array)$attrs["columns"];
-        foreach ($attrs["columns"] as $field) {
-            if (isEmpty(_columns[$field])) {
+        foreach ($attrs["columns"] as field) {
+            if (isEmpty(_columns[field])) {
                 $message = 
                     "Columns used in index `%s` in table `%s` must be added to the Table schema first. " ~
                     "The column `%s` was not found."
-                    .format($name, _table, $field);
+                    .format($name, _table, field);
                 throw new DatabaseException($message);
             }
         }
@@ -395,11 +395,11 @@ class TableSchema : TableISchema, ISqlGenerator {
             ));
         }
         attrs["columns"] = (array)$attrs["columns"];
-        foreach ($attrs["columns"] as $field) {
-            if (isEmpty(_columns[$field])) {
+        foreach ($attrs["columns"] as field) {
+            if (isEmpty(_columns[field])) {
                 $message = "Columns used in constraints must be added to the Table schema first. ' ~
                     "The column `%s` was not found in table `%s`.".format(
-                    $field,
+                    field,
                    _table
                 );
                 throw new DatabaseException($message);

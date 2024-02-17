@@ -42,8 +42,8 @@ class FloatType : BaseType, IBatchCasting {
         return valueToConvert.get!float;
     }
  
-    array manyToD(array  someValues, array $fields, Driver driver) {
-        $fields
+    array manyToD(array  someValues, array fields, Driver driver) {
+        fields
             .filter!(field => isSet(someValues[field]))
             .each(field => someValues[field] = (float) someValues[field]);
         }

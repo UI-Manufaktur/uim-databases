@@ -39,12 +39,12 @@ class JsonType : BaseType, IBatchCasting {
         return json_decode(valueToConvert, true);
     }
  
-    array manyToD(array  someValues, array $fields, Driver $driver) {
-        foreach ($fields as $field) {
-            if (!isSet(someValues[$field])) {
+    array manyToD(array  someValues, array fields, Driver $driver) {
+        foreach (fields as field) {
+            if (!isSet(someValues[field])) {
                 continue;
             }
-             someValues[$field] = json_decode(someValues[$field], true);
+             someValues[field] = json_decode(someValues[field], true);
         }
         return someValues;
     }

@@ -56,8 +56,8 @@ class BoolType : BaseType, IBatchCasting {
         return !aValue.isEmpty;
     }
  
-    array manyToD(array  someValues, array $fields, Driver aDriver) {
-        foreach (field; $fields) {
+    array manyToD(array  someValues, array fields, Driver aDriver) {
+        foreach (field; fields) {
             aValue = someValues[field] ?? null;
             if (aValue.isNull || isBool(aValue)) {
                 continue;

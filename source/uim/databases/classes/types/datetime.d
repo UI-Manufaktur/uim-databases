@@ -190,8 +190,8 @@ class DateTimeType : BaseType, IBatchCasting {
         this.keepDatabaseTimezone = $keep;
     }
  
-    array manyToD(array  someValues, array $fields, Driver $driver) {
-        $fields.each!((field) {
+    array manyToD(array  someValues, array fields, Driver $driver) {
+        fields.each!((field) {
             if (!someValues.isSet(field)) {
                 continue;
             }

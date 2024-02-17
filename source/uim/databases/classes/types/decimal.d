@@ -68,12 +68,12 @@ class DecimalType : BaseType, IBatchCasting {
         return (string)valueToConvert;
     }
  
-    array manyToD(array  someValues, array $fields, Driver $driver) {
-        foreach ($fields as $field) {
-            if (!someValues.isSet($field)) {
+    array manyToD(array  someValues, array fields, Driver $driver) {
+        foreach (fields as field) {
+            if (!someValues.isSet(field)) {
                 continue;
             }
-             someValues[$field] = (string) someValues[$field];
+             someValues[field] = (string) someValues[field];
         }
         return someValues;
     }
