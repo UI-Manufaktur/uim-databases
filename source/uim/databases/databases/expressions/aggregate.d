@@ -52,11 +52,11 @@ class AggregateExpression : FunctionExpression : WindowInterface {
     }
 
     auto order(IExpression|Closure|string[] afields) {
-        return this.orderBy($fields);
+        return this.orderBy(fields);
     }
  
     void orderBy(IExpression|Closure|string[] afields) {
-        this.getWindow().orderBy($fields);
+        this.getWindow().orderBy(fields);
     }
  
     void range(IExpression|string|int start, IExpression|string|int end = 0) {

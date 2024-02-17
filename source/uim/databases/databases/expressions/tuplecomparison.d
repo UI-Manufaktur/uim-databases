@@ -33,7 +33,7 @@ class TupleComparison : ComparisonExpression {
         string aconjunction = "="
     ) {
         this.types = types;
-        this.setFieldNames($fields);
+        this.setFieldNames(fields);
        _operator = conjunction;
         this.setValue(someValues);
     }
@@ -82,7 +82,7 @@ class TupleComparison : ComparisonExpression {
         someValues = _stringifyValues(aBinder);
 
         field = fields.join(", ");
-        return template.format($field, _operator,  someValues);
+        return template.format(field, _operator,  someValues);
     }
 
     /**

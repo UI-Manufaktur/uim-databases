@@ -103,9 +103,9 @@ class QueryExpression : UimExpression, Countable {
      * will be created, one per each value in the array.
      */
     auto eq(IExpression|string afield, Json aValue, string atype = null) {
-        type ??= _calculateType($field);
+        type ??= _calculateType(field);
 
-        return this.add(new ComparisonExpression($field, aValue, type, "="));
+        return this.add(new ComparisonExpression(field, aValue, type, "="));
     }
 
     /**
@@ -118,9 +118,9 @@ class QueryExpression : UimExpression, Countable {
      * will be created, one per each value in the array.
      */
     auto notEq(IExpression|string afield, Json aValue, string atype = null) {
-        type ??= _calculateType($field);
+        type ??= _calculateType(field);
 
-        return this.add(new ComparisonExpression($field, aValue, type, "!="));
+        return this.add(new ComparisonExpression(field, aValue, type, "!="));
     }
     
     /**
@@ -131,9 +131,9 @@ class QueryExpression : UimExpression, Countable {
      * @param string type the type name for aValue as configured using the Type map.
      */
     auto gt(IExpression|string afield, Json aValue, string atype = null) {
-        type ??= _calculateType($field);
+        type ??= _calculateType(field);
 
-        return this.add(new ComparisonExpression($field, aValue, type, ">"));
+        return this.add(new ComparisonExpression(field, aValue, type, ">"));
     }
     
     /**
@@ -144,9 +144,9 @@ class QueryExpression : UimExpression, Countable {
      * @param string type the type name for aValue as configured using the Type map.
      */
     auto lt(IExpression|string afield, Json aValue, string atype = null) {
-        type ??= _calculateType($field);
+        type ??= _calculateType(field);
 
-        return this.add(new ComparisonExpression($field, aValue, type, "<"));
+        return this.add(new ComparisonExpression(field, aValue, type, "<"));
     }
     
     /**
@@ -157,9 +157,9 @@ class QueryExpression : UimExpression, Countable {
      * @param string type the type name for aValue as configured using the Type map.
      */
     auto gte(IExpression|string afield, Json aValue, string atype = null) {
-        type ??= _calculateType($field);
+        type ??= _calculateType(field);
 
-        return this.add(new ComparisonExpression($field, aValue, type, ">="));
+        return this.add(new ComparisonExpression(field, aValue, type, ">="));
     }
     
     /**
@@ -170,9 +170,9 @@ class QueryExpression : UimExpression, Countable {
      * @param string type the type name for aValue as configured using the Type map.
      */
     auto lte(IExpression|string afield, Json aValue, string atype = null) {
-        type ??= _calculateType($field);
+        type ??= _calculateType(field);
 
-        return this.add(new ComparisonExpression($field, aValue, type, "<="));
+        return this.add(new ComparisonExpression(field, aValue, type, "<="));
     }
     
     /**
@@ -182,8 +182,8 @@ class QueryExpression : UimExpression, Countable {
      * tested for null
      */
     auto isNull(IExpression|string afield) {
-        if (!(cast(IExpression)$field )) {
-            field = new IdentifierExpression($field);
+        if (!(cast(IExpression)field )) {
+            field = new IdentifierExpression(field);
         }
         return this.add(new UnaryExpression("isNull", field, UnaryExpression.POSTFIX));
     }
@@ -194,8 +194,8 @@ class QueryExpression : UimExpression, Countable {
      * \UIM\Database\IExpression|string afield database field to be tested for not null
      */
     auto isNotNull(IExpression|string afield) {
-        if (!(cast(IExpression)$field)) {
-            field = new IdentifierExpression($field);
+        if (!(cast(IExpression)field)) {
+            field = new IdentifierExpression(field);
         }
         return this.add(new UnaryExpression("IS NOT NULL", field, UnaryExpression.POSTFIX));
     }
@@ -208,9 +208,9 @@ class QueryExpression : UimExpression, Countable {
      * @param string type the type name for aValue as configured using the Type map.
      */
     auto like(IExpression|string afield, Json aValue, string atype = null) {
-        type ??= _calculateType($field);
+        type ??= _calculateType(field);
 
-        return this.add(new ComparisonExpression($field, aValue, type, "LIKE"));
+        return this.add(new ComparisonExpression(field, aValue, type, "LIKE"));
     }
     
     /**
@@ -221,9 +221,9 @@ class QueryExpression : UimExpression, Countable {
      * @param string type the type name for aValue as configured using the Type map.
      */
     auto notLike(IExpression|string afield, Json aValue, string atype = null) {
-        type ??= _calculateType($field);
+        type ??= _calculateType(field);
 
-        return this.add(new ComparisonExpression($field, aValue, type, "NOT LIKE"));
+        return this.add(new ComparisonExpression(field, aValue, type, "NOT LIKE"));
     }
     
     /**
@@ -239,12 +239,12 @@ class QueryExpression : UimExpression, Countable {
         IExpression|string[] avalues,
         string atype = null
     ) {
-        type ??= _calculateType($field);
+        type ??= _calculateType(field);
         type = type ?: "string";
         type ~= "[]";
          someValues =  cast(IExpression)someValues  ?  someValues : (array) someValues;
 
-        return this.add(new ComparisonExpression($field,  someValues, type, "IN"));
+        return this.add(new ComparisonExpression(field,  someValues, type, "IN"));
     }
     
     /**
@@ -288,12 +288,12 @@ class QueryExpression : UimExpression, Countable {
         IExpression|string[] avalues,
         string atype = null
     ) {
-        type ??= _calculateType($field);
+        type ??= _calculateType(field);
         type = type ?: "string";
         type ~= "[]";
          someValues =  cast(IExpression)someValues  ?  someValues : (array) someValues;
 
-        return this.add(new ComparisonExpression($field,  someValues, type, "NOT IN"));
+        return this.add(new ComparisonExpression(field,  someValues, type, "NOT IN"));
     }
     
     /**
@@ -311,8 +311,8 @@ class QueryExpression : UimExpression, Countable {
     ) {
         or = new static([], [], "OR");
         or
-            .notIn($field,  someValues, type)
-            .isNull($field);
+            .notIn(field,  someValues, type)
+            .isNull(field);
 
         return this.add($or);
     }
@@ -345,9 +345,9 @@ class QueryExpression : UimExpression, Countable {
      * @param string type the type name for aValue as configured using the Type map.
      */
     auto between(IExpression|string afield, Json from, Json to, string atype = null) {
-        type ??= _calculateType($field);
+        type ??= _calculateType(field);
 
-        return this.add(new BetweenExpression($field, from, to, type));
+        return this.add(new BetweenExpression(field, from, to, type));
     }
     
     /**
@@ -410,11 +410,11 @@ class QueryExpression : UimExpression, Countable {
      * @param string arightField Right join condition field name.
      */
     auto equalFields(string aleftField, string arightField) {
-        wrapIdentifier = auto ($field) {
-            if (cast(IExpression)$field ) {
+        wrapIdentifier = auto (field) {
+            if (cast(IExpression)field ) {
                 return field;
             }
-            return new IdentifierExpression($field);
+            return new IdentifierExpression(field);
         };
 
         return this.eq($wrapIdentifier($leftField), wrapIdentifier($rightField));
@@ -628,11 +628,11 @@ class QueryExpression : UimExpression, Countable {
      * \UIM\Database\IExpression|string afield The field name to get a type for.
      */
     protected string _calculateType(IExpression|string afield) {
-        field = cast(IdentifierExpression)$field ? field.getIdentifier() : field;
-        if (!isString($field)) {
+        field = cast(IdentifierExpression)field ? field.getIdentifier() : field;
+        if (!isString(field)) {
             return null;
         }
-        return this.getTypeMap().type($field);
+        return this.getTypeMap().type(field);
     }
     
     // Clone this object and its subtree of expressions.

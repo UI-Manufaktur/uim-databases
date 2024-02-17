@@ -250,9 +250,9 @@ class IdentifierQuoter {
      * \UIM\Database\Expression\OrderByExpression expressionToQuote The expression to quote.
      */
     protected void _quoteOrderBy(OrderByExpression expressionToQuote) {
-        expressionToQuote.iterateParts(function ($part, &$field) {
-            if (isString($field)) {
-                field = this.quoteIdentifier($field);
+        expressionToQuote.iterateParts(function ($part, &field) {
+            if (isString(field)) {
+                field = this.quoteIdentifier(field);
 
                 return part;
             }

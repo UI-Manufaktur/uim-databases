@@ -170,9 +170,9 @@ class ValuesExpression : UimExpression {
                 continue;
             }
             value
-                .filter!(field => cast(IExpression)$field)
+                .filter!(field => cast(IExpression)field)
                 .each!((field) {
-                    aCallback($field);
+                    aCallback(field);
                     field.traverse(aCallback);
                 });
             });

@@ -73,7 +73,7 @@ class CommonTableExpression : UimExpression {
      * \UIM\Database\Expression\IdentifierExpression|array<\UIM\Database\Expression\IdentifierExpression>|string[]|string afields Field names
      */
     void field(IdentifierExpression|string[] afields) {
-        fields = (array)$fields;
+        fields = (array)fields;
         /** @var array<string|\UIM\Database\Expression\IdentifierExpression> fields */
         fields.each!((ref field) {
             if (!(cast(IdentifierExpression)field)) {

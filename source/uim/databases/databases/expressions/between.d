@@ -48,8 +48,8 @@ class BetweenExpression : UimExpression, IField {
             "to": _to,
         ];
 
-        auto$field = _field;
-        if (cast(IExpression)$field) {
+        autofield = _field;
+        if (cast(IExpression)field) {
             field = field.sql(aValueBinder);
         }
         someParts.byKeyValue
@@ -57,9 +57,9 @@ class BetweenExpression : UimExpression, IField {
                 ? namePart.value.sql(aValueBinder)
                 : _bindValue(namePart.value, aValueBinder, _type));
 
-        assert(isString($field));
+        assert(isString(field));
 
-        return "%s BETWEEN %s AND %s".format($field, someParts["from"], someParts["to"]);
+        return "%s BETWEEN %s AND %s".format(field, someParts["from"], someParts["to"]);
     }
 
     void traverse(Closure aCallback) {
