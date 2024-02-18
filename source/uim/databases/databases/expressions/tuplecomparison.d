@@ -124,12 +124,12 @@ class TupleComparison : ComparisonExpression {
             assert($valType.isNull || isScalar($valType));
              someValues ~= _bindValue(aValue, aBinder, valType);
         }
-        return join(", ",  someValues);
+        return someValues.join(", ");
     }
  
     protected string _bindValue(Json aValue, ValueBinder aBinder, string atype = null) {
-        placeholder = aBinder.placeholder("tuple");
-        aBinder.bind($placeholder, aValue, type);
+        string placeholder = aBinder.placeholder("tuple");
+        aBinder.bind(placeholder, aValue, type);
 
         return placeholder;
     }

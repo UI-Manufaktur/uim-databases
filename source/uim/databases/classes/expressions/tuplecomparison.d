@@ -24,24 +24,24 @@ class TupleComparison : ComparisonExpression {
      * @param string aconjunction the operator used for comparing field and value
      */
     this(
-        IExpression|string[] afields,
-        IExpression|array  someValues,
+        IExpression | string[] afields,
+        IExpression | array someValues,
         array types = [],
         string aconjunction = "="
     ) {
         this.types = types;
         this.setFieldNames(fields);
-       _operator = $conjunction;
+        _operator = $conjunction;
         this.setValue(someValues);
     }
-    
+
     /**
      * Returns the type to be used for casting the value to a database representation
      */
     string[] getType() {
         return this.types;
     }
-    
+
     /**
      * Sets the value
      * Params:
@@ -61,24 +61,20 @@ class TupleComparison : ComparisonExpression {
                 );
             }
         }
-       _value = aValue;
+        _value = aValue;
     }
- 
+
     string sql(ValueBinder aBinder) {
         $originalFields = this.getFieldNames();
         if (!isArray($originalFields)) {
             $originalFields = [$originalFields];
         }
         string[] fields;
-        $originalFields.each!(field => fields ~= cast(IExpression)field  
-                ? field.sql(aBinder)
-                : field;
-        }
+        $originalFields.each!(field => fields ~= cast(IExpression) field
+                ? field.sql(aBinder) : field;}
 
         string result = "(%s) %s (%s)"
-            .format(fields.join(", "), _operator,_stringifyValues(aBinder));
-
-        return result;
+            .format(fields.join(", "), _operator, _stringifyValues(aBinder)); return result;
     }
 
     /**
@@ -88,85 +84,66 @@ class TupleComparison : ComparisonExpression {
      * \UIM\Database\ValueBinder aBinder The value binder to convert expressions with.
      */
     protected string _stringifyValues(ValueBinder aBinder) {
-         someValues = [];
-        someParts = this.getValue();
+        string[] someValues; someParts = this.getValue(); if (cast(IExpression) someParts) {
+            return someParts.sql(aBinder);}
+            foreach (someParts as anI : aValue) {
+                if (cast(IExpression) aValue) {
+                    someValues ~= aValue.sql(aBinder); continue;}
+                    type = this.types; isMultiOperation = this.isMulti(); if (isEmpty($type)) {
+                        type = null;}
+                        if (isMultiOperation) {
+                            string[]$bound = []; aValue.byKeyValue
+                                .each!((kv) {
+                                    auto$valType = type && isSet($type[myKey]) ? type[myKey] : type;
+                                    assert($valType.isNull || isScalar($valType));
+                                    $bound ~= _bindValue($val, aBinder, $valType);
+                                }); someValues ~= "(%s)".format($bound.join(","));
+                            continue;}
+                            $valType = type && isSet($type[anI]) ? type[anI] : type;
+                                assert($valType.isNull || isScalar($valType)); someValues ~= _bindValue(aValue, aBinder, $valType);
+                        }
+                        return someValues.join(", ");}
 
-        if (cast(IExpression)someParts ) {
-            return someParts.sql(aBinder);
-        }
-        foreach (someParts as  anI: aValue) {
-            if (cast(IExpression)aValue ) {
-                 someValues ~= aValue.sql(aBinder);
-                continue;
-            }
-            type = this.types;
-             isMultiOperation = this.isMulti();
-            if (isEmpty($type)) {
-                type = null;
-            }
-            if (isMultiOperation) {
-                string[] $bound = [];
-                aValue.byKeyValue
-                    .each!((kv) {
-                        auto $valType = type && isSet($type[myKey]) ? type[myKey] : type;
-                        assert($valType.isNull || isScalar($valType));
-                        $bound ~= _bindValue($val, aBinder, $valType);
-                    });
-                
-                someValues ~= "(%s)".format($bound.join(","));
-                continue;
-            }
-            $valType = type && isSet($type[anI]) ? type[anI] : type;
-            assert($valType.isNull || isScalar($valType));
-             someValues ~= _bindValue(aValue, aBinder, $valType);
-        }
-        return join(", ",  someValues);
-    }
- 
-    protected string _bindValue(Json aValue, ValueBinder aBinder, string atype = null) {
-        $placeholder = aBinder.placeholder("tuple");
-        aBinder.bind($placeholder, aValue, type);
+                        protected string _bindValue(Json aValue, ValueBinder aBinder, string atype = null) {
+                            $placeholder = aBinder.placeholder("tuple"); aBinder.bind($placeholder, aValue, type);
 
-        return $placeholder;
-    }
- 
-    void traverse(Closure aCallback) {
-        fields = (array)this.getFieldNames();
-        fields.each!(field => _traverseValue(field, aCallback));
+                                return $placeholder;}
 
-        auto myValue = this.getValue();
-        if (cast(IExpression)myValue ) {
-            aCallback(myValue);
-            aValue.traverse(aCallback);
+                                void traverse(Closure aCallback) {
+                                    fields = (array) this.getFieldNames(); fields.each!(
+                                        field => _traverseValue(field, aCallback));
 
-            return;
-        }
-        
-        myValue.each!((subValue) {
-            if (this.isMulti()) {
-                subValue.each(v => _traverseValue(v, aCallback));
-            } else {
-               _traverseValue(subValue, aCallback);
-            }
-        });
-    }
+                                        auto myValue = this.getValue(); if (
+                                            cast(IExpression) myValue) {
+                                            aCallback(myValue); aValue.traverse(aCallback);
 
-    /**
+                                                return;}
+
+                                                myValue.each!((subValue) {
+                                                    if (this.isMulti()) {
+                                                        subValue.each(v => _traverseValue(v, aCallback));
+                                                    } else {
+                                                        _traverseValue(subValue, aCallback);
+                                                    }
+                                                });}
+
+                                                /**
      * Conditionally executes the callback for the passed value if
      * it is an IExpression
      * Params:
      * Json aValue The value to traverse
      * @param \Closure aCallback The callback to use when traversing
      */
-    protected void _traverseValue(Json aValue, Closure aCallback) {
-        if (cast(IExpression)aValue ) {
-            aCallback(aValue);
-            aValue.traverse(aCallback);
-        }
-    }
+                                                protected void _traverseValue(
+                                                    Json aValue, Closure aCallback) {
+                                                    if (cast(IExpression) aValue) {
+                                                        aCallback(aValue); aValue.traverse(
+                                                            aCallback);}
+                                                    }
 
-    // Determines if each of the values in this expressions is a tuple in itself
-    bool isMulti() {
-        return in_array(_operator.toLower, ["in", "not in"]);
-    }
-}
+                                                    // Determines if each of the values in this expressions is a tuple in itself
+                                                    bool isMulti() {
+                                                        return in_array(_operator.toLower, [
+                                                                "in", "not in"
+                                                            ]);}
+                                                    }

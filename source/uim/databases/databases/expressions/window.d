@@ -20,7 +20,7 @@ class WindowExpression : UimExpression, WindowInterface {
     protected string myexclusion = null;
 
     this(string windowName= null) {
-        this.name = new IdentifierExpression(windowName);
+        _name = new IdentifierExpression(windowName);
     }
 
     /**
@@ -30,7 +30,7 @@ class WindowExpression : UimExpression, WindowInterface {
      * specify their own partitions, frame or order.
      */
     bool isNamedOnly() {
-        return this.name.getIdentifier() && (!this.partitions && !this.frame && !this.order);
+        return _name.getIdentifier() && (!this.partitions && !this.frame && !this.order);
     }
 
     /**
@@ -39,7 +39,7 @@ class WindowExpression : UimExpression, WindowInterface {
      * string myname Window name
      */
     void name(string myname) {
-        this.name = new IdentifierExpression(myname);
+        _name = new IdentifierExpression(myname);
     }
 
     void partition(IExpression | Closure | string[] mypartitions) {
@@ -126,9 +126,9 @@ class WindowExpression : UimExpression, WindowInterface {
     }
 
     string sql(ValueBinder mybinder) {
-        auto myclauses = [];
-        if (this.name.getIdentifier()) {
-            myclauses ~= this.name.sql(mybinder);
+        string[] myclauses;
+        if (_name.getIdentifier()) {
+            myclauses ~= _name.sql(mybinder);
         }
         if (this.partitions) {
             auto myexpressions = [];
@@ -157,11 +157,11 @@ class WindowExpression : UimExpression, WindowInterface {
             }
             myclauses ~= myframeSql;
         }
-        return join(" ", myclauses);
+        return myclauses.join(" ");
     }
 
     auto traverse(Closure mycallback) {
-        mycallback(this.name);
+        mycallback(_name);
         this.partitions.each!((partition) {
             mycallback(partition);
             partition.traverse(mycallback);
@@ -213,7 +213,7 @@ class WindowExpression : UimExpression, WindowInterface {
      * Clone this object and its subtree of expressions.
      */
     void __clone() {
-        this.name = clone this.name;
+        _name = clone _name;
         foreach (this.partitions as myi : mypartition) {
             this.partitions[myi] = clone mypartition;
         }

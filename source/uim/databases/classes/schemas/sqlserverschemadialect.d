@@ -546,7 +546,7 @@ class SqlserverSchemaDialect : SchemaDialect {
 
     array createTableSql(TableSchema tableSchema, array someColumns, array $constraints, array  anIndexes) {
         $content = array_merge(someColumns, $constraints);
-        $content = join(",\n", array_filter($content));
+        $content = array_filter($content).join(",\n");
         aTableName = _driver.quoteIdentifier(tableSchema.name());
          auto result;
          result ~= "CREATE TABLE %s (\n%s\n)".format(aTableName, $content);

@@ -124,7 +124,7 @@ class ValuesExpression : UimExpression {
         }
         someColumns = _columnNames();
         defaults = array_fill_keys(someColumns, null);
-        placeholders = [];
+        string[] placeholders;
 
         types = [];
         typeMap = this.getTypeMap();
@@ -133,7 +133,7 @@ class ValuesExpression : UimExpression {
 
         foreach ($row; _values ) {
             row += defaults;
-            rowPlaceholders = [];
+            string[] rowPlaceholders;
 
             foreach ($column; someColumns) {
                 auto aValue = row[$column];
@@ -146,7 +146,7 @@ class ValuesExpression : UimExpression {
                 auto rowPlaceholders ~= placeholder;
                 aBinder.bind($placeholder, aValue, types[$column]);
             }
-            placeholders ~= join(", ", rowPlaceholders);
+            placeholders ~= rowPlaceholders.join(", ");
         }
         aQuery = this.getQuery();
         if (aQuery) {

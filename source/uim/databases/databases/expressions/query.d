@@ -556,8 +556,8 @@ class QueryExpression : UimExpression, Countable {
      * @param Json aValue The value to be bound to a placeholder for the field
      */
     protected IExpression|string _parseCondition(string acondition, Json aValue) {
-        expression = trim($condition);
-        operator = "=";
+        string expression = trim($condition);
+        string operator = "=";
 
         spaces = substr_count($expression, " ");
         // Handle expression values that contain multiple spaces, such as
@@ -572,12 +572,12 @@ class QueryExpression : UimExpression, Countable {
                 someParts ~= "{$second} {$last}";
             }
             operator = array_pop(someParts);
-            expression = join(" ", someParts);
+            expression = someParts.join(" ");
         } else if ($spaces == 1) {
             string[] someParts = split(" ", expression, 2);
             [$expression, operator] = someParts;
         }
-        operator = strtoupper(trim($operator));
+        operator = trim($operator).toUpper;
 
         type = this.getTypeMap().type($expression);
         typeMultiple = (isString($type) && type.has("[]"));

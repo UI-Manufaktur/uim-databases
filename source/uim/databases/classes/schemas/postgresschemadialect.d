@@ -495,7 +495,7 @@ class PostgresSchemaDialect : SchemaDialect {
         return "CREATE INDEX %s ON %s (%s)".format(
             _driver.quoteIdentifier($name),
             _driver.quoteIdentifier(tableSchema.name()),
-            join(", ", someColumns));
+            someColumns.join(", "));
     }
  
     string constraintSql(TableSchema tableSchema, string aName) {

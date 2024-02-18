@@ -322,7 +322,7 @@ class QueryCompiler {
      * @param \UIM\Database\ValueBinder aBinder Value binder used to generate parameter placeholder
      */
     protected string _buildValuesPart(array someParts, Query compiledQuery, ValueBinder valueBinder) {
-        return join("", _stringifyExpressions(someParts, valueBinder));
+        return _stringifyExpressions(someParts, valueBinder).join("");
     }
     
     /**
