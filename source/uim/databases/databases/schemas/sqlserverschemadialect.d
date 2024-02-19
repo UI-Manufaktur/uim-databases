@@ -502,12 +502,12 @@ class SqlserverSchemaDialect : SchemaDialect {
             .format(
                 _driver.quoteIdentifier($name),
                 _driver.quoteIdentifier(tableSchema.name()),
-                join(", ", someColumns)
+                someColumns.join(", ", )
             );
     }
  
     string constraintSql(TableSchema tableSchema, string aName) {
-        someData = tableSchema.getConstraint($name);
+        auto someData = tableSchema.getConstraint($name);
         assert(someData !isNull);
          result = "CONSTRAINT " ~ _driver.quoteIdentifier($name);
         if (someData["type"] == TableSchema.CONSTRAINT_PRIMARY) {

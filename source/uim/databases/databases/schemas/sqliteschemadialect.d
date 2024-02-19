@@ -209,8 +209,8 @@ class SqliteSchemaDialect : SchemaDialect {
      * string aidentifier The identifier to match.
      */
     protected string possiblyQuotedIdentifierRegex(string aidentifier) {
-         anIdentifiers = [];
-         anIdentifier = preg_quote(anIdentifier, "/");
+        string[] anIdentifiers;
+        string anIdentifier = preg_quote(anIdentifier, "/");
 
         hasTick = anIdentifier.has("`");
         hasDoubleQuote = anIdentifier.has("\"");
@@ -218,13 +218,13 @@ class SqliteSchemaDialect : SchemaDialect {
 
          anIdentifiers ~= "\[" ~  anIdentifier ~ "\]";
          anIdentifiers ~= "`" ~ ($hasTick ? anIdentifier.replace("`", "``"):  anIdentifier) ~ "`";
-         anIdentifiers ~= "\"" ~ ($hasDoubleQuote ? anIdentifier.replace("\"", "\"\""):  anIdentifier) ~ """;
+         anIdentifiers ~= "\"" ~ ($hasDoubleQuote ? anIdentifier.replace("\"", "\"\""):  anIdentifier) ~ "\"";
          anIdentifiers ~= "'" ~ ($hasSingleQuote ? anIdentifier.replace("'", "\"\""):  anIdentifier) ~ "'";
 
         if (!$hasTick && !$hasDoubleQuote && !$hasSingleQuote) {
              anIdentifiers ~=  anIdentifier;
         }
-        return join("|",  anIdentifiers);
+        return anIdentifiers.join("|");
     }
     
     /**

@@ -250,7 +250,7 @@ class MysqlSchemaDialect : SchemaDialect
     }
  
     array createTableSql(TableSchema tableSchema, array someColumns, array constraints, array  anIndexes) {
-        content = join(",\n", chain(someColumns, constraints,  anIndexes));
+        string content = chain(someColumns, constraints,  anIndexes).join(",\n");
         temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
         content = "CREATE%sTABLE `%s` (\n%s\n)".format($temporary, tableSchema.name(), content);
         options = tableSchema.getOptions();

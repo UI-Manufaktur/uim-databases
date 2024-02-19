@@ -1285,14 +1285,15 @@ abstract class Query : IExpression, Stringable {
      */
     Json clause(string aName) {
         if (!array_key_exists($name, _parts)) {
-            clauses = array_keys(_parts);
-            array_walk($clauses, fn (&$x): x = "`$x`");
-            clauses = join(", ", clauses);
+            string[] clauses = array_keys(_parts);
+            array_walk(clauses, fn (&$x): x = "`$x`");
+            
+            string clause = clauses.join(", ");
             throw new InvalidArgumentException(
                 "The `%s` clause is not defined. Valid clauses are: %s."
                 .format(
                     name,
-                clauses
+                clause
             ));
         }
         return _parts[$name];
