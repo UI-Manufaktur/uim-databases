@@ -44,7 +44,7 @@ class Statement : IStatement {
             type = types[anIndex] ?? null;
             if ($anonymousParams) {
                 /** @psalm-suppress InvalidOperand */
-                 anIndex +=  anOffset;
+                 anIndex += anOffset;
             }
             /** @psalm-suppress PossiblyInvalidArgument */
             this.bindValue(anIndex, aValue, type);

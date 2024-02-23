@@ -129,7 +129,7 @@ class TypeFactory
             return _types;
         }
 
-        return _types[type] ?? null;
+        return _types.get(type, null);
     }
 
     /**

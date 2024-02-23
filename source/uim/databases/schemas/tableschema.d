@@ -457,7 +457,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function indexes(): array
     {
-        return array_keys(this._indexes);
+        return this._indexes.keys;
     }
 
 
@@ -644,7 +644,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
     {
         dialect = connection.getDriver().schemaDialect();
         columns = constraints = indexes = [];
-        foreach (array_keys(this._columns) as name) {
+        foreach (this._columns.keys as name) {
             columns[] = dialect.columnSql(this, name);
         }
         foreach (array_keys(this._constraints) as name) {

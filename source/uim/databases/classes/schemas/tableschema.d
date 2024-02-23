@@ -470,12 +470,12 @@ class TableSchema : TableISchema, ISqlGenerator {
         return attrs;
     }
  
-    array constraints() {
+    string[] constraints() {
         return _constraints.keys;
     }
  
-    array getConstraint(string aName) {
-        return _constraints[$name] ?? null;
+    array getConstraint(string constraintName) {
+        return _constraints.get(constraintName, null);
     }
  
     auto setOptions(IData[string] options = null) {
@@ -501,7 +501,7 @@ class TableSchema : TableISchema, ISqlGenerator {
     array createSql(Connection aConnection) {
         $dialect = aConnection.getDriver().schemaDialect();
         someColumns = $constraints =  anIndexes = [];
-        foreach (array_keys(_columns) as $name) {
+        foreach (_columns.keys as $name) {
             someColumns ~= $dialect.columnSql(this, $name);
         }
         foreach (array_keys(_constraints) as $name) {

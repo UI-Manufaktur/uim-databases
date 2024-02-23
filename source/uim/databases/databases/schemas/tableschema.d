@@ -446,12 +446,12 @@ class TableSchema : TableISchema, ISqlGenerator {
         return attrs;
     }
  
-    array constraints() {
-        return array_keys(_constraints);
+    string[] constraints() {
+        return _constraints.keys;
     }
  
-    array getConstraint(string aName) {
-        return _constraints[$name] ?? null;
+    array getConstraint(string contraintName) {
+        return _constraints.get(contraintName, null);
     }
  
     auto setOptions(IData[string] options = null) {
@@ -480,7 +480,7 @@ class TableSchema : TableISchema, ISqlGenerator {
         foreach (_columns.keys as name) {
             someColumns ~= dialect.columnSql(this, name);
         }
-        foreach (array_keys(_constraints) as name) {
+        foreach (_constraints.keys as name) {
             constraints ~= dialect.constraintSql(this, name);
         }
         foreach (array_keys(_indexNames) as name) {
