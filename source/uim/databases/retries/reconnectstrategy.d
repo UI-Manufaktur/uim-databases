@@ -68,7 +68,7 @@ class ReconnectStrategy : RetryStrategyInterface
     bool shouldRetry(Exception exception, int retryCount) {
         message = exception.getMessage();
 
-        foreach (static::causes as cause) {
+        foreach (causes as cause) {
             if (strstr(message, cause) != false) {
                 return this.reconnect();
             }

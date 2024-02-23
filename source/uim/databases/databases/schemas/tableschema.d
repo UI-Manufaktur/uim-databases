@@ -333,11 +333,10 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     array indexNames() {
-        return array_keys(_indexNames);
+        return _indexNames.keys;
     }
  
-    auto getIndex(string indexName): array
-    {
+    array getIndex(string indexName) {
         if (!isSet(_indexNames[$name])) {
             return null;
         }
@@ -478,7 +477,7 @@ class TableSchema : TableISchema, ISqlGenerator {
     array createSql(Connection aConnection) {
         dialect = aConnection.getDriver().schemaDialect();
         someColumns = constraints =  anIndexes = [];
-        foreach (array_keys(_columns) as name) {
+        foreach (_columns.keys as name) {
             someColumns ~= dialect.columnSql(this, name);
         }
         foreach (array_keys(_constraints) as name) {

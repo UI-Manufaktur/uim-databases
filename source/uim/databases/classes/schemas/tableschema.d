@@ -248,7 +248,7 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     array columns() {
-        return array_keys(_columns);
+        return _columns.keys;
     }
  
     array getColumn(string aName) {
@@ -355,8 +355,8 @@ class TableSchema : TableISchema, ISqlGenerator {
         return this;
     }
  
-    array indexNames() {
-        return array_keys(_indexNames);
+    string[] indexNames() {
+        return _indexNames.keys;
     }
  
     auto getIndex(string indexName): array

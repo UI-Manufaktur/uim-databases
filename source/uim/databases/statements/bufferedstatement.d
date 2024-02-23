@@ -132,7 +132,7 @@ class BufferedStatement : Iterator, StatementInterface
 
     function fetchColumn(int position)
     {
-        result = this.fetch(static::FETCH_TYPE_NUM);
+        result = this.fetch(FETCH_TYPE_NUM);
         if (result != false && isset(result[position])) {
             return result[position];
         }
@@ -178,7 +178,7 @@ class BufferedStatement : Iterator, StatementInterface
             }
             this.index += 1;
 
-            if (aRow && type == static::FETCH_TYPE_NUM) {
+            if (aRow && type == FETCH_TYPE_NUM) {
                 return array_values(aRow);
             }
 
@@ -202,7 +202,7 @@ class BufferedStatement : Iterator, StatementInterface
      */
     function fetchAssoc(): array
     {
-        result = this.fetch(static::FETCH_TYPE_ASSOC);
+        result = this.fetch(FETCH_TYPE_ASSOC);
 
         return result ?: [];
     }
@@ -227,7 +227,7 @@ class BufferedStatement : Iterator, StatementInterface
     function rowCount(): int
     {
         if (!this._allFetched) {
-            this.fetchAll(static::FETCH_TYPE_ASSOC);
+            this.fetchAll(FETCH_TYPE_ASSOC);
         }
 
         return count(this.buffer);

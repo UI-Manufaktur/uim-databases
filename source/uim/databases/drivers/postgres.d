@@ -151,13 +151,13 @@ class Postgres : Driver
 
     bool supports(string $feature) {
         switch ($feature) {
-            case static::FEATURE_CTE:
-            case static::FEATURE_JSON:
-            case static::FEATURE_TRUNCATE_WITH_CONSTRAINTS:
-            case static::FEATURE_WINDOW:
+            case FEATURE_CTE:
+            case FEATURE_JSON:
+            case FEATURE_TRUNCATE_WITH_CONSTRAINTS:
+            case FEATURE_WINDOW:
                 return true;
 
-            case static::FEATURE_DISABLE_CONSTRAINT_WITHOUT_TRANSACTION:
+            case FEATURE_DISABLE_CONSTRAINT_WITHOUT_TRANSACTION:
                 return false;
         }
 

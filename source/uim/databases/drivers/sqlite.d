@@ -190,15 +190,15 @@ class Sqlite : Driver
 
     bool supports(string $feature) {
         switch ($feature) {
-            case static::FEATURE_CTE:
-            case static::FEATURE_WINDOW:
+            case FEATURE_CTE:
+            case FEATURE_WINDOW:
                 return version_compare(
                     this.version(),
                     this.featureVersions[$feature],
                     ">="
                 );
 
-            case static::FEATURE_TRUNCATE_WITH_CONSTRAINTS:
+            case FEATURE_TRUNCATE_WITH_CONSTRAINTS:
                 return true;
         }
 

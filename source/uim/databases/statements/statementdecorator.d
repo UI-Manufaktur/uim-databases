@@ -194,7 +194,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      */
     function fetchAssoc(): array
     {
-        result = this.fetch(static::FETCH_TYPE_ASSOC);
+        result = this.fetch(FETCH_TYPE_ASSOC);
 
         return result ?: [];
     }
@@ -207,7 +207,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
      */
     function fetchColumn(int position)
     {
-        result = this.fetch(static::FETCH_TYPE_NUM);
+        result = this.fetch(FETCH_TYPE_NUM);
         if (result && isset(result[position])) {
             return result[position];
         }
@@ -325,7 +325,7 @@ class StatementDecorator : StatementInterface, Countable, IteratorAggregate
     function lastInsertId(?string table = null, ?string column = null)
     {
         if (column && this.columnCount()) {
-            aRow = this.fetch(static::FETCH_TYPE_ASSOC);
+            aRow = this.fetch(FETCH_TYPE_ASSOC);
 
             if (aRow && isset(aRow[column])) {
                 return aRow[column];

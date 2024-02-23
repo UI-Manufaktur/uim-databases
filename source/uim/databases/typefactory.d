@@ -58,14 +58,14 @@ class TypeFactory
      */
     static function build(string aName): TypeInterface
     {
-        if (isset(static::_builtTypes[name])) {
-            return static::_builtTypes[name];
+        if (isset(_builtTypes[name])) {
+            return _builtTypes[name];
         }
-        if (!isset(static::_types[name])) {
+        if (!isset(_types[name])) {
             throw new InvalidArgumentException(sprintf("Unknown type '%s'", name));
         }
 
-        return static::_builtTypes[name] = new static::_types[name](name);
+        return _builtTypes[name] = new _types[name](name);
     }
 
     /**
@@ -75,8 +75,8 @@ class TypeFactory
      */
     static array buildAll() {
         result = null;
-        foreach (static::_types as name: type) {
-            result[name] = static::_builtTypes[name] ?? static::build(name);
+        foreach (_types as name: type) {
+            result[name] = _builtTypes[name] ?? build(name);
         }
 
         return result;
@@ -89,8 +89,8 @@ class TypeFactory
      * @param uim.databases.TypeInterface instance The type instance you want to set.
      */
     static void set(string aName, TypeInterface instance) {
-        static::_builtTypes[name] = instance;
-        static::_types[name] = get_class(instance);
+        _builtTypes[name] = instance;
+        _types[name] = get_class(instance);
     }
 
     /**
@@ -102,8 +102,8 @@ class TypeFactory
      * @psalm-param class-string<uim.databases.TypeInterface> className
      */
     static void map(string type, string className) {
-        static::_types[type] = className;
-        unset(static::_builtTypes[type]);
+        _types[type] = className;
+        unset(_builtTypes[type]);
     }
 
     /**
@@ -114,8 +114,8 @@ class TypeFactory
      * @psalm-param array<string, class-string<uim.databases.TypeInterface>> map
      */
     static void setMap(array map) {
-        static::_types = map;
-        static::_builtTypes = null;
+        _types = map;
+        _builtTypes = null;
     }
 
     /**
@@ -126,17 +126,17 @@ class TypeFactory
      */
     static function getMap(Nullable!string type = null) {
         if (type == null) {
-            return static::_types;
+            return _types;
         }
 
-        return static::_types[type] ?? null;
+        return _types[type] ?? null;
     }
 
     /**
      * Clears out all created instances and mapped types classes, useful for testing
      */
     static void clear() {
-        static::_types = null;
-        static::_builtTypes = null;
+        _types = null;
+        _builtTypes = null;
     }
 }

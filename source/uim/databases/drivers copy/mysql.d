@@ -200,9 +200,9 @@ class MysqlDriver : Driver {
 
     bool supports(string $feature) {
         switch ($feature) {
-            case static::FEATURE_CTE:
-            case static::FEATURE_JSON:
-            case static::FEATURE_WINDOW:
+            case FEATURE_CTE:
+            case FEATURE_JSON:
+            case FEATURE_WINDOW:
                 return version_compare(
                     this.version(),
                     this.featureVersions[this.serverType][$feature],
@@ -224,7 +224,7 @@ class MysqlDriver : Driver {
     bool isMariadb() {
         this.version();
 
-        return this.serverType == static::SERVER_TYPE_MARIADB;
+        return this.serverType == SERVER_TYPE_MARIADB;
     }
 
     /**
@@ -236,7 +236,7 @@ class MysqlDriver : Driver {
             _version = (string)_connection.getAttribute(PDO::ATTR_SERVER_VERSION);
 
             if (strpos(_version, "MariaDB") != false) {
-                this.serverType = static::SERVER_TYPE_MARIADB;
+                this.serverType = SERVER_TYPE_MARIADB;
                 preg_match("/^(?:5\.5\.5-)?(\d+\.\d+\.\d+.*-MariaDB[^:]*)/", _version, $matches);
                 _version = $matches[1];
             }

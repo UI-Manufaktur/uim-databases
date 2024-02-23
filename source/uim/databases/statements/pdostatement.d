@@ -107,13 +107,13 @@ class PDOStatement : StatementDecorator
      */
     function fetch(type = parent::FETCH_TYPE_NUM)
     {
-        if (type == static::FETCH_TYPE_NUM) {
+        if (type == FETCH_TYPE_NUM) {
             return this._statement.fetch(PDO::FETCH_NUM);
         }
-        if (type == static::FETCH_TYPE_ASSOC) {
+        if (type == FETCH_TYPE_ASSOC) {
             return this._statement.fetch(PDO::FETCH_ASSOC);
         }
-        if (type == static::FETCH_TYPE_OBJ) {
+        if (type == FETCH_TYPE_OBJ) {
             return this._statement.fetch(PDO::FETCH_OBJ);
         }
 
@@ -144,13 +144,13 @@ class PDOStatement : StatementDecorator
      */
     function fetchAll(type = parent::FETCH_TYPE_NUM)
     {
-        if (type == static::FETCH_TYPE_NUM) {
+        if (type == FETCH_TYPE_NUM) {
             return this._statement.fetchAll(PDO::FETCH_NUM);
         }
-        if (type == static::FETCH_TYPE_ASSOC) {
+        if (type == FETCH_TYPE_ASSOC) {
             return this._statement.fetchAll(PDO::FETCH_ASSOC);
         }
-        if (type == static::FETCH_TYPE_OBJ) {
+        if (type == FETCH_TYPE_OBJ) {
             return this._statement.fetchAll(PDO::FETCH_OBJ);
         }
 

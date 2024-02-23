@@ -137,15 +137,15 @@ class DecimalType : BaseType : BatchCastingInterface
             return this;
         }
         if (
-            static::numberClass == Number::class ||
-            is_subclass_of(static::numberClass, Number::class)
+            numberClass == Number::class ||
+            is_subclass_of(numberClass, Number::class)
         ) {
             _useLocaleParser = enable;
 
             return this;
         }
         throw new RuntimeException(
-            sprintf("Cannot use locale parsing with the %s class", static::numberClass)
+            sprintf("Cannot use locale parsing with the %s class", numberClass)
         );
     }
 
@@ -157,7 +157,7 @@ class DecimalType : BaseType : BatchCastingInterface
      */
     protected string _parseValue(string aValue) {
         /** @var uim.I18n\Number class */
-        class = static::numberClass;
+        class = numberClass;
 
         return (string)class::parseFloat(value);
     }

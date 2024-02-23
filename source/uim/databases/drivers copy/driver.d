@@ -34,7 +34,7 @@ abstract class Driver : IDriver
     function getConnection() {
         if (_connection == null) {
             throw new MissingConnectionException([
-                "driver": App::shortName(static::class, "Database/Driver"),
+                "driver": App::shortName(class, "Database/Driver"),
                 "reason": "Unknown",
             ]);
         }
@@ -110,7 +110,7 @@ abstract class Driver : IDriver
     bool supportsSavePoints() {
         deprecationWarning("Feature support checks are now implemented by `supports()` with FEATURE_* constants.");
 
-        return this.supports(static::FEATURE_SAVEPOINT);
+        return this.supports(FEATURE_SAVEPOINT);
     }
 
 
@@ -223,9 +223,9 @@ abstract class Driver : IDriver
      */
     bool supports(string $feature) {
         switch ($feature) {
-            case static::FEATURE_DISABLE_CONSTRAINT_WITHOUT_TRANSACTION:
-            case static::FEATURE_QUOTE:
-            case static::FEATURE_SAVEPOINT:
+            case FEATURE_DISABLE_CONSTRAINT_WITHOUT_TRANSACTION:
+            case FEATURE_QUOTE:
+            case FEATURE_SAVEPOINT:
                 return true;
         }
 
@@ -266,7 +266,7 @@ abstract class Driver : IDriver
      * @return int|null Maximum alias length or null if no limit
      */
     Nullable!int getMaxAliasLength() {
-        return static::MAX_ALIAS_LENGTH;
+        return MAX_ALIAS_LENGTH;
     }
 
     /**

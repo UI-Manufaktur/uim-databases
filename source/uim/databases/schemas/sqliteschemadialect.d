@@ -32,7 +32,7 @@ class SqlserverSchemaDialect : SchemaDialect
             WHERE TABLE_SCHEMA = ?
             AND (TABLE_TYPE = "BASE TABLE" OR TABLE_TYPE = "VIEW")
             ORDER BY TABLE_NAME";
-        schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
+        schema = empty(aConfig["schema"]) ? DEFAULT_SCHEMA_NAME : aConfig["schema"];
 
         return [sql, [schema]];
     }
@@ -50,7 +50,7 @@ class SqlserverSchemaDialect : SchemaDialect
             WHERE TABLE_SCHEMA = ?
             AND (TABLE_TYPE = "BASE TABLE")
             ORDER BY TABLE_NAME";
-        schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
+        schema = empty(aConfig["schema"]) ? DEFAULT_SCHEMA_NAME : aConfig["schema"];
 
         return [sql, [schema]];
     }
@@ -75,7 +75,7 @@ class SqlserverSchemaDialect : SchemaDialect
             WHERE T.[name] = ? AND S.[name] = ?
             ORDER BY column_id";
 
-        schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
+        schema = empty(aConfig["schema"]) ? DEFAULT_SCHEMA_NAME : aConfig["schema"];
 
         return [sql, [tableName, schema]];
     }
@@ -267,7 +267,7 @@ class SqlserverSchemaDialect : SchemaDialect
             WHERE T.[is_ms_shipped] = 0 AND I.[type_desc] <> "HEAP" AND T.[name] = ? AND S.[name] = ?
             ORDER BY I.[index_id], IC.[index_column_id]";
 
-        schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
+        schema = empty(aConfig["schema"]) ? DEFAULT_SCHEMA_NAME : aConfig["schema"];
 
         return [sql, [tableName, schema]];
     }
@@ -325,7 +325,7 @@ class SqlserverSchemaDialect : SchemaDialect
             ORDER BY FKC.constraint_column_id";
         // phpcs:enable Generic.Files.LineLength
 
-        schema = empty(aConfig["schema"]) ? static::DEFAULT_SCHEMA_NAME : aConfig["schema"];
+        schema = empty(aConfig["schema"]) ? DEFAULT_SCHEMA_NAME : aConfig["schema"];
 
         return [sql, [tableName, schema]];
     }

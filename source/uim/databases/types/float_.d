@@ -109,8 +109,8 @@ class FloatType : BaseType, IBatchCasting {
       return this;
   }
     if (
-        static::_numberClass == Number::class ||
-        is_subclass_of(static::_numberClass, Number::class)
+        _numberClass == Number::class ||
+        is_subclass_of(_numberClass, Number::class)
     ) {
         this._useLocaleParser = isEnabled;
 
@@ -118,7 +118,7 @@ class FloatType : BaseType, IBatchCasting {
     }
     return cast(O)this;
 /*     throw new RuntimeException(
-        sprintf("Cannot use locale parsing with the %s class", static::_numberClass)
+        sprintf("Cannot use locale parsing with the %s class", _numberClass)
     );
  */  
   }
@@ -131,7 +131,7 @@ class FloatType : BaseType, IBatchCasting {
     * @return float
     */
   protected float _parseValue(string aValue) {
-      class = static::_numberClass;
+      class = _numberClass;
 
       return class::parseFloat(DValue aValue);
   }

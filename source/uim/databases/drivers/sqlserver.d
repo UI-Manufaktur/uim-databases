@@ -220,12 +220,12 @@ class Sqlserver : Driver
 
     bool supports(string $feature) {
         switch ($feature) {
-            case static::FEATURE_CTE:
-            case static::FEATURE_TRUNCATE_WITH_CONSTRAINTS:
-            case static::FEATURE_WINDOW:
+            case FEATURE_CTE:
+            case FEATURE_TRUNCATE_WITH_CONSTRAINTS:
+            case FEATURE_WINDOW:
                 return true;
 
-            case static::FEATURE_QUOTE:
+            case FEATURE_QUOTE:
                 this.connect();
 
                 return _connection.getAttribute(PDO::ATTR_DRIVER_NAME) != "odbc";

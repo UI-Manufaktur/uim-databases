@@ -292,9 +292,9 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
         if (is_string(attrs)) {
             attrs = ["type" : attrs];
         }
-        valid = static::_columnKeys;
-        if (isset(static::_columnExtras[attrs["type"]])) {
-            valid += static::_columnExtras[attrs["type"]];
+        valid = _columnKeys;
+        if (isset(_columnExtras[attrs["type"]])) {
+            valid += _columnExtras[attrs["type"]];
         }
         attrs = array_intersect_key(attrs, valid);
         this._columns[name] = attrs + valid;
@@ -312,9 +312,9 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
     }
 
 
-    function columns(): array
+    string[] columns()
     {
-        return array_keys(this._columns);
+        return _columns.keys;
     }
 
 
@@ -417,11 +417,11 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
         if (is_string(attrs)) {
             attrs = ["type" : attrs];
         }
-        attrs = array_intersect_key(attrs, static::_indexKeys);
-        attrs += static::_indexKeys;
+        attrs = array_intersect_key(attrs, _indexKeys);
+        attrs += _indexKeys;
         unset(attrs["references"], attrs["update"], attrs["delete"]);
 
-        if (!in_array(attrs["type"], static::_validIndexTypes, true)) {
+        if (!in_array(attrs["type"], _validIndexTypes, true)) {
             throw new DatabaseException(sprintf(
                 "Invalid index type "%s" in index "%s" in table "%s".",
                 attrs["type"],
@@ -476,7 +476,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
     function getPrimaryKey(): array
     {
         foreach (this._constraints as data) {
-            if (data["type"] == static::CONSTRAINT_PRIMARY) {
+            if (data["type"] == CONSTRAINT_PRIMARY) {
                 return data["columns"];
             }
         }
@@ -490,9 +490,9 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
         if (is_string(attrs)) {
             attrs = ["type" : attrs];
         }
-        attrs = array_intersect_key(attrs, static::_indexKeys);
-        attrs += static::_indexKeys;
-        if (!in_array(attrs["type"], static::_validConstraintTypes, true)) {
+        attrs = array_intersect_key(attrs, _indexKeys);
+        attrs += _indexKeys;
+        if (!in_array(attrs["type"], _validConstraintTypes, true)) {
             throw new DatabaseException(sprintf(
                 "Invalid constraint type "%s" in table "%s".",
                 attrs["type"],
@@ -518,7 +518,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
             }
         }
 
-        if (attrs["type"] == static::CONSTRAINT_FOREIGN) {
+        if (attrs["type"] == CONSTRAINT_FOREIGN) {
             attrs = this._checkForeignKey(attrs);
 
             if (isset(this._constraints[name])) {
@@ -583,16 +583,16 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
         if (count(attrs["references"]) < 2) {
             throw new DatabaseException("References must contain a table and column.");
         }
-        if (!in_array(attrs["update"], static::_validForeignKeyActions)) {
+        if (!in_array(attrs["update"], _validForeignKeyActions)) {
             throw new DatabaseException(sprintf(
                 "Update action is invalid. Must be one of %s",
-                implode(",", static::_validForeignKeyActions)
+                implode(",", _validForeignKeyActions)
             ));
         }
-        if (!in_array(attrs["delete"], static::_validForeignKeyActions)) {
+        if (!in_array(attrs["delete"], _validForeignKeyActions)) {
             throw new DatabaseException(sprintf(
                 "Delete action is invalid. Must be one of %s",
-                implode(",", static::_validForeignKeyActions)
+                implode(",", _validForeignKeyActions)
             ));
         }
 
