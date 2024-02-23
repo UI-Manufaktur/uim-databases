@@ -650,7 +650,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
         foreach (array_keys(this._constraints) as name) {
             constraints[] = dialect.constraintSql(this, name);
         }
-        foreach (array_keys(this._indexes) as name) {
+        foreach (this._indexes.keys as name) {
             indexes[] = dialect.indexSql(this, name);
         }
 

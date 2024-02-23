@@ -358,7 +358,7 @@ class Connection : IConnection {
     function insert(string table, array values, array types = null): IStatement
     {
         return this.getDisconnectRetry().run(function () use (table, values, types) {
-            columns = array_keys(values);
+            columns = values.keys;
 
             return this.newQuery().insert(columns, types)
                 .into(table)

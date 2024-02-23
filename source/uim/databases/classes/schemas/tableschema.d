@@ -471,7 +471,7 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     array constraints() {
-        return array_keys(_constraints);
+        return _constraints.keys;
     }
  
     array getConstraint(string aName) {

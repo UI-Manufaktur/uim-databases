@@ -1849,7 +1849,7 @@ class Query : IDBAExpression, IteratorAggregate {
     */
   function clause(string myName) {
       if (!array_key_exists(myName, _parts)) {
-          clauses = implode(", ", array_keys(_parts));
+          clauses = implode(", ", _parts.keys);
           throw new InvalidArgumentException("The "myName" clause is not defined. Valid clauses are: clauses");
       }
 

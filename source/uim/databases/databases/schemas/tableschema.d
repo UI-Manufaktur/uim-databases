@@ -225,7 +225,7 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     array columns() {
-        return array_keys(_columns);
+        return _columns.keys;
     }
  
     array getColumn(string aName) {

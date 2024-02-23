@@ -1285,7 +1285,7 @@ abstract class Query : IExpression, Stringable {
      */
     Json clause(string aName) {
         if (!array_key_exists($name, _parts)) {
-            $clauses = array_keys(_parts);
+            $clauses = _parts.keys;
             array_walk($clauses, fn (&$x): $x = "`$x`");
             $clauses = join(", ", $clauses);
             throw new InvalidArgumentException(

@@ -44,7 +44,7 @@ class QueryFactory {
             aQuery.into(tableName);
         }
         if (someValues) {
-            someColumns = array_keys(someValues);
+            someColumns = someValues.keys;
             aQuery
                 .insert(someColumns, typesForCasting)
                 .values(someValues);
