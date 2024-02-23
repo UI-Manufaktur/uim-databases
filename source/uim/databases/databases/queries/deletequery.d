@@ -32,7 +32,7 @@ class DeleteQuery : Query {
      * string aTable The table to use when deleting.
      */
     void delete(string atable = null) {
-       _dirty();
+       _isDirty();
         if (!aTable.isNull) {
             this.from(aTable);
         }

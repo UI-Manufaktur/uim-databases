@@ -66,7 +66,7 @@ abstract class Query : IExpression, Stringable {
      * discard internal cached objects such as the transformed query or the reference
      * to the executed statement.
      */
-    protected bool _dirty = false;
+    protected bool _isDirty = false;
 
     protected IStatement _statement;
 
@@ -91,7 +91,7 @@ abstract class Query : IExpression, Stringable {
     
     // Sets the connection instance to be used for executing and transforming this query.
     void setConnection(Connection aConnection) {
-       _dirty();
+       _isDirty();
        _connection = aConnection;
     }
     
@@ -126,7 +126,7 @@ abstract class Query : IExpression, Stringable {
     IStatement execute() {
        _statement = null;
        _statement = _connection.run(this);
-       _dirty = false;
+       _isDirty = false;
 
         return _statement;
     }
@@ -287,7 +287,7 @@ abstract class Query : IExpression, Stringable {
             }
         }
        _parts["with"] ~= cte;
-       _dirty();
+       _isDirty();
 
     
     /**
@@ -312,7 +312,7 @@ abstract class Query : IExpression, Stringable {
      * @param bool overwrite whether to reset order with field list or not
      */
     void modifier(IExpression|string[] amodifiers, bool overwrite = false) {
-       _dirty();
+       _isDirty();
         if ($overwrite) {
            _parts["modifier"] = [];
         }
@@ -356,7 +356,7 @@ abstract class Query : IExpression, Stringable {
         } else {
            _parts["from"] = chain(_parts["from"], aTables);
         }
-       _dirty();
+       _isDirty();
     }
     
     /**
@@ -465,7 +465,7 @@ abstract class Query : IExpression, Stringable {
         }
         _parts["join"] = overwrite ? joins : chain(_parts["join"], joins);
 
-       _dirty();
+       _isDirty();
 
         return this;
     }
@@ -477,7 +477,7 @@ abstract class Query : IExpression, Stringable {
      */
     auto removeJoin(string joinName) {
         _parts["join"].remove(joinName);
-       _dirty();
+       _isDirty();
 
         return this;
     }
@@ -1095,7 +1095,7 @@ abstract class Query : IExpression, Stringable {
      * \UIM\Database\IExpression|int aLimit number of records to be returned
      */
     auto limit(IExpression|int aLimit) {
-       _dirty();
+       _isDirty();
        _parts["limit"] = aLimit;
 
         return this;
@@ -1119,7 +1119,7 @@ abstract class Query : IExpression, Stringable {
      * \UIM\Database\IExpression|int  anOffset number of records to be skipped
      */
     auto offset(IExpression|int  anOffset) {
-       _dirty();
+       _isDirty();
        _parts["offset"] =  anOffset;
 
         return this;
@@ -1161,7 +1161,7 @@ abstract class Query : IExpression, Stringable {
      * \UIM\Database\IExpression|string expression The expression to be appended
      */
     auto epilog(IExpression|string expression = null) {
-       _dirty();
+       _isDirty();
        _parts["epilog"] = expression;
 
         return this;
@@ -1180,7 +1180,7 @@ abstract class Query : IExpression, Stringable {
      * string expression The comment to be added
      */
     auto comment(string aexpression = null) {
-       _dirty();
+       _isDirty();
        _parts["comment"] = expression;
 
         return this;
@@ -1415,15 +1415,15 @@ abstract class Query : IExpression, Stringable {
                 .add([$expression, append], types);
         }
        _parts[$part] = expression;
-       _dirty();
+       _isDirty();
     }
     
     /**
      * Marks a query as dirty, removing any preprocessed information
      * from in memory caching.
      */
-    protected void _dirty() {
-       _dirty = true;
+    protected void _isDirty() {
+       _isDirty = true;
 
         if (_statement && _valueBinder) {
             this.getValueBinder().reset();

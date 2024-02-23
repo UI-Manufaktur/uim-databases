@@ -32,7 +32,7 @@ class InsertQuery : Query {
         if (isEmpty(someColumns)) {
             throw new InvalidArgumentException("At least 1 column is required to perform an insert.");
         }
-       _dirty();
+       _isDirty();
        _parts["insert"][1] = someColumns;
         if (!_parts["values"]) {
            _parts["values"] = new ValuesExpression(someColumns, this.getTypeMap().setTypes($types));
@@ -45,7 +45,7 @@ class InsertQuery : Query {
      * Set the table name for insert queries.
      */
     void into(string tableName) {
-       _dirty();
+       _isDirty();
        _parts["insert"][0] = tableName;
     }
     
@@ -67,7 +67,7 @@ class InsertQuery : Query {
                 'You cannot add values before defining columns to use.'
             );
         }
-       _dirty();
+       _isDirty();
         if (cast(ValuesExpression)someData) {
            _parts["values"] = someData;
 

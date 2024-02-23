@@ -91,7 +91,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * discard internal cached objects such as the transformed query or the reference
     * to the executed statement.
     */
-  protected bool _dirty = false;
+  protected bool _isDirty = false;
 
   /**
     * A list of callback functions to be called to alter each row from resulting
@@ -142,7 +142,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @return this
     */
   auto setConnection(Connection myConnection) {
-      _dirty();
+      _isDirty();
       _connection = myConnection;
 
       return cast(O)this;
@@ -180,7 +180,7 @@ class Query : IDBAExpression, IteratorAggregate {
   IStatement execute() {
       statement = _connection.run(this);
       _iterator = _decorateStatement(statement);
-      _dirty = false;
+      _isDirty = false;
 
       return _iterator;
   }
@@ -357,7 +357,7 @@ class Query : IDBAExpression, IteratorAggregate {
       }
 
       _parts["with"][] = cte;
-      _dirty();
+      _isDirty();
 
       return cast(O)this;
   }
@@ -412,7 +412,7 @@ class Query : IDBAExpression, IteratorAggregate {
           _parts["select"] = array_merge(_parts["select"], myFields);
       }
 
-      _dirty();
+      _isDirty();
       _type = "select";
 
       return cast(O)this;
@@ -462,7 +462,7 @@ class Query : IDBAExpression, IteratorAggregate {
       }
 
       _parts["distinct"] = on;
-      _dirty();
+      _isDirty();
 
       return cast(O)this;
   }
@@ -492,7 +492,7 @@ class Query : IDBAExpression, IteratorAggregate {
   O modifier(this O)(myModifiers, shouldOverwrite = false) {
   }
   O modifier(this O)(myModifiers, shouldOverwrite = false) {
-      _dirty();
+      _isDirty();
       if (shouldOverwrite) {
           _parts["modifier"] = [];
       }
@@ -542,7 +542,7 @@ class Query : IDBAExpression, IteratorAggregate {
           _parts["from"] = array_merge(_parts["from"], myTables);
       }
 
-      _dirty();
+      _isDirty();
 
       return cast(O)this;
   }
@@ -662,7 +662,7 @@ class Query : IDBAExpression, IteratorAggregate {
           _parts["join"] = array_merge(_parts["join"], joins);
       }
 
-      _dirty();
+      _isDirty();
 
       return cast(O)this;
   }
@@ -678,7 +678,7 @@ class Query : IDBAExpression, IteratorAggregate {
     */
   function removeJoin(string myName) {
       unset(_parts["join"][myName]);
-      _dirty();
+      _isDirty();
 
       return cast(O)this;
   }
@@ -1298,7 +1298,7 @@ class Query : IDBAExpression, IteratorAggregate {
       }
 
       _parts["group"] = array_merge(_parts["group"], array_values(myFields));
-      _dirty();
+      _isDirty();
 
       return cast(O)this;
   }
@@ -1370,7 +1370,7 @@ class Query : IDBAExpression, IteratorAggregate {
       }
 
       _parts["window"][] = ["name":new IdentifierExpression(myName), "window":window];
-      _dirty();
+      _isDirty();
 
       return cast(O)this;
   }
@@ -1428,7 +1428,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @return this
     */
   O limit(this O)(limit) {
-      _dirty();
+      _isDirty();
       _parts["limit"] = limit;
 
       return cast(O)this;
@@ -1453,7 +1453,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @return this
     */
   O offset(this O)(offset) {
-      _dirty();
+      _isDirty();
       _parts["offset"] = offset;
 
       return cast(O)this;
@@ -1491,7 +1491,7 @@ class Query : IDBAExpression, IteratorAggregate {
           "all":false,
           "query":myQuery,
       ];
-      _dirty();
+      _isDirty();
 
       return cast(O)this;
   }
@@ -1525,7 +1525,7 @@ class Query : IDBAExpression, IteratorAggregate {
           "all":true,
           "query":myQuery,
       ];
-      _dirty();
+      _isDirty();
 
       return cast(O)this;
   }
@@ -1545,7 +1545,7 @@ class Query : IDBAExpression, IteratorAggregate {
       if (empty(columns)) {
           throw new RuntimeException("At least 1 column is required to perform an insert.");
       }
-      _dirty();
+      _isDirty();
       _type = "insert";
       _parts["insert"][1] = columns;
       if (!_parts["values"]) {
@@ -1564,7 +1564,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @return this
     */
   O into(this O)(string myTable) {
-    _dirty();
+    _isDirty();
     _type = "insert";
     _parts["insert"][0] = myTable;
 
@@ -1611,7 +1611,7 @@ class Query : IDBAExpression, IteratorAggregate {
           );
       }
 
-      _dirty();
+      _isDirty();
       if (myData instanceof ValuesExpression) {
           _parts["values"] = myData;
 
@@ -1633,7 +1633,7 @@ class Query : IDBAExpression, IteratorAggregate {
   }
 
   O update(this O)(string myTable) {
-    _dirty();
+    _isDirty();
     _type = "update";
     _parts["update"][0] = myTable;
 
@@ -1711,7 +1711,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @return this
     */
   O delete(this O)(Nullable!string myTable = null) {
-    _dirty();
+    _isDirty();
     _type = "delete";
     if (myTable  !is null) {
         this.from(myTable);
@@ -1738,7 +1738,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @return this
     */
   O epilog(this O)(expression = null) {
-      _dirty();
+      _isDirty();
       _parts["epilog"] = expression;
 
       return cast(O)this;
@@ -1808,7 +1808,7 @@ class Query : IDBAExpression, IteratorAggregate {
     */
   #[\ReturnTypeWillChange]
   auto getIterator() {
-      if (_iterator is null || _dirty) {
+      if (_iterator is null || _isDirty) {
           _iterator = this.execute();
       }
 
@@ -2012,7 +2012,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * @return this
     */
   function enableBufferedResults(bool myEnable = true) {
-    _dirty();
+    _isDirty();
     _useBufferedResults = myEnable;
 
     return cast(O)this;
@@ -2025,7 +2025,7 @@ class Query : IDBAExpression, IteratorAggregate {
     * remembered for future iterations.
     */
   O disableBufferedResults(this O)() {
-    _dirty();
+    _isDirty();
     _useBufferedResults = false;
 
     return cast(O)this;
@@ -2053,7 +2053,7 @@ class Query : IDBAExpression, IteratorAggregate {
     */
   O setSelectTypeMap(this O)(TypeMap myTypeMap) {
     _selectTypeMap = myTypeMap;
-    _dirty();
+    _isDirty();
 
     return cast(O)this;
   }
@@ -2167,15 +2167,15 @@ class Query : IDBAExpression, IteratorAggregate {
       }
 
       _parts[part] = expression;
-      _dirty();
+      _isDirty();
   }
 
   /**
     * Marks a query as dirty, removing any preprocessed information
     * from in memory caching.
     */
-  protected void _dirty() {
-      _dirty = true;
+  protected void _isDirty() {
+      _isDirty = true;
 
       if (_iterator && _valueBinder) {
           this.getValueBinder().reset();

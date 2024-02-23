@@ -36,7 +36,7 @@ class UpdateQuery : Query {
      * \UIM\Database\IExpression|string atable The table you want to update.
      */
     void update(IExpression|string atable) {
-       _dirty();
+       _isDirty();
        _parts["update"][0] = aTable;
 Y>    }
     

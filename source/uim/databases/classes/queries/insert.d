@@ -42,7 +42,7 @@ return true;
         if (isEmpty(columnsToInsert)) {
             throw new InvalidArgumentException("At least 1 column is required to perform an insert.");
         }
-       _dirty();
+       _isDirty();
        _parts["insert"][1] = columnsToInsert;
         if (!_parts["values"]) {
            _parts["values"] = new ValuesExpression(columnsToInsert, this.getTypeMap().setTypes($types));
@@ -55,7 +55,7 @@ return true;
      * Set the table name for insert queries.
      */
     void into(string tableName) {
-       _dirty();
+       _isDirty();
        _parts["insert"][0] = tableName;
     }
     
@@ -77,7 +77,7 @@ return true;
                 'You cannot add values before defining columns to use.'
             );
         }
-       _dirty();
+       _isDirty();
         if (cast(ValuesExpression)someData) {
            _parts["values"] = someData;
 

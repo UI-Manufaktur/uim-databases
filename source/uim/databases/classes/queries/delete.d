@@ -37,7 +37,7 @@ return true;
      * create delete queries with specific conditions.
      */
     void delete(string tableName = null) {
-       _dirty();
+       _isDirty();
         if (!tableName.isNull) {
             this.from(tableName);
         }

@@ -58,7 +58,7 @@ class SelectQuery : Query, IteratorAggregate {
      * The results are cached until the query is modified and marked dirty.
      */
     iterable all() {
-        if (_results.isNull || _dirty) {
+        if (_results.isNull || _isDirty) {
            _results = this.execute().fetchAll(IStatement.FETCH_TYPE_ASSOC);
             if (_resultDecorators) {
                 foreach (&$row; _results) {
@@ -113,7 +113,7 @@ class SelectQuery : Query, IteratorAggregate {
 
         _parts["select"] = overwrite ? fields : chain(_parts["select"], fields);
 
-       _dirty();
+       _isDirty();
 
         return this;
     }
@@ -159,7 +159,7 @@ class SelectQuery : Query, IteratorAggregate {
             on = overwrite ? array_values($on): chain($merge, on.values);
         }
        _parts["distinct"] = on;
-       _dirty();
+       _isDirty();
 
         return this;
     }
@@ -274,7 +274,7 @@ class SelectQuery : Query, IteratorAggregate {
             ? joins
             : chain(_parts["join"], joins);
 
-       _dirty();
+       _isDirty();
     }
     
     /**
@@ -287,7 +287,7 @@ class SelectQuery : Query, IteratorAggregate {
      */
     void removeJoin(string aName) {
         unset(_parts["join"][$name]);
-       _dirty();
+       _isDirty();
     }
     
     /**
@@ -441,7 +441,7 @@ class SelectQuery : Query, IteratorAggregate {
             fields = [fields];
         }
        _parts["group"] = array_merge(_parts["group"], fields.values);
-       _dirty();
+       _isDirty();
 
         return this;
     }
@@ -512,7 +512,7 @@ class SelectQuery : Query, IteratorAggregate {
             }
         }
        _parts["window"] ~= ["name": new IdentifierExpression($name), "window": window];
-       _dirty();
+       _isDirty();
     }
     
     /**
@@ -578,7 +578,7 @@ class SelectQuery : Query, IteratorAggregate {
             'all": false,
             'query": aQuery,
         ];
-       _dirty();
+       _isDirty();
 
         return this;
     }
@@ -611,7 +611,7 @@ class SelectQuery : Query, IteratorAggregate {
             'all": true,
             'query": aQuery,
         ];
-       _dirty();
+       _isDirty();
 
         return this;
     }
@@ -659,7 +659,7 @@ class SelectQuery : Query, IteratorAggregate {
      * @param bool overwrite Whether this should append or replace all existing decorators.
      */
     auto decorateResults(?Closure aCallback, bool overwrite = false) {
-       _dirty();
+       _isDirty();
         if ($overwrite) {
            _resultDecorators = [];
         }
@@ -677,7 +677,7 @@ class SelectQuery : Query, IteratorAggregate {
      */
     auto setSelectTypeMap(TypeMap|array typeMap) {
        _selectTypeMap = isArray($typeMap) ? new TypeMap($typeMap): typeMap;
-       _dirty();
+       _isDirty();
 
         return this;
     }
