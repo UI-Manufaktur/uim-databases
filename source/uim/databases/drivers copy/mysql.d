@@ -118,16 +118,16 @@ class MysqlDriver : Driver {
         }
 
         if (empty(aConfig["unix_socket"])) {
-            $dsn = "mysql:host={aConfig["host"]};port={aConfig["port"]};dbname={aConfig["database"]}";
+            dsn = "mysql:host={aConfig["host"]};port={aConfig["port"]};dbname={aConfig["database"]}";
         } else {
-            $dsn = "mysql:unix_socket={aConfig["unix_socket"]};dbname={aConfig["database"]}";
+            dsn = "mysql:unix_socket={aConfig["unix_socket"]};dbname={aConfig["database"]}";
         }
 
         if (!empty(aConfig["encoding"])) {
-            $dsn ~= ";charset={aConfig["encoding"]}";
+            dsn ~= ";charset={aConfig["encoding"]}";
         }
 
-        _connect($dsn, aConfig);
+        _connect(dsn, aConfig);
 
         if (!empty(aConfig["init"])) {
             $connection = this.getConnection();

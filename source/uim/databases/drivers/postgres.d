@@ -72,12 +72,12 @@ class Postgres : Driver
             PDO::ATTR_ERRMODE: PDO::ERRMODE_EXCEPTION,
         ];
         if (empty(aConfig["unix_socket"])) {
-            $dsn = "pgsql:host={aConfig["host"]};port={aConfig["port"]};dbname={aConfig["database"]}";
+            dsn = "pgsql:host={aConfig["host"]};port={aConfig["port"]};dbname={aConfig["database"]}";
         } else {
-            $dsn = "pgsql:dbname={aConfig["database"]}";
+            dsn = "pgsql:dbname={aConfig["database"]}";
         }
 
-        _connect($dsn, aConfig);
+        _connect(dsn, aConfig);
         _connection = $connection = this.getConnection();
         if (!empty(aConfig["encoding"])) {
             this.setEncoding(aConfig["encoding"]);

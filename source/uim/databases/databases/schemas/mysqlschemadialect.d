@@ -460,7 +460,8 @@ class MysqlSchemaDialect : SchemaDialect
 
             return "PRIMARY KEY (%s)".format(someColumns.join(", "));
         }
-         result = "";
+        
+        string result = "";
         if (someData["type"] == TableSchema.CONSTRAINT_UNIQUE) {
              result = "UNIQUE KEY ";
         }
@@ -506,7 +507,8 @@ class MysqlSchemaDialect : SchemaDialect
     string indexSql(TableSchema tableSchema, string aName) {
         someData = tableSchema.getIndex($name);
         assert(someData !isNull);
-         result = "";
+        
+        string result = "";
         if (someData["type"] == TableSchema.INDEX_INDEX) {
              result = "KEY ";
         }

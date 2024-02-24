@@ -493,8 +493,8 @@ class SqliteSchemaDialect : SchemaDialect {
      * \UIM\Database\Schema\TableSchema tableSchema The table instance the column is in.
      * @param string aName The name of the column.
      */
-    string constraintSql(TableSchema tableSchema, string aName) {
-        someData = tableSchema.getConstraint($name);
+    string constraintSql(TableSchema tableSchema, string columnName) {
+        someData = tableSchema.getConstraint(columnName);
         assert(someData !isNull, "Data does not exist");
 
         column = tableSchema.getColumn(someData["columns"][0]);
@@ -507,8 +507,9 @@ class SqliteSchemaDialect : SchemaDialect {
         ) {
             return "";
         }
-        clause = "";
-        type = "";
+        
+        string clause = "";
+        string type = "";
         if (someData["type"] == TableSchema.CONSTRAINT_PRIMARY) {
             type = "PRIMARY KEY";
         }
@@ -533,9 +534,9 @@ class SqliteSchemaDialect : SchemaDialect {
 
         return 
             "CONSTRAINT %s %s (%s)%s"
-            .format(_driver.quoteIdentifier($name),
+            .format(_driver.quoteIdentifier(columnName),
             type,
-            join(", ", someColumns),
+            someColumns.join(", "),
             clause
         );
     }

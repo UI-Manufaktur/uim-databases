@@ -64,9 +64,9 @@ abstract class Driver : IDBADriver {
      * @return bool true on success
      */
     protected bool _connect(string dsn, array myConfig) {
-        action = function () use ($dsn, myConfig) {
+        action = function () use (dsn, myConfig) {
             this.setConnection(new PDO(
-                $dsn,
+                dsn,
                 myConfig["username"] ?: null,
                 myConfig["password"] ?: null,
                 myConfig["flags"]

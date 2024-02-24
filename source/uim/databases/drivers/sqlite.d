@@ -123,12 +123,12 @@ class Sqlite : Driver
             if (PHP_VERSION_ID < 80100) {
                 throw new RuntimeException("SQLite URI support requires D 8.1.");
             }
-            $dsn = "sqlite:file:" ~ aConfig["database"] ~ "?" ~ implode("&", params);
+            dsn = "sqlite:file:" ~ aConfig["database"] ~ "?" ~ implode("&", params);
         } else {
-            $dsn = "sqlite:" ~ aConfig["database"];
+            dsn = "sqlite:" ~ aConfig["database"];
         }
 
-        _connect($dsn, aConfig);
+        _connect(dsn, aConfig);
         if ($chmodFile) {
             // phpcs:disable
             @chmod(aConfig["database"], aConfig["mask"]);

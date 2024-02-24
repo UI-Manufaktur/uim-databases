@@ -96,34 +96,35 @@ class Sqlserver : Driver
         if (!empty(aConfig["encoding"])) {
             aConfig["flags"][PDO::SQLSRV_ATTR_ENCODING] = aConfig["encoding"];
         }
-        $port = "";
+
+        string port = "";
         if (aConfig["port"]) {
-            $port = "," ~ aConfig["port"];
+            port = "," ~ aConfig["port"];
         }
 
-        $dsn = "sqlsrv:Server={aConfig["host"]}{$port};Database={aConfig["database"]};MultipleActiveResultSets=false";
+        string dsn = "sqlsrv:Server={aConfig["host"]}{port};Database={aConfig["database"]};MultipleActiveResultSets=false";
         if (aConfig["app"] != null) {
-            $dsn ~= ";APP={aConfig["app"]}";
+            dsn ~= ";APP={aConfig["app"]}";
         }
         if (aConfig["connectionPooling"] != null) {
-            $dsn ~= ";ConnectionPooling={aConfig["connectionPooling"]}";
+            dsn ~= ";ConnectionPooling={aConfig["connectionPooling"]}";
         }
         if (aConfig["failoverPartner"] != null) {
-            $dsn ~= ";Failover_Partner={aConfig["failoverPartner"]}";
+            dsn ~= ";Failover_Partner={aConfig["failoverPartner"]}";
         }
         if (aConfig["loginTimeout"] != null) {
-            $dsn ~= ";LoginTimeout={aConfig["loginTimeout"]}";
+            dsn ~= ";LoginTimeout={aConfig["loginTimeout"]}";
         }
         if (aConfig["multiSubnetFailover"] != null) {
-            $dsn ~= ";MultiSubnetFailover={aConfig["multiSubnetFailover"]}";
+            dsn ~= ";MultiSubnetFailover={aConfig["multiSubnetFailover"]}";
         }
         if (aConfig["encrypt"] != null) {
-            $dsn ~= ";Encrypt={aConfig["encrypt"]}";
+            dsn ~= ";Encrypt={aConfig["encrypt"]}";
         }
         if (aConfig["trustServerCertificate"] != null) {
-            $dsn ~= ";TrustServerCertificate={aConfig["trustServerCertificate"]}";
+            dsn ~= ";TrustServerCertificate={aConfig["trustServerCertificate"]}";
         }
-        _connect($dsn, aConfig);
+        _connect(dsn, aConfig);
 
         $connection = this.getConnection();
         if (!empty(aConfig["init"])) {
