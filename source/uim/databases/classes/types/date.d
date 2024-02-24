@@ -44,7 +44,7 @@ class DateType : BaseType, IBatchCasting {
 
  
     this(string aName = null) {
-        super($name);
+        super(name);
 
        _className = class_exists(Date.classname) ? Date.classname : ChronosDate.classname;
     }

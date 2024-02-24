@@ -50,13 +50,13 @@ class TypeFactory {
      * @throws \InvalidArgumentException If type identifier is unknown
      */
     static IType build(string aName) {
-        if (isSet(_builtTypes[$name])) {
-            return _builtTypes[$name];
+        if (isSet(_builtTypes[name])) {
+            return _builtTypes[name];
         }
-        if (!isSet(_supportedDbTypes[$name])) {
-            throw new InvalidArgumentException("Unknown type `%s`".format($name));
+        if (!isSet(_supportedDbTypes[name])) {
+            throw new InvalidArgumentException("Unknown type `%s`".format(name));
         }
-        return _builtTypes[$name] = new _supportedDbTypes[$name]($name);
+        return _builtTypes[name] = new _supportedDbTypes[name](name);
     }
 
     // Returns an arrays with all the mapped type objects, indexed by name.
@@ -68,13 +68,13 @@ class TypeFactory {
     }
     
     /**
-     * Set IType instance capable of converting a type identified by $name
+     * Set IType instance capable of converting a type identified by name
      * Params:
      * string aName The type identifier you want to set.
      * @param \UIM\Database\IType  anInstance The type instance you want to set.
      */
     static void set(string aName, IType  anInstance) {
-        _builtTypes[$name] =  anInstance;
+        _builtTypes[name] =  anInstance;
     }
     
     /**

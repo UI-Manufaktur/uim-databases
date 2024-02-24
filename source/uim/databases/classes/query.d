@@ -229,7 +229,7 @@ abstract class Query : IExpression, Stringable {
      * @param string[] someParts The list of query parts to traverse
      */
     void traverseParts(Closure $visitor, array someParts) {
-        someParts.each!(name => $visitor(_parts[$name], $name));
+        someParts.each!(name => $visitor(_parts[name], name));
     }
     
     /**
@@ -819,10 +819,10 @@ abstract class Query : IExpression, Stringable {
      * Params:
      * string afield Field
      * @param array  someValues Array of values
-     * @param IData[string] $options Options
+     * @param IData[string] options Options
      */
     auto whereNotInList(string afield, array someValues, IData[string] options = null) {
-        auto options = $options.update([
+        auto options = options.update([
             "types": Json.emptyArray,
             "allowEmpty": Json(false)
         ];
@@ -844,22 +844,22 @@ abstract class Query : IExpression, Stringable {
      * Params:
      * string afield Field
      * @param array  someValues Array of values
-     * @param IData[string] $options Options
+     * @param IData[string] options Options
      */
     auto whereNotInListOrNull(string afield, array  someValues, IData[string] options = null) {
-        auto options = $options.update() [
+        auto options = options.update() [
             "types": Json.emptyArray,
             "allowEmpty": Json(false),
         ];
 
-        if ($options["allowEmpty"] && !someValues) {
+        if (options["allowEmpty"] && !someValues) {
             return this.where([field ~ " IS NOT": null]);
         }
         return this.where(
             [
                 "OR": [field ~ " NOT IN":  someValues, field ~ " IS": null],
             ],
-            $options["types"]
+            options["types"]
         );
     }
     
@@ -1284,18 +1284,18 @@ abstract class Query : IExpression, Stringable {
      * string aName name of the clause to be returned
      */
     Json clause(string aName) {
-        if (!array_key_exists($name, _parts)) {
+        if (!array_key_exists(name, _parts)) {
             $clauses = _parts.keys;
             array_walk($clauses, fn (&$x): $x = "`$x`");
             $clauses = join(", ", $clauses);
             throw new InvalidArgumentException(
                 "The `%s` clause is not defined. Valid clauses are: %s."
                 .format(
-                    $name,
+                    name,
                 $clauses
             ));
         }
-        return _parts[$name];
+        return _parts[name];
     }
     
     /**

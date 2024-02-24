@@ -144,17 +144,17 @@ _baseConfig = [
         return new (STATEMENT_CLASS)($statement, this, typeMap);
      }
 
-    string savePointSQL($name) {
-        return "SAVE TRANSACTION t" ~ $name;
+    string savePointSQL(name) {
+        return "SAVE TRANSACTION t" ~ name;
     }
 
-    string releaseSavePointSQL($name) {
+    string releaseSavePointSQL(name) {
         // SQLServer has no release save point operation.
         return "";
     }
 
-    string rollbackSavePointSQL($name) {
-        return "ROLLBACK TRANSACTION t" ~ $name;
+    string rollbackSavePointSQL(name) {
+        return "ROLLBACK TRANSACTION t" ~ name;
     }
 
     string disableForeignKeySQL() {

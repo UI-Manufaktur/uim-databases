@@ -63,10 +63,10 @@ class JsonType : BaseType, IBatchCasting {
     /**
      * Set json_encode options.
      * Params:
-     * int $options Encoding flags. Use JSON_* flags. Set `0` to reset.
+     * int options Encoding flags. Use JSON_* flags. Set `0` to reset.
      * @see https://www.d.net/manual/en/function.json-encode.d
      */
-    void setEncodingOptions(int $options) {
-       _encodingOptions = $options;
+    void setEncodingOptions(int options) {
+       _encodingOptions = options;
     }
 }

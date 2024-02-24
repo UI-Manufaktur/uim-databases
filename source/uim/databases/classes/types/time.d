@@ -37,11 +37,11 @@ class TimeType : BaseType, IBatchCasting {
     /**
      * Constructor
      * Params:
-     * string|null $name The name identifying this type.
+     * string|null name The name identifying this type.
      * @param class-string<\UIM\Chronos\ChronosTime>|null  className Class name for time representation.
      */
     this(string aName = null, string className = null) {
-        super($name);
+        super(name);
 
         if (className.isNull) {
              className = class_exists(Time.classname) ? Time.classname : ChronosTime.classname;

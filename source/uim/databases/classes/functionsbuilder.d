@@ -296,7 +296,7 @@ class FunctionsBuilder {
      * params, and the third one the return type of the function
      */
     FunctionExpression __call(string aName, array someArguments) {
-        return new FunctionExpression($name, ...someArguments);
+        return new FunctionExpression(name, ...someArguments);
     }
     
     /**

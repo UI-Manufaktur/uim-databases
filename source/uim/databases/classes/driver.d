@@ -181,11 +181,11 @@ abstract class Driver {
      * those params.
      * Params:
      * string asql SQL to be executed and interpolated with $params
-     * @param array $params List or associative array of params to be interpolated in $sql as values.
+     * @param array $params List or associative array of params to be interpolated in sql as values.
      * @param array types List or associative array of types to be used for casting values in query.
      */
     IStatement execute(string asql, array $params = [], array types = []) {
-        $statement = this.prepare($sql);
+        $statement = this.prepare(sql);
         if (!empty($params)) {
             $statement.bind($params, types);
         }

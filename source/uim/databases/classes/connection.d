@@ -148,11 +148,11 @@ class Connection : IConnection {
      * those params.
      * Params:
      * string asql SQL to be executed and interpolated with $params
-     * @param array $params list or associative array of params to be interpolated in $sql as values
+     * @param array $params list or associative array of params to be interpolated in sql as values
      * @param array typesForCasting list or associative array of types to be used for casting values in query
      */
     IStatement execute(string asql, array $params = [], array typesForCasting = []) {
-        return this.getDisconnectRetry().run(fn (): this.getDriver().execute($sql, $params, typesForCasting));
+        return this.getDisconnectRetry().run(fn (): this.getDriver().execute(sql, $params, typesForCasting));
     }
     
     /**
@@ -383,31 +383,31 @@ class Connection : IConnection {
     /**
      * Creates a new save point for nested transactions.
      * Params:
-     * string|int $name Save point name or id
+     * string|int name Save point name or id
      */
-    void createSavePoint(string|int $name) {
-        this.execute(this.getDriver().savePointSQL($name));
+    void createSavePoint(string|int name) {
+        this.execute(this.getDriver().savePointSQL(name));
     }
 
     /**
      * Releases a save point by its name.
      * Params:
-     * string|int $name Save point name or id
+     * string|int name Save point name or id
      */
-    void releaseSavePoint(string|int $name) {
-        $sql = this.getDriver().releaseSavePointSQL($name);
-        if ($sql) {
-            this.execute($sql);
+    void releaseSavePoint(string|int name) {
+        sql = this.getDriver().releaseSavePointSQL(name);
+        if (sql) {
+            this.execute(sql);
         }
     }
 
     /**
      * Rollback a save point by its name.
      * Params:
-     * string|int $name Save point name or id
+     * string|int name Save point name or id
      */
-    void rollbackSavepoint(string|int $name) {
-        this.execute(this.getDriver().rollbackSavePointSQL($name));
+    void rollbackSavepoint(string|int name) {
+        this.execute(this.getDriver().rollbackSavePointSQL(name));
     }
 
     // Run driver specific SQL to disable foreign key checks.
