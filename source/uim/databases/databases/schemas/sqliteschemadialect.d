@@ -143,7 +143,7 @@ class SqliteSchemaDialect : SchemaDialect {
         sql = "PRAGMA table_info(%s)".format(_driver.quoteIdentifier(aTableName)
         );
 
-        return [$sql, []];
+        return [sql, []];
     }
  
     void convertColumnDescription(TableSchema tableSchema, array row) {
@@ -263,7 +263,7 @@ class SqliteSchemaDialect : SchemaDialect {
             return;
         }
         string sql = "PRAGMA index_info(%s)".format(_driver.quoteIdentifier($row["name"]));
-        auto statement = _driver.prepare($sql);
+        auto statement = _driver.prepare(sql);
         statement.execute();
         string[] myColumns = statement.fetchAll("assoc")
             .map!(column => column["name"])
@@ -276,7 +276,7 @@ class SqliteSchemaDialect : SchemaDialect {
 
                 string sql = "SELECT sql FROM sqlite_master WHERE type = \"table\" AND tbl_name = %s"
                     .format(_driver.quoteIdentifier(tableSchema.name()));
-                statement = _driver.prepare($sql);
+                statement = _driver.prepare(sql);
                 statement.execute();
 
                 aTableRow = statement.fetchAssoc();
@@ -317,7 +317,7 @@ class SqliteSchemaDialect : SchemaDialect {
            _driver.quoteIdentifier(aTableName)
         );
 
-        return [$sql, []];
+        return [sql, []];
     }
  
     void convertForeignKeyDescription(TableSchema tableSchema, array row) {
@@ -358,11 +358,11 @@ class SqliteSchemaDialect : SchemaDialect {
      * @param string aName The name of the column.
      */
     string columnSql(TableSchema tableSchema, string aName) {
-        someData = tableSchema.getColumn($name);
+        someData = tableSchema.getColumn(name);
         assert(someData !isNull);
 
         sql = _getTypeSpecificColumnSql(someData["type"], tableSchema, name);
-        if ($sql !isNull) {
+        if (sql !isNull) {
             return sql;
         }
         typeMap = [
@@ -386,7 +386,7 @@ class SqliteSchemaDialect : SchemaDialect {
             TableISchema.TYPE_JSON: ' TEXT",
         ];
 
-         result = _driver.quoteIdentifier($name);
+         result = _driver.quoteIdentifier(name);
         hasUnsigned = [
             TableISchema.TYPE_TINYINTEGER,
             TableISchema.TYPE_SMALLINTEGER,
@@ -401,7 +401,7 @@ class SqliteSchemaDialect : SchemaDialect {
             isSet(someData["unsigned"]) &&
             someData["unsigned"] == true
         ) {
-            if (someData["type"] != TableISchema.TYPE_INTEGER || tableSchema.getPrimaryKey() != [$name]) {
+            if (someData["type"] != TableISchema.TYPE_INTEGER || tableSchema.getPrimaryKey() != [name]) {
                  result ~= " UNSIGNED";
             }
         }
@@ -442,7 +442,7 @@ class SqliteSchemaDialect : SchemaDialect {
         if (
             in_array(someData["type"],  anIntegerTypes, true) &&
             isSet(someData["length"]) &&
-            tableSchema.getPrimaryKey() != [$name]
+            tableSchema.getPrimaryKey() != [name]
         ) {
              result ~= "(" ~ (int)someData["length"] ~ ")";
         }
@@ -460,10 +460,10 @@ class SqliteSchemaDialect : SchemaDialect {
              result ~= " NOT NULL";
         }
         if (someData["type"] == TableISchema.TYPE_INTEGER) {
-            if (tableSchema.getPrimaryKey() == [$name]) {
+            if (tableSchema.getPrimaryKey() == [name]) {
                  result ~= " PRIMARY KEY";
 
-                if (($name == "id" || someData["autoIncrement"]) && someData["autoIncrement"] != false) {
+                if ((name == "id" || someData["autoIncrement"]) && someData["autoIncrement"] != false) {
                      result ~= " AUTOINCREMENT";
                     unset(someData["default"]);
                 }
@@ -563,7 +563,7 @@ class SqliteSchemaDialect : SchemaDialect {
     }
  
     string indexSql(TableSchema tableSchema, string aName) {
-        someData = tableSchema.getIndex($name);
+        someData = tableSchema.getIndex(name);
         assert(someData !isNull);
         
         someColumns = array_map(
@@ -572,7 +572,7 @@ class SqliteSchemaDialect : SchemaDialect {
         );
 
         return "CREATE INDEX %s ON %s (%s)"
-            .format(_driver.quoteIdentifier($name), _driver.quoteIdentifier(tableSchema.name()), join(", ", someColumns));
+            .format(_driver.quoteIdentifier(name), _driver.quoteIdentifier(tableSchema.name()), join(", ", someColumns));
     }
  
     array createTableSql(TableSchema tableSchema, array someColumns, array constraints, array  anIndexes) {

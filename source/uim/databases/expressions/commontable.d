@@ -20,7 +20,7 @@ class CommonTableExpression : IDBAExpression
      *
      * @var DDBExpression\IdentifierExpression
      */
-    protected $name;
+    protected name;
 
     /**
      * The field names to use for the CTE.
@@ -54,7 +54,7 @@ class CommonTableExpression : IDBAExpression
      * @param uim.databases.IDBAExpression|\Closure $query CTE query
      */
     this(string aName = "", $query = null) {
-        this.name = new IdentifierExpression($name);
+        this.name = new IdentifierExpression(name);
         if ($query) {
             this.query($query);
         }
@@ -70,7 +70,7 @@ class CommonTableExpression : IDBAExpression
      * @return this
      */
     function name(string aName) {
-        this.name = new IdentifierExpression($name);
+        this.name = new IdentifierExpression(name);
 
         return this;
     }

@@ -72,12 +72,12 @@ class BetweenExpression : IDBAExpression, FieldInterface
             field = field.sql($binder);
         }
 
-        foreach ($parts as $name: part) {
+        foreach ($parts as name: part) {
             if ($part instanceof IDBAExpression) {
-                parts[$name] = part.sql($binder);
+                parts[name] = part.sql($binder);
                 continue;
             }
-            parts[$name] = _bindValue($part, $binder, _type);
+            parts[name] = _bindValue($part, $binder, _type);
         }
 
         return sprintf("%s BETWEEN %s AND %s", field, parts["from"], parts["to"]);

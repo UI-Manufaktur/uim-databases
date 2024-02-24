@@ -34,9 +34,9 @@ class Collection : ICollection {
      * The list of tables in the connected database/schema.
      */
     string[] listTablesWithoutViews() {
-        [$sql, params] = _dialect.listTablesWithoutViewsSql(_connection.getDriver().config());
+        [sql, params] = _dialect.listTablesWithoutViewsSql(_connection.getDriver().config());
         auto result;
-        statement = _connection.execute($sql, params);
+        statement = _connection.execute(sql, params);
         while ($row = statement.fetch()) {
             result ~= row[0];
         }
@@ -47,9 +47,9 @@ class Collection : ICollection {
      * Get the list of tables and views available in the current connection.
      */
     string[] listTables() {
-        [$sql, params] = _dialect.listTablesSql(_connection.getDriver().config());
+        [sql, params] = _dialect.listTablesSql(_connection.getDriver().config());
         auto result;
-        statement = _connection.execute($sql, params);
+        statement = _connection.execute(sql, params);
         while ($row = statement.fetch()) {
             result ~= row[0];
         }
@@ -74,14 +74,14 @@ class Collection : ICollection {
      */
     TableISchema describe(string aName, IData[string] options = null) {
         configData = _connection.config();
-        if ($name.has(".")) {
+        if (name.has(".")) {
             [configData("schema"], name] = split(".", name);
         }
-        aTable = _connection.getDriver().newTableSchema($name);
+        aTable = _connection.getDriver().newTableSchema(name);
 
        _reflect("Column", name, configData, aTable);
         if (count(aTable.columns()) == 0) {
-            throw new DatabaseException("Cannot describe %s. It has 0 columns.".format($name));
+            throw new DatabaseException("Cannot describe %s. It has 0 columns.".format(name));
         }
        _reflect("Index", name, configData, aTable);
        _reflect("ForeignKey", name, configData, aTable);
@@ -116,12 +116,12 @@ class Collection : ICollection {
         string describeMethod = "describe{$stage}Sql";
         string convertMethod = "convert{$stage}Description";
 
-        [$sql, params] = _dialect.{describeMethod}(tableName, configData);
-        if (isEmpty($sql)) {
+        [sql, params] = _dialect.{describeMethod}(tableName, configData);
+        if (isEmpty(sql)) {
             return;
         }
         try {
-            statement = _connection.execute($sql, params);
+            statement = _connection.execute(sql, params);
         } catch (PDOException  anException) {
             throw new DatabaseException(anException.getMessage(), 500,  anException);
         }

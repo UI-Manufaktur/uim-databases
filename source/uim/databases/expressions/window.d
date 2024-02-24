@@ -18,7 +18,7 @@ class WindowExpression : IDBAExpression, IWindow
     /**
      * @var DDBExpression\IdentifierExpression
      */
-    protected $name;
+    protected name;
 
     /**
      * @var array<uim.databases.IDBAExpression>
@@ -43,7 +43,7 @@ class WindowExpression : IDBAExpression, IWindow
      * @param string aName Window name
      */
     this(string aName = "") {
-        this.name = new IdentifierExpression($name);
+        this.name = new IdentifierExpression(name);
     }
 
     /**
@@ -63,7 +63,7 @@ class WindowExpression : IDBAExpression, IWindow
      * @return this
      */
     function name(string aName) {
-        this.name = new IdentifierExpression($name);
+        this.name = new IdentifierExpression(name);
 
         return this;
     }

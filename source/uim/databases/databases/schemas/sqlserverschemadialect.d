@@ -66,7 +66,7 @@ class SqlserverSchemaDialect : SchemaDialect {
 
         tableSchema = empty(configData("schema"]) ? DEFAULT_SCHEMA_NAME : configData("schema"];
 
-        return [$sql, [aTableName, tableSchema]];
+        return [sql, [aTableName, tableSchema]];
     }
     
     /**
@@ -234,7 +234,7 @@ class SqlserverSchemaDialect : SchemaDialect {
 
         tableSchema = empty(configData("schema"]) ? DEFAULT_SCHEMA_NAME : configData("schema"];
 
-        return [$sql, [aTableName, tableSchema]];
+        return [sql, [aTableName, tableSchema]];
     }
  
     void convertIndexDescription(TableSchema tableSchema, array row) {
@@ -248,22 +248,22 @@ class SqlserverSchemaDialect : SchemaDialect {
         }
 
         auto existing = type == TableSchema.INDEX_INDEX 
-            ? tableSchema.getIndex($name)
-            : tableSchema.getConstraint($name);
+            ? tableSchema.getIndex(name)
+            : tableSchema.getConstraint(name);
         
         auto someColumns = [$row["column_name"]];
         if (!empty($existing)) {
             someColumns = chain($existing["columns"], someColumns);
         }
         if ($type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
-            tablSchema.addConstraint($name, [
+            tablSchema.addConstraint(name, [
                 "type": type,
                 "columns": someColumns,
             ]);
 
             return;
         }
-        tableSchema.addIndex($name, [
+        tableSchema.addIndex(name, [
             "type": type,
             "columns": someColumns,
         ]);
@@ -287,7 +287,7 @@ class SqlserverSchemaDialect : SchemaDialect {
 
         tableSchema = empty(configData("schema"]) ? DEFAULT_SCHEMA_NAME : configData("schema"];
 
-        return [$sql, [aTableName, tableSchema]];
+        return [sql, [aTableName, tableSchema]];
     }
  
     void convertForeignKeyDescription(TableSchema tableSchema, array row) {
@@ -299,7 +299,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             "delete": _convertOnClause($row["delete_type"]),
         ];
         name = row["foreign_key_name"];
-        tableSchema.addConstraint($name, someData);
+        tableSchema.addConstraint(name, someData);
     }
  
     protected string _foreignOnClause(string aon) {
@@ -319,14 +319,14 @@ class SqlserverSchemaDialect : SchemaDialect {
     }
  
     string columnSql(TableSchema tableSchema, string aName) {
-        someData = tableSchema.getColumn($name);
+        someData = tableSchema.getColumn(name);
         assert(someData !isNull);
 
         sql = _getTypeSpecificColumnSql(someData["type"], tableSchema, name);
-        if ($sql !isNull) {
+        if (sql !isNull) {
             return sql;
         }
-         result = _driver.quoteIdentifier($name);
+         result = _driver.quoteIdentifier(name);
         typeMap = [
             TableISchema.TYPE_TINYINTEGER: ' TINYINT",
             TableISchema.TYPE_SMALLINTEGER: ' SMALLINT",
@@ -360,7 +360,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         if (
             in_array(someData["type"], autoIncrementTypes, true) &&
             (
-                (tableSchema.getPrimaryKey() == [$name] && name == "id") || someData["autoIncrement"]
+                (tableSchema.getPrimaryKey() == [name] && name == "id") || someData["autoIncrement"]
             )
         ) {
              result ~= " IDENTITY(1, 1)";
@@ -462,8 +462,8 @@ class SqlserverSchemaDialect : SchemaDialect {
         string sqlPattern = "ALTER TABLE %s ADD %s;";
         string[] sqlResults;
 
-        foreach ($name; tableSchema.constraints()) {
-            constraint = tableSchema.getConstraint($name);
+        foreach (name; tableSchema.constraints()) {
+            constraint = tableSchema.getConstraint(name);
             assert($constraint !isNull);
             if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
@@ -478,11 +478,11 @@ class SqlserverSchemaDialect : SchemaDialect {
         string[] sqlResults;
 
         foreach (tableSchema.constraints() as name) {
-            constraint = tableSchema.getConstraint($name);
+            constraint = tableSchema.getConstraint(name);
             assert($constraint !isNull);
             if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
-                constraintName = _driver.quoteIdentifier($name);
+                constraintName = _driver.quoteIdentifier(name);
                 sqlResults ~= sqlPattern.format(aTableName, constraintName);
             }
         }
@@ -490,7 +490,7 @@ class SqlserverSchemaDialect : SchemaDialect {
     }
  
     string indexSql(TableSchema tableSchema, string aName) {
-        someData = tableSchema.getIndex($name);
+        someData = tableSchema.getIndex(name);
         assert(someData !isNull);
         someColumns = array_map(
             [_driver, "quoteIdentifier"],
@@ -500,16 +500,16 @@ class SqlserverSchemaDialect : SchemaDialect {
         return 
             "CREATE INDEX %s ON %s (%s)"
             .format(
-                _driver.quoteIdentifier($name),
+                _driver.quoteIdentifier(name),
                 _driver.quoteIdentifier(tableSchema.name()),
                 someColumns.join(", ", )
             );
     }
  
     string constraintSql(TableSchema tableSchema, string aName) {
-        auto someData = tableSchema.getConstraint($name);
+        auto someData = tableSchema.getConstraint(name);
         assert(someData !isNull);
-         result = "CONSTRAINT " ~ _driver.quoteIdentifier($name);
+         result = "CONSTRAINT " ~ _driver.quoteIdentifier(name);
         if (someData["type"] == TableSchema.CONSTRAINT_PRIMARY) {
              result = "PRIMARY KEY";
         }

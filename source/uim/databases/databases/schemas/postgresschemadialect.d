@@ -251,7 +251,7 @@ class PostgresSchemaDialect : SchemaDialect {
 
             return;
         }
-         anIndex = tableSchema.getIndex($name);
+         anIndex = tableSchema.getIndex(name);
         if (!anIndex) {
              anIndex = [
                 "type": type,
@@ -259,7 +259,7 @@ class PostgresSchemaDialect : SchemaDialect {
             ];
         }
          anIndex["columns"] ~= row["attname"];
-        tableSchema.addIndex($name,  anIndex);
+        tableSchema.addIndex(name,  anIndex);
     }
     
     /**
@@ -271,7 +271,7 @@ class PostgresSchemaDialect : SchemaDialect {
      * @param array row The metadata record to update with.
      */
     protected void _convertConstraint(TableSchema tableSchema, string aName, string atype, array row) {
-        constraint = tableSchema.getConstraint($name);
+        constraint = tableSchema.getConstraint(name);
         if (!$constraint) {
             constraint = [
                 "type": type,
@@ -279,7 +279,7 @@ class PostgresSchemaDialect : SchemaDialect {
             ];
         }
         constraint["columns"] ~= row["attname"];
-        tableSchema.addConstraint($name, constraint);
+        tableSchema.addConstraint(name, constraint);
     }
  
     array describeForeignKeySql(string atableName, IConfigData[string] configData) {
@@ -329,14 +329,14 @@ class PostgresSchemaDialect : SchemaDialect {
     }
  
     string columnSql(TableSchema tableSchema, string aName) {
-        auto someData = tableSchema.getColumn($name);
+        auto someData = tableSchema.getColumn(name);
         assert(someData !isNull);
 
         auto mySql = _getTypeSpecificColumnSql(someData["type"], tableSchema, name);
         if (mySql !isNull) {
             return mySql;
         }
-         result = _driver.quoteIdentifier($name);
+         result = _driver.quoteIdentifier(name);
         typeMap = [
             TableISchema.TYPE_TINYINTEGER: " SMALLINT",
             TableISchema.TYPE_SMALLINTEGER: " SMALLINT",
@@ -367,7 +367,7 @@ class PostgresSchemaDialect : SchemaDialect {
         if (
             in_array(someData["type"], autoIncrementTypes, true) &&
             (
-                (tableSchema.getPrimaryKey() == [$name] && name == "id") || someData["autoIncrement"]
+                (tableSchema.getPrimaryKey() == [name] && name == "id") || someData["autoIncrement"]
             )
         ) {
             typeMap[someData["type"]] = typeMap[someData["type"]].replace("INT", "SERIAL");
@@ -458,7 +458,7 @@ class PostgresSchemaDialect : SchemaDialect {
         auto mySql = [];
 
         foreach (tableSchema.constraints() as name) {
-            constraint = tableSchema.getConstraint($name);
+            constraint = tableSchema.getConstraint(name);
             assert($constraint !isNull);
             if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
@@ -472,12 +472,12 @@ class PostgresSchemaDialect : SchemaDialect {
         string sqlPattern = "ALTER TABLE %s DROP CONSTRAINT %s;";
         string [] sqlResults;
 
-        foreach ($name; tableSchema.constraints()) {
-            constraint = tableSchema.getConstraint($name);
+        foreach (name; tableSchema.constraints()) {
+            constraint = tableSchema.getConstraint(name);
             assert($constraint !isNull);
             if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
-                constraintName = _driver.quoteIdentifier($name);
+                constraintName = _driver.quoteIdentifier(name);
                 sqlResults ~= sqlPattern.format(aTableName, constraintName);
             }
         }
@@ -485,7 +485,7 @@ class PostgresSchemaDialect : SchemaDialect {
     }
  
     string indexSql(TableSchema tableSchema, string aName) {
-        someData = tableSchema.getIndex($name);
+        someData = tableSchema.getIndex(name);
         assert(someData !isNull);
         someColumns = array_map(
             [_driver, "quoteIdentifier"],
@@ -493,15 +493,15 @@ class PostgresSchemaDialect : SchemaDialect {
         );
 
         return "CREATE INDEX %s ON %s (%s)".format(
-            _driver.quoteIdentifier($name),
+            _driver.quoteIdentifier(name),
             _driver.quoteIdentifier(tableSchema.name()),
             join(", ", someColumns));
     }
  
     string constraintSql(TableSchema tableSchema, string aName) {
-        someData = tableSchema.getConstraint($name);
+        someData = tableSchema.getConstraint(name);
         assert(someData !isNull);
-         result = "CONSTRAINT " ~ _driver.quoteIdentifier($name);
+         result = "CONSTRAINT " ~ _driver.quoteIdentifier(name);
         if (someData["type"] == TableSchema.CONSTRAINT_PRIMARY) {
              result = "PRIMARY KEY";
         }
@@ -568,7 +568,7 @@ class PostgresSchemaDialect : SchemaDialect {
         auto name = _driver.quoteIdentifier(tableSchema.name());
 
         return [
-            "TRUNCATE %s RESTART IDENTITY CASCADE".format($name),
+            "TRUNCATE %s RESTART IDENTITY CASCADE".format(name),
         ];
     }
     
@@ -581,6 +581,6 @@ class PostgresSchemaDialect : SchemaDialect {
         sql = "DROP TABLE %s CASCADE"
             .format(_driver.quoteIdentifier(tableSchema.name()));
 
-        return [$sql];
+        return [sql];
     }
 }

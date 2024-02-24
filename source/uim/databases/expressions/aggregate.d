@@ -54,16 +54,16 @@ class AggregateExpression : FunctionExpression : IWindow
     /**
      * Adds an empty `OVER()` window expression or a named window epression.
      *
-     * @param string|null $name Window name
+     * @param string|null name Window name
      * @return this
      */
     function over(Nullable!string aName = null) {
         if (this.window == null) {
             this.window = new WindowExpression();
         }
-        if ($name) {
+        if (name) {
             // Set name manually in case this was chained from FunctionsBuilder wrapper
-            this.window.name($name);
+            this.window.name(name);
         }
 
         return this;
@@ -149,19 +149,19 @@ class AggregateExpression : FunctionExpression : IWindow
 
 
     string sql(ValueBinder aBinder) {
-        $sql = super.sql(aBinder);
+        sql = super.sql(aBinder);
         if (this.filter != null) {
-            $sql ~= " FILTER (WHERE " ~ this.filter.sql(aBinder) ~ ")";
+            sql ~= " FILTER (WHERE " ~ this.filter.sql(aBinder) ~ ")";
         }
         if (this.window != null) {
             if (this.window.isNamedOnly()) {
-                $sql ~= " OVER " ~ this.window.sql(aBinder);
+                sql ~= " OVER " ~ this.window.sql(aBinder);
             } else {
-                $sql ~= " OVER (" ~ this.window.sql(aBinder) ~ ")";
+                sql ~= " OVER (" ~ this.window.sql(aBinder) ~ ")";
             }
         }
 
-        return $sql;
+        return sql;
     }
 
 

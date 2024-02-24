@@ -74,12 +74,12 @@ class IdentifierExpression : IDBAExpression
 
 
     string sql(ValueBinder aBinder) {
-        $sql = _identifier;
+        sql = _identifier;
         if (this.collation) {
-            $sql ~= " COLLATE " ~ this.collation;
+            sql ~= " COLLATE " ~ this.collation;
         }
 
-        return $sql;
+        return sql;
     }
 
 

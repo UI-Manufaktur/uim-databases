@@ -51,7 +51,7 @@ class FunctionExpression : QueryExpression : ITypedResult
      * @param string $returnType The return type of this expression
      */
     this(string aName, array params = null, array types = null, string $returnType = "string") {
-        _name = $name;
+        _name = name;
         _returnType = $returnType;
         super(($params, types, ",");
     }
@@ -63,7 +63,7 @@ class FunctionExpression : QueryExpression : ITypedResult
      * @return this
      */
     function setName(string aName) {
-        _name = $name;
+        _name = name;
 
         return this;
     }
