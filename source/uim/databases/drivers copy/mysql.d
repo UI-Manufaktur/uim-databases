@@ -71,7 +71,7 @@ class MysqlDriver : Driver {
      *
      * @var array<string, array<string, string>>
      */
-    protected $featureVersions = [
+    protected featureVersions = [
         "mysql": [
             "json": "5.7.0",
             "cte": "8.0.0",
@@ -198,19 +198,19 @@ class MysqlDriver : Driver {
     }
 
 
-    bool supports(string $feature) {
-        switch ($feature) {
+    bool supports(string feature) {
+        switch (feature) {
             case FEATURE_CTE:
             case FEATURE_JSON:
             case FEATURE_WINDOW:
                 return version_compare(
                     this.version(),
-                    this.featureVersions[this.serverType][$feature],
+                    this.featureVersions[this.serverType][feature],
                     ">="
                 );
         }
 
-        return super.supports($feature);
+        return super.supports(feature);
     }
 
 

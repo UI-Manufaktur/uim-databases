@@ -8,7 +8,7 @@ import uim.databases;
  *
  * @method int|null getMaxAliasLength() Returns the maximum alias length allowed.
  * @method int getConnectRetries() Returns the number of connection retry attempts made.
- * @method bool supports(string $feature) Checks whether a feature is supported by the driver.
+ * @method bool supports(string feature) Checks whether a feature is supported by the driver.
  * @method bool inTransaction() Returns whether a transaction is active.
  */
 interface IDriver

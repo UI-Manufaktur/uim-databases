@@ -66,7 +66,7 @@ class Postgres : Driver {
     }
  
     bool supports(DriverFeatures feature) {
-        return match ($feature) {
+        return match (feature) {
             DriverFeatures.CTE,
             DriverFeatures.JSON,
             DriverFeatures.SAVEPOINT,

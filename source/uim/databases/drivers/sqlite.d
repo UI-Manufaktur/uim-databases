@@ -79,7 +79,7 @@ class Sqlite : Driver
      *
      * @var array<string, string>
      */
-    protected $featureVersions = [
+    protected featureVersions = [
         "cte": "3.8.3",
         "window": "3.28.0",
     ];
@@ -188,13 +188,13 @@ class Sqlite : Driver
     }
 
 
-    bool supports(string $feature) {
-        switch ($feature) {
+    bool supports(string feature) {
+        switch (feature) {
             case FEATURE_CTE:
             case FEATURE_WINDOW:
                 return version_compare(
                     this.version(),
-                    this.featureVersions[$feature],
+                    this.featureVersions[feature],
                     ">="
                 );
 
@@ -202,7 +202,7 @@ class Sqlite : Driver
                 return true;
         }
 
-        return super.supports($feature);
+        return super.supports(feature);
     }
 
 

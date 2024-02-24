@@ -165,8 +165,8 @@ _baseConfig = [
         return "EXEC sp_MSforeachtable "ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all"";
     }
  
-    bool supports(DriverFeatures $feature) {
-        return match ($feature) {
+    bool supports(DriverFeatures feature) {
+        return match (feature) {
             DriverFeatures.CTE,
             DriverFeatures.DISABLE_CONSTRAINT_WITHOUT_TRANSACTION,
             DriverFeatures.SAVEPOINT,

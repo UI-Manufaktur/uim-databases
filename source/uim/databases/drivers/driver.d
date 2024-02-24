@@ -307,7 +307,7 @@ abstract class Driver : IDBADriver {
      * @param string feature Driver feature name
      */
     bool supports(string feature) {
-        switch ($feature) {
+        switch (feature) {
             case static.FEATURE_DISABLE_CONSTRAINT_WITHOUT_TRANSACTION:
             case static.FEATURE_QUOTE:
             case static.FEATURE_SAVEPOINT:

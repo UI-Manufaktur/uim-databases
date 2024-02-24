@@ -219,10 +219,10 @@ abstract class Driver : IDriver
      *
      * Defaults to true for FEATURE_QUOTE and FEATURE_SAVEPOINT.
      *
-     * @param string $feature Driver feature name
+     * @param string feature Driver feature name
      */
-    bool supports(string $feature) {
-        switch ($feature) {
+    bool supports(string feature) {
+        switch (feature) {
             case FEATURE_DISABLE_CONSTRAINT_WITHOUT_TRANSACTION:
             case FEATURE_QUOTE:
             case FEATURE_SAVEPOINT:

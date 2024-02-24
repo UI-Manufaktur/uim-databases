@@ -149,8 +149,8 @@ class Postgres : Driver
     }
 
 
-    bool supports(string $feature) {
-        switch ($feature) {
+    bool supports(string feature) {
+        switch (feature) {
             case FEATURE_CTE:
             case FEATURE_JSON:
             case FEATURE_TRUNCATE_WITH_CONSTRAINTS:
@@ -161,7 +161,7 @@ class Postgres : Driver
                 return false;
         }
 
-        return super.supports($feature);
+        return super.supports(feature);
     }
 
 

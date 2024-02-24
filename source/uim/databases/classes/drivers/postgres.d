@@ -110,8 +110,8 @@ string enableForeignKeySQL() {
     return "SET CONSTRAINTS ALL IMMEDIATE";
 }
 
-bool supports(DriverFeatures$feature) {
-    return match($feature) {
+bool supports(DriverFeaturesfeature) {
+    return match(feature) {
         DriverFeatures.CTE,
         DriverFeatures.JSON,
         DriverFeatures.SAVEPOINT,

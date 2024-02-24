@@ -57,7 +57,7 @@ class SqliteDriver : Driver {
     ];
 
     // Mapping of feature to db server version for feature availability checks.
-    protected STRINGAA $featureVersions = [
+    protected STRINGAA featureVersions = [
         "cte": "3.8.3",
         "window": "3.28.0",
     ];
@@ -122,8 +122,8 @@ class SqliteDriver : Driver {
         return "PRAGMA foreign_keys = ON";
     }
 
-    bool supports(DriverFeatures $feature) {
-        return match ($feature) {
+    bool supports(DriverFeatures feature) {
+        return match (feature) {
             DriverFeatures.DISABLE_CONSTRAINT_WITHOUT_TRANSACTION,
             DriverFeatures.SAVEPOINT,
             DriverFeatures.TRUNCATE_WITH_CONSTRAINTS: true,
@@ -133,7 +133,7 @@ class SqliteDriver : Driver {
             DriverFeatures.CTE,
             DriverFeatures.WINDOW: version_compare(
                 this.currentVersion(),
-                this.featureVersions[$feature.value],
+                this.featureVersions[feature.value],
                 '>='
             ),
         };

@@ -135,8 +135,8 @@ class MysqlDriver : Driver {
         return "SET foreign_key_checks = 1";
     }
  
-    bool supports(DriverFeatures $feature) {
-        return match ($feature) {
+    bool supports(DriverFeatures feature) {
+        return match (feature) {
             DriverFeatures.DISABLE_CONSTRAINT_WITHOUT_TRANSACTION,
             DriverFeatures.SAVEPOINT: true,
 
@@ -146,7 +146,7 @@ class MysqlDriver : Driver {
             DriverFeatures.JSON,
             DriverFeatures.WINDOW: version_compare(
                 this.currentVersion(),
-                this.featureVersions[this.serverType][$feature.value],
+                this.featureVersions[this.serverType][feature.value],
                 '>='
             ),
         };

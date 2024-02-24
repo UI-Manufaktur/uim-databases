@@ -121,7 +121,7 @@ class Sqlite : Driver {
     }
 
     bool supports(DriverFeatures feature) {
-        return match ($feature) {
+        return match (feature) {
             DriverFeatures.DISABLE_CONSTRAINT_WITHOUT_TRANSACTION,
             DriverFeatures.SAVEPOINT,
             DriverFeatures.TRUNCATE_WITH_CONSTRAINTS: true,
@@ -131,7 +131,7 @@ class Sqlite : Driver {
             DriverFeatures.CTE,
             DriverFeatures.WINDOW: version_compare(
                 this.currentVersion(),
-                this.featureVersions[$feature.value],
+                this.featureVersions[feature.value],
                 '>='
             ),
         };

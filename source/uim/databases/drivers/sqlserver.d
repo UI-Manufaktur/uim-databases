@@ -197,7 +197,7 @@ class Sqlserver : Driver
     }
 
 
-    string releaseSavePointSQL(name) {
+    string releaseSavePointSQL(string name) {
         // SQLServer has no release save point operation.
         return "";
     }
@@ -214,12 +214,12 @@ class Sqlserver : Driver
 
 
     string enableForeignKeySQL() {
-        return "EXEC sp_MSforeachtable "ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all"";
+        return "EXEC sp_MSforeachtable \"ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all\"";
     }
 
 
-    bool supports(string $feature) {
-        switch ($feature) {
+    bool supports(string feature) {
+        switch (feature) {
             case FEATURE_CTE:
             case FEATURE_TRUNCATE_WITH_CONSTRAINTS:
             case FEATURE_WINDOW:
@@ -231,7 +231,7 @@ class Sqlserver : Driver
                 return _connection.getAttribute(PDO::ATTR_DRIVER_NAME) != "odbc";
         }
 
-        return super.supports($feature);
+        return super.supports(feature);
     }
 
 

@@ -76,7 +76,7 @@ class Mysql : Driver {
     }
  
     bool supports(DriverFeatures feature) {
-        return match ($feature) {
+        return match (feature) {
             DriverFeatures.DISABLE_CONSTRAINT_WITHOUT_TRANSACTION,
             DriverFeatures.SAVEPOINT: true,
 
@@ -86,7 +86,7 @@ class Mysql : Driver {
             DriverFeatures.JSON,
             DriverFeatures.WINDOW: version_compare(
                 this.currentVersion(),
-                this.featureVersions[this.serverType][$feature.value],
+                this.featureVersions[this.serverType][feature.value],
                 '>='
             ),
         };
