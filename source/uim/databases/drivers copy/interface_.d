@@ -115,23 +115,23 @@ interface IDriver
     /**
      * Get the SQL for releasing a save point.
      *
-     * @param string|int $name Save point name or id
+     * @param string|int name Save point name or id
      */
-    string releaseSavePointSQL($name);
+    string releaseSavePointSQL(name);
 
     /**
      * Get the SQL for creating a save point.
      *
-     * @param string|int $name Save point name or id
+     * @param string|int name Save point name or id
      */
-    string savePointSQL($name);
+    string savePointSQL(name);
 
     /**
      * Get the SQL for rollingback a save point.
      *
-     * @param string|int $name Save point name or id
+     * @param string|int name Save point name or id
      */
-    string rollbackSavePointSQL($name);
+    string rollbackSavePointSQL(name);
 
     /**
      * Get the SQL for disabling foreign keys.

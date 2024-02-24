@@ -100,9 +100,9 @@ class Sqlite : Driver
             PDO::ATTR_ERRMODE: PDO::ERRMODE_EXCEPTION,
         ];
         if (!is_string(aConfig["database"]) || aConfig["database"] == "") {
-            $name = aConfig["name"] ?? "unknown";
+            name = aConfig["name"] ?? "unknown";
             throw new InvalidArgumentException(
-                "The `database` key for the `{$name}` SQLite connection needs to be a non-empty string."
+                "The `database` key for the `{name}` SQLite connection needs to be a non-empty string."
             );
         }
 

@@ -148,11 +148,11 @@ class LoggedQuery : JsonSerializable
      * Returns the string representation of this logged query
      */
     string toString() {
-        $sql = this.query;
+        sql = this.query;
         if (!empty(this.params)) {
-            $sql = this.interpolate();
+            sql = this.interpolate();
         }
 
-        return $sql;
+        return sql;
     }
 }

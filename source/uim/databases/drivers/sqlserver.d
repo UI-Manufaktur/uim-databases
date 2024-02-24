@@ -161,17 +161,16 @@ class Sqlserver : Driver
      * @param uim.databases.Query|string $query The query to prepare.
      * @return uim.databases.IStatement
      */
-    function prepare($query): IStatement
-    {
+    IStatement prepare($query) {
         this.connect();
 
-        $sql = $query;
-        $options = [
+        sql = $query;
+        options = [
             PDO::ATTR_CURSOR: PDO::CURSOR_SCROLL,
             PDO::SQLSRV_ATTR_CURSOR_SCROLL_TYPE: PDO::SQLSRV_CURSOR_BUFFERED,
         ];
         if ($query instanceof Query) {
-            $sql = $query.sql();
+            sql = $query.sql();
             if (count($query.getValueBinder().bindings()) > 2100) {
                 throw new InvalidArgumentException(
                     "Exceeded maximum number of parameters (2100) for prepared statements in Sql Server~ " ~
@@ -182,30 +181,30 @@ class Sqlserver : Driver
             }
 
             if (!$query.isBufferedResultsEnabled()) {
-                $options = null;
+                options = null;
             }
         }
 
         /** @psalm-suppress PossiblyInvalidArgument */
-        $statement = _connection.prepare($sql, $options);
+        $statement = _connection.prepare(sql, options);
 
         return new SqlserverStatement($statement, this);
     }
 
 
-    string savePointSQL($name) {
-        return "SAVE TRANSACTION t" ~ $name;
+    string savePointSQL(name) {
+        return "SAVE TRANSACTION t" ~ name;
     }
 
 
-    string releaseSavePointSQL($name) {
+    string releaseSavePointSQL(name) {
         // SQLServer has no release save point operation.
         return "";
     }
 
 
-    string rollbackSavePointSQL($name) {
-        return "ROLLBACK TRANSACTION t" ~ $name;
+    string rollbackSavePointSQL(string name) {
+        return "ROLLBACK TRANSACTION t" ~ name;
     }
 
 
