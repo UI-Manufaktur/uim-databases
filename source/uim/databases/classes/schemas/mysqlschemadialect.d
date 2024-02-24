@@ -459,7 +459,8 @@ class MysqlSchemaDialect : SchemaDialect {
 
             return "PRIMARY KEY (%s)".format(someColumns.join(", "));
         }
-         result = "";
+        
+        string result = "";
         if (someData["type"] == TableSchema.CONSTRAINT_UNIQUE) {
              result = "UNIQUE KEY ";
         }

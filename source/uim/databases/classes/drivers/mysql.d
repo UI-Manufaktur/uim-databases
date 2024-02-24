@@ -91,14 +91,14 @@ class MysqlDriver : Driver {
             configData["flags"][PDO.MYSQL_ATTR_SSL_CA] = configData["ssl_ca"];
         }
 
-        auto $dsn = configData["unix_socket"].isEmpty
+        auto dsn = configData["unix_socket"].isEmpty
             ? "mysql:host={configData["host"]};port={configData["port"]};dbname={configData["database"]}"
             : "mysql:unix_socket={configData["unix_socket"]};dbname={configData["database"]}";
         }
         if (!empty(configData["encoding"])) {
-            $dsn ~= ";charset={configData["encoding"]}";
+            dsn ~= ";charset={configData["encoding"]}";
         }
-        this.pdo = this.createPdo($dsn, configData);
+        this.pdo = this.createPdo(dsn, configData);
 
         if (!configData["init"].isEmpty) {
             (array)configData["init"]

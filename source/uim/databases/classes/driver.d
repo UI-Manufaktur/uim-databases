@@ -111,7 +111,7 @@ abstract class Driver {
      */
     protected PDO createPdo(string adsn, IData[string] configData = null) {
         action = fn (): new PDO(
-            $dsn,
+            dsn,
             configData["username"] ?: null,
             configData["password"] ?: null,
             configData["flags"]

@@ -156,7 +156,7 @@ class IdentifierQuoter {
     protected array[string] _quoteJoins(array $joins) {
         auto result;
         $joins.each!((value) {
-            alias = "";
+            string alias = "";
             if (!empty(value["alias"])) {
                 alias = this.quoteIdentifier(value["alias"]);
                 value["alias"] = alias;

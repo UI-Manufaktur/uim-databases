@@ -62,7 +62,7 @@ class QueryCompiler {
      * @param \UIM\Database\ValueBinder aBinder Value binder used to generate parameter placeholders
      */
     string compile(Query compiledQuery, ValueBinder aBinder) {
-        auto result = "";
+        string result = "";
         auto queryType = compiledQuery.type();
         compiledQuery.traverseParts(
            _sqlCompiler(result, compiledQuery, aBinder),

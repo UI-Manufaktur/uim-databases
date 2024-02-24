@@ -48,12 +48,12 @@ class PostgresDriver : Driver {
             PDO.ATTR_ERRMODE: PDO.ERRMODE_EXCEPTION,
         ]);
 
-        string $dsn = configData["unix_socket"].isEmpty
+        string dsn = configData["unix_socket"].isEmpty
             ? `pgsql:host={configData["host"]};port={configData["port"]};dbname={configData["database"]}`
             : `pgsql:dbname={configData["database"]}`;
     }
 
-    this.pdo = this.createPdo($dsn, configData);
+    this.pdo = this.createPdo(dsn, configData);
     if (!empty(configData["encoding"])) {
         this.setEncoding(configData["encoding"]);
     }
