@@ -149,8 +149,8 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * a call to `then()` before invoking `when()` again or `else()`:
      *
      * ```
-     * $queryExpression
-     *     .case($query.identifier("Table.column"))
+     * queryExpression
+     *     .case(query.identifier("Table.column"))
      *     .when(true)
      *     .then("Yes")
      *     .when(false)
@@ -171,7 +171,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * and must return one, being it the same object, or a custom one:
      *
      * ```
-     * $queryExpression
+     * queryExpression
      *     .case()
      *     .when(function (uim.databases.Expression\WhenThenExpression $whenThen) {
      *         return $whenThen
@@ -197,7 +197,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * `uim.databases.Expression\WhenThenExpression::when()`:
      *
      * ```
-     * $queryExpression
+     * queryExpression
      *     .case()
      *     .when(function (uim.databases.Expression\WhenThenExpression $whenThen) {
      *         return $whenThen
@@ -251,11 +251,11 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * Lastly, data can also be bound manually:
      *
      * ```
-     * $query
+     * query
      *      .select([
-     *          "val": $query.newExpr()
+     *          "val": query.newExpr()
      *              .case()
-     *              .when($query.newExpr(":userData"))
+     *              .when(query.newExpr(":userData"))
      *              .then(123)
      *      ])
      *      .bind(":userData", $userData, "integer")

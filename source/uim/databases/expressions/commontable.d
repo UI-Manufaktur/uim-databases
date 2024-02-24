@@ -34,7 +34,7 @@ class CommonTableExpression : IDBAExpression
      *
      * @var DDBIDBAExpression|null
      */
-    protected $query;
+    protected query;
 
     /**
      * Whether the CTE is materialized or not materialized.
@@ -51,12 +51,12 @@ class CommonTableExpression : IDBAExpression
      * Constructor.
      *
      * @param string aName The CTE name.
-     * @param uim.databases.IDBAExpression|\Closure $query CTE query
+     * @param uim.databases.IDBAExpression|\Closure query CTE query
      */
-    this(string aName = "", $query = null) {
+    this(string aName = "", query = null) {
         this.name = new IdentifierExpression(name);
-        if ($query) {
-            this.query($query);
+        if (query) {
+            this.query(query);
         }
     }
 
@@ -78,19 +78,19 @@ class CommonTableExpression : IDBAExpression
     /**
      * Sets the query for this CTE.
      *
-     * @param uim.databases.IDBAExpression|\Closure $query CTE query
+     * @param uim.databases.IDBAExpression|\Closure query CTE query
      * @return this
      */
-    function query($query) {
-        if ($query instanceof Closure) {
-            $query = $query();
-            if (!($query instanceof IDBAExpression)) {
+    function query(query) {
+        if (query instanceof Closure) {
+            query = query();
+            if (!(query instanceof IDBAExpression)) {
                 throw new RuntimeException(
                     "You must return an `IDBAExpression` from a Closure passed to `query()`."
                 );
             }
         }
-        this.query = $query;
+        this.query = query;
 
         return this;
     }

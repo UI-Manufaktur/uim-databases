@@ -80,27 +80,27 @@ trait SqlDialectTrait
      */
     function queryTranslator(string type): Closure
     {
-        return function ($query) use ($type) {
+        return function (query) use ($type) {
             if (this.isAutoQuotingEnabled()) {
-                $query = (new IdentifierQuoter(this)).quote($query);
+                query = (new IdentifierQuoter(this)).quote(query);
             }
 
-            /** @var DORMQuery $query */
-            $query = this.{"_" ~ type ~ "QueryTranslator"}($query);
+            /** @var DORMQuery query */
+            query = this.{"_" ~ type ~ "QueryTranslator"}(query);
             translators = _expressionTranslators();
             if (!$translators) {
-                return $query;
+                return query;
             }
 
-            $query.traverseExpressions(void ($expression) use ($translators, $query) {
+            query.traverseExpressions(void ($expression) use ($translators, query) {
                 foreach ($translators as $class: $method) {
                     if ($expression instanceof $class) {
-                        this.{$method}($expression, $query);
+                        this.{$method}($expression, query);
                     }
                 }
             });
 
-            return $query;
+            return query;
         };
     }
 
@@ -119,29 +119,29 @@ trait SqlDialectTrait
     /**
      * Apply translation steps to select queries.
      *
-     * @param uim.databases.Query $query The query to translate
+     * @param uim.databases.Query query The query to translate
      * @return uim.databases.Query The modified query
      */
-    protected function _selectQueryTranslator(Query $query): Query
+    protected function _selectQueryTranslator(Query query): Query
     {
-        return _transformDistinct($query);
+        return _transformDistinct(query);
     }
 
     /**
      * Returns the passed query after rewriting the DISTINCT clause, so that drivers
      * that do not support the "ON" part can provide the actual way it should be done
      *
-     * @param uim.databases.Query $query The query to be transformed
+     * @param uim.databases.Query query The query to be transformed
      * @return uim.databases.Query
      */
-    protected function _transformDistinct(Query $query): Query
+    protected function _transformDistinct(Query query): Query
     {
-        if (is_array($query.clause("distinct"))) {
-            $query.group($query.clause("distinct"), true);
-            $query.distinct(false);
+        if (is_array(query.clause("distinct"))) {
+            query.group(query.clause("distinct"), true);
+            query.distinct(false);
         }
 
-        return $query;
+        return query;
     }
 
     /**
@@ -153,28 +153,28 @@ trait SqlDialectTrait
      *
      * We are intentionally not supporting deletes with joins as they have even poorer support.
      *
-     * @param uim.databases.Query $query The query to translate
+     * @param uim.databases.Query query The query to translate
      * @return uim.databases.Query The modified query
      */
-    protected function _deleteQueryTranslator(Query $query): Query
+    protected function _deleteQueryTranslator(Query query): Query
     {
         $hadAlias = false;
         tables = null;
-        foreach ($query.clause("from") as alias: table) {
+        foreach (query.clause("from") as alias: table) {
             if (is_string($alias)) {
                 $hadAlias = true;
             }
             tables[] = table;
         }
         if ($hadAlias) {
-            $query.from($tables, true);
+            query.from($tables, true);
         }
 
         if (!$hadAlias) {
-            return $query;
+            return query;
         }
 
-        return _removeAliasesFromConditions($query);
+        return _removeAliasesFromConditions(query);
     }
 
     /**
@@ -185,32 +185,32 @@ trait SqlDialectTrait
      *
      * Just like for delete queries, joins are currently not supported for update queries.
      *
-     * @param uim.databases.Query $query The query to translate
+     * @param uim.databases.Query query The query to translate
      * @return uim.databases.Query The modified query
      */
-    protected function _updateQueryTranslator(Query $query): Query
+    protected function _updateQueryTranslator(Query query): Query
     {
-        return _removeAliasesFromConditions($query);
+        return _removeAliasesFromConditions(query);
     }
 
     /**
      * Removes aliases from the `WHERE` clause of a query.
      *
-     * @param uim.databases.Query $query The query to process.
+     * @param uim.databases.Query query The query to process.
      * @return uim.databases.Query The modified query.
      * @throws \RuntimeException In case the processed query contains any joins, as removing
      *  aliases from the conditions can break references to the joined tables.
      */
-    protected function _removeAliasesFromConditions(Query $query): Query
+    protected function _removeAliasesFromConditions(Query query): Query
     {
-        if ($query.clause("join")) {
+        if (query.clause("join")) {
             throw new RuntimeException(
                 "Aliases are being removed from conditions for UPDATE/DELETE queries, " ~
                 "this can break references to joined tables."
             );
         }
 
-        $conditions = $query.clause("where");
+        $conditions = query.clause("where");
         if ($conditions) {
             $conditions.traverse(function ($expression) {
                 if ($expression instanceof ComparisonExpression) {
@@ -240,18 +240,18 @@ trait SqlDialectTrait
             });
         }
 
-        return $query;
+        return query;
     }
 
     /**
      * Apply translation steps to insert queries.
      *
-     * @param uim.databases.Query $query The query to translate
+     * @param uim.databases.Query query The query to translate
      * @return uim.databases.Query The modified query
      */
-    protected function _insertQueryTranslator(Query $query): Query
+    protected function _insertQueryTranslator(Query query): Query
     {
-        return $query;
+        return query;
     }
 
     /**

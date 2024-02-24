@@ -86,10 +86,10 @@ interface IDriver
     /**
      * Prepares a sql statement to be executed.
      *
-     * @param uim.databases.Query|string $query The query to turn into a prepared statement.
+     * @param uim.databases.Query|string query The query to turn into a prepared statement.
      * @return uim.databases.IStatement
      */
-    function prepare($query): IStatement;
+    function prepare(query): IStatement;
 
     /**
      * Starts a transaction.
@@ -253,12 +253,12 @@ interface IDriver
      * Transforms the passed query to this Driver"s dialect and returns an instance
      * of the transformed query and the full compiled SQL string.
      *
-     * @param uim.databases.Query $query The query to compile.
+     * @param uim.databases.Query query The query to compile.
      * @param uim.databases.ValueBinder aBinder The value binder to use.
      * @return array containing 2 entries. The first entity is the transformed query
      * and the second one the compiled SQL.
      */
-    array compileQuery(Query $query, ValueBinder aBinder);
+    array compileQuery(Query query, ValueBinder aBinder);
 
     /**
      * Returns an instance of a QueryCompiler.

@@ -158,20 +158,20 @@ class Sqlserver : Driver
     /**
      * Prepares a sql statement to be executed
      *
-     * @param uim.databases.Query|string $query The query to prepare.
+     * @param uim.databases.Query|string query The query to prepare.
      * @return uim.databases.IStatement
      */
-    IStatement prepare($query) {
+    IStatement prepare(query) {
         this.connect();
 
-        sql = $query;
+        sql = query;
         options = [
             PDO::ATTR_CURSOR: PDO::CURSOR_SCROLL,
             PDO::SQLSRV_ATTR_CURSOR_SCROLL_TYPE: PDO::SQLSRV_CURSOR_BUFFERED,
         ];
-        if ($query instanceof Query) {
-            sql = $query.sql();
-            if (count($query.getValueBinder().bindings()) > 2100) {
+        if (query instanceof Query) {
+            sql = query.sql();
+            if (count(query.getValueBinder().bindings()) > 2100) {
                 throw new InvalidArgumentException(
                     "Exceeded maximum number of parameters (2100) for prepared statements in Sql Server~ " ~
                     "This is probably due to a very large WHERE IN () clause which generates a parameter " ~
@@ -180,7 +180,7 @@ class Sqlserver : Driver
                 );
             }
 
-            if (!$query.isBufferedResultsEnabled()) {
+            if (!query.isBufferedResultsEnabled()) {
                 options = null;
             }
         }
@@ -260,24 +260,23 @@ class Sqlserver : Driver
     }
 
 
-    protected function _selectQueryTranslator(Query $query): Query
-    {
-        $limit = $query.clause("limit");
-        $offset = $query.clause("offset");
+    protected Query _selectQueryTranslator(Query query) {
+        limit = query.clause("limit");
+        offset = query.clause("offset");
 
-        if ($limit && $offset == null) {
-            $query.modifier(["_auto_top_": sprintf("TOP %d", $limit)]);
+        if (limit && offset == null) {
+            query.modifier(["_auto_top_": sprintf("TOP %d", limit)]);
         }
 
-        if ($offset != null && !$query.clause("order")) {
-            $query.order($query.newExpr().add("(SELECT NULL)"));
+        if (offset != null && !query.clause("order")) {
+            query.order(query.newExpr().add("(SELECT NULL)"));
         }
 
-        if (this.version() < 11 && $offset != null) {
-            return _pagingSubquery($query, $limit, $offset);
+        if (this.version() < 11 && offset != null) {
+            return _pagingSubquery(query, limit, offset);
         }
 
-        return _transformDistinct($query);
+        return _transformDistinct(query);
     }
 
     /**
@@ -287,11 +286,11 @@ class Sqlserver : Driver
      * be used.
      *
      * @param uim.databases.Query $original The query to wrap in a subquery.
-     * @param int|null $limit The number of rows to fetch.
-     * @param int|null $offset The number of rows to offset.
+     * @param int|null limit The number of rows to fetch.
+     * @param int|null offset The number of rows to offset.
      * @return uim.databases.Query Modified query object.
      */
-    protected function _pagingSubquery(Query $original, Nullable!int $limit, Nullable!int $offset): Query
+    protected function _pagingSubquery(Query $original, Nullable!int limit, Nullable!int offset): Query
     {
         field = "_cake_paging_._cake_page_rownum_";
 
@@ -322,22 +321,22 @@ class Sqlserver : Driver
             $order = new OrderByExpression("(SELECT NULL)");
         }
 
-        $query = clone $original;
-        $query.select([
+        query = clone $original;
+        query.select([
                 "_cake_page_rownum_": new UnaryExpression("ROW_NUMBER() OVER", $order),
             ]).limit(null)
             .offset(null)
             .order([], true);
 
-        $outer = new Query($query.getConnection());
+        $outer = new Query(query.getConnection());
         $outer.select("*")
-            .from(["_cake_paging_": $query]);
+            .from(["_cake_paging_": query]);
 
-        if ($offset) {
-            $outer.where(["field > " ~ $offset]);
+        if (offset) {
+            $outer.where(["field > " ~ offset]);
         }
-        if ($limit) {
-            value = (int)$offset + $limit;
+        if (limit) {
+            value = (int)offset + limit;
             $outer.where(["field <= value"]);
         }
 
@@ -355,20 +354,20 @@ class Sqlserver : Driver
     }
 
 
-    protected function _transformDistinct(Query $query): Query
+    protected function _transformDistinct(Query query): Query
     {
-        if (!is_array($query.clause("distinct"))) {
-            return $query;
+        if (!is_array(query.clause("distinct"))) {
+            return query;
         }
 
-        $original = $query;
-        $query = clone $original;
+        $original = query;
+        query = clone $original;
 
-        $distinct = $query.clause("distinct");
-        $query.distinct(false);
+        $distinct = query.clause("distinct");
+        query.distinct(false);
 
         $order = new OrderByExpression($distinct);
-        $query
+        query
             .select(function ($q) use ($distinct, $order) {
                 $over = $q.newExpr("ROW_NUMBER() OVER")
                     .add("(PARTITION BY")
@@ -385,9 +384,9 @@ class Sqlserver : Driver
             .offset(null)
             .order([], true);
 
-        $outer = new Query($query.getConnection());
+        $outer = new Query(query.getConnection());
         $outer.select("*")
-            .from(["_cake_distinct_": $query])
+            .from(["_cake_distinct_": query])
             .where(["_cake_distinct_pivot_": 1]);
 
         // Decorate the original query as that is what the

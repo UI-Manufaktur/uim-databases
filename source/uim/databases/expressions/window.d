@@ -229,15 +229,15 @@ class WindowExpression : IDBAExpression, IWindow
         }
 
         if (this.frame != null) {
-            $offset = this.frame["start"]["offset"];
-            if ($offset instanceof IDBAExpression) {
-                $callback($offset);
-                $offset.traverse($callback);
+            offset = this.frame["start"]["offset"];
+            if (offset instanceof IDBAExpression) {
+                $callback(offset);
+                offset.traverse($callback);
             }
-            $offset = this.frame["end"]["offset"] ?? null;
-            if ($offset instanceof IDBAExpression) {
-                $callback($offset);
-                $offset.traverse($callback);
+            offset = this.frame["end"]["offset"] ?? null;
+            if (offset instanceof IDBAExpression) {
+                $callback(offset);
+                offset.traverse($callback);
             }
         }
 
@@ -248,21 +248,21 @@ class WindowExpression : IDBAExpression, IWindow
      * Builds frame offset sql.
      *
      * @param uim.databases.ValueBinder aBinder Value binder
-     * @param uim.databases.IDBAExpression|string|int|null $offset Frame offset
+     * @param uim.databases.IDBAExpression|string|int|null offset Frame offset
      * @param string $direction Frame offset direction
      */
-    protected string buildOffsetSql(ValueBinder aBinder, $offset, string $direction) {
-        if ($offset == 0) {
+    protected string buildOffsetSql(ValueBinder aBinder, offset, string $direction) {
+        if (offset == 0) {
             return "CURRENT ROW";
         }
 
-        if ($offset instanceof IDBAExpression) {
-            $offset = $offset.sql($binder);
+        if (offset instanceof IDBAExpression) {
+            offset = offset.sql($binder);
         }
 
         return sprintf(
             "%s %s",
-            $offset ?? "UNBOUNDED",
+            offset ?? "UNBOUNDED",
             $direction
         );
     }

@@ -30,7 +30,7 @@ class LoggedQuery : JsonSerializable
      *
      * @var string
      */
-    $query = "";
+    query = "";
 
     /**
      * Number of milliseconds this query took to complete
@@ -100,12 +100,12 @@ class LoggedQuery : JsonSerializable
         }, this.params);
 
         $keys = null;
-        $limit = is_int(key($params)) ? 1 : -1;
+        limit = is_int(key($params)) ? 1 : -1;
         foreach ($params as $key: $param) {
             $keys[] = is_string($key) ? "/:$key\b/" : "/[?]/";
         }
 
-        return preg_replace($keys, $params, this.query, $limit);
+        return preg_replace($keys, $params, this.query, limit);
     }
 
     /**

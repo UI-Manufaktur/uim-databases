@@ -170,19 +170,19 @@ class Postgres : Driver
     }
 
 
-    protected function _transformDistinct(Query $query): Query
+    protected function _transformDistinct(Query query): Query
     {
-        return $query;
+        return query;
     }
 
 
-    protected function _insertQueryTranslator(Query $query): Query
+    protected function _insertQueryTranslator(Query query): Query
     {
-        if (!$query.clause("epilog")) {
-            $query.epilog("RETURNING *");
+        if (!query.clause("epilog")) {
+            query.epilog("RETURNING *");
         }
 
-        return $query;
+        return query;
     }
 
 

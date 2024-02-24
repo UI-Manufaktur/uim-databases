@@ -59,10 +59,10 @@ abstract class Driver : IDriver
     abstract bool enabled();
 
 
-    function prepare($query): IStatement
+    function prepare(query): IStatement
     {
         this.connect();
-        $statement = _connection.prepare($query instanceof Query ? $query.sql() : $query);
+        $statement = _connection.prepare(query instanceof Query ? query.sql() : query);
 
         return new PDOStatement($statement, this);
     }
@@ -233,12 +233,12 @@ abstract class Driver : IDriver
     }
 
 
-    array compileQuery(Query $query, ValueBinder aBinder) {
+    array compileQuery(Query query, ValueBinder aBinder) {
         $processor = this.newCompiler();
-        translator = this.queryTranslator($query.type());
-        $query = translator($query);
+        translator = this.queryTranslator(query.type());
+        query = translator(query);
 
-        return [$query, $processor.compile($query, $binder)];
+        return [query, $processor.compile(query, $binder)];
     }
 
 

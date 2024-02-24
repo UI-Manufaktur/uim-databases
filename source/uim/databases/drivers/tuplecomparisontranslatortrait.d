@@ -29,9 +29,9 @@ trait TupleComparisonTranslatorTrait
      * 1 = (SELECT 1 FROM a_table WHERE (a = c) AND (b = d))
      *
      * @param uim.databases.Expression\TupleComparison $expression The expression to transform
-     * @param uim.databases.Query $query The query to update.
+     * @param uim.databases.Query query The query to update.
      */
-    protected void _transformTupleComparison(TupleComparison $expression, Query $query) {
+    protected void _transformTupleComparison(TupleComparison $expression, Query query) {
         fields = $expression.getField();
 
         if (!is_array(fields)) {
@@ -71,7 +71,7 @@ trait TupleComparisonTranslatorTrait
             typeMap = null;
         }
 
-        $surrogate = $query.getConnection()
+        $surrogate = query.getConnection()
             .newQuery()
             .select($true);
 

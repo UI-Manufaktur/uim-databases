@@ -161,11 +161,11 @@ class ValuesExpression : IDBAExpression {
      * Sets the query object to be used as the values expression to be evaluated
      * to insert records in the table.
      *
-     * @param uim.databases.Query $query The query to set
+     * @param uim.databases.Query query The query to set
      * @return this
      */
-    function setQuery(Query $query) {
-        _query = $query;
+    function setQuery(Query query) {
+        _query = query;
 
         return this;
     }
@@ -221,9 +221,9 @@ class ValuesExpression : IDBAExpression {
             $placeholders[] = implode(", ", $rowPlaceholders);
         }
 
-        $query = this.getQuery();
-        if ($query) {
-            return " " ~ $query.sql($binder);
+        query = this.getQuery();
+        if (query) {
+            return " " ~ query.sql($binder);
         }
 
         return sprintf(" VALUES (%s)", implode("), (", $placeholders));
