@@ -229,7 +229,7 @@ abstract class Query : IExpression, Stringable {
      * @param string[] someParts The list of query parts to traverse
      */
     void traverseParts(Closure visitor, array someParts) {
-        someParts.each!(name => visitor(_parts[$name], name));
+        someParts.each!(name => visitor(_parts[name], name));
     }
     
     /**
@@ -852,7 +852,7 @@ abstract class Query : IExpression, Stringable {
             "allowEmpty": Json(false),
         ];
 
-        if ($options["allowEmpty"] && !someValues) {
+        if (options["allowEmpty"] && !someValues) {
             return this.where([field ~ " IS NOT": null]);
         }
         return this.where(
@@ -1284,7 +1284,7 @@ abstract class Query : IExpression, Stringable {
      * string aName name of the clause to be returned
      */
     Json clause(string aName) {
-        if (!array_key_exists($name, _parts)) {
+        if (!array_key_exists(name, _parts)) {
             string[] clauses = _parts.keys;
             array_walk(clauses, fn (&$x): x = "`$x`");
             
@@ -1296,7 +1296,7 @@ abstract class Query : IExpression, Stringable {
                 clause
             ));
         }
-        return _parts[$name];
+        return _parts[name];
     }
     
     /**

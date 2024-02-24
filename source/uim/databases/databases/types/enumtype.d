@@ -26,7 +26,7 @@ class EnumType : BaseType {
         string aName,
         string enumClassName
     ) {
-        super($name);
+        super(name);
         this.enumClassName = enumClassName;
 
         try {
@@ -41,13 +41,13 @@ class EnumType : BaseType {
             ));
         }
         namedType = reflectionEnum.getBackingType();
-        if ($namedType.isNull) {
+        if (namedType.isNull) {
             throw new DatabaseException(
                 "Unable to use enum `%s` for type `%s`, must be a backed enum."
                 .format(enumClassName, name)
             );
         }
-        _.backingType = to!string($namedType);
+        _.backingType = to!string(namedType);
     }
     
     /**

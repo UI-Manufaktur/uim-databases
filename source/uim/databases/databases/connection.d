@@ -152,7 +152,7 @@ class Connection : IConnection {
      * @param array typesForCasting list or associative array of types to be used for casting values in query
      */
     IStatement execute(string asql, array params = [], array typesForCasting = []) {
-        return this.getDisconnectRetry().run(fn (): this.getDriver().execute($sql, params, typesForCasting));
+        return this.getDisconnectRetry().run(fn (): this.getDriver().execute(sql, params, typesForCasting));
     }
     
     /**
@@ -386,7 +386,7 @@ class Connection : IConnection {
      * string|int name Save point name or id
      */
     void createSavePoint(string|int name) {
-        this.execute(this.getDriver().savePointSQL($name));
+        this.execute(this.getDriver().savePointSQL(name));
     }
 
     /**
@@ -395,9 +395,9 @@ class Connection : IConnection {
      * string|int name Save point name or id
      */
     void releaseSavePoint(string|int name) {
-        sql = this.getDriver().releaseSavePointSQL($name);
-        if ($sql) {
-            this.execute($sql);
+        sql = this.getDriver().releaseSavePointSQL(name);
+        if (sql) {
+            this.execute(sql);
         }
     }
 
@@ -407,7 +407,7 @@ class Connection : IConnection {
      * string|int name Save point name or id
      */
     void rollbackSavepoint(string|int name) {
-        this.execute(this.getDriver().rollbackSavePointSQL($name));
+        this.execute(this.getDriver().rollbackSavePointSQL(name));
     }
 
     // Run driver specific SQL to disable foreign key checks.

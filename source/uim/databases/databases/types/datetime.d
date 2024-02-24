@@ -74,7 +74,7 @@ class DateTimeType : BaseType, IBatchCasting {
      * string name The name identifying this type
      */
     this(string aName = null) {
-        super($name);
+        super(name);
 
         this.defaultTimezone = new DateTimeZone(date_default_timezone_get());
        _className = class_exists(DateTime.classname) ? DateTime.classname : DateTimeImmutable.classname;

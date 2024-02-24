@@ -73,7 +73,7 @@ class Sqlite : Driver {
         if (!configData("database"].isString) || configData("database"].isEmpty) {
             name = configData("name"] ?? "unknown";
             throw new InvalidArgumentException(
-                "The `database` key for the `{$name}` SQLite connection needs to be a non-empty string."
+                "The `database` key for the `{name}` SQLite connection needs to be a non-empty string."
             );
         }
         chmodFile = false;

@@ -163,7 +163,7 @@ abstract class Driver {
      * @param array types List or associative array of types to be used for casting values in query.
      */
     IStatement execute(string asql, array params = [], array types = []) {
-        statement = this.prepare($sql);
+        statement = this.prepare(sql);
         if (!empty($params)) {
             statement.bind($params, types);
         }

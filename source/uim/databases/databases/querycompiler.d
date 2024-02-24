@@ -97,8 +97,8 @@ class QueryCompiler {
      * @param \UIM\Database\Query compiledQuery The query that is being compiled
      * @param \UIM\Database\ValueBinder aBinder Value binder used to generate parameter placeholder
      */
-    protected Closure _sqlCompiler(string &$sql, Query compiledQuery, ValueBinder aBinder) {
-        return void ($part, partName) use (&$sql, compiledQuery, aBinder) {
+    protected Closure _sqlCompiler(string &sql, Query compiledQuery, ValueBinder aBinder) {
+        return void ($part, partName) use (&sql, compiledQuery, aBinder) {
             if (
                 part.isNull ||
                 (isArray($part) && empty($part)) ||

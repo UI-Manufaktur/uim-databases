@@ -75,7 +75,7 @@ class TypeFactory {
      * @param \UIM\Database\IType  anInstance The type instance you want to set.
      */
     static void set(string typeId, IType  anInstance) {
-        _builtTypes[$name] =  anInstance;
+        _builtTypes[name] =  anInstance;
     }
     
     /**
