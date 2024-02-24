@@ -239,12 +239,12 @@ class TableSchema : TableISchema, ISqlGenerator {
             $valid += _columnExtras[$attrs["type"]];
         }
         attrs = array_intersect_key($attrs, $valid);
-       _columns[$name] = attrs + $valid;
-       _typeMap[$name] = _columns[$name]["type"];
+       _columns[name] = attrs + $valid;
+       _typeMap[name] = _columns[name]["type"];
     }
  
     void removeColumn(string aName) {
-        unset(_columns[$name], _typeMap[$name]);
+        unset(_columns[name], _typeMap[name]);
     }
  
     array columns() {
@@ -252,36 +252,36 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     array getColumn(string aName) {
-        if (!isSet(_columns[$name])) {
+        if (!isSet(_columns[name])) {
             return null;
         }
-        $column = _columns[$name];
+        $column = _columns[name];
         unset($column["baseType"]);
 
         return $column;
     }
  
     string getColumnType(string aName) {
-        if (!_columns.isSet($name)) {
+        if (!_columns.isSet(name)) {
             return null;
         }
-        return _columns[$name]["type"];
+        return _columns[name]["type"];
     }
  
     auto setColumnType(string aName, string atype) {
-        if (!isSet(_columns[$name])) {
+        if (!isSet(_columns[name])) {
             return this;
         }
-       _columns[$name]["type"] = type;
-       _typeMap[$name] = type;
+       _columns[name]["type"] = type;
+       _typeMap[name] = type;
 
-        unset(_columns[$name]["baseType"]);
+        unset(_columns[name]["baseType"]);
 
         return this;
     }
  
     bool hasColumn(string aName) {
-        return isSet(_columns[$name]);
+        return isSet(_columns[name]);
     }
  
     string baseColumnType(string acolumn) {
@@ -304,22 +304,22 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     bool isNullable(string aName) {
-        if (!isSet(_columns[$name])) {
+        if (!isSet(_columns[name])) {
             return true;
         }
-        return _columns[$name]["null"] == true;
+        return _columns[name]["null"] == true;
     }
  
     array defaultValues() {
         IData[string] $defaults;
-        foreach (_columns as $name: someData) {
+        foreach (_columns as name: someData) {
             if (!array_key_exists("default", someData)) {
                 continue;
             }
             if (someData["default"].isNull && someData["null"] != true) {
                 continue;
             }
-            $defaults[$name] = someData["default"];
+            $defaults[name] = someData["default"];
         }
         return $defaults;
     }
@@ -336,7 +336,7 @@ class TableSchema : TableISchema, ISqlGenerator {
             throw new DatabaseException(
                 "Invalid index type `%s` in index `%s` in table `%s`."
                 .format($attrs["type"],
-                $name,
+                name,
                _table
             ));
         }
@@ -346,11 +346,11 @@ class TableSchema : TableISchema, ISqlGenerator {
                 $message = 
                     "Columns used in index `%s` in table `%s` must be added to the Table schema first. " ~
                     "The column `%s` was not found."
-                    .format($name, _table, field);
+                    .format(name, _table, field);
                 throw new DatabaseException($message);
             }
         }
-       _indexNames[$name] = attrs;
+       _indexNames[name] = attrs;
 
         return this;
     }
@@ -361,10 +361,10 @@ class TableSchema : TableISchema, ISqlGenerator {
  
     auto getIndex(string indexName): array
     {
-        if (!isSet(_indexNames[$name])) {
+        if (!isSet(_indexNames[name])) {
             return null;
         }
-        return _indexNames[$name];
+        return _indexNames[name];
     }
  
     array getPrimaryKey() {
@@ -408,15 +408,15 @@ class TableSchema : TableISchema, ISqlGenerator {
         if ($attrs["type"] == CONSTRAINT_FOREIGN) {
             attrs = _checkForeignKey($attrs);
 
-            if (isSet(_constraints[$name])) {
-               _constraints[$name]["columns"] = array_unique(array_merge(
-                   _constraints[$name]["columns"],
+            if (isSet(_constraints[name])) {
+               _constraints[name]["columns"] = array_unique(array_merge(
+                   _constraints[name]["columns"],
                     attrs["columns"]
                 ));
 
-                if (isSet(_constraints[$name]["references"])) {
-                   _constraints[$name]["references"][1] = array_unique(array_merge(
-                        (array)_constraints[$name]["references"][1],
+                if (isSet(_constraints[name]["references"])) {
+                   _constraints[name]["references"][1] = array_unique(array_merge(
+                        (array)_constraints[name]["references"][1],
                         [$attrs["references"][1]]
                     ));
                 }
@@ -425,14 +425,14 @@ class TableSchema : TableISchema, ISqlGenerator {
         } else {
             unset($attrs["references"], attrs["update"], attrs["delete"]);
         }
-       _constraints[$name] = attrs;
+       _constraints[name] = attrs;
 
         return this;
     }
  
     void dropConstraint(string aName) {
-        if (isSet(_constraints[$name])) {
-            unset(_constraints[$name]);
+        if (isSet(_constraints[name])) {
+            unset(_constraints[name]);
         }
     }
     
@@ -479,7 +479,7 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     auto setOptions(IData[string] options = null) {
-       _options = $options + _options;
+       _options = options + _options;
 
         return this;
     }
@@ -501,14 +501,14 @@ class TableSchema : TableISchema, ISqlGenerator {
     array createSql(Connection aConnection) {
         $dialect = aConnection.getDriver().schemaDialect();
         someColumns = $constraints =  anIndexes = [];
-        foreach (_columns.keys as $name) {
-            someColumns ~= $dialect.columnSql(this, $name);
+        foreach (_columns.keys as name) {
+            someColumns ~= $dialect.columnSql(this, name);
         }
-        foreach (array_keys(_constraints) as $name) {
-            $constraints ~= $dialect.constraintSql(this, $name);
+        foreach (array_keys(_constraints) as name) {
+            $constraints ~= $dialect.constraintSql(this, name);
         }
-        foreach (array_keys(_indexNames) as $name) {
-             anIndexes ~= $dialect.indexSql(this, $name);
+        foreach (array_keys(_indexNames) as name) {
+             anIndexes ~= $dialect.indexSql(this, name);
         }
         return $dialect.createTableSql(this, someColumns, $constraints,  anIndexes);
     }

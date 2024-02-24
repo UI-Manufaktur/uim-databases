@@ -43,7 +43,7 @@ class FunctionExpression : QueryExpression, ITypedResult {
      * @param string resultType The return type of this expression
      */
     this(string aName, array $params = [], array types = [], string resultType = "string") {
-       _name = $name;
+       _name = name;
        _returnType = resultType;
         super($params, types, ",");
     }

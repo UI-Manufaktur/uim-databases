@@ -29,8 +29,8 @@ class Collection : ICollection {
      * The list of tables in the connected database/schema.
      */
     string[] listTablesWithoutViews() {
-        [$sql, $params] = _dialect.listTablesWithoutViewsSql(_connection.getDriver().config());
-        auto $statement = _connection.execute($sql, $params);
+        [sql, $params] = _dialect.listTablesWithoutViewsSql(_connection.getDriver().config());
+        auto $statement = _connection.execute(sql, $params);
 
         string[] result;
         while ($row = $statement.fetch()) {
@@ -41,8 +41,8 @@ class Collection : ICollection {
     
     // Get the list of tables and views available in the current connection.
     string[] listTables() {
-        [$sql, $params] = _dialect.listTablesSql(_connection.getDriver().config());
-        $statement = _connection.execute($sql, $params);
+        [sql, $params] = _dialect.listTablesSql(_connection.getDriver().config());
+        $statement = _connection.execute(sql, $params);
         
         string[] result;
         while ($row = $statement.fetch()) {
@@ -65,22 +65,22 @@ class Collection : ICollection {
      *  Defaults to false.
      * Params:
      * string aName The name of the table to describe.
-     * @param IData[string] $options The options to use, see above.
+     * @param IData[string] options The options to use, see above.
      */
     TableISchema describe(string aName, IData[string] options = null) {
         configData = _connection.config();
-        if ($name.has(".")) {
-            [configData["schema"], $name] = split(".", $name);
+        if (name.has(".")) {
+            [configData["schema"], name] = split(".", name);
         }
-        aTable = _connection.getDriver().newTableSchema($name);
+        aTable = _connection.getDriver().newTableSchema(name);
 
-       _reflect("Column", $name, configData, aTable);
+       _reflect("Column", name, configData, aTable);
         if (count(aTable.columns()) == 0) {
-            throw new DatabaseException("Cannot describe %s. It has 0 columns.".format($name));
+            throw new DatabaseException("Cannot describe %s. It has 0 columns.".format(name));
         }
-       _reflect("Index", $name, configData, aTable);
-       _reflect("ForeignKey", $name, configData, aTable);
-       _reflect("Options", $name, configData, aTable);
+       _reflect("Index", name, configData, aTable);
+       _reflect("ForeignKey", name, configData, aTable);
+       _reflect("Options", name, configData, aTable);
 
         return aTable;
     }
@@ -106,12 +106,12 @@ class Collection : ICollection {
         string describeMethod = "describe{$stage}Sql";
         string convertMethod = "convert{$stage}Description";
 
-        [$sql, $params] = _dialect.{describeMethod}(tableName, configData);
-        if (isEmpty($sql)) {
+        [sql, $params] = _dialect.{describeMethod}(tableName, configData);
+        if (isEmpty(sql)) {
             return;
         }
         try {
-            $statement = _connection.execute($sql, $params);
+            $statement = _connection.execute(sql, $params);
         } catch (PDOException  anException) {
             throw new DatabaseException(anException.getMessage(), 500,  anException);
         }

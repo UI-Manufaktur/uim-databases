@@ -51,12 +51,12 @@ class BetweenExpression : IExpression, IField {
         if (cast(IExpression)field ) {
             field = field.sql(aValueBinder);
         }
-        foreach ($name: $part; someParts) {
+        foreach (name: $part; someParts) {
             if (cast(IExpression)$part) {
-                someParts[$name] = $part.sql(aValueBinder);
+                someParts[name] = $part.sql(aValueBinder);
                 continue;
             }
-            someParts[$name] = _bindValue($part, aValueBinder, _type);
+            someParts[name] = _bindValue($part, aValueBinder, _type);
         }
         assert(isString(field));
 

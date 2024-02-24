@@ -195,7 +195,7 @@ class MysqlSchemaDialect : SchemaDialect {
             type == TableSchema.INDEX_FULLTEXT
         );
         if (isIndex) {
-            $existing = tableSchema.getIndex($name);
+            $existing = tableSchema.getIndex(name);
         } else {
             $existing = tableSchema.getConstraint(keyName);
         }
@@ -205,7 +205,7 @@ class MysqlSchemaDialect : SchemaDialect {
             $length = array_merge($existing["length"], $length);
         }
         if (isIndex) {
-            tableSchema.addIndex($name, [
+            tableSchema.addIndex(name, [
                 "type": type,
                 "columns": someColumns,
                 "length": $length,
@@ -252,28 +252,28 @@ class MysqlSchemaDialect : SchemaDialect {
         $content = join(",\n", array_merge(someColumns, $constraints,  anIndexes));
         temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
         $content = "CREATE%sTABLE `%s` (\n%s\n)".format($temporary, tableSchema.name(), $content);
-        $options = tableSchema.getOptions();
-        if (isSet($options["engine"])) {
-            $content ~= " ENGINE=%s".format($options["engine"]);
+        options = tableSchema.getOptions();
+        if (isSet(options["engine"])) {
+            $content ~= " ENGINE=%s".format(options["engine"]);
         }
-        if (isSet($options["charset"])) {
-            $content ~= " DEFAULT CHARSET=%s".format($options["charset"]);
+        if (isSet(options["charset"])) {
+            $content ~= " DEFAULT CHARSET=%s".format(options["charset"]);
         }
-        if (isSet($options["collate"])) {
-            $content ~= " COLLATE=%s".format($options["collate"]);
+        if (isSet(options["collate"])) {
+            $content ~= " COLLATE=%s".format(options["collate"]);
         }
         return [$content];
     }
  
     auto columnSql(TableSchema tableSchema, string aName) {
-        someData = tableSchema.getColumn($name);
+        someData = tableSchema.getColumn(name);
         assert(someData !isNull);
 
-        $sql = _getTypeSpecificColumnSql(someData["type"], tableSchema, $name);
-        if ($sql !isNull) {
-            return $sql;
+        sql = _getTypeSpecificColumnSql(someData["type"], tableSchema, name);
+        if (sql !isNull) {
+            return sql;
         }
-         result = _driver.quoteIdentifier($name);
+         result = _driver.quoteIdentifier(name);
         $nativeJson = _driver.supports(DriverFeatures.JSON);
 
         typeMap = [
@@ -405,7 +405,7 @@ class MysqlSchemaDialect : SchemaDialect {
         if (
             in_array(someData["type"], autoIncrementTypes, true) &&
             (
-                (tableSchema.getPrimaryKey() == [$name] && $name == "id") || someData["autoIncrement"]
+                (tableSchema.getPrimaryKey() == [name] && name == "id") || someData["autoIncrement"]
             )
         ) {
              result ~= " AUTO_INCREMENT";
@@ -449,7 +449,7 @@ class MysqlSchemaDialect : SchemaDialect {
     }
  
     string constraintSql(TableSchema tableSchema, string aName) {
-        someData = tableSchema.getConstraint($name);
+        someData = tableSchema.getConstraint(name);
         assert(someData !isNull);
         if (someData["type"] == TableSchema.CONSTRAINT_PRIMARY) {
             someColumns = array_map(
@@ -467,7 +467,7 @@ class MysqlSchemaDialect : SchemaDialect {
         if (someData["type"] == TableSchema.CONSTRAINT_FOREIGN) {
              result = "CONSTRAINT ";
         }
-         result ~= _driver.quoteIdentifier($name);
+         result ~= _driver.quoteIdentifier(name);
 
         return _keySql(result, someData);
     }
@@ -491,12 +491,12 @@ class MysqlSchemaDialect : SchemaDialect {
         string sqlPattern = "ALTER TABLE %s DROP FOREIGN KEY %s;";
         string[] sqlResults;
 
-        foreach (tableSchema.constraints() as $name) {
-            $constraint = tableSchema.getConstraint($name);
+        foreach (tableSchema.constraints() as name) {
+            $constraint = tableSchema.getConstraint(name);
             assert($constraint !isNull);
             if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
-                $constraintName = _driver.quoteIdentifier($name);
+                $constraintName = _driver.quoteIdentifier(name);
                 sqlResults ~= sqlPattern.format(aTableName, $constraintName);
             }
         }
@@ -504,7 +504,7 @@ class MysqlSchemaDialect : SchemaDialect {
     }
  
     string indexSql(TableSchema tableSchema, string aName) {
-        someData = tableSchema.getIndex($name);
+        someData = tableSchema.getIndex(name);
         assert(someData !isNull);
          result = "";
         if (someData["type"] == TableSchema.INDEX_INDEX) {
@@ -513,7 +513,7 @@ class MysqlSchemaDialect : SchemaDialect {
         if (someData["type"] == TableSchema.INDEX_FULLTEXT) {
              result = "FULLTEXT KEY ";
         }
-         result ~= _driver.quoteIdentifier($name);
+         result ~= _driver.quoteIdentifier(name);
 
         return _keySql(result, someData);
     }

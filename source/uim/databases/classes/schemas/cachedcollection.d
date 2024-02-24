@@ -37,16 +37,16 @@ class CachedCollection : ICollection {
   }
 
   TableISchema describe(string myname, IData[string] optionData = null) {
-    $options += ["forceRefresh": false];
-    $cacheKey = this.cacheKey($name);
+    options += ["forceRefresh": false];
+    $cacheKey = this.cacheKey(name);
 
-    if (!$options["forceRefresh"]) {
+    if (!options["forceRefresh"]) {
       $cached = this.cacher.get($cacheKey);
       if ($cached !isNull) {
         return $cached;
       }
     }
-    aTable = this.collection.describe($name, $options);
+    aTable = this.collection.describe(name, options);
     this.cacher.set($cacheKey, aTable);
 
     return aTable;

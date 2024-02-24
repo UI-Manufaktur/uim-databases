@@ -293,7 +293,7 @@ class SelectQuery : Query, IteratorAggregate {
      * string aName The alias/name of the join to remove.
      */
     void removeJoin(string aName) {
-        unset(_parts["join"][$name]);
+        unset(_parts["join"][name]);
        _isDirty();
     }
     
@@ -518,7 +518,7 @@ class SelectQuery : Query, IteratorAggregate {
                 throw new UimException("You must return a `WindowExpression` from a Closure passed to `window()`.");
             }
         }
-       _parts["window"] ~= ["name": new IdentifierExpression($name), "window": $window];
+       _parts["window"] ~= ["name": new IdentifierExpression(name), "window": $window];
        _isDirty();
     }
     
