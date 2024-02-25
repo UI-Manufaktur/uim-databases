@@ -87,7 +87,7 @@ Binding values to parametrized arguments is also possible with the execute funct
 
 ```php
 $statement = aConnection.execute("SELECT * FROM articles WHERE id = :id", ["id": 1], ["id": 'integer"]);
-$results = $statement.fetch("assoc");
+results = $statement.fetch("assoc");
 ```
 
 The third parameter is the types the passed values should be converted to when passed to the database. If
@@ -98,7 +98,7 @@ Alternatively you can construct a statement manually and then fetch rows from it
 ```php
 $statement = aConnection.prepare("SELECT * from articles WHERE id != :id");
 $statement.bind(["id": 1], ["id": 'integer"]);
-$results = $statement.fetchAll("assoc");
+results = $statement.fetchAll("assoc");
 ```
 
 The default types that are understood by this library and can be passed to the `bind()` auto or to `execute()`
@@ -122,10 +122,10 @@ Statements can be reused by binding new values to the parameters in the query:
 ```php
 $statement = aConnection.prepare("SELECT * from articles WHERE id = :id");
 $statement.bind(["id": 1], ["id": 'integer"]);
-$results = $statement.fetchAll("assoc");
+results = $statement.fetchAll("assoc");
 
 $statement.bind(["id": 1], ["id": 'integer"]);
-$results = $statement.fetchAll("assoc");
+results = $statement.fetchAll("assoc");
 ```
 
 ### Updating Rows
@@ -350,7 +350,7 @@ foreach (aQuery as $row) {
 }
 
 // Get the statement and fetch all results
-$results = aQuery.execute().fetchAll("assoc");
+results = aQuery.execute().fetchAll("assoc");
 ```
 
 ## Official API

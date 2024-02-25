@@ -168,13 +168,13 @@ class Sqlite : Driver
          * @psalm-suppress PossiblyInvalidArgument
          */
         $statement = _connection.prepare($isObject ? query.sql() : query);
-        $result = new SqliteStatement(new PDOStatement($statement, this), this);
+        result = new SqliteStatement(new PDOStatement($statement, this), this);
         /** @psalm-suppress PossiblyInvalidMethodCall */
         if ($isObject && query.isBufferedResultsEnabled() == false) {
-            $result.bufferResults(false);
+            result.bufferResults(false);
         }
 
-        return $result;
+        return result;
     }
 
 

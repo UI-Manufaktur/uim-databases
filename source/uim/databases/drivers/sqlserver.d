@@ -126,20 +126,20 @@ class Sqlserver : Driver
         }
         _connect(dsn, aConfig);
 
-        $connection = this.getConnection();
+        connection = this.getConnection();
         if (!empty(aConfig["init"])) {
             foreach ((array)aConfig["init"] as $command) {
-                $connection.exec($command);
+                connection.exec($command);
             }
         }
         if (!empty(aConfig["settings"]) && is_array(aConfig["settings"])) {
             foreach (aConfig["settings"] as $key: value) {
-                $connection.exec("SET {$key} {value}");
+                connection.exec("SET {$key} {value}");
             }
         }
         if (!empty(aConfig["attributes"]) && is_array(aConfig["attributes"])) {
             foreach (aConfig["attributes"] as $key: value) {
-                $connection.setAttribute($key, value);
+                connection.setAttribute($key, value);
             }
         }
 

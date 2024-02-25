@@ -71,10 +71,10 @@ interface IDriver
     /**
      * Set the internal connection object.
      *
-     * @param object $connection The connection instance.
+     * @param object connection The connection instance.
      * @return this
      */
-    function setConnection($connection);
+    function setConnection(connection);
 
     /**
      * Returns whether D is able to use this driver for connecting to database.

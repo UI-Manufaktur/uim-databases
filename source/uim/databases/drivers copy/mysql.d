@@ -130,9 +130,9 @@ class MysqlDriver : Driver {
         _connect(dsn, aConfig);
 
         if (!empty(aConfig["init"])) {
-            $connection = this.getConnection();
+            connection = this.getConnection();
             foreach ((array)aConfig["init"] as $command) {
-                $connection.exec($command);
+                connection.exec($command);
             }
         }
 
@@ -163,13 +163,13 @@ class MysqlDriver : Driver {
          * @psalm-suppress PossiblyInvalidArgument
          */
         $statement = _connection.prepare($isObject ? query.sql() : query);
-        $result = new MysqlStatement($statement, this);
+        result = new MysqlStatement($statement, this);
         /** @psalm-suppress PossiblyInvalidMethodCall */
         if ($isObject && query.isBufferedResultsEnabled() == false) {
-            $result.bufferResults(false);
+            result.bufferResults(false);
         }
 
-        return $result;
+        return result;
     }
 
 

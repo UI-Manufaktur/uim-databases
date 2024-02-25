@@ -93,8 +93,8 @@ class Statement : IStatement {
     }
  
     Json fetch(string|int mode = PDO.FETCH_NUM) {
-        mode = this.convertMode($mode);
-        row = this.statement.fetch($mode);
+        mode = this.convertMode(mode);
+        row = this.statement.fetch(mode);
         if ($row == false) {
             return false;
         }
@@ -116,8 +116,8 @@ class Statement : IStatement {
     }
  
     array fetchAll(string|int mode = PDO.FETCH_NUM) {
-        mode = this.convertMode($mode);
-        rows = this.statement.fetchAll($mode);
+        mode = this.convertMode(mode);
+        rows = this.statement.fetchAll(mode);
 
         if (this.typeConverter !isNull) {
             return array_map(this.typeConverter, rows);
@@ -131,11 +131,11 @@ class Statement : IStatement {
      * string|int mode Mode name or PDO constant
      */
     protected int convertMode(string|int mode) {
-        if (isInt($mode)) {
+        if (isInt(mode)) {
             // We don`t try to validate the PDO constants
             return mode;
         }
-        return MODE_NAME_MAP[$mode]
+        return MODE_NAME_MAP[mode]
             ??
             throw new InvalidArgumentException("Invalid fetch mode requested. Expected \'assoc\", \'num\' or \'obj\'.");
     }

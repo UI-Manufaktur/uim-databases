@@ -34,17 +34,16 @@ class LoggingStatement : StatementDecorator
 
     /**
      * Query execution start time.
-     *
      * @var float
      */
-    protected $startTime = 0.0;
+    protected float _startTime = 0.0;
 
     /**
      * Logged query
      *
-     * @var DDBlogs.LoggedQuery|null
+     * @var DDBlogs.|null
      */
-    protected $loggedQuery;
+    protected LoggedQuery _loggedQuery;
 
     /**
      * Wrapper for the execute function to calculate time spent
@@ -55,19 +54,19 @@ class LoggingStatement : StatementDecorator
      * @throws \Exception Re-throws any exception raised during query execution.
      */
     bool execute(?array $params = null) {
-        this.startTime = microtime(true);
+        _startTime = microtime(true);
 
-        this.loggedQuery = new LoggedQuery();
-        this.loggedQuery.driver = _driver;
-        this.loggedQuery.params = $params ?: _compiledParams;
+        _loggedQuery = new LoggedQuery();
+        _loggedQuery.driver = _driver;
+        _loggedQuery.params = $params ?: _compiledParams;
 
         try {
-            $result = super.execute($params);
-            this.loggedQuery.took = (int)round((microtime(true) - this.startTime) * 1000, 0);
+            result = super.execute($params);
+            _loggedQuery.took = (int)round((microtime(true) - _startTime) * 1000, 0);
         } catch (Exception $e) {
             /** @psalm-suppress UndefinedPropertyAssignment */
-            $e.queryString = this.queryString;
-            this.loggedQuery.error = $e;
+            $e.queryString = _queryString;
+            _loggedQuery.error = $e;
             _log();
             throw $e;
         }
@@ -76,7 +75,7 @@ class LoggingStatement : StatementDecorator
             this.rowCount();
         }
 
-        return $result;
+        return result;
     }
 
 
@@ -92,25 +91,25 @@ class LoggingStatement : StatementDecorator
 
 
     function fetchAll($type = self::FETCH_TYPE_NUM) {
-        $results = super.fetchAll($type);
+        results = super.fetchAll($type);
 
         if (this.loggedQuery) {
             this.rowCount();
         }
 
-        return $results;
+        return results;
     }
 
 
     int rowCount() {
-        $result = super.rowCount();
+        result = super.rowCount();
 
-        if (this.loggedQuery) {
-            this.loggedQuery.numRows = $result;
+        if (_loggedQuery) {
+            _loggedQuery.numRows = result;
             _log();
         }
 
-        return $result;
+        return result;
     }
 
     /**
@@ -118,14 +117,14 @@ class LoggingStatement : StatementDecorator
      * to the logging system.
      */
     protected void _log() {
-        if (this.loggedQuery == null) {
+        if (_loggedQuery == null) {
             return;
         }
 
-        this.loggedQuery.query = this.queryString;
-        this.getLogger().debug((string)this.loggedQuery, ["query": this.loggedQuery]);
+        _loggedQuery.query = _queryString;
+        _getLogger().debug((string)_loggedQuery, ["query": _loggedQuery]);
 
-        this.loggedQuery = null;
+        _loggedQuery = null;
     }
 
     /**

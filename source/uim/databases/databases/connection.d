@@ -66,17 +66,17 @@ class Connection : IConnection {
      */
     protected Driver[string] createDrivers(IConfigData[string] configData = null) {
         driver = configData("driver"] ?? "";
-        if (!isString($driver)) {
-            assert(cast(Driver)$driver);
-            if (!$driver.enabled()) {
-                throw new MissingExtensionException(["driver": get_class($driver), "name": this.configName()]);
+        if (!isString(driver)) {
+            assert(cast(Driver)driver);
+            if (!driver.enabled()) {
+                throw new MissingExtensionException(["driver": get_class(driver), "name": this.configName()]);
             }
             // Legacy support for setting instance instead of driver class
             return [self.ROLE_READ: driver, self.ROLE_WRITE: driver];
         }
         /** @var class-string<\UIM\Database\Driver>|null driverClass */
-        driverClass = App.className($driver, "Database/Driver");
-        if ($driverClass.isNull) {
+        driverClass = App.className(driver, "Database/Driver");
+        if (driverClass.isNull) {
             throw new MissingDriverException(["driver": driver, "connection": this.configName()]);
         }
         sharedConfig = array_diff_key(configData, array_flip([

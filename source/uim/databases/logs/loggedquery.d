@@ -23,7 +23,7 @@ class LoggedQuery : JsonSerializable
      *
      * @var DDBIDriver|null
      */
-    $driver = null;
+    driver = null;
 
     /**
      * Query string that was executed

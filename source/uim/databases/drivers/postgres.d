@@ -78,7 +78,7 @@ class Postgres : Driver
         }
 
         _connect(dsn, aConfig);
-        _connection = $connection = this.getConnection();
+        _connection = connection = this.getConnection();
         if (!empty(aConfig["encoding"])) {
             this.setEncoding(aConfig["encoding"]);
         }
@@ -88,11 +88,11 @@ class Postgres : Driver
         }
 
         if (!empty(aConfig["timezone"])) {
-            aConfig["init"][] = sprintf("SET timezone = %s", $connection.quote(aConfig["timezone"]));
+            aConfig["init"][] = sprintf("SET timezone = %s", connection.quote(aConfig["timezone"]));
         }
 
         foreach (aConfig["init"] as $command) {
-            $connection.exec($command);
+            connection.exec($command);
         }
 
         return true;

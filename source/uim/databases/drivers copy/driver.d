@@ -45,12 +45,12 @@ abstract class Driver : IDriver
     /**
      * Set the internal PDO connection instance.
      *
-     * @param \PDO $connection PDO instance.
+     * @param \PDO connection PDO instance.
      * @return this
      * @psalm-suppress MoreSpecificImplementedParamType
      */
-    function setConnection($connection) {
-        _connection = $connection;
+    function setConnection(connection) {
+        _connection = connection;
 
         return this;
     }

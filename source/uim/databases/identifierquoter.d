@@ -21,10 +21,10 @@ class IdentifierQuoter
     /**
      * Constructor
      *
-     * @param uim.databases.Driver $driver The driver instance used to do the identifier quoting
+     * @param uim.databases.Driver driver The driver instance used to do the identifier quoting
      */
-    this(Driver $driver) {
-        _driver = $driver;
+    this(Driver driver) {
+        _driver = driver;
     }
 
     /**
@@ -91,9 +91,9 @@ class IdentifierQuoter
                 continue;
             }
 
-            $result = _basicQuoter($contents);
-            if (!empty($result)) {
-                query.{$part}($result, true);
+            result = _basicQuoter($contents);
+            if (!empty(result)) {
+                query.{$part}(result, true);
             }
         }
 
@@ -111,14 +111,14 @@ class IdentifierQuoter
      * @return array<string, mixed>
      */
     protected array _basicQuoter(array $part) {
-        $result = null;
+        result = null;
         foreach ($part as alias: value) {
             value = !is_string(value) ? value : _driver.quoteIdentifier(value);
             alias = is_numeric($alias) ? alias : _driver.quoteIdentifier($alias);
-            $result[$alias] = value;
+            result[$alias] = value;
         }
 
-        return $result;
+        return result;
     }
 
     /**
@@ -129,7 +129,7 @@ class IdentifierQuoter
      * @return array<string, array>
      */
     protected array _quoteJoins(array $joins) {
-        $result = null;
+        result = null;
         foreach ($joins as value) {
             alias = "";
             if (!empty(value["alias"])) {
@@ -141,10 +141,10 @@ class IdentifierQuoter
                 value["table"] = _driver.quoteIdentifier(value["table"]);
             }
 
-            $result[$alias] = value;
+            result[$alias] = value;
         }
 
-        return $result;
+        return result;
     }
 
     /**
