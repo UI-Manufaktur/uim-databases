@@ -230,7 +230,7 @@ class ValuesExpression : IDBAExpression {
     }
 
 
-    O traverse(this O)(Closure $callback) {
+    O traverse(this O)(Closure callback) {
         if (_query) {
             return this;
         }
@@ -241,15 +241,15 @@ class ValuesExpression : IDBAExpression {
 
         foreach (_values as $v) {
             if ($v instanceof IDBAExpression) {
-                $v.traverse($callback);
+                $v.traverse(callback);
             }
             if (!is_array($v)) {
                 continue;
             }
             foreach ($v as field) {
                 if (field instanceof IDBAExpression) {
-                    $callback(field);
-                    field.traverse($callback);
+                    callback(field);
+                    field.traverse(callback);
                 }
             }
         }

@@ -84,10 +84,10 @@ class BetweenExpression : IDBAExpression, FieldInterface
     }
 
 
-    O traverse(this O)(Closure $callback) {
+    O traverse(this O)(Closure callback) {
         foreach ([_field, _from, _to] as part) {
             if ($part instanceof IDBAExpression) {
-                $callback($part);
+                callback($part);
             }
         }
 

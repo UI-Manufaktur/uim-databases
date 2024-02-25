@@ -348,21 +348,21 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      *     // ...
      * ```
      *
-     * @param uim.databases.IDBAExpression|object|scalar|null $result The result value.
+     * @param uim.databases.IDBAExpression|object|scalar|null result The result value.
      * @param string|null type The result type. If no type is provided, the type will be tried to be inferred from the
      *  value.
      * @return this
      * @throws \LogicException In case `when()` wasn"t previously called with a value other than a closure or an
      *  instance of `uim.databases.Expression\WhenThenExpression`.
      */
-    function then($result, Nullable!string type = null) {
+    function then(result, Nullable!string type = null) {
         if (this.whenBuffer == null) {
             throw new LogicException("Cannot call `then()` before `when()`.");
         }
 
         $whenThen = (new WhenThenExpression(this.getTypeMap()))
             .when(this.whenBuffer["when"], this.whenBuffer["type"])
-            .then($result, type);
+            .then(result, type);
 
         this.whenBuffer = null;
 
@@ -374,37 +374,37 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
     /**
      * Sets the `ELSE` result value.
      *
-     * @param uim.databases.IDBAExpression|object|scalar|null $result The result value.
+     * @param uim.databases.IDBAExpression|object|scalar|null result The result value.
      * @param string|null type The result type. If no type is provided, the type will be tried to be inferred from the
      *  value.
      * @return this
      * @throws \LogicException In case a closing `then()` call is required before calling this method.
-     * @throws \InvalidArgumentException In case the `$result` argument is neither a scalar value, nor an object, an
+     * @throws \InvalidArgumentException In case the `result` argument is neither a scalar value, nor an object, an
      *  instance of `uim.databases.IDBAExpression`, or `null`.
      */
-    function else($result, Nullable!string type = null) {
+    function else(result, Nullable!string type = null) {
         if (this.whenBuffer != null) {
             throw new LogicException("Cannot call `else()` between `when()` and `then()`.");
         }
 
         if (
-            $result != null &&
-            !is_scalar($result) &&
-            !(is_object($result) && !($result instanceof Closure))
+            result != null &&
+            !is_scalar(result) &&
+            !(is_object(result) && !(result instanceof Closure))
         ) {
             throw new InvalidArgumentException(sprintf(
-                "The `$result` argument must be either `null`, a scalar value, an object, " ~
+                "The `result` argument must be either `null`, a scalar value, an object, " ~
                 "or an instance of `\%s`, `%s` given.",
                 IDBAExpression::class,
-                getTypeName($result)
+                getTypeName(result)
             ));
         }
 
         if ($type == null) {
-            type = this.inferType($result);
+            type = this.inferType(result);
         }
 
-        this.else = $result;
+        this.else = result;
         this.elseType = type;
 
         return this;
@@ -518,24 +518,24 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
     }
 
 
-    O traverse(this O)(Closure $callback) {
+    O traverse(this O)(Closure callback) {
         if (this.whenBuffer != null) {
             throw new LogicException("Case expression has incomplete when clause. Missing `then()` after `when()`.");
         }
 
         if (this.value instanceof IDBAExpression) {
-            $callback(this.value);
-            this.value.traverse($callback);
+            callback(this.value);
+            this.value.traverse(callback);
         }
 
         foreach (this.when as $when) {
-            $callback($when);
-            $when.traverse($callback);
+            callback($when);
+            $when.traverse(callback);
         }
 
         if (this.else instanceof IDBAExpression) {
-            $callback(this.else);
-            this.else.traverse($callback);
+            callback(this.else);
+            this.else.traverse(callback);
         }
 
         return this;

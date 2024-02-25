@@ -528,11 +528,11 @@ class QueryExpression : IDBAExpression, Countable
     }
 
 
-    O traverse(this O)(Closure $callback) {
+    O traverse(this O)(Closure callback) {
         foreach (_conditions as $c) {
             if ($c instanceof IDBAExpression) {
-                $callback($c);
-                $c.traverse($callback);
+                callback($c);
+                $c.traverse(callback);
             }
         }
 
@@ -551,14 +551,14 @@ class QueryExpression : IDBAExpression, Countable
      * passed by reference, this will enable you to change the key under which the
      * modified part is stored.
      *
-     * @param callable $callback The callable to apply to each part.
+     * @param callable callback The callable to apply to each part.
      * @return this
      */
-    function iterateParts(callable $callback) {
+    function iterateParts(callable callback) {
         $parts = null;
         foreach (_conditions as $k: $c) {
             $key = &$k;
-            $part = $callback($c, $key);
+            $part = callback($c, $key);
             if ($part != null) {
                 $parts[$key] = $part;
             }

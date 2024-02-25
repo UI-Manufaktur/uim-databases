@@ -47,10 +47,10 @@ class OrderClauseExpression : IDBAExpression, FieldInterface
     }
 
 
-    O traverse(this O)(Closure $callback) {
+    O traverse(this O)(Closure callback) {
         if (_field instanceof IDBAExpression) {
-            $callback(_field);
-            _field.traverse($callback);
+            callback(_field);
+            _field.traverse(callback);
         }
 
         return this;

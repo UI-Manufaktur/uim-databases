@@ -83,7 +83,7 @@ class IdentifierExpression : IDBAExpression
     }
 
 
-    O traverse(this O)(Closure $callback) {
+    O traverse(this O)(Closure callback) {
         return this;
     }
 }

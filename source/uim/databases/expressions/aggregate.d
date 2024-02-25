@@ -165,15 +165,15 @@ class AggregateExpression : FunctionExpression : IWindow
     }
 
 
-    O traverse(this O)(Closure $callback) {
-        super.traverse($callback);
+    O traverse(this O)(Closure callback) {
+        super.traverse(callback);
         if (this.filter != null) {
-            $callback(this.filter);
-            this.filter.traverse($callback);
+            callback(this.filter);
+            this.filter.traverse(callback);
         }
         if (this.window != null) {
-            $callback(this.window);
-            this.window.traverse($callback);
+            callback(this.window);
+            this.window.traverse(callback);
         }
 
         return this;

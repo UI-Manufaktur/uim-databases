@@ -184,29 +184,29 @@ class WhenThenExpression : IDBAExpression
     /**
      * Sets the `THEN` result value.
      *
-     * @param uim.databases.IDBAExpression|object|scalar|null $result The result value.
+     * @param uim.databases.IDBAExpression|object|scalar|null result The result value.
      * @param string|null type The result type. If no type is provided, the type will be inferred from the given
      *  result value.
      * @return this
      */
-    function then($result, Nullable!string type = null) {
+    function then(result, Nullable!string type = null) {
         if (
-            $result != null &&
-            !is_scalar($result) &&
-            !(is_object($result) && !($result instanceof Closure))
+            result != null &&
+            !is_scalar(result) &&
+            !(is_object(result) && !(result instanceof Closure))
         ) {
             throw new InvalidArgumentException(sprintf(
-                "The `$result` argument must be either `null`, a scalar value, an object, " ~
+                "The `result` argument must be either `null`, a scalar value, an object, " ~
                 "or an instance of `\%s`, `%s` given.",
                 IDBAExpression::class,
-                getTypeName($result)
+                getTypeName(result)
             ));
         }
 
-        this.then = $result;
+        this.then = result;
 
         if ($type == null) {
-            type = this.inferType($result);
+            type = this.inferType(result);
         }
 
         this.thenType = type;
@@ -292,15 +292,15 @@ class WhenThenExpression : IDBAExpression
     }
 
 
-    O traverse(this O)(Closure $callback) {
+    O traverse(this O)(Closure callback) {
         if (this.when instanceof IDBAExpression) {
-            $callback(this.when);
-            this.when.traverse($callback);
+            callback(this.when);
+            this.when.traverse(callback);
         }
 
         if (this.then instanceof IDBAExpression) {
-            $callback(this.then);
-            this.then.traverse($callback);
+            callback(this.then);
+            this.then.traverse(callback);
         }
 
         return this;

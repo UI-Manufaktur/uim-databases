@@ -175,16 +175,16 @@ class CommonTableExpression : IDBAExpression
     }
 
 
-    O traverse(this O)(Closure $callback) {
-        $callback(this.name);
+    O traverse(this O)(Closure callback) {
+        callback(this.name);
         foreach (this.fields as field) {
-            $callback(field);
-            field.traverse($callback);
+            callback(field);
+            field.traverse(callback);
         }
 
         if (this.query) {
-            $callback(this.query);
-            this.query.traverse($callback);
+            callback(this.query);
+            this.query.traverse(callback);
         }
 
         return this;

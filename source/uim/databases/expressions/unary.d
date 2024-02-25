@@ -74,10 +74,10 @@ class UnaryExpression : IDBAExpression
     }
 
 
-    O traverse(this O)(Closure $callback) {
+    O traverse(this O)(Closure callback) {
         if (_value instanceof IDBAExpression) {
-            $callback(_value);
-            _value.traverse($callback);
+            callback(_value);
+            _value.traverse(callback);
         }
 
         return this;

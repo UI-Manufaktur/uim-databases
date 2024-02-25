@@ -216,28 +216,28 @@ class WindowExpression : IDBAExpression, IWindow
     }
 
 
-    O traverse(this O)(Closure $callback) {
-        $callback(this.name);
+    O traverse(this O)(Closure callback) {
+        callback(this.name);
         foreach (this.partitions as $partition) {
-            $callback($partition);
-            $partition.traverse($callback);
+            callback($partition);
+            $partition.traverse(callback);
         }
 
         if (this.order) {
-            $callback(this.order);
-            this.order.traverse($callback);
+            callback(this.order);
+            this.order.traverse(callback);
         }
 
         if (this.frame != null) {
             offset = this.frame["start"]["offset"];
             if (offset instanceof IDBAExpression) {
-                $callback(offset);
-                offset.traverse($callback);
+                callback(offset);
+                offset.traverse(callback);
             }
             offset = this.frame["end"]["offset"] ?? null;
             if (offset instanceof IDBAExpression) {
-                $callback(offset);
-                offset.traverse($callback);
+                callback(offset);
+                offset.traverse(callback);
             }
         }
 

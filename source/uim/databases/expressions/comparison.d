@@ -132,20 +132,20 @@ class ComparisonExpression : IDBAExpression, FieldInterface
     }
 
 
-    O traverse(this O)(Closure $callback) {
+    O traverse(this O)(Closure callback) {
         if (_field instanceof IDBAExpression) {
-            $callback(_field);
-            _field.traverse($callback);
+            callback(_field);
+            _field.traverse(callback);
         }
 
         if (_value instanceof IDBAExpression) {
-            $callback(_value);
-            _value.traverse($callback);
+            callback(_value);
+            _value.traverse(callback);
         }
 
         foreach (_valueExpressions as $v) {
-            $callback($v);
-            $v.traverse($callback);
+            callback($v);
+            $v.traverse(callback);
         }
 
         return this;
@@ -254,12 +254,12 @@ class ComparisonExpression : IDBAExpression, FieldInterface
             return [values, []];
         }
 
-        $expressions = $result = null;
+        $expressions = result = null;
         $isArray = is_array(values);
 
         if ($isArray) {
-            /** @var array $result */
-            $result = values;
+            /** @var array result */
+            result = values;
         }
 
         foreach (values as $k: $v) {
@@ -268,11 +268,11 @@ class ComparisonExpression : IDBAExpression, FieldInterface
             }
 
             if ($isArray) {
-                $result[$k] = $v;
+                result[$k] = $v;
             }
         }
 
-        return [$result, $expressions];
+        return [result, $expressions];
     }
 }
 

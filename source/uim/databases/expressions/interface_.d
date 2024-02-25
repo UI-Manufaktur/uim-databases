@@ -14,7 +14,7 @@ interface IDBAExpression {
   string sql(DDBAValueBinder newValueBinder);
 
   /**
-    * Iterates over each part of the expression recursively for every level of the expressions tree and executes the $callback callable
+    * Iterates over each part of the expression recursively for every level of the expressions tree and executes the callback callable
     * passing as first parameter the instance of the expression currently being iterated.
     *
     * aCallback - The callable to apply to all nodes.

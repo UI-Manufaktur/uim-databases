@@ -30,7 +30,7 @@ class StringExpression : IDBAExpression {
     return $placeholder ~ " COLLATE " ~ this.collation;
   }
 
-  O traverse(this O)(Closure $callback)
+  O traverse(this O)(Closure callback)
   {
       return this;
   }

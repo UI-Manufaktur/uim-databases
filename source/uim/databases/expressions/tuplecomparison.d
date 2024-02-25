@@ -148,17 +148,17 @@ class TupleComparison : ComparisonExpression
     }
 
 
-    O traverse(this O)(Closure $callback) {
+    O traverse(this O)(Closure callback) {
         /** @var array<string> fields */
         fields = this.getField();
         foreach (fields as field) {
-            _traverseValue(field, $callback);
+            _traverseValue(field, callback);
         }
 
         value = this.getValue();
         if (value instanceof IDBAExpression) {
-            $callback(value);
-            value.traverse($callback);
+            callback(value);
+            value.traverse(callback);
 
             return this;
         }
@@ -166,10 +166,10 @@ class TupleComparison : ComparisonExpression
         foreach (value as $val) {
             if (this.isMulti()) {
                 foreach ($val as $v) {
-                    _traverseValue($v, $callback);
+                    _traverseValue($v, callback);
                 }
             } else {
-                _traverseValue($val, $callback);
+                _traverseValue($val, callback);
             }
         }
 
@@ -181,12 +181,12 @@ class TupleComparison : ComparisonExpression
      * it is an IDBAExpression
      *
      * @param mixed value The value to traverse
-     * @param \Closure $callback The callable to use when traversing
+     * @param \Closure callback The callable to use when traversing
      */
-    protected void _traverseValue(value, Closure $callback) {
+    protected void _traverseValue(value, Closure callback) {
         if (value instanceof IDBAExpression) {
-            $callback(value);
-            value.traverse($callback);
+            callback(value);
+            value.traverse(callback);
         }
     }
 
