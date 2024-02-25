@@ -10,7 +10,7 @@ import uim.databases;
  */
 class LoggedQuery : JsonSerializable, Stringable {
     // Driver executing the query
-    protected Driver $driver = null;
+    protected Driver driver = null;
 
     // Query string that was executed
     protected string aquery = "";

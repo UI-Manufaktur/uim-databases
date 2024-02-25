@@ -94,9 +94,9 @@ class DateTimeType : BaseType, IBatchCasting {
      * Convert DateTime instance into strings.
      * Params:
      * Json aValue The value to convert.
-     * @param \UIM\Database\Driver $driver The driver instance to convert with.
+     * @param \UIM\Database\Driver driver The driver instance to convert with.
      */
-    string toDatabase(Json aValue, Driver $driver) {
+    string toDatabase(Json aValue, Driver driver) {
         if (aValue.isNull || isString(aValue)) {
             return aValue;
         }
@@ -149,9 +149,9 @@ class DateTimeType : BaseType, IBatchCasting {
     /**
  Params:
      * Json aValue Value to be converted to D equivalent
-     * @param \UIM\Database\Driver $driver Object from which database preferences and configuration will be extracted
+     * @param \UIM\Database\Driver driver Object from which database preferences and configuration will be extracted
      */
-    DateTime|DateTimeImmutable|null ToD(Json aValue, Driver $driver) {
+    DateTime|DateTimeImmutable|null ToD(Json aValue, Driver driver) {
         if (aValue.isNull) {
             return null;
         }
@@ -190,7 +190,7 @@ class DateTimeType : BaseType, IBatchCasting {
         this.keepDatabaseTimezone = $keep;
     }
  
-    array manyToD(array  someValues, array fields, Driver $driver) {
+    array manyToD(array  someValues, array fields, Driver driver) {
         fields.each!((field) {
             if (!someValues.isSet(field)) {
                 continue;
@@ -362,7 +362,7 @@ class DateTimeType : BaseType, IBatchCasting {
         return null;
     }
 
-    int toStatement(Json aValue, Driver $driver) {
+    int toStatement(Json aValue, Driver driver) {
         return PDO.PARAM_STR;
     }
 }

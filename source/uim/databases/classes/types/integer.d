@@ -44,16 +44,16 @@ class IntegerType : BaseType, IBatchCasting {
     /**
  Params:
      * Json valueToConvert The value to convert.
-     * @param \UIM\Database\Driver $driver The driver instance to convert with.
+     * @param \UIM\Database\Driver driver The driver instance to convert with.
      */
-    int ToD(Json valueToConvert, Driver $driver) {
+    int ToD(Json valueToConvert, Driver driver) {
         if (valueToConvert.isNull) {
             return null;
         }
         return (int)valueToConvert;
     }
  
-    array manyToD(array  someValues, array fields, Driver $driver) {
+    array manyToD(array  someValues, array fields, Driver driver) {
         foreach (fields as field) {
             if (!isSet(someValues[field])) {
                 continue;
@@ -65,7 +65,7 @@ class IntegerType : BaseType, IBatchCasting {
         return someValues;
     }
  
-    int toStatement(Json aValue, Driver $driver) {
+    int toStatement(Json aValue, Driver driver) {
         return PDO.PARAM_INT;
     }
     

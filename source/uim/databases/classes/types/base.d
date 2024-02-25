@@ -28,7 +28,7 @@ abstract class BaseType : IType {
         return _name;
     }
  
-    int toStatement(Json aValue, Driver $driver) {
+    int toStatement(Json aValue, Driver driver) {
         if (aValue.isNull) {
             return PDO.PARAM_NULL;
         }

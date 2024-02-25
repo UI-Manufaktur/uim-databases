@@ -22,17 +22,17 @@ class Statement : IStatement {
 
     /**
      * @param \PDOStatement $statement PDO statement
-     * @param \UIM\Database\Driver $driver Database driver
+     * @param \UIM\Database\Driver driver Database driver
      * @param \UIM\Database\TypeMap|null typeMap Results type map
      */
     this(
         PDOStatement $statement,
-        Driver $driver,
+        Driver driver,
         ?TypeMap typeMap = null,
     ) {
-       _driver = $driver;
+       _driver = driver;
         this.statement = $statement;
-        this.typeConverter = typeMap !isNull ? new FieldTypeConverter($typeMap, $driver): null;
+        this.typeConverter = typeMap !isNull ? new FieldTypeConverter($typeMap, driver): null;
     }
     void bind(array $params, array types) {
         if (isEmpty($params)) {
@@ -93,9 +93,9 @@ class Statement : IStatement {
         return this.statement.execute($params);
     }
  
-    Json fetch(string|int $mode = PDO.FETCH_NUM) {
-        $mode = this.convertMode($mode);
-        $row = this.statement.fetch($mode);
+    Json fetch(string|int mode = PDO.FETCH_NUM) {
+        mode = this.convertMode(mode);
+        $row = this.statement.fetch(mode);
         if ($row == false) {
             return false;
         }
@@ -117,9 +117,9 @@ class Statement : IStatement {
         return false;
     }
  
-    array fetchAll(string|int $mode = PDO.FETCH_NUM) {
-        $mode = this.convertMode($mode);
-        $rows = this.statement.fetchAll($mode);
+    array fetchAll(string|int mode = PDO.FETCH_NUM) {
+        mode = this.convertMode(mode);
+        $rows = this.statement.fetchAll(mode);
 
         if (this.typeConverter !isNull) {
             return array_map(this.typeConverter, $rows);
@@ -130,14 +130,14 @@ class Statement : IStatement {
     /**
      * Converts mode name to PDO constant.
      * Params:
-     * string|int $mode Mode name or PDO constant
+     * string|int mode Mode name or PDO constant
      */
-    protected int convertMode(string|int $mode) {
-        if (isInt($mode)) {
+    protected int convertMode(string|int mode) {
+        if (isInt(mode)) {
             // We don`t try to validate the PDO constants
-            return $mode;
+            return mode;
         }
-        return MODE_NAME_MAP[$mode]
+        return MODE_NAME_MAP[mode]
             ??
             throw new InvalidArgumentException("Invalid fetch mode requested. Expected \'assoc\", \'num\' or \'obj\'.");
     }

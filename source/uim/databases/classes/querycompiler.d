@@ -151,15 +151,15 @@ class QueryCompiler {
         auto $distinct = compiledQuery.clause("distinct");
         someModifiers = _buildModifierPart(compiledQuery.clause("modifier"), compiledQuery, aBinder);
 
-        auto $driver = compiledQuery.getConnection().getDriver(compiledQuery.getConnectionRole());
-        auto $quoteIdentifiers = $driver.isAutoQuotingEnabled() || _quotedSelectAliases;
+        auto driver = compiledQuery.getConnection().getDriver(compiledQuery.getConnectionRole());
+        auto $quoteIdentifiers = driver.isAutoQuotingEnabled() || _quotedSelectAliases;
         auto $normalized = [];
         auto someParts = _stringifyExpressions(someParts, aBinder);
         foreach (myKey: $p; someParts ) {
             if (!isNumeric(myKey)) {
                 $p = $p ~ " AS ";
                 $p ~= $quoteIdentifiers
-                    ? $driver.quoteIdentifier(myKey)
+                    ? driver.quoteIdentifier(myKey)
                     : myKey;
             }
             $normalized ~= $p;

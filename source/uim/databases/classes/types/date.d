@@ -53,9 +53,9 @@ class DateType : BaseType, IBatchCasting {
      * Convert DateTime instance into strings.
      * Params:
      * Json aValue The value to convert.
-     * @param \UIM\Database\Driver $driver The driver instance to convert with.
+     * @param \UIM\Database\Driver driver The driver instance to convert with.
      */
-    string toDatabase(Json aValue, Driver $driver) {
+    string toDatabase(Json aValue, Driver driver) {
         if (aValue.isNull || isString(aValue)) {
             return aValue;
         }
@@ -69,9 +69,9 @@ class DateType : BaseType, IBatchCasting {
     /**
  Params:
      * Json aValue Value to be converted to D equivalent
-     * @param \UIM\Database\Driver $driver Object from which database preferences and configuration will be extracted
+     * @param \UIM\Database\Driver driver Object from which database preferences and configuration will be extracted
      */
-    ChronosDate ToD(Json aValue, Driver $driver) {
+    ChronosDate ToD(Json aValue, Driver driver) {
         if (aValue.isNull) {
             return null;
         }
@@ -86,7 +86,7 @@ class DateType : BaseType, IBatchCasting {
         return anInstance;
     }
  
-    array manyToD(array  someValues, array fields, Driver $driver) {
+    array manyToD(array  someValues, array fields, Driver driver) {
         foreach (field; fields) {
             if (!someValues.isSet(field)) {
                 continue;

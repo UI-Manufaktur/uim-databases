@@ -15,9 +15,9 @@ class JsonType : BaseType, IBatchCasting {
      * Convert a value data into a JSON string
      * Params:
      * Json aValue The value to convert.
-     * @param \UIM\Database\Driver $driver The driver instance to convert with.
+     * @param \UIM\Database\Driver driver The driver instance to convert with.
      */
-    string toDatabase(Json valueToConvert, Driver $driver) {
+    string toDatabase(Json valueToConvert, Driver driver) {
         if (isResource(valueToConvert)) {
             throw new InvalidArgumentException("Cannot convert a resource value to JSON");
         }
@@ -30,16 +30,16 @@ class JsonType : BaseType, IBatchCasting {
     /**
  Params:
      * Json aValue The value to convert.
-     * @param \UIM\Database\Driver $driver The driver instance to convert with.
+     * @param \UIM\Database\Driver driver The driver instance to convert with.
     */
-    Json ToD(Json valueToConvert, Driver $driver) {
+    Json ToD(Json valueToConvert, Driver driver) {
         if (!isString(valueToConvert)) {
             return null;
         }
         return json_decode(valueToConvert, true);
     }
  
-    array manyToD(array  someValues, array fields, Driver $driver) {
+    array manyToD(array  someValues, array fields, Driver driver) {
         foreach (fields as field) {
             if (!isSet(someValues[field])) {
                 continue;
@@ -49,7 +49,7 @@ class JsonType : BaseType, IBatchCasting {
         return someValues;
     }
  
-    int toStatement(Json aValue, Driver $driver) {
+    int toStatement(Json aValue, Driver driver) {
         return PDO.PARAM_STR;
     }
     

@@ -65,19 +65,19 @@ class Connection : IConnection {
      * configData = Connection config
      */
     protected Driver[string] createDrivers(IData[string] configData = null) {
-        $driver = configData["driver"] ?? "";
-        if (!isString($driver)) {
-            assert(cast(Driver)$driver);
-            if (!$driver.enabled()) {
-                throw new MissingExtensionException(["driver": get_class($driver), "name": this.configName()]);
+        driver = configData["driver"] ?? "";
+        if (!isString(driver)) {
+            assert(cast(Driver)driver);
+            if (!driver.enabled()) {
+                throw new MissingExtensionException(["driver": get_class(driver), "name": this.configName()]);
             }
             // Legacy support for setting instance instead of driver class
-            return [self.ROLE_READ: $driver, self.ROLE_WRITE: $driver];
+            return [self.ROLE_READ: driver, self.ROLE_WRITE: driver];
         }
-        /** @var class-string<\UIM\Database\Driver>|null $driverClass */
-        $driverClass = App.className($driver, "Database/Driver");
-        if ($driverClass.isNull) {
-            throw new MissingDriverException(["driver": $driver, "connection": this.configName()]);
+        /** @var class-string<\UIM\Database\Driver>|null driverClass */
+        driverClass = App.className(driver, "Database/Driver");
+        if (driverClass.isNull) {
+            throw new MissingDriverException(["driver": driver, "connection": this.configName()]);
         }
         $sharedConfig = array_diff_key(configData, array_flip([
             "name",
@@ -89,10 +89,10 @@ class Connection : IConnection {
         $writeConfig = configData["write"] ?? [] + $sharedConfig;
         $readConfig = configData["read"] ?? [] + $sharedConfig;
         if ($readConfig == $writeConfig) {
-            $readDriver = $writeDriver = new $driverClass(["_role": self.ROLE_WRITE] + $writeConfig);
+            $readDriver = $writeDriver = new driverClass(["_role": self.ROLE_WRITE] + $writeConfig);
         } else {
-            $readDriver = new $driverClass(["_role": self.ROLE_READ] + $readConfig);
-            $writeDriver = new $driverClass(["_role": self.ROLE_WRITE] + $writeConfig);
+            $readDriver = new driverClass(["_role": self.ROLE_READ] + $readConfig);
+            $writeDriver = new driverClass(["_role": self.ROLE_WRITE] + $writeConfig);
         }
         if (!$writeDriver.enabled()) {
             throw new MissingExtensionException(["driver": get_class($writeDriver), "name": this.configName()]);

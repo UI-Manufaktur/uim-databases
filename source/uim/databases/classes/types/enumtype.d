@@ -64,9 +64,9 @@ class EnumType : BaseType {
      * Convert enum instances into the database format.
      * Params:
      * Json aValue The value to convert.
-     * @param \UIM\Database\Driver $driver The driver instance to convert with.
+     * @param \UIM\Database\Driver driver The driver instance to convert with.
      */
-    string|int toDatabase(Json aValue, Driver $driver) {
+    string|int toDatabase(Json aValue, Driver driver) {
         if (aValue.isNull) {
             return null;
         }
@@ -96,9 +96,9 @@ class EnumType : BaseType {
      * Transform DB value to backed enum instance
      * Params:
      * Json aValue The value to convert.
-     * @param \UIM\Database\Driver $driver The driver instance to convert with.
+     * @param \UIM\Database\Driver driver The driver instance to convert with.
      */
-    BackedEnum ToD(Json aValue, Driver $driver) {
+    BackedEnum ToD(Json aValue, Driver driver) {
         if (aValue.isNull) {
             return null;
         }
@@ -111,7 +111,7 @@ class EnumType : BaseType {
         return this.enumClassName.from(aValue);
     }
  
-    int toStatement(Json aValue, Driver $driver) {
+    int toStatement(Json aValue, Driver driver) {
         if (this.backingType == "int") {
             return PDO.PARAM_INT;
         }

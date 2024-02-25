@@ -33,9 +33,9 @@ class DecimalType : BaseType, IBatchCasting {
      * Convert decimal strings into the database format.
      *
      * valueToConvert - The value to convert.
-     * @param \UIM\Database\Driver $driver The driver instance to convert with.
+     * @param \UIM\Database\Driver driver The driver instance to convert with.
      */
-    string|float|int toDatabase(Json valueToConvert, Driver $driver) {
+    string|float|int toDatabase(Json valueToConvert, Driver driver) {
         if (valueToConvert.isNull || valueToConvert == "") {
             return null;
         }
@@ -59,16 +59,16 @@ class DecimalType : BaseType, IBatchCasting {
     /**
  Params:
      * Json valueToConvert The value to convert.
-     * @param \UIM\Database\Driver $driver The driver instance to convert with.
+     * @param \UIM\Database\Driver driver The driver instance to convert with.
      */
-    string ToD(Json valueToConvert, Driver $driver) {
+    string ToD(Json valueToConvert, Driver driver) {
         if (valueToConvert.isNull) {
             return null;
         }
         return (string)valueToConvert;
     }
  
-    array manyToD(array  someValues, array fields, Driver $driver) {
+    array manyToD(array  someValues, array fields, Driver driver) {
         foreach (fields as field) {
             if (!someValues.isSet(field)) {
                 continue;
@@ -78,7 +78,7 @@ class DecimalType : BaseType, IBatchCasting {
         return someValues;
     }
  
-    int toStatement(Json valueToConvert, Driver $driver) {
+    int toStatement(Json valueToConvert, Driver driver) {
         return PDO.PARAM_STR;
     }
     

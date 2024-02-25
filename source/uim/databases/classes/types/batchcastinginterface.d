@@ -15,7 +15,7 @@ interface IBatchCasting {
      * Params:
      * array  someValues The original array of values containing the fields to be casted
      * @param string[] fields The field keys to cast
-     * @param \UIM\Database\Driver $driver Object from which database preferences and configuration will be extracted.
+     * @param \UIM\Database\Driver driver Object from which database preferences and configuration will be extracted.
      */
-    IData[string] manyToD(array  someValues, array fields, Driver $driver);
+    IData[string] manyToD(array  someValues, array fields, Driver driver);
 }
