@@ -483,7 +483,7 @@ class TableSchema : TableISchema, ISqlGenerator {
         foreach (_constraints.keys as name) {
             constraints ~= dialect.constraintSql(this, name);
         }
-        foreach (array_keys(_indexNames) as name) {
+        foreach (_indexNames.keys as name) {
              anIndexes ~= dialect.indexSql(this, name);
         }
         return dialect.createTableSql(this, someColumns, constraints,  anIndexes);

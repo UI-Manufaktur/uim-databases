@@ -602,7 +602,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
 
     function constraints(): array
     {
-        return array_keys(this._constraints);
+        return this._constraints.keys;
     }
 
 
@@ -634,20 +634,18 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
     }
 
 
-    function isTemporary(): bool
-    {
+    bool isTemporary() {
         return this._temporary;
     }
 
 
-    function createSql(Connection connection): array
-    {
+    array createSql(Connection connection) {
         dialect = connection.getDriver().schemaDialect();
         columns = constraints = indexes = [];
         foreach (this._columns.keys as name) {
             columns[] = dialect.columnSql(this, name);
         }
-        foreach (array_keys(this._constraints) as name) {
+        foreach (this._constraints.keys as name) {
             constraints[] = dialect.constraintSql(this, name);
         }
         foreach (this._indexes.keys as name) {
@@ -658,8 +656,7 @@ class TableSchema : ITableSchema, SqlGeneratorInterface
     }
 
 
-    function dropSql(Connection connection): array
-    {
+    array dropSql(Connection connection) {
         dialect = connection.getDriver().schemaDialect();
 
         return dialect.dropTableSql(this);
