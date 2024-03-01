@@ -97,7 +97,7 @@ class Collection : CollectionInterface
      * @return uim.databases.Schema\TableSchema Object with column metadata.
      * @throws uim.databases.Exception\DatabaseException when table cannot be described.
      */
-    function describe(string name, array options = []): ITableSchema
+    function describe(string name, IData[string] options = null): ITableSchema
     {
         config = this._connection.config();
         if (strpos(name, ".")) {

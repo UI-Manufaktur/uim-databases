@@ -46,7 +46,7 @@ class CachedCollection : CollectionInterface
     }
 
 
-    function describe(string name, array options = []): ITableSchema
+    function describe(string name, IData[string] options = null): ITableSchema
     {
         options += ["forceRefresh" : false];
         cacheKey = this.cacheKey(name);
