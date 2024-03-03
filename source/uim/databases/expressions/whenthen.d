@@ -236,22 +236,22 @@ class WhenThenExpression : IDBAExpression
      * * `when`: The `WHEN` value.
      * * `then`: The `THEN` result value.
      *
-     * @param string $clause The name of the clause to obtain.
+     * @param string clause The name of the clause to obtain.
      * @return uim.databases.IDBAExpression|object|scalar|null
      * @throws \InvalidArgumentException In case the given clause name is invalid.
      */
-    function clause(string $clause) {
-        if (!hasAllValues($clause, this.validClauseNames, true)) {
+    function clause(string clause) {
+        if (!hasAllValues(clause, this.validClauseNames, true)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    "The `$clause` argument must be one of `%s`, the given value `%s` is invalid.",
+                    "The `clause` argument must be one of `%s`, the given value `%s` is invalid.",
                     implode("`, `", this.validClauseNames),
-                    $clause
+                    clause
                 )
             );
         }
 
-        return this.{$clause};
+        return this.{clause};
     }
 
 

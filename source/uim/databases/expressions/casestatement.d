@@ -221,7 +221,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * The following is _unsafe_ usage that must be avoided:
      *
      * ```
-     * $case
+     * case
      *      .when($userData)
      * ```
      *
@@ -229,7 +229,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * the value:
      *
      * ```
-     * $case
+     * case
      *      .when($userData, "integer")
      * ```
      *
@@ -242,7 +242,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * entries, which will cause them to be bound:
      *
      * ```
-     * $case
+     * case
      *      .when([
      *          "Table.column": $userData,
      *      ])
@@ -310,7 +310,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * `uim.databases.Expression\WhenThenExpression`:
      *
      * ```
-     * $case
+     * case
      *     .when(["Table.column": true])
      *     .then("Yes")
      *     .when(["Table.column": false])
@@ -321,27 +321,27 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * The following would all fail with an exception:
      *
      * ```
-     * $case
+     * case
      *     .when(["Table.column": true])
      *     .when(["Table.column": false])
      *     // ...
      * ```
      *
      * ```
-     * $case
+     * case
      *     .when(["Table.column": true])
      *     .else("Maybe")
      *     // ...
      * ```
      *
      * ```
-     * $case
+     * case
      *     .then("Yes")
      *     // ...
      * ```
      *
      * ```
-     * $case
+     * case
      *     .when(["Table.column": true])
      *     .then("Yes")
      *     .then("No")
@@ -473,22 +473,22 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * * `when`: An array of `WHEN ... THEN ...` expressions.
      * * `else`: The `ELSE` result value.
      *
-     * @param string $clause The name of the clause to obtain.
+     * @param string clause The name of the clause to obtain.
      * @return uim.databases.IDBAExpression|object|array<uim.databases.Expression\WhenThenExpression>|scalar|null
      * @throws \InvalidArgumentException In case the given clause name is invalid.
      */
-    function clause(string $clause) {
-        if (!hasAllValues($clause, this.validClauseNames, true)) {
+    function clause(string clause) {
+        if (!hasAllValues(clause, this.validClauseNames, true)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    "The `$clause` argument must be one of `%s`, the given value `%s` is invalid.",
+                    "The `clause` argument must be one of `%s`, the given value `%s` is invalid.",
                     implode("`, `", this.validClauseNames),
-                    $clause
+                    clause
                 )
             );
         }
 
-        return this.{$clause};
+        return this.{clause};
     }
 
 

@@ -18,12 +18,12 @@ class OrderByExpression : QueryExpression
     /**
      * Constructor
      *
-     * @param uim.databases.IDBAExpression|array|string $conditions The sort columns
+     * @param uim.databases.IDBAExpression|array|string conditions The sort columns
      * @param uim.databases.TypeMap|array<string, string> types The types for each column.
-     * @param string $conjunction The glue used to join conditions together.
+     * @param string conjunction The glue used to join conditions together.
      */
-    this($conditions = null, types = null, $conjunction = "") {
-        super(($conditions, types, $conjunction);
+    this(conditions = null, types = null, conjunction = "") {
+        super((conditions, types, conjunction);
     }
 
 
@@ -45,11 +45,11 @@ class OrderByExpression : QueryExpression
      *
      * New order by expressions are merged to existing ones
      *
-     * @param array $conditions list of order by expressions
-     * @param array types list of types associated on fields referenced in $conditions
+     * @param array conditions list of order by expressions
+     * @param array types list of types associated on fields referenced in conditions
      */
-    protected void _addConditions(array $conditions, array types) {
-        foreach ($conditions as $key: $val) {
+    protected void _addConditions(array conditions, array types) {
+        foreach (conditions as $key: $val) {
             if (
                 is_string($key) &&
                 is_string($val) &&
@@ -67,6 +67,6 @@ class OrderByExpression : QueryExpression
             }
         }
 
-        _conditions = array_merge(_conditions, $conditions);
+        _conditions = array_merge(_conditions, conditions);
     }
 }

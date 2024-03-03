@@ -131,12 +131,12 @@ class LoggingStatement : StatementDecorator
      * Wrapper for bindValue function to gather each parameter to be later used
      * in the logger function.
      *
-     * @param string|int $column Name or param position to be bound
+     * @param string|int column Name or param position to be bound
      * @param mixed value The value to bind to variable in query
      * @param string|int|null type PDO type or name of configured Type class
      */
-    void bindValue($column, value, type = "string") {
-        super.bindValue($column, value, type);
+    void bindValue(column, value, type = "string") {
+        super.bindValue(column, value, type);
 
         if ($type == null) {
             type = "string";
@@ -144,7 +144,7 @@ class LoggingStatement : StatementDecorator
         if (!ctype_digit($type)) {
             value = this.cast(value, type)[0];
         }
-        _compiledParams[$column] = value;
+        _compiledParams[column] = value;
     }
 
     /**

@@ -78,7 +78,7 @@ class FunctionExpression : QueryExpression : ITypedResult
     /**
      * Adds one or more arguments for the function call.
      *
-     * @param array $conditions list of arguments to be passed to the function
+     * @param array conditions list of arguments to be passed to the function
      * If associative the key would be used as argument when value is "literal"
      * @param array<string, string> types Associative array of types to be associated with the
      * passed arguments
@@ -87,10 +87,10 @@ class FunctionExpression : QueryExpression : ITypedResult
      * @return this
      * @psalm-suppress MoreSpecificImplementedParamType
      */
-    function add($conditions, array types = null, bool prepend = false) {
+    function add(conditions, array types = null, bool prepend = false) {
         put = prepend ? "array_unshift" : "array_push";
         typeMap = this.getTypeMap().setTypes($types);
-        foreach ($conditions as $k: p) {
+        foreach (conditions as $k: p) {
             if ($p == "literal") {
                 put(_conditions, $k);
                 continue;
@@ -121,17 +121,17 @@ class FunctionExpression : QueryExpression : ITypedResult
 
     string sql(ValueBinder aBinder) {
         parts = null;
-        foreach (_conditions as $condition) {
-            if ($condition instanceof Query) {
-                $condition = sprintf("(%s)", $condition.sql($binder));
-            } elseif ($condition instanceof IDBAExpression) {
-                $condition = $condition.sql($binder);
-            } elseif (is_array($condition)) {
+        foreach (_conditions as condition) {
+            if (condition instanceof Query) {
+                condition = sprintf("(%s)", condition.sql($binder));
+            } elseif (condition instanceof IDBAExpression) {
+                condition = condition.sql($binder);
+            } elseif (is_array(condition)) {
                 p = $binder.placeholder("param");
-                $binder.bind($p, $condition["value"], $condition["type"]);
-                $condition = p;
+                $binder.bind($p, condition["value"], condition["type"]);
+                condition = p;
             }
-            parts[] = $condition;
+            parts[] = condition;
         }
 
         return _name . sprintf("(%s)", implode(

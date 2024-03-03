@@ -31,12 +31,12 @@ class TupleComparison : ComparisonExpression
      * @param uim.databases.IDBAExpression|array values the values to use to form a tuple
      * @param array<string|null> types the types names to use for casting each of the values, only
      * one type per position in the value array in needed
-     * @param string $conjunction the operator used for comparing field and value
+     * @param string conjunction the operator used for comparing field and value
      */
-    this(fields, values, array types = null, string $conjunction = "=") {
+    this(fields, values, array types = null, string conjunction = "=") {
         _type = types;
         this.setField(fields);
-        _operator = $conjunction;
+        _operator = conjunction;
         this.setValue(values);
     }
 

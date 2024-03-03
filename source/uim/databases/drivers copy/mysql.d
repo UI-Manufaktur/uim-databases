@@ -131,8 +131,8 @@ class MysqlDriver : Driver {
 
         if (!empty(aConfig["init"])) {
             connection = this.getConnection();
-            foreach ((array)aConfig["init"] as $command) {
-                connection.exec($command);
+            foreach ((array)aConfig["init"] as command) {
+                connection.exec(command);
             }
         }
 

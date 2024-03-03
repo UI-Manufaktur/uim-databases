@@ -54,11 +54,11 @@ class ValuesExpression : IDBAExpression {
     /**
      * Constructor
      *
-     * @param array $columns The list of columns that are going to be part of the values.
+     * @param array columns The list of columns that are going to be part of the values.
      * @param uim.databases.TypeMap typeMap A dictionary of column . type names
      */
-    this(array $columns, TypeMap typeMap) {
-        _columns = $columns;
+    this(array columns, TypeMap typeMap) {
+        _columns = columns;
         this.setTypeMap($typeMap);
     }
 
@@ -97,11 +97,11 @@ class ValuesExpression : IDBAExpression {
     /**
      * Sets the columns to be inserted.
      *
-     * @param array $columns Array with columns to be inserted.
+     * @param array columns Array with columns to be inserted.
      * @return this
      */
-    function setColumns(array $columns) {
-        _columns = $columns;
+    function setColumns(array columns) {
+        _columns = columns;
         _castedExpressions = false;
 
         return this;
@@ -122,15 +122,15 @@ class ValuesExpression : IDBAExpression {
      *
      */
     protected array _columnNames() {
-        $columns = null;
-        foreach (_columns as $col) {
-            if (is_string($col)) {
-                $col = trim($col, "`[]"");
+        columns = null;
+        foreach (_columns as col) {
+            if (is_string(col)) {
+                col = trim(col, "`[]"");
             }
-            $columns[] = $col;
+            columns[] = col;
         }
 
-        return $columns;
+        return columns;
     }
 
     /**
@@ -191,22 +191,22 @@ class ValuesExpression : IDBAExpression {
             _processExpressions();
         }
 
-        $columns = _columnNames();
-        $defaults = array_fill_keys($columns, null);
+        columns = _columnNames();
+        $defaults = array_fill_keys(columns, null);
         $placeholders = null;
 
         types = null;
         typeMap = this.getTypeMap();
-        foreach ($defaults as $col: $v) {
-            types[$col] = typeMap.type($col);
+        foreach ($defaults as col: $v) {
+            types[col] = typeMap.type(col);
         }
 
         foreach (_values as $row) {
             $row += $defaults;
             $rowPlaceholders = null;
 
-            foreach ($columns as $column) {
-                value = $row[$column];
+            foreach (columns as column) {
+                value = $row[column];
 
                 if (value instanceof IDBAExpression) {
                     $rowPlaceholders[] = "(" ~ value.sql($binder) ~ ")";
@@ -215,7 +215,7 @@ class ValuesExpression : IDBAExpression {
 
                 $placeholder = $binder.placeholder("c");
                 $rowPlaceholders[] = $placeholder;
-                $binder.bind($placeholder, value, types[$column]);
+                $binder.bind($placeholder, value, types[column]);
             }
 
             $placeholders[] = implode(", ", $rowPlaceholders);
@@ -264,12 +264,12 @@ class ValuesExpression : IDBAExpression {
         types = null;
         typeMap = this.getTypeMap();
 
-        $columns = _columnNames();
-        foreach ($columns as $c) {
-            if (!is_string($c) && !is_int($c)) {
+        columns = _columnNames();
+        foreach (columns as c) {
+            if (!is_string(c) && !is_int(c)) {
                 continue;
             }
-            types[$c] = typeMap.type($c);
+            types[c] = typeMap.type(c);
         }
 
         types = _requiresToExpressionCasting($types);
@@ -279,9 +279,9 @@ class ValuesExpression : IDBAExpression {
         }
 
         foreach (_values as $row: values) {
-            foreach ($types as $col: type) {
+            foreach ($types as col: type) {
                 /** @var DDBtypes.ExpressionTypeInterface type */
-                _values[$row][$col] = type.toExpression(values[$col]);
+                _values[$row][col] = type.toExpression(values[col]);
             }
         }
         _castedExpressions = true;

@@ -173,9 +173,9 @@ class WindowExpression : IDBAExpression, IWindow
 
 
     string sql(ValueBinder aBinder) {
-        $clauses = null;
+        clauses = null;
         if (this.name.getIdentifier()) {
-            $clauses[] = this.name.sql($binder);
+            clauses[] = this.name.sql($binder);
         }
 
         if (this.partitions) {
@@ -184,11 +184,11 @@ class WindowExpression : IDBAExpression, IWindow
                 $expressions[] = $partition.sql($binder);
             }
 
-            $clauses[] = "PARTITION BY " ~ implode(", ", $expressions);
+            clauses[] = "PARTITION BY " ~ implode(", ", $expressions);
         }
 
         if (this.order) {
-            $clauses[] = this.order.sql($binder);
+            clauses[] = this.order.sql($binder);
         }
 
         if (this.frame) {
@@ -209,10 +209,10 @@ class WindowExpression : IDBAExpression, IWindow
                 $frameSql ~= " EXCLUDE " ~ this.exclusion;
             }
 
-            $clauses[] = $frameSql;
+            clauses[] = $frameSql;
         }
 
-        return implode(" ", $clauses);
+        return implode(" ", clauses);
     }
 
 

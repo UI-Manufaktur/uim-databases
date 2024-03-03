@@ -32,11 +32,11 @@ class IdentifierExpression : IDBAExpression
      * Constructor
      *
      * @param string $identifier The identifier this expression represents
-     * @param string|null $collation The identifier collation
+     * @param string|null collation The identifier collation
      */
-    this(string $identifier, Nullable!string $collation = null) {
+    this(string $identifier, Nullable!string collation = null) {
         _identifier = $identifier;
-        this.collation = $collation;
+        this.collation = collation;
     }
 
     /**
@@ -58,10 +58,10 @@ class IdentifierExpression : IDBAExpression
     /**
      * Sets the collation.
      *
-     * @param string $collation Identifier collation
+     * @param string collation Identifier collation
      */
-    void setCollation(string $collation) {
-        this.collation = $collation;
+    void setCollation(string collation) {
+        this.collation = collation;
     }
 
     /**

@@ -42,30 +42,30 @@ class QueryExpression : IDBAExpression, Countable
      * expression objects. Optionally, you can set the conjunction keyword to be used
      * for joining each part of this level of the expression tree.
      *
-     * @param uim.databases.IDBAExpression|array|string $conditions Tree like array structure
+     * @param uim.databases.IDBAExpression|array|string conditions Tree like array structure
      * containing all the conditions to be added or nested inside this expression object.
      * @param uim.databases.TypeMap|array types Associative array of types to be associated with the values
-     * passed in $conditions.
-     * @param string $conjunction the glue that will join all the string conditions at this
+     * passed in conditions.
+     * @param string conjunction the glue that will join all the string conditions at this
      * level of the expression tree. For example "AND", "OR", "XOR"...
-     * @see uim.databases.Expression\QueryExpression::add() for more details on $conditions and types
+     * @see uim.databases.Expression\QueryExpression::add() for more details on conditions and types
      */
-    this($conditions = null, types = null, $conjunction = "AND") {
+    this(conditions = null, types = null, conjunction = "AND") {
         this.setTypeMap($types);
-        this.setConjunction(strtoupper($conjunction));
-        if (!empty($conditions)) {
-            this.add($conditions, this.getTypeMap().getTypes());
+        this.setConjunction(strtoupper(conjunction));
+        if (!empty(conditions)) {
+            this.add(conditions, this.getTypeMap().getTypes());
         }
     }
 
     /**
      * Changes the conjunction for the conditions at this level of the expression tree.
      *
-     * @param string $conjunction Value to be used for joining conditions
+     * @param string conjunction Value to be used for joining conditions
      * @return this
      */
-    function setConjunction(string $conjunction) {
-        _conjunction = strtoupper($conjunction);
+    function setConjunction(string conjunction) {
+        _conjunction = strtoupper(conjunction);
 
         return this;
     }
@@ -88,7 +88,7 @@ class QueryExpression : IDBAExpression, Countable
      * then it will cause the placeholder to be re-written dynamically so if the
      * value is an array, it will create as many placeholders as values are in it.
      *
-     * @param uim.databases.IDBAExpression|array|string $conditions single or multiple conditions to
+     * @param uim.databases.IDBAExpression|array|string conditions single or multiple conditions to
      * be added. When using an array and the key is "OR" or "AND" a new expression
      * object will be created with that conjunction and internal array value passed
      * as conditions.
@@ -97,20 +97,20 @@ class QueryExpression : IDBAExpression, Countable
      * @see uim.databases.Query::where() for examples on conditions
      * @return this
      */
-    function add($conditions, array types = null) {
-        if (is_string($conditions)) {
-            _conditions[] = $conditions;
+    function add(conditions, array types = null) {
+        if (is_string(conditions)) {
+            _conditions[] = conditions;
 
             return this;
         }
 
-        if ($conditions instanceof IDBAExpression) {
-            _conditions[] = $conditions;
+        if (conditions instanceof IDBAExpression) {
+            _conditions[] = conditions;
 
             return this;
         }
 
-        _addConditions($conditions, types);
+        _addConditions(conditions, types);
 
         return this;
     }
@@ -411,34 +411,34 @@ class QueryExpression : IDBAExpression, Countable
      * Returns a new QueryExpression object containing all the conditions passed
      * and set up the conjunction to be "AND"
      *
-     * @param uim.databases.IDBAExpression|\Closure|array|string $conditions to be joined with AND
+     * @param uim.databases.IDBAExpression|\Closure|array|string conditions to be joined with AND
      * @param array<string, string> types Associative array of fields pointing to the type of the
      * values that are being passed. Used for correctly binding values to statements.
      * @return uim.databases.Expression\QueryExpression
      */
-    function and($conditions, types = null) {
-        if ($conditions instanceof Closure) {
-            return $conditions(new static([], this.getTypeMap().setTypes($types)));
+    function and(conditions, types = null) {
+        if (conditions instanceof Closure) {
+            return conditions(new static([], this.getTypeMap().setTypes($types)));
         }
 
-        return new static($conditions, this.getTypeMap().setTypes($types));
+        return new static(conditions, this.getTypeMap().setTypes($types));
     }
 
     /**
      * Returns a new QueryExpression object containing all the conditions passed
      * and set up the conjunction to be "OR"
      *
-     * @param uim.databases.IDBAExpression|\Closure|array|string $conditions to be joined with OR
+     * @param uim.databases.IDBAExpression|\Closure|array|string conditions to be joined with OR
      * @param array<string, string> types Associative array of fields pointing to the type of the
      * values that are being passed. Used for correctly binding values to statements.
      * @return uim.databases.Expression\QueryExpression
      */
-    function or($conditions, types = null) {
-        if ($conditions instanceof Closure) {
-            return $conditions(new static([], this.getTypeMap().setTypes($types), "OR"));
+    function or(conditions, types = null) {
+        if (conditions instanceof Closure) {
+            return conditions(new static([], this.getTypeMap().setTypes($types), "OR"));
         }
 
-        return new static($conditions, this.getTypeMap().setTypes($types), "OR");
+        return new static(conditions, this.getTypeMap().setTypes($types), "OR");
     }
 
     // phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -447,16 +447,16 @@ class QueryExpression : IDBAExpression, Countable
      * Returns a new QueryExpression object containing all the conditions passed
      * and set up the conjunction to be "OR"
      *
-     * @param uim.databases.IDBAExpression|\Closure|array|string $conditions to be joined with OR
+     * @param uim.databases.IDBAExpression|\Closure|array|string conditions to be joined with OR
      * @param array<string, string> types Associative array of fields pointing to the type of the
      * values that are being passed. Used for correctly binding values to statements.
      * @return uim.databases.Expression\QueryExpression
      * @deprecated 4.0.0 Use {@link or()} instead.
      */
-    function or_($conditions, types = null) {
+    function or_(conditions, types = null) {
         deprecationWarning("QueryExpression::or_() is deprecated use or() instead.");
 
-        return this.or($conditions, types);
+        return this.or(conditions, types);
     }
 
     // phpcs:enable
@@ -467,13 +467,13 @@ class QueryExpression : IDBAExpression, Countable
      * "NOT ( (condition1) AND (conditions2) )" conjunction depends on the one
      * currently configured for this object.
      *
-     * @param uim.databases.IDBAExpression|\Closure|array|string $conditions to be added and negated
+     * @param uim.databases.IDBAExpression|\Closure|array|string conditions to be added and negated
      * @param array<string, string> types Associative array of fields pointing to the type of the
      * values that are being passed. Used for correctly binding values to statements.
      * @return this
      */
-    function not($conditions, types = null) {
-        return this.add(["NOT": $conditions], types);
+    function not(conditions, types = null) {
+        return this.add(["NOT": conditions], types);
     }
 
     /**
@@ -510,7 +510,7 @@ class QueryExpression : IDBAExpression, Countable
         if ($len == 0) {
             return "";
         }
-        $conjunction = _conjunction;
+        conjunction = _conjunction;
         template = $len == 1 ? '%s' : "(%s)";
         $parts = null;
         foreach (_conditions as $part) {
@@ -524,15 +524,15 @@ class QueryExpression : IDBAExpression, Countable
             }
         }
 
-        return sprintf($template, implode(" $conjunction ", $parts));
+        return sprintf($template, implode(" conjunction ", $parts));
     }
 
 
     O traverse(this O)(Closure callback) {
-        foreach (_conditions as $c) {
-            if ($c instanceof IDBAExpression) {
-                callback($c);
-                $c.traverse(callback);
+        foreach (_conditions as c) {
+            if (c instanceof IDBAExpression) {
+                callback(c);
+                c.traverse(callback);
             }
         }
 
@@ -556,9 +556,9 @@ class QueryExpression : IDBAExpression, Countable
      */
     function iterateParts(callable callback) {
         $parts = null;
-        foreach (_conditions as $k: $c) {
+        foreach (_conditions as $k: c) {
             $key = &$k;
-            $part = callback($c, $key);
+            $part = callback(c, $key);
             if ($part != null) {
                 $parts[$key] = $part;
             }
@@ -575,8 +575,8 @@ class QueryExpression : IDBAExpression, Countable
      * IDBAExpression objects
      */
     bool hasNestedExpression() {
-        foreach (_conditions as $c) {
-            if ($c instanceof IDBAExpression) {
+        foreach (_conditions as c) {
+            if (c instanceof IDBAExpression) {
                 return true;
             }
         }
@@ -590,27 +590,27 @@ class QueryExpression : IDBAExpression, Countable
      * String conditions are stored directly in the conditions, while any other
      * representation is wrapped around an adequate instance or of this class.
      *
-     * @param array $conditions list of conditions to be stored in this object
-     * @param array<int|string, string> types list of types associated on fields referenced in $conditions
+     * @param array conditions list of conditions to be stored in this object
+     * @param array<int|string, string> types list of types associated on fields referenced in conditions
      */
-    protected void _addConditions(array $conditions, array types) {
+    protected void _addConditions(array conditions, array types) {
         $operators = ["and", "or", "xor"];
 
         typeMap = this.getTypeMap().setTypes($types);
 
-        foreach ($conditions as $k: $c) {
+        foreach (conditions as $k: c) {
             $numericKey = is_numeric($k);
 
-            if ($c instanceof Closure) {
+            if (c instanceof Closure) {
                 $expr = new static([], typeMap);
-                $c = $c($expr, this);
+                c = c($expr, this);
             }
 
-            if ($numericKey && empty($c)) {
+            if ($numericKey && empty(c)) {
                 continue;
             }
 
-            $isArray = is_array($c);
+            $isArray = is_array(c);
             $isOperator = $isNot = false;
             if (!$numericKey) {
                 $normalizedKey = strtolower($k);
@@ -618,32 +618,32 @@ class QueryExpression : IDBAExpression, Countable
                 $isNot = $normalizedKey == "not";
             }
 
-            if (($isOperator || $isNot) && ($isArray || $c instanceof Countable) && count($c) == 0) {
+            if (($isOperator || $isNot) && ($isArray || c instanceof Countable) && count(c) == 0) {
                 continue;
             }
 
-            if ($numericKey && $c instanceof IDBAExpression) {
-                _conditions[] = $c;
+            if ($numericKey && c instanceof IDBAExpression) {
+                _conditions[] = c;
                 continue;
             }
 
-            if ($numericKey && is_string($c)) {
-                _conditions[] = $c;
+            if ($numericKey && is_string(c)) {
+                _conditions[] = c;
                 continue;
             }
 
             if ($numericKey && $isArray || $isOperator) {
-                _conditions[] = new static($c, typeMap, $numericKey ? "AND" : $k);
+                _conditions[] = new static(c, typeMap, $numericKey ? "AND" : $k);
                 continue;
             }
 
             if ($isNot) {
-                _conditions[] = new UnaryExpression("NOT", new static($c, typeMap));
+                _conditions[] = new UnaryExpression("NOT", new static(c, typeMap));
                 continue;
             }
 
             if (!$numericKey) {
-                _conditions[] = _parseCondition($k, $c);
+                _conditions[] = _parseCondition($k, c);
             }
         }
     }
@@ -754,9 +754,9 @@ class QueryExpression : IDBAExpression, Countable
      * Clone this object and its subtree of expressions.
      */
     void __clone() {
-        foreach (_conditions as $i: $condition) {
-            if ($condition instanceof IDBAExpression) {
-                _conditions[$i] = clone $condition;
+        foreach (_conditions as $i: condition) {
+            if (condition instanceof IDBAExpression) {
+                _conditions[$i] = clone condition;
             }
         }
     }

@@ -217,10 +217,10 @@ interface IDriver
      * Returns last id generated for a table or sequence in database.
      *
      * @param string|null table table name or sequence to get last insert value from.
-     * @param string|null $column the name of the column representing the primary key.
+     * @param string|null column the name of the column representing the primary key.
      * @return string|int
      */
-    function lastInsertId(Nullable!string table = null, Nullable!string $column = null);
+    function lastInsertId(Nullable!string table = null, Nullable!string column = null);
 
     /**
      * Checks whether the driver is connected.
@@ -231,10 +231,10 @@ interface IDriver
      * Sets whether this driver should automatically quote identifiers
      * in queries.
      *
-     * @param bool $enable Whether to enable auto quoting
+     * @param bool enable Whether to enable auto quoting
      * @return this
      */
-    function enableAutoQuoting(bool $enable = true);
+    function enableAutoQuoting(bool enable = true);
 
     /**
      * Disable auto quoting of identifiers in queries.
@@ -271,8 +271,8 @@ interface IDriver
      * Constructs new TableSchema.
      *
      * @param string table The table name.
-     * @param array $columns The list of columns for the schema.
+     * @param array columns The list of columns for the schema.
      * @return uim.databases.Schema\TableSchema
      */
-    function newTableSchema(string table, array $columns = null): TableSchema;
+    function newTableSchema(string table, array columns = null): TableSchema;
 }
