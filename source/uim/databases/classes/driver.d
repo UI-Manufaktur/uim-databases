@@ -68,7 +68,7 @@ abstract class Driver {
     protected string _version = null;
 
     // The last number of connection retry attempts.
-    protected int $connectRetries = 0;
+    protected int connectRetries = 0;
 
     // The schema dialect for this driver
     protected SchemaDialect _schemaDialect;
@@ -119,7 +119,7 @@ abstract class Driver {
 
         $retry = new CommandRetry(new ErrorCodeWaitStrategy(RETRY_ERROR_CODES, 5), 4);
         try {
-            return $retry.run($action);
+            return $retry.run(action);
         } catch (PDOException  anException) {
             throw new MissingConnectionException(
                 [
@@ -455,10 +455,10 @@ abstract class Driver {
                 "this can break references to joined tables."
             );
         }
-        $conditions = queryToProcess.clause("where");
-        assert($conditions.isNull || cast(IExpression)$conditions);
-        if ($conditions) {
-            $conditions.traverse(function ($expression) {
+        conditions = queryToProcess.clause("where");
+        assert(conditions.isNull || cast(IExpression)conditions);
+        if (conditions) {
+            conditions.traverse(function ($expression) {
                 if (cast(ComparisonExpression)$expression) {
                     field = $expression.getFieldNames();
                     if (
@@ -568,14 +568,14 @@ abstract class Driver {
     bool isConnected() {
         if (isSet(this.pdo)) {
             try {
-                $connected = (bool)this.pdo.query("SELECT 1");
+                connected = (bool)this.pdo.query("SELECT 1");
             } catch (PDOException  anException) {
-                $connected = false;
+                connected = false;
             }
         } else {
-            $connected = false;
+            connected = false;
         }
-        return $connected;
+        return connected;
     }
 
     // Sets whether this driver should automatically quote identifiers in queries.
@@ -658,9 +658,9 @@ abstract class Driver {
      * Logs a message or query using the configured logger object.
      * Params:
      * \Stringable|string amessage Message string or query.
-     * @param array $context Logging context.
+     * @param array context Logging context.
      */
-    bool log(Stringable|string amessage, array $context = []) {
+    bool log(Stringable|string amessage, array context = []) {
         if (this.logger.isNull) {
             return false;
         }

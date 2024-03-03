@@ -121,12 +121,12 @@ class IdentifierQuoter {
      */
     protected void _quoteParts(Query aQuery, array someParts) {
         foreach ($part; someParts) {
-            $contents = aQuery.clause($part);
+            contents = aQuery.clause($part);
 
-            if (!isArray($contents)) {
+            if (!isArray(contents)) {
                 continue;
             }
-            result = _basicQuoter($contents);
+            result = _basicQuoter(contents);
             if (!empty(result)) {
                 aQuery.{$part}(result, true);
             }
@@ -142,8 +142,8 @@ class IdentifierQuoter {
         result = [];
         foreach ($part as alias: value) {
             value = !isString(value) ? value : this.quoteIdentifier(value);
-            alias = isNumeric($alias) ? alias : this.quoteIdentifier($alias);
-            result[$alias] = aValue;
+            alias = isNumeric(alias) ? alias : this.quoteIdentifier(alias);
+            result[alias] = aValue;
         }
         return result;
     }
@@ -164,7 +164,7 @@ class IdentifierQuoter {
             if (isString(value["table"])) {
                 value["table"] = this.quoteIdentifier(value["table"]);
             }
-            result[$alias] = value;
+            result[alias] = value;
         });
         return result;
     }
@@ -211,9 +211,9 @@ class IdentifierQuoter {
         }
         [aTable, someColumns] =  anInsert;
         aTable = this.quoteIdentifier(aTable);
-        foreach (&$column; someColumns ) {
-            if (isScalar($column)) {
-                $column = this.quoteIdentifier((string)$column);
+        foreach (&column; someColumns ) {
+            if (isScalar(column)) {
+                column = this.quoteIdentifier((string)column);
             }
         }
         queryToQuote.insert(someColumns).into(aTable);

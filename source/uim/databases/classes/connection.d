@@ -23,7 +23,7 @@ class Connection : IConnection {
     protected bool _useSavePoints = false;
 
     // Cacher object instance.
-    protected ICache $cacher = null;
+    protected ICache cacher = null;
 
     /**
      * The schema collection object
@@ -202,36 +202,36 @@ class Connection : IConnection {
      * Params:
      * \UIM\Database\IExpression|string|null aTable The table to update rows of.
      * @param array  someValues Values to be updated.
-     * @param array $conditions Conditions to be set for the update statement.
+     * @param array conditions Conditions to be set for the update statement.
      * @param STRINGAA typesForCasting Associative array containing the types to be used for casting.
      */
     UpdateQuery updateQuery(
         IExpression|string|null aTable = null,
         array  someValues = [],
-        array $conditions = [],
+        array conditions = [],
         array typesForCasting = []
     ) {
-        return this.queryFactory().update(aTable,  someValues, $conditions, typesForCasting);
+        return this.queryFactory().update(aTable,  someValues, conditions, typesForCasting);
     }
     
     /**
      * Create a new DeleteQuery instance for this connection.
      * Params:
      * string|null aTable The table to delete rows from.
-     * @param array $conditions Conditions to be set for the delete statement.
+     * @param array conditions Conditions to be set for the delete statement.
      * typesForCasting - Associative array containing the types to be used for casting.
      */
-    DeleteQuery deleteQuery(string atable = null, array $conditions = [], STRINGAA typesForCasting = []) {
-        return this.queryFactory().delete(aTable, $conditions, typesForCasting);
+    DeleteQuery deleteQuery(string atable = null, array conditions = [], STRINGAA typesForCasting = []) {
+        return this.queryFactory().delete(aTable, conditions, typesForCasting);
     }
     
     /**
      * Sets a Schema\Collection object for this connection.
      * Params:
-     * \UIM\Database\Schema\ICollection $collection The schema collection object
+     * \UIM\Database\Schema\ICollection collection The schema collection object
      */
-    void setSchemaCollection(SchemaICollection $collection) {
-       _schemaCollection = $collection;
+    void setSchemaCollection(SchemaICollection collection) {
+       _schemaCollection = collection;
     }
 
     // Gets a Schema\Collection object for this connection.
@@ -265,22 +265,22 @@ class Connection : IConnection {
      * Params:
      * string atable the table to update rows from
      * @param array  someValues values to be updated
-     * @param array $conditions conditions to be set for update statement
+     * @param array conditions conditions to be set for update statement
      * @param string[] typesForCasting list of associative array containing the types to be used for casting
      */
-    IStatement update(string atable, array  someValues, array $conditions = [], array typesForCasting = []) {
-        return this.updateQuery(aTable,  someValues, $conditions, typesForCasting).execute();
+    IStatement update(string atable, array  someValues, array conditions = [], array typesForCasting = []) {
+        return this.updateQuery(aTable,  someValues, conditions, typesForCasting).execute();
     }
     
     /**
      * Executes a DELETE statement on the specified table.
      * Params:
      * string atable the table to delete rows from
-     * @param array $conditions conditions to be set for delete statement
+     * @param array conditions conditions to be set for delete statement
      * @param string[] typesForCasting list of associative array containing the types to be used for casting
      */
-    IStatement delete(string atable, array $conditions = [], array typesForCasting = []) {
-        return this.deleteQuery(aTable, $conditions, typesForCasting).execute();
+    IStatement delete(string atable, array conditions = [], array typesForCasting = []) {
+        return this.deleteQuery(aTable, conditions, typesForCasting).execute();
     }
     
     // Starts a new transaction.
@@ -364,7 +364,7 @@ class Connection : IConnection {
      * If you are trying to enable this feature, make sure you check
      * `isSavePointsEnabled()` to verify that savepoints were enabled successfully.
      * Params:
-     * bool $enable Whether save points should be used.
+     * bool enable Whether save points should be used.
      */
     void enableSavePoints(bool isEnable = true) {
         _useSavePoints = isEnable ? this.getDriver().supports(DriverFeatures.SAVEPOINT) : false;
@@ -509,19 +509,19 @@ class Connection : IConnection {
      *
      * Changing this setting will not modify existing schema collections objects.
      * Params:
-     * string|bool $cache Either boolean false to disable metadata caching, or
+     * string|bool cache Either boolean false to disable metadata caching, or
      *  true to use `_cake_model_` or the name of the cache config to use.
      */
-    void cacheMetadata(string|bool $cache) {
+    void cacheMetadata(string|bool cache) {
        _schemaCollection = null;
-       _config["cacheMetadata"] = $cache;
-        if (isString($cache)) {
+       _config["cacheMetadata"] = cache;
+        if (isString(cache)) {
             this.cacher = null;
         }
     }
  
-    void setCacher(ICache $cacher) {
-        this.cacher = $cacher;
+    void setCacher(ICache cacher) {
+        this.cacher = cacher;
     }
  
     ICache getCacher() {

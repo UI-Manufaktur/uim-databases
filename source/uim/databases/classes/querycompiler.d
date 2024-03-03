@@ -222,12 +222,12 @@ class QueryCompiler {
             }
             joinPart ~= " %s JOIN %s %s".format($join["type"], $join["table"], $join["alias"]);
 
-            string $condition = "";
+            string condition = "";
             if (isSet($join["conditions"]) && cast(IExpression)$join["conditions"] ) {
-                $condition = $join["conditions"].sql(aBinder);
+                condition = $join["conditions"].sql(aBinder);
             }
 
-            joinPart ~= $condition.isEmpty ? " ON 1 = 1" : " ON {$condition}";
+            joinPart ~= condition.isEmpty ? " ON 1 = 1" : " ON {condition}";
         }
         return joinPart;
     }

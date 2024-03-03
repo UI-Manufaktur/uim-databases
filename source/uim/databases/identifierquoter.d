@@ -85,13 +85,13 @@ class IdentifierQuoter
      */
     protected void _quoteParts(Query $query) {
         foreach (["distinct", "select", "from", "group"] as $part) {
-            $contents = $query.clause($part);
+            contents = $query.clause($part);
 
-            if (!is_array($contents)) {
+            if (!is_array(contents)) {
                 continue;
             }
 
-            $result = _basicQuoter($contents);
+            $result = _basicQuoter(contents);
             if (!empty($result)) {
                 $query.{$part}($result, true);
             }
@@ -112,10 +112,10 @@ class IdentifierQuoter
      */
     protected array _basicQuoter(array $part) {
         $result = null;
-        foreach ($part as $alias: $value) {
+        foreach ($part as alias: $value) {
             $value = !is_string($value) ? $value : _driver.quoteIdentifier($value);
-            $alias = is_numeric($alias) ? $alias : _driver.quoteIdentifier($alias);
-            $result[$alias] = $value;
+            alias = is_numeric(alias) ? alias : _driver.quoteIdentifier(alias);
+            $result[alias] = $value;
         }
 
         return $result;
@@ -131,17 +131,17 @@ class IdentifierQuoter
     protected array _quoteJoins(array $joins) {
         $result = null;
         foreach ($joins as $value) {
-            $alias = "";
+            alias = "";
             if (!empty($value["alias"])) {
-                $alias = _driver.quoteIdentifier($value["alias"]);
-                $value["alias"] = $alias;
+                alias = _driver.quoteIdentifier($value["alias"]);
+                $value["alias"] = alias;
             }
 
             if (is_string($value["table"])) {
                 $value["table"] = _driver.quoteIdentifier($value["table"]);
             }
 
-            $result[$alias] = $value;
+            $result[alias] = $value;
         }
 
         return $result;
@@ -157,14 +157,14 @@ class IdentifierQuoter
         if (!isset($insert[0]) || !isset($insert[1])) {
             return;
         }
-        [$table, $columns] = $insert;
+        [$table, columns] = $insert;
         $table = _driver.quoteIdentifier($table);
-        foreach ($columns as &$column) {
-            if (is_scalar($column)) {
-                $column = _driver.quoteIdentifier((string)$column);
+        foreach (columns as &column) {
+            if (is_scalar(column)) {
+                column = _driver.quoteIdentifier((string)column);
             }
         }
-        $query.insert($columns).into($table);
+        $query.insert(columns).into($table);
     }
 
     /**

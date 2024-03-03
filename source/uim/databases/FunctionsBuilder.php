@@ -104,25 +104,25 @@ class FunctionsBuilder
     /**
      * Returns a FunctionExpression representing a string concatenation
      *
-     * @param array $args List of strings or expressions to concatenate
+     * @param array args List of strings or expressions to concatenate
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\FunctionExpression
      */
-    function concat(array $args, array $types = []): FunctionExpression
+    function concat(array args, array $types = []): FunctionExpression
     {
-        return new FunctionExpression("CONCAT", $args, someTypes, "string");
+        return new FunctionExpression("CONCAT", args, someTypes, "string");
     }
 
     /**
      * Returns a FunctionExpression representing a call to SQL COALESCE function.
      *
-     * @param array $args List of expressions to evaluate as function parameters
+     * @param array args List of expressions to evaluate as function parameters
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\FunctionExpression
      */
-    function coalesce(array $args, array $types = []): FunctionExpression
+    function coalesce(array args, array $types = []): FunctionExpression
     {
-        return new FunctionExpression("COALESCE", $args, someTypes, current($types) ?: "string");
+        return new FunctionExpression("COALESCE", args, someTypes, current($types) ?: "string");
     }
 
     /**
@@ -139,7 +139,7 @@ class FunctionsBuilder
     {
         if (is_array(field)) {
             deprecationWarning(
-                "Build cast function by FunctionsBuilder.cast(array $args) is deprecated. " .
+                "Build cast function by FunctionsBuilder.cast(array args) is deprecated. " .
                 "Use FunctionsBuilder.cast(field, string $type) instead."
             );
 
@@ -160,13 +160,13 @@ class FunctionsBuilder
      * Returns a FunctionExpression representing the difference in days between
      * two dates.
      *
-     * @param array $args List of expressions to obtain the difference in days.
+     * @param array args List of expressions to obtain the difference in days.
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\FunctionExpression
      */
-    function dateDiff(array $args, array $types = []): FunctionExpression
+    function dateDiff(array args, array $types = []): FunctionExpression
     {
-        return new FunctionExpression("DATEDIFF", $args, someTypes, "integer");
+        return new FunctionExpression("DATEDIFF", args, someTypes, "integer");
     }
 
     /**
@@ -347,14 +347,14 @@ class FunctionsBuilder
      * Magic method dispatcher to create custom SQL function calls
      *
      * @param string name the SQL function name to construct
-     * @param array $args list with up to 3 arguments, first one being an array with
+     * @param array args list with up to 3 arguments, first one being an array with
      * parameters for the SQL function, the second one a list of types to bind to those
      * params, and the third one the return type of the function
      * @return uim.databases.Expression\FunctionExpression
      */
-    function __call(string name, array $args): FunctionExpression
+    function __call(string name, array args): FunctionExpression
     {
-        return new FunctionExpression(name, ...$args);
+        return new FunctionExpression(name, ...args);
     }
 
     /**

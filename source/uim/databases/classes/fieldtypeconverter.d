@@ -14,7 +14,7 @@ class FieldTypeConverter {
     protected Driver driver;
 
     // Maps type names to conversion settings.
-    protected array $conversions = [];
+    protected array conversions = [];
 
     /**
      * Builds the type map

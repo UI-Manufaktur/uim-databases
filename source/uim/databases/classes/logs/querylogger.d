@@ -18,17 +18,17 @@ class QueryLogger : BaseLog {
   }
 
   void log($level, string | Stringable $message, array mycontext = []) {
-    $context += [
+    context += [
       "scope": this.scopes() ? : ["queriesLog", "cake.database.queries"],
       "connection": _configData.isSet("connection"),
       "query": null,
     ];
 
-    if (cast(LoggedQuery)$context["query"]) {
-      $context = $context["query"].getContext() + $context;
+    if (cast(LoggedQuery)context["query"]) {
+      context = context["query"].getContext() + context;
       $message = "connection={connection} role={role} duration={took} rows={numRows} " ~ $message;
     }
   Log:
-     : write("debug", (string)$message, $context);
+     : write("debug", (string)$message, context);
   }
 }

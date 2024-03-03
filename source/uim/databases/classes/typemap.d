@@ -99,10 +99,10 @@ class TypeMap {
      * the column type will be looked for inside the default mapping. If neither exist,
      * null will be returned.
      * Params:
-     * string|int $column The type for a given column
+     * string|int column The type for a given column
      */
-    string type(string|int $column) {
-        return _types[$column] ?? _defaults[$column] ?? null;
+    string type(string|int column) {
+        return _types[column] ?? _defaults[column] ?? null;
     }
     
     /**
