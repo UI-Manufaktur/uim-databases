@@ -98,14 +98,14 @@ abstract class SchemaDialect
         TableISchema tableSchema,
         string acolumn
     ) {
-        if (!TypeFactory.getMap($columnType)) {
+        if (!TypeFactory.getMap(columnType)) {
             return null;
         }
-        type = TypeFactory.build($columnType);
+        type = TypeFactory.build(columnType);
         if (!(cast(IColumnSchemaAware)$type)) {
             return null;
         }
-        return type.getColumnSql(tableSchema, $column, _driver);
+        return type.getColumnSql(tableSchema, column, _driver);
     }
     
     /**
@@ -116,10 +116,10 @@ abstract class SchemaDialect
      * @param array $definition The column definition.
      */
     protected array _applyTypeSpecificColumnConversion(string acolumnType, array $definition) {
-        if (!TypeFactory.getMap($columnType)) {
+        if (!TypeFactory.getMap(columnType)) {
             return null;
         }
-        type = TypeFactory.build($columnType);
+        type = TypeFactory.build(columnType);
         if (!(cast(IColumnSchemaAware)$type)) {
             return null;
         }
@@ -216,14 +216,14 @@ abstract class SchemaDialect
      * Params:
      * \UIM\Database\Schema\TableSchema tableSchema Table instance.
      * @param string[] someColumns The columns to go inside the table.
-     * @param string[] $constraints The constraints for the table.
+     * @param string[] constraints The constraints for the table.
      * @param string[] anIndexes The indexes for the table.
      * returns = SQL statements to create a table.
      */
     abstract string[] createTableSql(
         TableSchema tableSchema,
         string[] someColumns,
-        string[] $constraints,
+        string[] constraints,
         string[] anIndexes
     );
 

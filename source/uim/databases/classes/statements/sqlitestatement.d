@@ -22,9 +22,9 @@ class SqliteStatement : Statement {
             this.statement.queryString &&
             preg_match("/^(?:DELETE|UPDATE|INSERT)/i", this.statement.queryString)
             ) {
-            auto $changes = _driver.prepare("SELECT CHANGES()");
-            $changes.execute();
-            $row = $changes.fetch();
+            auto changes = _driver.prepare("SELECT CHANGES()");
+            changes.execute();
+            $row = changes.fetch();
 
             this.affectedRows = $row ? (int)$row[0] : 0;
         } else {

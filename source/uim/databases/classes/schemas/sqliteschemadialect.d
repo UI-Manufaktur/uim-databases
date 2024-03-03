@@ -34,7 +34,7 @@ class SqliteSchemaDialect : SchemaDialect {
         if ($matches[1].toLower == "unsigned") {
             isUnsigned = true;
         }
-        auto $col = $matches[2].toLower;
+        auto col = $matches[2].toLower;
         size_t columnLength = $precision = $scale = null;
         if (isSet($matches[3])) {
             columnLength = $matches[3];
@@ -45,25 +45,25 @@ class SqliteSchemaDialect : SchemaDialect {
             $precision = (int)$precision;
         }
         type = _applyTypeSpecificColumnConversion(
-            $col,
+            col,
             compact("length", "precision", "scale")
         );
         if ($type !isNull) {
             return type;
         }
-        if ($col == "bigint") {
+        if (col == "bigint") {
             return ["type": TableISchema.TYPE_BIGINTEGER, "length": columnLength, "unsigned": isUnsigned];
         }
-        if ($col == "smallint") {
+        if (col == "smallint") {
             return ["type": TableISchema.TYPE_SMALLINTEGER, "length": columnLength, "unsigned": isUnsigned];
         }
-        if ($col == "tinyint") {
+        if (col == "tinyint") {
             return ["type": TableISchema.TYPE_TINYINTEGER, "length": columnLength, "unsigned": isUnsigned];
         }
-        if ($col.has("int")) {
+        if (col.has("int")) {
             return ["type": TableISchema.TYPE_INTEGER, "length": columnLength, "unsigned": isUnsigned];
         }
-        if ($col.has("decimal")) {
+        if (col.has("decimal")) {
             return [
                 "type": TableISchema.TYPE_DECIMAL,
                 "length": columnLength,
@@ -71,7 +71,7 @@ class SqliteSchemaDialect : SchemaDialect {
                 "unsigned": $unsigned,
             ];
         }
-        if (in_array($col, ["float", "real", "double"])) {
+        if (in_array(col, ["float", "real", "double"])) {
             return [
                 "type": TableISchema.TYPE_FLOAT,
                 "length": columnLength,
@@ -79,22 +79,22 @@ class SqliteSchemaDialect : SchemaDialect {
                 "unsigned": $unsigned,
             ];
         }
-        if ($col.has("boolean")) {
+        if (col.has("boolean")) {
             return ["type": TableISchema.TYPE_BOOLEAN, "length": null];
         }
-        if (($col == "binary" && columnLength == 16) || strtolower(aColumn) == "uuid_blob") {
+        if ((col == "binary" && columnLength == 16) || strtolower(aColumn) == "uuid_blob") {
             return ["type": TableISchema.TYPE_BINARY_UUID, "length": null];
         }
-        if (($col == "char" && columnLength == 36) || $col == "uuid") {
+        if ((col == "char" && columnLength == 36) || col == "uuid") {
             return ["type": TableISchema.TYPE_UUID, "length": null];
         }
-        if ($col == "char") {
+        if (col == "char") {
             return ["type": TableISchema.TYPE_CHAR, "length": columnLength];
         }
-        if ($col.has("char")) {
+        if (col.has("char")) {
             return ["type": TableISchema.TYPE_STRING, "length": columnLength];
         }
-        if (in_array($col, ["blob", "clob", "binary", "varbinary"])) {
+        if (in_array(col, ["blob", "clob", "binary", "varbinary"])) {
             return ["type": TableISchema.TYPE_BINARY, "length": columnLength];
         }
         $datetimeTypes = [
@@ -106,8 +106,8 @@ class SqliteSchemaDialect : SchemaDialect {
             "datetime",
             "datetimefractional",
         ];
-        if (in_array($col, $datetimeTypes)) {
-            return ["type": $col, "length": null];
+        if (in_array(col, $datetimeTypes)) {
+            return ["type": col, "length": null];
         }
         return ["type": TableISchema.TYPE_TEXT, "length": null];
     }
@@ -166,12 +166,12 @@ class SqliteSchemaDialect : SchemaDialect {
         }
         tableSchema.addColumn($row["name"], myField);
         if ($row["pk"]) {
-            $constraint = (array)tableSchema.getConstraint("primary") ~ [
+            constraint = (array)tableSchema.getConstraint("primary") ~ [
                 "type": TableSchema.CONSTRAINT_PRIMARY,
                 "columns": [],
             ];
-            $constraint["columns"] = array_merge($constraint["columns"], [$row["name"]]);
-            tableSchema.addConstraint("primary", $constraint);
+            constraint["columns"] = array_merge(constraint["columns"], [$row["name"]]);
+            tableSchema.addConstraint("primary", constraint);
         }
     }
     
@@ -266,7 +266,7 @@ class SqliteSchemaDialect : SchemaDialect {
         auto statement = _driver.prepare(sql);
         statement.execute();
         string[] myColumns = statement.fetchAll("assoc")
-            .map!(column => $column["name"])
+            .map!(column => column["name"])
             .array;
 
         if ($row["unique"]) {
@@ -286,7 +286,7 @@ class SqliteSchemaDialect : SchemaDialect {
                     someColumnsPattern = join(
                         "\s*,\s*",
                         array_map(
-                            fn ($column): "(?:" ~ this.possiblyQuotedIdentifierRegex($column) ~ ")",
+                            fn (column): "(?:" ~ this.possiblyQuotedIdentifierRegex(column) ~ ")",
                             someColumns
                         )
                     );
@@ -497,17 +497,17 @@ class SqliteSchemaDialect : SchemaDialect {
         someData = tableSchema.getConstraint(name);
         assert(someData !isNull, "Data does not exist");
 
-        $column = tableSchema.getColumn(someData["columns"][0]);
-        assert($column !isNull, "Data does not exist");
+        column = tableSchema.getColumn(someData["columns"][0]);
+        assert(column !isNull, "Data does not exist");
 
         if (
             someData["type"] == TableSchema.CONSTRAINT_PRIMARY &&
             count(someData["columns"]) == 1 &&
-            $column["type"] == TableISchema.TYPE_INTEGER
+            column["type"] == TableISchema.TYPE_INTEGER
         ) {
             return "";
         }
-        $clause = "";
+        clause = "";
         type = "";
         if (someData["type"] == TableSchema.CONSTRAINT_PRIMARY) {
             type = "PRIMARY KEY";
@@ -518,7 +518,7 @@ class SqliteSchemaDialect : SchemaDialect {
         if (someData["type"] == TableSchema.CONSTRAINT_FOREIGN) {
             type = "FOREIGN KEY";
 
-            $clause = sprintf(
+            clause = sprintf(
                 " REFERENCES %s (%s) ON UPDATE %s ON DELETE %s",
                _driver.quoteIdentifier(someData["references"][0]),
                _convertConstraintColumns(someData["references"][1]),
@@ -536,7 +536,7 @@ class SqliteSchemaDialect : SchemaDialect {
             .format(_driver.quoteIdentifier(name),
             type,
             join(", ", someColumns),
-            $clause
+            clause
         );
     }
     
@@ -574,11 +574,11 @@ class SqliteSchemaDialect : SchemaDialect {
             .format(_driver.quoteIdentifier(name), _driver.quoteIdentifier(tableSchema.name()), join(", ", someColumns));
     }
  
-    array createTableSql(TableSchema tableSchema, array someColumns, array $constraints, array  anIndexes) {
-        auto $lines = array_merge(someColumns, $constraints);
+    array createTableSql(TableSchema tableSchema, array someColumns, array constraints, array  anIndexes) {
+        auto $lines = array_merge(someColumns, constraints);
         string content = join(",\n", array_filter($lines));
         string sqlTemporary = tableSchema.isTemporary() ? " TEMPORARY ' : ' ";
-        aTable = sprintf("CREATE%sTABLE \"%s\" (\n%s\n)", sqlTemporary, tableSchema.name(), $content);
+        aTable = sprintf("CREATE%sTABLE \"%s\" (\n%s\n)", sqlTemporary, tableSchema.name(), content);
         
         auto result = [aTable];
         anIndexes.each!(index => result ~=  anIndex);

@@ -79,69 +79,69 @@ class PostgresSchemaDialect : SchemaDialect {
         if ($matches.isEmpty) {
             throw new DatabaseException("Unable to parse column type from `%s`".format(columnType));
         }
-        auto $col = $matches[1].toLower;
+        auto col = $matches[1].toLower;
         auto $length = $precision = $scale = null;
         if (isSet($matches[2])) {
             $length = (int)$matches[2];
         }
         type = _applyTypeSpecificColumnConversion(
-            $col,
+            col,
             compact("length", "precision", "scale")
         );
         if ($type !isNull) {
             return type;
         }
-        if (in_array($col, ["date", "time", "boolean"], true)) {
-            return ["type": $col, "length": null];
+        if (in_array(col, ["date", "time", "boolean"], true)) {
+            return ["type": col, "length": null];
         }
-        if (in_array($col, ["timestamptz", "timestamp with time zone"], true)) {
+        if (in_array(col, ["timestamptz", "timestamp with time zone"], true)) {
             return ["type": TableISchema.TYPE_TIMESTAMP_TIMEZONE, "length": null];
         }
-        if ($col.has("timestamp")) {
+        if (col.has("timestamp")) {
             return ["type": TableISchema.TYPE_TIMESTAMP_FRACTIONAL, "length": null];
         }
-        if ($col.has("time")) {
+        if (col.has("time")) {
             return ["type": TableISchema.TYPE_TIME, "length": null];
         }
-        if ($col == "Serial" || $col == "integer") {
+        if (col == "Serial" || col == "integer") {
             return ["type": TableISchema.TYPE_INTEGER, "length": 10];
         }
-        if ($col == "bigserial" || $col == "bigint") {
+        if (col == "bigserial" || col == "bigint") {
             return ["type": TableISchema.TYPE_BIGINTEGER, "length": 20];
         }
-        if ($col == "Smallint") {
+        if (col == "Smallint") {
             return ["type": TableISchema.TYPE_SMALLINTEGER, "length": 5];
         }
-        if ($col == "inet") {
+        if (col == "inet") {
             return ["type": TableISchema.TYPE_STRING, "length": 39];
         }
-        if ($col == "uuid") {
+        if (col == "uuid") {
             return ["type": TableISchema.TYPE_UUID, "length": null];
         }
-        if ($col == "char") {
+        if (col == "char") {
             return ["type": TableISchema.TYPE_CHAR, "length": $length];
         }
-        if ($col.has("character")) {
+        if (col.has("character")) {
             return ["type": TableISchema.TYPE_STRING, "length": $length];
         }
         // money is `string' as it includes arbitrary text content
         // before the number value.
-        if ($col.has("money") || $col == "String") {
+        if (col.has("money") || col == "String") {
             return ["type": TableISchema.TYPE_STRING, "length": $length];
         }
-        if ($col.has("text")) {
+        if (col.has("text")) {
             return ["type": TableISchema.TYPE_TEXT, "length": null];
         }
-        if ($col == "byte") {
+        if (col == "byte") {
             return ["type": TableISchema.TYPE_BINARY, "length": null];
         }
-        if ($col == "real" || $col.has("double")) {
+        if (col == "real" || col.has("double")) {
             return ["type": TableISchema.TYPE_FLOAT, "length": null];
         }
-        if ($col.has("numeric") || $col.has("decimal")) {
+        if (col.has("numeric") || col.has("decimal")) {
             return ["type": TableISchema.TYPE_DECIMAL, "length": null];
         }
-        if ($col.has("json")) {
+        if (col.has("json")) {
             return ["type": TableISchema.TYPE_JSON, "length": null];
         }
         $length = isNumeric($length) ? $length : null;
@@ -271,15 +271,15 @@ class PostgresSchemaDialect : SchemaDialect {
      * @param array $row The metadata record to update with.
      */
     protected void _convertConstraint(TableSchema tableSchema, string aName, string atype, array $row) {
-        $constraint = tableSchema.getConstraint(name);
-        if (!$constraint) {
-            $constraint = [
+        constraint = tableSchema.getConstraint(name);
+        if (!constraint) {
+            constraint = [
                 "type": type,
                 "columns": [],
             ];
         }
-        $constraint["columns"] ~= $row["attname"];
-        tableSchema.addConstraint(name, $constraint);
+        constraint["columns"] ~= $row["attname"];
+        tableSchema.addConstraint(name, constraint);
     }
  
     array describeForeignKeySql(string atableName, IData[string] configData) {
@@ -458,9 +458,9 @@ class PostgresSchemaDialect : SchemaDialect {
         auto mySql = [];
 
         foreach (tableSchema.constraints() as name) {
-            $constraint = tableSchema.getConstraint(name);
-            assert($constraint !isNull);
-            if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
+            constraint = tableSchema.getConstraint(name);
+            assert(constraint !isNull);
+            if (constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
                 mySql ~= mySqlPattern.format(aTableName, this.constraintSql(tableSchema, name));
             }
@@ -473,12 +473,12 @@ class PostgresSchemaDialect : SchemaDialect {
         string [] sqlResults;
 
         foreach (name; tableSchema.constraints()) {
-            $constraint = tableSchema.getConstraint(name);
-            assert($constraint !isNull);
-            if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
+            constraint = tableSchema.getConstraint(name);
+            assert(constraint !isNull);
+            if (constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
-                $constraintName = _driver.quoteIdentifier(name);
-                sqlResults ~= sqlPattern.format(aTableName, $constraintName);
+                constraintName = _driver.quoteIdentifier(name);
+                sqlResults ~= sqlPattern.format(aTableName, constraintName);
             }
         }
         return sqlResults;
@@ -535,9 +535,9 @@ class PostgresSchemaDialect : SchemaDialect {
         return $prefix ~ " (" ~ join(", ", someColumns) ~ ")";
     }
  
-    array createTableSql(TableSchema tableSchema, array someColumns, array $constraints, array  anIndexes) {
-        $content = array_merge(someColumns, $constraints);
-        $content = join(",\n", array_filter($content));
+    array createTableSql(TableSchema tableSchema, array someColumns, array constraints, array  anIndexes) {
+        content = array_merge(someColumns, constraints);
+        content = join(",\n", array_filter(content));
         aTableName = _driver.quoteIdentifier(tableSchema.name());
         $dbSchema = _driver.schema();
         if ($dbSchema != "public") {
@@ -545,19 +545,19 @@ class PostgresSchemaDialect : SchemaDialect {
         }
         temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
          auto result;
-         result ~= "CREATE%sTABLE %s (\n%s\n)".format($temporary, aTableName, $content);
+         result ~= "CREATE%sTABLE %s (\n%s\n)".format($temporary, aTableName, content);
         foreach (anIndexes as  anIndex) {
              result ~=  anIndex;
         }
-        foreach (tableSchema.columns() as $column) {
-            $columnData = tableSchema.getColumn($column);
-            if (isSet($columnData["comment"])) {
+        foreach (tableSchema.columns() as column) {
+            columnData = tableSchema.getColumn(column);
+            if (isSet(columnData["comment"])) {
                  result ~= 
                     "COMMENT ON COLUMN %s.%s IS %s"
                     .format(
                         aTableName,
-                        _driver.quoteIdentifier($column),
-                        _driver.schemaValue($columnData["comment"])
+                        _driver.quoteIdentifier(column),
+                        _driver.schemaValue(columnData["comment"])
                     );
             }
         }

@@ -102,7 +102,7 @@ class SelectQuery : Query, IteratorAggregate {
      * aQuery.select(["id", "title"]); // Produces SELECT id, title
      * aQuery.select(["author": 'author_id"]); // Appends author: SELECT id, title, author_id as author
      * aQuery.select("id", true); // Resets the list: SELECT id
-     * aQuery.select(["total": $countQuery]); // SELECT id, (SELECT ...) AS total
+     * aQuery.select(["total": countQuery]); // SELECT id, (SELECT ...) AS total
      * aQuery.select(function (aQuery) {
      *    return ["article_id", "total": aQuery.count("*")];
      * })
@@ -263,7 +263,7 @@ class SelectQuery : Query, IteratorAggregate {
         }
         $joins = [];
         anI = count(_parts["join"]);
-        foreach ($alias: t; aTables) {
+        foreach (alias: t; aTables) {
             if (!isArray($t)) {
                 t = ["table": t, "conditions": this.newExpr()];
             }
@@ -273,8 +273,8 @@ class SelectQuery : Query, IteratorAggregate {
             if (!(cast(IExpression)$t["conditions"] )) {
                 t["conditions"] = this.newExpr().add($t["conditions"], typeNames);
             }
-            alias = isString($alias) ? alias : null;
-            $joins[$alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": alias];
+            alias = isString(alias) ? alias : null;
+            $joins[alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": alias];
         }
 
         _parts["join"] = overwrite 
@@ -338,7 +338,7 @@ class SelectQuery : Query, IteratorAggregate {
         IExpression|Closure|string[] aconditions = [],
         array types = []
     ) {
-        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_LEFT), types);
+        this.join(_makeJoin(aTable, conditions, JOIN_TYPE_LEFT), types);
     }
 
     /**
@@ -360,7 +360,7 @@ class SelectQuery : Query, IteratorAggregate {
         IExpression|Closure|string[] aconditions = [],
         array types = []
     ) {
-        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_RIGHT), types);
+        this.join(_makeJoin(aTable, conditions, JOIN_TYPE_RIGHT), types);
 
         return this;
     }
@@ -384,7 +384,7 @@ class SelectQuery : Query, IteratorAggregate {
         IExpression|Closure|string[] aconditions = [],
         array types = []
     ) {
-        this.join(_makeJoin(aTable, $conditions, JOIN_TYPE_INNER), types);
+        this.join(_makeJoin(aTable, conditions, JOIN_TYPE_INNER), types);
     }
 
     /**
@@ -410,7 +410,7 @@ class SelectQuery : Query, IteratorAggregate {
         return [
             alias: [
                 'table": aTable,
-                'conditions": $conditions,
+                'conditions": conditions,
                 'type": type,
             ],
         ];
@@ -462,20 +462,20 @@ class SelectQuery : Query, IteratorAggregate {
      * Having fields are not suitable for use with user supplied data as they are
      * not sanitized by the query builder.
      * Params:
-     * \UIM\Database\IExpression|\Closure|string[]|null $conditions The having conditions.
+     * \UIM\Database\IExpression|\Closure|string[]|null conditions The having conditions.
      * types Associative array of type names used to bind values to query
      * @param bool overwrite whether to reset conditions with passed list or not
      * @see \UIM\Database\Query.where()
      */
     auto having(
-        IExpression|Closure|string[]|null $conditions = null,
+        IExpression|Closure|string[]|null conditions = null,
         STRINGAA types = [],
         bool overwrite = false
     ) {
         if (overwrite) {
            _parts["having"] = this.newExpr();
         }
-       _conjugate("having", $conditions, "AND", types);
+       _conjugate("having", conditions, "AND", types);
 
         return this;
     }
@@ -494,7 +494,7 @@ class SelectQuery : Query, IteratorAggregate {
      * @see \UIM\Database\Query.andWhere()
      */
     auto andHaving(IExpression|Closure|string[] aconditions, array types = []) {
-       _conjugate("having", $conditions, "AND", types);
+       _conjugate("having", conditions, "AND", types);
 
         return this;
     }
@@ -566,7 +566,7 @@ class SelectQuery : Query, IteratorAggregate {
      * ### Examples
      *
      * ```
-     * $union = (new SelectQuery($conn)).select(["id", "title"]).from(["a": 'articles"]);
+     * $union = (new SelectQuery(conn)).select(["id", "title"]).from(["a": 'articles"]);
      * aQuery.select(["id", "name"]).from(["d": 'things"]).union($union);
      * ```
      *
@@ -599,7 +599,7 @@ class SelectQuery : Query, IteratorAggregate {
      * Unlike UNION, UNION ALL will not remove duplicate rows.
      *
      * ```
-     * $union = (new SelectQuery($conn)).select(["id", "title"]).from(["a": 'articles"]);
+     * $union = (new SelectQuery(conn)).select(["id", "title"]).from(["a": 'articles"]);
      * aQuery.select(["id", "name"]).from(["d": 'things"]).unionAll($union);
      * ```
      *

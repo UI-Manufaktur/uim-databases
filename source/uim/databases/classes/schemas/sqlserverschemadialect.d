@@ -309,7 +309,7 @@ class SqlserverSchemaDialect : SchemaDialect {
     }
  
     protected string _convertOnClause(string aclause) {
-        return match ($clause) {
+        return match (clause) {
             'NO_ACTION": TableSchema.ACTION_NO_ACTION,
             'CASCADE": TableSchema.ACTION_CASCADE,
             `sET_NULL": TableSchema.ACTION_SET_NULL,
@@ -463,9 +463,9 @@ class SqlserverSchemaDialect : SchemaDialect {
         string[] sqlResults;
 
         foreach (name; tableSchema.constraints()) {
-            $constraint = tableSchema.getConstraint(name);
-            assert($constraint !isNull);
-            if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
+            constraint = tableSchema.getConstraint(name);
+            assert(constraint !isNull);
+            if (constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
                 sqlResults ~= sqlPattern.format(aTableName, this.constraintSql(tableSchema, name));
             }
@@ -478,12 +478,12 @@ class SqlserverSchemaDialect : SchemaDialect {
         string[] sqlResults;
 
         foreach (tableSchema.constraints() as name) {
-            $constraint = tableSchema.getConstraint(name);
-            assert($constraint !isNull);
-            if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
+            constraint = tableSchema.getConstraint(name);
+            assert(constraint !isNull);
+            if (constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
-                $constraintName = _driver.quoteIdentifier(name);
-                sqlResults ~= sqlPattern.format(aTableName, $constraintName);
+                constraintName = _driver.quoteIdentifier(name);
+                sqlResults ~= sqlPattern.format(aTableName, constraintName);
             }
         }
         return sqlResults;
@@ -544,12 +544,12 @@ class SqlserverSchemaDialect : SchemaDialect {
         return $prefix ~ " (" ~ join(", ", someColumns) ~ ")";
     }
 
-    array createTableSql(TableSchema tableSchema, array someColumns, array $constraints, array  anIndexes) {
-        $content = array_merge(someColumns, $constraints);
-        $content = array_filter($content).join(",\n");
+    array createTableSql(TableSchema tableSchema, array someColumns, array constraints, array  anIndexes) {
+        content = array_merge(someColumns, constraints);
+        content = array_filter(content).join(",\n");
         aTableName = _driver.quoteIdentifier(tableSchema.name());
          auto result;
-         result ~= "CREATE TABLE %s (\n%s\n)".format(aTableName, $content);
+         result ~= "CREATE TABLE %s (\n%s\n)".format(aTableName, content);
         foreach (anIndexes as  anIndex) {
              result ~=  anIndex;
         }
@@ -565,9 +565,9 @@ class SqlserverSchemaDialect : SchemaDialect {
         // Restart identity sequences
         $pk = tableSchema.getPrimaryKey();
         if (count($pk) == 1) {
-            $column = tableSchema.getColumn($pk[0]);
-            assert($column !isNull);
-            if (in_array($column["type"], ["integer", "biginteger"])) {
+            column = tableSchema.getColumn($pk[0]);
+            assert(column !isNull);
+            if (in_array(column["type"], ["integer", "biginteger"])) {
                 $queries ~= 
                     "IF EXISTS (SELECT * FROM sys.identity_columns WHERE OBJECT_NAME(OBJECT_ID) = "%s' AND " ~
                     "last_value IS NOT NULL) DBCC CHECKIDENT("%s", RESEED, 0)"

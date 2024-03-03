@@ -7,7 +7,7 @@ import uim.databases;
 // Decorates a schema collection and adds caching
 class CachedCollection : ICollection {
   // Cacher instance.
-  protected ICache$cacher;
+  protected ICachecacher;
 
   // The decorated schema collection
   protected ICollection _collection;
@@ -18,14 +18,14 @@ class CachedCollection : ICollection {
   /**
      * Constructor.
      * Params:
-     * \UIM\Database\Schema\ICollection $collection The collection to wrap.
+     * \UIM\Database\Schema\ICollection collection The collection to wrap.
      * @param string aprefix The cache key prefix to use. Typically the connection name.
-     * @param \Psr\SimpleCache\ICache $cacher Cacher instance.
+     * @param \Psr\SimpleCache\ICache cacher Cacher instance.
      */
-  this(ICollection collection, string myprefix, ICache$cacher) {
+  this(ICollection collection, string myprefix, ICachecacher) {
     _collection = collection;
     this.prefix = $prefix;
-    this.cacher = $cacher;
+    this.cacher = cacher;
   }
 
   array listTablesWithoutViews() {
@@ -38,16 +38,16 @@ class CachedCollection : ICollection {
 
   TableISchema describe(string myname, IData[string] optionData = null) {
     options += ["forceRefresh": false];
-    $cacheKey = this.cacheKey(name);
+    cacheKey = this.cacheKey(name);
 
     if (!options["forceRefresh"]) {
-      $cached = this.cacher.get($cacheKey);
-      if ($cached !isNull) {
-        return $cached;
+      cached = this.cacher.get(cacheKey);
+      if (cached !isNull) {
+        return cached;
       }
     }
     aTable = this.collection.describe(name, options);
-    this.cacher.set($cacheKey, aTable);
+    this.cacher.set(cacheKey, aTable);
 
     return aTable;
   }

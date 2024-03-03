@@ -16,7 +16,7 @@ class ReconnectStrategy : IRetryStrategy {
      *
      * This is a static variable to enable opcache to inline the values.
      */
-    protected static string[] $causes = [
+    protected static string[] causes = [
         "gone away",
         "Lost connection",
         "Transaction() on null",
@@ -54,8 +54,8 @@ class ReconnectStrategy : IRetryStrategy {
     bool shouldRetry(Exception $exception, int $retryCount) {
         auto $message = $exception.getMessage();
 
-        foreach ($cause; $causes) {
-            if ($message.has($cause)) {
+        foreach (cause; causes) {
+            if ($message.has(cause)) {
                 return this.reconnect();
             }
         }

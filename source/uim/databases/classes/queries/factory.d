@@ -57,13 +57,13 @@ class QueryFactory {
      * Params:
      * \UIM\Database\IExpression|string|null aTable The table to update rows of.
      * @param array  someValues Values to be updated.
-     * @param array $conditions Conditions to be set for the update statement.
+     * @param array conditions Conditions to be set for the update statement.
      * typesForCasting Associative array containing the types to be used for casting.
      */
     UpdateQuery update(
         IExpression|string|null aTable = null,
         array  someValues = [],
-        array $conditions = [],
+        array conditions = [],
         typesForCasting = []
     ) {
         aQuery = new UpdateQuery(this.connection);
@@ -74,8 +74,8 @@ class QueryFactory {
         if (someValues) {
             aQuery.set(someValues, typesForCasting);
         }
-        if ($conditions) {
-            aQuery.where($conditions, typesForCasting);
+        if (conditions) {
+            aQuery.where(conditions, typesForCasting);
         }
         return aQuery;
     }
@@ -84,15 +84,15 @@ class QueryFactory {
      * Create a new DeleteQuery instance.
      * Params:
      * string|null aTable The table to delete rows from.
-     * @param array $conditions Conditions to be set for the delete statement.
+     * @param array conditions Conditions to be set for the delete statement.
      * typesForCasting Associative array containing the types to be used for casting.
      */
-    DeleteQuery delete(string tableName = null, array $conditions = [], STRINGAA typesForCasting = []) {
+    DeleteQuery delete(string tableName = null, array conditions = [], STRINGAA typesForCasting = []) {
         aQuery = (new DeleteQuery(this.connection))
             .delete(tableName);
 
-        if ($conditions) {
-            aQuery.where($conditions, typesForCasting);
+        if (conditions) {
+            aQuery.where(conditions, typesForCasting);
         }
         return aQuery;
     }
