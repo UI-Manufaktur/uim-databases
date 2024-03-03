@@ -42,7 +42,7 @@ class Statement : IStatement {
         int anOffset = 1;
         foreach (anIndex: aValue; params) {
             type = types[anIndex] ?? null;
-            if ($anonymousParams) {
+            if (anonymousParams) {
                  anIndex +=  anOffset;
             }
             /** @psalm-suppress PossiblyInvalidArgument */
@@ -55,8 +55,8 @@ class Statement : IStatement {
         if (!isInt($type)) {
             [aValue, type] = this.castType(aValue, type);
         }
-        this.params[$column] = aValue;
-        this.performBind($column, aValue, type);
+        this.params[column] = aValue;
+        this.performBind(column, aValue, type);
     }
     
     /**
@@ -85,7 +85,7 @@ class Statement : IStatement {
     }
     
     protected void performBind(string|int column, Json aValue, int type) {
-        this.statement.bindValue($column, aValue, type);
+        this.statement.bindValue(column, aValue, type);
     }
  
     bool execute(array params = null) {
@@ -161,11 +161,11 @@ class Statement : IStatement {
     }
  
     string|int lastInsertId(string atable = null, string acolumn = null) {
-        if ($column && this.columnCount()) {
+        if (column && this.columnCount()) {
             row = this.fetch(FETCH_TYPE_ASSOC);
 
-            if ($row && isSet($row[$column])) {
-                return row[$column];
+            if ($row && isSet($row[column])) {
+                return row[column];
             }
         }
         return _driver.lastInsertId(aTable);

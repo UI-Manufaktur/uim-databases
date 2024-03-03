@@ -309,7 +309,7 @@ class SqlserverSchemaDialect : SchemaDialect {
     }
  
     protected string _convertOnClause(string aclause) {
-        return match ($clause) {
+        return match (clause) {
             "NO_ACTION": TableSchema.ACTION_NO_ACTION,
             "CASCADE": TableSchema.ACTION_CASCADE,
             "sET_NULL": TableSchema.ACTION_SET_NULL,
@@ -464,8 +464,8 @@ class SqlserverSchemaDialect : SchemaDialect {
 
         foreach (name; tableSchema.constraints()) {
             constraint = tableSchema.getConstraint(name);
-            assert($constraint !isNull);
-            if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
+            assert(constraint !isNull);
+            if (constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
                 sqlResults ~= sqlPattern.format(aTableName, this.constraintSql(tableSchema, name));
             }
@@ -479,8 +479,8 @@ class SqlserverSchemaDialect : SchemaDialect {
 
         foreach (tableSchema.constraints() as name) {
             constraint = tableSchema.getConstraint(name);
-            assert($constraint !isNull);
-            if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
+            assert(constraint !isNull);
+            if (constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
                 constraintName = _driver.quoteIdentifier(name);
                 sqlResults ~= sqlPattern.format(aTableName, constraintName);
@@ -546,7 +546,7 @@ class SqlserverSchemaDialect : SchemaDialect {
 
     array createTableSql(TableSchema tableSchema, array someColumns, array constraints, array  anIndexes) {
         content = chain(someColumns, constraints);
-        content = join(",\n", array_filter($content));
+        content = join(",\n", array_filter(content));
         aTableName = _driver.quoteIdentifier(tableSchema.name());
          auto result;
          result ~= "CREATE TABLE %s (\n%s\n)".format(aTableName, content);
@@ -566,8 +566,8 @@ class SqlserverSchemaDialect : SchemaDialect {
         pk = tableSchema.getPrimaryKey();
         if (count($pk) == 1) {
             column = tableSchema.getColumn($pk[0]);
-            assert($column !isNull);
-            if (in_array($column["type"], ["integer", "biginteger"])) {
+            assert(column !isNull);
+            if (in_array(column["type"], ["integer", "biginteger"])) {
                 queries ~= 
                     "IF EXISTS (SELECT * FROM sys.identity_columns WHERE OBJECT_NAME(OBJECT_ID) = "%s' AND " ~
                     "last_value IS NOT NULL) DBCC CHECKIDENT("%s", RESEED, 0)"

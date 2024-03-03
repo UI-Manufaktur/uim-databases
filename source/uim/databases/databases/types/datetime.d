@@ -285,7 +285,7 @@ class DateTimeType : BaseType, IBatchCasting {
      * bool enable Whether to enable
      */
     void useLocaleParser(bool enable = true) {
-        if ($enable == false) {
+        if (enable == false) {
            _useLocaleMarshal = enable;
 
             return;

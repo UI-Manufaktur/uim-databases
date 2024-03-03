@@ -208,14 +208,14 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     void addColumn(string aName, attrs) {
-        if (isString($attrs)) {
+        if (isString(attrs)) {
             attrs = ["type": attrs];
         }
         valid = _columnKeys;
-        if (isSet(_columnExtras[$attrs["type"]])) {
-            valid += _columnExtras[$attrs["type"]];
+        if (isSet(_columnExtras[attrs["type"]])) {
+            valid += _columnExtras[attrs["type"]];
         }
-        attrs = array_intersect_key($attrs, valid);
+        attrs = array_intersect_key(attrs, valid);
        _columns[name] = attrs + valid;
        _typeMap[name] = _columns[name]["type"];
     }
@@ -233,7 +233,7 @@ class TableSchema : TableISchema, ISqlGenerator {
             return null;
         }
         column = _columns[name];
-        unset($column["baseType"]);
+        unset(column["baseType"]);
 
         return column;
     }
@@ -262,10 +262,10 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     string baseColumnType(string acolumn) {
-        if (isSet(_columns[$column]["baseType"])) {
-            return _columns[$column]["baseType"];
+        if (isSet(_columns[column]["baseType"])) {
+            return _columns[column]["baseType"];
         }
-        type = this.getColumnType($column);
+        type = this.getColumnType(column);
 
         if ($type.isNull) {
             return null;
@@ -273,7 +273,7 @@ class TableSchema : TableISchema, ISqlGenerator {
         if (TypeFactory.getMap($type)) {
             type = TypeFactory.build($type).getBaseType();
         }
-        return _columns[$column]["baseType"] = type;
+        return _columns[column]["baseType"] = type;
     }
  
     array typeMap() {
@@ -302,23 +302,23 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     auto addIndex(string aName, attrs) {
-        if (isString($attrs)) {
+        if (isString(attrs)) {
             attrs = ["type": attrs];
         }
-        attrs = array_intersect_key($attrs, _indexKeys);
+        attrs = array_intersect_key(attrs, _indexKeys);
         attrs += _indexKeys;
-        unset($attrs["references"], attrs["update"], attrs["delete"]);
+        unset(attrs["references"], attrs["update"], attrs["delete"]);
 
-        if (!in_array($attrs["type"], _validIndexTypes, true)) {
+        if (!in_array(attrs["type"], _validIndexTypes, true)) {
             throw new DatabaseException(
                 "Invalid index type `%s` in index `%s` in table `%s`."
-                .format($attrs["type"],
+                .format(attrs["type"],
                 name,
                _table
             ));
         }
-        attrs["columns"] = (array)$attrs["columns"];
-        foreach ($attrs["columns"] as field) {
+        attrs["columns"] = (array)attrs["columns"];
+        foreach (attrs["columns"] as field) {
             if (isEmpty(_columns[field])) {
                 message = 
                     "Columns used in index `%s` in table `%s` must be added to the Table schema first. " ~
@@ -353,25 +353,25 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     auto addConstraint(string aName, attrs) {
-        if (isString($attrs)) {
+        if (isString(attrs)) {
             attrs = ["type": attrs];
         }
-        attrs = array_intersect_key($attrs, _indexKeys);
+        attrs = array_intersect_key(attrs, _indexKeys);
         attrs += _indexKeys;
-        if (!in_array($attrs["type"], _validConstraintTypes, true)) {
+        if (!in_array(attrs["type"], _validConstraintTypes, true)) {
             throw new DatabaseException(
                 "Invalid constraint type `%s` in table `%s`."
-                .format($attrs["type"], _table)
+                .format(attrs["type"], _table)
             );
         }
-        if (isEmpty($attrs["columns"])) {
+        if (isEmpty(attrs["columns"])) {
             throw new DatabaseException(
                 "Constraints in table `%s` must have at least one column."
                 .format(_table
             ));
         }
-        attrs["columns"] = (array)$attrs["columns"];
-        foreach ($attrs["columns"] as field) {
+        attrs["columns"] = (array)attrs["columns"];
+        foreach (attrs["columns"] as field) {
             if (isEmpty(_columns[field])) {
                 message = "Columns used in constraints must be added to the Table schema first. ' ~
                     "The column `%s` was not found in table `%s`.".format(
@@ -381,8 +381,8 @@ class TableSchema : TableISchema, ISqlGenerator {
                 throw new DatabaseException($message);
             }
         }
-        if ($attrs["type"] == CONSTRAINT_FOREIGN) {
-            attrs = _checkForeignKey($attrs);
+        if (attrs["type"] == CONSTRAINT_FOREIGN) {
+            attrs = _checkForeignKey(attrs);
 
             if (isSet(_constraints[name])) {
                _constraints[name]["columns"] = array_unique(chain(
@@ -393,13 +393,13 @@ class TableSchema : TableISchema, ISqlGenerator {
                 if (isSet(_constraints[name]["references"])) {
                    _constraints[name]["references"][1] = array_unique(chain(
                         (array)_constraints[name]["references"][1],
-                        [$attrs["references"][1]]
+                        [attrs["references"][1]]
                     ));
                 }
                 return this;
             }
         } else {
-            unset($attrs["references"], attrs["update"], attrs["delete"]);
+            unset(attrs["references"], attrs["update"], attrs["delete"]);
         }
        _constraints[name] = attrs;
 
@@ -414,8 +414,8 @@ class TableSchema : TableISchema, ISqlGenerator {
     
     // Check whether a table has an autoIncrement column defined.
    bool hasAutoincrement() {
-        foreach ($column; _columns) {
-            if (isSet($column["autoIncrement"]) && column["autoIncrement"]) {
+        foreach (column; _columns) {
+            if (isSet(column["autoIncrement"]) && column["autoIncrement"]) {
                 return true;
             }
         }
@@ -428,16 +428,16 @@ class TableSchema : TableISchema, ISqlGenerator {
      * IData[string] attrs Attributes to set.
      */
     protected IData[string] _checkForeignKey(array attrs) {
-        if (count($attrs["references"]) < 2) {
+        if (count(attrs["references"]) < 2) {
             throw new DatabaseException("References must contain a table and column.");
         }
-        if (!in_array($attrs["update"], _validForeignKeyActions)) {
+        if (!in_array(attrs["update"], _validForeignKeyActions)) {
             throw new DatabaseException(
                 "Update action is invalid. Must be one of %s".format(
                 join(",", _validForeignKeyActions)
             ));
         }
-        if (!in_array($attrs["delete"], _validForeignKeyActions)) {
+        if (!in_array(attrs["delete"], _validForeignKeyActions)) {
             throw new DatabaseException(
                 "Delete action is invalid. Must be one of %s"
                 .format(join(",", _validForeignKeyActions))

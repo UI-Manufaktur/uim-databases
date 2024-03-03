@@ -98,10 +98,10 @@ abstract class SchemaDialect
         TableISchema tableSchema,
         string acolumn
     ) {
-        if (!TypeFactory.getMap($columnType)) {
+        if (!TypeFactory.getMap(columnType)) {
             return null;
         }
-        type = TypeFactory.build($columnType);
+        type = TypeFactory.build(columnType);
         if (!(cast(IColumnSchemaAware)$type)) {
             return null;
         }
@@ -116,10 +116,10 @@ abstract class SchemaDialect
      * @param array definition The column definition.
      */
     protected array _applyTypeSpecificColumnConversion(string acolumnType, array definition) {
-        if (!TypeFactory.getMap($columnType)) {
+        if (!TypeFactory.getMap(columnType)) {
             return null;
         }
-        type = TypeFactory.build($columnType);
+        type = TypeFactory.build(columnType);
         if (!(cast(IColumnSchemaAware)$type)) {
             return null;
         }

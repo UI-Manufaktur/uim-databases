@@ -51,19 +51,19 @@ class SqliteSchemaDialect : SchemaDialect {
         if ($type !isNull) {
             return type;
         }
-        if ($col == "bigint") {
+        if (col == "bigint") {
             return ["type": TableISchema.TYPE_BIGINTEGER, "length": columnLength, "unsigned": isUnsigned];
         }
-        if ($col == "smallint") {
+        if (col == "smallint") {
             return ["type": TableISchema.TYPE_SMALLINTEGER, "length": columnLength, "unsigned": isUnsigned];
         }
-        if ($col == "tinyint") {
+        if (col == "tinyint") {
             return ["type": TableISchema.TYPE_TINYINTEGER, "length": columnLength, "unsigned": isUnsigned];
         }
-        if ($col.has("int")) {
+        if (col.has("int")) {
             return ["type": TableISchema.TYPE_INTEGER, "length": columnLength, "unsigned": isUnsigned];
         }
-        if ($col.has("decimal")) {
+        if (col.has("decimal")) {
             return [
                 "type": TableISchema.TYPE_DECIMAL,
                 "length": columnLength,
@@ -71,7 +71,7 @@ class SqliteSchemaDialect : SchemaDialect {
                 "unsigned": unsigned,
             ];
         }
-        if (in_array($col, ["float", "real", "double"])) {
+        if (in_array(col, ["float", "real", "double"])) {
             return [
                 "type": TableISchema.TYPE_FLOAT,
                 "length": columnLength,
@@ -79,22 +79,22 @@ class SqliteSchemaDialect : SchemaDialect {
                 "unsigned": unsigned,
             ];
         }
-        if ($col.has("boolean")) {
+        if (col.has("boolean")) {
             return ["type": TableISchema.TYPE_BOOLEAN, "length": null];
         }
-        if (($col == "binary" && columnLength == 16) || strtolower(aColumn) == "uuid_blob") {
+        if ((col == "binary" && columnLength == 16) || strtolower(aColumn) == "uuid_blob") {
             return ["type": TableISchema.TYPE_BINARY_UUID, "length": null];
         }
-        if (($col == "char" && columnLength == 36) || col == "uuid") {
+        if ((col == "char" && columnLength == 36) || col == "uuid") {
             return ["type": TableISchema.TYPE_UUID, "length": null];
         }
-        if ($col == "char") {
+        if (col == "char") {
             return ["type": TableISchema.TYPE_CHAR, "length": columnLength];
         }
-        if ($col.has("char")) {
+        if (col.has("char")) {
             return ["type": TableISchema.TYPE_STRING, "length": columnLength];
         }
-        if (in_array($col, ["blob", "clob", "binary", "varbinary"])) {
+        if (in_array(col, ["blob", "clob", "binary", "varbinary"])) {
             return ["type": TableISchema.TYPE_BINARY, "length": columnLength];
         }
         datetimeTypes = [
@@ -106,7 +106,7 @@ class SqliteSchemaDialect : SchemaDialect {
             "datetime",
             "datetimefractional",
         ];
-        if (in_array($col, datetimeTypes)) {
+        if (in_array(col, datetimeTypes)) {
             return ["type": col, "length": null];
         }
         return ["type": TableISchema.TYPE_TEXT, "length": null];
@@ -170,7 +170,7 @@ class SqliteSchemaDialect : SchemaDialect {
                 "type": TableSchema.CONSTRAINT_PRIMARY,
                 "columns": [],
             ];
-            constraint["columns"] = chain($constraint["columns"], [$row["name"]]);
+            constraint["columns"] = chain(constraint["columns"], [$row["name"]]);
             tableSchema.addConstraint("primary", constraint);
         }
     }
@@ -286,7 +286,7 @@ class SqliteSchemaDialect : SchemaDialect {
                     someColumnsPattern = join(
                         "\s*,\s*",
                         array_map(
-                            fn ($column): "(?:" ~ this.possiblyQuotedIdentifierRegex($column) ~ ")",
+                            fn (column): "(?:" ~ this.possiblyQuotedIdentifierRegex(column) ~ ")",
                             someColumns
                         )
                     );
@@ -498,7 +498,7 @@ class SqliteSchemaDialect : SchemaDialect {
         assert(someData !isNull, "Data does not exist");
 
         column = tableSchema.getColumn(someData["columns"][0]);
-        assert($column !isNull, "Data does not exist");
+        assert(column !isNull, "Data does not exist");
 
         if (
             someData["type"] == TableSchema.CONSTRAINT_PRIMARY &&

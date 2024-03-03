@@ -64,7 +64,7 @@ class MysqlSchemaDialect : SchemaDialect
     protected IData[string] _convertColumn(string acolumn) {
         preg_match("/([a-z]+)(?:\(([0-9,]+)\))?\s*([a-z]+)?/i", column, matches);
         if (isEmpty($matches)) {
-            throw new DatabaseException("Unable to parse column type from `%s`".format($column));
+            throw new DatabaseException("Unable to parse column type from `%s`".format(column));
         }
         col = matches[1].toLower;
         length = precision = scale = null;
@@ -83,57 +83,57 @@ class MysqlSchemaDialect : SchemaDialect
         if (!$type.isNull) {
             return type;
         }
-        if (in_array($col, ["date", "time"])) {
+        if (in_array(col, ["date", "time"])) {
             return ["type": col, "length": null];
         }
-        if (in_array($col, ["datetime", "timestamp"])) {
+        if (in_array(col, ["datetime", "timestamp"])) {
             typeName = col;
             if ($length > 0) {
                 typeName = col ~ "fractional";
             }
             return ["type": typeName, "length": null, "precision": length];
         }
-        if (($col == "tinyint" && length == 1) || col == "boolean") {
+        if ((col == "tinyint" && length == 1) || col == "boolean") {
             return ["type": TableISchema.TYPE_BOOLEAN, "length": null];
         }
         unsigned = (isSet($matches[3]) && matches[3].toLower) == "unsigned");
-        if ($col.has("bigint") || col == "bigint") {
+        if (col.has("bigint") || col == "bigint") {
             return ["type": TableISchema.TYPE_BIGINTEGER, "length": null, "unsigned": unsigned];
         }
-        if ($col == "tinyint") {
+        if (col == "tinyint") {
             return ["type": TableISchema.TYPE_TINYINTEGER, "length": null, "unsigned": unsigned];
         }
-        if ($col == "smallint") {
+        if (col == "smallint") {
             return ["type": TableISchema.TYPE_SMALLINTEGER, "length": null, "unsigned": unsigned];
         }
-        if (in_array($col, ["int", "integer", "mediumint"])) {
+        if (in_array(col, ["int", "integer", "mediumint"])) {
             return ["type": TableISchema.TYPE_INTEGER, "length": null, "unsigned": unsigned];
         }
-        if ($col == "char" && length == 36) {
+        if (col == "char" && length == 36) {
             return ["type": TableISchema.TYPE_UUID, "length": null];
         }
-        if ($col == "char") {
+        if (col == "char") {
             return ["type": TableISchema.TYPE_CHAR, "length": length];
         }
-        if ($col.has("char")) {
+        if (col.has("char")) {
             return ["type": TableISchema.TYPE_STRING, "length": length];
         }
-        if ($col.has("text")) {
-            lengthName = substr($col, 0, -4);
-            length = TableSchema.$columnLengths[$lengthName] ?? null;
+        if (col.has("text")) {
+            lengthName = substr(col, 0, -4);
+            length = TableSchema.columnLengths[$lengthName] ?? null;
 
             return ["type": TableISchema.TYPE_TEXT, "length": length];
         }
-        if ($col == "binary" && length == 16) {
+        if (col == "binary" && length == 16) {
             return ["type": TableISchema.TYPE_BINARY_UUID, "length": null];
         }
-        if ($col.has("blob") || in_array($col, ["binary", "varbinary"])) {
-            lengthName = substr($col, 0, -4);
-            length = TableSchema.$columnLengths[$lengthName] ?? length;
+        if (col.has("blob") || in_array(col, ["binary", "varbinary"])) {
+            lengthName = substr(col, 0, -4);
+            length = TableSchema.columnLengths[$lengthName] ?? length;
 
             return ["type": TableISchema.TYPE_BINARY, "length": length];
         }
-        if ($col.has("float") || col.has("double")) {
+        if (col.has("float") || col.has("double")) {
             return [
                 "type": TableISchema.TYPE_FLOAT,
                 "length": length,
@@ -141,7 +141,7 @@ class MysqlSchemaDialect : SchemaDialect
                 "unsigned": unsigned,
             ];
         }
-        if ($col.has("decimal")) {
+        if (col.has("decimal")) {
             return [
                 "type": TableISchema.TYPE_DECIMAL,
                 "length": length,
@@ -149,7 +149,7 @@ class MysqlSchemaDialect : SchemaDialect
                 "unsigned": unsigned,
             ];
         }
-        if ($col.has("json")) {
+        if (col.has("json")) {
             return ["type": TableISchema.TYPE_JSON, "length": null];
         }
         return ["type": TableISchema.TYPE_STRING, "length": null];
@@ -263,7 +263,7 @@ class MysqlSchemaDialect : SchemaDialect
         if (isSet(options["collate"])) {
             content ~= " COLLATE=%s".format(options["collate"]);
         }
-        return [$content];
+        return [content];
     }
  
     auto columnSql(TableSchema tableSchema, string aName) {
@@ -315,20 +315,20 @@ class MysqlSchemaDialect : SchemaDialect
                     }
                     break;
                 case TableISchema.TYPE_TEXT:
-                     isKnownLength = in_array(someData["length"], TableSchema.$columnLengths);
+                     isKnownLength = in_array(someData["length"], TableSchema.columnLengths);
                     if (isEmpty(someData["length"]) || !isKnownLength) {
                          result ~= " TEXT";
                         break;
                     }
-                    length = array_search(someData["length"], TableSchema.$columnLengths);
+                    length = array_search(someData["length"], TableSchema.columnLengths);
                     assert(isString($length));
                      result ~= " " ~ strtoupper($length) ~ "TEXT";
 
                     break;
                 case TableISchema.TYPE_BINARY:
-                     isKnownLength = in_array(someData["length"], TableSchema.$columnLengths);
+                     isKnownLength = in_array(someData["length"], TableSchema.columnLengths);
                     if (isKnownLength) {
-                        length = array_search(someData["length"], TableSchema.$columnLengths);
+                        length = array_search(someData["length"], TableSchema.columnLengths);
                         assert(isString($length));
                          result ~= " " ~ strtoupper($length) ~ "BLOB";
                         break;
@@ -479,8 +479,8 @@ class MysqlSchemaDialect : SchemaDialect
 
         tableSchema.constraints().each!((name) {
             constraint = tableSchema.getConstraint(name);
-            assert($constraint !isNull);
-            if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
+            assert(constraint !isNull);
+            if (constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 auto ableName = _driver.quoteIdentifier(tableSchema.name());
                 sqlResults ~= sqlPattern.format(aTableName, this.constraintSql(tableSchema, name));
             }
@@ -494,8 +494,8 @@ class MysqlSchemaDialect : SchemaDialect
 
         foreach (tableSchema.constraints() as name) {
             constraint = tableSchema.getConstraint(name);
-            assert($constraint !isNull);
-            if ($constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
+            assert(constraint !isNull);
+            if (constraint["type"] == TableSchema.CONSTRAINT_FOREIGN) {
                 aTableName = _driver.quoteIdentifier(tableSchema.name());
                 constraintName = _driver.quoteIdentifier(name);
                 sqlResults ~= sqlPattern.format(aTableName, constraintName);
@@ -532,8 +532,8 @@ class MysqlSchemaDialect : SchemaDialect
             someData["columns"]
         );
         foreach (index, column; someData["columns"]) {
-            if (isSet(someData["length"][$column])) {
-                someColumns[index] ~= "(%d)".format(someData["length"][$column]);
+            if (isSet(someData["length"][column])) {
+                someColumns[index] ~= "(%d)".format(someData["length"][column]);
             }
         }
         if (someData["type"] == TableSchema.CONSTRAINT_FOREIGN) {
