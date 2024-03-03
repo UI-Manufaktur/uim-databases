@@ -54,7 +54,7 @@ class Connection : IConnection {
      *
      * configData - Configuration array.
      */
-    this(IConfigData[string] configData = null) {
+    this(IData[string] configData = null) {
        _config = configData;
         [self.ROLE_READ: this.readDriver, self.ROLE_WRITE: this.writeDriver] = this.createDrivers(configData);
     }
@@ -64,7 +64,7 @@ class Connection : IConnection {
      * Params:
      * configData = Connection config
      */
-    protected Driver[string] createDrivers(IConfigData[string] configData = null) {
+    protected Driver[string] createDrivers(IData[string] configData = null) {
         driver = configData("driver"] ?? "";
         if (!isString(driver)) {
             assert(cast(Driver)driver);
