@@ -13,5 +13,5 @@ class DDBAExpression {
     initialize;
   }
 
-  void initialize() {}
+  bool initialize() {}
 }

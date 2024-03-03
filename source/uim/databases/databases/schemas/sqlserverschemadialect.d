@@ -14,9 +14,9 @@ class SqlserverSchemaDialect : SchemaDialect {
     /**
      * Generate the SQL to list the tables and views.
      * Params:
-     * IConfigData[string] configData The connection configuration to use for getting tables from.
+     * IData[string] configData The connection configuration to use for getting tables from.
      */
-    array listTablesSql(IConfigData[string] configData = null) {
+    array listTablesSql(IData[string] configData = null) {
         auto sql = "SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
             WHERE TABLE_SCHEMA = ?
@@ -30,10 +30,10 @@ class SqlserverSchemaDialect : SchemaDialect {
     /**
      * Generate the SQL to list the tables, excluding all views.
      * Params:
-     * IConfigData[string] configData The connection configuration to use for
+     * IData[string] configData The connection configuration to use for
      *   getting tables from.
      */
-    Json[] listTablesWithoutViewsSql(IConfigData[string] configData = null) {
+    Json[] listTablesWithoutViewsSql(IData[string] configData = null) {
         auto sql = "SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
             WHERE TABLE_SCHEMA = ?
@@ -45,7 +45,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         return [sql, [schema]];
     }
  
-    array describeColumnSql(string atableName, IConfigData[string] configData) {
+    array describeColumnSql(string atableName, IData[string] configData) {
         auto mySql = "SELECT DISTINCT
             AC.column_id AS [column_id],
             AC.name AS [name],
@@ -217,7 +217,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         }
         return default;
     }
-    array describeIndexSql(string atableName, IConfigData[string] configData) {
+    array describeIndexSql(string atableName, IData[string] configData) {
         auto mySql = "SELECT
                 I.[name] AS [index_name],
                 IC.[index_column_id] AS [index_order],
@@ -269,7 +269,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         ]);
     }
  
-    array describeForeignKeySql(string atableName, IConfigData[string] configData) {
+    array describeForeignKeySql(string atableName, IData[string] configData) {
         // phpcs:disable Generic.Files.LineLength
         string mySql = "SELECT FK.[name] AS [foreign_key_name], FK.[delete_referential_action_desc] AS [delete_type],
                 FK.[update_referential_action_desc] AS [update_type], C.name AS [column], RT.name AS [reference_table],

@@ -17,32 +17,32 @@ class MysqlSchemaDialect : SchemaDialect
      * configData - The connection configuration to use for
      *   getting tables from.
      */
-    array<mixed> listTablesSql(IConfigData[string] configData = null) {
+    array<mixed> listTablesSql(IData[string] configData = null) {
         return ["SHOW FULL TABLES FROM " ~ _driver.quoteIdentifier(configData("database"]), []];
     }
     
     /**
      * Generate the SQL to list the tables, excluding all views.
      * Params:
-     * IConfigData[string] configData The connection configuration to use for
+     * IData[string] configData The connection configuration to use for
      *   getting tables from.
      */
-    Json[] listTablesWithoutViewsSql(IConfigData[string] configData = null) {
+    Json[] listTablesWithoutViewsSql(IData[string] configData = null) {
         return [
             "SHOW FULL TABLES FROM " ~ _driver.quoteIdentifier(configData("database"])
             ~ " WHERE TABLE_TYPE = 'BASE TABLE'"
         , []];
     }
  
-    array describeColumnSql(string aTableName, IConfigData[string] configData) {
+    array describeColumnSql(string aTableName, IData[string] configData) {
         return ["SHOW FULL COLUMNS FROM " ~ _driver.quoteIdentifier(aTableName), []];
     }
  
-    array describeIndexSql(string aTableName, IConfigData[string] configData) {
+    array describeIndexSql(string aTableName, IData[string] configData) {
         return ["SHOW INDEXES FROM " ~ _driver.quoteIdentifier(aTableName), []];
     }
  
-    array describeOptionsSql(string aTableName, IConfigData[string] configData) {
+    array describeOptionsSql(string aTableName, IData[string] configData) {
         return ["SHOW TABLE STATUS WHERE Name = ?", [aTableName]];
     }
  
@@ -220,7 +220,7 @@ class MysqlSchemaDialect : SchemaDialect
         }
     }
  
-    array describeForeignKeySql(string aTableName, IConfigData[string] configData) {
+    array describeForeignKeySql(string aTableName, IData[string] configData) {
         auto mySql = "SELECT * FROM information_schema.key_column_usage AS kcu
             INNER JOIN information_schema.referential_constraints AS rc
             ON (

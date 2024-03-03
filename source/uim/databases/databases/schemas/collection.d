@@ -112,7 +112,7 @@ class Collection : ICollection {
      * @uses \UIM\Database\Schema\SchemaDialect.convertForeignKeyDescription
      * @uses \UIM\Database\Schema\SchemaDialect.convertOptionsDescription
      */
-    protected void _reflect(string astage, string tableName, IConfigData[string] configData, TableISchema tableSchema) {
+    protected void _reflect(string astage, string tableName, IData[string] configData, TableISchema tableSchema) {
         string describeMethod = "describe{$stage}Sql";
         string convertMethod = "convert{$stage}Description";
 

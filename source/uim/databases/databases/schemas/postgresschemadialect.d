@@ -15,7 +15,7 @@ class PostgresSchemaDialect : SchemaDialect {
      * Params:
      * configData = The connection configuration to use for getting tables from.
      */
-    array listTablesSql(IConfigData[string] configData = null) {
+    array listTablesSql(IData[string] configData = null) {
         auto mySql = "SELECT table_name as name FROM information_schema.tables
                 WHERE table_schema = ? ORDER BY name";
         tableSchema = empty(configData("schema"]) ? "public" : configData("schema"];
@@ -29,7 +29,7 @@ class PostgresSchemaDialect : SchemaDialect {
      * configData = The connection configuration to use for getting tables from.
      * returns An array of (sql, params) to execute.
      */
-    Json[] listTablesWithoutViewsSql(IConfigData[string] configData = null) {
+    Json[] listTablesWithoutViewsSql(IData[string] configData = null) {
         auto mySql = "SELECT table_name as name FROM information_schema.tables
                 WHERE table_schema = ? AND table_type = \'BASE TABLE\' ORDER BY name";
         auto mySschema = empty(configData("schema"]) ? "public" : configData("schema"];
@@ -37,7 +37,7 @@ class PostgresSchemaDialect : SchemaDialect {
         return [mySql, [tableSchema]];
     }
  
-    array describeColumnSql(string aTableName, IConfigData[string] configData = null) {
+    array describeColumnSql(string aTableName, IData[string] configData = null) {
         auto mySql = "SELECT DISTINCT table_schema AS schema,
             column_name AS name,
             data_type AS type,
@@ -214,7 +214,7 @@ class PostgresSchemaDialect : SchemaDialect {
         );
     }
  
-    array describeIndexSql(string atableName, IConfigData[string] configData) {
+    array describeIndexSql(string atableName, IData[string] configData) {
         auto mySql = "SELECT
         c2.relname,
         a.attname,
@@ -282,7 +282,7 @@ class PostgresSchemaDialect : SchemaDialect {
         tableSchema.addConstraint(name, constraint);
     }
  
-    array describeForeignKeySql(string atableName, IConfigData[string] configData) {
+    array describeForeignKeySql(string atableName, IData[string] configData) {
         // phpcs:disable Generic.Files.LineLength
         auto mySql = "SELECT
         c.conname AS name,

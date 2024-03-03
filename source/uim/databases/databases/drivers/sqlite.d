@@ -7,7 +7,7 @@ import uim.cake;
 class Sqlite : Driver {
     mixin(DriverThis!("Sqlite"));
     
-  	override bool initialize(IConfigData[string] configData = null) {
+  	override bool initialize(IData[string] configData = null) {
 		if (!super.initialize(configData)) { return false; }
 		
 		return true;
