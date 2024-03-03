@@ -322,11 +322,11 @@ parameters allow you to reference columns or other SQL literals. Bound parameter
 For example:
 
 ```php
-$concat = aQuery.func().concat([
+concat = aQuery.func().concat([
     'title": 'literal",
     ' NEW'
 ]);
-aQuery.select(["title": $concat]);
+aQuery.select(["title": concat]);
 ```
 
 The above generates:

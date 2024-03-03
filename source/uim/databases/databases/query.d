@@ -193,7 +193,7 @@ abstract class Query : IExpression, Stringable {
      * ### Example
      * ```
      * aQuery.select(["title"]).from("articles").traverse(function (aValue, clause) {
-     *    if ($clause == "Select") {
+     *    if (clause == "Select") {
      *        var_dump(aValue);
      *    }
      * });
@@ -219,7 +219,7 @@ abstract class Query : IExpression, Stringable {
      *
      * ```
      * aQuery.select(["title"]).from("articles").traverse(function (aValue, clause) {
-     *    if ($clause == "Select") {
+     *    if (clause == "Select") {
      *        var_dump(aValue);
      *    }
      * }, ["select", "from"]);
@@ -248,7 +248,7 @@ abstract class Query : IExpression, Stringable {
      *        .from("articles")
      * );
      *
-     * aQuery.with($cte);
+     * aQuery.with(cte);
      * ```
      *
      * or returned from a closure, which will receive a new common table expression
@@ -266,7 +266,7 @@ abstract class Query : IExpression, Stringable {
      *
      *    return cte
      *        .name("cte")
-     *        .query($cteQuery);
+     *        .query(cteQuery);
      * });
      * ```
      * Params:
@@ -277,10 +277,10 @@ abstract class Query : IExpression, Stringable {
         if (overwrite) {
            _parts["with"] = [];
         }
-        if (cast(Closure)$cte) {
+        if (cast(Closure)cte) {
             aQuery = this.getConnection().selectQuery();
             cte = cte(new CommonTableExpression(), aQuery);
-            if (!(cast(CommonTableExpression)$cte)) {
+            if (!(cast(CommonTableExpression)cte)) {
                 throw new UimException(
                     'You must return a `CommonTableExpression` from a Closure passed to `with()`.'
                 );
@@ -450,7 +450,7 @@ abstract class Query : IExpression, Stringable {
         }
         joins = [];
          anI = count(_parts["join"]);
-        foreach ($alias, t; aTables) {
+        foreach (alias, t; aTables) {
             if (!isArray($t)) {
                 t = ["table": t, "conditions": this.newExpr()];
             }
@@ -460,8 +460,8 @@ abstract class Query : IExpression, Stringable {
             if (!cast(IExpression)$t["conditions"]) {
                 t["conditions"] = this.newExpr().add($t["conditions"], types);
             }
-            alias = isString($alias) ? alias : null;
-            joins[$alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": alias];
+            alias = isString(alias) ? alias : null;
+            joins[alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": alias];
         }
         _parts["join"] = overwrite ? joins : chain(_parts["join"], joins);
 
@@ -693,7 +693,7 @@ abstract class Query : IExpression, Stringable {
      *  .where(function ($exp, aQuery) {
      *    or = exp.or(["id": 1]);
      *    and = exp.and(["id >": 2, "id <": 10]);
-     *   return or.add($and);
+     *   return or.add(and);
      *  });
      * ```
      *
@@ -1399,19 +1399,19 @@ abstract class Query : IExpression, Stringable {
         array types
     ) {
         expression = _parts[$part] ?: this.newExpr();
-        if (isEmpty($append)) {
+        if (isEmpty(append)) {
            _parts[$part] = expression;
 
             return;
         }
-        if (cast(Closure)$append) {
+        if (cast(Closure)append) {
             append = append(this.newExpr(), this);
         }
         if ($expression.getConjunction() == conjunction) {
-            expression.add($append, types);
+            expression.add(append, types);
         } else {
             expression = this.newExpr()
-                .setConjunction($conjunction)
+                .setConjunction(conjunction)
                 .add([$expression, append], types);
         }
        _parts[$part] = expression;

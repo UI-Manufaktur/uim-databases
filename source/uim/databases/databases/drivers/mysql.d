@@ -42,7 +42,7 @@ class Mysql : Driver {
 
         if (!configData("init"].isEmpty) {
             (array)configData("init"]
-                .each!($command => this.pdo.exec($command));
+                .each!(command => this.pdo.exec(command));
         }
     }
     

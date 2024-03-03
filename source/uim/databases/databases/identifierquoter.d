@@ -206,9 +206,9 @@ class IdentifierQuoter {
         }
         [aTable, someColumns] =  anInsert;
         aTable = this.quoteIdentifier(aTable);
-        foreach (&$column; someColumns ) {
-            if (isScalar($column)) {
-                column = this.quoteIdentifier(to!string($column));
+        foreach (&column; someColumns ) {
+            if (isScalar(column)) {
+                column = this.quoteIdentifier(to!string(column));
             }
         }
         queryToQuote.insert(someColumns).into(aTable);

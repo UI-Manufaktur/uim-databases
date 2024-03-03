@@ -74,7 +74,7 @@ template TupleComparisonTranslatorTemplate {
             auto items = []; foreach (anI : value2; tuple.values) {
                 items ~= [fields[anI]: value2];}
                 conditions["OR"] ~= items;});
-                surrogate.where($conditions, typeMap);
+                surrogate.where(conditions, typeMap);
 
                 expression.setFieldNames($true);
                 expression.setValue($surrogate);

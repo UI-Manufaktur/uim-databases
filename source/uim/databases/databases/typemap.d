@@ -102,7 +102,7 @@ class TypeMap {
      * string|int column The type for a given column
      */
     string type(string|int column) {
-        return _types[$column] ?? _defaults[$column] ?? null;
+        return _types[column] ?? _defaults[column] ?? null;
     }
     
     /**

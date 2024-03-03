@@ -515,7 +515,7 @@ class Connection : IConnection {
     void cacheMetadata(string|bool cache) {
        _schemaCollection = null;
        configuration.data("cacheMetadata"] = cache;
-        if (isString($cache)) {
+        if (isString(cache)) {
             this.cacher = null;
         }
     }

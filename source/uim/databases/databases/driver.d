@@ -97,7 +97,7 @@ abstract class Driver {
 
         retry = new CommandRetry(new ErrorCodeWaitStrategy(RETRY_ERROR_CODES, 5), 4);
         try {
-            return retry.run($action);
+            return retry.run(action);
         } catch (PDOException  anException) {
             throw new MissingConnectionException(
                 [
@@ -434,8 +434,8 @@ abstract class Driver {
             );
         }
         conditions = queryToProcess.clause("where");
-        assert($conditions.isNull || cast(IExpression)$conditions);
-        if ($conditions) {
+        assert(conditions.isNull || cast(IExpression)conditions);
+        if (conditions) {
             conditions.traverse(function ($expression) {
                 if (cast(ComparisonExpression)$expression) {
                     field = expression.getFieldNames();

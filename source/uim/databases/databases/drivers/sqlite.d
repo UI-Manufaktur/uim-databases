@@ -93,12 +93,12 @@ class Sqlite : Driver {
             : "sqlite:" ~ configData("database"];
         }
         this.pdo = this.createPdo(dsn, configData);
-        if ($chmodFile) {
+        if (chmodFile) {
             @chmod(configData("database"], configData("mask"]);
         }
         if (!empty(configData("init"])) {
             foreach ( command; (array)configData("init"] ) {
-                this.pdo.exec($command);
+                this.pdo.exec(command);
             }
         }
     }

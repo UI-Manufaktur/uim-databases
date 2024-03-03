@@ -234,7 +234,7 @@ class QueryCompiler {
                 condition = join["conditions"].sql(aBinder);
             }
 
-            joinPart ~= condition.isEmpty ? " ON 1 = 1" : " ON {$condition}";
+            joinPart ~= condition.isEmpty ? " ON 1 = 1" : " ON {condition}";
         }
         return joinPart;
     }
