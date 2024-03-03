@@ -39,66 +39,66 @@ class FunctionsBuilder
     /**
      * Returns a AggregateExpression representing a call to SQL SUM function.
      *
-     * @param uim.databases.ExpressionInterface|string $expression the function argument
+     * @param uim.databases.ExpressionInterface|string expression the function argument
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\AggregateExpression
      */
-    function sum($expression, someTypes = []): AggregateExpression
+    function sum(expression, someTypes = []): AggregateExpression
     {
         $returnType = "float";
         if (current($types) == "integer") {
             $returnType = "integer";
         }
 
-        return this.aggregate("SUM", this.toLiteralParam($expression), someTypes, $returnType);
+        return this.aggregate("SUM", this.toLiteralParam(expression), someTypes, $returnType);
     }
 
     /**
      * Returns a AggregateExpression representing a call to SQL AVG function.
      *
-     * @param uim.databases.ExpressionInterface|string $expression the function argument
+     * @param uim.databases.ExpressionInterface|string expression the function argument
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\AggregateExpression
      */
-    function avg($expression, someTypes = []): AggregateExpression
+    function avg(expression, someTypes = []): AggregateExpression
     {
-        return this.aggregate("AVG", this.toLiteralParam($expression), someTypes, "float");
+        return this.aggregate("AVG", this.toLiteralParam(expression), someTypes, "float");
     }
 
     /**
      * Returns a AggregateExpression representing a call to SQL MAX function.
      *
-     * @param uim.databases.ExpressionInterface|string $expression the function argument
+     * @param uim.databases.ExpressionInterface|string expression the function argument
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\AggregateExpression
      */
-    function max($expression, someTypes = []): AggregateExpression
+    function max(expression, someTypes = []): AggregateExpression
     {
-        return this.aggregate("MAX", this.toLiteralParam($expression), someTypes, current($types) ?: "float");
+        return this.aggregate("MAX", this.toLiteralParam(expression), someTypes, current($types) ?: "float");
     }
 
     /**
      * Returns a AggregateExpression representing a call to SQL MIN function.
      *
-     * @param uim.databases.ExpressionInterface|string $expression the function argument
+     * @param uim.databases.ExpressionInterface|string expression the function argument
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\AggregateExpression
      */
-    function min($expression, someTypes = []): AggregateExpression
+    function min(expression, someTypes = []): AggregateExpression
     {
-        return this.aggregate("MIN", this.toLiteralParam($expression), someTypes, current($types) ?: "float");
+        return this.aggregate("MIN", this.toLiteralParam(expression), someTypes, current($types) ?: "float");
     }
 
     /**
      * Returns a AggregateExpression representing a call to SQL COUNT function.
      *
-     * @param uim.databases.ExpressionInterface|string $expression the function argument
+     * @param uim.databases.ExpressionInterface|string expression the function argument
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\AggregateExpression
      */
-    function count($expression, someTypes = []): AggregateExpression
+    function count(expression, someTypes = []): AggregateExpression
     {
-        return this.aggregate("COUNT", this.toLiteralParam($expression), someTypes, "integer");
+        return this.aggregate("COUNT", this.toLiteralParam(expression), someTypes, "integer");
     }
 
     /**
@@ -150,10 +150,10 @@ class FunctionsBuilder
             throw new InvalidArgumentException("The `$type` in a cast cannot be empty.");
         }
 
-        $expression = new FunctionExpression("CAST", this.toLiteralParam(field));
-        $expression.setConjunction(" AS").add([$type: "literal"]);
+        expression = new FunctionExpression("CAST", this.toLiteralParam(field));
+        expression.setConjunction(" AS").add([$type: "literal"]);
 
-        return $expression;
+        return expression;
     }
 
     /**
@@ -173,76 +173,76 @@ class FunctionsBuilder
      * Returns the specified date part from the SQL expression.
      *
      * @param string $part Part of the date to return.
-     * @param uim.databases.ExpressionInterface|string $expression Expression to obtain the date part from.
+     * @param uim.databases.ExpressionInterface|string expression Expression to obtain the date part from.
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\FunctionExpression
      */
-    function datePart(string $part, $expression, array $types = []): FunctionExpression
+    function datePart(string $part, expression, array $types = []): FunctionExpression
     {
-        return this.extract($part, $expression, someTypes);
+        return this.extract($part, expression, someTypes);
     }
 
     /**
      * Returns the specified date part from the SQL expression.
      *
      * @param string $part Part of the date to return.
-     * @param uim.databases.ExpressionInterface|string $expression Expression to obtain the date part from.
+     * @param uim.databases.ExpressionInterface|string expression Expression to obtain the date part from.
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\FunctionExpression
      */
-    function extract(string $part, $expression, array $types = []): FunctionExpression
+    function extract(string $part, expression, array $types = []): FunctionExpression
     {
-        $expression = new FunctionExpression("EXTRACT", this.toLiteralParam($expression), someTypes, "integer");
-        $expression.setConjunction(" FROM").add([$part: "literal"], [], true);
+        expression = new FunctionExpression("EXTRACT", this.toLiteralParam(expression), someTypes, "integer");
+        expression.setConjunction(" FROM").add([$part: "literal"], [], true);
 
-        return $expression;
+        return expression;
     }
 
     /**
      * Add the time unit to the date expression
      *
-     * @param uim.databases.ExpressionInterface|string $expression Expression to obtain the date part from.
+     * @param uim.databases.ExpressionInterface|string expression Expression to obtain the date part from.
      * @param string|int aValue Value to be added. Use negative to subtract.
      * @param string $unit Unit of the value e.g. hour or day.
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\FunctionExpression
      */
-    function dateAdd($expression, DValue aValue, string $unit, array $types = []): FunctionExpression
+    function dateAdd(expression, DValue aValue, string $unit, array $types = []): FunctionExpression
     {
         if (!is_numeric(DValue aValue)) {
             aValue = 0;
         }
         $interval = aValue . " " . $unit;
-        $expression = new FunctionExpression("DATE_ADD", this.toLiteralParam($expression), someTypes, "datetime");
-        $expression.setConjunction(", INTERVAL").add([$interval: "literal"]);
+        expression = new FunctionExpression("DATE_ADD", this.toLiteralParam(expression), someTypes, "datetime");
+        expression.setConjunction(", INTERVAL").add([$interval: "literal"]);
 
-        return $expression;
+        return expression;
     }
 
     /**
      * Returns a FunctionExpression representing a call to SQL WEEKDAY function.
      * 1 - Sunday, 2 - Monday, 3 - Tuesday...
      *
-     * @param uim.databases.ExpressionInterface|string $expression the function argument
+     * @param uim.databases.ExpressionInterface|string expression the function argument
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\FunctionExpression
      */
-    function dayOfWeek($expression, someTypes = []): FunctionExpression
+    function dayOfWeek(expression, someTypes = []): FunctionExpression
     {
-        return new FunctionExpression("DAYOFWEEK", this.toLiteralParam($expression), someTypes, "integer");
+        return new FunctionExpression("DAYOFWEEK", this.toLiteralParam(expression), someTypes, "integer");
     }
 
     /**
      * Returns a FunctionExpression representing a call to SQL WEEKDAY function.
      * 1 - Sunday, 2 - Monday, 3 - Tuesday...
      *
-     * @param uim.databases.ExpressionInterface|string $expression the function argument
+     * @param uim.databases.ExpressionInterface|string expression the function argument
      * @param array $types list of types to bind to the arguments
      * @return uim.databases.Expression\FunctionExpression
      */
-    function weekday($expression, someTypes = []): FunctionExpression
+    function weekday(expression, someTypes = []): FunctionExpression
     {
-        return this.dayOfWeek($expression, someTypes);
+        return this.dayOfWeek(expression, someTypes);
     }
 
     /**
@@ -281,15 +281,15 @@ class FunctionsBuilder
     /**
      * Returns an AggregateExpression representing call to SQL LAG().
      *
-     * @param uim.databases.ExpressionInterface|string $expression The value evaluated at offset
+     * @param uim.databases.ExpressionInterface|string expression The value evaluated at offset
      * @param int offset The row offset
      * @param mixed $default The default value if offset doesn"t exist
      * @param string $type The output type of the lag expression. Defaults to float.
      * @return uim.databases.Expression\AggregateExpression
      */
-    function lag($expression, int offset, $default = null, $type = null): AggregateExpression
+    function lag(expression, int offset, $default = null, $type = null): AggregateExpression
     {
-        $params = this.toLiteralParam($expression) + [offset: "literal"];
+        $params = this.toLiteralParam(expression) + [offset: "literal"];
         if ($default != null) {
             $params[] = $default;
         }
@@ -305,15 +305,15 @@ class FunctionsBuilder
     /**
      * Returns an AggregateExpression representing call to SQL LEAD().
      *
-     * @param uim.databases.ExpressionInterface|string $expression The value evaluated at offset
+     * @param uim.databases.ExpressionInterface|string expression The value evaluated at offset
      * @param int offset The row offset
      * @param mixed $default The default value if offset doesn"t exist
      * @param string $type The output type of the lead expression. Defaults to float.
      * @return uim.databases.Expression\AggregateExpression
      */
-    function lead($expression, int offset, $default = null, $type = null): AggregateExpression
+    function lead(expression, int offset, $default = null, $type = null): AggregateExpression
     {
-        $params = this.toLiteralParam($expression) + [offset: "literal"];
+        $params = this.toLiteralParam(expression) + [offset: "literal"];
         if ($default != null) {
             $params[] = $default;
         }
@@ -360,15 +360,15 @@ class FunctionsBuilder
     /**
      * Creates function parameter array from expression or string literal.
      *
-     * @param uim.databases.ExpressionInterface|string $expression function argument
+     * @param uim.databases.ExpressionInterface|string expression function argument
      * @return array<uim.databases.ExpressionInterface|string>
      */
-    protected function toLiteralParam($expression)
+    protected function toLiteralParam(expression)
     {
-        if (is_string($expression)) {
-            return [$expression: "literal"];
+        if (is_string(expression)) {
+            return [expression: "literal"];
         }
 
-        return [$expression];
+        return [expression];
     }
 }

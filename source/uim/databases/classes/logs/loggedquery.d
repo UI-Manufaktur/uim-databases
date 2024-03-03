@@ -25,7 +25,7 @@ class LoggedQuery : JsonSerializable, Stringable {
     protected int $numRows = 0;
 
     // The exception that was thrown by the execution of this query
-    protected Exception $error = null;
+    protected Exception error = null;
 
     // Helper auto used to replace query placeholders by the real params used to execute the query
     protected string interpolate() {
@@ -86,12 +86,12 @@ class LoggedQuery : JsonSerializable, Stringable {
     
     // Returns data that will be serialized as JSON
     IData[string] jsonSerialize() {
-        $error = this.error;
-        if ($error !isNull) {
-            $error = [
-                "class": $error.classname,
-                "message": $error.getMessage(),
-                "code": $error.getCode(),
+        error = this.error;
+        if (error !isNull) {
+            error = [
+                "class": error.classname,
+                "message": error.getMessage(),
+                "code": error.getCode(),
             ];
         }
         return [
@@ -99,7 +99,7 @@ class LoggedQuery : JsonSerializable, Stringable {
             "numRows": this.numRows,
             "params": this.params,
             "took": this.took,
-            "error": $error,
+            "error": error,
         ];
     }
     

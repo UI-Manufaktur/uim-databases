@@ -220,7 +220,7 @@ abstract class Driver {
 
             return;
         }
-        auto $exception = null;
+        auto exception = null;
         auto took = 0.0;
 
         try {
@@ -228,21 +228,21 @@ abstract class Driver {
             statementToExecute.execute($params);
             took = (float)number_format((microtime(true) - $start) * 1000, 1);
         } catch (PDOException  anException) {
-            $exception =  anException;
+            exception =  anException;
         }
         $logContext = [
             'driver": this,
-            'error": $exception,
+            'error": exception,
             'params": $params ?? statementToExecute.getBoundParams(),
         ];
-        if (!$exception) {
+        if (!exception) {
             $logContext["numRows"] = statementToExecute.rowCount();
             $logContext["took"] = took;
         }
         this.log(statementToExecute.queryString(), $logContext);
 
-        if ($exception) {
-            throw $exception;
+        if (exception) {
+            throw exception;
         }
     }
     
@@ -364,10 +364,10 @@ abstract class Driver {
         if (!$translators) {
             return aQuery;
         }
-        aQuery.traverseExpressions(function ($expression) use ($translators, aQuery) {
+        aQuery.traverseExpressions(function (expression) use ($translators, aQuery) {
             foreach ($translators as  className: $method) {
-                if (cast8className)$expression) {
-                    this.{$method}($expression, aQuery);
+                if (cast8className)expression) {
+                    this.{$method}(expression, aQuery);
                 }
             }
         });
@@ -458,27 +458,27 @@ abstract class Driver {
         conditions = queryToProcess.clause("where");
         assert(conditions.isNull || cast(IExpression)conditions);
         if (conditions) {
-            conditions.traverse(function ($expression) {
-                if (cast(ComparisonExpression)$expression) {
-                    field = $expression.getFieldNames();
+            conditions.traverse(function (expression) {
+                if (cast(ComparisonExpression)expression) {
+                    field = expression.getFieldNames();
                     if (
                         isString(field) &&
                         field.has(".")
                     ) {
                         [, $unaliasedField] = split(".", field, 2);
-                        $expression.setFieldNames($unaliasedField);
+                        expression.setFieldNames($unaliasedField);
                     }
-                    return $expression;
+                    return expression;
                 }
-                if (cast(IdentifierExpression)$expression) {
-                     anIdentifier = $expression.getIdentifier();
+                if (cast(IdentifierExpression)expression) {
+                     anIdentifier = expression.getIdentifier();
                     if (anIdentifier.has(".")) {
                         [, $unaliasedIdentifier] = split(".",  anIdentifier, 2);
-                        $expression.setIdentifier($unaliasedIdentifier);
+                        expression.setIdentifier($unaliasedIdentifier);
                     }
-                    return $expression;
+                    return expression;
                 }
-                return $expression;
+                return expression;
             });
         }
         return queryToProcess;

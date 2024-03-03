@@ -51,8 +51,8 @@ class ReconnectStrategy : IRetryStrategy {
      * Checks whether the exception was caused by a lost connection,
      * and returns true if it was able to successfully reconnect.
      */
-    bool shouldRetry(Exception $exception, int $retryCount) {
-        auto $message = $exception.getMessage();
+    bool shouldRetry(Exception exception, int $retryCount) {
+        auto $message = exception.getMessage();
 
         foreach (cause; causes) {
             if ($message.has(cause)) {

@@ -56,23 +56,23 @@ class IdentifierQuoter
     /**
      * Quotes identifiers inside expression objects
      *
-     * @param uim.databases.IDBAExpression $expression The expression object to walk and quote.
+     * @param uim.databases.IDBAExpression expression The expression object to walk and quote.
      */
-    void quoteExpression(IDBAExpression $expression) {
-        if ($expression instanceof FieldInterface) {
-            _quoteComparison($expression);
+    void quoteExpression(IDBAExpression expression) {
+        if (expression instanceof FieldInterface) {
+            _quoteComparison(expression);
 
             return;
         }
 
-        if ($expression instanceof OrderByExpression) {
-            _quoteOrderBy($expression);
+        if (expression instanceof OrderByExpression) {
+            _quoteOrderBy(expression);
 
             return;
         }
 
-        if ($expression instanceof IdentifierExpression) {
-            _quoteIdentifierExpression($expression);
+        if (expression instanceof IdentifierExpression) {
+            _quoteIdentifierExpression(expression);
 
             return;
         }
@@ -183,18 +183,18 @@ class IdentifierQuoter
     /**
      * Quotes identifiers in expression objects implementing the field interface
      *
-     * @param uim.databases.Expression\FieldInterface $expression The expression to quote.
+     * @param uim.databases.Expression\FieldInterface expression The expression to quote.
      */
-    protected void _quoteComparison(FieldInterface $expression) {
-        $field = $expression.getField();
+    protected void _quoteComparison(FieldInterface expression) {
+        $field = expression.getField();
         if (is_string($field)) {
-            $expression.setField(_driver.quoteIdentifier($field));
+            expression.setField(_driver.quoteIdentifier($field));
         } elseif (is_array($field)) {
             $quoted = null;
             foreach ($field as $f) {
                 $quoted[] = _driver.quoteIdentifier($f);
             }
-            $expression.setField($quoted);
+            expression.setField($quoted);
         } elseif ($field instanceof IDBAExpression) {
             this.quoteExpression($field);
         }
@@ -206,10 +206,10 @@ class IdentifierQuoter
      * Strings with spaces are treated as literal expressions
      * and will not have identifiers quoted.
      *
-     * @param uim.databases.Expression\OrderByExpression $expression The expression to quote.
+     * @param uim.databases.Expression\OrderByExpression expression The expression to quote.
      */
-    protected void _quoteOrderBy(OrderByExpression $expression) {
-        $expression.iterateParts(function ($part, &$field) {
+    protected void _quoteOrderBy(OrderByExpression expression) {
+        expression.iterateParts(function ($part, &$field) {
             if (is_string($field)) {
                 $field = _driver.quoteIdentifier($field);
 
@@ -226,11 +226,11 @@ class IdentifierQuoter
     /**
      * Quotes identifiers in "order by" expression objects
      *
-     * @param uim.databases.Expression\IdentifierExpression $expression The identifiers to quote.
+     * @param uim.databases.Expression\IdentifierExpression expression The identifiers to quote.
      */
-    protected void _quoteIdentifierExpression(IdentifierExpression $expression) {
-        $expression.setIdentifier(
-            _driver.quoteIdentifier($expression.getIdentifier())
+    protected void _quoteIdentifierExpression(IdentifierExpression expression) {
+        expression.setIdentifier(
+            _driver.quoteIdentifier(expression.getIdentifier())
         );
     }
 }

@@ -195,14 +195,14 @@ class MysqlSchemaDialect : SchemaDialect {
             type == TableSchema.INDEX_FULLTEXT
         );
         if (isIndex) {
-            $existing = tableSchema.getIndex(name);
+            existing = tableSchema.getIndex(name);
         } else {
-            $existing = tableSchema.getConstraint(keyName);
+            existing = tableSchema.getConstraint(keyName);
         }
         // MySQL multi column indexes come back as multiple rows.
-        if (!empty($existing)) {
-            someColumns = array_merge($existing["columns"], someColumns);
-            $length = array_merge($existing["length"], $length);
+        if (!empty(existing)) {
+            someColumns = array_merge(existing["columns"], someColumns);
+            $length = array_merge(existing["length"], $length);
         }
         if (isIndex) {
             tableSchema.addIndex(name, [

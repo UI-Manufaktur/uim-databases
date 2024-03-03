@@ -66,8 +66,8 @@ class UpdateQuery : Query {
      * Passing a callback:
      *
      * ```
-     * aQuery.update("articles").set(function ($exp) {
-     *  return $exp.eq("title", "The title", "string");
+     * aQuery.update("articles").set(function (exp) {
+     *  return exp.eq("title", "The title", "string");
      * });
      * ```
      * Params:
@@ -85,8 +85,8 @@ class UpdateQuery : Query {
             }
 
             if (cast(Closure) aKey) {
-                $exp = this.newExpr().setConjunction(",");
-                _parts["set"].add(aKey($exp));
+                exp = this.newExpr().setConjunction(",");
+                _parts["set"].add(aKey(exp));
 
                 return;
             }

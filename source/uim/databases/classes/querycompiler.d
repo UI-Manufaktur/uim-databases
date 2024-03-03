@@ -365,10 +365,10 @@ class QueryCompiler {
     protected array _stringifyExpressions(array someExpressions, ValueBinder valueBinder, bool shouldWrap = true) {
         STRINGAA results;
 
-        foreach (myKey: $expression; someExpressions) {
+        foreach (myKey: expression; someExpressions) {
             string sqlExpression;
-            if (cast(IExpression)$expression ) {
-                aValue = $expression.sql(valueBinder);
+            if (cast(IExpression)expression ) {
+                aValue = expression.sql(valueBinder);
                 sqlExpression = shouldWrap ? "(" ~ aValue ~ ")" : aValue;
             }
 
