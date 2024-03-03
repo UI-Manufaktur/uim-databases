@@ -129,7 +129,7 @@ class EnumType : BaseType {
             ));
         }
         enumInstance = this.enumClassName.tryFrom(aValue);
-        if ($enumInstance.isNull) {
+        if (enumInstance.isNull) {
             throw new InvalidArgumentException(
                 "Unable to marshal value to %s, got %s"
                 .format(this.enumClassName, get_debug_type(aValue),

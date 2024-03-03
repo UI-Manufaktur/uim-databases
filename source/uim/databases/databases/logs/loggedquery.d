@@ -87,7 +87,7 @@ class LoggedQuery : JsonSerializable, Stringable {
     // Returns data that will be serialized as JSON
     IData[string] jsonSerialize() {
         error = this.error;
-        if ($error !isNull) {
+        if (error !isNull) {
             error = [
                 "class": error.classname,
                 "message": error.getMessage(),

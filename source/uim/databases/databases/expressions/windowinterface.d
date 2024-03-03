@@ -39,7 +39,7 @@ interface WindowInterface {
      * - `null` - 'UNBOUNDED PRECEDING'
      * - offset - 'offset PRECEDING'
      *
-     * `$end`:
+     * `end`:
      * - `0` - 'CURRENT ROW'
      * - `null` - 'UNBOUNDED FOLLOWING'
      * - offset - 'offset FOLLOWING'
@@ -83,7 +83,7 @@ interface WindowInterface {
      *
      * You can specify any direction for both frame start and frame end.
      *
-     * With both `$startOffset` and `$endOffset`:
+     * With both `$startOffset` and `endOffset`:
      * - `0` - 'CURRENT ROW'
      * - `null` - 'UNBOUNDED'
      * Params:

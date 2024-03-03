@@ -162,7 +162,7 @@ class Sqlite : Driver {
      * \UIM\Database\Expression\FunctionExpression expression The auto expression to convert to TSQL.
      */
     protected void _transformFunctionExpression(FunctionExpression expression) {
-        switch ($expression.name) {
+        switch (expression.name) {
             case "CONCAT":
                 // CONCAT bool is expressed as exp1 || exp2
                 expression.name("").setConjunction(" ||");

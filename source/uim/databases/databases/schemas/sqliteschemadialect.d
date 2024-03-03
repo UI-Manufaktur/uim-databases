@@ -162,7 +162,7 @@ class SqliteSchemaDialect : SchemaDialect {
         if ($row["pk"] && !empty($primary)) {
             existingColumn = primary["columns"][0];
             /** @psalm-suppress PossiblyNullOperand */
-            tableSchema.addColumn($existingColumn, ["autoIncrement": null] + tableSchema.getColumn($existingColumn));
+            tableSchema.addColumn(existingColumn, ["autoIncrement": null] + tableSchema.getColumn(existingColumn));
         }
         tableSchema.addColumn($row["name"], myField);
         if ($row["pk"]) {

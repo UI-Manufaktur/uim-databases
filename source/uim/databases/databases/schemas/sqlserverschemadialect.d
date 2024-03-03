@@ -252,8 +252,8 @@ class SqlserverSchemaDialect : SchemaDialect {
             : tableSchema.getConstraint(name);
         
         auto someColumns = [$row["column_name"]];
-        if (!empty($existing)) {
-            someColumns = chain($existing["columns"], someColumns);
+        if (!empty(existing)) {
+            someColumns = chain(existing["columns"], someColumns);
         }
         if ($type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
             tablSchema.addConstraint(name, [

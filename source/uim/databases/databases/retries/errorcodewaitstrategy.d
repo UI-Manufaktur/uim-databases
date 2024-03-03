@@ -28,9 +28,9 @@ class ErrorCodeWaitStrategy : IRetryStrategy {
  
     bool shouldRetry(Exception exception, int retryCount) {
         if (
-            cast(PDOException)$exception &&
+            cast(PDOException)exception &&
             exception.errorInfo &&
-            in_array($exception.errorInfo[1], this.errorCodes)
+            in_array(exception.errorInfo[1], this.errorCodes)
         ) {
             if (this.retryInterval > 0) {
                 sleep(this.retryInterval);

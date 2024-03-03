@@ -201,9 +201,9 @@ class MysqlSchemaDialect : SchemaDialect
             existing = tableSchema.getConstraint(keyName);
         }
         // MySQL multi column indexes come back as multiple rows.
-        if (!empty($existing)) {
-            someColumns = chain($existing["columns"], someColumns);
-            length = chain($existing["length"], length);
+        if (!empty(existing)) {
+            someColumns = chain(existing["columns"], someColumns);
+            length = chain(existing["length"], length);
         }
         if (isIndex) {
             tableSchema.addIndex(name, [

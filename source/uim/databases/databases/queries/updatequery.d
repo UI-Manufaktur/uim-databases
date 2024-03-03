@@ -60,7 +60,7 @@ Y>    }
      * Passing a callback:
      *
      * ```
-     * aQuery.update("articles").set(function ($exp) {
+     * aQuery.update("articles").set(function (exp) {
      *  return exp.eq("title", "The title", "string");
      * });
      * ```
@@ -79,7 +79,7 @@ Y>    }
         }
         if (cast(Closure)aKey) {
             exp = this.newExpr().setConjunction(",");
-           _parts["set"].add(aKey($exp));
+           _parts["set"].add(aKey(exp));
 
             return ;
         }

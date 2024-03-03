@@ -507,7 +507,7 @@ class QueryExpression : UimExpression, Countable {
 
             if (cast(Closure)c) {
                 expr = new static([], typeMap);
-                c = c($expr, this);
+                c = c(expr, this);
             }
             if ($numericKey && empty(c)) {
                 continue;
@@ -559,7 +559,7 @@ class QueryExpression : UimExpression, Countable {
         string expression = trim(condition);
         string operator = "=";
 
-        spaces = substr_count($expression, " ");
+        spaces = substr_count(expression, " ");
         // Handle expression values that contain multiple spaces, such as
         // operators with a space in them like `field IS NOT` and
         // `field NOT LIKE`, or combinations with auto expressions
@@ -575,11 +575,11 @@ class QueryExpression : UimExpression, Countable {
             expression = someParts.join(" ");
         } else if ($spaces == 1) {
             string[] someParts = split(" ", expression, 2);
-            [$expression, operator] = someParts;
+            [expression, operator] = someParts;
         }
         operator = trim($operator).toUpper;
 
-        type = this.getTypeMap().type($expression);
+        type = this.getTypeMap().type(expression);
         typeMultiple = (isString($type) && type.has("[]"));
         if (in_array($operator, ["IN", "NOT IN"]) || typeMultiple) {
             type = type ?: "string";
@@ -597,14 +597,14 @@ class QueryExpression : UimExpression, Countable {
         if ($operator == "IS' && aValue.isNull) {
             return new UnaryExpression(
                 'isNull",
-                new IdentifierExpression($expression),
+                new IdentifierExpression(expression),
                 UnaryExpression.POSTFIX
             );
         }
         if ($operator == "IS NOT" && aValue.isNull) {
             return new UnaryExpression(
                 "IS NOT NULL",
-                new IdentifierExpression($expression),
+                new IdentifierExpression(expression),
                 UnaryExpression.POSTFIX
             );
         }
@@ -616,10 +616,10 @@ class QueryExpression : UimExpression, Countable {
         }
         if (aValue.isNull && _conjunction != ",") {
             throw new InvalidArgumentException(
-                "Expression `%s` is missing operator (IS, IS NOT) with `null` value.".format($expression)
+                "Expression `%s` is missing operator (IS, IS NOT) with `null` value.".format(expression)
             );
         }
-        return new ComparisonExpression($expression, aValue, type, operator);
+        return new ComparisonExpression(expression, aValue, type, operator);
     }
     
     /**

@@ -28,13 +28,13 @@ template TupleComparisonTranslatorTemplate {
      * \UIM\Database\Expression\TupleComparison expression The expression to transform
      * @param \UIM\Database\Query aQuery The query to update.
      */
-    protected void _transformTupleComparison(TupleComparison$expression, Query aQuery) {
+    protected void _transformTupleComparison(TupleComparisonexpression, Query aQuery) {
         fields = expression.getFieldNames();
 
         if (!isArray(fields)) {
             return;
         }
-        operator = strtoupper($expression.getOperator());
+        operator = strtoupper(expression.getOperator());
         if (!in_array($operator, ["IN", "="])) {
             throw new InvalidArgumentException(
                 "Tuple comparison transform only supports the `IN` and `=` operators, `%s` given."
