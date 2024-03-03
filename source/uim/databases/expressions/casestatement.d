@@ -72,7 +72,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      *
      * @var DDBIDBAExpression|object|scalar|null
      */
-    protected $else = null;
+    protected else = null;
 
     /**
      * The else part result type.
@@ -512,9 +512,9 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
         }
         $whenThen = implode(" ", $whenThenExpressions);
 
-        $else = this.compileNullableValue($binder, this.else, this.elseType);
+        else = this.compileNullableValue($binder, this.else, this.elseType);
 
-        return "CASE {value}{$whenThen} ELSE $else END";
+        return "CASE {value}{$whenThen} ELSE else END";
     }
 
 

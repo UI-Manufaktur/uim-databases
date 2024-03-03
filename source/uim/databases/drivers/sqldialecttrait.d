@@ -92,10 +92,10 @@ trait SqlDialectTrait
                 return query;
             }
 
-            query.traverseExpressions(void ($expression) use ($translators, query) {
+            query.traverseExpressions(void (expression) use ($translators, query) {
                 foreach ($translators as class: $method) {
-                    if ($expression instanceof class) {
-                        this.{$method}($expression, query);
+                    if (expression instanceof class) {
+                        this.{$method}(expression, query);
                     }
                 }
             });
@@ -212,31 +212,31 @@ trait SqlDialectTrait
 
         conditions = query.clause("where");
         if (conditions) {
-            conditions.traverse(function ($expression) {
-                if ($expression instanceof ComparisonExpression) {
-                    field = $expression.getField();
+            conditions.traverse(function (expression) {
+                if (expression instanceof ComparisonExpression) {
+                    field = expression.getField();
                     if (
                         is_string(field) &&
                         strpos(field, ".") != false
                     ) {
                         [, $unaliasedField] = explode(".", field, 2);
-                        $expression.setField($unaliasedField);
+                        expression.setField($unaliasedField);
                     }
 
-                    return $expression;
+                    return expression;
                 }
 
-                if ($expression instanceof IdentifierExpression) {
-                    $identifier = $expression.getIdentifier();
+                if (expression instanceof IdentifierExpression) {
+                    $identifier = expression.getIdentifier();
                     if (strpos($identifier, ".") != false) {
                         [, $unaliasedIdentifier] = explode(".", $identifier, 2);
-                        $expression.setIdentifier($unaliasedIdentifier);
+                        expression.setIdentifier($unaliasedIdentifier);
                     }
 
-                    return $expression;
+                    return expression;
                 }
 
-                return $expression;
+                return expression;
             });
         }
 

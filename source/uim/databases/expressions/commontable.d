@@ -157,10 +157,10 @@ class CommonTableExpression : IDBAExpression
     string sql(ValueBinder aBinder) {
         fields = "";
         if (this.fields) {
-            $expressions = array_map(function (IdentifierExpression $e) use ($binder) {
-                return $e.sql($binder);
+            expressions = array_map(function (IdentifierExpression e) use ($binder) {
+                return e.sql($binder);
             }, this.fields);
-            fields = sprintf("(%s)", implode(", ", $expressions));
+            fields = sprintf("(%s)", implode(", ", expressions));
         }
 
         $suffix = this.materialized ? this.materialized ~ " " : "";

@@ -414,13 +414,13 @@ class Sqlserver : Driver
      * Receives a FunctionExpression and changes it so that it conforms to this
      * SQL dialect.
      *
-     * @param uim.databases.Expression\FunctionExpression $expression The function expression to convert to TSQL.
+     * @param uim.databases.Expression\FunctionExpression expression The function expression to convert to TSQL.
      */
-    protected void _transformFunctionExpression(FunctionExpression $expression) {
-        switch ($expression.getName()) {
+    protected void _transformFunctionExpression(FunctionExpression expression) {
+        switch (expression.getName()) {
             case "CONCAT":
                 // CONCAT bool is expressed as exp1 + exp2
-                $expression.setName("").setConjunction(" +");
+                expression.setName("").setConjunction(" +");
                 break;
             case "DATEDIFF":
                 /** @var bool $hasDay */
@@ -432,25 +432,25 @@ class Sqlserver : Driver
 
                     return value;
                 };
-                $expression.iterateParts($visitor);
+                expression.iterateParts($visitor);
 
                 if (!$hasDay) {
-                    $expression.add(["day": "literal"], [], true);
+                    expression.add(["day": "literal"], [], true);
                 }
                 break;
             case "CURRENT_DATE":
                 time = new FunctionExpression("GETUTCDATE");
-                $expression.setName("CONVERT").add(["date": "literal", time]);
+                expression.setName("CONVERT").add(["date": "literal", time]);
                 break;
             case "CURRENT_TIME":
                 time = new FunctionExpression("GETUTCDATE");
-                $expression.setName("CONVERT").add(["time": "literal", time]);
+                expression.setName("CONVERT").add(["time": "literal", time]);
                 break;
             case "NOW":
-                $expression.setName("GETUTCDATE");
+                expression.setName("GETUTCDATE");
                 break;
             case "EXTRACT":
-                $expression.setName("DATEPART").setConjunction(" ,");
+                expression.setName("DATEPART").setConjunction(" ,");
                 break;
             case "DATE_ADD":
                 $params = null;
@@ -469,7 +469,7 @@ class Sqlserver : Driver
                     return $params[$key];
                 };
 
-                $expression
+                expression
                     .setName("DATEADD")
                     .setConjunction(",")
                     .iterateParts($visitor)
@@ -477,16 +477,16 @@ class Sqlserver : Driver
                     .add([$params[2]: "literal"]);
                 break;
             case "DAYOFWEEK":
-                $expression
+                expression
                     .setName("DATEPART")
                     .setConjunction(" ")
                     .add(["weekday, ": "literal"], [], true);
                 break;
             case "SUBSTR":
-                $expression.setName("SUBSTRING");
-                if (count($expression) < 4) {
+                expression.setName("SUBSTRING");
+                if (count(expression) < 4) {
                     $params = null;
-                    $expression
+                    expression
                         .iterateParts(function ($p) use (&$params) {
                             return $params[] = $p;
                         })

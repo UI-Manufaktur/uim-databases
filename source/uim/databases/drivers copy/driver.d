@@ -187,7 +187,7 @@ abstract class Driver : IDriver
         } else {
             try {
                 connected = (bool)_connection.query("SELECT 1");
-            } catch (PDOException $e) {
+            } catch (PDOException e) {
                 connected = false;
             }
         }

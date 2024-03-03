@@ -113,18 +113,18 @@ class WindowExpression : IDBAExpression, IWindow
     }
 
 
-    function range($start, $end = 0) {
-        return this.frame(self::RANGE, $start, self::PRECEDING, $end, self::FOLLOWING);
+    function range($start, end = 0) {
+        return this.frame(self::RANGE, $start, self::PRECEDING, end, self::FOLLOWING);
     }
 
 
-    function rows(Nullable!int $start, Nullable!int $end = 0) {
-        return this.frame(self::ROWS, $start, self::PRECEDING, $end, self::FOLLOWING);
+    function rows(Nullable!int $start, Nullable!int end = 0) {
+        return this.frame(self::ROWS, $start, self::PRECEDING, end, self::FOLLOWING);
     }
 
 
-    function groups(Nullable!int $start, Nullable!int $end = 0) {
-        return this.frame(self::GROUPS, $start, self::PRECEDING, $end, self::FOLLOWING);
+    function groups(Nullable!int $start, Nullable!int end = 0) {
+        return this.frame(self::GROUPS, $start, self::PRECEDING, end, self::FOLLOWING);
     }
 
 
@@ -132,8 +132,8 @@ class WindowExpression : IDBAExpression, IWindow
         string type,
         $startOffset,
         string $startDirection,
-        $endOffset,
-        string $endDirection
+        endOffset,
+        string endDirection
     ) {
         this.frame = [
             "type": type,
@@ -142,8 +142,8 @@ class WindowExpression : IDBAExpression, IWindow
                 "direction": $startDirection,
             ],
             "end": [
-                "offset": $endOffset,
-                "direction": $endDirection,
+                "offset": endOffset,
+                "direction": endDirection,
             ],
         ];
 
@@ -179,12 +179,12 @@ class WindowExpression : IDBAExpression, IWindow
         }
 
         if (this.partitions) {
-            $expressions = null;
+            expressions = null;
             foreach (this.partitions as $partition) {
-                $expressions[] = $partition.sql($binder);
+                expressions[] = $partition.sql($binder);
             }
 
-            clauses[] = "PARTITION BY " ~ implode(", ", $expressions);
+            clauses[] = "PARTITION BY " ~ implode(", ", expressions);
         }
 
         if (this.order) {
@@ -197,13 +197,13 @@ class WindowExpression : IDBAExpression, IWindow
                 this.frame["start"]["offset"],
                 this.frame["start"]["direction"]
             );
-            $end = this.buildOffsetSql(
+            end = this.buildOffsetSql(
                 $binder,
                 this.frame["end"]["offset"],
                 this.frame["end"]["direction"]
             );
 
-            $frameSql = sprintf("%s BETWEEN %s AND %s", this.frame["type"], $start, $end);
+            $frameSql = sprintf("%s BETWEEN %s AND %s", this.frame["type"], $start, end);
 
             if (this.exclusion != null) {
                 $frameSql ~= " EXCLUDE " ~ this.exclusion;

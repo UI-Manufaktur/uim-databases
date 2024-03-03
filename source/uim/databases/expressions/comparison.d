@@ -254,7 +254,7 @@ class ComparisonExpression : IDBAExpression, FieldInterface
             return [values, []];
         }
 
-        $expressions = result = null;
+        expressions = result = null;
         $isArray = is_array(values);
 
         if ($isArray) {
@@ -264,7 +264,7 @@ class ComparisonExpression : IDBAExpression, FieldInterface
 
         foreach (values as $k: $v) {
             if ($v instanceof IDBAExpression) {
-                $expressions[$k] = $v;
+                expressions[$k] = $v;
             }
 
             if ($isArray) {
@@ -272,7 +272,7 @@ class ComparisonExpression : IDBAExpression, FieldInterface
             }
         }
 
-        return [result, $expressions];
+        return [result, expressions];
     }
 }
 

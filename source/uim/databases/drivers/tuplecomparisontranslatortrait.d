@@ -28,17 +28,17 @@ trait TupleComparisonTranslatorTrait
      *
      * 1 = (SELECT 1 FROM a_table WHERE (a = c) AND (b = d))
      *
-     * @param uim.databases.Expression\TupleComparison $expression The expression to transform
+     * @param uim.databases.Expression\TupleComparison expression The expression to transform
      * @param uim.databases.Query query The query to update.
      */
-    protected void _transformTupleComparison(TupleComparison $expression, Query query) {
-        fields = $expression.getField();
+    protected void _transformTupleComparison(TupleComparison expression, Query query) {
+        fields = expression.getField();
 
         if (!is_array(fields)) {
             return;
         }
 
-        $operator = strtoupper($expression.getOperator());
+        $operator = strtoupper(expression.getOperator());
         if (!hasAllValues($operator, ["IN", "="])) {
             throw new RuntimeException(
                 sprintf(
@@ -48,7 +48,7 @@ trait TupleComparisonTranslatorTrait
             );
         }
 
-        value = $expression.getValue();
+        value = expression.getValue();
         true = new QueryExpression("1");
 
         if (value instanceof Query) {
@@ -57,13 +57,13 @@ trait TupleComparisonTranslatorTrait
                 value.andWhere([field: new IdentifierExpression($selected[$i])]);
             }
             value.select($true, true);
-            $expression.setField($true);
-            $expression.setOperator("=");
+            expression.setField($true);
+            expression.setOperator("=");
 
             return;
         }
 
-        type = $expression.getType();
+        type = expression.getType();
         if ($type) {
             /** @var array<string, string> typeMap */
             typeMap = array_combine(fields, type) ?: [];
@@ -89,8 +89,8 @@ trait TupleComparisonTranslatorTrait
         }
         $surrogate.where(conditions, typeMap);
 
-        $expression.setField($true);
-        $expression.setValue($surrogate);
-        $expression.setOperator("=");
+        expression.setField($true);
+        expression.setValue($surrogate);
+        expression.setOperator("=");
     }
 }

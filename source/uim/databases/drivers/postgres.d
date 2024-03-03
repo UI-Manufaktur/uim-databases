@@ -120,11 +120,11 @@ class Postgres : Driver
     /**
      * Sets connection encoding
      *
-     * @param string $encoding The encoding to use.
+     * @param string encoding The encoding to use.
      */
-    void setEncoding(string $encoding) {
+    void setEncoding(string encoding) {
         this.connect();
-        _connection.exec("SET NAMES " ~ _connection.quote($encoding));
+        _connection.exec("SET NAMES " ~ _connection.quote(encoding));
     }
 
     /**
@@ -197,13 +197,13 @@ class Postgres : Driver
     /**
      * Changes identifer expression into postgresql format.
      *
-     * @param uim.databases.Expression\IdentifierExpression $expression The expression to tranform.
+     * @param uim.databases.Expression\IdentifierExpression expression The expression to tranform.
      */
-    protected void _transformIdentifierExpression(IdentifierExpression $expression) {
-        collation = $expression.getCollation();
+    protected void _transformIdentifierExpression(IdentifierExpression expression) {
+        collation = expression.getCollation();
         if (collation) {
             // use trim() to work around expression being transformed multiple times
-            $expression.setCollation(""" ~ trim(collation, """) ~ """);
+            expression.setCollation(""" ~ trim(collation, """) ~ """);
         }
     }
 
@@ -211,17 +211,17 @@ class Postgres : Driver
      * Receives a FunctionExpression and changes it so that it conforms to this
      * SQL dialect.
      *
-     * @param uim.databases.Expression\FunctionExpression $expression The function expression to convert
+     * @param uim.databases.Expression\FunctionExpression expression The function expression to convert
      *   to postgres SQL.
      */
-    protected void _transformFunctionExpression(FunctionExpression $expression) {
-        switch ($expression.getName()) {
+    protected void _transformFunctionExpression(FunctionExpression expression) {
+        switch (expression.getName()) {
             case "CONCAT":
                 // CONCAT bool is expressed as exp1 || exp2
-                $expression.setName("").setConjunction(" ||");
+                expression.setName("").setConjunction(" ||");
                 break;
             case "DATEDIFF":
-                $expression
+                expression
                     .setName("")
                     .setConjunction("-")
                     .iterateParts(function ($p) {
@@ -236,20 +236,20 @@ class Postgres : Driver
                 break;
             case "CURRENT_DATE":
                 time = new FunctionExpression("LOCALTIMESTAMP", [" 0 ": "literal"]);
-                $expression.setName("CAST").setConjunction(" AS ").add([$time, "date": "literal"]);
+                expression.setName("CAST").setConjunction(" AS ").add([$time, "date": "literal"]);
                 break;
             case "CURRENT_TIME":
                 time = new FunctionExpression("LOCALTIMESTAMP", [" 0 ": "literal"]);
-                $expression.setName("CAST").setConjunction(" AS ").add([$time, "time": "literal"]);
+                expression.setName("CAST").setConjunction(" AS ").add([$time, "time": "literal"]);
                 break;
             case "NOW":
-                $expression.setName("LOCALTIMESTAMP").add([" 0 ": "literal"]);
+                expression.setName("LOCALTIMESTAMP").add([" 0 ": "literal"]);
                 break;
             case "RAND":
-                $expression.setName("RANDOM");
+                expression.setName("RANDOM");
                 break;
             case "DATE_ADD":
-                $expression
+                expression
                     .setName("")
                     .setConjunction(" + INTERVAL")
                     .iterateParts(function ($p, $key) {
@@ -261,7 +261,7 @@ class Postgres : Driver
                     });
                 break;
             case "DAYOFWEEK":
-                $expression
+                expression
                     .setName("EXTRACT")
                     .setConjunction(" ")
                     .add(["DOW FROM": "literal"], [], true)
@@ -273,11 +273,11 @@ class Postgres : Driver
     /**
      * Changes string expression into postgresql format.
      *
-     * @param uim.databases.Expression\StringExpression $expression The string expression to tranform.
+     * @param uim.databases.Expression\StringExpression expression The string expression to tranform.
      */
-    protected void _transformStringExpression(StringExpression $expression) {
+    protected void _transformStringExpression(StringExpression expression) {
         // use trim() to work around expression being transformed multiple times
-        $expression.setCollation(""" ~ trim($expression.getCollation(), """) ~ """);
+        expression.setCollation(""" ~ trim(expression.getCollation(), """) ~ """);
     }
 
     /**

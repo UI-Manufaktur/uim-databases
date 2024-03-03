@@ -63,12 +63,12 @@ class LoggingStatement : StatementDecorator
         try {
             result = super.execute($params);
             _loggedQuery.took = (int)round((microtime(true) - _startTime) * 1000, 0);
-        } catch (Exception $e) {
+        } catch (Exception e) {
             /** @psalm-suppress UndefinedPropertyAssignment */
-            $e.queryString = _queryString;
-            _loggedQuery.error = $e;
+            e.queryString = _queryString;
+            _loggedQuery.error = e;
             _log();
-            throw $e;
+            throw e;
         }
 
         if (preg_match("/^(?!SELECT)/i", this.queryString)) {

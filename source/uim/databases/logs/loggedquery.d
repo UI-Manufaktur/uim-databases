@@ -58,7 +58,7 @@ class LoggedQuery : JsonSerializable
      *
      * @var \Exception|null
      */
-    $error;
+    error;
 
     /**
      * Helper function used to replace query placeholders by the real
@@ -126,12 +126,12 @@ class LoggedQuery : JsonSerializable
      * @return array<string, mixed>
      */
     array jsonSerialize() {
-        $error = this.error;
-        if ($error != null) {
-            $error = [
-                "class": get_class($error),
-                "message": $error.getMessage(),
-                "code": $error.getCode(),
+        error = this.error;
+        if (error != null) {
+            error = [
+                "class": get_class(error),
+                "message": error.getMessage(),
+                "code": error.getCode(),
             ];
         }
 
@@ -140,7 +140,7 @@ class LoggedQuery : JsonSerializable
             "numRows": this.numRows,
             "params": this.params,
             "took": this.took,
-            "error": $error,
+            "error": error,
         ];
     }
 

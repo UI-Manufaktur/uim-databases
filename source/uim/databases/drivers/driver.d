@@ -76,14 +76,14 @@ abstract class Driver : IDBADriver {
         $retry = new CommandRetry(new ErrorCodeWaitStrategy(static.RETRY_ERROR_CODES, 5), 4);
         try {
             $retry.run(action);
-        } catch (PDOException $e) {
+        } catch (PDOException e) {
             throw new MissingConnectionException(
                 [
                     "driver":App.shortName(static.class, "Database/Driver"),
-                    "reason":$e.getMessage(),
+                    "reason":e.getMessage(),
                 ],
                 null,
-                $e
+                e
             );
         } finally {
             this.connectRetries = $retry.getRetries();
@@ -272,7 +272,7 @@ abstract class Driver : IDBADriver {
         } else {
             try {
                 connected = (bool)_connection.query("SELECT 1");
-            } catch (PDOException $e) {
+            } catch (PDOException e) {
                 connected = false;
             }
         }

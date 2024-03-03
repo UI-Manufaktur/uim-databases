@@ -323,12 +323,12 @@ class QueryExpression : IDBAExpression, Countable
     function case(value = null, Nullable!string type = null): CaseStatementExpression
     {
         if (func_num_args() > 0) {
-            $expression = new CaseStatementExpression(value, type);
+            expression = new CaseStatementExpression(value, type);
         } else {
-            $expression = new CaseStatementExpression();
+            expression = new CaseStatementExpression();
         }
 
-        return $expression.setTypeMap(this.getTypeMap());
+        return expression.setTypeMap(this.getTypeMap());
     }
 
     /**
@@ -372,21 +372,21 @@ class QueryExpression : IDBAExpression, Countable
     /**
      * Adds a new condition to the expression object in the form "EXISTS (...)".
      *
-     * @param uim.databases.IDBAExpression $expression the inner query
+     * @param uim.databases.IDBAExpression expression the inner query
      * @return this
      */
-    function exists(IDBAExpression $expression) {
-        return this.add(new UnaryExpression("EXISTS", $expression, UnaryExpression::PREFIX));
+    function exists(IDBAExpression expression) {
+        return this.add(new UnaryExpression("EXISTS", expression, UnaryExpression::PREFIX));
     }
 
     /**
      * Adds a new condition to the expression object in the form "NOT EXISTS (...)".
      *
-     * @param uim.databases.IDBAExpression $expression the inner query
+     * @param uim.databases.IDBAExpression expression the inner query
      * @return this
      */
-    function notExists(IDBAExpression $expression) {
-        return this.add(new UnaryExpression("NOT EXISTS", $expression, UnaryExpression::PREFIX));
+    function notExists(IDBAExpression expression) {
+        return this.add(new UnaryExpression("NOT EXISTS", expression, UnaryExpression::PREFIX));
     }
 
     /**
@@ -602,8 +602,8 @@ class QueryExpression : IDBAExpression, Countable
             $numericKey = is_numeric($k);
 
             if (c instanceof Closure) {
-                $expr = new static([], typeMap);
-                c = c($expr, this);
+                expr = new static([], typeMap);
+                c = c(expr, this);
             }
 
             if ($numericKey && empty(c)) {
@@ -664,7 +664,7 @@ class QueryExpression : IDBAExpression, Countable
     protected function _parseCondition(string field, value) {
         field = trim(field);
         $operator = "=";
-        $expression = field;
+        expression = field;
 
         $spaces = substr_count(field, " ");
         // Handle field values that contain multiple spaces, such as
@@ -679,13 +679,13 @@ class QueryExpression : IDBAExpression, Countable
                 $parts[] = "{$second} {$last}";
             }
             $operator = array_pop($parts);
-            $expression = implode(" ", $parts);
+            expression = implode(" ", $parts);
         } elseif ($spaces == 1) {
             $parts = explode(" ", field, 2);
-            [$expression, $operator] = $parts;
+            [expression, $operator] = $parts;
         }
         $operator = strtolower(trim($operator));
-        type = this.getTypeMap().type($expression);
+        type = this.getTypeMap().type(expression);
 
         typeMultiple = (is_string($type) && strpos($type, "[]") != false);
         if (hasAllValues($operator, ["in", "not in"]) || typeMultiple) {
@@ -705,7 +705,7 @@ class QueryExpression : IDBAExpression, Countable
         if ($operator == "is" && value == null) {
             return new UnaryExpression(
                 "IS NULL",
-                new IdentifierExpression($expression),
+                new IdentifierExpression(expression),
                 UnaryExpression::POSTFIX
             );
         }
@@ -713,7 +713,7 @@ class QueryExpression : IDBAExpression, Countable
         if ($operator == "is not" && value == null) {
             return new UnaryExpression(
                 "IS NOT NULL",
-                new IdentifierExpression($expression),
+                new IdentifierExpression(expression),
                 UnaryExpression::POSTFIX
             );
         }
@@ -728,11 +728,11 @@ class QueryExpression : IDBAExpression, Countable
 
         if (value == null && _conjunction != ",") {
             throw new InvalidArgumentException(
-                sprintf("Expression `%s` is missing operator (IS, IS NOT) with `null` value.", $expression)
+                sprintf("Expression `%s` is missing operator (IS, IS NOT) with `null` value.", expression)
             );
         }
 
-        return new ComparisonExpression($expression, value, type, $operator);
+        return new ComparisonExpression(expression, value, type, $operator);
     }
 
     /**
