@@ -5,8 +5,8 @@ import uim.cake;
 @safe:
 // Responsible for compiling a Query object into its SQL representation for SQLite
 class SqliteCompiler : QueryCompiler {
-  	override bool initialize(IData[string] configData = null) {
-		if (!super.initialize(configData)) { return false; }
+  	override bool initialize(IData[string] initData = null) {
+		if (!super.initialize(initData)) { return false; }
 		
 		return true;
 	}

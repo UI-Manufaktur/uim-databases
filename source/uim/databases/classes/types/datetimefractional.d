@@ -9,7 +9,7 @@ class DateTimeFractionalType : DateTimeType {
     mixin(TypeThis!("DateTimeFractionalType"));
 
     override bool initialize(IData[string] configData = null) {
-        if (!super.initialize(configData)) {
+        if (!super.initialize(initData)) {
             return false;
         }
 

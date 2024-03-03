@@ -12,8 +12,8 @@ import uim.databases;
 class IntegerType : BaseType, IBatchCasting {
     mixin(TypeThis!("IntegerType"));
 
-    override bool initialize(IData[string] configData = null) {
-        if (!super.initialize(configData)) {
+    override bool initialize(IData[string] initData = null) {
+        if (!super.initialize(initData)) {
             return false;
         }
 

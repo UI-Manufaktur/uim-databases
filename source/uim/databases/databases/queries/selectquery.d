@@ -434,7 +434,7 @@ class SelectQuery : Query, IteratorAggregate {
      * @param bool overwrite whether to reset fields with passed list or not
      */
     auto groupBy(IExpression|string[] afields, bool overwrite = false) {
-        if ($overwrite) {
+        if (overwrite) {
            _parts["group"] = [];
         }
         if (!isArray(fields)) {
@@ -465,7 +465,7 @@ class SelectQuery : Query, IteratorAggregate {
         STRINGAA types = [],
         bool overwrite = false
     ) {
-        if ($overwrite) {
+        if (overwrite) {
            _parts["having"] = this.newExpr();
         }
        _conjugate("having", conditions, "AND", types);
@@ -502,7 +502,7 @@ class SelectQuery : Query, IteratorAggregate {
      * @param bool overwrite Clear all previous query window expressions
      */
     void window(string aName, WindowExpression|Closure window, bool overwrite = false) {
-        if ($overwrite) {
+        if (overwrite) {
            _parts["window"] = [];
         }
         if (cast(Closure)$window) {
@@ -571,7 +571,7 @@ class SelectQuery : Query, IteratorAggregate {
      * @param bool overwrite whether to reset the list of queries to be operated or not
      */
     auto union(Query|string aquery, bool overwrite = false) {
-        if ($overwrite) {
+        if (overwrite) {
            _parts["union"] = [];
         }
        _parts["union"] ~= [
@@ -604,7 +604,7 @@ class SelectQuery : Query, IteratorAggregate {
      * @param bool overwrite whether to reset the list of queries to be operated or not
      */
     auto unionAll(Query|string aquery, bool overwrite = false) {
-        if ($overwrite) {
+        if (overwrite) {
            _parts["union"] = [];
         }
        _parts["union"] ~= [
@@ -660,7 +660,7 @@ class SelectQuery : Query, IteratorAggregate {
      */
     auto decorateResults(?Closure aCallback, bool overwrite = false) {
        _isDirty();
-        if ($overwrite) {
+        if (overwrite) {
            _resultDecorators = [];
         }
         if (aCallback !isNull) {

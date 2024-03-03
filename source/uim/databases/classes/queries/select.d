@@ -13,8 +13,8 @@ import uim.databases;
 class SelectQuery : Query, IteratorAggregate {
     mixin(QueryThis!("SelectQuery"));
 
-    override bool initialize(IData[string] configData = null) {
-        if (!super.initialize(configData)) {
+    override bool initialize(IData[string] initData = null) {
+        if (!super.initialize(initData)) {
             return false;
         }
 
@@ -113,9 +113,9 @@ class SelectQuery : Query, IteratorAggregate {
      * from the table.
      * Params:
      * \UIM\Database\IExpression|\Closure|string[]|float|int fields fields to be added to the list.
-     * @param bool $overwrite whether to reset fields with passed list or not
+     * @param bool overwrite whether to reset fields with passed list or not
      */
-    void select(IExpression|Closure|string[]|float|int fields = [], bool $overwrite = false) {
+    void select(IExpression|Closure|string[]|float|int fields = [], bool overwrite = false) {
         if (!isString(fields) && cast(Closure)fieldsClosure) {
             fields = fields(this);
         }
@@ -123,7 +123,7 @@ class SelectQuery : Query, IteratorAggregate {
             fields = [fields];
         }
 
-        _parts["select"] = $overwrite ? fields : array_merge(_parts["select"], fields);
+        _parts["select"] = overwrite ? fields : array_merge(_parts["select"], fields);
 
        _isDirty();
     }
@@ -153,9 +153,9 @@ class SelectQuery : Query, IteratorAggregate {
      * Params:
      * \UIM\Database\IExpression|string[]|bool $on Enable/disable distinct class
      * or list of fields to be filtered on
-     * @param bool $overwrite whether to reset fields with passed list or not
+     * @param bool overwrite whether to reset fields with passed list or not
      */
-    void distinct(IExpression|string[]|bool $on = [], bool $overwrite = false) {
+    void distinct(IExpression|string[]|bool $on = [], bool overwrite = false) {
         if ($on == []) {
             $on = true;
         } elseif (isString($on)) {
@@ -166,7 +166,7 @@ class SelectQuery : Query, IteratorAggregate {
             if (isArray(_parts["distinct"])) {
                 $merge = _parts["distinct"];
             }
-            $on = $overwrite ? array_values($on): array_merge($merge, $on.values);
+            $on = overwrite ? array_values($on): array_merge($merge, $on.values);
         }
        _parts["distinct"] = $on;
        _isDirty();
@@ -254,10 +254,10 @@ class SelectQuery : Query, IteratorAggregate {
      * Params:
      * IData[string]|string atables list of tables to be joined in the query
      * typeNames Associative array of type names used to bind values to query
-     * @param bool $overwrite whether to reset joins with passed list or not
+     * @param bool overwrite whether to reset joins with passed list or not
      * @see \UIM\Database\TypeFactory
      */
-    void join(string[] atables, STRINGAA typeNames = [], bool $overwrite = false) {
+    void join(string[] atables, STRINGAA typeNames = [], bool overwrite = false) {
         if (isString(aTables) || isSet(aTables["table"])) {
             aTables = [aTables];
         }
@@ -277,7 +277,7 @@ class SelectQuery : Query, IteratorAggregate {
             $joins[$alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": alias];
         }
 
-        _parts["join"] = $overwrite 
+        _parts["join"] = overwrite 
             ? $joins
             : array_merge(_parts["join"], $joins);
 
@@ -438,10 +438,10 @@ class SelectQuery : Query, IteratorAggregate {
      * not sanitized by the query builder.
      * Params:
      * \UIM\Database\IExpression|string[] afields fields to be added to the list
-     * @param bool $overwrite whether to reset fields with passed list or not
+     * @param bool overwrite whether to reset fields with passed list or not
      */
-    auto groupBy(IExpression|string[] afields, bool $overwrite = false) {
-        if ($overwrite) {
+    auto groupBy(IExpression|string[] afields, bool overwrite = false) {
+        if (overwrite) {
            _parts["group"] = [];
         }
         if (!isArray(fields)) {
@@ -464,15 +464,15 @@ class SelectQuery : Query, IteratorAggregate {
      * Params:
      * \UIM\Database\IExpression|\Closure|string[]|null $conditions The having conditions.
      * types Associative array of type names used to bind values to query
-     * @param bool $overwrite whether to reset conditions with passed list or not
+     * @param bool overwrite whether to reset conditions with passed list or not
      * @see \UIM\Database\Query.where()
      */
     auto having(
         IExpression|Closure|string[]|null $conditions = null,
         STRINGAA types = [],
-        bool $overwrite = false
+        bool overwrite = false
     ) {
-        if ($overwrite) {
+        if (overwrite) {
            _parts["having"] = this.newExpr();
         }
        _conjugate("having", $conditions, "AND", types);
@@ -506,10 +506,10 @@ class SelectQuery : Query, IteratorAggregate {
      * Params:
      * string aName Window name
      * @param \UIM\Database\Expression\WindowExpression|\Closure $window Window expression
-     * @param bool $overwrite Clear all previous query window expressions
+     * @param bool overwrite Clear all previous query window expressions
      */
-    void window(string aName, WindowExpression|Closure $window, bool $overwrite = false) {
-        if ($overwrite) {
+    void window(string aName, WindowExpression|Closure $window, bool overwrite = false) {
+        if (overwrite) {
            _parts["window"] = [];
         }
         if (cast(Closure)$window) {
@@ -575,10 +575,10 @@ class SelectQuery : Query, IteratorAggregate {
      * `SELECT id, name FROM things d UNION SELECT id, title FROM articles a`
      * Params:
      * \UIM\Database\Query|string aquery full SQL query to be used in UNION operator
-     * @param bool $overwrite whether to reset the list of queries to be operated or not
+     * @param bool overwrite whether to reset the list of queries to be operated or not
      */
-    auto union(Query|string aquery, bool $overwrite = false) {
-        if ($overwrite) {
+    auto union(Query|string aquery, bool overwrite = false) {
+        if (overwrite) {
            _parts["union"] = [];
         }
        _parts["union"] ~= [
@@ -608,10 +608,10 @@ class SelectQuery : Query, IteratorAggregate {
      * `SELECT id, name FROM things d UNION ALL SELECT id, title FROM articles a`
      * Params:
      * \UIM\Database\Query|string aquery full SQL query to be used in UNION operator
-     * @param bool $overwrite whether to reset the list of queries to be operated or not
+     * @param bool overwrite whether to reset the list of queries to be operated or not
      */
-    auto unionAll(Query|string aquery, bool $overwrite = false) {
-        if ($overwrite) {
+    auto unionAll(Query|string aquery, bool overwrite = false) {
+        if (overwrite) {
            _parts["union"] = [];
         }
        _parts["union"] ~= [
@@ -663,11 +663,11 @@ class SelectQuery : Query, IteratorAggregate {
      * ```
      * Params:
      * \Closure|null aCallback The callback to invoke when results are fetched.
-     * @param bool $overwrite Whether this should append or replace all existing decorators.
+     * @param bool overwrite Whether this should append or replace all existing decorators.
      */
-    auto decorateResults(?Closure aCallback, bool $overwrite = false) {
+    auto decorateResults(?Closure aCallback, bool overwrite = false) {
        _isDirty();
-        if ($overwrite) {
+        if (overwrite) {
            _resultDecorators = [];
         }
         if (aCallback !isNull) {

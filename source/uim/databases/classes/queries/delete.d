@@ -8,8 +8,8 @@ import uim.databases;
 class DeleteQuery : Query {
     mixin(QueryThis!("DeleteQuery"));
 
-    override bool initialize(IData[string] configData = null) {
-		if (!super.initialize(configData)) { return false; }
+    override bool initialize(IData[string] initData = null) {
+		if (!super.initialize(initData)) { return false; }
 
     // List of SQL parts that will be used to build this query.
     _parts = [

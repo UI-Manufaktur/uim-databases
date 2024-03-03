@@ -274,7 +274,7 @@ abstract class Query : IExpression, Stringable {
      * @param bool overwrite Whether to reset the list of CTEs.
      */
     void with(CommonTableExpression|Closure cte, bool overwrite = false) {
-        if ($overwrite) {
+        if (overwrite) {
            _parts["with"] = [];
         }
         if (cast(Closure)$cte) {
@@ -313,7 +313,7 @@ abstract class Query : IExpression, Stringable {
      */
     void modifier(IExpression|string[] amodifiers, bool overwrite = false) {
        _isDirty();
-        if ($overwrite) {
+        if (overwrite) {
            _parts["modifier"] = [];
         }
         if (!isArray(someModifiers)) {
@@ -351,7 +351,7 @@ abstract class Query : IExpression, Stringable {
     void from(string[] tableNames, bool overwrite = false) {
         if (tableNames.isEmpty) { return; }
 
-        if ($overwrite) {
+        if (overwrite) {
            _parts["from"] = aTables;
         } else {
            _parts["from"] = chain(_parts["from"], aTables);
@@ -743,7 +743,7 @@ abstract class Query : IExpression, Stringable {
         array types = [],
         bool overwrite = false
     ) {
-        if ($overwrite) {
+        if (overwrite) {
            _parts["where"] = this.newExpr();
         }
        _conjugate("where", conditions, "AND", types);
@@ -986,7 +986,7 @@ abstract class Query : IExpression, Stringable {
      * @param bool overwrite whether to reset order with field list or not
      */
     auto orderBy(IExpression|Closure|string[] afields, bool overwrite = false) {
-        if ($overwrite) {
+        if (overwrite) {
            _parts["order"] = null;
         }
         if (!fields) {
@@ -1013,7 +1013,7 @@ abstract class Query : IExpression, Stringable {
      * @param bool overwrite Whether to reset the order clauses.
      */
     auto orderByAsc(IExpression|Closure|string afield, bool overwrite = false) {
-        if ($overwrite) {
+        if (overwrite) {
            _parts["order"] = null;
         }
         if (!field) {
@@ -1043,7 +1043,7 @@ abstract class Query : IExpression, Stringable {
      * @param bool overwrite Whether to reset the order clauses.
      */
     auto orderByDesc(IExpression|Closure|string afield, bool overwrite = false) {
-        if ($overwrite) {
+        if (overwrite) {
            _parts["order"] = null;
         }
         if (!field) {
