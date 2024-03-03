@@ -292,16 +292,16 @@ class DateTimeType : BaseType, IBatchCasting {
      * Sets whether to parse strings passed to `marshal()` using
      * the locale-aware format set by `setLocaleFormat()`.
      * Params:
-     * bool $enable Whether to enable
+     * bool enable Whether to enable
      */
-    void useLocaleParser(bool $enable = true) {
-        if ($enable == false) {
-           _useLocaleMarshal = $enable;
+    void useLocaleParser(bool enable = true) {
+        if (enable == false) {
+           _useLocaleMarshal = enable;
 
             return;
         }
         if (isA(_className, DateTime.classname, true)) {
-           _useLocaleMarshal = $enable;
+           _useLocaleMarshal = enable;
 
             return;
         }

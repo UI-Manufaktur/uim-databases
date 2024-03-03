@@ -42,7 +42,7 @@ class Statement : IStatement {
          anOffset = 1;
         foreach ($params as  anIndex: aValue) {
             type = types[anIndex] ?? null;
-            if ($anonymousParams) {
+            if (anonymousParams) {
                 /** @psalm-suppress InvalidOperand */
                  anIndex += anOffset;
             }
@@ -51,13 +51,13 @@ class Statement : IStatement {
         }
     }
  
-    void bindValue(string|int $column, Json aValue, string|int type = "string") {
+    void bindValue(string|int column, Json aValue, string|int type = "string") {
         type ??= "string";
         if (!isInt($type)) {
             [aValue, type] = this.castType(aValue, type);
         }
-        this.params[$column] = aValue;
-        this.performBind($column, aValue, type);
+        this.params[column] = aValue;
+        this.performBind(column, aValue, type);
     }
     
     /**
@@ -85,8 +85,8 @@ class Statement : IStatement {
         return this.params;
     }
     
-    protected void performBind(string|int $column, Json aValue, int type) {
-        this.statement.bindValue($column, aValue, type);
+    protected void performBind(string|int column, Json aValue, int type) {
+        this.statement.bindValue(column, aValue, type);
     }
  
     bool execute(array $params = null) {
@@ -163,11 +163,11 @@ class Statement : IStatement {
     }
  
     string|int lastInsertId(string atable = null, string acolumn = null) {
-        if ($column && this.columnCount()) {
+        if (column && this.columnCount()) {
             $row = this.fetch(FETCH_TYPE_ASSOC);
 
-            if ($row && isSet($row[$column])) {
-                return $row[$column];
+            if ($row && isSet($row[column])) {
+                return $row[column];
             }
         }
         return _driver.lastInsertId(aTable);

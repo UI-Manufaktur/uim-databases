@@ -164,11 +164,11 @@ class TimeType : BaseType, IBatchCasting {
      * Sets whether to parse strings passed to `marshal()` using
      * the locale-aware format set by `setLocaleFormat()`.
      * Params:
-     * bool $enable Whether to enable
+     * bool enable Whether to enable
      */
-    void useLocaleParser(bool $enable = true) {
+    void useLocaleParser(bool enable = true) {
         if (
-            $enable &&
+            enable &&
             !(
                _className == Time.classname ||
                 isSubclass_of(_className, Time.classname)
@@ -176,7 +176,7 @@ class TimeType : BaseType, IBatchCasting {
         ) {
             throw new UimException("You must install the `UIM/i18n` package to use locale aware parsing.");
         }
-       _useLocaleMarshal = $enable;
+       _useLocaleMarshal = enable;
     }
     
     /**

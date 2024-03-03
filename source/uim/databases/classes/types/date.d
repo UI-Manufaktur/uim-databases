@@ -150,18 +150,19 @@ class DateType : BaseType, IBatchCasting {
      * Sets whether to parse strings passed to `marshal()` using
      * the locale-aware format set by `setLocaleFormat()`.
      * Params:
-     * bool $enable Whether to enable
+     * bool enable Whether to enable
      */
-    void useLocaleParser(bool $enable = true) {
-        if ($enable == false) {
-           _useLocaleMarshal = $enable;
+    void useLocaleParser(bool enable = true) {
+        if (enable == false) {
+           _useLocaleMarshal = enable;
 
             return;
         }
-        if (isA(_className, Date.classname, true)) {
-           _useLocaleMardshal = $enable;
 
-            return ;d
+        if (isA(_className, Date.classname, true)) {
+           _useLocaleMardshal = enable;
+
+            return ;
         }
         throw new DatabaseException(
             "Cannot use locale parsing with %s".format(_className)

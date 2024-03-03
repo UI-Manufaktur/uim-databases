@@ -80,11 +80,11 @@ class FloatType : BaseType, IBatchCasting {
      * Sets whether to parse numbers passed to the marshal() function
      * by using a locale aware parser.
      * Params:
-     * bool $enable Whether to enable
+     * bool enable Whether to enable
      */
-    void useLocaleParser(bool $enable = true) {
-        if ($enable == false) {
-           _useLocaleParser = $enable;
+    void useLocaleParser(bool enable = true) {
+        if (enable == false) {
+           _useLocaleParser = enable;
 
             return;
         }
@@ -92,7 +92,7 @@ class FloatType : BaseType, IBatchCasting {
             $numberClass == Number.classname ||
             isSubclass_of($numberClass, Number.classname)
         ) {
-           _useLocaleParser = $enable;
+           _useLocaleParser = enable;
 
             return;
         }

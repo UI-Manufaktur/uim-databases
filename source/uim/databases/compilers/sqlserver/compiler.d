@@ -72,10 +72,10 @@ class SqlserverCompiler : QueryCompiler
             );
         }
         myTable = [0];
-        $columns = _stringifyExpressions([1], aValueBinder);
+        columns = _stringifyExpressions([1], aValueBinder);
         auto myModifiers = _buildModifierPart(myQuery.clause("modifier"), myQuery, aValueBinder);
 
-        return "INSERT%s INTO %s (%s) OUTPUT INSERTED.*".format(myModifiers, myTable, implode(", ", $columns));
+        return "INSERT%s INTO %s (%s) OUTPUT INSERTED.*".format(myModifiers, myTable, implode(", ", columns));
     }
 
     /**

@@ -133,9 +133,9 @@ class QueryCompiler {
     protected string _buildWithPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $recursive = false;
         $expressions = [];
-        foreach (someParts as $cte) {
-            $recursive = $recursive || $cte.isRecursive();
-            $expressions[] = $cte.sql($binder);
+        foreach (someParts as cte) {
+            $recursive = $recursive || cte.isRecursive();
+            $expressions[] = cte.sql($binder);
         }
 
         $recursive = $recursive ? "RECURSIVE " : "";
@@ -241,14 +241,14 @@ class QueryCompiler {
 
             $joins ~= " %s JOIN %s %s".format($join["type"], $join["table"], $join["alias"]);
 
-            $condition = "";
+            condition = "";
             if (isset($join["conditions"]) && $join["conditions"] instanceof IDBAExpression) {
-                $condition = $join["conditions"].sql($binder);
+                condition = $join["conditions"].sql($binder);
             }
-            if ($condition == "") {
+            if (condition == "") {
                 $joins ~= " ON 1 = 1";
             } else {
-                $joins ~= " ON {$condition}";
+                $joins ~= " ON {condition}";
             }
         }
 
