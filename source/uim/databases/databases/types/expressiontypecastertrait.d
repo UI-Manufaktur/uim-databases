@@ -24,14 +24,14 @@ template ExpressionTypeCasterTemplate {
         baseType = type.replace("[]", "");
         converter = TypeFactory.build($baseType);
 
-        if (!cast(IExpression)$converter Type) {
+        if (!cast(IExpression)converter Type) {
             return aValue;
         }
         multi = type != baseType;
 
         if ($multi) {
             /** @var \UIM\Database\Type\IExpressionType converter */
-            return array_map([$converter, "toExpression"], aValue);
+            return array_map([converter, "toExpression"], aValue);
         }
         return converter.toExpression(aValue);
     }

@@ -79,15 +79,15 @@ trait TupleComparisonTranslatorTrait
             value = [value];
         }
 
-        $conditions = ["OR": []];
+        conditions = ["OR": []];
         foreach (value as tuple) {
             $item = null;
             foreach (array_values($tuple) as $i: value2) {
                 $item[] = [fields[$i]: value2];
             }
-            $conditions["OR"][] = $item;
+            conditions["OR"][] = $item;
         }
-        $surrogate.where($conditions, typeMap);
+        $surrogate.where(conditions, typeMap);
 
         $expression.setField($true);
         $expression.setValue($surrogate);

@@ -106,9 +106,9 @@ class Sqlite : Driver
             );
         }
 
-        $chmodFile = false;
+        chmodFile = false;
         if (aConfig["database"] != ":memory:" && aConfig["mode"] != "memory") {
-            $chmodFile = !file_exists(aConfig["database"]);
+            chmodFile = !file_exists(aConfig["database"]);
         }
 
         params = null;
@@ -129,15 +129,15 @@ class Sqlite : Driver
         }
 
         _connect(dsn, aConfig);
-        if ($chmodFile) {
+        if (chmodFile) {
             // phpcs:disable
             @chmod(aConfig["database"], aConfig["mask"]);
             // phpcs:enable
         }
 
         if (!empty(aConfig["init"])) {
-            foreach ((array)aConfig["init"] as $command) {
-                this.getConnection().exec($command);
+            foreach ((array)aConfig["init"] as command) {
+                this.getConnection().exec(command);
             }
         }
 

@@ -91,8 +91,8 @@ class Postgres : Driver
             aConfig["init"][] = sprintf("SET timezone = %s", connection.quote(aConfig["timezone"]));
         }
 
-        foreach (aConfig["init"] as $command) {
-            connection.exec($command);
+        foreach (aConfig["init"] as command) {
+            connection.exec(command);
         }
 
         return true;
@@ -200,10 +200,10 @@ class Postgres : Driver
      * @param uim.databases.Expression\IdentifierExpression $expression The expression to tranform.
      */
     protected void _transformIdentifierExpression(IdentifierExpression $expression) {
-        $collation = $expression.getCollation();
-        if ($collation) {
+        collation = $expression.getCollation();
+        if (collation) {
             // use trim() to work around expression being transformed multiple times
-            $expression.setCollation(""" ~ trim($collation, """) ~ """);
+            $expression.setCollation(""" ~ trim(collation, """) ~ """);
         }
     }
 

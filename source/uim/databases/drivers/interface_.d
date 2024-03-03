@@ -172,7 +172,7 @@ interface IDBADriver {
      * Returns last id generated for a table or sequence in database.
      *
      * @param string|null myTable table name or sequence to get last insert value from.
-     * @param string|null $column the name of the column representing the primary key.
+     * @param string|null column the name of the column representing the primary key.
      * @return string|int
      */
     function lastInsertId(Nullable!string myTable = null, Nullable!string column = null);
@@ -212,8 +212,8 @@ interface IDBADriver {
      * Constructs new TableSchema.
      *
      * @param string myTable The table name.
-     * @param array $columns The list of columns for the schema.
+     * @param array columns The list of columns for the schema.
      * @return uim.databases.Schema\TableSchema
      */
-    TableSchema newTableSchema(string myTable, array $columns = []);
+    TableSchema newTableSchema(string myTable, array columns = []);
 }

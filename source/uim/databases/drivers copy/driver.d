@@ -170,7 +170,7 @@ abstract class Driver : IDriver
     }
 
 
-    function lastInsertId(Nullable!string table = null, Nullable!string $column = null) {
+    function lastInsertId(Nullable!string table = null, Nullable!string column = null) {
         this.connect();
 
         if (_connection instanceof PDO) {
@@ -183,21 +183,21 @@ abstract class Driver : IDriver
 
     bool isConnected() {
         if (_connection == null) {
-            $connected = false;
+            connected = false;
         } else {
             try {
-                $connected = (bool)_connection.query("SELECT 1");
+                connected = (bool)_connection.query("SELECT 1");
             } catch (PDOException $e) {
-                $connected = false;
+                connected = false;
             }
         }
 
-        return $connected;
+        return connected;
     }
 
 
-    function enableAutoQuoting(bool $enable = true) {
-        _autoQuoting = $enable;
+    function enableAutoQuoting(bool enable = true) {
+        _autoQuoting = enable;
 
         return this;
     }
@@ -248,15 +248,15 @@ abstract class Driver : IDriver
     }
 
 
-    function newTableSchema(string table, array $columns = null): TableSchema
+    function newTableSchema(string table, array columns = null): TableSchema
     {
-        $className = TableSchema::class;
+        className = TableSchema::class;
         if (isset(_config["tableSchema"])) {
-            /** @var class-string<uim.databases.Schema\TableSchema> $className */
-            $className = _config["tableSchema"];
+            /** @var class-string<uim.databases.Schema\TableSchema> className */
+            className = _config["tableSchema"];
         }
 
-        return new $className($table, $columns);
+        return new className($table, columns);
     }
 
     /**

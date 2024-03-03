@@ -128,8 +128,8 @@ class Sqlserver : Driver
 
         connection = this.getConnection();
         if (!empty(aConfig["init"])) {
-            foreach ((array)aConfig["init"] as $command) {
-                connection.exec($command);
+            foreach ((array)aConfig["init"] as command) {
+                connection.exec(command);
             }
         }
         if (!empty(aConfig["settings"]) && is_array(aConfig["settings"])) {

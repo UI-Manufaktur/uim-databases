@@ -75,7 +75,7 @@ abstract class Driver : IDBADriver {
 
         $retry = new CommandRetry(new ErrorCodeWaitStrategy(static.RETRY_ERROR_CODES, 5), 4);
         try {
-            $retry.run($action);
+            $retry.run(action);
         } catch (PDOException $e) {
             throw new MissingConnectionException(
                 [
@@ -268,16 +268,16 @@ abstract class Driver : IDBADriver {
     
     bool isConnected() {
         if (_connection is null) {
-            $connected = false;
+            connected = false;
         } else {
             try {
-                $connected = (bool)_connection.query("SELECT 1");
+                connected = (bool)_connection.query("SELECT 1");
             } catch (PDOException $e) {
-                $connected = false;
+                connected = false;
             }
         }
 
-        return $connected;
+        return connected;
     }
 
     
@@ -329,14 +329,14 @@ abstract class Driver : IDBADriver {
         return new QueryCompiler();
     }
 
-    TableSchema newTableSchema(string myTable, array $columns = []) {
+    TableSchema newTableSchema(string myTable, array columns = []) {
         myClassName = TableSchema.class;
         if (isset(_config["tableSchema"])) {
             /** @var class-string<uim.databases.Schema\TableSchema> myClassName */
             myClassName = _config["tableSchema"];
         }
 
-        return new myClassName(myTable, $columns);
+        return new myClassName(myTable, columns);
     }
 
     /**

@@ -93,8 +93,8 @@ trait SqlDialectTrait
             }
 
             query.traverseExpressions(void ($expression) use ($translators, query) {
-                foreach ($translators as $class: $method) {
-                    if ($expression instanceof $class) {
+                foreach ($translators as class: $method) {
+                    if ($expression instanceof class) {
                         this.{$method}($expression, query);
                     }
                 }
@@ -161,7 +161,7 @@ trait SqlDialectTrait
         $hadAlias = false;
         tables = null;
         foreach (query.clause("from") as alias: table) {
-            if (is_string($alias)) {
+            if (is_string(alias)) {
                 $hadAlias = true;
             }
             tables[] = table;
@@ -210,9 +210,9 @@ trait SqlDialectTrait
             );
         }
 
-        $conditions = query.clause("where");
-        if ($conditions) {
-            $conditions.traverse(function ($expression) {
+        conditions = query.clause("where");
+        if (conditions) {
+            conditions.traverse(function ($expression) {
                 if ($expression instanceof ComparisonExpression) {
                     field = $expression.getField();
                     if (
