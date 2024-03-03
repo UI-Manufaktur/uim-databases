@@ -132,15 +132,15 @@ class QueryCompiler {
      */
     protected string _buildWithPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $recursive = false;
-        $expressions = [];
+        expressions = [];
         foreach (someParts as cte) {
             $recursive = $recursive || cte.isRecursive();
-            $expressions[] = cte.sql($binder);
+            expressions[] = cte.sql($binder);
         }
 
         $recursive = $recursive ? "RECURSIVE " : "";
 
-        return "WITH %s%s ".format($recursive, implode(", ", $expressions));
+        return "WITH %s%s ".format($recursive, implode(", ", expressions));
     }
 
     /**
@@ -389,7 +389,7 @@ class QueryCompiler {
      * Helper function used to covert IDBAExpression objects inside an array
      * into their string representation.
      *
-     * @param array $expressions list of strings and IDBAExpression objects
+     * @param array expressions list of strings and IDBAExpression objects
      * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @param $wrap Whether to wrap each expression object with parenthesis
      * @return array

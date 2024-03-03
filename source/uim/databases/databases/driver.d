@@ -213,13 +213,13 @@ abstract class Driver {
             'error": exception,
             'params": params ?? statementToExecute.getBoundParams(),
         ];
-        if (!$exception) {
+        if (!exception) {
             logContext["numRows"] = statementToExecute.rowCount();
             logContext["took"] = took;
         }
         this.log(statementToExecute.queryString(), logContext);
 
-        if ($exception) {
+        if (exception) {
             throw exception;
         }
     }
@@ -342,10 +342,10 @@ abstract class Driver {
         if (!$translators) {
             return aQuery;
         }
-        aQuery.traverseExpressions(function ($expression) use ($translators, aQuery) {
+        aQuery.traverseExpressions(function (expression) use ($translators, aQuery) {
             foreach ($translators as  className: method) {
-                if (cast8className)$expression) {
-                    this.{$method}($expression, aQuery);
+                if (cast8className)expression) {
+                    this.{$method}(expression, aQuery);
                 }
             }
         });
@@ -436,8 +436,8 @@ abstract class Driver {
         conditions = queryToProcess.clause("where");
         assert(conditions.isNull || cast(IExpression)conditions);
         if (conditions) {
-            conditions.traverse(function ($expression) {
-                if (cast(ComparisonExpression)$expression) {
+            conditions.traverse(function (expression) {
+                if (cast(ComparisonExpression)expression) {
                     field = expression.getFieldNames();
                     if (
                         isString(field) &&
@@ -448,7 +448,7 @@ abstract class Driver {
                     }
                     return expression;
                 }
-                if (cast(IdentifierExpression)$expression) {
+                if (cast(IdentifierExpression)expression) {
                      anIdentifier = expression.getIdentifier();
                     if (anIdentifier.has(".")) {
                         [, unaliasedIdentifier] = split(".",  anIdentifier, 2);

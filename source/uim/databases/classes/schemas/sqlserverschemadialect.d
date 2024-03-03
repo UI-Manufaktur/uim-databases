@@ -247,13 +247,13 @@ class SqlserverSchemaDialect : SchemaDialect {
             type = TableSchema.CONSTRAINT_UNIQUE;
         }
 
-        auto $existing = type == TableSchema.INDEX_INDEX 
+        auto existing = type == TableSchema.INDEX_INDEX 
             ? tableSchema.getIndex(name)
             : tableSchema.getConstraint(name);
         
         auto someColumns = [$row["column_name"]];
-        if (!empty($existing)) {
-            someColumns = array_merge($existing["columns"], someColumns);
+        if (!empty(existing)) {
+            someColumns = array_merge(existing["columns"], someColumns);
         }
         if ($type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
             tablSchema.addConstraint(name, [

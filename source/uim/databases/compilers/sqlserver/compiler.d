@@ -44,12 +44,12 @@ class SqlserverCompiler : QueryCompiler
      * @return string
      */
     protected string _buildWithPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
-        $expressions = [];
+        expressions = [];
         foreach (myPart; someParts) {
-            $expressions[] = myPart.sql(aValueBinder);
+            expressions[] = myPart.sql(aValueBinder);
         }
 
-        return sprintf("WITH %s ", implode(", ", $expressions));
+        return sprintf("WITH %s ", implode(", ", expressions));
     }
 
     /**

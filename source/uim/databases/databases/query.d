@@ -671,7 +671,7 @@ abstract class Query : IExpression, Stringable {
      *
      * ```
      * exp = aQuery.newExpr().add(["id !=": 100, "author_id' != 1]).tieWith("OR");
-     * aQuery.where(["published": true], ["published": 'boolean"]).where($exp);
+     * aQuery.where(["published": true], ["published": 'boolean"]).where(exp);
      * ```
      *
      * The previous example produces:
@@ -690,7 +690,7 @@ abstract class Query : IExpression, Stringable {
      * ```
      * aQuery
      *  .where(["title !=": 'Hello World"])
-     *  .where(function ($exp, aQuery) {
+     *  .where(function (exp, aQuery) {
      *    or = exp.or(["id": 1]);
      *    and = exp.and(["id >": 2, "id <": 10]);
      *   return or.add(and);
@@ -902,7 +902,7 @@ abstract class Query : IExpression, Stringable {
      * ```
      * aQuery
      *  .where(["title": 'Foo"])
-     *  .andWhere(function ($exp, aQuery) {
+     *  .andWhere(function (exp, aQuery) {
      *    return exp
      *      .or(["author_id": 1])
      *      .add(["author_id": 2]);
@@ -960,14 +960,14 @@ abstract class Query : IExpression, Stringable {
      *
      * ```
      * expression = aQuery.newExpr().add(["id % 2 = 0"]);
-     * aQuery.orderBy($expression).orderBy(["title": 'ASC"]);
+     * aQuery.orderBy(expression).orderBy(["title": 'ASC"]);
      * ```
      *
      * and
      *
      * ```
-     * aQuery.orderBy(function ($exp, aQuery) {
-     *    return [$exp.add(["id % 2 = 0"]), "title": 'ASC"];
+     * aQuery.orderBy(function (exp, aQuery) {
+     *    return [exp.add(["id % 2 = 0"]), "title": 'ASC"];
      * });
      * ```
      *
@@ -1329,11 +1329,11 @@ abstract class Query : IExpression, Stringable {
     }
     
     protected void _expressionsVisitor(Json expression, Closure aCallback) {
-        if (cast(IExpression)$expression) {
-            expression.traverse(fn ($exp): _expressionsVisitor($exp, aCallback));
+        if (cast(IExpression)expression) {
+            expression.traverse(fn (exp): _expressionsVisitor(exp, aCallback));
 
-            if (!cast(self)$expression) {
-                aCallback($expression);
+            if (!cast(self)expression) {
+                aCallback(expression);
             }
         }
     }
@@ -1407,12 +1407,12 @@ abstract class Query : IExpression, Stringable {
         if (cast(Closure)append) {
             append = append(this.newExpr(), this);
         }
-        if ($expression.getConjunction() == conjunction) {
+        if (expression.getConjunction() == conjunction) {
             expression.add(append, types);
         } else {
             expression = this.newExpr()
                 .setConjunction(conjunction)
-                .add([$expression, append], types);
+                .add([expression, append], types);
         }
        _parts[$part] = expression;
        _isDirty();
@@ -1469,8 +1469,8 @@ abstract class Query : IExpression, Stringable {
         params = [];
         try {
             set_error_handler(
-                void ($errno, errstr) {
-                    throw new UimException($errstr, errno);
+                void (errno, errstr) {
+                    throw new UimException(errstr, errno);
                 },
                 E_ALL
             );

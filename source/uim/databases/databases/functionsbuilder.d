@@ -26,7 +26,7 @@ class FunctionsBuilder {
         if (current($types) == "integer") {
             resultType = "integer";
         }
-        return this.aggregate("SUM", this.toLiteralParam($expression), types, resultType);
+        return this.aggregate("SUM", this.toLiteralParam(expression), types, resultType);
     }
     
     /**
@@ -36,7 +36,7 @@ class FunctionsBuilder {
      * @param array types list of types to bind to the arguments
      */
     AggregateExpression avg(IExpression|string aexpression, array types = []) {
-        return this.aggregate("AVG", this.toLiteralParam($expression), types, "float");
+        return this.aggregate("AVG", this.toLiteralParam(expression), types, "float");
     }
     
     /**
@@ -46,11 +46,11 @@ class FunctionsBuilder {
      * @param array types list of types to bind to the arguments
      */
     AggregateExpression max(IExpression autoExpression, array types = []) {
-        return this.aggregate("MAX", this.toLiteralParam($expression), types, current($types) ?: "float");
+        return this.aggregate("MAX", this.toLiteralParam(expression), types, current($types) ?: "float");
     }
 
     AggregateExpression max(string autoExpression, array types = []) {
-        return this.aggregate("MAX", this.toLiteralParam($expression), types, current($types) ?: "float");
+        return this.aggregate("MAX", this.toLiteralParam(expression), types, current($types) ?: "float");
     }
     
     /**
@@ -60,7 +60,7 @@ class FunctionsBuilder {
      * @param array types list of types to bind to the arguments
      */
     AggregateExpression min(IExpression|string autoExpression, array types = []) {
-        return this.aggregate("MIN", this.toLiteralParam($expression), types, current($types) ?: "float");
+        return this.aggregate("MIN", this.toLiteralParam(expression), types, current($types) ?: "float");
     }
     
     /**
@@ -70,7 +70,7 @@ class FunctionsBuilder {
      * @param array types list of types to bind to the arguments
      */
     AggregateExpression count(IExpression|string autoExpression, array types = []) {
-        return this.aggregate("COUNT", this.toLiteralParam($expression), types, "integer");
+        return this.aggregate("COUNT", this.toLiteralParam(expression), types, "integer");
     }
     
     /**
@@ -167,7 +167,7 @@ class FunctionsBuilder {
             aValue = 0;
         }
          anInterval = aValue ~ " " ~ unit;
-        expression = new FunctionExpression("DATE_ADD", this.toLiteralParam($expression), types, "datetime");
+        expression = new FunctionExpression("DATE_ADD", this.toLiteralParam(expression), types, "datetime");
         expression.setConjunction(", INTERVAL").add([anInterval: "literal"]);
 
         return expression;
@@ -181,7 +181,7 @@ class FunctionsBuilder {
      * @param array types list of types to bind to the arguments
      */
     FunctionExpression dayOfWeek(IExpression|string aexpression, array types = []) {
-        return new FunctionExpression("DAYOFWEEK", this.toLiteralParam($expression), types, "integer");
+        return new FunctionExpression("DAYOFWEEK", this.toLiteralParam(expression), types, "integer");
     }
     
     /**
@@ -192,7 +192,7 @@ class FunctionsBuilder {
      * @param array types list of types to bind to the arguments
      */
     FunctionExpression weekday(IExpression|string aexpression, array types = []) {
-        return this.dayOfWeek($expression, types);
+        return this.dayOfWeek(expression, types);
     }
     
     /**
@@ -236,7 +236,7 @@ class FunctionsBuilder {
         Json defaultValue = Json(null),
         string outputType = null
     ) {
-        params = this.toLiteralParam($expression) ~ [anOffset: "literal"];
+        params = this.toLiteralParam(expression) ~ [anOffset: "literal"];
         if ($default !isNull) {
             params ~= default;
         }
@@ -261,7 +261,7 @@ class FunctionsBuilder {
         Json defaultValue = Json(null),
         string atype = null
     ) {
-        params = this.toLiteralParam($expression) ~ [anOffset: "literal"];
+        params = this.toLiteralParam(expression) ~ [anOffset: "literal"];
         if ($default !isNull) {
             params ~= default;
         }
@@ -309,9 +309,9 @@ class FunctionsBuilder {
      * \UIM\Database\IExpression|string aexpression auto argument
      */
     protected array<\UIM\Database\IExpression|string> toLiteralParam(IExpression|string aexpression) {
-        if (isString($expression)) {
-            return [$expression: 'literal"];
+        if (isString(expression)) {
+            return [expression: 'literal"];
         }
-        return [$expression];
+        return [expression];
     }
 }

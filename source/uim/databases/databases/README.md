@@ -241,8 +241,8 @@ aQuery.where(["OR": ["id >": 1, "title": 'My title"]]);
 For even more complex conditions you can use closures and expression objects:
 
 ```php
-aQuery.where(function ($exp) {
-        return $exp
+aQuery.where(function (exp) {
+        return exp
             .eq("author_id", 2)
             .eq("published", true)
             .notEq("spam", true)
@@ -264,10 +264,10 @@ WHERE
 Combining expressions is also possible:
 
 ```php
-aQuery.where(function ($exp) {
-        $orConditions = $exp.or(["author_id": 2])
+aQuery.where(function (exp) {
+        $orConditions = exp.or(["author_id": 2])
             .eq("author_id", 5);
-        return $exp
+        return exp
             .not($orConditions)
             .lte("view_count", 10);
     });

@@ -374,7 +374,7 @@ class QueryCompiler {
 
         foreach (myKey: expression; someExpressions) {
             string sqlExpression;
-            if (cast(IExpression)$expression ) {
+            if (cast(IExpression)expression ) {
                 aValue = expression.sql(valueBinder);
                 sqlExpression = shouldWrap ? "(" ~ aValue ~ ")" : aValue;
             }
