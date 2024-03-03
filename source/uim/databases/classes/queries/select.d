@@ -13,7 +13,7 @@ import uim.databases;
 class SelectQuery : Query, IteratorAggregate {
     mixin(QueryThis!("SelectQuery"));
 
-    override bool initialize(IConfigData[string] configData = null) {
+    override bool initialize(IData[string] configData = null) {
         if (!super.initialize(configData)) {
             return false;
         }

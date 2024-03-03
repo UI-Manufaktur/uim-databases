@@ -12,7 +12,7 @@ import uim.databases;
 class DateTimeType : BaseType, IBatchCasting {
     mixin(TypeThis!("DateTimeType"));
 
-    override bool initialize(IConfigData[string] configData = null) {
+    override bool initialize(IData[string] configData = null) {
         if (!super.initialize(configData)) {
             return false;
         }

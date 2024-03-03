@@ -11,8 +11,8 @@ use InvalidArgumentException; */
 class InsertQuery : Query {
     mixin(QueryThis!("InsertQuery"));
 
-    override bool initialize(IConfigData[string] configData = null) {
-		if (!super.initialize(configData)) { return false; }
+    override bool initialize(IData[string] initData = null) {
+		if (!super.initialize(initData)) { return false; }
 
     _parts = [
         "comment": null,

@@ -7,8 +7,8 @@ import uim.databases;
 class DateType : BaseType, IBatchCasting {
     mixin(TypeThis!("DateType"));
 
-    override bool initialize(IConfigData[string] configData = null) {
-        if (!super.initialize(configData)) {
+    override bool initialize(IData[string] initData = null) {
+        if (!super.initialize(initData)) {
             return false;
         }
 

@@ -8,7 +8,7 @@ import uim.databases;
 class DateTimeTimezoneType : DateTimeType {
      mixin(TypeThis!("DateTimeTimezoneType"));
 
-    override bool initialize(IConfigData[string] configData = null) {
+    override bool initialize(IData[string] configData = null) {
         if (!super.initialize(configData)) {
             return false;
         }

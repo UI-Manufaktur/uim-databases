@@ -11,7 +11,7 @@ import uim.databases;
 abstract class Driver {
     mixin LoggerAwareTrait;
 
- 	override bool initialize(IConfigData[string] configData = null) {
+ 	override bool initialize(IData[string] configData = null) {
         _config = Configuration; 
         _baseConfig = Configuration; 
     }

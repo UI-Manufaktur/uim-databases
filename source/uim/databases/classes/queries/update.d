@@ -11,7 +11,7 @@ import uim.databases;
 class UpdateQuery : Query {
     mixin(QueryThis!("UpdateQuery"));
 
-    override bool initialize(IConfigData[string] configData = null) {
+    override bool initialize(IData[string] configData = null) {
         if (!super.initialize(configData)) {
             return false;
         }
