@@ -559,7 +559,7 @@ class SelectQuery : Query, IteratorAggregate {
      * ### Examples
      *
      * ```
-     * union = (new SelectQuery($conn)).select(["id", "title"]).from(["a": 'articles"]);
+     * union = (new SelectQuery(conn)).select(["id", "title"]).from(["a": 'articles"]);
      * aQuery.select(["id", "name"]).from(["d": 'things"]).union($union);
      * ```
      *
@@ -592,7 +592,7 @@ class SelectQuery : Query, IteratorAggregate {
      * Unlike UNION, UNION ALL will not remove duplicate rows.
      *
      * ```
-     * union = (new SelectQuery($conn)).select(["id", "title"]).from(["a": 'articles"]);
+     * union = (new SelectQuery(conn)).select(["id", "title"]).from(["a": 'articles"]);
      * aQuery.select(["id", "name"]).from(["d": 'things"]).unionAll($union);
      * ```
      *

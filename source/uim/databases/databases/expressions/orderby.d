@@ -20,7 +20,7 @@ class OrderByExpression : QueryExpression {
         TypeMap|array types = [],
         string aConjunction = ""
     ) {
-        super($conditions, types, aConjunction);
+        super(conditions, types, aConjunction);
     }
     string sql(ValueBinder aBinder) {
         string[] sqlOrders;

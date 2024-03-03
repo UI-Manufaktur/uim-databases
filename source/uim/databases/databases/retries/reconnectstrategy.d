@@ -56,8 +56,8 @@ class ReconnectStrategy : IRetryStrategy {
     bool shouldRetry(Exception exception, int retryCount) {
         auto message = exception.getMessage();
 
-        foreach ($cause; causes) {
-            if ($message.has($cause)) {
+        foreach (cause; causes) {
+            if ($message.has(cause)) {
                 return this.reconnect();
             }
         }

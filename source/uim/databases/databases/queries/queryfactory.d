@@ -78,8 +78,8 @@ class QueryFactory {
         if (someValues) {
             aQuery.set(someValues, typesForCasting);
         }
-        if ($conditions) {
-            aQuery.where($conditions, typesForCasting);
+        if (conditions) {
+            aQuery.where(conditions, typesForCasting);
         }
         return aQuery;
     }
@@ -95,8 +95,8 @@ class QueryFactory {
         aQuery = (new DeleteQuery(this.connection))
             .delete(aTable);
 
-        if ($conditions) {
-            aQuery.where($conditions, typesForCasting);
+        if (conditions) {
+            aQuery.where(conditions, typesForCasting);
         }
         return aQuery;
     }

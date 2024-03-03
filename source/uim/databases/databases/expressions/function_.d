@@ -91,12 +91,12 @@ class FunctionExpression : QueryExpression, ITypedResult {
  
     string sql(ValueBinder aBinder) {
         someParts = [];
-        foreach ($condition; _conditions) {
-            if (cast(Query)$condition) {
-                condition = "(%s)".format($condition.sql(aBinder));
-            } else if (cast(IExpression)$condition ) {
+        foreach (condition; _conditions) {
+            if (cast(Query)condition) {
+                condition = "(%s)".format(condition.sql(aBinder));
+            } else if (cast(IExpression)condition ) {
                 condition = condition.sql(aBinder);
-            } else if (isArray($condition)) {
+            } else if (isArray(condition)) {
                 p = aBinder.placeholder("param");
                 aBinder.bind($p, condition["value"], condition["type"]);
                 condition = p;

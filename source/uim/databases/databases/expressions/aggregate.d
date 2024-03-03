@@ -28,10 +28,10 @@ class AggregateExpression : FunctionExpression : WindowInterface {
     void filter(IExpression|Closure|string[] aconditions, STRINGAA typeNames = []) {
         this.filter ??= new QueryExpression();
 
-        if (cast(Closure)$conditions ) {
+        if (cast(Closure)conditions ) {
             conditions = conditions(new QueryExpression());
         }
-        this.filter.add($conditions, typeNames);
+        this.filter.add(conditions, typeNames);
     }
     
     /**

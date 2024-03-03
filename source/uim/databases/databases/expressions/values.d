@@ -89,9 +89,9 @@ class ValuesExpression : UimExpression {
      */
     protected array _columnNames() {
         someColumns = [];
-        foreach ($col; _columns) {
-            if (isString($col)) {
-                col = trim($col, "`[]'");
+        foreach (col; _columns) {
+            if (isString(col)) {
+                col = trim(col, "`[]'");
             }
             someColumns ~= col;
         }
@@ -135,8 +135,8 @@ class ValuesExpression : UimExpression {
             row += defaults;
             string[] rowPlaceholders;
 
-            foreach ($column; someColumns) {
-                auto aValue = row[$column];
+            foreach (column; someColumns) {
+                auto aValue = row[column];
 
                 if (cast(IExpression)aValue ) {
                     rowPlaceholders ~= "(" ~ aValue.sql(aBinder) ~ ")";
@@ -144,7 +144,7 @@ class ValuesExpression : UimExpression {
                 }
                 auto placeholder = aBinder.placeholder("c");
                 auto rowPlaceholders ~= placeholder;
-                aBinder.bind($placeholder, aValue, types[$column]);
+                aBinder.bind($placeholder, aValue, types[column]);
             }
             placeholders ~= rowPlaceholders.join(", ");
         }

@@ -24,7 +24,7 @@ class QueryLogger : BaseLog {
       "query": null,
     ];
 
-    if (cast(LoggedQuery)$context["query"]) {
+    if (cast(LoggedQuery)context["query"]) {
       context = context["query"].getContext() + context;
       string message = "connection={connection} role={role} duration={took} rows={numRows} " ~ message;
     }

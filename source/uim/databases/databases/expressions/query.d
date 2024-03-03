@@ -47,9 +47,9 @@ class QueryExpression : UimExpression, Countable {
         string aconjunction = "AND"
     ) {
         this.setTypeMap($types);
-        this.setConjunction(strtoupper($conjunction));
-        if (!empty($conditions)) {
-            this.add($conditions, this.getTypeMap().getTypes());
+        this.setConjunction(strtoupper(conjunction));
+        if (!empty(conditions)) {
+            this.add(conditions, this.getTypeMap().getTypes());
         }
     }
     
@@ -85,12 +85,12 @@ class QueryExpression : UimExpression, Countable {
      * @see \UIM\Database\Query.where() for examples on conditions
      */
     void add(IExpression|string[] aconditions, array types = []) {
-        if (isString($conditions) || cast(IExpression)$conditions ) {
+        if (isString(conditions) || cast(IExpression)conditions ) {
            _conditions ~= conditions;
 
             return;
         }
-       _addConditions($conditions, types);
+       _addConditions(conditions, types);
     }
 
     /**
@@ -359,10 +359,10 @@ class QueryExpression : UimExpression, Countable {
      * values that are being passed. Used for correctly binding values to statements.
      */
     static and(IExpression|Closure|string[] aconditions, STRINGAA passedTypes = null) {
-        if (cast(Closure)$conditions) {
+        if (cast(Closure)conditions) {
             return conditions(new static([], this.getTypeMap().setTypes(passedTypes)));
         }
-        return new static($conditions, this.getTypeMap().setTypes(passedTypes));
+        return new static(conditions, this.getTypeMap().setTypes(passedTypes));
     }
     
     /**
@@ -374,10 +374,10 @@ class QueryExpression : UimExpression, Countable {
      * values that are being passed. Used for correctly binding values to statements.
      */
     static or(IExpression|Closure|string[] aconditions, STRINGAA passedTypes = []) {
-        if (cast(Closure)$conditions) {
+        if (cast(Closure)conditions) {
             return conditions(new static([], this.getTypeMap().setTypes(passedTypes), "OR"));
         }
-        return new static($conditions, this.getTypeMap().setTypes(passedTypes), "OR");
+        return new static(conditions, this.getTypeMap().setTypes(passedTypes), "OR");
     }
     
     /**
@@ -442,7 +442,7 @@ class QueryExpression : UimExpression, Countable {
 
     void traverse(Closure aCallback) {
         _conditions.each!((condition) {
-            if (cast(IExpression)$c ) {
+            if (cast(IExpression)c ) {
                 aCallback(condition);
                 condition.traverse(aCallback);
             }
@@ -467,7 +467,7 @@ class QueryExpression : UimExpression, Countable {
         someParts = [];
         foreach (myKey: c; _conditions) {
             aKey = &myKey;
-            part = aCallback($c, aKey);
+            part = aCallback(c, aKey);
             if ($part !isNull) {
                 someParts[aKey] = part;
             }
@@ -505,37 +505,37 @@ class QueryExpression : UimExpression, Countable {
         foreach (myKey: c; conditions) {
             numericKey = isNumeric(myKey);
 
-            if (cast(Closure)$c) {
+            if (cast(Closure)c) {
                 expr = new static([], typeMap);
                 c = c($expr, this);
             }
-            if ($numericKey && empty($c)) {
+            if ($numericKey && empty(c)) {
                 continue;
             }
-             isArray = isArray($c);
+             isArray = isArray(c);
              isOperator =  isNot = false;
             if (!$numericKey) {
                 normalizedKey = myKey.toLower;
                  isOperator = in_array($normalizedKey, operators);
                  isNot = normalizedKey == "not";
             }
-            if ((isOperator ||  isNot) && (isArray || cast(Countable)$c) && count($c) == 0) {
+            if ((isOperator ||  isNot) && (isArray || cast(Countable)c) && count(c) == 0) {
                 continue;
             }
-            if ($numericKey && cast(IExpression)$c ) {
+            if ($numericKey && cast(IExpression)c ) {
                _conditions ~= c;
                 continue;
             }
-            if ($numericKey && isString($c)) {
+            if ($numericKey && isString(c)) {
                _conditions ~= c;
                 continue;
             }
             if ($numericKey &&  isArray ||  isOperator) {
-               _conditions ~= new static($c, typeMap, numericKey ? "AND" : myKey);
+               _conditions ~= new static(c, typeMap, numericKey ? "AND" : myKey);
                 continue;
             }
             if (isNot) {
-               _conditions ~= new UnaryExpression("NOT", new static($c, typeMap));
+               _conditions ~= new UnaryExpression("NOT", new static(c, typeMap));
                 continue;
             }
             if (!$numericKey) {
@@ -556,7 +556,7 @@ class QueryExpression : UimExpression, Countable {
      * @param Json aValue The value to be bound to a placeholder for the field
      */
     protected IExpression|string _parseCondition(string acondition, Json aValue) {
-        string expression = trim($condition);
+        string expression = trim(condition);
         string operator = "=";
 
         spaces = substr_count($expression, " ");
@@ -638,7 +638,7 @@ class QueryExpression : UimExpression, Countable {
     // Clone this object and its subtree of expressions.
     void __clone() {
         foreach (anI: condition; _conditions) {
-            if (cast(IExpression)$condition ) {
+            if (cast(IExpression)condition ) {
                _conditions[anI] = clone condition;
             }
         }

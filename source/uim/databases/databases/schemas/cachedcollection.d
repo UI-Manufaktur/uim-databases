@@ -7,10 +7,10 @@ import uim.cake;
 // Decorates a schema collection and adds caching
 class CachedCollection : ICollection {
   // Cacher instance.
-  protected ICache$cacher;
+  protected ICachecacher;
 
   // The decorated schema collection
-  protected ICollection$collection;
+  protected ICollectioncollection;
 
   // The cache key prefix
   protected string myprefix;
@@ -22,7 +22,7 @@ class CachedCollection : ICollection {
      * @param string aprefix The cache key prefix to use. Typically the connection name.
      * @param \Psr\SimpleCache\ICache cacher Cacher instance.
      */
-  this(ICollection$collection, string myprefix, ICache$cacher) {
+  this(ICollectioncollection, string myprefix, ICachecacher) {
     this.collection = collection;
     this.prefix = prefix;
     this.cacher = cacher;
@@ -41,13 +41,13 @@ class CachedCollection : ICollection {
     cacheKey = this.cacheKey(name);
 
     if (!options["forceRefresh"]) {
-      cached = this.cacher.get($cacheKey);
-      if ($cached !isNull) {
+      cached = this.cacher.get(cacheKey);
+      if (cached !isNull) {
         return cached;
       }
     }
     aTable = this.collection.describe(name, options);
-    this.cacher.set($cacheKey, aTable);
+    this.cacher.set(cacheKey, aTable);
 
     return aTable;
   }
