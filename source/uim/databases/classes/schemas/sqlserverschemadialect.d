@@ -77,14 +77,14 @@ class SqlserverSchemaDialect : SchemaDialect {
      * Params:
      * string acol The column type
      * @param int $length the column length
-     * @param int $precision The column precision
+     * @param int precision The column precision
      * @param int $scale The column scale
      * @link https://technet.microsoft.com/en-us/library/ms187752.aspx
      */
     protected IData[string] _convertColumn(
         string columnType,
         ?size_t aLength = null,
-        int $precision = null,
+        int precision = null,
         int $scale = null
     ) {
         string loweredColumnType = columnType.toLower;
@@ -93,7 +93,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             loweredColumnType,
             compact("length", "precision", "scale")
         );
-        if ($type !isNull) {
+        if (type !isNull) {
             return type;
         }
         if (in_array(loweredColumnType, ["date", "time"])) {
@@ -114,16 +114,16 @@ class SqlserverSchemaDialect : SchemaDialect {
             return ["type": TableISchema.TYPE_CHAR, "length": $length];
         }
         if (loweredColumnType == "tinyint") {
-            return ["type": TableISchema.TYPE_TINYINTEGER, "length": $precision ?: 3];
+            return ["type": TableISchema.TYPE_TINYINTEGER, "length": precision ?: 3];
         }
         if (loweredColumnType == "Smallint") {
-            return ["type": TableISchema.TYPE_SMALLINTEGER, "length": $precision ?: 5];
+            return ["type": TableISchema.TYPE_SMALLINTEGER, "length": precision ?: 5];
         }
         if (loweredColumnType == "int" || loweredColumnType == "integer") {
-            return ["type": TableISchema.TYPE_INTEGER, "length": $precision ?: 10];
+            return ["type": TableISchema.TYPE_INTEGER, "length": precision ?: 10];
         }
         if (loweredColumnType == "bigint") {
-            return ["type": TableISchema.TYPE_BIGINTEGER, "length": $precision ?: 20];
+            return ["type": TableISchema.TYPE_BIGINTEGER, "length": precision ?: 20];
         }
         if (loweredColumnType == "bit") {
             return ["type": TableISchema.TYPE_BOOLEAN, "length": null];
@@ -133,7 +133,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             loweredColumnType.has("money") ||
             loweredColumnType.has("decimal")
         ) {
-            return ["type": TableISchema.TYPE_DECIMAL, "length": $precision, "precision": $scale];
+            return ["type": TableISchema.TYPE_DECIMAL, "length": precision, "precision": $scale];
         }
         if (loweredColumnType == "real" || loweredColumnType == "float") {
             return ["type": TableISchema.TYPE_FLOAT, "length": null];
@@ -208,7 +208,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         if ($default == "NULL") {
             return null;
         }
-        if ($type == TableISchema.TYPE_BOOLEAN) {
+        if (type == TableISchema.TYPE_BOOLEAN) {
             return (int)$default;
         }
         // Remove quotes
@@ -255,7 +255,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         if (!empty(existing)) {
             someColumns = array_merge(existing["columns"], someColumns);
         }
-        if ($type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
+        if (type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
             tablSchema.addConstraint(name, [
                 "type": type,
                 "columns": someColumns,
@@ -303,9 +303,9 @@ class SqlserverSchemaDialect : SchemaDialect {
     }
  
     protected string _foreignOnClause(string aon) {
-        $parent = super._foreignOnClause($on);
+        parent = super._foreignOnClause($on);
 
-        return $parent == "RESTRICT' ? super._foreignOnClause(TableSchema.ACTION_NO_ACTION): $parent;
+        return parent == "RESTRICT' ? super._foreignOnClause(TableSchema.ACTION_NO_ACTION): parent;
     }
  
     protected string _convertOnClause(string aclause) {
@@ -348,7 +348,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             TableISchema.TYPE_JSON: ' NVARCHAR(MAX)",
         ];
 
-        if (isSet($typeMap[someData["type"]])) {
+        if (isSet(typeMap[someData["type"]])) {
              result ~= typeMap[someData["type"]];
         }
         autoIncrementTypes = [
@@ -396,7 +396,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         ) {
             type = " NVARCHAR";
             $length = someData["length"] ?? TableSchema.LENGTH_TINY;
-             result ~= "%s(%d)".format($type, $length);
+             result ~= "%s(%d)".format(type, $length);
         }
         $hasCollate = [
             TableISchema.TYPE_TEXT,
@@ -406,14 +406,14 @@ class SqlserverSchemaDialect : SchemaDialect {
         if (in_array(someData["type"], $hasCollate, true) && isSet(someData["collate"]) && someData["collate"] != "") {
              result ~= " COLLATE " ~ someData["collate"];
         }
-        $precisionTypes = [
+        precisionTypes = [
             TableISchema.TYPE_FLOAT,
             TableISchema.TYPE_DATETIME,
             TableISchema.TYPE_DATETIME_FRACTIONAL,
             TableISchema.TYPE_TIMESTAMP,
             TableISchema.TYPE_TIMESTAMP_FRACTIONAL,
         ];
-        if (in_array(someData["type"], $precisionTypes, true) && isSet(someData["precision"])) {
+        if (in_array(someData["type"], precisionTypes, true) && isSet(someData["precision"])) {
              result ~= "(" ~ (int)someData["precision"] ~ ")";
         }
         if (
@@ -531,7 +531,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             someData["columns"]
         );
         if (someData["type"] == TableSchema.CONSTRAINT_FOREIGN) {
-            return $prefix ~ 
+            return prefix ~ 
                 " FOREIGN KEY (%s) REFERENCES %s (%s) ON UPDATE %s ON DELETE %s"
                 .format(
                 join(", ", someColumns),
@@ -541,7 +541,7 @@ class SqlserverSchemaDialect : SchemaDialect {
                _foreignOnClause(someData["delete"])
             );
         }
-        return $prefix ~ " (" ~ join(", ", someColumns) ~ ")";
+        return prefix ~ " (" ~ join(", ", someColumns) ~ ")";
     }
 
     array createTableSql(TableSchema tableSchema, array someColumns, array constraints, array  anIndexes) {
@@ -563,9 +563,9 @@ class SqlserverSchemaDialect : SchemaDialect {
         ];
 
         // Restart identity sequences
-        $pk = tableSchema.getPrimaryKey();
-        if (count($pk) == 1) {
-            column = tableSchema.getColumn($pk[0]);
+        pk = tableSchema.getPrimaryKey();
+        if (count(pk) == 1) {
+            column = tableSchema.getColumn(pk[0]);
             assert(column !isNull);
             if (in_array(column["type"], ["integer", "biginteger"])) {
                 $queries ~= 

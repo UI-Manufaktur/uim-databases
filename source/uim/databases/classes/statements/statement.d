@@ -18,7 +18,7 @@ class Statement : IStatement {
     protected FieldTypeConverter typeConverter;
 
     // Cached bound parameters used for logging
-    protected Json $params = [];
+    protected Json params = [];
 
     /**
      * @param \PDOStatement $statement PDO statement
@@ -32,15 +32,15 @@ class Statement : IStatement {
     ) {
        _driver = driver;
         this.statement = $statement;
-        this.typeConverter = typeMap !isNull ? new FieldTypeConverter($typeMap, driver): null;
+        this.typeConverter = typeMap !isNull ? new FieldTypeConverter(typeMap, driver): null;
     }
-    void bind(array $params, array types) {
-        if (isEmpty($params)) {
+    void bind(array params, array types) {
+        if (isEmpty(params)) {
             return;
         }
-        anonymousParams = isInt(key($params));
+        anonymousParams = isInt(key(params));
          anOffset = 1;
-        foreach ($params as  anIndex: aValue) {
+        foreach (params as  anIndex: aValue) {
             type = types[anIndex] ?? null;
             if (anonymousParams) {
                 /** @psalm-suppress InvalidOperand */
@@ -53,7 +53,7 @@ class Statement : IStatement {
  
     void bindValue(string|int column, Json aValue, string|int type = "string") {
         type ??= "string";
-        if (!isInt($type)) {
+        if (!isInt(type)) {
             [aValue, type] = this.castType(aValue, type);
         }
         this.params[column] = aValue;
@@ -74,7 +74,7 @@ class Statement : IStatement {
         return castType(Value, type = "String");
     }
     protected array castType(Json valueToCast, IType|string|int type = "String") {
-        if (cast(IType)$type) {
+        if (cast(IType)type) {
             valueToCast = type.toDatabase(valueToCast, _driver);
             type = type.toStatement(valueToCast, _driver);
         }
@@ -89,8 +89,8 @@ class Statement : IStatement {
         this.statement.bindValue(column, aValue, type);
     }
  
-    bool execute(array $params = null) {
-        return this.statement.execute($params);
+    bool execute(array params = null) {
+        return this.statement.execute(params);
     }
  
     Json fetch(string|int mode = PDO.FETCH_NUM) {
@@ -109,10 +109,10 @@ class Statement : IStatement {
         return this.fetch(PDO.FETCH_ASSOC) ?: [];
     }
  
-    Json fetchColumn(int $position) {
+    Json fetchColumn(int position) {
         $row = this.fetch(PDO.FETCH_NUM);
-        if ($row && isSet($row[$position])) {
-            return $row[$position];
+        if ($row && isSet($row[position])) {
+            return $row[position];
         }
         return false;
     }

@@ -126,8 +126,8 @@ class DateTimeType : BaseType, IBatchCasting {
      * @param \DateTimeZone|string|null timezone Database timezone.
      */
     void setDatabaseTimezone(DateTimeZone|string|null timezone) {
-        if (isString($timezone)) {
-            timezone = new DateTimeZone($timezone);
+        if (isString(timezone)) {
+            timezone = new DateTimeZone(timezone);
         }
         this.dbTimezone = timezone;
     }
@@ -140,8 +140,8 @@ class DateTimeType : BaseType, IBatchCasting {
      * \DateTimeZone|string|null timezone User timezone.
      */
     void setUserTimezone(DateTimeZone|string|null timezone) {
-        if (isString($timezone)) {
-            timezone = new DateTimeZone($timezone);
+        if (isString(timezone)) {
+            timezone = new DateTimeZone(timezone);
         }
         this.userTimezone = timezone;
     }
@@ -271,7 +271,7 @@ class DateTimeType : BaseType, IBatchCasting {
         if (isSet(myRequestData["meridian"])) {
             myRequestData["hour"] = strtolower(myRequestData["meridian"]) == "am" ? myRequestData["hour"] : myRequestData["hour"] + 12;
         }
-        $format = 
+        format = 
             "%d-%02d-%02d %02d:%02d:%02d.%06d"
             .format(
                 myRequestData["year"],
@@ -283,7 +283,7 @@ class DateTimeType : BaseType, IBatchCasting {
                 myRequestData["microsecond"]
             );
 
-        $dateTime = new  className($format, myRequestData["timezone"] ?? this.userTimezone);
+        $dateTime = new  className(format, myRequestData["timezone"] ?? this.userTimezone);
 
         return $dateTime.setTimezone(this.defaultTimezone);
     }
@@ -319,7 +319,7 @@ class DateTimeType : BaseType, IBatchCasting {
      * @see \UIM\I18n\Time.parseDateTime()
      */
     void setLocaleFormat(string[] aformat) {
-       _localeMarshalFormat = $format;
+       _localeMarshalFormat = format;
     }
     
     /**
@@ -348,9 +348,9 @@ class DateTimeType : BaseType, IBatchCasting {
      */
     protected DateTime|DateTimeImmutable|null _parseValue(string valueToParse) {
          className = _className;
-        foreach ($format; _marshalFormats) {
+        foreach (format; _marshalFormats) {
             try {
-                if(auto dateTime = className.createFromFormat($format, valueToParse, this.userTimezone)) {
+                if(auto dateTime = className.createFromFormat(format, valueToParse, this.userTimezone)) {
                     return dateTime;
                 }
             } catch (InvalidArgumentException) {

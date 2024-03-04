@@ -290,11 +290,11 @@ class TableSchema : TableISchema, ISqlGenerator {
         }
         type = this.getColumnType(column);
 
-        if ($type.isNull) {
+        if (type.isNull) {
             return null;
         }
-        if (TypeFactory.getMap($type)) {
-            type = TypeFactory.build($type).getBaseType();
+        if (TypeFactory.getMap(type)) {
+            type = TypeFactory.build(type).getBaseType();
         }
         return _columns[column]["baseType"] = type;
     }

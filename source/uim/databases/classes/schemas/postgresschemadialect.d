@@ -80,7 +80,7 @@ class PostgresSchemaDialect : SchemaDialect {
             throw new DatabaseException("Unable to parse column type from `%s`".format(columnType));
         }
         auto col = $matches[1].toLower;
-        auto $length = $precision = $scale = null;
+        auto $length = precision = $scale = null;
         if (isSet($matches[2])) {
             $length = (int)$matches[2];
         }
@@ -88,7 +88,7 @@ class PostgresSchemaDialect : SchemaDialect {
             col,
             compact("length", "precision", "scale")
         );
-        if ($type !isNull) {
+        if (type !isNull) {
             return type;
         }
         if (in_array(col, ["date", "time", "boolean"], true)) {
@@ -246,7 +246,7 @@ class PostgresSchemaDialect : SchemaDialect {
         if ($row["indisunique"] && type == TableSchema.INDEX_INDEX) {
             type = TableSchema.CONSTRAINT_UNIQUE;
         }
-        if ($type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
+        if (type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
            _convertConstraint(tableSchema, name, type, $row);
 
             return;
@@ -373,7 +373,7 @@ class PostgresSchemaDialect : SchemaDialect {
             typeMap[someData["type"]] = typeMap[someData["type"]].replace("INT", "SERIAL");
             unset(someData["default"]);
         }
-        if (isSet($typeMap[someData["type"]])) {
+        if (isSet(typeMap[someData["type"]])) {
              result ~= typeMap[someData["type"]];
         }
         if (someData["type"] == TableISchema.TYPE_TEXT && someData["length"] != TableSchema.LENGTH_TINY) {
@@ -523,7 +523,7 @@ class PostgresSchemaDialect : SchemaDialect {
             someData["columns"]
         );
         if (someData["type"] == TableSchema.CONSTRAINT_FOREIGN) {
-            return $prefix ~ " FOREIGN KEY (%s) REFERENCES %s (%s) ON UPDATE %s ON DELETE %s DEFERRABLE INITIALLY IMMEDIATE"
+            return prefix ~ " FOREIGN KEY (%s) REFERENCES %s (%s) ON UPDATE %s ON DELETE %s DEFERRABLE INITIALLY IMMEDIATE"
                 .format(
                     join(", ", someColumns),
                     _driver.quoteIdentifier(someData["references"][0]),
@@ -532,7 +532,7 @@ class PostgresSchemaDialect : SchemaDialect {
                     _foreignOnClause(someData["delete"])
                 );
         }
-        return $prefix ~ " (" ~ join(", ", someColumns) ~ ")";
+        return prefix ~ " (" ~ join(", ", someColumns) ~ ")";
     }
  
     array createTableSql(TableSchema tableSchema, array someColumns, array constraints, array  anIndexes) {
@@ -545,7 +545,7 @@ class PostgresSchemaDialect : SchemaDialect {
         }
         temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
          auto result;
-         result ~= "CREATE%sTABLE %s (\n%s\n)".format($temporary, aTableName, content);
+         result ~= "CREATE%sTABLE %s (\n%s\n)".format(temporary, aTableName, content);
         foreach (anIndexes as  anIndex) {
              result ~=  anIndex;
         }

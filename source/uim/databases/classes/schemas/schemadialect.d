@@ -102,7 +102,7 @@ abstract class SchemaDialect
             return null;
         }
         type = TypeFactory.build(columnType);
-        if (!(cast(IColumnSchemaAware)$type)) {
+        if (!(cast(IColumnSchemaAware)type)) {
             return null;
         }
         return type.getColumnSql(tableSchema, column, _driver);
@@ -120,7 +120,7 @@ abstract class SchemaDialect
             return null;
         }
         type = TypeFactory.build(columnType);
-        if (!(cast(IColumnSchemaAware)$type)) {
+        if (!(cast(IColumnSchemaAware)type)) {
             return null;
         }
         return type.convertColumnDefinition($definition, _driver);

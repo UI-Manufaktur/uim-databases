@@ -162,8 +162,8 @@ class EnumType : BaseType {
      */
     static string from(string enumClassName) {
         typeName = "enum-" ~ (Text.slug(enumClassName).toLower);
-         anInstance = new EnumType($typeName, enumClassName);
-        TypeFactory.set($typeName,  anInstance);
+         anInstance = new EnumType(typeName, enumClassName);
+        TypeFactory.set(typeName,  anInstance);
 
         return typeName;
     }

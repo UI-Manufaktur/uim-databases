@@ -141,9 +141,9 @@ class DateType : BaseType, IBatchCasting {
         ) {
             return null;
         }
-        $format = "%d-%02d-%02d".format(aValue["year"], aValue["month"], aValue["day"]);
+        format = "%d-%02d-%02d".format(aValue["year"], aValue["month"], aValue["day"]);
 
-        return new  className($format);
+        return new  className(format);
     }
     
     /**
@@ -174,11 +174,11 @@ class DateType : BaseType, IBatchCasting {
      *
      * See `UIM\I18n\Date.parseDate()` for accepted formats.
      * Params:
-     * string|int $format The locale-aware format
+     * string|int format The locale-aware format
      * @see \UIM\I18n\Date.parseDate()
      */
-    void setLocaleFormat(string|int $format) {
-       _localeMarshalFormat = $format;
+    void setLocaleFormat(string|int format) {
+       _localeMarshalFormat = format;
     }
     
     /**
@@ -206,9 +206,9 @@ class DateType : BaseType, IBatchCasting {
      */
     protected ChronosDate _parseValue(string avalue) {
         className = _className;
-        foreach (_marshalFormats as $format) {
+        foreach (_marshalFormats as format) {
             try {
-                return className.createFromFormat($format, aValue);
+                return className.createFromFormat(format, aValue);
             } catch (InvalidArgumentException) {
                 continue;
             }

@@ -11,7 +11,7 @@ class SqliteStatement : Statement {
     bool execute(? array myparams = null) {
         this.affectedRows = null;
 
-        return super.execute($params);
+        return super.execute(params);
     }
 
     size_t rowCount() {
