@@ -89,8 +89,8 @@ class FloatType : BaseType, IBatchCasting {
             return;
         }
         if (
-            $numberClass == Number.classname ||
-            isSubclass_of($numberClass, Number.classname)
+            numberClass == Number.classname ||
+            isSubclass_of(numberClass, Number.classname)
         ) {
            _useLocaleParser = enable;
 
@@ -98,7 +98,7 @@ class FloatType : BaseType, IBatchCasting {
         }
         throw new DatabaseException(
             "Cannot use locale parsing with the %s class"
-            .format($numberClass)
+            .format(numberClass)
         );
     }
     
@@ -109,7 +109,7 @@ class FloatType : BaseType, IBatchCasting {
      * string valueToConvert The value to parse and convert to an float.
      */
     protected float _parseValue(string valueToConvert) {
-         className = $numberClass;
+         className = numberClass;
 
         return className.parseFloat(valueToConvert);
     }

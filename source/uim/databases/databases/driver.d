@@ -167,7 +167,7 @@ abstract class Driver {
         if (!empty(params)) {
             statement.bind(params, types);
         }
-        this.executeStatement($statement);
+        this.executeStatement(statement);
 
         return statement;
     }
@@ -237,7 +237,7 @@ abstract class Driver {
             typeMap = aQuery.getSelectTypeMap();
         }
         /** @var \UIM\Database\IStatement */
-        return new (STATEMENT_CLASS)($statement, this, typeMap);
+        return new (STATEMENT_CLASS)(statement, this, typeMap);
     }
     
     /**
@@ -444,7 +444,7 @@ abstract class Driver {
                         field.has(".")
                     ) {
                         [, unaliasedField] = split(".", field, 2);
-                        expression.setFieldNames($unaliasedField);
+                        expression.setFieldNames(unaliasedField);
                     }
                     return expression;
                 }
@@ -452,7 +452,7 @@ abstract class Driver {
                      anIdentifier = expression.getIdentifier();
                     if (anIdentifier.has(".")) {
                         [, unaliasedIdentifier] = split(".",  anIdentifier, 2);
-                        expression.setIdentifier($unaliasedIdentifier);
+                        expression.setIdentifier(unaliasedIdentifier);
                     }
                     return expression;
                 }

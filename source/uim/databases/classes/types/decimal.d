@@ -43,10 +43,10 @@ class DecimalType : BaseType, IBatchCasting {
             return valueToConvert;
         }
         if (cast(Stringable)valueToConvert) {
-            $str = (string)valueToConvert;
+            str = (string)valueToConvert;
 
-            if (isNumeric($str)) {
-                return $str;
+            if (isNumeric(str)) {
+                return str;
             }
         }
         throw new InvalidArgumentException(
@@ -114,15 +114,15 @@ class DecimalType : BaseType, IBatchCasting {
             return;
         }
         if (
-            $numberClass == Number.classname ||
-            isSubclass_of($numberClass, Number.classname)
+            numberClass == Number.classname ||
+            isSubclass_of(numberClass, Number.classname)
         ) {
            _useLocaleParser = enable;
 
             return;
         }
         throw new DatabaseException(
-            "Cannot use locale parsing with the %s class".format($numberClass)
+            "Cannot use locale parsing with the %s class".format(numberClass)
         );
     }
     
@@ -133,7 +133,7 @@ class DecimalType : BaseType, IBatchCasting {
      * string valueToConvert The value to parse and convert to an float.
      */
     protected string _parseValue(string valueToParse) {
-        className = $numberClass;
+        className = numberClass;
 
         return (string) className.parseFloat(valueToParse);
     }

@@ -77,17 +77,17 @@ The easiest way of executing queries is by using the `execute()` method, it will
 `UIM\Database\StatementInterface` that you can use to get the data back:
 
 ```php
-$statement = aConnection.execute("SELECT * FROM articles");
+statement = aConnection.execute("SELECT * FROM articles");
 
-while($row = $statement.fetch("assoc")) {
+while($row = statement.fetch("assoc")) {
 	echo $row["title"] ~ PHP_EOL;
 }
 ```
 Binding values to parametrized arguments is also possible with the execute function:
 
 ```php
-$statement = aConnection.execute("SELECT * FROM articles WHERE id = :id", ["id": 1], ["id": 'integer"]);
-results = $statement.fetch("assoc");
+statement = aConnection.execute("SELECT * FROM articles WHERE id = :id", ["id": 1], ["id": 'integer"]);
+results = statement.fetch("assoc");
 ```
 
 The third parameter is the types the passed values should be converted to when passed to the database. If
@@ -96,9 +96,9 @@ no types are passed, all arguments will be interpreted as a string.
 Alternatively you can construct a statement manually and then fetch rows from it:
 
 ```php
-$statement = aConnection.prepare("SELECT * from articles WHERE id != :id");
-$statement.bind(["id": 1], ["id": 'integer"]);
-results = $statement.fetchAll("assoc");
+statement = aConnection.prepare("SELECT * from articles WHERE id != :id");
+statement.bind(["id": 1], ["id": 'integer"]);
+results = statement.fetchAll("assoc");
 ```
 
 The default types that are understood by this library and can be passed to the `bind()` auto or to `execute()`
@@ -120,12 +120,12 @@ More types can be added dynamically in a bit.
 Statements can be reused by binding new values to the parameters in the query:
 
 ```php
-$statement = aConnection.prepare("SELECT * from articles WHERE id = :id");
-$statement.bind(["id": 1], ["id": 'integer"]);
-results = $statement.fetchAll("assoc");
+statement = aConnection.prepare("SELECT * from articles WHERE id = :id");
+statement.bind(["id": 1], ["id": 'integer"]);
+results = statement.fetchAll("assoc");
 
-$statement.bind(["id": 1], ["id": 'integer"]);
-results = $statement.fetchAll("assoc");
+statement.bind(["id": 1], ["id": 'integer"]);
+results = statement.fetchAll("assoc");
 ```
 
 ### Updating Rows

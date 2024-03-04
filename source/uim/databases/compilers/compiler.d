@@ -155,16 +155,16 @@ class QueryCompiler {
      * @return string
      */
     protected string _buildSelectPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
-        $select = "SELECT%s %s%s";
+        select = "SELECT%s %s%s";
         if (_orderedUnion && myQuery.clause("union")) {
-            $select = "(SELECT%s %s%s";
+            select = "(SELECT%s %s%s";
         }
         $distinct = myQuery.clause("distinct");
         myModifiers = _buildModifierPart(myQuery.clause("modifier"), myQuery, $binder);
 
         myDriver = myQuery.getConnection().getDriver();
         $quoteIdentifiers = myDriver.isAutoQuotingEnabled() || _quotedSelectAliases;
-        $normalized = [];
+        normalized = [];
         someParts = _stringifyExpressions(someParts, $binder);
         foreach (someParts as $k: p) {
             if (!is_numeric($k)) {
@@ -175,7 +175,7 @@ class QueryCompiler {
                     p ~= $k;
                 }
             }
-            $normalized[] = p;
+            normalized[] = p;
         }
 
         if ($distinct == true) {
@@ -187,7 +187,7 @@ class QueryCompiler {
             $distinct = "DISTINCT ON (%s) ".format(implode(", ", $distinct));
         }
 
-        return $select, myModifiers, $distinct.format(implode(", ", $normalized));
+        return select, myModifiers, $distinct.format(implode(", ", normalized));
     }
 
     /**
@@ -201,17 +201,17 @@ class QueryCompiler {
      * @return string
      */
     protected string _buildFromPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
-        $select = " FROM %s";
-        $normalized = [];
+        select = " FROM %s";
+        normalized = [];
         someParts = _stringifyExpressions(someParts, $binder);
         foreach (someParts as $k: p) {
             if (!is_numeric($k)) {
                 p = p . " "~ $k;
             }
-            $normalized[] = p;
+            normalized[] = p;
         }
 
-        return $select.format(implode(", ", $normalized));
+        return select.format(implode(", ", normalized));
     }
 
     /**
@@ -281,7 +281,7 @@ class QueryCompiler {
      * @return string
      */
     protected string _buildSetPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
-        $set = [];
+        set = [];
         foreach (someParts as part) {
             if (part instanceof IDBAExpression) {
                 part = part.sql($binder);
@@ -289,10 +289,10 @@ class QueryCompiler {
             if (part[0] == "(") {
                 part = subString(part, 1, -1);
             }
-            $set[] = part;
+            set[] = part;
         }
 
-        return " SET "~ implode("", $set);
+        return " SET "~ implode("", set);
     }
 
     /**

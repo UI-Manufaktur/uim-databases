@@ -100,7 +100,7 @@ class SqlserverCompiler : QueryCompiler {
     protected string _buildHavingParts(array someParts, Query aQuery, ValueBinder aBinder) {
         auto selectParts = aQuery.clause("select");
 
-        foreach ($selectKey: selectPart; selectParts) {
+        foreach (selectKey: selectPart; selectParts) {
         selectParts.byKeyValue
             .filter!(keyPart => cast(FunctionExpression)keyPart.value)
             .each!((keyPart) {

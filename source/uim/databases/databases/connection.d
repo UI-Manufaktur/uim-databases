@@ -340,7 +340,7 @@ class Connection : IConnection {
             return false;
         }
         useSavePoint = this.isSavePointsEnabled();
-        toBeginning ??= !$useSavePoint;
+        toBeginning ??= !useSavePoint;
         if (_transactionLevel == 0 || toBeginning) {
            _transactionLevel = 0;
            _transactionStarted = false;
@@ -350,8 +350,8 @@ class Connection : IConnection {
             return true;
         }
         savePoint = _transactionLevel--;
-        if ($useSavePoint) {
-            this.rollbackSavepoint($savePoint);
+        if (useSavePoint) {
+            this.rollbackSavepoint(savePoint);
         } else {
             this.nestedTransactionRollbackException ??= new NestedTransactionRollbackException();
         }
@@ -550,14 +550,14 @@ class Connection : IConnection {
             "database": "*****",
             "port": "*****",
         ];
-        replace = array_intersect_key($secrets, _config);
+        replace = array_intersect_key(secrets, _config);
         configData = replace + _config;
 
         if (configuration.hasKey("read")) {
-            configData("read", array_intersect_key($secrets, configData("read")) + configData("read"));
+            configData("read", array_intersect_key(secrets, configData("read")) + configData("read"));
         }
         if (configData.isSet("write")) {
-            configData("write", array_intersect_key($secrets, configData("write")) + configData("write"));
+            configData("write", array_intersect_key(secrets, configData("write")) + configData("write"));
         }
         return [
             "config": configData,

@@ -35,9 +35,9 @@ class PostgresCompiler : QueryCompiler {
      * @return string
      */
     protected auto _buildHavingPart(parts, myQuery, $binder) {
-        $selectParts = myQuery.clause("select");
+        selectParts = myQuery.clause("select");
 
-        foreach (selectKey, selectPart; $selectParts) {
+        foreach (selectKey, selectPart; selectParts) {
             if (!selectPart instanceof FunctionExpression) {
                 continue;
             }
@@ -46,7 +46,7 @@ class PostgresCompiler : QueryCompiler {
                     continue;
                 }
                 preg_match_all(
-                    "/\b"~ trim($selectKey, "\"") . "\b/i",
+                    "/\b"~ trim(selectKey, "\"") . "\b/i",
                     p,
                     $matches
                 );
@@ -56,8 +56,8 @@ class PostgresCompiler : QueryCompiler {
                 }
 
                 parts[$k] = preg_replace(
-                    ["/"/", "/\b"~ trim($selectKey, "\"") . "\b/i"],
-                    ["", $selectPart.sql($binder)],
+                    ["/"/", "/\b"~ trim(selectKey, "\"") . "\b/i"],
+                    ["", selectPart.sql($binder)],
                     p
                 );
             }

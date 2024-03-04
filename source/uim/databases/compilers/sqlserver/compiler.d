@@ -104,10 +104,10 @@ class SqlserverCompiler : QueryCompiler
      * @return string
      */
     protected auto _buildHavingPart(, myQuery, aValueBinder) {
-        $selectParts = myQuery.clause("select");
+        selectParts = myQuery.clause("select");
 
-        foreach ($selectParts as $selectKey: $selectPart) {
-            if (!$selectPart instanceof FunctionExpression) {
+        foreach (selectParts as selectKey: selectPart) {
+            if (!selectPart instanceof FunctionExpression) {
                 continue;
             }
             foreach ( as $k: p) {
@@ -115,7 +115,7 @@ class SqlserverCompiler : QueryCompiler
                     continue;
                 }
                 preg_match_all(
-                    "/\b" . trim($selectKey, "[]") . "\b/i",
+                    "/\b" . trim(selectKey, "[]") . "\b/i",
                     p,
                     $matches
                 );
@@ -125,8 +125,8 @@ class SqlserverCompiler : QueryCompiler
                 }
 
                 [$k] = preg_replace(
-                    ["/\[|\]/", "/\b" . trim($selectKey, "[]") . "\b/i"],
-                    ["", $selectPart.sql(aValueBinder)],
+                    ["/\[|\]/", "/\b" . trim(selectKey, "[]") . "\b/i"],
+                    ["", selectPart.sql(aValueBinder)],
                     p
                 );
             }

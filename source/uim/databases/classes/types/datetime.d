@@ -65,7 +65,7 @@ class DateTimeType : BaseType, IBatchCasting {
      *
      * @var \DateTimeZone|null
      */
-    protected DateTimeZone $userTimezone = null;
+    protected DateTimeZone userTimezone = null;
 
     /**
      * Default time zone.

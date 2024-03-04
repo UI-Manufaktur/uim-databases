@@ -45,9 +45,9 @@ template TupleComparisonTranslatorTemplate {
         true = new QueryExpression("1");
 
         if (cast(SelectQuery) aValue) {
-            string[]$selected = aValue.clause("select").values;
+            string[]selected = aValue.clause("select").values;
             foreach (anI : field; fields) {
-                aValue.andWhere([field: new IdentifierExpression($selected[anI])]);
+                aValue.andWhere([field: new IdentifierExpression(selected[anI])]);
             }
             aValue.select(true, true);
             expression.setFieldNames(true);
@@ -77,7 +77,7 @@ template TupleComparisonTranslatorTemplate {
                 surrogate.where(conditions, typeMap);
 
                 expression.setFieldNames(true);
-                expression.setValue($surrogate);
+                expression.setValue(surrogate);
                 expression.setOperator("=");
             }
         }
