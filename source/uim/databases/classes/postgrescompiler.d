@@ -43,13 +43,13 @@ class PostgresCompiler : QueryCompiler {
             if (!cast(FunctionExpression)$selectPart ) {
                 continue;
             }
-            foreach ($p; someParts; myKey) {
-                if (!isString($p)) {
+            foreach (p; someParts; myKey) {
+                if (!isString(p)) {
                     continue;
                 }
                 preg_match_all(
                     "/\b" ~ trim($selectKey, "\"") ~ "\b/i",
-                    $p,
+                    p,
                     $matches
                 );
 
@@ -59,7 +59,7 @@ class PostgresCompiler : QueryCompiler {
                 someParts[myKey] = preg_replace(
                     ["/"/"", "/\b" ~ trim($selectKey, "\"") ~ "\b/i"],
                     ["", $selectPart.sql(aBinder)],
-                    $p
+                    p
                 );
             }
         }

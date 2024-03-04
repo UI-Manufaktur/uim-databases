@@ -23,7 +23,7 @@ class FunctionsBuilder {
      */
     AggregateExpression sum(IExpression|string aexpression, array types = []) {
         resultType = "float";
-        if (current($types) == "integer") {
+        if (current(types) == "integer") {
             resultType = "integer";
         }
         return this.aggregate("SUM", this.toLiteralParam(expression), types, resultType);
@@ -46,7 +46,7 @@ class FunctionsBuilder {
      * @param array types list of types to bind to the arguments
      */
     AggregateExpression max(IExpression|string aexpression, array types = []) {
-        return this.aggregate("MAX", this.toLiteralParam(expression), types, current($types) ?: "float");
+        return this.aggregate("MAX", this.toLiteralParam(expression), types, current(types) ?: "float");
     }
     
     /**
@@ -56,7 +56,7 @@ class FunctionsBuilder {
      * @param array types list of types to bind to the arguments
      */
     AggregateExpression min(IExpression|string aexpression, array types = []) {
-        return this.aggregate("MIN", this.toLiteralParam(expression), types, current($types) ?: "float");
+        return this.aggregate("MIN", this.toLiteralParam(expression), types, current(types) ?: "float");
     }
     
     /**
@@ -86,13 +86,13 @@ class FunctionsBuilder {
      * @param array types list of types to bind to the arguments
      */
     FunctionExpression coalesce(array someArguments, array types = []) {
-        return new FunctionExpression("COALESCE", someArguments, types, current($types) ?: "string");
+        return new FunctionExpression("COALESCE", someArguments, types, current(types) ?: "string");
     }
     
     /**
      * Returns a FunctionExpression representing a SQL CAST.
      *
-     * The `$type` parameter is a SQL type. The return type for the returned expression
+     * The `type` parameter is a SQL type. The return type for the returned expression
      * is the default type name. Use `setReturnType()` to update it.
      * Params:
      * \UIM\Database\IExpression|string afield Field or expression to cast.
@@ -128,7 +128,7 @@ class FunctionsBuilder {
         IExpression|string aexpression,
         array types = []
     ) {
-        return this.extract($part, expression, types);
+        return this.extract(part, expression, types);
     }
     
     /**
@@ -140,7 +140,7 @@ class FunctionsBuilder {
      */
     FunctionExpression extract(string apart, IExpression|string aexpression, array types = []) {
         auto functionExpression = new FunctionExpression("EXTRACT", this.toLiteralParam(aexpression), types, "integer");
-        functionExpression.setConjunction(" FROM").add([$part: "literal"], [], true);
+        functionExpression.setConjunction(" FROM").add([part: "literal"], [], true);
 
         return functionExpression;
     }
@@ -199,13 +199,13 @@ class FunctionsBuilder {
      * string atype (datetime|date|time)
      */
     FunctionExpression now(string atype = "datetime") {
-        if ($type == "datetime") {
+        if (type == "datetime") {
             return new FunctionExpression("NOW", [], [], "datetime");
         }
-        if ($type == "date") {
+        if (type == "date") {
             return new FunctionExpression("CURRENT_DATE", [], [], "date");
         }
-        if ($type == "time") {
+        if (type == "time") {
             return new FunctionExpression("CURRENT_TIME", [], [], "time");
         }
         throw new InvalidArgumentException("Invalid argument for FunctionsBuilder.now(): " ~ type);
@@ -232,15 +232,15 @@ class FunctionsBuilder {
         Json defaultValue = Json(null),
         string outputType = null
     ) {
-        $params = this.toLiteralParam(expression) ~ [anOffset: "literal"];
+        params = this.toLiteralParam(expression) ~ [anOffset: "literal"];
         if ($default !isNull) {
-            $params ~= $default;
+            params ~= $default;
         }
         types = [];
         if (!outputType.isNull) {
             types = [outputType, "integer", outputType];
         }
-        return (new AggregateExpression("LAG", $params, types, outputType ?? "float")).over();
+        return (new AggregateExpression("LAG", params, types, outputType ?? "float")).over();
     }
     
     /**
@@ -257,34 +257,34 @@ class FunctionsBuilder {
         Json defaultValue = Json(null),
         string atype = null
     ) {
-        $params = this.toLiteralParam(expression) ~ [anOffset: "literal"];
+        params = this.toLiteralParam(expression) ~ [anOffset: "literal"];
         if ($default !isNull) {
-            $params ~= $default;
+            params ~= $default;
         }
         types = [];
         if (outputType !isNull) {
             types = [outputType, "integer", outputType];
         }
-        return (new AggregateExpression("LEAD", $params, types, outputType ?? "float")).over();
+        return (new AggregateExpression("LEAD", params, types, outputType ?? "float")).over();
     }
     
     /**
      * Helper method to create arbitrary SQL aggregate auto calls.
      * Params:
-     * @param array $params Array of arguments to be passed to the function.
+     * @param array params Array of arguments to be passed to the function.
      *    Can be an associative array with the literal value or identifier:
      *    `["value": "literal"]` or `["value": 'identifier"]
-     * @param array types Array of types that match the names used in `$params`:
+     * @param array types Array of types that match the names used in `params`:
      *    `["name": 'type"]`
      * @param string result Return type of the entire expression. Defaults to float.
      */
     AggregateExpression aggregate(
         string sqlName,
-        array $params = [],
+        array params = [],
         array types = [],
         string result = "float"
     ) {
-        return new AggregateExpression(sqlName, $params, types, result);
+        return new AggregateExpression(sqlName, params, types, result);
     }
     
     /**

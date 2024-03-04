@@ -103,13 +103,13 @@ class SqlserverCompiler : QueryCompiler {
         selectParts.byKeyValue
             .filter!(keyPart => cast(FunctionExpression)keyPart.value)
             .each!((keyPart) {
-                foreach (myKey, $p; someParts) {
-                    if (!isString($p)) {
+                foreach (myKey, p; someParts) {
+                    if (!isString(p)) {
                         continue;
                     }
                     preg_match_all(
                         "/\b" ~ trim(keyPart.key, "[]") ~ "\b/i",
-                        $p,
+                        p,
                         $matches
                     );
 
@@ -119,7 +119,7 @@ class SqlserverCompiler : QueryCompiler {
                     someParts[myKey] = preg_replace(
                         ["/\[|\]/", "/\b" ~ trim(keyPart.key, "[]") ~ "\b/i"],
                         ["", keyPart.value.sql(aBinder)],
-                        $p
+                        p
                     );
                 }
             });

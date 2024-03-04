@@ -120,15 +120,15 @@ class IdentifierQuoter {
      * @param array someParts Query clauses.
      */
     protected void _quoteParts(Query aQuery, array someParts) {
-        foreach ($part; someParts) {
-            contents = aQuery.clause($part);
+        foreach (part; someParts) {
+            contents = aQuery.clause(part);
 
             if (!isArray(contents)) {
                 continue;
             }
             result = _basicQuoter(contents);
             if (!empty(result)) {
-                aQuery.{$part}(result, true);
+                aQuery.{part}(result, true);
             }
         }
     }
@@ -136,11 +136,11 @@ class IdentifierQuoter {
     /**
      * A generic identifier quoting auto used for various parts of the query
      *
-     * @param IData[string] $part the part of the query to quote
+     * @param IData[string] part the part of the query to quote
      */
-    protected IData[string] _basicQuoter(array $part) {
+    protected IData[string] _basicQuoter(array part) {
         result = [];
-        foreach ($part as alias: value) {
+        foreach (part as alias: value) {
             value = !isString(value) ? value : this.quoteIdentifier(value);
             alias = isNumeric(alias) ? alias : this.quoteIdentifier(alias);
             result[alias] = aValue;
@@ -255,16 +255,16 @@ class IdentifierQuoter {
      * \UIM\Database\Expression\OrderByExpression expressionToQuote The expression to quote.
      */
     protected void _quoteOrderBy(OrderByExpression expressionToQuote) {
-        expressionToQuote.iterateParts(function ($part, &field) {
+        expressionToQuote.iterateParts(function (part, &field) {
             if (isString(field)) {
                 field = this.quoteIdentifier(field);
 
-                return $part;
+                return part;
             }
-            if (isString($part) && !$part.has(" ")) {
-                return this.quoteIdentifier($part);
+            if (isString(part) && !part.has(" ")) {
+                return this.quoteIdentifier(part);
             }
-            return $part;
+            return part;
         });
     }
     

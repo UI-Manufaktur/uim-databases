@@ -144,15 +144,15 @@ class Connection : IConnection {
     }
     
     /**
-     * Executes a query using $params for interpolating values and typesForCasting as a hint for each
+     * Executes a query using params for interpolating values and typesForCasting as a hint for each
      * those params.
      * Params:
-     * string asql SQL to be executed and interpolated with $params
-     * @param array $params list or associative array of params to be interpolated in sql as values
+     * string asql SQL to be executed and interpolated with params
+     * @param array params list or associative array of params to be interpolated in sql as values
      * @param array typesForCasting list or associative array of types to be used for casting values in query
      */
-    IStatement execute(string asql, array $params = [], array typesForCasting = []) {
-        return this.getDisconnectRetry().run(fn (): this.getDriver().execute(sql, $params, typesForCasting));
+    IStatement execute(string asql, array params = [], array typesForCasting = []) {
+        return this.getDisconnectRetry().run(fn (): this.getDriver().execute(sql, params, typesForCasting));
     }
     
     /**

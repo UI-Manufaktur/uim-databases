@@ -84,8 +84,8 @@ class IdentifierQuoter
      * @param uim.databases.Query $query The query to quote.
      */
     protected void _quoteParts(Query $query) {
-        foreach (["distinct", "select", "from", "group"] as $part) {
-            contents = $query.clause($part);
+        foreach (["distinct", "select", "from", "group"] as part) {
+            contents = $query.clause(part);
 
             if (!is_array(contents)) {
                 continue;
@@ -93,7 +93,7 @@ class IdentifierQuoter
 
             $result = _basicQuoter(contents);
             if (!empty($result)) {
-                $query.{$part}($result, true);
+                $query.{part}($result, true);
             }
         }
 
@@ -107,12 +107,12 @@ class IdentifierQuoter
     /**
      * A generic identifier quoting function used for various parts of the query
      *
-     * @param array<string, mixed> $part the part of the query to quote
+     * @param array<string, mixed> part the part of the query to quote
      * @return array<string, mixed>
      */
-    protected array _basicQuoter(array $part) {
+    protected array _basicQuoter(array part) {
         $result = null;
-        foreach ($part as alias: $value) {
+        foreach (part as alias: $value) {
             $value = !is_string($value) ? $value : _driver.quoteIdentifier($value);
             alias = is_numeric(alias) ? alias : _driver.quoteIdentifier(alias);
             $result[alias] = $value;
@@ -153,18 +153,18 @@ class IdentifierQuoter
      * @param uim.databases.Query $query The insert query to quote.
      */
     protected void _quoteInsert(Query $query) {
-        $insert = $query.clause("insert");
-        if (!isset($insert[0]) || !isset($insert[1])) {
+        insert = $query.clause("insert");
+        if (!isset(insert[0]) || !isset(insert[1])) {
             return;
         }
-        [$table, columns] = $insert;
-        $table = _driver.quoteIdentifier($table);
+        [table, columns] = insert;
+        table = _driver.quoteIdentifier(table);
         foreach (columns as &column) {
             if (is_scalar(column)) {
                 column = _driver.quoteIdentifier((string)column);
             }
         }
-        $query.insert(columns).into($table);
+        $query.insert(columns).into(table);
     }
 
     /**
@@ -173,10 +173,10 @@ class IdentifierQuoter
      * @param uim.databases.Query $query The update query to quote.
      */
     protected void _quoteUpdate(Query $query) {
-        $table = $query.clause("update")[0];
+        table = $query.clause("update")[0];
 
-        if (is_string($table)) {
-            $query.update(_driver.quoteIdentifier($table));
+        if (is_string(table)) {
+            $query.update(_driver.quoteIdentifier(table));
         }
     }
 
@@ -186,17 +186,17 @@ class IdentifierQuoter
      * @param uim.databases.Expression\FieldInterface expression The expression to quote.
      */
     protected void _quoteComparison(FieldInterface expression) {
-        $field = expression.getField();
-        if (is_string($field)) {
-            expression.setField(_driver.quoteIdentifier($field));
-        } elseif (is_array($field)) {
+        field = expression.getField();
+        if (is_string(field)) {
+            expression.setField(_driver.quoteIdentifier(field));
+        } elseif (is_array(field)) {
             $quoted = null;
-            foreach ($field as $f) {
-                $quoted[] = _driver.quoteIdentifier($f);
+            foreach (field as f) {
+                $quoted[] = _driver.quoteIdentifier(f);
             }
             expression.setField($quoted);
-        } elseif ($field instanceof IDBAExpression) {
-            this.quoteExpression($field);
+        } elseif (field instanceof IDBAExpression) {
+            this.quoteExpression(field);
         }
     }
 
@@ -209,17 +209,17 @@ class IdentifierQuoter
      * @param uim.databases.Expression\OrderByExpression expression The expression to quote.
      */
     protected void _quoteOrderBy(OrderByExpression expression) {
-        expression.iterateParts(function ($part, &$field) {
-            if (is_string($field)) {
-                $field = _driver.quoteIdentifier($field);
+        expression.iterateParts(function (part, &field) {
+            if (is_string(field)) {
+                field = _driver.quoteIdentifier(field);
 
-                return $part;
+                return part;
             }
-            if (is_string($part) && strpos($part, " ") == false) {
-                return _driver.quoteIdentifier($part);
+            if (is_string(part) && strpos(part, " ") == false) {
+                return _driver.quoteIdentifier(part);
             }
 
-            return $part;
+            return part;
         });
     }
 

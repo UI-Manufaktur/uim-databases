@@ -29,7 +29,7 @@ abstract class Driver {
     protected const string STATEMENT_CLASS = Statement.classname;
 
     // Instance of PDO.
-    protected PDO $pdo = null;
+    protected PDO pdo = null;
 
     // Configuration data.
     protected IConfiguration _config;
@@ -177,17 +177,17 @@ abstract class Driver {
     abstract bool enabled();
 
     /**
-     * Executes a query using $params for interpolating values and types as a hint for each
+     * Executes a query using params for interpolating values and types as a hint for each
      * those params.
      * Params:
-     * string asql SQL to be executed and interpolated with $params
-     * @param array $params List or associative array of params to be interpolated in sql as values.
+     * string asql SQL to be executed and interpolated with params
+     * @param array params List or associative array of params to be interpolated in sql as values.
      * @param array types List or associative array of types to be used for casting values in query.
      */
-    IStatement execute(string asql, array $params = [], array types = []) {
+    IStatement execute(string asql, array params = [], array types = []) {
         $statement = this.prepare(sql);
-        if (!empty($params)) {
-            $statement.bind($params, types);
+        if (!empty(params)) {
+            $statement.bind(params, types);
         }
         this.executeStatement($statement);
 
@@ -212,11 +212,11 @@ abstract class Driver {
      * Execute the statement and log the query string.
      * Params:
      * \UIM\Database\IStatement $statement Statement to execute.
-     * @param array|null $params List of values to be bound to query.
+     * @param array|null params List of values to be bound to query.
      */
-    protected void executeStatement(IStatement statementToExecute, array $params = null) {
+    protected void executeStatement(IStatement statementToExecute, array params = null) {
         if (this.logger.isNull) {
-            statementToExecute.execute($params);
+            statementToExecute.execute(params);
 
             return;
         }
@@ -225,7 +225,7 @@ abstract class Driver {
 
         try {
             $start = microtime(true);
-            statementToExecute.execute($params);
+            statementToExecute.execute(params);
             took = (float)number_format((microtime(true) - $start) * 1000, 1);
         } catch (PDOException  anException) {
             exception =  anException;
@@ -233,7 +233,7 @@ abstract class Driver {
         $logContext = [
             'driver": this,
             'error": exception,
-            'params": $params ?? statementToExecute.getBoundParams(),
+            'params": params ?? statementToExecute.getBoundParams(),
         ];
         if (!exception) {
             $logContext["numRows"] = statementToExecute.rowCount();
@@ -361,11 +361,11 @@ abstract class Driver {
         };
 
         translators = _expressionTranslators();
-        if (!$translators) {
+        if (!translators) {
             return aQuery;
         }
-        aQuery.traverseExpressions(function (expression) use ($translators, aQuery) {
-            foreach ($translators as  className: $method) {
+        aQuery.traverseExpressions(function (expression) use (translators, aQuery) {
+            foreach (translators as  className: $method) {
                 if (cast8className)expression) {
                     this.{$method}(expression, aQuery);
                 }
