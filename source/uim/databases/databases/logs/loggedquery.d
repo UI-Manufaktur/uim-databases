@@ -29,21 +29,21 @@ class LoggedQuery : JsonSerializable, Stringable {
 
     // Helper auto used to replace query placeholders by the real params used to execute the query
     protected string interpolate() {
-        params = array_map(function ($p) {
-            if ($p.isNull) {
+        params = array_map(function (p) {
+            if (p.isNull) {
                 return "NULL";
             }
-            if (isBool($p)) {
+            if (isBool(p)) {
                 if (cast(Sqlserver)this.driver ) {
                     return p ? "1" : "0";
                 }
                 return p ? "TRUE" : "FALSE";
             }
-            if (isString($p)) {
+            if (isString(p)) {
                 // Likely binary data like a blob or binary uuid.
                 // pattern matches ascii control chars.
                 if (preg_replace("/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u", "", p) != p) {
-                    p = bin2hex($p);
+                    p = bin2hex(p);
                 }
                 replacements = [
                     "$": "\\$",
@@ -51,14 +51,14 @@ class LoggedQuery : JsonSerializable, Stringable {
                     "\'": "\"\"",
                 ];
 
-                p = strtr($p, replacements);
+                p = strtr(p, replacements);
 
-                return "'$p'";
+                return "'p'";
             }
             return p;
         }, this.params);
 
-        aLimit = isInt(key($params)) ? 1 : -1;
+        aLimit = isInt(key(params)) ? 1 : -1;
         auto someKeys = params.byKeyValue
             .map!(keyParam => isString(keyParam.key) ? "/:"~keyParam.key~"\b/" : "/[?]/")
             .array;

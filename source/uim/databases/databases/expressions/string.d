@@ -34,7 +34,7 @@ class StringExpression : UimExpression {
  
     string sql(ValueBinder aBinder) {
         placeholder = aBinder.placeholder("c");
-        aBinder.bind($placeholder, this.string, "string");
+        aBinder.bind(placeholder, this.string, "string");
 
         return placeholder ~ " COLLATE " ~ this.collation;
     }

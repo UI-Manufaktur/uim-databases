@@ -34,7 +34,7 @@ class ValuesExpression : UimExpression {
      */
     this(array someColumns, TypeMap typeMap) {
        _columns = someColumns;
-        this.setTypeMap($typeMap);
+        this.setTypeMap(typeMap);
     }
     
     /**
@@ -144,7 +144,7 @@ class ValuesExpression : UimExpression {
                 }
                 auto placeholder = aBinder.placeholder("c");
                 auto rowPlaceholders ~= placeholder;
-                aBinder.bind($placeholder, aValue, types[column]);
+                aBinder.bind(placeholder, aValue, types[column]);
             }
             placeholders ~= rowPlaceholders.join(", ");
         }
@@ -189,9 +189,9 @@ class ValuesExpression : UimExpression {
             .filter!(colName => isString(colName) || isInt(colName))
             .each!(colName => types[colName] = typeMap.type(colName));
 
-        types = _requiresToExpressionCasting($types);
+        types = _requiresToExpressionCasting(types);
 
-        if (isEmpty($types)) {
+        if (isEmpty(types)) {
             return;
         }
         foreach (_values as row:  someValues) {

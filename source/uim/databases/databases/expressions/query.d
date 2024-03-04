@@ -46,7 +46,7 @@ class QueryExpression : UimExpression, Countable {
         TypeMap|array types = [],
         string aconjunction = "AND"
     ) {
-        this.setTypeMap($types);
+        this.setTypeMap(types);
         this.setConjunction(strtoupper(conjunction));
         if (!empty(conditions)) {
             this.add(conditions, this.getTypeMap().getTypes());
@@ -428,12 +428,12 @@ class QueryExpression : UimExpression, Countable {
         template = len == 1 ? "%s' : '(%s)";
         someParts = [];
         foreach (_conditions as part) {
-            if (cast(Query)$part) {
+            if (cast(Query)part) {
                 part = "(" ~ part.sql(aBinder) ~ ")";
-            } else if (cast(IExpression)$part) {
+            } else if (cast(IExpression)part) {
                 part = part.sql(aBinder);
             }
-            if (!$part.isEmpty) {
+            if (!part.isEmpty) {
                 someParts ~= part;
             }
         }
@@ -468,7 +468,7 @@ class QueryExpression : UimExpression, Countable {
         foreach (myKey: c; _conditions) {
             aKey = &myKey;
             part = aCallback(c, aKey);
-            if ($part !isNull) {
+            if (part !isNull) {
                 someParts[aKey] = part;
             }
         }
@@ -580,10 +580,10 @@ class QueryExpression : UimExpression, Countable {
         operator = trim($operator).toUpper;
 
         type = this.getTypeMap().type(expression);
-        typeMultiple = (isString($type) && type.has("[]"));
+        typeMultiple = (isString(type) && type.has("[]"));
         if (in_array($operator, ["IN", "NOT IN"]) || typeMultiple) {
             type = type ?: "string";
-            if (!$typeMultiple) {
+            if (!typeMultiple) {
                 type ~= "[]";
             }
             operator = operator == "=" ? "IN" : operator;
@@ -591,7 +591,7 @@ class QueryExpression : UimExpression, Countable {
             typeMultiple = true;
         }
 
-        if ($typeMultiple) {
+        if (typeMultiple) {
             aValue = cast(IExpression)aValue  ? aValue : (array)aValue;
         }
         if ($operator == "IS' && aValue.isNull) {

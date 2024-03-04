@@ -27,11 +27,11 @@ class FunctionExpression : QueryExpression, ITypedResult {
      *
      * ### Examples:
      *
-     * `$f = new FunctionExpression("CONCAT", ["UIM", " rules"]);`
+     * `f = new FunctionExpression("CONCAT", ["UIM", " rules"]);`
      *
      * Previous line will generate `CONCAT("UIM", " rules")`
      *
-     * `$f = new FunctionExpression("CONCAT", ["name": 'literal", " rules"]);`
+     * `f = new FunctionExpression("CONCAT", ["name": 'literal", " rules"]);`
      *
      * Will produce `CONCAT(name, " rules")`
      * Params:
@@ -45,7 +45,7 @@ class FunctionExpression : QueryExpression, ITypedResult {
     this(string aName, array params = [], array types = [], string resultType = "string") {
        _name = name;
        _returnType = resultType;
-        super($params, types, ",");
+        super(params, types, ",");
     }
 
     /**
@@ -62,7 +62,7 @@ class FunctionExpression : QueryExpression, ITypedResult {
      */
     void add(IExpression|string[] aconditions, array types = [], bool prepend = false) {
         put = prepend ? "array_unshift' : 'array_push";
-        typeMap = this.getTypeMap().setTypes($types);
+        typeMap = this.getTypeMap().setTypes(types);
 
         conditions.byKeyValue
             .each!(kv => addCondtion(conditions, kv.key, kv.value));
@@ -79,8 +79,8 @@ class FunctionExpression : QueryExpression, ITypedResult {
             }
             type = typeMap.type(myKey);
 
-            if ($type !isNull && !cast(IExpression)$p ) {
-                condition = _castToExpression($p, type);
+            if (type !isNull && !cast(IExpression)p ) {
+                condition = _castToExpression(p, type);
             }
             if (cast(IExpression)condition) {
                 put(_conditions, condition);
@@ -98,7 +98,7 @@ class FunctionExpression : QueryExpression, ITypedResult {
                 condition = condition.sql(aBinder);
             } else if (isArray(condition)) {
                 p = aBinder.placeholder("param");
-                aBinder.bind($p, condition["value"], condition["type"]);
+                aBinder.bind(p, condition["value"], condition["type"]);
                 condition = p;
             }
             someParts ~= condition;

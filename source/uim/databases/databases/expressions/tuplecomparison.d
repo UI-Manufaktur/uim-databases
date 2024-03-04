@@ -105,14 +105,14 @@ class TupleComparison : ComparisonExpression {
             }
             type = this.types;
              isMultiOperation = this.isMulti();
-            if (isEmpty($type)) {
+            if (isEmpty(type)) {
                 type = null;
             }
             if (isMultiOperation) {
                 string[] bound = [];
                 aValue.byKeyValue
                     .each!((kv) {
-                        auto valType = type && isSet($type[myKey]) ? type[myKey] : type;
+                        auto valType = type && isSet(type[myKey]) ? type[myKey] : type;
                         assert($valType.isNull || isScalar($valType));
                         bound ~= _bindValue($val, aBinder, valType);
                     });
@@ -120,7 +120,7 @@ class TupleComparison : ComparisonExpression {
                 someValues ~= "(%s)".format($bound.join(","));
                 continue;
             }
-            valType = type && isSet($type[anI]) ? type[anI] : type;
+            valType = type && isSet(type[anI]) ? type[anI] : type;
             assert($valType.isNull || isScalar($valType));
              someValues ~= _bindValue(aValue, aBinder, valType);
         }

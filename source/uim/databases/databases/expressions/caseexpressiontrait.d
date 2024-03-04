@@ -69,7 +69,7 @@ template CaseExpressionTemplate {
             aValue = aValue.sql(aBinder);
         } else {
             placeholder = aBinder.placeholder("c");
-            aBinder.bind($placeholder, aValue, type);
+            aBinder.bind(placeholder, aValue, type);
             aValue = placeholder;
         }
         return aValue;

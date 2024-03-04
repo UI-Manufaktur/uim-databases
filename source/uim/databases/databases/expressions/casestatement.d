@@ -162,7 +162,7 @@ class CaseStatementExpression : UimExpression, ITypedResult {
      *
      * ### Type handling
      *
-     * The types provided via the `$type` argument will be merged with the
+     * The types provided via the `type` argument will be merged with the
      * type map set for this expression. When using callables for `$when`,
      * the `\UIM\Database\Expression\WhenThenExpression`
      * instance received by the callables will inherit that type map, however
@@ -238,7 +238,7 @@ class CaseStatementExpression : UimExpression, ITypedResult {
      * \UIM\Database\IExpression|\Closure|object|array|scalar when The `WHEN` value. When using an
      * array of conditions, it must be compatible with `\UIM\Database\Query.where()`. Note that this argument is
      * _not_completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in!If
-     * you plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to
+     * you plan to use user data, either pass a single type for the `type` argument (which forces the `$when` value to
      * be a non-array, and then always binds the data), use a conditions array where the user data is only passed on
      * the value side of the array entries, or custom bindings!
      * @param STRINGAA|string type The when value type. Either an associative array when using array style
@@ -388,15 +388,15 @@ class CaseStatementExpression : UimExpression, ITypedResult {
         auto types = [];
         foreach ($when; this.when as) {
             type = when.getResultType();
-            if ($type !isNull) {
+            if (type !isNull) {
                 types ~= type;
             }
         }
         if (this.elseType !isNull) {
             types ~= this.elseType;
         }
-        types = array_unique($types);
-        if (count($types) == 1) {
+        types = array_unique(types);
+        if (count(types) == 1) {
             return types[0];
         }
         return "string";
