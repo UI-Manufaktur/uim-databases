@@ -77,9 +77,9 @@ class QueryCompiler {
         // placeholders can be found in the SQL statement.
         if (myQuery.getValueBinder() != $binder) {
             foreach (myQuery.getValueBinder().bindings() as $binding) {
-                $placeholder = ":"~ $binding["placeholder"];
-                if (preg_match("/"~ $placeholder . "(?:\W|$)/", mySql) > 0) {
-                    $binder.bind($placeholder, $binding["value"], $binding["type"]);
+                placeholder = ":"~ $binding["placeholder"];
+                if (preg_match("/"~ placeholder . "(?:\W|$)/", mySql) > 0) {
+                    $binder.bind(placeholder, $binding["value"], $binding["type"]);
                 }
             }
         }
@@ -97,26 +97,26 @@ class QueryCompiler {
      * @return \Closure
      */
     protected Closure _sqlCompiler(string &mySql, Query myQuery, ValueBinder aValueBinder) {
-        return function ($part, $partName) use (&mySql, myQuery, $binder) {
+        return function (part, partName) use (&mySql, myQuery, $binder) {
             if (
-                $part is null ||
-                (is_array($part) && empty($part)) ||
-                ($part instanceof Countable && count($part) == 0)
+                part is null ||
+                (is_array(part) && empty(part)) ||
+                (part instanceof Countable && count(part) == 0)
             ) {
                 return;
             }
 
-            if ($part instanceof IDBAExpression) {
-                $part = [$part.sql($binder)];
+            if (part instanceof IDBAExpression) {
+                part = [part.sql($binder)];
             }
-            if (isset(_templates[$partName])) {
-                $part = _stringifyExpressions((array)$part, $binder);
-                mySql ~= _templates[$partName].format(implode(", ", $part));
+            if (isset(_templates[partName])) {
+                part = _stringifyExpressions((array)part, $binder);
+                mySql ~= _templates[partName].format(implode(", ", part));
 
                 return;
             }
 
-            mySql ~= this.{"_build"~ $partName . "Part"}($part, myQuery, $binder);
+            mySql ~= this.{"_build"~ partName . "Part"}(part, myQuery, $binder);
         };
     }
 
@@ -166,16 +166,16 @@ class QueryCompiler {
         $quoteIdentifiers = myDriver.isAutoQuotingEnabled() || _quotedSelectAliases;
         $normalized = [];
         someParts = _stringifyExpressions(someParts, $binder);
-        foreach (someParts as $k: $p) {
+        foreach (someParts as $k: p) {
             if (!is_numeric($k)) {
-                $p = $p . " AS ";
+                p = p . " AS ";
                 if ($quoteIdentifiers) {
-                    $p ~= myDriver.quoteIdentifier($k);
+                    p ~= myDriver.quoteIdentifier($k);
                 } else {
-                    $p ~= $k;
+                    p ~= $k;
                 }
             }
-            $normalized[] = $p;
+            $normalized[] = p;
         }
 
         if ($distinct == true) {
@@ -204,11 +204,11 @@ class QueryCompiler {
         $select = " FROM %s";
         $normalized = [];
         someParts = _stringifyExpressions(someParts, $binder);
-        foreach (someParts as $k: $p) {
+        foreach (someParts as $k: p) {
             if (!is_numeric($k)) {
-                $p = $p . " "~ $k;
+                p = p . " "~ $k;
             }
-            $normalized[] = $p;
+            $normalized[] = p;
         }
 
         return $select.format(implode(", ", $normalized));
@@ -282,14 +282,14 @@ class QueryCompiler {
      */
     protected string _buildSetPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $set = [];
-        foreach (someParts as $part) {
-            if ($part instanceof IDBAExpression) {
-                $part = $part.sql($binder);
+        foreach (someParts as part) {
+            if (part instanceof IDBAExpression) {
+                part = part.sql($binder);
             }
-            if ($part[0] == "(") {
-                $part = subString($part, 1, -1);
+            if (part[0] == "(") {
+                part = subString(part, 1, -1);
             }
-            $set[] = $part;
+            $set[] = part;
         }
 
         return " SET "~ implode("", $set);
@@ -306,15 +306,15 @@ class QueryCompiler {
      * @return string
      */
     protected string _buildUnionPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
-        someParts = array_map(function ($p) use ($binder) {
-            $p["query"] = $p["query"].sql($binder);
-            $p["query"] = $p["query"][0] == "(" ? trim($p["query"], "()") : $p["query"];
-            $prefix = $p["all"] ? "ALL " : "";
+        someParts = array_map(function (p) use ($binder) {
+            p["query"] = p["query"].sql($binder);
+            p["query"] = p["query"][0] == "(" ? trim(p["query"], "()") : p["query"];
+            prefix = p["all"] ? "ALL " : "";
             if (_orderedUnion) {
-                return "{$prefix}({$p["query"]})";
+                return "{prefix}({p["query"]})";
             }
 
-            return $prefix . $p["query"];
+            return prefix . p["query"];
         }, someParts);
 
         if (_orderedUnion) {

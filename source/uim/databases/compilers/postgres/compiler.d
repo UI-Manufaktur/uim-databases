@@ -34,20 +34,20 @@ class PostgresCompiler : QueryCompiler {
      * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected auto _buildHavingPart($parts, myQuery, $binder) {
+    protected auto _buildHavingPart(parts, myQuery, $binder) {
         $selectParts = myQuery.clause("select");
 
         foreach (selectKey, selectPart; $selectParts) {
             if (!selectPart instanceof FunctionExpression) {
                 continue;
             }
-            foreach ($parts as $k: $p) {
-                if (!is_string($p)) {
+            foreach (parts as $k: p) {
+                if (!is_string(p)) {
                     continue;
                 }
                 preg_match_all(
                     "/\b"~ trim($selectKey, "\"") . "\b/i",
-                    $p,
+                    p,
                     $matches
                 );
 
@@ -55,14 +55,14 @@ class PostgresCompiler : QueryCompiler {
                     continue;
                 }
 
-                $parts[$k] = preg_replace(
+                parts[$k] = preg_replace(
                     ["/"/", "/\b"~ trim($selectKey, "\"") . "\b/i"],
                     ["", $selectPart.sql($binder)],
-                    $p
+                    p
                 );
             }
         }
 
-        return sprintf(" HAVING %s", implode(", ", $parts));
+        return sprintf(" HAVING %s", implode(", ", parts));
     }
 }

@@ -98,24 +98,24 @@ class QueryCompiler {
      * @param \UIM\Database\ValueBinder aBinder Value binder used to generate parameter placeholder
      */
     protected Closure _sqlCompiler(string &sql, Query compiledQuery, ValueBinder aBinder) {
-        return void ($part, partName) use (&sql, compiledQuery, aBinder) {
+        return void (part, partName) use (&sql, compiledQuery, aBinder) {
             if (
                 part.isNull ||
-                (isArray($part) && empty($part)) ||
-                (cast(Countable)$part && count($part) == 0)
+                (isArray(part) && empty(part)) ||
+                (cast(Countable)part && count(part) == 0)
             ) {
                 return;
             }
-            if (cast(IExpression)$part) {
-                part = [$part.sql(aBinder)];
+            if (cast(IExpression)part) {
+                part = [part.sql(aBinder)];
             }
-            if (isSet(_templates[$partName])) {
-                part = _stringifyExpressions((array)$part, aBinder);
-                sql ~= _templates[$partName].format(join(", ", part));
+            if (isSet(_templates[partName])) {
+                part = _stringifyExpressions((array)part, aBinder);
+                sql ~= _templates[partName].format(join(", ", part));
 
                 return;
             }
-            sql ~= this.{"_build" ~ partName ~ "Part"}($part, compiledQuery, aBinder);
+            sql ~= this.{"_build" ~ partName ~ "Part"}(part, compiledQuery, aBinder);
         };
     }
     
@@ -197,7 +197,7 @@ class QueryCompiler {
         _stringifyExpressions(someParts, aBinder).byKeyValue
             .each!((kv) {
             if (!isNumeric(kv.key)) {
-                kv.value$p = kv.value ~ " " ~ kv.key;
+                kv.valuep = kv.value ~ " " ~ kv.key;
             }
             normalized ~= kv.value;
         });
@@ -285,12 +285,12 @@ class QueryCompiler {
      * @param \UIM\Database\ValueBinder aBinder Value binder used to generate parameter placeholder
      */
     protected string _buildUnionPart(array someParts, Query compiledQuery, ValueBinder valueBinder) {
-        someParts = array_map(function ($p) use (valueBinder) {
+        someParts = array_map(function (p) use (valueBinder) {
             p["query"] = p["query"].sql(valueBinder);
-            p["query"] = p["query"][0] == "(" ? trim($p["query"], "()"): p["query"];
+            p["query"] = p["query"][0] == "(" ? trim(p["query"], "()"): p["query"];
             prefix = p["all"] ? "ALL " : "";
             if (_orderedUnion) {
-                return "{$prefix}("~$p["query"]~")";
+                return "{prefix}("~p["query"]~")";
             }
             return prefix ~ p["query"];
         }, someParts);

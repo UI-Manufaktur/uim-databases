@@ -49,8 +49,8 @@ class PostgresCompiler : QueryCompiler {
     }
 
     protected string buildHavingPart(array key, array part, Query aQuery, ValueBinder aBinder) {
-        foreach ($p; someParts; key) {
-            if (!isString($p)) {
+        foreach (p; someParts; key) {
+            if (!isString(p)) {
                 continue;
             }
             preg_match_all(

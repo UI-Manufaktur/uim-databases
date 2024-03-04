@@ -451,14 +451,14 @@ abstract class Query : IExpression, Stringable {
         joins = [];
          anI = count(_parts["join"]);
         foreach (alias, t; aTables) {
-            if (!isArray($t)) {
+            if (!isArray(t)) {
                 t = ["table": t, "conditions": this.newExpr()];
             }
-            if (cast(Closure)$t["conditions"]) {
+            if (cast(Closure)t["conditions"]) {
                 t["conditions"] = t["conditions"](this.newExpr(), this);
             }
-            if (!cast(IExpression)$t["conditions"]) {
-                t["conditions"] = this.newExpr().add($t["conditions"], types);
+            if (!cast(IExpression)t["conditions"]) {
+                t["conditions"] = this.newExpr().add(t["conditions"], types);
             }
             alias = isString(alias) ? alias : null;
             joins[alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": alias];
@@ -499,7 +499,7 @@ abstract class Query : IExpression, Stringable {
      * ```
      *
      * Conditions can be passed as strings, arrays, or expression objects. When
-     * using arrays it is possible to combine them with the `$types` parameter
+     * using arrays it is possible to combine them with the `types` parameter
      * in order to define how to convert the values:
      *
      * ```
@@ -1352,7 +1352,7 @@ abstract class Query : IExpression, Stringable {
      *  to database
      */
     auto bind(string|int param, Json aValue, string|int type = null) {
-        this.getValueBinder().bind($param, aValue, type);
+        this.getValueBinder().bind(param, aValue, type);
 
         return this;
     }
@@ -1398,9 +1398,9 @@ abstract class Query : IExpression, Stringable {
         string aconjunction,
         array types
     ) {
-        expression = _parts[$part] ?: this.newExpr();
+        expression = _parts[part] ?: this.newExpr();
         if (isEmpty(append)) {
-           _parts[$part] = expression;
+           _parts[part] = expression;
 
             return;
         }
@@ -1414,7 +1414,7 @@ abstract class Query : IExpression, Stringable {
                 .setConjunction(conjunction)
                 .add([expression, append], types);
         }
-       _parts[$part] = expression;
+       _parts[part] = expression;
        _isDirty();
     }
     
@@ -1437,17 +1437,17 @@ abstract class Query : IExpression, Stringable {
            _valueBinder = clone _valueBinder;
         }
         _parts.byKeyValue
-            .filter!(namePart => !isEmpty($part))
+            .filter!(namePart => !isEmpty(part))
             .each!(namePart => 
             if (namePart.value.isArray) {
                 foreach (anI: piece; namePart.value) {
-                    if (isArray($piece)) {
-                        foreach ($piece as j: aValue) {
+                    if (isArray(piece)) {
+                        foreach (piece as j: aValue) {
                             if (cast(IExpression)aValue) {
                                _parts[namePart.key][anI][$j] = clone aValue;
                             }
                         }
-                    } else if (cast(IExpression)$piece ) {
+                    } else if (cast(IExpression)piece ) {
                        _parts[namePart.key][anI] = clone piece;
                     }
                 }
@@ -1485,7 +1485,7 @@ abstract class Query : IExpression, Stringable {
             return [
                 "(help)": "This is a Query object, to get the results execute or iterate it.",
                 "sql": Json(mySql),
-                "params": Json($params),
+                "params": Json(params),
                 "defaultTypes": Json(this.getDefaultTypes()),
                 "executed": Json((bool)_statement),
             ];

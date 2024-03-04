@@ -81,14 +81,14 @@ class TimeType : BaseType, IBatchCasting {
         if (isSet(requestData["meridian"])) {
             requestData["hour"] = requestData["meridian"].toLower == "am" ? requestData["hour"] : requestData["hour"] + 12;
         }
-        $format = "%02d:%02d:%02d.%06d".format(
+        format = "%02d:%02d:%02d.%06d".format(
             requestData["hour"],
             requestData["minute"],
             requestData["second"],
             requestData["microsecond"]
         );
 
-        return new _className($format);
+        return new _className(format);
     }
     array manyToD(array  someValues, array fields, Driver driver) {
         foreach (fields as field) {
@@ -184,10 +184,10 @@ class TimeType : BaseType, IBatchCasting {
      *
      * See `UIM\I18n\Time.parseTime()` for accepted formats.
      * Params:
-     * string|int $format The locale-aware format
+     * string|int format The locale-aware format
      * @see \UIM\I18n\Time.parseTime()
      */
-    void setLocaleFormat(string|int $format) {
-       _localeMarshalFormat = $format;
+    void setLocaleFormat(string|int format) {
+       _localeMarshalFormat = format;
     }
 }

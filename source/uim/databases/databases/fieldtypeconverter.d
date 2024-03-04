@@ -27,16 +27,16 @@ class FieldTypeConverter {
 
         auto types = TypeFactory.buildAll();
         foreach (field: typeName; typesToUse.toArray()) {
-            type = types.get($typeName, null);
+            type = types.get(typeName, null);
             if (!type || (cast(IOptionalConvert)type && !type.requiresToDCast())) {
                 continue;
             }
-            this.conversions[$typeName] ??= [
+            this.conversions[typeName] ??= [
                 "type": type,
                 "hasBatch": cast(IBatchCasting)type ,
                 "fields": [],
             ];
-            this.conversions[$typeName]["fields"] ~= field;
+            this.conversions[typeName]["fields"] ~= field;
         }
     }
     

@@ -164,8 +164,8 @@ abstract class Driver {
      */
     IStatement execute(string asql, array params = [], array types = []) {
         statement = this.prepare(sql);
-        if (!empty($params)) {
-            statement.bind($params, types);
+        if (!empty(params)) {
+            statement.bind(params, types);
         }
         this.executeStatement($statement);
 
@@ -194,7 +194,7 @@ abstract class Driver {
      */
     protected void executeStatement(IStatement statementToExecute, array params = null) {
         if (this.logger.isNull) {
-            statementToExecute.execute($params);
+            statementToExecute.execute(params);
 
             return;
         }
@@ -203,7 +203,7 @@ abstract class Driver {
 
         try {
             start = microtime(true);
-            statementToExecute.execute($params);
+            statementToExecute.execute(params);
             took = (float)number_format((microtime(true) - start) * 1000, 1);
         } catch (PDOException  anException) {
             exception =  anException;
@@ -339,11 +339,11 @@ abstract class Driver {
         };
 
         translators = _expressionTranslators();
-        if (!$translators) {
+        if (!translators) {
             return aQuery;
         }
-        aQuery.traverseExpressions(function (expression) use ($translators, aQuery) {
-            foreach ($translators as  className: method) {
+        aQuery.traverseExpressions(function (expression) use (translators, aQuery) {
+            foreach (translators as  className: method) {
                 if (cast8className)expression) {
                     this.{$method}(expression, aQuery);
                 }
