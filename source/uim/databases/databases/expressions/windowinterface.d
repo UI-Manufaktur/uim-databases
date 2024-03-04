@@ -34,7 +34,7 @@ interface WindowInterface {
     /**
      * Adds a simple range frame to the window.
      *
-     * `$start`:
+     * `start`:
      * - `0` - 'CURRENT ROW'
      * - `null` - 'UNBOUNDED PRECEDING'
      * - offset - 'offset PRECEDING'
@@ -83,7 +83,7 @@ interface WindowInterface {
      *
      * You can specify any direction for both frame start and frame end.
      *
-     * With both `$startOffset` and `endOffset`:
+     * With both `startOffset` and `endOffset`:
      * - `0` - 'CURRENT ROW'
      * - `null` - 'UNBOUNDED'
      * Params:

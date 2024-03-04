@@ -509,28 +509,28 @@ class QueryExpression : UimExpression, Countable {
                 expr = new static([], typeMap);
                 c = c(expr, this);
             }
-            if ($numericKey && empty(c)) {
+            if (numericKey && empty(c)) {
                 continue;
             }
              isArray = isArray(c);
              isOperator =  isNot = false;
-            if (!$numericKey) {
+            if (!numericKey) {
                 normalizedKey = myKey.toLower;
-                 isOperator = in_array($normalizedKey, operators);
+                 isOperator = in_array(normalizedKey, operators);
                  isNot = normalizedKey == "not";
             }
             if ((isOperator ||  isNot) && (isArray || cast(Countable)c) && count(c) == 0) {
                 continue;
             }
-            if ($numericKey && cast(IExpression)c ) {
+            if (numericKey && cast(IExpression)c ) {
                _conditions ~= c;
                 continue;
             }
-            if ($numericKey && isString(c)) {
+            if (numericKey && isString(c)) {
                _conditions ~= c;
                 continue;
             }
-            if ($numericKey &&  isArray ||  isOperator) {
+            if (numericKey &&  isArray ||  isOperator) {
                _conditions ~= new static(c, typeMap, numericKey ? "AND" : myKey);
                 continue;
             }
@@ -538,7 +538,7 @@ class QueryExpression : UimExpression, Countable {
                _conditions ~= new UnaryExpression("NOT", new static(c, typeMap));
                 continue;
             }
-            if (!$numericKey) {
+            if (!numericKey) {
                _conditions ~= _parseCondition(myKey, c);
             }
         }
@@ -564,16 +564,16 @@ class QueryExpression : UimExpression, Countable {
         // operators with a space in them like `field IS NOT` and
         // `field NOT LIKE`, or combinations with auto expressions
         // like `CONCAT(first_name, " ", last_name) IN`.
-        if ($spaces > 1) {
+        if (spaces > 1) {
             string[] someParts = split(" ", expression);
             if (preg_match("/(is not|not \w+)$/i", expression)) {
                 last = array_pop(someParts);
                 second = array_pop(someParts);
-                someParts ~= "{$second} {$last}";
+                someParts ~= "{second} {$last}";
             }
             operator = array_pop(someParts);
             expression = someParts.join(" ");
-        } else if ($spaces == 1) {
+        } else if (spaces == 1) {
             string[] someParts = split(" ", expression, 2);
             [expression, operator] = someParts;
         }

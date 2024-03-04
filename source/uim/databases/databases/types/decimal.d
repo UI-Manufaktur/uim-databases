@@ -35,7 +35,7 @@ class DecimalType : BaseType, IBatchCasting {
         if (cast(Stringable)valueToConvert) {
             str = to!string(valueToConvert);
 
-            if (isNumeric($str)) {
+            if (isNumeric(str)) {
                 return str;
             }
         }
@@ -101,14 +101,14 @@ class DecimalType : BaseType, IBatchCasting {
         }
         if (
             numberClass == Number.classname ||
-            isSubclass_of($numberClass, Number.classname)
+            isSubclass_of(numberClass, Number.classname)
         ) {
            _useLocaleParser = enable;
 
             return;
         }
         throw new DatabaseException(
-            "Cannot use locale parsing with the %s class".format($numberClass)
+            "Cannot use locale parsing with the %s class".format(numberClass)
         );
     }
     

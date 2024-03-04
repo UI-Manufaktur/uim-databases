@@ -79,7 +79,7 @@ class BinaryUuidType : BaseType {
      */
     protected string convertBinaryUuidToString(Json binary) {
         string = unpack("H*", binary);
-        assert($string != false, "Could not unpack uuid");
+        assert(string != false, "Could not unpack uuid");
 
         string[] string = preg_replace(
             "/([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})/",

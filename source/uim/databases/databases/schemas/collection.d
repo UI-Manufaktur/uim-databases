@@ -113,8 +113,8 @@ class Collection : ICollection {
      * @uses \UIM\Database\Schema\SchemaDialect.convertOptionsDescription
      */
     protected void _reflect(string astage, string tableName, IData[string] configData, TableISchema tableSchema) {
-        string describeMethod = "describe{$stage}Sql";
-        string convertMethod = "convert{$stage}Description";
+        string describeMethod = "describe{stage}Sql";
+        string convertMethod = "convert{stage}Description";
 
         [sql, params] = _dialect.{describeMethod}(tableName, configData);
         if (isEmpty(sql)) {

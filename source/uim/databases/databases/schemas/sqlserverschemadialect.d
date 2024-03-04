@@ -105,7 +105,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         }
         if (loweredColumnType.has("datetime")) {
             auto typeName = TableISchema.TYPE_DATETIME;
-            if ($scale > 0) {
+            if (scale > 0) {
                 typeName = TableISchema.TYPE_DATETIME_FRACTIONAL;
             }
             return ["type": typeName, "length": null, "precision": scale];

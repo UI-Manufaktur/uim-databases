@@ -306,7 +306,7 @@ class MysqlSchemaDialect : SchemaDialect
         if (isSet(typeMap[someData["type"]])) {
              result ~= typeMap[someData["type"]];
         }
-        if (isSet($specialMap[someData["type"]])) {
+        if (isSet(specialMap[someData["type"]])) {
             switch (someData["type"]) {
                 case TableISchema.TYPE_STRING:
                      result ~= " VARCHAR";

@@ -148,9 +148,9 @@ abstract class Driver : IDBADriver {
     function prepare(myQuery): IStatement
     {
         this.connect();
-        $statement = _connection.prepare(myQuery instanceof Query ? myQuery.sql() : myQuery);
+        statement = _connection.prepare(myQuery instanceof Query ? myQuery.sql() : myQuery);
 
-        return new PDOStatement($statement, this);
+        return new PDOStatement(statement, this);
     }
 
     

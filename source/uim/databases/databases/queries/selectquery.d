@@ -529,7 +529,7 @@ class SelectQuery : Query, IteratorAggregate {
      * the current limit clause will be used.
      */
     void page(int num, int aLimit = null) {
-        if ($num < 1) {
+        if (num < 1) {
             throw new InvalidArgumentException("Pages must start at 1.");
         }
         if (aLimit !isNull) {
@@ -540,7 +540,7 @@ class SelectQuery : Query, IteratorAggregate {
             aLimit = 25;
             this.limit(aLimit);
         }
-         anOffset = ($num - 1) * aLimit;
+         anOffset = (num - 1) * aLimit;
         if (UIM_INT_MAX <=  anOffset) {
              anOffset = UIM_INT_MAX;
         }
@@ -560,7 +560,7 @@ class SelectQuery : Query, IteratorAggregate {
      *
      * ```
      * union = (new SelectQuery(conn)).select(["id", "title"]).from(["a": 'articles"]);
-     * aQuery.select(["id", "name"]).from(["d": 'things"]).union($union);
+     * aQuery.select(["id", "name"]).from(["d": 'things"]).union(union);
      * ```
      *
      * Will produce:
@@ -593,7 +593,7 @@ class SelectQuery : Query, IteratorAggregate {
      *
      * ```
      * union = (new SelectQuery(conn)).select(["id", "title"]).from(["a": 'articles"]);
-     * aQuery.select(["id", "name"]).from(["d": 'things"]).unionAll($union);
+     * aQuery.select(["id", "name"]).from(["d": 'things"]).unionAll(union);
      * ```
      *
      * Will produce:

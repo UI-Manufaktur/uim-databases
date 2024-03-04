@@ -92,7 +92,7 @@ class FloatType : BaseType, IBatchCasting {
         }
         if (
             numberClass == Number.classname ||
-            isSubclass_of($numberClass, Number.classname)
+            isSubclass_of(numberClass, Number.classname)
         ) {
            _useLocaleParser = enable;
 
@@ -100,7 +100,7 @@ class FloatType : BaseType, IBatchCasting {
         }
         throw new DatabaseException(
             "Cannot use locale parsing with the %s class"
-            .format($numberClass)
+            .format(numberClass)
         );
     }
     
