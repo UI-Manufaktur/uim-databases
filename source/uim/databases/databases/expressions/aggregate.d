@@ -60,15 +60,15 @@ class AggregateExpression : FunctionExpression : WindowInterface {
     }
  
     void range(IExpression|string|int start, IExpression|string|int end = 0) {
-        this.getWindow().range($start, end);
+        this.getWindow().range(start, end);
     }
  
     void rows(int start, int end = 0) {
-        this.getWindow().rows($start, end);
+        this.getWindow().rows(start, end);
     }
  
     void groups(int start, int end = 0) {
-        this.getWindow().groups($start, end);
+        this.getWindow().groups(start, end);
     }
  
     void frame(

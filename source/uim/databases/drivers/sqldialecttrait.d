@@ -219,8 +219,8 @@ trait SqlDialectTrait
                         is_string(field) &&
                         strpos(field, ".") != false
                     ) {
-                        [, $unaliasedField] = explode(".", field, 2);
-                        expression.setField($unaliasedField);
+                        [, unaliasedField] = explode(".", field, 2);
+                        expression.setField(unaliasedField);
                     }
 
                     return expression;
@@ -229,8 +229,8 @@ trait SqlDialectTrait
                 if (expression instanceof IdentifierExpression) {
                     identifier = expression.getIdentifier();
                     if (strpos(identifier, ".") != false) {
-                        [, $unaliasedIdentifier] = explode(".", identifier, 2);
-                        expression.setIdentifier($unaliasedIdentifier);
+                        [, unaliasedIdentifier] = explode(".", identifier, 2);
+                        expression.setIdentifier(unaliasedIdentifier);
                     }
 
                     return expression;

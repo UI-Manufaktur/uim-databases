@@ -131,11 +131,11 @@ class Postgres : Driver
      * Sets connection default schema, if any relation defined in a query is not fully qualified
      * postgres will fallback to looking the relation into defined default schema
      *
-     * @param string $schema The schema names to set `search_path` to.
+     * @param string schema The schema names to set `search_path` to.
      */
-    void setSchema(string $schema) {
+    void setSchema(string schema) {
         this.connect();
-        _connection.exec("SET search_path TO " ~ _connection.quote($schema));
+        _connection.exec("SET search_path TO " ~ _connection.quote(schema));
     }
 
 

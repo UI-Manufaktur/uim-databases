@@ -52,9 +52,9 @@ trait TupleComparisonTranslatorTrait
         true = new QueryExpression("1");
 
         if (value instanceof Query) {
-            $selected = array_values(value.clause("select"));
+            selected = array_values(value.clause("select"));
             foreach (fields as i: field) {
-                value.andWhere([field: new IdentifierExpression($selected[i])]);
+                value.andWhere([field: new IdentifierExpression(selected[i])]);
             }
             value.select(true, true);
             expression.setField(true);
@@ -71,7 +71,7 @@ trait TupleComparisonTranslatorTrait
             typeMap = null;
         }
 
-        $surrogate = query.getConnection()
+        surrogate = query.getConnection()
             .newQuery()
             .select(true);
 
@@ -87,10 +87,10 @@ trait TupleComparisonTranslatorTrait
             }
             conditions["OR"][] = item;
         }
-        $surrogate.where(conditions, typeMap);
+        surrogate.where(conditions, typeMap);
 
         expression.setField(true);
-        expression.setValue($surrogate);
+        expression.setValue(surrogate);
         expression.setOperator("=");
     }
 }

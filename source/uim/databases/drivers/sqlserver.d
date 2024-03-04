@@ -186,9 +186,9 @@ class Sqlserver : Driver
         }
 
         /** @psalm-suppress PossiblyInvalidArgument */
-        $statement = _connection.prepare(sql, options);
+        statement = _connection.prepare(sql, options);
 
-        return new SqlserverStatement($statement, this);
+        return new SqlserverStatement(statement, this);
     }
 
 
@@ -299,17 +299,17 @@ class Sqlserver : Driver
             // the only practical way to specify the use of calculated columns
             // is with their alias.  So substitute the select SQL in place of
             // any column aliases for those entries in the order clause.
-            $select = $original.clause("select");
+            select = $original.clause("select");
             $order = new OrderByExpression();
             $original
                 .clause("order")
-                .iterateParts(function ($direction, $orderBy) use ($select, $order) {
+                .iterateParts(function ($direction, $orderBy) use (select, $order) {
                     $key = $orderBy;
                     if (
-                        isset($select[$orderBy]) &&
-                        $select[$orderBy] instanceof IDBAExpression
+                        isset(select[$orderBy]) &&
+                        select[$orderBy] instanceof IDBAExpression
                     ) {
-                        $order.add(new OrderClauseExpression($select[$orderBy], $direction));
+                        $order.add(new OrderClauseExpression(select[$orderBy], $direction));
                     } else {
                         $order.add([$key: $direction]);
                     }

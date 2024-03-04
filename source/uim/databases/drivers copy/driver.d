@@ -62,9 +62,9 @@ abstract class Driver : IDriver
     function prepare(query): IStatement
     {
         this.connect();
-        $statement = _connection.prepare(query instanceof Query ? query.sql() : query);
+        statement = _connection.prepare(query instanceof Query ? query.sql() : query);
 
-        return new PDOStatement($statement, this);
+        return new PDOStatement(statement, this);
     }
 
 

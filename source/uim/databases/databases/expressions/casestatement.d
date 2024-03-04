@@ -196,7 +196,7 @@ class CaseStatementExpression : UimExpression, ITypedResult {
      *
      * ```
      * case
-     *     .when($userData)
+     *     .when(userData)
      * ```
      *
      * A safe variant for the above would be to define a single type for
@@ -204,7 +204,7 @@ class CaseStatementExpression : UimExpression, ITypedResult {
      *
      * ```
      * case
-     *     .when($userData, "integer")
+     *     .when(userData, "integer")
      * ```
      *
      * This way an exception would be triggered when an array is passed for
