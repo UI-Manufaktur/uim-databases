@@ -307,7 +307,7 @@ class SelectQuery : Query, IteratorAggregate {
      * ```
      *
      * Conditions can be passed as strings, arrays, or expression objects. When
-     * using arrays it is possible to combine them with the `$types` parameter
+     * using arrays it is possible to combine them with the `types` parameter
      * in order to define how to convert the values:
      *
      * ```
@@ -676,7 +676,7 @@ class SelectQuery : Query, IteratorAggregate {
      * \UIM\Database\TypeMap|array typeMap Creates a TypeMap if array, otherwise sets the given TypeMap.
      */
     auto setSelectTypeMap(TypeMap|array typeMap) {
-       _selectTypeMap = isArray($typeMap) ? new TypeMap($typeMap): typeMap;
+       _selectTypeMap = isArray(typeMap) ? new TypeMap(typeMap): typeMap;
        _isDirty();
 
         return this;

@@ -35,7 +35,7 @@ class InsertQuery : Query {
        _isDirty();
        _parts["insert"][1] = someColumns;
         if (!_parts["values"]) {
-           _parts["values"] = new ValuesExpression(someColumns, this.getTypeMap().setTypes($types));
+           _parts["values"] = new ValuesExpression(someColumns, this.getTypeMap().setTypes(types));
         } else {
            _parts["values"].setColumns(someColumns);
         }

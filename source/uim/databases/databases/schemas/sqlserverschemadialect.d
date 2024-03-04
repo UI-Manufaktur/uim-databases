@@ -93,7 +93,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             loweredColumnType,
             compact("length", "precision", "scale")
         );
-        if ($type !isNull) {
+        if (type !isNull) {
             return type;
         }
         if (in_array(loweredColumnType, ["date", "time"])) {
@@ -208,7 +208,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         if ($default == "NULL") {
             return null;
         }
-        if ($type == TableISchema.TYPE_BOOLEAN) {
+        if (type == TableISchema.TYPE_BOOLEAN) {
             return (int)$default;
         }
         // Remove quotes
@@ -255,7 +255,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         if (!empty(existing)) {
             someColumns = chain(existing["columns"], someColumns);
         }
-        if ($type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
+        if (type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
             tablSchema.addConstraint(name, [
                 "type": type,
                 "columns": someColumns,
@@ -348,7 +348,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             TableISchema.TYPE_JSON: ' NVARCHAR(MAX)",
         ];
 
-        if (isSet($typeMap[someData["type"]])) {
+        if (isSet(typeMap[someData["type"]])) {
              result ~= typeMap[someData["type"]];
         }
         autoIncrementTypes = [
@@ -396,7 +396,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         ) {
             type = " NVARCHAR";
             length = someData["length"] ?? TableSchema.LENGTH_TINY;
-             result ~= "%s(%d)".format($type, length);
+             result ~= "%s(%d)".format(type, length);
         }
         hasCollate = [
             TableISchema.TYPE_TEXT,
@@ -564,8 +564,8 @@ class SqlserverSchemaDialect : SchemaDialect {
 
         // Restart identity sequences
         pk = tableSchema.getPrimaryKey();
-        if (count($pk) == 1) {
-            column = tableSchema.getColumn($pk[0]);
+        if (count(pk) == 1) {
+            column = tableSchema.getColumn(pk[0]);
             assert(column !isNull);
             if (in_array(column["type"], ["integer", "biginteger"])) {
                 queries ~= 

@@ -42,13 +42,13 @@ class SqliteSchemaDialect : SchemaDialect {
                 [columnLength, precision] = split(",", columnLength);
             }
             columnLength = (int)columnLength;
-            precision = to!int($precision);
+            precision = to!int(precision);
         }
         type = _applyTypeSpecificColumnConversion(
             col,
             compact("length", "precision", "scale")
         );
-        if ($type !isNull) {
+        if (type !isNull) {
             return type;
         }
         if (col == "bigint") {
@@ -154,12 +154,12 @@ class SqliteSchemaDialect : SchemaDialect {
         ];
         primary = tableSchema.getConstraint("primary");
 
-        if ($row["pk"] && empty($primary)) {
+        if ($row["pk"] && empty(primary)) {
             myField["null"] = false;
             myField["autoIncrement"] = true;
         }
         // SQLite does not support autoincrement on composite keys.
-        if ($row["pk"] && !empty($primary)) {
+        if ($row["pk"] && !empty(primary)) {
             existingColumn = primary["columns"][0];
             /** @psalm-suppress PossiblyNullOperand */
             tableSchema.addColumn(existingColumn, ["autoIncrement": null] + tableSchema.getColumn(existingColumn));
@@ -340,12 +340,12 @@ class SqliteSchemaDialect : SchemaDialect {
             someData["references"] ~= foreignKey["to"];
         });
         if (count(someData["references"]) == 1) {
-            someData["references"] = [$foreignKey["table"], someData["references"][0]];
+            someData["references"] = [foreignKey["table"], someData["references"][0]];
         } else {
-            someData["references"] = [$foreignKey["table"], someData["references"]];
+            someData["references"] = [foreignKey["table"], someData["references"]];
         }
-        someData["update"] = _convertOnClause($foreignKey["on_update"] ?? "");
-        someData["delete"] = _convertOnClause($foreignKey["on_delete"] ?? "");
+        someData["update"] = _convertOnClause(foreignKey["on_update"] ?? "");
+        someData["delete"] = _convertOnClause(foreignKey["on_delete"] ?? "");
 
         string name = join("_", someData["columns"]) ~ "_" ~ row["id"] ~ "_fk";
 
@@ -405,7 +405,7 @@ class SqliteSchemaDialect : SchemaDialect {
                  result ~= " UNSIGNED";
             }
         }
-        if (isSet($typeMap[someData["type"]])) {
+        if (isSet(typeMap[someData["type"]])) {
              result ~= typeMap[someData["type"]];
         }
         if (someData["type"] == TableISchema.TYPE_TEXT && someData["length"] != TableSchema.LENGTH_TINY) {

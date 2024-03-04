@@ -74,13 +74,13 @@ class MysqlSchemaDialect : SchemaDialect
                 [$length, precision] = split(",", length);
             }
             length = (int)$length;
-            precision = (int)$precision;
+            precision = (int)precision;
         }
         type = _applyTypeSpecificColumnConversion(
             col,
             compact("length", "precision", "scale")
         );
-        if (!$type.isNull) {
+        if (!type.isNull) {
             return type;
         }
         if (in_array(col, ["date", "time"])) {
@@ -185,7 +185,7 @@ class MysqlSchemaDialect : SchemaDialect
             type = TableSchema.INDEX_FULLTEXT;
         } else if ((int)$row["Non_unique"] == 0 && type != "primary") {
             type = TableSchema.CONSTRAINT_UNIQUE;
-        } else if ($type != "primary") {
+        } else if (type != "primary") {
             type = TableSchema.INDEX_INDEX;
         }
         if (!$row["Sub_part"])) {
@@ -252,7 +252,7 @@ class MysqlSchemaDialect : SchemaDialect
     array createTableSql(TableSchema tableSchema, array someColumns, array constraints, array  anIndexes) {
         string content = chain(someColumns, constraints,  anIndexes).join(",\n");
         temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
-        content = "CREATE%sTABLE `%s` (\n%s\n)".format($temporary, tableSchema.name(), content);
+        content = "CREATE%sTABLE `%s` (\n%s\n)".format(temporary, tableSchema.name(), content);
         options = tableSchema.getOptions();
         if (isSet(options["engine"])) {
             content ~= " ENGINE=%s".format(options["engine"]);
@@ -303,7 +303,7 @@ class MysqlSchemaDialect : SchemaDialect
             "char": true,
             "binary": true,
         ];
-        if (isSet($typeMap[someData["type"]])) {
+        if (isSet(typeMap[someData["type"]])) {
              result ~= typeMap[someData["type"]];
         }
         if (isSet($specialMap[someData["type"]])) {
