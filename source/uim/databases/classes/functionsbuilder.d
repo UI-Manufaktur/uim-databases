@@ -162,7 +162,7 @@ class FunctionsBuilder {
         if (!isNumeric(aValue)) {
             aValue = 0;
         }
-         anInterval = aValue ~ " " ~ $unit;
+         anInterval = aValue ~ " " ~ unit;
         expression = new FunctionExpression("DATE_ADD", this.toLiteralParam(expression), types, "datetime");
         expression.setConjunction(", INTERVAL").add([anInterval: "literal"]);
 

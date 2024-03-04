@@ -185,13 +185,13 @@ abstract class Driver {
      * @param array types List or associative array of types to be used for casting values in query.
      */
     IStatement execute(string asql, array params = [], array types = []) {
-        $statement = this.prepare(sql);
+        statement = this.prepare(sql);
         if (!empty(params)) {
-            $statement.bind(params, types);
+            statement.bind(params, types);
         }
-        this.executeStatement($statement);
+        this.executeStatement(statement);
 
-        return $statement;
+        return statement;
     }
     
     /**
@@ -211,7 +211,7 @@ abstract class Driver {
     /**
      * Execute the statement and log the query string.
      * Params:
-     * \UIM\Database\IStatement $statement Statement to execute.
+     * \UIM\Database\IStatement statement Statement to execute.
      * @param array|null params List of values to be bound to query.
      */
     protected void executeStatement(IStatement statementToExecute, array params = null) {
@@ -224,9 +224,9 @@ abstract class Driver {
         auto took = 0.0;
 
         try {
-            $start = microtime(true);
+            start = microtime(true);
             statementToExecute.execute(params);
-            took = (float)number_format((microtime(true) - $start) * 1000, 1);
+            took = (float)number_format((microtime(true) - start) * 1000, 1);
         } catch (PDOException  anException) {
             exception =  anException;
         }
@@ -252,14 +252,14 @@ abstract class Driver {
      * \UIM\Database\Query|string aquery The query to turn into a prepared statement.
      */
     IStatement prepare(Query|string aquery) {
-        $statement = this.getPdo().prepare(cast(Query)aQuery  ? aQuery.sql(): aQuery);
+        statement = this.getPdo().prepare(cast(Query)aQuery  ? aQuery.sql(): aQuery);
 
         typeMap = null;
         if (cast(SelectQuery)aQuery  && aQuery.isResultsCastingEnabled()) {
             typeMap = aQuery.getSelectTypeMap();
         }
         /** @var \UIM\Database\IStatement */
-        return new (STATEMENT_CLASS)($statement, this, typeMap);
+        return new (STATEMENT_CLASS)(statement, this, typeMap);
     }
     
     /**
@@ -465,16 +465,16 @@ abstract class Driver {
                         isString(field) &&
                         field.has(".")
                     ) {
-                        [, $unaliasedField] = split(".", field, 2);
-                        expression.setFieldNames($unaliasedField);
+                        [, unaliasedField] = split(".", field, 2);
+                        expression.setFieldNames(unaliasedField);
                     }
                     return expression;
                 }
                 if (cast(IdentifierExpression)expression) {
                      anIdentifier = expression.getIdentifier();
                     if (anIdentifier.has(".")) {
-                        [, $unaliasedIdentifier] = split(".",  anIdentifier, 2);
-                        expression.setIdentifier($unaliasedIdentifier);
+                        [, unaliasedIdentifier] = split(".",  anIdentifier, 2);
+                        expression.setIdentifier(unaliasedIdentifier);
                     }
                     return expression;
                 }

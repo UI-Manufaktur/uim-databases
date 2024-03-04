@@ -91,7 +91,7 @@ class ValueBinder {
     /**
      * Binds all the stored values in this object to the passed statement.
      * Params:
-     * \UIM\Database\IStatement $statement The statement to add parameters to.
+     * \UIM\Database\IStatement statement The statement to add parameters to.
      */
     void attachTo(IStatement targetStatement) {
         auto bindings = this.bindings();

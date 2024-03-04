@@ -203,16 +203,16 @@ class FunctionsBuilder
      *
      * @param uim.databases.ExpressionInterface|string expression Expression to obtain the date part from.
      * @param string|int aValue Value to be added. Use negative to subtract.
-     * @param string $unit Unit of the value e.g. hour or day.
+     * @param string unit Unit of the value e.g. hour or day.
      * @param array types list of types to bind to the arguments
      * @return uim.databases.Expression\FunctionExpression
      */
-    function dateAdd(expression, DValue aValue, string $unit, array types = []): FunctionExpression
+    function dateAdd(expression, DValue aValue, string unit, array types = []): FunctionExpression
     {
         if (!is_numeric(DValue aValue)) {
             aValue = 0;
         }
-        interval = aValue . " " . $unit;
+        interval = aValue . " " . unit;
         expression = new FunctionExpression("DATE_ADD", this.toLiteralParam(expression), someTypes, "datetime");
         expression.setConjunction(", INTERVAL").add([interval: "literal"]);
 

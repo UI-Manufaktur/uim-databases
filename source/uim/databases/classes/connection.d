@@ -36,7 +36,7 @@ class Connection : IConnection {
      * NestedTransactionRollbackException object instance, will be stored if
      * the rollback method is called in some nested transaction.
      */
-    protected NestedTransactionRollbackException $nestedTransactionRollbackException = null;
+    protected NestedTransactionRollbackException nestedTransactionRollbackException = null;
 
     protected QueryFactory aQueryFactory;
 
@@ -79,15 +79,15 @@ class Connection : IConnection {
         if (driverClass.isNull) {
             throw new MissingDriverException(["driver": driver, "connection": this.configName()]);
         }
-        $sharedConfig = array_diff_key(configData, array_flip([
+        sharedConfig = array_diff_key(configData, array_flip([
             "name",
             "driver",
             "cacheMetaData",
             "cacheKeyPrefix",
         ]));
 
-        $writeConfig = configData["write"] ?? [] + $sharedConfig;
-        $readConfig = configData["read"] ?? [] + $sharedConfig;
+        $writeConfig = configData["write"] ?? [] + sharedConfig;
+        $readConfig = configData["read"] ?? [] + sharedConfig;
         if ($readConfig == $writeConfig) {
             $readDriver = $writeDriver = new driverClass(["_role": self.ROLE_WRITE] + $writeConfig);
         } else {
@@ -339,8 +339,8 @@ class Connection : IConnection {
         if (!_transactionStarted) {
             return false;
         }
-        $useSavePoint = this.isSavePointsEnabled();
-        toBeginning ??= !$useSavePoint;
+        useSavePoint = this.isSavePointsEnabled();
+        toBeginning ??= !useSavePoint;
         if (_transactionLevel == 0 || toBeginning) {
            _transactionLevel = 0;
            _transactionStarted = false;
@@ -349,9 +349,9 @@ class Connection : IConnection {
 
             return true;
         }
-        $savePoint = _transactionLevel--;
-        if ($useSavePoint) {
-            this.rollbackSavepoint($savePoint);
+        savePoint = _transactionLevel--;
+        if (useSavePoint) {
+            this.rollbackSavepoint(savePoint);
         } else {
             this.nestedTransactionRollbackException ??= new NestedTransactionRollbackException();
         }
@@ -543,21 +543,21 @@ class Connection : IConnection {
 
     // Returns an array that can be used to describe the internal state of this object.
     IData[string] debugInfo() {
-        $secrets = [
+        secrets = [
             "password": "*****",
             "username": "*****",
             "host": "*****",
             "database": "*****",
             "port": "*****",
         ];
-        $replace = array_intersect_key($secrets, _config);
+        $replace = array_intersect_key(secrets, _config);
         configData = $replace + _config;
 
         if (isSet(configData["read"])) {
-            configData["read"] = array_intersect_key($secrets, configData["read"]) + configData["read"];
+            configData["read"] = array_intersect_key(secrets, configData["read"]) + configData["read"];
         }
         if (configData.isSet("write")) {
-            configData["write"] = array_intersect_key($secrets, configData["write"]) + configData["write"];
+            configData["write"] = array_intersect_key(secrets, configData["write"]) + configData["write"];
         }
         return [
             "config": configData,
