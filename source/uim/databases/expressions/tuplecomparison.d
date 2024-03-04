@@ -90,7 +90,7 @@ class TupleComparison : ComparisonExpression
 
         field = implode(", ", fields);
 
-        return sprintf($template, field, _operator, values);
+        return sprintf(template, field, _operator, values);
     }
 
     /**
@@ -103,11 +103,11 @@ class TupleComparison : ComparisonExpression
         values = null;
         parts = this.getValue();
 
-        if ($parts instanceof IDBAExpression) {
+        if (parts instanceof IDBAExpression) {
             return parts.sql($binder);
         }
 
-        foreach ($parts as i: value) {
+        foreach (parts as i: value) {
             if (value instanceof IDBAExpression) {
                 values[] = value.sql($binder);
                 continue;
@@ -115,15 +115,15 @@ class TupleComparison : ComparisonExpression
 
             type = _type;
             isMultiOperation = this.isMulti();
-            if (empty($type)) {
+            if (empty(type)) {
                 type = null;
             }
 
-            if ($isMultiOperation) {
+            if (isMultiOperation) {
                 $bound = null;
                 foreach (value as $k: $val) {
                     /** @var string $valType */
-                    $valType = type && isset($type.isSet($k) ? type[$k] : type;
+                    $valType = type && isset(type.isSet($k) ? type[$k] : type;
                     $bound[] = _bindValue($val, $binder, $valType);
                 }
 
@@ -132,7 +132,7 @@ class TupleComparison : ComparisonExpression
             }
 
             /** @var string $valType */
-            $valType = type && type[$i]) ? type[$i] : type;
+            $valType = type && type[i]) ? type[i] : type;
             values[] = _bindValue(value, $binder, $valType);
         }
 
@@ -142,7 +142,7 @@ class TupleComparison : ComparisonExpression
 
     protected string _bindValue(value, ValueBinder aBinder, Nullable!string type = null) {
         placeholder = $binder.placeholder("tuple");
-        $binder.bind($placeholder, value, type);
+        $binder.bind(placeholder, value, type);
 
         return placeholder;
     }

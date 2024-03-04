@@ -51,7 +51,7 @@ class QueryExpression : IDBAExpression, Countable
      * @see uim.databases.Expression\QueryExpression::add() for more details on conditions and types
      */
     this(conditions = null, types = null, conjunction = "AND") {
-        this.setTypeMap($types);
+        this.setTypeMap(types);
         this.setConjunction(strtoupper(conjunction));
         if (!empty(conditions)) {
             this.add(conditions, this.getTypeMap().getTypes());
@@ -126,7 +126,7 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function eq(field, value, Nullable!string type = null) {
-        if ($type == null) {
+        if (type == null) {
             type = _calculateType(field);
         }
 
@@ -144,7 +144,7 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function notEq(field, value, type = null) {
-        if ($type == null) {
+        if (type == null) {
             type = _calculateType(field);
         }
 
@@ -160,7 +160,7 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function gt(field, value, type = null) {
-        if ($type == null) {
+        if (type == null) {
             type = _calculateType(field);
         }
 
@@ -176,7 +176,7 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function lt(field, value, type = null) {
-        if ($type == null) {
+        if (type == null) {
             type = _calculateType(field);
         }
 
@@ -192,7 +192,7 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function gte(field, value, type = null) {
-        if ($type == null) {
+        if (type == null) {
             type = _calculateType(field);
         }
 
@@ -208,7 +208,7 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function lte(field, value, type = null) {
-        if ($type == null) {
+        if (type == null) {
             type = _calculateType(field);
         }
 
@@ -254,7 +254,7 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function like(field, value, type = null) {
-        if ($type == null) {
+        if (type == null) {
             type = _calculateType(field);
         }
 
@@ -270,7 +270,7 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function notLike(field, value, type = null) {
-        if ($type == null) {
+        if (type == null) {
             type = _calculateType(field);
         }
 
@@ -287,7 +287,7 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function in(field, values, type = null) {
-        if ($type == null) {
+        if (type == null) {
             type = _calculateType(field);
         }
         type = type ?: "string";
@@ -341,7 +341,7 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function notIn(field, values, type = null) {
-        if ($type == null) {
+        if (type == null) {
             type = _calculateType(field);
         }
         type = type ?: "string";
@@ -394,17 +394,17 @@ class QueryExpression : IDBAExpression, Countable
      * "field BETWEEN from AND to".
      *
      * @param uim.databases.IDBAExpression|string field The field name to compare for values inbetween the range.
-     * @param mixed $from The initial value of the range.
+     * @param mixed from The initial value of the range.
      * @param mixed to The ending value in the comparison range.
      * @param string|null type the type name for value as configured using the Type map.
      * @return this
      */
-    function between(field, $from, to, type = null) {
-        if ($type == null) {
+    function between(field, from, to, type = null) {
+        if (type == null) {
             type = _calculateType(field);
         }
 
-        return this.add(new BetweenExpression(field, $from, to, type));
+        return this.add(new BetweenExpression(field, from, to, type));
     }
 
     /**
@@ -418,10 +418,10 @@ class QueryExpression : IDBAExpression, Countable
      */
     function and(conditions, types = null) {
         if (conditions instanceof Closure) {
-            return conditions(new static([], this.getTypeMap().setTypes($types)));
+            return conditions(new static([], this.getTypeMap().setTypes(types)));
         }
 
-        return new static(conditions, this.getTypeMap().setTypes($types));
+        return new static(conditions, this.getTypeMap().setTypes(types));
     }
 
     /**
@@ -435,10 +435,10 @@ class QueryExpression : IDBAExpression, Countable
      */
     function or(conditions, types = null) {
         if (conditions instanceof Closure) {
-            return conditions(new static([], this.getTypeMap().setTypes($types), "OR"));
+            return conditions(new static([], this.getTypeMap().setTypes(types), "OR"));
         }
 
-        return new static(conditions, this.getTypeMap().setTypes($types), "OR");
+        return new static(conditions, this.getTypeMap().setTypes(types), "OR");
     }
 
     // phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
@@ -512,19 +512,19 @@ class QueryExpression : IDBAExpression, Countable
         }
         conjunction = _conjunction;
         template = $len == 1 ? '%s' : "(%s)";
-        $parts = null;
-        foreach (_conditions as $part) {
-            if ($part instanceof Query) {
-                $part = "(" ~ $part.sql($binder) ~ ")";
-            } elseif ($part instanceof IDBAExpression) {
-                $part = $part.sql($binder);
+        parts = null;
+        foreach (_conditions as part) {
+            if (part instanceof Query) {
+                part = "(" ~ part.sql($binder) ~ ")";
+            } elseif (part instanceof IDBAExpression) {
+                part = part.sql($binder);
             }
-            if ($part != "") {
-                $parts[] = $part;
+            if (part != "") {
+                parts[] = part;
             }
         }
 
-        return sprintf($template, implode(" conjunction ", $parts));
+        return sprintf(template, implode(" conjunction ", parts));
     }
 
 
@@ -555,15 +555,15 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function iterateParts(callable callback) {
-        $parts = null;
+        parts = null;
         foreach (_conditions as $k: c) {
             $key = &$k;
-            $part = callback(c, $key);
-            if ($part != null) {
-                $parts[$key] = $part;
+            part = callback(c, $key);
+            if (part != null) {
+                parts[$key] = part;
             }
         }
-        _conditions = $parts;
+        _conditions = parts;
 
         return this;
     }
@@ -596,7 +596,7 @@ class QueryExpression : IDBAExpression, Countable
     protected void _addConditions(array conditions, array types) {
         $operators = ["and", "or", "xor"];
 
-        typeMap = this.getTypeMap().setTypes($types);
+        typeMap = this.getTypeMap().setTypes(types);
 
         foreach (conditions as $k: c) {
             $numericKey = is_numeric($k);
@@ -610,15 +610,15 @@ class QueryExpression : IDBAExpression, Countable
                 continue;
             }
 
-            $isArray = is_array(c);
-            $isOperator = $isNot = false;
+            isArray = is_array(c);
+            isOperator = isNot = false;
             if (!$numericKey) {
                 $normalizedKey = strtolower($k);
-                $isOperator = hasAllValues($normalizedKey, $operators);
-                $isNot = $normalizedKey == "not";
+                isOperator = hasAllValues($normalizedKey, $operators);
+                isNot = $normalizedKey == "not";
             }
 
-            if (($isOperator || $isNot) && ($isArray || c instanceof Countable) && count(c) == 0) {
+            if ((isOperator || isNot) && (isArray || c instanceof Countable) && count(c) == 0) {
                 continue;
             }
 
@@ -632,12 +632,12 @@ class QueryExpression : IDBAExpression, Countable
                 continue;
             }
 
-            if ($numericKey && $isArray || $isOperator) {
+            if ($numericKey && isArray || isOperator) {
                 _conditions[] = new static(c, typeMap, $numericKey ? "AND" : $k);
                 continue;
             }
 
-            if ($isNot) {
+            if (isNot) {
                 _conditions[] = new UnaryExpression("NOT", new static(c, typeMap));
                 continue;
             }
@@ -672,25 +672,25 @@ class QueryExpression : IDBAExpression, Countable
         // `field NOT LIKE`, or combinations with function expressions
         // like `CONCAT(first_name, " ", last_name) IN`.
         if ($spaces > 1) {
-            $parts = explode(" ", field);
+            parts = explode(" ", field);
             if (preg_match("/(is not|not \w+)$/i", field)) {
-                $last = array_pop($parts);
-                $second = array_pop($parts);
-                $parts[] = "{$second} {$last}";
+                $last = array_pop(parts);
+                $second = array_pop(parts);
+                parts[] = "{$second} {$last}";
             }
-            $operator = array_pop($parts);
-            expression = implode(" ", $parts);
+            $operator = array_pop(parts);
+            expression = implode(" ", parts);
         } elseif ($spaces == 1) {
-            $parts = explode(" ", field, 2);
-            [expression, $operator] = $parts;
+            parts = explode(" ", field, 2);
+            [expression, $operator] = parts;
         }
         $operator = strtolower(trim($operator));
         type = this.getTypeMap().type(expression);
 
-        typeMultiple = (is_string($type) && strpos($type, "[]") != false);
+        typeMultiple = (is_string(type) && strpos(type, "[]") != false);
         if (hasAllValues($operator, ["in", "not in"]) || typeMultiple) {
             type = type ?: "string";
-            if (!$typeMultiple) {
+            if (!typeMultiple) {
                 type ~= "[]";
             }
             $operator = $operator == "=" ? "IN" : $operator;
@@ -698,7 +698,7 @@ class QueryExpression : IDBAExpression, Countable
             typeMultiple = true;
         }
 
-        if ($typeMultiple) {
+        if (typeMultiple) {
             value = value instanceof IDBAExpression ? value : (array)value;
         }
 
@@ -754,9 +754,9 @@ class QueryExpression : IDBAExpression, Countable
      * Clone this object and its subtree of expressions.
      */
     void __clone() {
-        foreach (_conditions as $i: condition) {
+        foreach (_conditions as i: condition) {
             if (condition instanceof IDBAExpression) {
-                _conditions[$i] = clone condition;
+                _conditions[i] = clone condition;
             }
         }
     }

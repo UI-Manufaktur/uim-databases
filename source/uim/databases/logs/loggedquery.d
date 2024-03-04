@@ -44,7 +44,7 @@ class LoggedQuery : JsonSerializable
      *
      * @var array
      */
-    $params = null;
+    params = null;
 
     /**
      * Number of rows affected or returned by the query execution
@@ -65,24 +65,24 @@ class LoggedQuery : JsonSerializable
      * params used to execute the query
      */
     protected string interpolate() {
-        $params = array_map(function ($p) {
-            if ($p == null) {
+        params = array_map(function (p) {
+            if (p == null) {
                 return "NULL";
             }
 
-            if (is_bool($p)) {
+            if (is_bool(p)) {
                 if (this.driver instanceof Sqlserver) {
-                    return $p ? "1" : "0";
+                    return p ? "1" : "0";
                 }
 
-                return $p ? "TRUE" : "FALSE";
+                return p ? "TRUE" : "FALSE";
             }
 
-            if (is_string($p)) {
+            if (is_string(p)) {
                 // Likely binary data like a blob or binary uuid.
                 // pattern matches ascii control chars.
-                if (preg_replace("/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u", "", $p) != $p) {
-                    $p = bin2hex($p);
+                if (preg_replace("/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u", "", p) != p) {
+                    p = bin2hex(p);
                 }
 
                 $replacements = [
@@ -91,21 +91,21 @@ class LoggedQuery : JsonSerializable
                     """: """",
                 ];
 
-                $p = strtr($p, $replacements);
+                p = strtr(p, $replacements);
 
-                return ""$p"";
+                return ""p"";
             }
 
-            return $p;
+            return p;
         }, this.params);
 
         $keys = null;
-        limit = is_int(key($params)) ? 1 : -1;
-        foreach ($params as $key: $param) {
+        limit = is_int(key(params)) ? 1 : -1;
+        foreach (params as $key: param) {
             $keys[] = is_string($key) ? "/:$key\b/" : "/[?]/";
         }
 
-        return preg_replace($keys, $params, this.query, limit);
+        return preg_replace($keys, params, this.query, limit);
     }
 
     /**

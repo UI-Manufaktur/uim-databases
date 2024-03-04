@@ -30,10 +30,10 @@ interface IWindow {
     /**
      * Adds one or more partition expressions to the window.
      *
-     * @param uim.databases.IDBAExpression|\Closure|array<uim.databases.IDBAExpression|string>|string $partitions Partition expressions
+     * @param uim.databases.IDBAExpression|\Closure|array<uim.databases.IDBAExpression|string>|string partitions Partition expressions
      * @return this
      */
-    function partition($partitions);
+    function partition(partitions);
 
     /**
      * Adds one or more order clauses to the window.

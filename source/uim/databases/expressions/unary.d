@@ -44,19 +44,19 @@ class UnaryExpression : IDBAExpression
     /**
      * Where to place the operator
      */
-    protected int $position;
+    protected int position;
 
     /**
      * Constructor
      *
      * @param string $operator The operator to used for the expression
      * @param mixed value the value to use as the operand for the expression
-     * @param int $position either UnaryExpression::PREFIX or UnaryExpression::POSTFIX
+     * @param int position either UnaryExpression::PREFIX or UnaryExpression::POSTFIX
      */
-    this(string $operator, value, $position = self::PREFIX) {
+    this(string $operator, value, position = self::PREFIX) {
         _operator = $operator;
         _value = value;
-        this.position = $position;
+        this.position = position;
     }
 
 

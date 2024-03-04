@@ -49,19 +49,19 @@ class LoggingStatement : StatementDecorator
      * Wrapper for the execute function to calculate time spent
      * and log the query afterwards.
      *
-     * @param array|null $params List of values to be bound to query
+     * @param array|null params List of values to be bound to query
      * @return bool True on success, false otherwise
      * @throws \Exception Re-throws any exception raised during query execution.
      */
-    bool execute(?array $params = null) {
+    bool execute(?array params = null) {
         _startTime = microtime(true);
 
         _loggedQuery = new LoggedQuery();
         _loggedQuery.driver = _driver;
-        _loggedQuery.params = $params ?: _compiledParams;
+        _loggedQuery.params = params ?: _compiledParams;
 
         try {
-            result = super.execute($params);
+            result = super.execute(params);
             _loggedQuery.took = (int)round((microtime(true) - _startTime) * 1000, 0);
         } catch (Exception e) {
             /** @psalm-suppress UndefinedPropertyAssignment */
@@ -79,8 +79,8 @@ class LoggingStatement : StatementDecorator
     }
 
 
-    function fetch($type = self::FETCH_TYPE_NUM) {
-        $record = super.fetch($type);
+    function fetch(type = self::FETCH_TYPE_NUM) {
+        $record = super.fetch(type);
 
         if (this.loggedQuery) {
             this.rowCount();
@@ -90,8 +90,8 @@ class LoggingStatement : StatementDecorator
     }
 
 
-    function fetchAll($type = self::FETCH_TYPE_NUM) {
-        results = super.fetchAll($type);
+    function fetchAll(type = self::FETCH_TYPE_NUM) {
+        results = super.fetchAll(type);
 
         if (this.loggedQuery) {
             this.rowCount();
@@ -138,10 +138,10 @@ class LoggingStatement : StatementDecorator
     void bindValue(column, value, type = "string") {
         super.bindValue(column, value, type);
 
-        if ($type == null) {
+        if (type == null) {
             type = "string";
         }
-        if (!ctype_digit($type)) {
+        if (!ctype_digit(type)) {
             value = this.cast(value, type)[0];
         }
         _compiledParams[column] = value;

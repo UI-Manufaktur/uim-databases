@@ -25,9 +25,9 @@ class StringExpression : IDBAExpression {
 
   string sql(ValueBinder aValueBinder) {
     placeholder = aValueBinder.placeholder("c");
-    aValueBinder.bind($placeholder, this.string,"string");
+    aValueBinder.bind(placeholder, this.string,"string");
 
-    return $placeholder ~ " COLLATE " ~ this.collation;
+    return placeholder ~ " COLLATE " ~ this.collation;
   }
 
   O traverse(this O)(Closure callback)

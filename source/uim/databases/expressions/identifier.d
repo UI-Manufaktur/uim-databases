@@ -31,21 +31,21 @@ class IdentifierExpression : IDBAExpression
     /**
      * Constructor
      *
-     * @param string $identifier The identifier this expression represents
+     * @param string identifier The identifier this expression represents
      * @param string|null collation The identifier collation
      */
-    this(string $identifier, Nullable!string collation = null) {
-        _identifier = $identifier;
+    this(string identifier, Nullable!string collation = null) {
+        _identifier = identifier;
         this.collation = collation;
     }
 
     /**
      * Sets the identifier this expression represents
      *
-     * @param string $identifier The identifier
+     * @param string identifier The identifier
      */
-    void setIdentifier(string $identifier) {
-        _identifier = $identifier;
+    void setIdentifier(string identifier) {
+        _identifier = identifier;
     }
 
     /**

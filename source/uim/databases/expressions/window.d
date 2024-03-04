@@ -23,7 +23,7 @@ class WindowExpression : IDBAExpression, IWindow
     /**
      * @var array<uim.databases.IDBAExpression>
      */
-    protected $partitions = null;
+    protected partitions = null;
 
     /**
      * @var DDBExpression\OrderByExpression|null
@@ -33,7 +33,7 @@ class WindowExpression : IDBAExpression, IWindow
     /**
      * @var array|null
      */
-    protected $frame;
+    protected frame;
 
     /**
      */
@@ -69,26 +69,26 @@ class WindowExpression : IDBAExpression, IWindow
     }
 
 
-    function partition($partitions) {
-        if (!$partitions) {
+    function partition(partitions) {
+        if (!partitions) {
             return this;
         }
 
-        if ($partitions instanceof Closure) {
-            $partitions = $partitions(new QueryExpression([], [], ""));
+        if (partitions instanceof Closure) {
+            partitions = partitions(new QueryExpression([], [], ""));
         }
 
-        if (!is_array($partitions)) {
-            $partitions = [$partitions];
+        if (!is_array(partitions)) {
+            partitions = [partitions];
         }
 
-        foreach ($partitions as &$partition) {
-            if (is_string($partition)) {
-                $partition = new IdentifierExpression($partition);
+        foreach (partitions as &partition) {
+            if (is_string(partition)) {
+                partition = new IdentifierExpression(partition);
             }
         }
 
-        this.partitions = array_merge(this.partitions, $partitions);
+        this.partitions = array_merge(this.partitions, partitions);
 
         return this;
     }
@@ -180,8 +180,8 @@ class WindowExpression : IDBAExpression, IWindow
 
         if (this.partitions) {
             expressions = null;
-            foreach (this.partitions as $partition) {
-                expressions[] = $partition.sql($binder);
+            foreach (this.partitions as partition) {
+                expressions[] = partition.sql($binder);
             }
 
             clauses[] = "PARTITION BY " ~ implode(", ", expressions);
@@ -203,13 +203,13 @@ class WindowExpression : IDBAExpression, IWindow
                 this.frame["end"]["direction"]
             );
 
-            $frameSql = sprintf("%s BETWEEN %s AND %s", this.frame["type"], $start, end);
+            frameSql = sprintf("%s BETWEEN %s AND %s", this.frame["type"], $start, end);
 
             if (this.exclusion != null) {
-                $frameSql ~= " EXCLUDE " ~ this.exclusion;
+                frameSql ~= " EXCLUDE " ~ this.exclusion;
             }
 
-            clauses[] = $frameSql;
+            clauses[] = frameSql;
         }
 
         return implode(" ", clauses);
@@ -218,9 +218,9 @@ class WindowExpression : IDBAExpression, IWindow
 
     O traverse(this O)(Closure callback) {
         callback(this.name);
-        foreach (this.partitions as $partition) {
-            callback($partition);
-            $partition.traverse(callback);
+        foreach (this.partitions as partition) {
+            callback(partition);
+            partition.traverse(callback);
         }
 
         if (this.order) {
@@ -272,8 +272,8 @@ class WindowExpression : IDBAExpression, IWindow
      */
     void __clone() {
         this.name = clone this.name;
-        foreach (this.partitions as $i: $partition) {
-            this.partitions[$i] = clone $partition;
+        foreach (this.partitions as i: partition) {
+            this.partitions[i] = clone partition;
         }
         if (this.order != null) {
             this.order = clone this.order;

@@ -59,7 +59,7 @@ class ValuesExpression : IDBAExpression {
      */
     this(array columns, TypeMap typeMap) {
         _columns = columns;
-        this.setTypeMap($typeMap);
+        this.setTypeMap(typeMap);
     }
 
     /**
@@ -193,7 +193,7 @@ class ValuesExpression : IDBAExpression {
 
         columns = _columnNames();
         $defaults = array_fill_keys(columns, null);
-        $placeholders = null;
+        placeholders = null;
 
         types = null;
         typeMap = this.getTypeMap();
@@ -213,12 +213,12 @@ class ValuesExpression : IDBAExpression {
                     continue;
                 }
 
-                $placeholder = $binder.placeholder("c");
-                $rowPlaceholders[] = $placeholder;
-                $binder.bind($placeholder, value, types[column]);
+                placeholder = $binder.placeholder("c");
+                $rowPlaceholders[] = placeholder;
+                $binder.bind(placeholder, value, types[column]);
             }
 
-            $placeholders[] = implode(", ", $rowPlaceholders);
+            placeholders[] = implode(", ", $rowPlaceholders);
         }
 
         query = this.getQuery();
@@ -226,7 +226,7 @@ class ValuesExpression : IDBAExpression {
             return " " ~ query.sql($binder);
         }
 
-        return sprintf(" VALUES (%s)", implode("), (", $placeholders));
+        return sprintf(" VALUES (%s)", implode("), (", placeholders));
     }
 
 
@@ -272,14 +272,14 @@ class ValuesExpression : IDBAExpression {
             types[c] = typeMap.type(c);
         }
 
-        types = _requiresToExpressionCasting($types);
+        types = _requiresToExpressionCasting(types);
 
-        if (empty($types)) {
+        if (empty(types)) {
             return;
         }
 
         foreach (_values as $row: values) {
-            foreach ($types as col: type) {
+            foreach (types as col: type) {
                 /** @var DDBtypes.ExpressionTypeInterface type */
                 _values[$row][col] = type.toExpression(values[col]);
             }

@@ -81,7 +81,7 @@ class WhenThenExpression : IDBAExpression
      *  value.
      */
     this(?TypeMap typeMap = null) {
-        if ($typeMap == null) {
+        if (typeMap == null) {
             typeMap = new TypeMap();
         }
         _typeMap = typeMap;
@@ -93,7 +93,7 @@ class WhenThenExpression : IDBAExpression
      * @param uim.databases.IDBAExpression|object|array|scalar $when The `WHEN` value. When using an array of
      *  conditions, it must be compatible with `uim.databases.Query::where()`. Note that this argument is _not_
      *  completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in! If you
-     *  plan to use user data, either pass a single type for the `$type` argument (which forces the `$when` value to be
+     *  plan to use user data, either pass a single type for the `type` argument (which forces the `$when` value to be
      *  a non-array, and then always binds the data), use a conditions array where the user data is only passed on the
      *  value side of the array entries, or custom bindings!
      * @param array<string, string>|string|null type The when value type. Either an associative array when using array style
@@ -101,10 +101,10 @@ class WhenThenExpression : IDBAExpression
      * @return this
      * @throws \InvalidArgumentException In case the `$when` argument is neither a non-empty array, nor a scalar value,
      *  an object, or an instance of `uim.databases.IDBAExpression`.
-     * @throws \InvalidArgumentException In case the `$type` argument is neither an array, a string, nor null.
-     * @throws \InvalidArgumentException In case the `$when` argument is an array, and the `$type` argument is neither
+     * @throws \InvalidArgumentException In case the `type` argument is neither an array, a string, nor null.
+     * @throws \InvalidArgumentException In case the `$when` argument is an array, and the `type` argument is neither
      * an array, nor null.
-     * @throws \InvalidArgumentException In case the `$when` argument is a non-array value, and the `$type` argument is
+     * @throws \InvalidArgumentException In case the `$when` argument is a non-array value, and the `type` argument is
      * neither a string, nor null.
      * @see CaseStatementExpression::when() for a more detailed usage explanation.
      */
@@ -124,46 +124,46 @@ class WhenThenExpression : IDBAExpression
 
         if (
             type != null &&
-            !is_array($type) &&
-            !is_string($type)
+            !is_array(type) &&
+            !is_string(type)
         ) {
             throw new InvalidArgumentException(sprintf(
-                "The `$type` argument must be either an array, a string, or `null`, `%s` given.",
-                getTypeName($type)
+                "The `type` argument must be either an array, a string, or `null`, `%s` given.",
+                getTypeName(type)
             ));
         }
 
         if (is_array($when)) {
             if (
                 type != null &&
-                !is_array($type)
+                !is_array(type)
             ) {
                 throw new InvalidArgumentException(sprintf(
-                    "When using an array for the `$when` argument, the `$type` argument must be an " ~
+                    "When using an array for the `$when` argument, the `type` argument must be an " ~
                     "array too, `%s` given.",
-                    getTypeName($type)
+                    getTypeName(type)
                 ));
             }
 
             // avoid dirtying the type map for possible consecutive `when()` calls
             typeMap = clone _typeMap;
             if (
-                is_array($type) &&
-                count($type) > 0
+                is_array(type) &&
+                count(type) > 0
             ) {
-                typeMap = typeMap.setTypes($type);
+                typeMap = typeMap.setTypes(type);
             }
 
             $when = new QueryExpression($when, typeMap);
         } else {
             if (
                 type != null &&
-                !is_string($type)
+                !is_string(type)
             ) {
                 throw new InvalidArgumentException(sprintf(
-                    "When using a non-array value for the `$when` argument, the `$type` argument must " ~
+                    "When using a non-array value for the `$when` argument, the `type` argument must " ~
                     "be a string, `%s` given.",
-                    getTypeName($type)
+                    getTypeName(type)
                 ));
             }
 
@@ -205,7 +205,7 @@ class WhenThenExpression : IDBAExpression
 
         this.then = result;
 
-        if ($type == null) {
+        if (type == null) {
             type = this.inferType(result);
         }
 
@@ -276,14 +276,14 @@ class WhenThenExpression : IDBAExpression
         } elseif ($when instanceof IDBAExpression) {
             $when = $when.sql($binder);
         } else {
-            $placeholder = $binder.placeholder("c");
+            placeholder = $binder.placeholder("c");
             if (is_string(this.whenType)) {
                 $whenType = this.whenType;
             } else {
                 $whenType = null;
             }
-            $binder.bind($placeholder, $when, $whenType);
-            $when = $placeholder;
+            $binder.bind(placeholder, $when, $whenType);
+            $when = placeholder;
         }
 
         then = this.compileNullableValue($binder, this.then, this.thenType);

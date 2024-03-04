@@ -35,11 +35,11 @@ class FunctionExpression : QueryExpression : ITypedResult
      *
      * ### Examples:
      *
-     * `$f = new FunctionExpression("CONCAT", ["UIM", " rules"]);`
+     * `f = new FunctionExpression("CONCAT", ["UIM", " rules"]);`
      *
      * Previous line will generate `CONCAT("UIM", " rules")`
      *
-     * `$f = new FunctionExpression("CONCAT", ["name": "literal", " rules"]);`
+     * `f = new FunctionExpression("CONCAT", ["name": "literal", " rules"]);`
      *
      * Will produce `CONCAT(name, " rules")`
      *
@@ -53,7 +53,7 @@ class FunctionExpression : QueryExpression : ITypedResult
     this(string aName, array params = null, array types = null, string $returnType = "string") {
         _name = name;
         _returnType = $returnType;
-        super(($params, types, ",");
+        super((params, types, ",");
     }
 
     /**
@@ -89,25 +89,25 @@ class FunctionExpression : QueryExpression : ITypedResult
      */
     function add(conditions, array types = null, bool prepend = false) {
         put = prepend ? "array_unshift" : "array_push";
-        typeMap = this.getTypeMap().setTypes($types);
+        typeMap = this.getTypeMap().setTypes(types);
         foreach (conditions as $k: p) {
-            if ($p == "literal") {
+            if (p == "literal") {
                 put(_conditions, $k);
                 continue;
             }
 
-            if ($p == "identifier") {
+            if (p == "identifier") {
                 put(_conditions, new IdentifierExpression($k));
                 continue;
             }
 
             type = typeMap.type($k);
 
-            if ($type != null && !$p instanceof IDBAExpression) {
-                p = _castToExpression($p, type);
+            if (type != null && !p instanceof IDBAExpression) {
+                p = _castToExpression(p, type);
             }
 
-            if ($p instanceof IDBAExpression) {
+            if (p instanceof IDBAExpression) {
                 put(_conditions, p);
                 continue;
             }
@@ -128,7 +128,7 @@ class FunctionExpression : QueryExpression : ITypedResult
                 condition = condition.sql($binder);
             } elseif (is_array(condition)) {
                 p = $binder.placeholder("param");
-                $binder.bind($p, condition["value"], condition["type"]);
+                $binder.bind(p, condition["value"], condition["type"]);
                 condition = p;
             }
             parts[] = condition;
