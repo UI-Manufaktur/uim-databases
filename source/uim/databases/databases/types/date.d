@@ -133,7 +133,7 @@ class DateType : BaseType, IBatchCasting {
         }
         format = "%d-%02d-%02d".format(aValue["year"], aValue["month"], aValue["day"]);
 
-        return new className($format);
+        return new className(format);
     }
     
     /**
@@ -197,7 +197,7 @@ class DateType : BaseType, IBatchCasting {
         className = _className;
         foreach (_marshalFormats as format) {
             try {
-                return className.createFromFormat($format, aValue);
+                return className.createFromFormat(format, aValue);
             } catch (InvalidArgumentException) {
                 continue;
             }

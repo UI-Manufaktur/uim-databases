@@ -119,7 +119,7 @@ class Sqlite : Driver
             params[] = "mode=" ~ aConfig["mode"];
         }
 
-        if ($params) {
+        if (params) {
             if (PHP_VERSION_ID < 80100) {
                 throw new RuntimeException("SQLite URI support requires D 8.1.");
             }
@@ -167,10 +167,10 @@ class Sqlite : Driver
          * @psalm-suppress PossiblyInvalidMethodCall
          * @psalm-suppress PossiblyInvalidArgument
          */
-        $statement = _connection.prepare($isObject ? query.sql() : query);
+        $statement = _connection.prepare(isObject ? query.sql() : query);
         result = new SqliteStatement(new PDOStatement($statement, this), this);
         /** @psalm-suppress PossiblyInvalidMethodCall */
-        if ($isObject && query.isBufferedResultsEnabled() == false) {
+        if (isObject && query.isBufferedResultsEnabled() == false) {
             result.bufferResults(false);
         }
 
@@ -250,8 +250,8 @@ class Sqlite : Driver
                 expression
                     .setName("ROUND")
                     .setConjunction("-")
-                    .iterateParts(function ($p) {
-                        return new FunctionExpression("JULIANDAY", [$p["value"]], [$p["type"]]);
+                    .iterateParts(function (p) {
+                        return new FunctionExpression("JULIANDAY", [p["value"]], [p["type"]]);
                     });
                 break;
             case "NOW":
@@ -272,9 +272,9 @@ class Sqlite : Driver
                 expression
                     .setName("STRFTIME")
                     .setConjunction(" ,")
-                    .iterateParts(function ($p, $key) {
+                    .iterateParts(function (p, $key) {
                         if ($key == 0) {
-                            value = rtrim($p.toLower, "s");
+                            value = rtrim(p.toLower, "s");
                             if (isset(_dateParts[value])) {
                                 p = ["value": "%" ~ _dateParts[value], "type": null];
                             }
@@ -287,7 +287,7 @@ class Sqlite : Driver
                 expression
                     .setName("DATE")
                     .setConjunction(",")
-                    .iterateParts(function ($p, $key) {
+                    .iterateParts(function (p, $key) {
                         if ($key == 1) {
                             p = ["value": p, "type": null];
                         }

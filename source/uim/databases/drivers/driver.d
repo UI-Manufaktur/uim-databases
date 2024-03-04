@@ -318,11 +318,11 @@ abstract class Driver : IDBADriver {
     }
 
     array compileQuery(Query myQuery, ValueBinder aValueBinder) {
-        $processor = this.newCompiler();
+        processor = this.newCompiler();
         translator = this.queryTranslator(myQuery.type());
         myQuery = translator(myQuery);
 
-        return [myQuery, $processor.compile(myQuery, $binder)];
+        return [myQuery, processor.compile(myQuery, $binder)];
     }
 
     QueryCompiler newCompiler() {

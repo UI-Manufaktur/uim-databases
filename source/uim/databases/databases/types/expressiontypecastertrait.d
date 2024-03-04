@@ -18,7 +18,7 @@ template ExpressionTypeCasterTemplate {
      * @param string type The type name
      */
     protected Json _castToExpression(Json aValue, string atype = null) {
-        if ($type.isNull) {
+        if (type.isNull) {
             return aValue;
         }
         baseType = type.replace("[]", "");

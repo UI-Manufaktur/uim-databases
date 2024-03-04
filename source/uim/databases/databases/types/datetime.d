@@ -116,8 +116,8 @@ class DateTimeType : BaseType, IBatchCasting {
      * @param \DateTimeZone|string timezone Database timezone.
      */
     void setDatabaseTimezone(DateTimeZone|string timezone) {
-        if (isString($timezone)) {
-            timezone = new DateTimeZone($timezone);
+        if (isString(timezone)) {
+            timezone = new DateTimeZone(timezone);
         }
         this.dbTimezone = timezone;
     }
@@ -130,8 +130,8 @@ class DateTimeType : BaseType, IBatchCasting {
      * \DateTimeZone|string timezone User timezone.
      */
     void setUserTimezone(DateTimeZone|string timezone) {
-        if (isString($timezone)) {
-            timezone = new DateTimeZone($timezone);
+        if (isString(timezone)) {
+            timezone = new DateTimeZone(timezone);
         }
         this.userTimezone = timezone;
     }
@@ -273,7 +273,7 @@ class DateTimeType : BaseType, IBatchCasting {
                 myRequestData["microsecond"]
             );
 
-        dateTime = new className($format, myRequestData.get("timezone", this.userTimezone);
+        dateTime = new className(format, myRequestData.get("timezone", this.userTimezone);
 
         return dateTime.setTimezone(this.defaultTimezone);
     }
@@ -338,9 +338,9 @@ class DateTimeType : BaseType, IBatchCasting {
      */
     protected DateTime|DateTimeImmutable|null _parseValue(string valueToParse) {
          className = _className;
-        foreach ($format; _marshalFormats) {
+        foreach (format; _marshalFormats) {
             try {
-                if(auto dateTime = className.createFromFormat($format, valueToParse, this.userTimezone)) {
+                if(auto dateTime = className.createFromFormat(format, valueToParse, this.userTimezone)) {
                     return dateTime;
                 }
             } catch (InvalidArgumentException) {

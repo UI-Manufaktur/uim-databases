@@ -91,7 +91,7 @@ class TimeType : BaseType, IBatchCasting {
             requestData["microsecond"]
         );
 
-        return new _className($format);
+        return new _className(format);
     }
     array manyToD(array  someValues, array fields, Driver driver) {
         fields

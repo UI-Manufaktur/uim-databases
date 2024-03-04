@@ -18,55 +18,55 @@ trait SqlDialectTrait
      * Quotes a database identifier (a column name, table name, etc..) to
      * be used safely in queries without the risk of using reserved words
      *
-     * @param string $identifier The identifier to quote.
+     * @param string identifier The identifier to quote.
      */
-    string quoteIdentifier(string $identifier) {
-        $identifier = trim($identifier);
+    string quoteIdentifier(string identifier) {
+        identifier = trim(identifier);
 
-        if ($identifier == "*" || $identifier == "") {
-            return $identifier;
+        if (identifier == "*" || identifier == "") {
+            return identifier;
         }
 
         // string
-        if (preg_match("/^[\w-]+$/u", $identifier)) {
-            return _startQuote . $identifier . _endQuote;
+        if (preg_match("/^[\w-]+$/u", identifier)) {
+            return _startQuote . identifier . _endQuote;
         }
 
         // string.string
-        if (preg_match("/^[\w-]+\.[^ \*]*$/u", $identifier)) {
-            $items = explode(".", $identifier);
+        if (preg_match("/^[\w-]+\.[^ \*]*$/u", identifier)) {
+            items = explode(".", identifier);
 
-            return _startQuote . implode(_endQuote ~ "." ~ _startQuote, $items) . _endQuote;
+            return _startQuote . implode(_endQuote ~ "." ~ _startQuote, items) . _endQuote;
         }
 
         // string.*
-        if (preg_match("/^[\w-]+\.\*$/u", $identifier)) {
-            return _startQuote . replace(".*", _endQuote ~ ".*", $identifier);
+        if (preg_match("/^[\w-]+\.\*$/u", identifier)) {
+            return _startQuote . replace(".*", _endQuote ~ ".*", identifier);
         }
 
         // Functions
-        if (preg_match("/^([\w-]+)\((.*)\)$/", $identifier, $matches)) {
+        if (preg_match("/^([\w-]+)\((.*)\)$/", identifier, $matches)) {
             return $matches[1] ~ "(" ~ this.quoteIdentifier($matches[2]) ~ ")";
         }
 
         // Alias.field AS thing
-        if (preg_match("/^([\w-]+(\.[\w\s-]+|\(.*\))*)\s+AS\s*([\w-]+)$/ui", $identifier, $matches)) {
+        if (preg_match("/^([\w-]+(\.[\w\s-]+|\(.*\))*)\s+AS\s*([\w-]+)$/ui", identifier, $matches)) {
             return this.quoteIdentifier($matches[1]) ~ " AS " ~ this.quoteIdentifier($matches[3]);
         }
 
         // string.string with spaces
-        if (preg_match("/^([\w-]+\.[\w][\w\s-]*[\w])(.*)/u", $identifier, $matches)) {
-            $items = explode(".", $matches[1]);
-            field = implode(_endQuote ~ "." ~ _startQuote, $items);
+        if (preg_match("/^([\w-]+\.[\w][\w\s-]*[\w])(.*)/u", identifier, $matches)) {
+            items = explode(".", $matches[1]);
+            field = implode(_endQuote ~ "." ~ _startQuote, items);
 
             return _startQuote . field . _endQuote . $matches[2];
         }
 
-        if (preg_match("/^[\w\s-]*[\w-]+/u", $identifier)) {
-            return _startQuote . $identifier . _endQuote;
+        if (preg_match("/^[\w\s-]*[\w-]+/u", identifier)) {
+            return _startQuote . identifier . _endQuote;
         }
 
-        return $identifier;
+        return identifier;
     }
 
     /**
@@ -80,7 +80,7 @@ trait SqlDialectTrait
      */
     function queryTranslator(string type): Closure
     {
-        return function (query) use ($type) {
+        return function (query) use (type) {
             if (this.isAutoQuotingEnabled()) {
                 query = (new IdentifierQuoter(this)).quote(query);
             }
@@ -88,12 +88,12 @@ trait SqlDialectTrait
             /** @var DORMQuery query */
             query = this.{"_" ~ type ~ "QueryTranslator"}(query);
             translators = _expressionTranslators();
-            if (!$translators) {
+            if (!translators) {
                 return query;
             }
 
-            query.traverseExpressions(void (expression) use ($translators, query) {
-                foreach ($translators as class: $method) {
+            query.traverseExpressions(void (expression) use (translators, query) {
+                foreach (translators as class: $method) {
                     if (expression instanceof class) {
                         this.{$method}(expression, query);
                     }
@@ -167,7 +167,7 @@ trait SqlDialectTrait
             tables[] = table;
         }
         if ($hadAlias) {
-            query.from($tables, true);
+            query.from(tables, true);
         }
 
         if (!$hadAlias) {
@@ -227,9 +227,9 @@ trait SqlDialectTrait
                 }
 
                 if (expression instanceof IdentifierExpression) {
-                    $identifier = expression.getIdentifier();
-                    if (strpos($identifier, ".") != false) {
-                        [, $unaliasedIdentifier] = explode(".", $identifier, 2);
+                    identifier = expression.getIdentifier();
+                    if (strpos(identifier, ".") != false) {
+                        [, $unaliasedIdentifier] = explode(".", identifier, 2);
                         expression.setIdentifier($unaliasedIdentifier);
                     }
 

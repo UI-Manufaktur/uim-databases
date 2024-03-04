@@ -224,23 +224,23 @@ class Postgres : Driver
                 expression
                     .setName("")
                     .setConjunction("-")
-                    .iterateParts(function ($p) {
-                        if (is_string($p)) {
-                            $p = ["value": [$p: "literal"], "type": null];
+                    .iterateParts(function (p) {
+                        if (is_string(p)) {
+                            p = ["value": [p: "literal"], "type": null];
                         } else {
-                            $p["value"] = [$p["value"]];
+                            p["value"] = [p["value"]];
                         }
 
-                        return new FunctionExpression("DATE", $p["value"], [$p["type"]]);
+                        return new FunctionExpression("DATE", p["value"], [p["type"]]);
                     });
                 break;
             case "CURRENT_DATE":
                 time = new FunctionExpression("LOCALTIMESTAMP", [" 0 ": "literal"]);
-                expression.setName("CAST").setConjunction(" AS ").add([$time, "date": "literal"]);
+                expression.setName("CAST").setConjunction(" AS ").add([time, "date": "literal"]);
                 break;
             case "CURRENT_TIME":
                 time = new FunctionExpression("LOCALTIMESTAMP", [" 0 ": "literal"]);
-                expression.setName("CAST").setConjunction(" AS ").add([$time, "time": "literal"]);
+                expression.setName("CAST").setConjunction(" AS ").add([time, "time": "literal"]);
                 break;
             case "NOW":
                 expression.setName("LOCALTIMESTAMP").add([" 0 ": "literal"]);
@@ -252,12 +252,12 @@ class Postgres : Driver
                 expression
                     .setName("")
                     .setConjunction(" + INTERVAL")
-                    .iterateParts(function ($p, $key) {
+                    .iterateParts(function (p, $key) {
                         if ($key == 1) {
-                            $p = sprintf("'%s'", $p);
+                            p = sprintf("'%s'", p);
                         }
 
-                        return $p;
+                        return p;
                     });
                 break;
             case "DAYOFWEEK":
