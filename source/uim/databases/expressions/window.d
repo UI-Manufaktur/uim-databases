@@ -113,33 +113,33 @@ class WindowExpression : IDBAExpression, IWindow
     }
 
 
-    function range($start, end = 0) {
-        return this.frame(self::RANGE, $start, self::PRECEDING, end, self::FOLLOWING);
+    function range(start, end = 0) {
+        return this.frame(self::RANGE, start, self::PRECEDING, end, self::FOLLOWING);
     }
 
 
-    function rows(Nullable!int $start, Nullable!int end = 0) {
-        return this.frame(self::ROWS, $start, self::PRECEDING, end, self::FOLLOWING);
+    function rows(Nullable!int start, Nullable!int end = 0) {
+        return this.frame(self::ROWS, start, self::PRECEDING, end, self::FOLLOWING);
     }
 
 
-    function groups(Nullable!int $start, Nullable!int end = 0) {
-        return this.frame(self::GROUPS, $start, self::PRECEDING, end, self::FOLLOWING);
+    function groups(Nullable!int start, Nullable!int end = 0) {
+        return this.frame(self::GROUPS, start, self::PRECEDING, end, self::FOLLOWING);
     }
 
 
     function frame(
         string type,
-        $startOffset,
-        string $startDirection,
+        startOffset,
+        string startDirection,
         endOffset,
         string endDirection
     ) {
         this.frame = [
             "type": type,
             "start": [
-                "offset": $startOffset,
-                "direction": $startDirection,
+                "offset": startOffset,
+                "direction": startDirection,
             ],
             "end": [
                 "offset": endOffset,
@@ -192,7 +192,7 @@ class WindowExpression : IDBAExpression, IWindow
         }
 
         if (this.frame) {
-            $start = this.buildOffsetSql(
+            start = this.buildOffsetSql(
                 $binder,
                 this.frame["start"]["offset"],
                 this.frame["start"]["direction"]
@@ -203,7 +203,7 @@ class WindowExpression : IDBAExpression, IWindow
                 this.frame["end"]["direction"]
             );
 
-            frameSql = sprintf("%s BETWEEN %s AND %s", this.frame["type"], $start, end);
+            frameSql = sprintf("%s BETWEEN %s AND %s", this.frame["type"], start, end);
 
             if (this.exclusion != null) {
                 frameSql ~= " EXCLUDE " ~ this.exclusion;

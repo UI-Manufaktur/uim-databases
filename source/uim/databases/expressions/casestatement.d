@@ -222,7 +222,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      *
      * ```
      * case
-     *      .when($userData)
+     *      .when(userData)
      * ```
      *
      * A safe variant for the above would be to define a single type for
@@ -230,7 +230,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      *
      * ```
      * case
-     *      .when($userData, "integer")
+     *      .when(userData, "integer")
      * ```
      *
      * This way an exception would be triggered when an array is passed for
@@ -244,7 +244,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * ```
      * case
      *      .when([
-     *          "Table.column": $userData,
+     *          "Table.column": userData,
      *      ])
      * ```
      *
@@ -258,7 +258,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      *              .when(query.newExpr(":userData"))
      *              .then(123)
      *      ])
-     *      .bind(":userData", $userData, "integer")
+     *      .bind(":userData", userData, "integer")
      * ```
      *
      * @param uim.databases.IDBAExpression|\Closure|object|array|scalar $when The `WHEN` value. When using an

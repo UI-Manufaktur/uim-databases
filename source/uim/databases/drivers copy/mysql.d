@@ -64,7 +64,7 @@ class MysqlDriver : Driver {
      * If the underlying server is MariaDB, its value will get set to `"mariadb"`
      * after `version()` method is called.
      */
-    protected string $serverType = self::SERVER_TYPE_MYSQL;
+    protected string serverType = self::SERVER_TYPE_MYSQL;
 
     /**
      * Mapping of feature to db server version for feature availability checks.
@@ -162,8 +162,8 @@ class MysqlDriver : Driver {
          * @psalm-suppress PossiblyInvalidMethodCall
          * @psalm-suppress PossiblyInvalidArgument
          */
-        $statement = _connection.prepare(isObject ? query.sql() : query);
-        result = new MysqlStatement($statement, this);
+        statement = _connection.prepare(isObject ? query.sql() : query);
+        result = new MysqlStatement(statement, this);
         /** @psalm-suppress PossiblyInvalidMethodCall */
         if (isObject && query.isBufferedResultsEnabled() == false) {
             result.bufferResults(false);

@@ -163,13 +163,13 @@ class CommonTableExpression : IDBAExpression
             fields = sprintf("(%s)", implode(", ", expressions));
         }
 
-        $suffix = this.materialized ? this.materialized ~ " " : "";
+        suffix = this.materialized ? this.materialized ~ " " : "";
 
         return sprintf(
             "%s%s AS %s(%s)",
             this.name.sql($binder),
             fields,
-            $suffix,
+            suffix,
             this.query ? this.query.sql($binder) : ""
         );
     }

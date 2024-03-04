@@ -46,7 +46,7 @@ interface IWindow {
     /**
      * Adds a simple range frame to the window.
      *
-     * `$start`:
+     * `start`:
      *  - `0` - "CURRENT ROW"
      *  - `null` - "UNBOUNDED PRECEDING"
      *  - offset - "offset PRECEDING"
@@ -59,36 +59,36 @@ interface IWindow {
      * If you need to use "FOLLOWING" with frame start or
      * "PRECEDING" with frame end, use `frame()` instead.
      *
-     * @param uim.databases.IDBAExpression|string|int|null $start Frame start
+     * @param uim.databases.IDBAExpression|string|int|null start Frame start
      * @param uim.databases.IDBAExpression|string|int|null end Frame end
      *  If not passed in, only frame start SQL will be generated.
      * @return this
      */
-    function range($start, end = 0);
+    function range(start, end = 0);
 
     /**
      * Adds a simple rows frame to the window.
      *
      * See `range()` for details.
      *
-     * @param int|null $start Frame start
+     * @param int|null start Frame start
      * @param int|null end Frame end
      *  If not passed in, only frame start SQL will be generated.
      * @return this
      */
-    function rows(Nullable!int $start, Nullable!int end = 0);
+    function rows(Nullable!int start, Nullable!int end = 0);
 
     /**
      * Adds a simple groups frame to the window.
      *
      * See `range()` for details.
      *
-     * @param int|null $start Frame start
+     * @param int|null start Frame start
      * @param int|null end Frame end
      *  If not passed in, only frame start SQL will be generated.
      * @return this
      */
-    function groups(Nullable!int $start, Nullable!int end = 0);
+    function groups(Nullable!int start, Nullable!int end = 0);
 
     /**
      * Adds a frame to the window.
@@ -98,25 +98,25 @@ interface IWindow {
      *
      * You can specify any direction for both frame start and frame end.
      *
-     * With both `$startOffset` and `endOffset`:
+     * With both `startOffset` and `endOffset`:
      *  - `0` - "CURRENT ROW"
      *  - `null` - "UNBOUNDED"
      *
      * @param string type Frame type
-     * @param uim.databases.IDBAExpression|string|int|null $startOffset Frame start offset
-     * @param string $startDirection Frame start direction
+     * @param uim.databases.IDBAExpression|string|int|null startOffset Frame start offset
+     * @param string startDirection Frame start direction
      * @param uim.databases.IDBAExpression|string|int|null endOffset Frame end offset
      * @param string endDirection Frame end direction
      * @return this
      * @throws \InvalidArgumentException WHen offsets are negative.
      * @psalm-param self::RANGE|self::ROWS|self::GROUPS type
-     * @psalm-param self::PRECEDING|self::FOLLOWING $startDirection
+     * @psalm-param self::PRECEDING|self::FOLLOWING startDirection
      * @psalm-param self::PRECEDING|self::FOLLOWING endDirection
      */
     function frame(
         string type,
-        $startOffset,
-        string $startDirection,
+        startOffset,
+        string startDirection,
         endOffset,
         string endDirection
     );

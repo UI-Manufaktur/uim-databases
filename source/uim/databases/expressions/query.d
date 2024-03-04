@@ -599,41 +599,41 @@ class QueryExpression : IDBAExpression, Countable
         typeMap = this.getTypeMap().setTypes(types);
 
         foreach (conditions as $k: c) {
-            $numericKey = is_numeric($k);
+            numericKey = is_numeric($k);
 
             if (c instanceof Closure) {
                 expr = new static([], typeMap);
                 c = c(expr, this);
             }
 
-            if ($numericKey && empty(c)) {
+            if (numericKey && empty(c)) {
                 continue;
             }
 
             isArray = is_array(c);
             isOperator = isNot = false;
-            if (!$numericKey) {
-                $normalizedKey = strtolower($k);
-                isOperator = hasAllValues($normalizedKey, $operators);
-                isNot = $normalizedKey == "not";
+            if (!numericKey) {
+                normalizedKey = strtolower($k);
+                isOperator = hasAllValues(normalizedKey, $operators);
+                isNot = normalizedKey == "not";
             }
 
             if ((isOperator || isNot) && (isArray || c instanceof Countable) && count(c) == 0) {
                 continue;
             }
 
-            if ($numericKey && c instanceof IDBAExpression) {
+            if (numericKey && c instanceof IDBAExpression) {
                 _conditions[] = c;
                 continue;
             }
 
-            if ($numericKey && is_string(c)) {
+            if (numericKey && is_string(c)) {
                 _conditions[] = c;
                 continue;
             }
 
-            if ($numericKey && isArray || isOperator) {
-                _conditions[] = new static(c, typeMap, $numericKey ? "AND" : $k);
+            if (numericKey && isArray || isOperator) {
+                _conditions[] = new static(c, typeMap, numericKey ? "AND" : $k);
                 continue;
             }
 
@@ -642,7 +642,7 @@ class QueryExpression : IDBAExpression, Countable
                 continue;
             }
 
-            if (!$numericKey) {
+            if (!numericKey) {
                 _conditions[] = _parseCondition($k, c);
             }
         }
@@ -666,21 +666,21 @@ class QueryExpression : IDBAExpression, Countable
         $operator = "=";
         expression = field;
 
-        $spaces = substr_count(field, " ");
+        spaces = substr_count(field, " ");
         // Handle field values that contain multiple spaces, such as
         // operators with a space in them like `field IS NOT` and
         // `field NOT LIKE`, or combinations with function expressions
         // like `CONCAT(first_name, " ", last_name) IN`.
-        if ($spaces > 1) {
+        if (spaces > 1) {
             parts = explode(" ", field);
             if (preg_match("/(is not|not \w+)$/i", field)) {
                 $last = array_pop(parts);
-                $second = array_pop(parts);
-                parts[] = "{$second} {$last}";
+                second = array_pop(parts);
+                parts[] = "{second} {$last}";
             }
             $operator = array_pop(parts);
             expression = implode(" ", parts);
-        } elseif ($spaces == 1) {
+        } elseif (spaces == 1) {
             parts = explode(" ", field, 2);
             [expression, $operator] = parts;
         }

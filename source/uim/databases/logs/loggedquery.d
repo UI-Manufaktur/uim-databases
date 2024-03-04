@@ -51,7 +51,7 @@ class LoggedQuery : JsonSerializable
      *
      * @var int
      */
-    $numRows = 0;
+    numRows = 0;
 
     /**
      * The exception that was thrown by the execution of this query

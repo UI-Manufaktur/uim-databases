@@ -13,7 +13,7 @@ class StringExpression : IDBAExpression {
   protected string _string;
 
   /**
-    * @param string $string String value
+    * @param string string String value
     * @param string _collation String collation
     */
   this(string aString, string aCollation) {

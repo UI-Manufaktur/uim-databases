@@ -86,25 +86,25 @@ class AggregateExpression : FunctionExpression : IWindow
     }
 
 
-    function range($start, end = 0) {
+    function range(start, end = 0) {
         this.over();
-        this.window.range($start, end);
+        this.window.range(start, end);
 
         return this;
     }
 
 
-    function rows(Nullable!int $start, Nullable!int end = 0) {
+    function rows(Nullable!int start, Nullable!int end = 0) {
         this.over();
-        this.window.rows($start, end);
+        this.window.rows(start, end);
 
         return this;
     }
 
 
-    function groups(Nullable!int $start, Nullable!int end = 0) {
+    function groups(Nullable!int start, Nullable!int end = 0) {
         this.over();
-        this.window.groups($start, end);
+        this.window.groups(start, end);
 
         return this;
     }
@@ -112,13 +112,13 @@ class AggregateExpression : FunctionExpression : IWindow
 
     function frame(
         string type,
-        $startOffset,
-        string $startDirection,
+        startOffset,
+        string startDirection,
         endOffset,
         string endDirection
     ) {
         this.over();
-        this.window.frame(type, $startOffset, $startDirection, endOffset, endDirection);
+        this.window.frame(type, startOffset, startDirection, endOffset, endDirection);
 
         return this;
     }
