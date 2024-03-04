@@ -95,15 +95,13 @@ abstract class Driver : IDBADriver {
     
     abstract bool connect();
     
-    function disconnect(): void
-    {
-        /** @psalm-suppress PossiblyNullPropertyAssignmentValue */
+    void disconnect() {
         _connection = null;
         _version = null;
     }
 
     // Returns connected server version.
-    string version() {
+    string serverVersion() {
         if (_version is null) {
             this.connect();
             _version = (string)_connection.getAttribute(PDO.ATTR_SERVER_VERSION);
@@ -145,8 +143,7 @@ abstract class Driver : IDBADriver {
     abstract bool enabled();
 
     
-    function prepare(myQuery): IStatement
-    {
+    IStatement prepare(myQuery) {
         this.connect();
         statement = _connection.prepare(myQuery instanceof Query ? myQuery.sql() : myQuery);
 
@@ -183,9 +180,7 @@ abstract class Driver : IDBADriver {
         return _connection.rollBack();
     }
 
-    /**
-     * Returns whether a transaction is active for connection.
-     */
+    // Returns whether a transaction is active for connection.
     bool inTransaction() {
         this.connect();
 
@@ -356,11 +351,8 @@ abstract class Driver : IDBADriver {
         return this.connectRetries;
     }
 
-    /**
-     * Destructor
-     */
+    // Destructor
     auto __destruct() {
-        /** @psalm-suppress PossiblyNullPropertyAssignmentValue */
         _connection = null;
     }
 

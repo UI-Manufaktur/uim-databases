@@ -1,4 +1,4 @@
-module uim.databases;
+module uim.databases.classes.drivers.driverfeatureenum;
 
 import uim.databases;
 

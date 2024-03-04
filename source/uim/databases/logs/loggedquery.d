@@ -18,26 +18,14 @@ use JsonSerializable;
  */
 class LoggedQuery : JsonSerializable
 {
-    /**
-     * Driver executing the query
-     *
-     * @var DDBIDriver|null
-     */
-    driver = null;
+    // Driver executing the query
+    DDBIDriver driver = null;
 
-    /**
-     * Query string that was executed
-     *
-     * @var string
-     */
-    query = "";
+    // Query string that was executed
+    string query = "";
 
-    /**
-     * Number of milliseconds this query took to complete
-     *
-     * @var float
-     */
-    took = 0;
+    // Number of milliseconds this query took to complete
+    float took = 0.0;
 
     /**
      * Associative array with the params bound to the query string

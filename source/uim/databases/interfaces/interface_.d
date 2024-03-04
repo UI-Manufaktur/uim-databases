@@ -1,4 +1,4 @@
-module uim.databases;
+module uim.databases.interfaces.interface_;
 
 @safe:
 import uim.databases;

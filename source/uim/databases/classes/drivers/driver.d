@@ -1,4 +1,4 @@
-module uim.databases.classes.driver;
+module uim.databases.classes.drivers.driver;
 
 import uim.databases;
 
@@ -10,7 +10,26 @@ import uim.databases;
  */
 abstract class Driver {
     mixin LoggerAwareTrait;
+    // Common Table Expressions (with clause) support.
+    public const string FEATURE_CTE = "cte";
 
+    // Disabling constraints without being in transaction support.
+    public const string FEATURE_DISABLE_CONSTRAINT_WITHOUT_TRANSACTION = "disable-constraint-without-transaction";
+
+    // Native JSON data type support.
+    public const string FEATURE_JSON = "json";
+
+    // PDO.quote() support.
+    public const string FEATURE_QUOTE = "quote";
+
+    // Transaction savepoint support.
+    public const string FEATURE_SAVEPOINT = "savepoint";
+
+    // Truncate with foreign keys attached support.
+    public const string FEATURE_TRUNCATE_WITH_CONSTRAINTS = "truncate-with-constraints";
+
+    // Window function support (all or partial clauses).
+    public const string FEATURE_WINDOW = "window";
  	override bool initialize(IData[string] configData = null) {
         _config = Configuration; 
         _baseConfig = Configuration; 
