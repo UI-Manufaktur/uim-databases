@@ -78,14 +78,14 @@ class SqlserverSchemaDialect : SchemaDialect {
      * string acol The column type
      * @param int $length the column length
      * @param int precision The column precision
-     * @param int $scale The column scale
+     * @param int scale The column scale
      * @link https://technet.microsoft.com/en-us/library/ms187752.aspx
      */
     protected IData[string] _convertColumn(
         string columnType,
         ?size_t aLength = null,
         int precision = null,
-        int $scale = null
+        int scale = null
     ) {
         string loweredColumnType = columnType.toLower;
 
@@ -105,10 +105,10 @@ class SqlserverSchemaDialect : SchemaDialect {
         }
         if (loweredColumnType.has("datetime")) {
             auto typeName = TableISchema.TYPE_DATETIME;
-            if ($scale > 0) {
+            if (scale > 0) {
                 typeName = TableISchema.TYPE_DATETIME_FRACTIONAL;
             }
-            return ["type": typeName, "length": null, "precision": $scale];
+            return ["type": typeName, "length": null, "precision": scale];
         }
         if (loweredColumnType == "char") {
             return ["type": TableISchema.TYPE_CHAR, "length": $length];
@@ -133,7 +133,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             loweredColumnType.has("money") ||
             loweredColumnType.has("decimal")
         ) {
-            return ["type": TableISchema.TYPE_DECIMAL, "length": precision, "precision": $scale];
+            return ["type": TableISchema.TYPE_DECIMAL, "length": precision, "precision": scale];
         }
         if (loweredColumnType == "real" || loweredColumnType == "float") {
             return ["type": TableISchema.TYPE_FLOAT, "length": null];

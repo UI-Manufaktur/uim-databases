@@ -531,12 +531,12 @@ class SelectQuery : Query, IteratorAggregate {
      *
      * Pages must start at 1.
      * Params:
-     * int $num The page number you want.
+     * int num The page number you want.
      * @param int aLimit The number of rows you want in the page. If null
      * the current limit clause will be used.
      */
-    void page(int $num, int aLimit = null) {
-        if ($num < 1) {
+    void page(int num, int aLimit = null) {
+        if (num < 1) {
             throw new InvalidArgumentException("Pages must start at 1.");
         }
         if (aLimit !isNull) {
@@ -547,7 +547,7 @@ class SelectQuery : Query, IteratorAggregate {
             aLimit = 25;
             this.limit(aLimit);
         }
-         anOffset = ($num - 1) * aLimit;
+         anOffset = (num - 1) * aLimit;
         if (PHP_INT_MAX <=  anOffset) {
              anOffset = PHP_INT_MAX;
         }
@@ -566,8 +566,8 @@ class SelectQuery : Query, IteratorAggregate {
      * ### Examples
      *
      * ```
-     * $union = (new SelectQuery(conn)).select(["id", "title"]).from(["a": 'articles"]);
-     * aQuery.select(["id", "name"]).from(["d": 'things"]).union($union);
+     * union = (new SelectQuery(conn)).select(["id", "title"]).from(["a": 'articles"]);
+     * aQuery.select(["id", "name"]).from(["d": 'things"]).union(union);
      * ```
      *
      * Will produce:
@@ -599,8 +599,8 @@ class SelectQuery : Query, IteratorAggregate {
      * Unlike UNION, UNION ALL will not remove duplicate rows.
      *
      * ```
-     * $union = (new SelectQuery(conn)).select(["id", "title"]).from(["a": 'articles"]);
-     * aQuery.select(["id", "name"]).from(["d": 'things"]).unionAll($union);
+     * union = (new SelectQuery(conn)).select(["id", "title"]).from(["a": 'articles"]);
+     * aQuery.select(["id", "name"]).from(["d": 'things"]).unionAll(union);
      * ```
      *
      * Will produce:

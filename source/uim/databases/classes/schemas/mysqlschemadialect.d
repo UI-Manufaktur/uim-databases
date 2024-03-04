@@ -66,7 +66,7 @@ class MysqlSchemaDialect : SchemaDialect {
             throw new DatabaseException("Unable to parse column type from `%s`".format(column));
         }
         col = $matches[1].toLower;
-        $length = precision = $scale = null;
+        $length = precision = scale = null;
         if (isSet($matches[2]) && $matches[2].length {
             $length = $matches[2];
             if ($matches[2].has(",")) {
@@ -95,18 +95,18 @@ class MysqlSchemaDialect : SchemaDialect {
         if ((col == "tinyint" && $length == 1) || col == "boolean") {
             return ["type": TableISchema.TYPE_BOOLEAN, "length": null];
         }
-        $unsigned = (isSet($matches[3]) && $matches[3].toLower) == "unsigned");
+        unsigned = (isSet($matches[3]) && $matches[3].toLower) == "unsigned");
         if (col.has("bigint") || col == "bigint") {
-            return ["type": TableISchema.TYPE_BIGINTEGER, "length": null, "unsigned": $unsigned];
+            return ["type": TableISchema.TYPE_BIGINTEGER, "length": null, "unsigned": unsigned];
         }
         if (col == "tinyint") {
-            return ["type": TableISchema.TYPE_TINYINTEGER, "length": null, "unsigned": $unsigned];
+            return ["type": TableISchema.TYPE_TINYINTEGER, "length": null, "unsigned": unsigned];
         }
         if (col == "smallint") {
-            return ["type": TableISchema.TYPE_SMALLINTEGER, "length": null, "unsigned": $unsigned];
+            return ["type": TableISchema.TYPE_SMALLINTEGER, "length": null, "unsigned": unsigned];
         }
         if (in_array(col, ["int", "integer", "mediumint"])) {
-            return ["type": TableISchema.TYPE_INTEGER, "length": null, "unsigned": $unsigned];
+            return ["type": TableISchema.TYPE_INTEGER, "length": null, "unsigned": unsigned];
         }
         if (col == "char" && $length == 36) {
             return ["type": TableISchema.TYPE_UUID, "length": null];
@@ -137,7 +137,7 @@ class MysqlSchemaDialect : SchemaDialect {
                 "type": TableISchema.TYPE_FLOAT,
                 "length": $length,
                 "precision": precision,
-                "unsigned": $unsigned,
+                "unsigned": unsigned,
             ];
         }
         if (col.has("decimal")) {
@@ -145,7 +145,7 @@ class MysqlSchemaDialect : SchemaDialect {
                 "type": TableISchema.TYPE_DECIMAL,
                 "length": $length,
                 "precision": precision,
-                "unsigned": $unsigned,
+                "unsigned": unsigned,
             ];
         }
         if (col.has("json")) {
@@ -274,7 +274,7 @@ class MysqlSchemaDialect : SchemaDialect {
             return sql;
         }
          result = _driver.quoteIdentifier(name);
-        $nativeJson = _driver.supports(DriverFeatures.JSON);
+        nativeJson = _driver.supports(DriverFeatures.JSON);
 
         typeMap = [
             TableISchema.TYPE_TINYINTEGER: " TINYINT",
@@ -294,9 +294,9 @@ class MysqlSchemaDialect : SchemaDialect {
             TableISchema.TYPE_TIMESTAMP_TIMEZONE: " TIMESTAMP",
             TableISchema.TYPE_CHAR: " CHAR",
             TableISchema.TYPE_UUID: " CHAR(36)",
-            TableISchema.TYPE_JSON: $nativeJson ? " JSON" : " LONGTEXT",
+            TableISchema.TYPE_JSON: nativeJson ? " JSON" : " LONGTEXT",
         ];
-        $specialMap = [
+        specialMap = [
             "string": true,
             "text": true,
             "char": true,
@@ -305,7 +305,7 @@ class MysqlSchemaDialect : SchemaDialect {
         if (isSet(typeMap[someData["type"]])) {
              result ~= typeMap[someData["type"]];
         }
-        if (isSet($specialMap[someData["type"]])) {
+        if (isSet(specialMap[someData["type"]])) {
             switch (someData["type"]) {
                 case TableISchema.TYPE_STRING:
                      result ~= " VARCHAR";

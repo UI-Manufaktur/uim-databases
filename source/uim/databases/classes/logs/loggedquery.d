@@ -22,7 +22,7 @@ class LoggedQuery : JsonSerializable, Stringable {
     protected array params = [];
 
     // Number of rows affected or returned by the query execution
-    protected int $numRows = 0;
+    protected int numRows = 0;
 
     // The exception that was thrown by the execution of this query
     protected Exception error = null;

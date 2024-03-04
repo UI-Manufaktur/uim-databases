@@ -35,7 +35,7 @@ class SqliteSchemaDialect : SchemaDialect {
             isUnsigned = true;
         }
         auto col = $matches[2].toLower;
-        size_t columnLength = precision = $scale = null;
+        size_t columnLength = precision = scale = null;
         if (isSet($matches[3])) {
             columnLength = $matches[3];
             if (columnLength.has(",")) {
@@ -68,7 +68,7 @@ class SqliteSchemaDialect : SchemaDialect {
                 "type": TableISchema.TYPE_DECIMAL,
                 "length": columnLength,
                 "precision": precision,
-                "unsigned": $unsigned,
+                "unsigned": unsigned,
             ];
         }
         if (in_array(col, ["float", "real", "double"])) {
@@ -76,7 +76,7 @@ class SqliteSchemaDialect : SchemaDialect {
                 "type": TableISchema.TYPE_FLOAT,
                 "length": columnLength,
                 "precision": precision,
-                "unsigned": $unsigned,
+                "unsigned": unsigned,
             ];
         }
         if (col.has("boolean")) {
@@ -325,8 +325,8 @@ class SqliteSchemaDialect : SchemaDialect {
             `SELECT * FROM pragma_foreign_key_list(%s) WHERE id = %d ORDER BY seq`
             .format(_driver.quoteIdentifier(tableSchema.name()), $row["id"]));
 
-        $statement = _driver.prepare(sql);
-        $statement.execute();
+        statement = _driver.prepare(sql);
+        statement.execute();
 
         someData = [
             "type": TableSchema.CONSTRAINT_FOREIGN,
@@ -335,7 +335,7 @@ class SqliteSchemaDialect : SchemaDialect {
         ];
 
         auto foreignKey = null;
-        $statement.fetchAll("assoc").each!((foreignKey) {
+        statement.fetchAll("assoc").each!((foreignKey) {
             someData["columns"] ~= foreignKey["from"];
             someData["references"] ~= foreignKey["to"];
         });

@@ -30,10 +30,10 @@ class Collection : ICollection {
      */
     string[] listTablesWithoutViews() {
         [sql, params] = _dialect.listTablesWithoutViewsSql(_connection.getDriver().config());
-        auto $statement = _connection.execute(sql, params);
+        auto statement = _connection.execute(sql, params);
 
         string[] result;
-        while ($row = $statement.fetch()) {
+        while ($row = statement.fetch()) {
             result ~= $row[0];
         }
         return result;
@@ -42,10 +42,10 @@ class Collection : ICollection {
     // Get the list of tables and views available in the current connection.
     string[] listTables() {
         [sql, params] = _dialect.listTablesSql(_connection.getDriver().config());
-        $statement = _connection.execute(sql, params);
+        statement = _connection.execute(sql, params);
         
         string[] result;
-        while ($row = $statement.fetch()) {
+        while ($row = statement.fetch()) {
             result ~= $row[0];
         }
         return result;
@@ -103,19 +103,19 @@ class Collection : ICollection {
      * @uses \UIM\Database\Schema\SchemaDialect.convertOptionsDescription
      */
     protected void _reflect(string astage, string tableName, IData[string] configData, TableISchema tableSchema) {
-        string describeMethod = "describe{$stage}Sql";
-        string convertMethod = "convert{$stage}Description";
+        string describeMethod = "describe{stage}Sql";
+        string convertMethod = "convert{stage}Description";
 
         [sql, params] = _dialect.{describeMethod}(tableName, configData);
         if (isEmpty(sql)) {
             return;
         }
         try {
-            $statement = _connection.execute(sql, params);
+            statement = _connection.execute(sql, params);
         } catch (PDOException  anException) {
             throw new DatabaseException(anException.getMessage(), 500,  anException);
         }
-        $statement.fetchAll("assoc")
+        statement.fetchAll("assoc")
             .each!(row => _dialect.{convertMethod}(tableSchema, row));
     }
 }

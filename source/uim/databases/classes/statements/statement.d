@@ -13,7 +13,7 @@ class Statement : IStatement {
 
     protected Driver _driver;
 
-    protected PDOStatement $statement;
+    protected PDOStatement statement;
 
     protected FieldTypeConverter typeConverter;
 
@@ -21,17 +21,17 @@ class Statement : IStatement {
     protected Json params = [];
 
     /**
-     * @param \PDOStatement $statement PDO statement
+     * @param \PDOStatement statement PDO statement
      * @param \UIM\Database\Driver driver Database driver
      * @param \UIM\Database\TypeMap|null typeMap Results type map
      */
     this(
-        PDOStatement $statement,
+        PDOStatement statement,
         Driver driver,
         ?TypeMap typeMap = null,
     ) {
        _driver = driver;
-        this.statement = $statement;
+        this.statement = statement;
         this.typeConverter = typeMap !isNull ? new FieldTypeConverter(typeMap, driver): null;
     }
     void bind(array params, array types) {
