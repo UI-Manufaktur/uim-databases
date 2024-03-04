@@ -45,7 +45,7 @@ return true;
        _isDirty();
        _parts["insert"][1] = columnsToInsert;
         if (!_parts["values"]) {
-           _parts["values"] = new ValuesExpression(columnsToInsert, this.getTypeMap().setTypes($types));
+           _parts["values"] = new ValuesExpression(columnsToInsert, this.getTypeMap().setTypes(types));
         } else {
            _parts["values"].setColumns(columnsToInsert);
         }

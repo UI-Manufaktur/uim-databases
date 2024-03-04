@@ -18,15 +18,15 @@ class ValueBinder {
     /**
      * Associates a query placeholder to a value and a type
      * Params:
-     * string|int $param placeholder to be replaced with quoted version
+     * string|int param placeholder to be replaced with quoted version
      * of aValue
      * valueToBind - The value to be bound
      * @param string|int type the mapped type name, used for casting when sending
      * to database
      */
-    void bind(string|int $param, Json valueToBind, string|int type = null) {
-       _bindings[$param] = compact("value", "type") ~ [
-            "placeholder": isInt($param) ? $param : substr($param, 1),
+    void bind(string|int param, Json valueToBind, string|int type = null) {
+       _bindings[param] = compact("value", "type") ~ [
+            "placeholder": isInt(param) ? param : substr(param, 1),
         ];
     }
     
@@ -40,8 +40,8 @@ class ValueBinder {
      */
     string placeholder(string atoken) {
         auto myNumber = _bindingsCount++;
-        if ($token[0] != ":" && token != "?") {
-            token = ":%s%s".format($token, myNumber);
+        if (token[0] != ":" && token != "?") {
+            token = ":%s%s".format(token, myNumber);
         }
         return token;
     }
@@ -54,17 +54,17 @@ class ValueBinder {
      * @param string|int type The type with which all values will be bound
      */
     array generateManyNamed(iterable  someValues, string|int type = null) {
-        auto $placeholders = [];
+        auto placeholders = [];
         foreach (someValues as myKey: aValue) {
-            $param = this.placeholder("c");
-           _bindings[$param] = [
+            param = this.placeholder("c");
+           _bindings[param] = [
                 'value": aValue,
                 'type": type,
-                'placeholder": substr($param, 1),
+                'placeholder": substr(param, 1),
             ];
-            $placeholders[myKey] = $param;
+            placeholders[myKey] = param;
         }
-        return $placeholders;
+        return placeholders;
     }
     
     /**

@@ -84,8 +84,8 @@ class TypeFactory {
      * @psalm-param class-string<\UIM\Database\IType>  className
      */
     static void map(string atype, string className) {
-        _supportedDbTypes[$type] = className;
-        _builtTypes.remove($type);
+        _supportedDbTypes[type] = className;
+        _builtTypes.remove(type);
     }
     
     // Set type to classname mapping.

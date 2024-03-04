@@ -24,7 +24,7 @@ class CachedCollection : ICollection {
      */
   this(ICollection collection, string myprefix, ICachecacher) {
     _collection = collection;
-    this.prefix = $prefix;
+    this.prefix = prefix;
     this.cacher = cacher;
   }
 

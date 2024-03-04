@@ -29,8 +29,8 @@ class Collection : ICollection {
      * The list of tables in the connected database/schema.
      */
     string[] listTablesWithoutViews() {
-        [sql, $params] = _dialect.listTablesWithoutViewsSql(_connection.getDriver().config());
-        auto $statement = _connection.execute(sql, $params);
+        [sql, params] = _dialect.listTablesWithoutViewsSql(_connection.getDriver().config());
+        auto $statement = _connection.execute(sql, params);
 
         string[] result;
         while ($row = $statement.fetch()) {
@@ -41,8 +41,8 @@ class Collection : ICollection {
     
     // Get the list of tables and views available in the current connection.
     string[] listTables() {
-        [sql, $params] = _dialect.listTablesSql(_connection.getDriver().config());
-        $statement = _connection.execute(sql, $params);
+        [sql, params] = _dialect.listTablesSql(_connection.getDriver().config());
+        $statement = _connection.execute(sql, params);
         
         string[] result;
         while ($row = $statement.fetch()) {
@@ -106,12 +106,12 @@ class Collection : ICollection {
         string describeMethod = "describe{$stage}Sql";
         string convertMethod = "convert{$stage}Description";
 
-        [sql, $params] = _dialect.{describeMethod}(tableName, configData);
+        [sql, params] = _dialect.{describeMethod}(tableName, configData);
         if (isEmpty(sql)) {
             return;
         }
         try {
-            $statement = _connection.execute(sql, $params);
+            $statement = _connection.execute(sql, params);
         } catch (PDOException  anException) {
             throw new DatabaseException(anException.getMessage(), 500,  anException);
         }

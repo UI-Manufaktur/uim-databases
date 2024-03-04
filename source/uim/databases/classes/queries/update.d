@@ -96,7 +96,7 @@ class UpdateQuery : Query {
 
                 return;
             }
-            if (!isString($types)) {
+            if (!isString(types)) {
                 types = null;
             }
             _parts["set"].eq(aKey, aValue, types);

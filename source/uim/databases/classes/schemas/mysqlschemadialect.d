@@ -66,20 +66,20 @@ class MysqlSchemaDialect : SchemaDialect {
             throw new DatabaseException("Unable to parse column type from `%s`".format(column));
         }
         col = $matches[1].toLower;
-        $length = $precision = $scale = null;
+        $length = precision = $scale = null;
         if (isSet($matches[2]) && $matches[2].length {
             $length = $matches[2];
             if ($matches[2].has(",")) {
-                [$length, $precision] = split(",", $length);
+                [$length, precision] = split(",", $length);
             }
             $length = (int)$length;
-            $precision = (int)$precision;
+            precision = (int)precision;
         }
         type = _applyTypeSpecificColumnConversion(
             col,
             compact("length", "precision", "scale")
         );
-        if (!$type.isNull) {
+        if (!type.isNull) {
             return type;
         }
         if (in_array(col, ["date", "time"])) {
@@ -136,7 +136,7 @@ class MysqlSchemaDialect : SchemaDialect {
             return [
                 "type": TableISchema.TYPE_FLOAT,
                 "length": $length,
-                "precision": $precision,
+                "precision": precision,
                 "unsigned": $unsigned,
             ];
         }
@@ -144,7 +144,7 @@ class MysqlSchemaDialect : SchemaDialect {
             return [
                 "type": TableISchema.TYPE_DECIMAL,
                 "length": $length,
-                "precision": $precision,
+                "precision": precision,
                 "unsigned": $unsigned,
             ];
         }
@@ -184,7 +184,7 @@ class MysqlSchemaDialect : SchemaDialect {
             type = TableSchema.INDEX_FULLTEXT;
         } elseif ((int)$row["Non_unique"] == 0 && type != "primary") {
             type = TableSchema.CONSTRAINT_UNIQUE;
-        } elseif ($type != "primary") {
+        } elseif (type != "primary") {
             type = TableSchema.INDEX_INDEX;
         }
         if (!$row["Sub_part"])) {
@@ -251,7 +251,7 @@ class MysqlSchemaDialect : SchemaDialect {
     array createTableSql(TableSchema tableSchema, array someColumns, array constraints, array  anIndexes) {
         content = join(",\n", array_merge(someColumns, constraints,  anIndexes));
         temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
-        content = "CREATE%sTABLE `%s` (\n%s\n)".format($temporary, tableSchema.name(), content);
+        content = "CREATE%sTABLE `%s` (\n%s\n)".format(temporary, tableSchema.name(), content);
         options = tableSchema.getOptions();
         if (isSet(options["engine"])) {
             content ~= " ENGINE=%s".format(options["engine"]);
@@ -302,7 +302,7 @@ class MysqlSchemaDialect : SchemaDialect {
             "char": true,
             "binary": true,
         ];
-        if (isSet($typeMap[someData["type"]])) {
+        if (isSet(typeMap[someData["type"]])) {
              result ~= typeMap[someData["type"]];
         }
         if (isSet($specialMap[someData["type"]])) {
@@ -363,11 +363,11 @@ class MysqlSchemaDialect : SchemaDialect {
                 ? "(" ~ (int)someData["length"] ~ "," ~ (int)someData["precision"] ~ ")"
                 : "(" ~ (int)someData["length"] ~ ")";
         }
-        $precisionTypes = [
+        precisionTypes = [
             TableISchema.TYPE_DATETIME_FRACTIONAL,
             TableISchema.TYPE_TIMESTAMP_FRACTIONAL,
         ];
-        if (in_array(someData["type"], $precisionTypes, true) && isSet(someData["precision"])) {
+        if (in_array(someData["type"], precisionTypes, true) && isSet(someData["precision"])) {
              result ~= "(" ~ (int)someData["precision"] ~ ")";
         }
         $hasUnsigned = [
@@ -535,7 +535,7 @@ class MysqlSchemaDialect : SchemaDialect {
             }
         }
         if (someData["type"] == TableSchema.CONSTRAINT_FOREIGN) {
-            return $prefix ~ sprintf(
+            return prefix ~ sprintf(
                 " FOREIGN KEY (%s) REFERENCES %s (%s) ON UPDATE %s ON DELETE %s",
                 join(", ", someColumns),
                _driver.quoteIdentifier(someData["references"][0]),
@@ -544,6 +544,6 @@ class MysqlSchemaDialect : SchemaDialect {
                _foreignOnClause(someData["delete"])
             );
         }
-        return $prefix ~ " (" ~ join(", ", someColumns) ~ ")";
+        return prefix ~ " (" ~ join(", ", someColumns) ~ ")";
     }
 }
