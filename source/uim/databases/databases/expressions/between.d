@@ -30,10 +30,10 @@ class BetweenExpression : UimExpression, IField {
      * @param Json to The ending value in the comparison range.
      * @param string type The data type name to bind the values with.
      */
-    this(IExpression | string afield, Json$from, Json$to, string atype = null) {
-        if (!$type.isNull) {
-            from = _castToExpression($from, type);
-            to = _castToExpression($to, type);
+    this(IExpression | string afield, Jsonfrom, Jsonto, string atype = null) {
+        if (!type.isNull) {
+            from = _castToExpression(from, type);
+            to = _castToExpression(to, type);
         }
 
         _field = field;
@@ -77,7 +77,7 @@ class BetweenExpression : UimExpression, IField {
      */
     protected string _bindValue(Json aValue, ValueBinder aValueBinder, string atype) {
         placeholder = aValueBinder.placeholder("c");
-        aValueBinder.bind($placeholder, aValue, type);
+        aValueBinder.bind(placeholder, aValue, type);
 
         return placeholder;
     }

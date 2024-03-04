@@ -122,22 +122,22 @@ class Postgres : Driver {
                 expressionToConvert
                     .name("")
                     .setConjunction("-")
-                    .iterateParts(function ($p) {
-                        if (isString($p)) {
-                            p = ["value": [$p: "literal"], "type": null];
+                    .iterateParts(function (p) {
+                        if (isString(p)) {
+                            p = ["value": [p: "literal"], "type": null];
                         } else {
-                            p["value"] = [$p["value"]];
+                            p["value"] = [p["value"]];
                         }
-                        return new FunctionExpression("DATE", p["value"], [$p["type"]]);
+                        return new FunctionExpression("DATE", p["value"], [p["type"]]);
                     });
                 break;
             case "CURRENT_DATE":
                 time = new FunctionExpression("LOCALTIMESTAMP", [" 0 ": "literal"]);
-                expressionToConvert.name("CAST").setConjunction(" AS ").add([$time, "date": "literal"]);
+                expressionToConvert.name("CAST").setConjunction(" AS ").add([time, "date": "literal"]);
                 break;
             case "CURRENT_TIME":
                 time = new FunctionExpression("LOCALTIMESTAMP", [" 0 ": "literal"]);
-                expressionToConvert.name("CAST").setConjunction(" AS ").add([$time, "time": "literal"]);
+                expressionToConvert.name("CAST").setConjunction(" AS ").add([time, "time": "literal"]);
                 break;
             case "NOW":
                 expressionToConvert.name("LOCALTIMESTAMP").add([" 0 ": "literal"]);
@@ -149,9 +149,9 @@ class Postgres : Driver {
                 expressionToConvert
                     .name("")
                     .setConjunction(" + INTERVAL")
-                    .iterateParts(function ($p, aKey) {
+                    .iterateParts(function (p, aKey) {
                         if (aKey == 1) {
-                            p = "'%s'".format($p);
+                            p = "'%s'".format(p);
                         }
                         return p;
                     });

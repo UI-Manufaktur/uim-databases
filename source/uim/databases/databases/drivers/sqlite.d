@@ -171,8 +171,8 @@ class Sqlite : Driver {
                 expression
                     .name("ROUND")
                     .setConjunction("-")
-                    .iterateParts(function ($p) {
-                        return new FunctionExpression("JULIANDAY", [$p["value"]], [$p["type"]]);
+                    .iterateParts(function (p) {
+                        return new FunctionExpression("JULIANDAY", [p["value"]], [p["type"]]);
                     });
                 break;
             case "NOW":
@@ -193,9 +193,9 @@ class Sqlite : Driver {
                 expression
                     .name("STRFTIME")
                     .setConjunction(" ,")
-                    .iterateParts(function ($p, aKey) {
+                    .iterateParts(function (p, aKey) {
                         if (aKey == 0) {
-                            aValue = rtrim(s$p.toLower, "s");
+                            aValue = rtrim(sp.toLower, "s");
                             if (isSet(_dateParts[aValue])) {
                                 p = ["value": '%" ~ _dateParts[aValue], "type": null];
                             }
@@ -207,7 +207,7 @@ class Sqlite : Driver {
                 expression
                     .name("DATE")
                     .setConjunction(",")
-                    .iterateParts(function ($p, aKey) {
+                    .iterateParts(function (p, aKey) {
                         if (aKey == 1) {
                             p = ["value": p, "type": null];
                         }

@@ -31,8 +31,8 @@ class ValueBinder {
      * to database
      */
     void bind(string|int param, Json valueToBind, string|int type = null) {
-       _bindings[$param] = compact("value", "type") ~ [
-            "placeholder": isInt($param) ? param : substr($param, 1),
+       _bindings[param] = compact("value", "type") ~ [
+            "placeholder": isInt(param) ? param : substr(param, 1),
         ];
     }
     
@@ -47,7 +47,7 @@ class ValueBinder {
     string placeholder(string token) {
         auto myNumber = _bindingsCount++;
         if (!token.startsWith(":") && token != "?") {
-            token = ":%s%s".format($token, myNumber);
+            token = ":%s%s".format(token, myNumber);
         }
         return token;
     }

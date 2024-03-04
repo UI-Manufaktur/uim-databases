@@ -16,7 +16,7 @@ template TypeMapTemplate {
      * \UIM\Database\TypeMap|array typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
      */
     void setTypeMap(TypeMap|array typeMap) {
-       _typeMap = isArray($typeMap) ? new TypeMap($typeMap): typeMap;
+       _typeMap = isArray(typeMap) ? new TypeMap(typeMap): typeMap;
     }
     
     // Returns the existing type map.
@@ -39,7 +39,7 @@ template TypeMapTemplate {
      * @see \UIM\Database\TypeMap.setDefaults()
      */
     void setDefaultTypes(array types) {
-        this.getTypeMap().setDefaults($types);
+        this.getTypeMap().setDefaults(types);
     }
     
     /**

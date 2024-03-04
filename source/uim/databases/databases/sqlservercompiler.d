@@ -105,7 +105,7 @@ class SqlserverCompiler : QueryCompiler {
             .filter!(keyPart => cast(FunctionExpression)keyPart.value)
             .each!((keyPart) {
                 foreach (myKey, p; someParts) {
-                    if (!isString($p)) {
+                    if (!isString(p)) {
                         continue;
                     }
                     preg_match_all(

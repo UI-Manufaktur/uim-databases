@@ -48,7 +48,7 @@ class AggregateExpression : FunctionExpression : WindowInterface {
     }
  
     void partition(IExpression|Closure|string[] apartitions) {
-        this.getWindow().partition($partitions);
+        this.getWindow().partition(partitions);
     }
 
     auto order(IExpression|Closure|string[] afields) {
@@ -78,7 +78,7 @@ class AggregateExpression : FunctionExpression : WindowInterface {
         IExpression|string|int endOffset,
         string aendDirection
     ) {
-        this.getWindow().frame($type, startOffset, startDirection, endOffset, endDirection);
+        this.getWindow().frame(type, startOffset, startDirection, endOffset, endDirection);
     }
  
     void excludeCurrent() {
