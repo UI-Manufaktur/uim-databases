@@ -453,20 +453,20 @@ class Sqlserver : Driver
                 expression.setName("DATEPART").setConjunction(" ,");
                 break;
             case "DATE_ADD":
-                $params = null;
-                $visitor = function ($p, $key) use (&$params) {
+                params = null;
+                $visitor = function (p, $key) use (&params) {
                     if ($key == 0) {
-                        $params[2] = $p;
+                        params[2] = p;
                     } else {
-                        valueUnit = explode(" ", $p);
-                        $params[0] = rtrim(valueUnit[1], "s");
-                        $params[1] = valueUnit[0];
+                        valueUnit = explode(" ", p);
+                        params[0] = rtrim(valueUnit[1], "s");
+                        params[1] = valueUnit[0];
                     }
 
-                    return $p;
+                    return p;
                 };
-                $manipulator = function ($p, $key) use (&$params) {
-                    return $params[$key];
+                $manipulator = function (p, $key) use (&params) {
+                    return params[$key];
                 };
 
                 expression
@@ -474,7 +474,7 @@ class Sqlserver : Driver
                     .setConjunction(",")
                     .iterateParts($visitor)
                     .iterateParts($manipulator)
-                    .add([$params[2]: "literal"]);
+                    .add([params[2]: "literal"]);
                 break;
             case "DAYOFWEEK":
                 expression
@@ -485,12 +485,12 @@ class Sqlserver : Driver
             case "SUBSTR":
                 expression.setName("SUBSTRING");
                 if (count(expression) < 4) {
-                    $params = null;
+                    params = null;
                     expression
-                        .iterateParts(function ($p) use (&$params) {
-                            return $params[] = $p;
+                        .iterateParts(function (p) use (&params) {
+                            return params[] = p;
                         })
-                        .add([new FunctionExpression("LEN", [$params[0]]), ["string"]]);
+                        .add([new FunctionExpression("LEN", [params[0]]), ["string"]]);
                 }
 
                 break;

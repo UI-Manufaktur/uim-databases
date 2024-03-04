@@ -21,7 +21,7 @@ class AggregateExpression : FunctionExpression : IWindow
     /**
      * @var DDBExpression\QueryExpression
      */
-    protected $filter;
+    protected filter;
 
     /**
      * @var DDBExpression\WindowExpression
@@ -70,9 +70,9 @@ class AggregateExpression : FunctionExpression : IWindow
     }
 
 
-    function partition($partitions) {
+    function partition(partitions) {
         this.over();
-        this.window.partition($partitions);
+        this.window.partition(partitions);
 
         return this;
     }
@@ -118,7 +118,7 @@ class AggregateExpression : FunctionExpression : IWindow
         string endDirection
     ) {
         this.over();
-        this.window.frame($type, $startOffset, $startDirection, endOffset, endDirection);
+        this.window.frame(type, $startOffset, $startDirection, endOffset, endDirection);
 
         return this;
     }

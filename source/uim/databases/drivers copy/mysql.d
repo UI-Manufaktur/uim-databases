@@ -157,15 +157,15 @@ class MysqlDriver : Driver {
     function prepare(query): IStatement
     {
         this.connect();
-        $isObject = query instanceof Query;
+        isObject = query instanceof Query;
         /**
          * @psalm-suppress PossiblyInvalidMethodCall
          * @psalm-suppress PossiblyInvalidArgument
          */
-        $statement = _connection.prepare($isObject ? query.sql() : query);
+        $statement = _connection.prepare(isObject ? query.sql() : query);
         result = new MysqlStatement($statement, this);
         /** @psalm-suppress PossiblyInvalidMethodCall */
-        if ($isObject && query.isBufferedResultsEnabled() == false) {
+        if (isObject && query.isBufferedResultsEnabled() == false) {
             result.bufferResults(false);
         }
 

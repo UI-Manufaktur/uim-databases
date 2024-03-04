@@ -196,9 +196,9 @@ interface IDriver
      * Quotes a database identifier (a column name, table name, etc..) to
      * be used safely in queries without the risk of using reserved words.
      *
-     * @param string $identifier The identifier expression to quote.
+     * @param string identifier The identifier expression to quote.
      */
-    string quoteIdentifier(string $identifier);
+    string quoteIdentifier(string identifier);
 
     /**
      * Escapes values for use in schema definitions.

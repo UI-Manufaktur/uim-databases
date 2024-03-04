@@ -75,12 +75,12 @@ class ComparisonExpression : IDBAExpression, FieldInterface
     void setValue(value) {
         value = _castToExpression(value, _type);
 
-        $isMultiple = _type && strpos(_type, "[]") != false;
-        if ($isMultiple) {
+        isMultiple = _type && strpos(_type, "[]") != false;
+        if (isMultiple) {
             [value, _valueExpressions] = _collectExpressions(value);
         }
 
-        _isMultiple = $isMultiple;
+        _isMultiple = isMultiple;
         _value = value;
     }
 
@@ -125,10 +125,10 @@ class ComparisonExpression : IDBAExpression, FieldInterface
             template = "%s %s (%s)";
             value = _value.sql($binder);
         } else {
-            [$template, value] = _stringExpression($binder);
+            [template, value] = _stringExpression($binder);
         }
 
-        return sprintf($template, field, _operator, value);
+        return sprintf(template, field, _operator, value);
     }
 
 
@@ -158,8 +158,8 @@ class ComparisonExpression : IDBAExpression, FieldInterface
      */
     void __clone() {
         foreach (["_value", "_field"] as prop) {
-            if (this.{$prop} instanceof IDBAExpression) {
-                this.{$prop} = clone this.{$prop};
+            if (this.{prop} instanceof IDBAExpression) {
+                this.{prop} = clone this.{prop};
             }
         }
     }
@@ -181,7 +181,7 @@ class ComparisonExpression : IDBAExpression, FieldInterface
         if (_isMultiple) {
             template ~= "%s (%s)";
             type = _type;
-            if ($type != null) {
+            if (type != null) {
                 type = replace("[]", "", type);
             }
             value = _flattenValue(_value, $binder, type);
@@ -200,7 +200,7 @@ class ComparisonExpression : IDBAExpression, FieldInterface
             value = _bindValue(_value, $binder, _type);
         }
 
-        return [$template, value];
+        return [template, value];
     }
 
     /**
@@ -213,7 +213,7 @@ class ComparisonExpression : IDBAExpression, FieldInterface
      */
     protected string _bindValue(value, ValueBinder aBinder, Nullable!string type = null) {
         placeholder = $binder.placeholder("c");
-        $binder.bind($placeholder, value, type);
+        $binder.bind(placeholder, value, type);
 
         return placeholder;
     }
@@ -255,9 +255,9 @@ class ComparisonExpression : IDBAExpression, FieldInterface
         }
 
         expressions = result = null;
-        $isArray = is_array(values);
+        isArray = is_array(values);
 
-        if ($isArray) {
+        if (isArray) {
             /** @var array result */
             result = values;
         }
@@ -267,7 +267,7 @@ class ComparisonExpression : IDBAExpression, FieldInterface
                 expressions[$k] = $v;
             }
 
-            if ($isArray) {
+            if (isArray) {
                 result[$k] = $v;
             }
         }

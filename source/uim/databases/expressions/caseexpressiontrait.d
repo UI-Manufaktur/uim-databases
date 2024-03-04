@@ -86,7 +86,7 @@ trait CaseExpressionTrait
             value = value.sql($binder);
         } else {
             placeholder = $binder.placeholder("c");
-            $binder.bind($placeholder, value, type);
+            $binder.bind(placeholder, value, type);
             value = placeholder;
         }
 

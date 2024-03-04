@@ -43,18 +43,18 @@ class BetweenExpression : IDBAExpression, FieldInterface
      * Constructor
      *
      * @param uim.databases.IDBAExpression|string field The field name to compare for values inbetween the range.
-     * @param mixed $from The initial value of the range.
+     * @param mixed from The initial value of the range.
      * @param mixed to The ending value in the comparison range.
      * @param string|null type The data type name to bind the values with.
      */
-    this(field, $from, to, type = null) {
-        if ($type != null) {
-            $from = _castToExpression($from, type);
-            to = _castToExpression($to, type);
+    this(field, from, to, type = null) {
+        if (type != null) {
+            from = _castToExpression(from, type);
+            to = _castToExpression(to, type);
         }
 
         _field = field;
-        _from = $from;
+        _from = from;
         _to = to;
         _type = type;
     }
@@ -72,12 +72,12 @@ class BetweenExpression : IDBAExpression, FieldInterface
             field = field.sql($binder);
         }
 
-        foreach ($parts as name: part) {
-            if ($part instanceof IDBAExpression) {
+        foreach (parts as name: part) {
+            if (part instanceof IDBAExpression) {
                 parts[name] = part.sql($binder);
                 continue;
             }
-            parts[name] = _bindValue($part, $binder, _type);
+            parts[name] = _bindValue(part, $binder, _type);
         }
 
         return sprintf("%s BETWEEN %s AND %s", field, parts["from"], parts["to"]);
@@ -86,8 +86,8 @@ class BetweenExpression : IDBAExpression, FieldInterface
 
     O traverse(this O)(Closure callback) {
         foreach ([_field, _from, _to] as part) {
-            if ($part instanceof IDBAExpression) {
-                callback($part);
+            if (part instanceof IDBAExpression) {
+                callback(part);
             }
         }
 
@@ -104,7 +104,7 @@ class BetweenExpression : IDBAExpression, FieldInterface
      */
     protected string _bindValue(value, $binder, type) {
         placeholder = $binder.placeholder("c");
-        $binder.bind($placeholder, value, type);
+        $binder.bind(placeholder, value, type);
 
         return placeholder;
     }
@@ -114,8 +114,8 @@ class BetweenExpression : IDBAExpression, FieldInterface
      */
     void __clone() {
         foreach (["_field", "_from", "_to"] as part) {
-            if (this.{$part} instanceof IDBAExpression) {
-                this.{$part} = clone this.{$part};
+            if (this.{part} instanceof IDBAExpression) {
+                this.{part} = clone this.{part};
             }
         }
     }

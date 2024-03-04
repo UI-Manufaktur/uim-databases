@@ -53,18 +53,18 @@ trait TupleComparisonTranslatorTrait
 
         if (value instanceof Query) {
             $selected = array_values(value.clause("select"));
-            foreach (fields as $i: field) {
-                value.andWhere([field: new IdentifierExpression($selected[$i])]);
+            foreach (fields as i: field) {
+                value.andWhere([field: new IdentifierExpression($selected[i])]);
             }
-            value.select($true, true);
-            expression.setField($true);
+            value.select(true, true);
+            expression.setField(true);
             expression.setOperator("=");
 
             return;
         }
 
         type = expression.getType();
-        if ($type) {
+        if (type) {
             /** @var array<string, string> typeMap */
             typeMap = array_combine(fields, type) ?: [];
         } else {
@@ -73,7 +73,7 @@ trait TupleComparisonTranslatorTrait
 
         $surrogate = query.getConnection()
             .newQuery()
-            .select($true);
+            .select(true);
 
         if (!is_array(current(value))) {
             value = [value];
@@ -81,15 +81,15 @@ trait TupleComparisonTranslatorTrait
 
         conditions = ["OR": []];
         foreach (value as tuple) {
-            $item = null;
-            foreach (array_values($tuple) as $i: value2) {
-                $item[] = [fields[$i]: value2];
+            item = null;
+            foreach (array_values(tuple) as i: value2) {
+                item[] = [fields[i]: value2];
             }
-            conditions["OR"][] = $item;
+            conditions["OR"][] = item;
         }
         $surrogate.where(conditions, typeMap);
 
-        expression.setField($true);
+        expression.setField(true);
         expression.setValue($surrogate);
         expression.setOperator("=");
     }

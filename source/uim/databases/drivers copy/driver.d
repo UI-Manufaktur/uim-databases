@@ -129,7 +129,7 @@ abstract class Driver : IDriver
     abstract function schemaDialect(): SchemaDialect;
 
 
-    abstract string quoteIdentifier(string $identifier);
+    abstract string quoteIdentifier(string identifier);
 
 
     string schemaValue(value) {
@@ -174,10 +174,10 @@ abstract class Driver : IDriver
         this.connect();
 
         if (_connection instanceof PDO) {
-            return _connection.lastInsertId($table);
+            return _connection.lastInsertId(table);
         }
 
-        return _connection.lastInsertId($table);
+        return _connection.lastInsertId(table);
     }
 
 
@@ -234,11 +234,11 @@ abstract class Driver : IDriver
 
 
     array compileQuery(Query query, ValueBinder aBinder) {
-        $processor = this.newCompiler();
+        processor = this.newCompiler();
         translator = this.queryTranslator(query.type());
         query = translator(query);
 
-        return [query, $processor.compile(query, $binder)];
+        return [query, processor.compile(query, $binder)];
     }
 
 
@@ -256,7 +256,7 @@ abstract class Driver : IDriver
             className = _config["tableSchema"];
         }
 
-        return new className($table, columns);
+        return new className(table, columns);
     }
 
     /**
