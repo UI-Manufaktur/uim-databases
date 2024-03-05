@@ -84,10 +84,10 @@ class BinaryUuidType : BaseType {
     /**
      * Converts a binary uuid to a string representation
      * Params:
-     * Json $binary The value to convert.
+     * Json  binary The value to convert.
      */
-    protected string convertBinaryUuidToString(Json $binary) {
-        string = unpack("H*", $binary);
+    protected string convertBinaryUuidToString(Json  binary) {
+        string = unpack("H*",  binary);
         assert(string != false, "Could not unpack uuid");
 
         string[] string = preg_replace(

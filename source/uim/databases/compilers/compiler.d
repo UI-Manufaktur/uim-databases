@@ -69,17 +69,17 @@ class QueryCompiler {
         mySql = "";
         myType = myQuery.type();
         myQuery.traverseParts(
-            _sqlCompiler(mySql, myQuery, $binder),
+            _sqlCompiler(mySql, myQuery,  binder),
             this.{"_{myType}Parts"}
         );
 
         // Propagate bound parameters from sub-queries if the
         // placeholders can be found in the SQL statement.
-        if (myQuery.getValueBinder() != $binder) {
-            foreach (myQuery.getValueBinder().bindings() as $binding) {
-                placeholder = ":"~ $binding["placeholder"];
+        if (myQuery.getValueBinder() !=  binder) {
+            foreach (myQuery.getValueBinder().bindings() as  binding) {
+                placeholder = ":"~  binding["placeholder"];
                 if (preg_match("/"~ placeholder . "(?:\W|$)/", mySql) > 0) {
-                    $binder.bind(placeholder, $binding["value"], $binding["type"]);
+                     binder.bind(placeholder,  binding["value"],  binding["type"]);
                 }
             }
         }
@@ -97,7 +97,7 @@ class QueryCompiler {
      * @return \Closure
      */
     protected Closure _sqlCompiler(string &mySql, Query myQuery, ValueBinder aValueBinder) {
-        return function (part, partName) use (&mySql, myQuery, $binder) {
+        return function (part, partName) use (&mySql, myQuery,  binder) {
             if (
                 part is null ||
                 (is_array(part) && empty(part)) ||
@@ -107,16 +107,16 @@ class QueryCompiler {
             }
 
             if (part instanceof IDBAExpression) {
-                part = [part.sql($binder)];
+                part = [part.sql( binder)];
             }
             if (isset(_templates[partName])) {
-                part = _stringifyExpressions((array)part, $binder);
+                part = _stringifyExpressions((array)part,  binder);
                 mySql ~= _templates[partName].format(implode(", ", part));
 
                 return;
             }
 
-            mySql ~= this.{"_build"~ partName . "Part"}(part, myQuery, $binder);
+            mySql ~= this.{"_build"~ partName . "Part"}(part, myQuery,  binder);
         };
     }
 
@@ -135,7 +135,7 @@ class QueryCompiler {
         expressions = [];
         foreach (someParts as cte) {
              recursive =  recursive || cte.isRecursive();
-            expressions[] = cte.sql($binder);
+            expressions[] = cte.sql( binder);
         }
 
          recursive =  recursive ? "RECURSIVE " : "";
@@ -160,16 +160,16 @@ class QueryCompiler {
             select = "(SELECT%s %s%s";
         }
         $distinct = myQuery.clause("distinct");
-        myModifiers = _buildModifierPart(myQuery.clause("modifier"), myQuery, $binder);
+        myModifiers = _buildModifierPart(myQuery.clause("modifier"), myQuery,  binder);
 
         myDriver = myQuery.getConnection().getDriver();
-        $quoteIdentifiers = myDriver.isAutoQuotingEnabled() || _quotedSelectAliases;
+         quoteIdentifiers = myDriver.isAutoQuotingEnabled() || _quotedSelectAliases;
         normalized = [];
-        someParts = _stringifyExpressions(someParts, $binder);
+        someParts = _stringifyExpressions(someParts,  binder);
         foreach (someParts as $k: p) {
             if (!is_numeric($k)) {
                 p = p . " AS ";
-                if ($quoteIdentifiers) {
+                if ( quoteIdentifiers) {
                     p ~= myDriver.quoteIdentifier($k);
                 } else {
                     p ~= $k;
@@ -183,7 +183,7 @@ class QueryCompiler {
         }
 
         if (is_array($distinct)) {
-            $distinct = _stringifyExpressions($distinct, $binder);
+            $distinct = _stringifyExpressions($distinct,  binder);
             $distinct = "DISTINCT ON (%s) ".format(implode(", ", $distinct));
         }
 
@@ -203,7 +203,7 @@ class QueryCompiler {
     protected string _buildFromPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         select = " FROM %s";
         normalized = [];
-        someParts = _stringifyExpressions(someParts, $binder);
+        someParts = _stringifyExpressions(someParts,  binder);
         foreach (someParts as $k: p) {
             if (!is_numeric($k)) {
                 p = p . " "~ $k;
@@ -236,14 +236,14 @@ class QueryCompiler {
                 ));
             }
             if ($join["table"] instanceof IDBAExpression) {
-                $join["table"] = "("~ $join["table"].sql($binder) . ")";
+                $join["table"] = "("~ $join["table"].sql( binder) . ")";
             }
 
             $joins ~= " %s JOIN %s %s".format($join["type"], $join["table"], $join["alias"]);
 
             condition = "";
             if (isset($join["conditions"]) && $join["conditions"] instanceof IDBAExpression) {
-                condition = $join["conditions"].sql($binder);
+                condition = $join["conditions"].sql( binder);
             }
             if (condition == "") {
                 $joins ~= " ON 1 = 1";
@@ -266,7 +266,7 @@ class QueryCompiler {
     protected string _buildWindowPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
         $windows = [];
         foreach (someParts as $window) {
-            $windows[] = $window["name"].sql($binder) . " AS ("~ $window["window"].sql($binder) . ")";
+            $windows[] = $window["name"].sql( binder) . " AS ("~ $window["window"].sql( binder) . ")";
         }
 
         return " WINDOW "~ implode(", ", $windows);
@@ -284,7 +284,7 @@ class QueryCompiler {
         set = [];
         foreach (someParts as part) {
             if (part instanceof IDBAExpression) {
-                part = part.sql($binder);
+                part = part.sql( binder);
             }
             if (part[0] == "(") {
                 part = subString(part, 1, -1);
@@ -306,8 +306,8 @@ class QueryCompiler {
      * @return string
      */
     protected string _buildUnionPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
-        someParts = array_map(function (p) use ($binder) {
-            p["query"] = p["query"].sql($binder);
+        someParts = array_map(function (p) use ( binder) {
+            p["query"] = p["query"].sql( binder);
             p["query"] = p["query"][0] == "(" ? trim(p["query"], "()") : p["query"];
             prefix = p["all"] ? "ALL " : "";
             if (_orderedUnion) {
@@ -327,7 +327,7 @@ class QueryCompiler {
     // Builds the SQL fragment for INSERT INTO.
     // array someParts The insert parts.
     //  uim.databases.Query myQuery The query that is being compiled
-    // $binder Value binder used to generate parameter placeholder
+    //  binder Value binder used to generate parameter placeholder
     // SQL fragment.
     protected string _buildInsertPart(array someParts, DDBAQuery myQuery, DDBAValueBinder aValueBinder) {
         if (0 !in someParts[0]) {
@@ -337,8 +337,8 @@ class QueryCompiler {
             );
         }
         auto myTable = someParts[0];
-        auto myColumns = _stringifyExpressions(someParts[1], $binder);
-        auto mymodifiers = _buildModifierPart(myQuery.clause("modifier"), myQuery, $binder);
+        auto myColumns = _stringifyExpressions(someParts[1],  binder);
+        auto mymodifiers = _buildModifierPart(myQuery.clause("modifier"), myQuery,  binder);
 
         return "INSERT%s INTO %s (%s)".format(myModifiers, myTable, implode(", ", myColumns));
     }
@@ -352,7 +352,7 @@ class QueryCompiler {
      * @return SQL fragment.
      */
     protected string _buildValuesPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
-        return implode("", _stringifyExpressions(someParts, $binder));
+        return implode("", _stringifyExpressions(someParts,  binder));
     }
 
     /**
@@ -364,7 +364,7 @@ class QueryCompiler {
      * @return SQL fragment.
      */
     protected string _buildUpdatePart(array someParts, Query aQuery, ValueBinder aBinder) {
-        auto myTable = _stringifyExpressions(someParts, $binder);
+        auto myTable = _stringifyExpressions(someParts,  binder);
         myModifiers = _buildModifierPart(myQuery.clause("modifier"), aQuery, aBinder);
 
         return "UPDATE%s %s".format(myModifiers, myTable.joined(","));

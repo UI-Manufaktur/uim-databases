@@ -78,7 +78,7 @@ abstract class Driver {
      *
      * @var \UIM\Database\IdentifierQuoter|null
      */
-    protected IdentifierQuoter $quoter = null;
+    protected IdentifierQuoter  quoter = null;
 
     /**
      * The server version

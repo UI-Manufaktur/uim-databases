@@ -31,26 +31,26 @@ class IdentifierQuoter
      * Iterates over each of the clauses in a query looking for identifiers and
      * quotes them
      *
-     * @param uim.databases.Query $query The query to have its identifiers quoted
+     * @param uim.databases.Query  query The query to have its identifiers quoted
      * @return uim.databases.Query
      */
-    function quote(Query $query): Query
+    function quote(Query  query): Query
     {
-        $binder = $query.getValueBinder();
-        $query.setValueBinder(null);
+         binder =  query.getValueBinder();
+         query.setValueBinder(null);
 
-        if ($query.type() == "insert") {
-            _quoteInsert($query);
-        } elseif ($query.type() == "update") {
-            _quoteUpdate($query);
+        if ( query.type() == "insert") {
+            _quoteInsert( query);
+        } elseif ( query.type() == "update") {
+            _quoteUpdate( query);
         } else {
-            _quoteParts($query);
+            _quoteParts( query);
         }
 
-        $query.traverseExpressions([this, "quoteExpression"]);
-        $query.setValueBinder($binder);
+         query.traverseExpressions([this, "quoteExpression"]);
+         query.setValueBinder( binder);
 
-        return $query;
+        return  query;
     }
 
     /**
@@ -81,11 +81,11 @@ class IdentifierQuoter
     /**
      * Quotes all identifiers in each of the clauses of a query
      *
-     * @param uim.databases.Query $query The query to quote.
+     * @param uim.databases.Query  query The query to quote.
      */
-    protected void _quoteParts(Query $query) {
+    protected void _quoteParts(Query  query) {
         foreach (["distinct", "select", "from", "group"] as part) {
-            contents = $query.clause(part);
+            contents =  query.clause(part);
 
             if (!is_array(contents)) {
                 continue;
@@ -93,14 +93,14 @@ class IdentifierQuoter
 
              result = _basicQuoter(contents);
             if (!empty( result)) {
-                $query.{part}( result, true);
+                 query.{part}( result, true);
             }
         }
 
-        $joins = $query.clause("join");
+        $joins =  query.clause("join");
         if ($joins) {
             $joins = _quoteJoins($joins);
-            $query.join($joins, [], true);
+             query.join($joins, [], true);
         }
     }
 
@@ -150,10 +150,10 @@ class IdentifierQuoter
     /**
      * Quotes the table name and columns for an insert query
      *
-     * @param uim.databases.Query $query The insert query to quote.
+     * @param uim.databases.Query  query The insert query to quote.
      */
-    protected void _quoteInsert(Query $query) {
-        insert = $query.clause("insert");
+    protected void _quoteInsert(Query  query) {
+        insert =  query.clause("insert");
         if (!isset(insert[0]) || !isset(insert[1])) {
             return;
         }
@@ -164,19 +164,19 @@ class IdentifierQuoter
                 column = _driver.quoteIdentifier((string)column);
             }
         }
-        $query.insert(columns).into(table);
+         query.insert(columns).into(table);
     }
 
     /**
      * Quotes the table name for an update query
      *
-     * @param uim.databases.Query $query The update query to quote.
+     * @param uim.databases.Query  query The update query to quote.
      */
-    protected void _quoteUpdate(Query $query) {
-        table = $query.clause("update")[0];
+    protected void _quoteUpdate(Query  query) {
+        table =  query.clause("update")[0];
 
         if (is_string(table)) {
-            $query.update(_driver.quoteIdentifier(table));
+             query.update(_driver.quoteIdentifier(table));
         }
     }
 
@@ -190,11 +190,11 @@ class IdentifierQuoter
         if (is_string(field)) {
             expression.setField(_driver.quoteIdentifier(field));
         } elseif (is_array(field)) {
-            $quoted = null;
+             quoted = null;
             foreach (field as f) {
-                $quoted[] = _driver.quoteIdentifier(f);
+                 quoted[] = _driver.quoteIdentifier(f);
             }
-            expression.setField($quoted);
+            expression.setField( quoted);
         } elseif (field instanceof IDBAExpression) {
             this.quoteExpression(field);
         }

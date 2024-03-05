@@ -152,13 +152,13 @@ class QueryCompiler {
         someModifiers = _buildModifierPart(compiledQuery.clause("modifier"), compiledQuery, aBinder);
 
         auto driver = compiledQuery.getConnection().getDriver(compiledQuery.getConnectionRole());
-        auto $quoteIdentifiers = driver.isAutoQuotingEnabled() || _quotedSelectAliases;
+        auto  quoteIdentifiers = driver.isAutoQuotingEnabled() || _quotedSelectAliases;
         auto normalized = [];
         auto someParts = _stringifyExpressions(someParts, aBinder);
         foreach (myKey: p; someParts ) {
             if (!isNumeric(myKey)) {
                 p = p ~ " AS ";
-                p ~= $quoteIdentifiers
+                p ~=  quoteIdentifiers
                     ? driver.quoteIdentifier(myKey)
                     : myKey;
             }

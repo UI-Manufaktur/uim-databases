@@ -34,7 +34,7 @@ class PostgresCompiler : QueryCompiler {
      * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected auto _buildHavingPart(parts, myQuery, $binder) {
+    protected auto _buildHavingPart(parts, myQuery,  binder) {
         selectParts = myQuery.clause("select");
 
         foreach (selectKey, selectPart; selectParts) {
@@ -57,7 +57,7 @@ class PostgresCompiler : QueryCompiler {
 
                 parts[$k] = preg_replace(
                     ["/"/", "/\b"~ trim(selectKey, "\"") . "\b/i"],
-                    ["", selectPart.sql($binder)],
+                    ["", selectPart.sql( binder)],
                     p
                 );
             }

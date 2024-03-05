@@ -558,7 +558,7 @@ class SqlserverSchemaDialect : SchemaDialect {
  
     array truncateTableSql(TableSchema tableSchema) {
         name = _driver.quoteIdentifier(tableSchema.name());
-        $queries = [
+         queries = [
             sprintf("DELETE FROM %s", name),
         ];
 
@@ -568,12 +568,12 @@ class SqlserverSchemaDialect : SchemaDialect {
             column = tableSchema.getColumn(pk[0]);
             assert(column !isNull);
             if (in_array(column["type"], ["integer", "biginteger"])) {
-                $queries ~= 
+                 queries ~= 
                     "IF EXISTS (SELECT * FROM sys.identity_columns WHERE OBJECT_NAME(OBJECT_ID) = "%s' AND " ~
                     "last_value IS NOT NULL) DBCC CHECKIDENT("%s", RESEED, 0)"
                     .format(tableSchema.name(), tableSchema.name());
             }
         }
-        return $queries;
+        return  queries;
     }
 }

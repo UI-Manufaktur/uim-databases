@@ -21,13 +21,13 @@ trait ExpressionTypeCasterTrait {
         if (type.isNull) {
             return aValue;
         }
-        $baseType = type.replace("[]", "");
-        converter = TypeFactory.build($baseType);
+         baseType = type.replace("[]", "");
+        converter = TypeFactory.build( baseType);
 
         if (!cast(IExpression)converter Type) {
             return aValue;
         }
-        $multi = type != $baseType;
+        $multi = type !=  baseType;
 
         if ($multi) {
             /** @var \UIM\Database\Type\IExpressionType converter */
