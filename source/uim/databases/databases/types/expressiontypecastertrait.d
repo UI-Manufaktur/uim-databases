@@ -22,7 +22,7 @@ template ExpressionTypeCasterTemplate {
             return aValue;
         }
         baseType = type.replace("[]", "");
-        converter = TypeFactory.build($baseType);
+        converter = TypeFactory.build( baseType);
 
         if (!cast(IExpression)converter Type) {
             return aValue;

@@ -503,16 +503,16 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
 
         value = "";
         if (this.isSimpleVariant) {
-            value = this.compileNullableValue($binder, this.value, this.valueType) ~ " ";
+            value = this.compileNullableValue( binder, this.value, this.valueType) ~ " ";
         }
 
         $whenThenExpressions = null;
         foreach (this.when as $whenThen) {
-            $whenThenExpressions[] = $whenThen.sql($binder);
+            $whenThenExpressions[] = $whenThen.sql( binder);
         }
         $whenThen = implode(" ", $whenThenExpressions);
 
-        else = this.compileNullableValue($binder, this.else, this.elseType);
+        else = this.compileNullableValue( binder, this.else, this.elseType);
 
         return "CASE {value}{$whenThen} ELSE else END";
     }

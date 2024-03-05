@@ -81,12 +81,12 @@ trait CaseExpressionTrait
         if (value == null) {
             value = "NULL";
         } elseif (value instanceof Query) {
-            value = sprintf("(%s)", value.sql($binder));
+            value = sprintf("(%s)", value.sql( binder));
         } elseif (value instanceof IDBAExpression) {
-            value = value.sql($binder);
+            value = value.sql( binder);
         } else {
-            placeholder = $binder.placeholder("c");
-            $binder.bind(placeholder, value, type);
+            placeholder =  binder.placeholder("c");
+             binder.bind(placeholder, value, type);
             value = placeholder;
         }
 

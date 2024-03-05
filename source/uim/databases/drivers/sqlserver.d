@@ -368,10 +368,10 @@ class Sqlserver : Driver
 
          order = new OrderByExpression($distinct);
         query
-            .select(function ($q) use ($distinct,  order) {
-                 over = $q.newExpr("ROW_NUMBER() OVER")
+            .select(function ( q) use ($distinct,  order) {
+                 over =  q.newExpr("ROW_NUMBER() OVER")
                     .add("(PARTITION BY")
-                    .add($q.newExpr().add($distinct).setConjunction(","))
+                    .add( q.newExpr().add($distinct).setConjunction(","))
                     .add( order)
                     .add(")")
                     .setConjunction(" ");

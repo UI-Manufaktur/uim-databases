@@ -237,8 +237,8 @@ class SqliteSchemaDialect : SchemaDialect {
             return mb_substr(identifierToNormalize, 1, -1);
         }
         ["`", "'", "\""].each!((quote) {
-            if (identifierToNormalize.startsWith($quote) && identifierToNormalize.endsWith($quote)) {
-                identifierToNormalize = identifierToNormalize.replace($quote ~ quote, quote);
+            if (identifierToNormalize.startsWith( quote) && identifierToNormalize.endsWith( quote)) {
+                identifierToNormalize = identifierToNormalize.replace( quote ~ quote, quote);
 
                 return mb_substr(identifierToNormalize, 1, -1);
             }

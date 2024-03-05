@@ -117,7 +117,7 @@ class TupleComparison : ComparisonExpression {
                         bound ~= _bindValue( val, aBinder, valType);
                     });
                 
-                someValues ~= "(%s)".format($bound.join(","));
+                someValues ~= "(%s)".format( bound.join(","));
                 continue;
             }
             valType = type && isSet(type[anI]) ? type[anI] : type;

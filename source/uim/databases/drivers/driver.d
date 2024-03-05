@@ -317,7 +317,7 @@ abstract class Driver : IDBADriver {
         translator = this.queryTranslator(myQuery.type());
         myQuery = translator(myQuery);
 
-        return [myQuery, processor.compile(myQuery, $binder)];
+        return [myQuery, processor.compile(myQuery,  binder)];
     }
 
     QueryCompiler newCompiler() {
