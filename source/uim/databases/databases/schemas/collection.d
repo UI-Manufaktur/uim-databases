@@ -37,7 +37,7 @@ class Collection : ICollection {
         [sql, params] = _dialect.listTablesWithoutViewsSql(_connection.getDriver().config());
         auto result;
         statement = _connection.execute(sql, params);
-        while ($row = statement.fetch()) {
+        while ( row = statement.fetch()) {
             result ~= row[0];
         }
         return result;
@@ -50,7 +50,7 @@ class Collection : ICollection {
         [sql, params] = _dialect.listTablesSql(_connection.getDriver().config());
         auto result;
         statement = _connection.execute(sql, params);
-        while ($row = statement.fetch()) {
+        while ( row = statement.fetch()) {
             result ~= row[0];
         }
         return result;

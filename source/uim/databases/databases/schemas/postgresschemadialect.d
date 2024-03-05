@@ -144,27 +144,27 @@ class PostgresSchemaDialect : SchemaDialect {
         if (col.has("json")) {
             return ["type": TableISchema.TYPE_JSON, "length": null];
         }
-        length = isNumeric($length) ? length : null;
+        length = isNumeric( length) ? length : null;
 
         return ["type": TableISchema.TYPE_STRING, "length": length];
     }
  
     void convertColumnDescription(TableSchema tableSchema, array row) {
-        field = _convertColumn($row["type"]);
+        field = _convertColumn( row["type"]);
 
         if (field["type"] == TableISchema.TYPE_BOOLEAN) {
-            if ($row["default"] == "true") {
+            if ( row["default"] == "true") {
                 row["default"] = 1;
             }
-            if ($row["default"] == "false") {
+            if ( row["default"] == "false") {
                 row["default"] = 0;
             }
         }
-        if (!empty($row["has_serial"])) {
+        if (!empty( row["has_serial"])) {
             field["autoIncrement"] = true;
         }
         field += [
-            "default": _defaultValue($row["default"]),
+            "default": _defaultValue( row["default"]),
             "null": row["null"] == "YES",
             "collate": row["collation_name"],
             "comment": row["comment"],
@@ -184,7 +184,7 @@ class PostgresSchemaDialect : SchemaDialect {
         if (field["type"] == TableISchema.TYPE_TIMESTAMP_TIMEZONE) {
             field["precision"] = row["datetime_precision"];
         }
-        tableSchema.addColumn($row["name"], field);
+        tableSchema.addColumn( row["name"], field);
     }
     
     /**
@@ -240,10 +240,10 @@ class PostgresSchemaDialect : SchemaDialect {
     void convertIndexDescription(TableSchema tableSchema, array row) {
         type = TableSchema.INDEX_INDEX;
         name = row["relname"];
-        if ($row["indisprimary"]) {
+        if ( row["indisprimary"]) {
             name = type = TableSchema.CONSTRAINT_PRIMARY;
         }
-        if ($row["indisunique"] && type == TableSchema.INDEX_INDEX) {
+        if ( row["indisunique"] && type == TableSchema.INDEX_INDEX) {
             type = TableSchema.CONSTRAINT_UNIQUE;
         }
         if (type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
@@ -312,11 +312,11 @@ class PostgresSchemaDialect : SchemaDialect {
         someData = [
             "type": TableSchema.CONSTRAINT_FOREIGN,
             "columns": row["column_name"],
-            "references": [$row["references_table"], row["references_field"]],
-            "update": _convertOnClause($row["on_update"]),
-            "delete": _convertOnClause($row["on_delete"]),
+            "references": [ row["references_table"], row["references_field"]],
+            "update": _convertOnClause( row["on_update"]),
+            "delete": _convertOnClause( row["on_delete"]),
         ];
-        tableSchema.addConstraint($row["name"], someData);
+        tableSchema.addConstraint( row["name"], someData);
     }
  
     protected string _convertOnClause(string aclause) {

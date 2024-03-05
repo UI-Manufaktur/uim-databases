@@ -26,7 +26,7 @@ class SqliteStatement : Statement {
             changes.execute();
             
             auto row = changes.fetch();
-            this.affectedRows = row ? (int)$row[0] : 0;
+            this.affectedRows = row ? (int) row[0] : 0;
         } else {
             this.affectedRows = super.rowCount();
         }

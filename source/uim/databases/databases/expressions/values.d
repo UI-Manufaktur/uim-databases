@@ -131,7 +131,7 @@ class ValuesExpression : UimExpression {
         defaults.byKeyValue
             .each!(kv => types[kv.key] = typeMap.type(kv.key));
 
-        foreach ($row; _values ) {
+        foreach ( row; _values ) {
             row += defaults;
             string[] rowPlaceholders;
 
@@ -163,7 +163,7 @@ class ValuesExpression : UimExpression {
            _processExpressions();
         }
         _values.each!((value) {
-            if (cast(IExpression)$v) {
+            if (cast(IExpression) v) {
                 value.traverse(aCallback);
             }
             if (!isArray(value)) {
@@ -197,7 +197,7 @@ class ValuesExpression : UimExpression {
         foreach (_values as row:  someValues) {
             types.byKeyValue
                 .each!((colType) {
-                   _values[$row][colType.key] = colType.value.toExpression(someValues[colType.key]);
+                   _values[ row][colType.key] = colType.value.toExpression(someValues[colType.key]);
                 });
         }
        _castedExpressions = true;

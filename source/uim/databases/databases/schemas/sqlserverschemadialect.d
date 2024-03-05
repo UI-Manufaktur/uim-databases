@@ -157,7 +157,7 @@ class SqlserverSchemaDialect : SchemaDialect {
         }
         if (loweredColumnType == "image" || loweredColumnType.has("binary")) {
             // -1 is the value for MAX which we treat as a 'long' binary
-            if ($length == -1) {
+            if ( length == -1) {
                 length = TableSchema.LENGTH_LONG;
             }
             return ["type": TableISchema.TYPE_BINARY, "length": length];
@@ -171,12 +171,12 @@ class SqlserverSchemaDialect : SchemaDialect {
     void convertColumnDescription(TableSchema tableSchema, array row) {
         auto field = _convertColumn(
             row["type"],
-            !row["char_length"].isNull ? (int)$row["char_length"] : null,
-            !row["precision"].isNull ? (int)$row["precision"] : null,
-            !row["scale"].isNull ? (int)$row["scale"] : null
+            !row["char_length"].isNull ? (int) row["char_length"] : null,
+            !row["precision"].isNull ? (int) row["precision"] : null,
+            !row["scale"].isNull ? (int) row["scale"] : null
         );
 
-        if (!empty($row["autoincrement"])) {
+        if (!empty( row["autoincrement"])) {
             field["autoIncrement"] = true;
         }
         field += [
@@ -184,7 +184,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             "default": _defaultValue(field["type"], row["default"]),
             "collate": row["collation_name"],
         ];
-        tableSchema.addColumn($row["name"], field);
+        tableSchema.addColumn( row["name"], field);
     }
     
     /**
@@ -240,10 +240,10 @@ class SqlserverSchemaDialect : SchemaDialect {
     void convertIndexDescription(TableSchema tableSchema, array row) {
         auto type = TableSchema.INDEX_INDEX;
         auto name = row["index_name"];
-        if ($row["isPrimaryKey"]) {
+        if ( row["isPrimaryKey"]) {
             name = type = TableSchema.CONSTRAINT_PRIMARY;
         }
-        if (($row["is_unique"] || row["is_unique_constraint"]) && type == TableSchema.INDEX_INDEX) {
+        if (( row["is_unique"] || row["is_unique_constraint"]) && type == TableSchema.INDEX_INDEX) {
             type = TableSchema.CONSTRAINT_UNIQUE;
         }
 
@@ -251,7 +251,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             ? tableSchema.getIndex(name)
             : tableSchema.getConstraint(name);
         
-        auto someColumns = [$row["column_name"]];
+        auto someColumns = [ row["column_name"]];
         if (!empty(existing)) {
             someColumns = chain(existing["columns"], someColumns);
         }
@@ -293,17 +293,17 @@ class SqlserverSchemaDialect : SchemaDialect {
     void convertForeignKeyDescription(TableSchema tableSchema, array row) {
         someData = [
             "type": TableSchema.CONSTRAINT_FOREIGN,
-            "columns": [$row["column"]],
-            "references": [$row["reference_table"], row["reference_column"]],
-            "update": _convertOnClause($row["update_type"]),
-            "delete": _convertOnClause($row["delete_type"]),
+            "columns": [ row["column"]],
+            "references": [ row["reference_table"], row["reference_column"]],
+            "update": _convertOnClause( row["update_type"]),
+            "delete": _convertOnClause( row["delete_type"]),
         ];
         name = row["foreign_key_name"];
         tableSchema.addConstraint(name, someData);
     }
  
     protected string _foreignOnClause(string aon) {
-        parent = super._foreignOnClause($on);
+        parent = super._foreignOnClause( on);
 
         return parent == "RESTRICT" ? super._foreignOnClause(TableSchema.ACTION_NO_ACTION): parent;
     }

@@ -71,9 +71,9 @@ class MysqlSchemaDialect : SchemaDialect
         if (isSet($matches[2]) && matches[2].length {
             length = matches[2];
             if ($matches[2].has(",")) {
-                [$length, precision] = split(",", length);
+                [ length, precision] = split(",", length);
             }
-            length = (int)$length;
+            length = (int) length;
             precision = (int)precision;
         }
         type = _applyTypeSpecificColumnConversion(
@@ -88,7 +88,7 @@ class MysqlSchemaDialect : SchemaDialect
         }
         if (in_array(col, ["datetime", "timestamp"])) {
             typeName = col;
-            if ($length > 0) {
+            if ( length > 0) {
                 typeName = col ~ "fractional";
             }
             return ["type": typeName, "length": null, "precision": length];
@@ -120,7 +120,7 @@ class MysqlSchemaDialect : SchemaDialect
         }
         if (col.has("text")) {
             lengthName = substr(col, 0, -4);
-            length = TableSchema.columnLengths[$lengthName] ?? null;
+            length = TableSchema.columnLengths[ lengthName] ?? null;
 
             return ["type": TableISchema.TYPE_TEXT, "length": length];
         }
@@ -129,7 +129,7 @@ class MysqlSchemaDialect : SchemaDialect
         }
         if (col.has("blob") || in_array(col, ["binary", "varbinary"])) {
             lengthName = substr(col, 0, -4);
-            length = TableSchema.columnLengths[$lengthName] ?? length;
+            length = TableSchema.columnLengths[ lengthName] ?? length;
 
             return ["type": TableISchema.TYPE_BINARY, "length": length];
         }
@@ -156,7 +156,7 @@ class MysqlSchemaDialect : SchemaDialect
     }
  
     void convertColumnDescription(TableSchema tableSchema, array row) {
-        auto field = _convertColumn($row["Type"]);
+        auto field = _convertColumn( row["Type"]);
         field = field.update([
             "null": row["Null"] == "YES",
             "default": row["default"],
@@ -164,10 +164,10 @@ class MysqlSchemaDialect : SchemaDialect
             "comment": row["Comment"],
         ];
 
-        if ($row.isSet("Extra") && row["Extra"] == "auto_increment") {
+        if ( row.isSet("Extra") && row["Extra"] == "auto_increment") {
             field["autoIncrement"] = true;
         }
-        tableSchema.addColumn($row["Field"], field);
+        tableSchema.addColumn( row["Field"], field);
     }
  
     void convertIndexDescription(TableSchema tableSchema, array row) {
@@ -178,18 +178,18 @@ class MysqlSchemaDialect : SchemaDialect
         if (keyName == "PRIMARY") {
             keyName = type = TableSchema.CONSTRAINT_PRIMARY;
         }
-        if (!empty($row["Column_name"])) {
+        if (!empty( row["Column_name"])) {
             someColumns ~= row["Column_name"];
         }
-        if ($row["Index_type"] == "FULLTEXT") {
+        if ( row["Index_type"] == "FULLTEXT") {
             type = TableSchema.INDEX_FULLTEXT;
-        } else if ((int)$row["Non_unique"] == 0 && type != "primary") {
+        } else if ((int) row["Non_unique"] == 0 && type != "primary") {
             type = TableSchema.CONSTRAINT_UNIQUE;
         } else if (type != "primary") {
             type = TableSchema.INDEX_INDEX;
         }
-        if (!$row["Sub_part"])) {
-            length[$row["Column_name"]] = row["Sub_part"];
+        if (! row["Sub_part"])) {
+            length[ row["Column_name"]] = row["Sub_part"];
         }
          isIndex = (
             type == TableSchema.INDEX_INDEX ||
@@ -236,10 +236,10 @@ class MysqlSchemaDialect : SchemaDialect
     void convertForeignKeyDescription(TableSchema tableSchema, array row) {
         data = [
             "type": TableSchema.CONSTRAINT_FOREIGN,
-            "columns": [$row["COLUMN_NAME"]],
-            "references": [$row["REFERENCED_TABLE_NAME"], row["REFERENCED_COLUMN_NAME"]],
-            "update": _convertOnClause($row["UPDATE_RULE"]),
-            "delete": _convertOnClause($row["DELETE_RULE"]),
+            "columns": [ row["COLUMN_NAME"]],
+            "references": [ row["REFERENCED_TABLE_NAME"], row["REFERENCED_COLUMN_NAME"]],
+            "update": _convertOnClause( row["UPDATE_RULE"]),
+            "delete": _convertOnClause( row["DELETE_RULE"]),
         ];
         auto contraintName = row["CONSTRAINT_NAME"];
         tableSchema.addConstraint(contraintName, data);
@@ -321,16 +321,16 @@ class MysqlSchemaDialect : SchemaDialect
                         break;
                     }
                     length = array_search(someData["length"], TableSchema.columnLengths);
-                    assert(isString($length));
-                     result ~= " " ~ strtoupper($length) ~ "TEXT";
+                    assert(isString( length));
+                     result ~= " " ~ strtoupper( length) ~ "TEXT";
 
                     break;
                 case TableISchema.TYPE_BINARY:
                      isKnownLength = in_array(someData["length"], TableSchema.columnLengths);
                     if (isKnownLength) {
                         length = array_search(someData["length"], TableSchema.columnLengths);
-                        assert(isString($length));
-                         result ~= " " ~ strtoupper($length) ~ "BLOB";
+                        assert(isString( length));
+                         result ~= " " ~ strtoupper( length) ~ "BLOB";
                         break;
                     }
                     if (isEmpty(someData["length"])) {

@@ -76,8 +76,8 @@ abstract class SchemaDialect
      * string[]|string areferences The referenced columns of a foreign key constraint statement
      */
     protected string _convertConstraintColumns(string[] areferences) {
-        if (isString($references)) {
-            return _driver.quoteIdentifier($references);
+        if (isString( references)) {
+            return _driver.quoteIdentifier( references);
         }
         return join(", ", array_map(
             [_driver, "quoteIdentifier"],

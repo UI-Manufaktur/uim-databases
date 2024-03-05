@@ -61,8 +61,8 @@ class SelectQuery : Query, IteratorAggregate {
         if (_results.isNull || _isDirty) {
            _results = this.execute().fetchAll(IStatement.FETCH_TYPE_ASSOC);
             if (_resultDecorators) {
-                foreach (&$row; _results) {
-                    _resultDecorators.each!(decorator => row = decorator($row));
+                foreach (& row; _results) {
+                    _resultDecorators.each!(decorator => row = decorator( row));
                 }
             }
         }
@@ -146,17 +146,17 @@ class SelectQuery : Query, IteratorAggregate {
      * @param bool overwrite whether to reset fields with passed list or not
      */
     auto distinct(IExpression|string[]|bool on = [], bool overwrite = false) {
-        if ($on == []) {
+        if ( on == []) {
             on = true;
-        } else if (isString($on)) {
-            on = [$on];
+        } else if (isString( on)) {
+            on = [ on];
         }
-        if (isArray($on)) {
+        if (isArray( on)) {
             merge = [];
             if (isArray(_parts["distinct"])) {
                 merge = _parts["distinct"];
             }
-            on = overwrite ? array_values($on): chain($merge, on.values);
+            on = overwrite ? array_values( on): chain($merge, on.values);
         }
        _parts["distinct"] = on;
        _isDirty();
@@ -649,8 +649,8 @@ class SelectQuery : Query, IteratorAggregate {
      * ### Example
      *
      * ```
-     * aQuery.decorateResults(function ($row) {
-     *  row["order_total"] = row["subtotal"] + ($row["subtotal"] * row["tax"]);
+     * aQuery.decorateResults(function ( row) {
+     *  row["order_total"] = row["subtotal"] + ( row["subtotal"] * row["tax"]);
      *   return row;
      * });
      * ```
@@ -754,7 +754,7 @@ class SelectQuery : Query, IteratorAggregate {
      * string arole Connection role ("read' or 'write")
      */
     auto setConnectionRole(string arole) {
-        assert($role == Connection.ROLE_READ || role == Connection.ROLE_WRITE);
+        assert( role == Connection.ROLE_READ || role == Connection.ROLE_WRITE);
         this.connectionRole = role;
 
         return this;
