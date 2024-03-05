@@ -172,11 +172,11 @@ class QueryCompiler {
             normalized ~= p;
         }
 
-        if ($distinct == true) {
+        if ( distinct == true) {
             distinct = "DISTINCT ";
         }
-        if (isArray($distinct)) {
-            distinct = _stringifyExpressions($distinct, aBinder);
+        if (isArray( distinct)) {
+            distinct = _stringifyExpressions( distinct, aBinder);
             distinct = "DISTINCT ON (%s) ".format(join(", ", distinct));
         }
         return select.format(someModifiers, distinct, join(", ", normalized));

@@ -123,7 +123,7 @@ abstract class SchemaDialect
         if (!(cast(IColumnSchemaAware)type)) {
             return null;
         }
-        return type.convertColumnDefinition($definition, _driver);
+        return type.convertColumnDefinition( definition, _driver);
     }
     
     // Generate the SQL to drop a table.

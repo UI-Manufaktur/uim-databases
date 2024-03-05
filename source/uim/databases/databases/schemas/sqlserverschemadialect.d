@@ -197,7 +197,7 @@ class SqlserverSchemaDialect : SchemaDialect {
      * @param string default The default value.
      */
     protected string|int _defaultValue(string atype, string adefault) {
-        if ($default.isNull) {
+        if ( default.isNull) {
             return null;
         }
         // remove () surrounding value (NULL) but leave () at the end of functions
@@ -205,11 +205,11 @@ class SqlserverSchemaDialect : SchemaDialect {
         if (preg_match("/^\(+(.*?(\(\))?)\)+$/", default, matches)) {
             default = matches[1];
         }
-        if ($default == "NULL") {
+        if ( default == "NULL") {
             return null;
         }
         if (type == TableISchema.TYPE_BOOLEAN) {
-            return (int)$default;
+            return (int) default;
         }
         // Remove quotes
         if (preg_match("/^\(?N?'(.*)'\)?/", default, matches)) {

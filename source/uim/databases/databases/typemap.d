@@ -25,7 +25,7 @@ class TypeMap {
      * array<int|string, string> defaults The defaults to use.
      */
     this(array defaults = []) {
-        this.setDefaults($defaults);
+        this.setDefaults( defaults);
     }
     
     /**

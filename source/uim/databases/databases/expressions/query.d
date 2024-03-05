@@ -417,7 +417,7 @@ class QueryExpression : UimExpression, Countable {
             return new IdentifierExpression(field);
         };
 
-        return this.eq($wrapIdentifier( leftField), wrapIdentifier( rightField));
+        return this.eq( wrapIdentifier( leftField), wrapIdentifier( rightField));
     }
     string sql(ValueBinder aBinder) {
         len = this.count();

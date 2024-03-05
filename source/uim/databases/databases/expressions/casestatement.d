@@ -163,7 +163,7 @@ class CaseStatementExpression : UimExpression, ITypedResult {
      * ### Type handling
      *
      * The types provided via the `type` argument will be merged with the
-     * type map set for this expression. When using callables for `$when`,
+     * type map set for this expression. When using callables for ` when`,
      * the `\UIM\Database\Expression\WhenThenExpression`
      * instance received by the callables will inherit that type map, however
      * the types passed here will _not_be merged in case of using callables,
@@ -238,7 +238,7 @@ class CaseStatementExpression : UimExpression, ITypedResult {
      * \UIM\Database\IExpression|\Closure|object|array|scalar when The `WHEN` value. When using an
      * array of conditions, it must be compatible with `\UIM\Database\Query.where()`. Note that this argument is
      * _not_completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in!If
-     * you plan to use user data, either pass a single type for the `type` argument (which forces the `$when` value to
+     * you plan to use user data, either pass a single type for the `type` argument (which forces the ` when` value to
      * be a non-array, and then always binds the data), use a conditions array where the user data is only passed on
      * the value side of the array entries, or custom bindings!
      * @param STRINGAA|string type The when value type. Either an associative array when using array style
@@ -252,16 +252,16 @@ class CaseStatementExpression : UimExpression, ITypedResult {
         if (!this.whenBuffer.isNull) {
             throw new LogicException("Cannot call `when()` between `when()` and `then()`.");
         }
-        if (cast(Closure)$when) {
+        if (cast(Closure) when) {
             when = when(new WhenThenExpression(this.getTypeMap()));
-            if (!(cast(WhenThenExpression)$when )) {
+            if (!(cast(WhenThenExpression) when )) {
                 throw new LogicException(
                     "`when()` callables must return an instance of `\%s`, `%s` given."
-                    .format(WhenThenExpression.classname, get_debug_type($when))
+                    .format(WhenThenExpression.classname, get_debug_type( when))
                 );
             }
         }
-        if (cast(WhenThenExpression)$when) {
+        if (cast(WhenThenExpression) when) {
             this.when ~= when;
         } else {
             this.whenBuffer = ["when": when, "type": type];
@@ -386,7 +386,7 @@ class CaseStatementExpression : UimExpression, ITypedResult {
         }
         
         auto types = [];
-        foreach ($when; this.when as) {
+        foreach ( when; this.when as) {
             type = when.getResultType();
             if (type !isNull) {
                 types ~= type;
@@ -457,7 +457,7 @@ class CaseStatementExpression : UimExpression, ITypedResult {
         string whenThen = whenThenExpressions.join(" ");
         
         auto sqlElse = this.compileNullableValue(aBinder, this.else, this.elseType);
-        return "CASE {aValue}{$whenThen} ELSE else END";
+        return "CASE {aValue}{ whenThen} ELSE else END";
     }
  
     void traverse(Closure aCallback) {

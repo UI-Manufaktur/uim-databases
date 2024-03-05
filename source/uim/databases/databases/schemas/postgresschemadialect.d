@@ -196,14 +196,14 @@ class PostgresSchemaDialect : SchemaDialect {
      * string|int default The default value.
      */
     protected string|int _defaultValue(string|int default) {
-        if (isNumeric($default) || default.isNull) {
+        if (isNumeric( default) || default.isNull) {
             return default;
         }
         // Sequences
-        if ($default.startsWith("nextval")) {
+        if ( default.startsWith("nextval")) {
             return null;
         }
-        if ($default.startsWith("NULL.")) {
+        if ( default.startsWith("NULL.")) {
             return null;
         }
         // Remove quotes and postgres casts
@@ -444,9 +444,9 @@ class PostgresSchemaDialect : SchemaDialect {
         } else if (isSet(someData["default"])) {
             defaultValue = someData["default"];
             if (someData["type"] == "boolean") {
-                defaultValue = (bool)$defaultValue;
+                defaultValue = (bool) defaultValue;
             }
-             result ~= " DEFAULT " ~ _driver.schemaValue($defaultValue);
+             result ~= " DEFAULT " ~ _driver.schemaValue( defaultValue);
         } else if (isSet(someData["null"]) && someData["null"] != false) {
              result ~= " DEFAULT NULL";
         }
@@ -540,8 +540,8 @@ class PostgresSchemaDialect : SchemaDialect {
         content = join(",\n", array_filter(content));
         aTableName = _driver.quoteIdentifier(tableSchema.name());
         dbSchema = _driver.schema();
-        if ($dbSchema != "public") {
-            aTableName = _driver.quoteIdentifier($dbSchema) ~ "." ~ aTableName;
+        if ( dbSchema != "public") {
+            aTableName = _driver.quoteIdentifier( dbSchema) ~ "." ~ aTableName;
         }
         temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
          auto result;

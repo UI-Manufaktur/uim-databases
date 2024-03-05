@@ -505,9 +505,9 @@ class SelectQuery : Query, IteratorAggregate {
         if (overwrite) {
            _parts["window"] = [];
         }
-        if (cast(Closure)$window) {
+        if (cast(Closure) window) {
             window = window(new WindowExpression(), this);
-            if (!(cast(WindowExpression)$window)) {
+            if (!(cast(WindowExpression) window)) {
                 throw new UimException("You must return a `WindowExpression` from a Closure passed to `window()`.");
             }
         }

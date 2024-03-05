@@ -25,7 +25,7 @@ class OrderByExpression : QueryExpression {
     string sql(ValueBinder aBinder) {
         string[] sqlOrders;
         foreach (myKey: direction; _conditions) {
-            if (cast(IExpression)$direction ) {
+            if (cast(IExpression) direction ) {
                 direction = direction.sql(aBinder);
             }
             sqlOrders ~= isNumeric(myKey) ? direction : "%s %s".format(myKey, direction);

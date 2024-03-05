@@ -184,11 +184,11 @@ class SqliteSchemaDialect : SchemaDialect {
      * string|int default The default value.
      */
     protected string|int _defaultValue(string|int default) {
-        if ($default == "NULL" || default.isNull) {
+        if ( default == "NULL" || default.isNull) {
             return null;
         }
         // Remove quotes
-        if (isString($default) && preg_match("/^'(.*)'$/", default, matches)) {
+        if (isString( default) && preg_match("/^'(.*)'$/", default, matches)) {
             return matches[1].replace("\"\"", "'");
         }
         return default;
