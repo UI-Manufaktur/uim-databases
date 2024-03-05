@@ -17,7 +17,7 @@ class QueryLogger : BaseLog {
     super(configData);
   }
 
-  void log( level, string | Stringable$message, array mycontext = []) {
+  void log( level, string | Stringable message, array mycontext = []) {
     context += [
       "scope": this.scopes() ? : ["queriesLog", "cake.database.queries"],
       "connection": _configData.isSet("connection"),
@@ -29,6 +29,6 @@ class QueryLogger : BaseLog {
       string message = "connection={connection} role={role} duration={took} rows={numRows} " ~ message;
     }
 
-    Log.write("debug", to!string($message), context);
+    Log.write("debug", to!string( message), context);
   }
 }

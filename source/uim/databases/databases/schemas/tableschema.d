@@ -324,7 +324,7 @@ class TableSchema : TableISchema, ISqlGenerator {
                     "Columns used in index `%s` in table `%s` must be added to the Table schema first. " ~
                     "The column `%s` was not found."
                     .format(name, _table, field);
-                throw new DatabaseException($message);
+                throw new DatabaseException( message);
             }
         }
        _indexNames[name] = attrs;
@@ -378,7 +378,7 @@ class TableSchema : TableISchema, ISqlGenerator {
                     field,
                    _table
                 );
-                throw new DatabaseException($message);
+                throw new DatabaseException( message);
             }
         }
         if (attrs["type"] == CONSTRAINT_FOREIGN) {

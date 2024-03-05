@@ -29,14 +29,14 @@ class QueryLogger : BaseLog
     }
 
 
-    function log( level, $message, array context = null) {
+    function log( level,  message, array context = null) {
         context["scope"] = this.scopes() ?: ["queriesLog"];
         context["connection"] = this.getConfig("connection");
 
         if (context["query"] instanceof LoggedQuery) {
             context = context["query"].getContext() + context;
-            $message = "connection={connection} duration={took} rows={numRows} " ~ $message;
+             message = "connection={connection} duration={took} rows={numRows} " ~  message;
         }
-        Log::write("debug", $message, context);
+        Log::write("debug",  message, context);
     }
 }

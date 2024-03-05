@@ -465,7 +465,7 @@ class Sqlserver : Driver
 
                     return p;
                 };
-                $manipulator = function (p,  key) use (&params) {
+                 manipulator = function (p,  key) use (&params) {
                     return params[ key];
                 };
 
@@ -473,7 +473,7 @@ class Sqlserver : Driver
                     .setName("DATEADD")
                     .setConjunction(",")
                     .iterateParts( visitor)
-                    .iterateParts($manipulator)
+                    .iterateParts( manipulator)
                     .add([params[2]: "literal"]);
                 break;
             case "DAYOFWEEK":

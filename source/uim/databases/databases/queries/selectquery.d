@@ -156,7 +156,7 @@ class SelectQuery : Query, IteratorAggregate {
             if (isArray(_parts["distinct"])) {
                 merge = _parts["distinct"];
             }
-            on = overwrite ? array_values( on): chain($merge, on.values);
+            on = overwrite ? array_values( on): chain( merge, on.values);
         }
        _parts["distinct"] = on;
        _isDirty();

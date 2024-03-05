@@ -29,7 +29,7 @@ template ExpressionTypeCasterTemplate {
         }
         multi = type != baseType;
 
-        if ($multi) {
+        if ( multi) {
             /** @var \UIM\Database\Type\IExpressionType converter */
             return array_map([converter, "toExpression"], aValue);
         }

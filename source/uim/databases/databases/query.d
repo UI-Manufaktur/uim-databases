@@ -1444,7 +1444,7 @@ abstract class Query : IExpression, Stringable {
                     if (isArray(piece)) {
                         foreach (piece as j: aValue) {
                             if (cast(IExpression)aValue) {
-                               _parts[namePart.key][anI][$j] = clone aValue;
+                               _parts[namePart.key][anI][ j] = clone aValue;
                             }
                         }
                     } else if (cast(IExpression)piece ) {

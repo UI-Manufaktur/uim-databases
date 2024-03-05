@@ -45,21 +45,21 @@ trait SqlDialectTrait
         }
 
         // Functions
-        if (preg_match("/^([\w-]+)\((.*)\)$/", identifier, $matches)) {
-            return $matches[1] ~ "(" ~ this.quoteIdentifier($matches[2]) ~ ")";
+        if (preg_match("/^([\w-]+)\((.*)\)$/", identifier,  matches)) {
+            return  matches[1] ~ "(" ~ this.quoteIdentifier( matches[2]) ~ ")";
         }
 
         // Alias.field AS thing
-        if (preg_match("/^([\w-]+(\.[\w\s-]+|\(.*\))*)\s+AS\s*([\w-]+)$/ui", identifier, $matches)) {
-            return this.quoteIdentifier($matches[1]) ~ " AS " ~ this.quoteIdentifier($matches[3]);
+        if (preg_match("/^([\w-]+(\.[\w\s-]+|\(.*\))*)\s+AS\s*([\w-]+)$/ui", identifier,  matches)) {
+            return this.quoteIdentifier( matches[1]) ~ " AS " ~ this.quoteIdentifier( matches[3]);
         }
 
         // string.string with spaces
-        if (preg_match("/^([\w-]+\.[\w][\w\s-]*[\w])(.*)/u", identifier, $matches)) {
-            items = explode(".", $matches[1]);
+        if (preg_match("/^([\w-]+\.[\w][\w\s-]*[\w])(.*)/u", identifier,  matches)) {
+            items = explode(".",  matches[1]);
             field = implode(_endQuote ~ "." ~ _startQuote, items);
 
-            return _startQuote . field . _endQuote . $matches[2];
+            return _startQuote . field . _endQuote .  matches[2];
         }
 
         if (preg_match("/^[\w\s-]*[\w-]+/u", identifier)) {
@@ -93,9 +93,9 @@ trait SqlDialectTrait
             }
 
             query.traverseExpressions(void (expression) use (translators, query) {
-                foreach (translators as class: $method) {
+                foreach (translators as class:  method) {
                     if (expression instanceof class) {
-                        this.{$method}(expression, query);
+                        this.{ method}(expression, query);
                     }
                 }
             });

@@ -237,8 +237,8 @@ class MysqlDriver : Driver {
 
             if (strpos(_version, "MariaDB") != false) {
                 this.serverType = SERVER_TYPE_MARIADB;
-                preg_match("/^(?:5\.5\.5-)?(\d+\.\d+\.\d+.*-MariaDB[^:]*)/", _version, $matches);
-                _version = $matches[1];
+                preg_match("/^(?:5\.5\.5-)?(\d+\.\d+\.\d+.*-MariaDB[^:]*)/", _version,  matches);
+                _version =  matches[1];
             }
         }
 

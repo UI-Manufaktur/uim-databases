@@ -114,7 +114,7 @@ class SqlserverCompiler : QueryCompiler {
                         matches
                     );
 
-                    if ($matches[0].isEmpty) {
+                    if ( matches[0].isEmpty) {
                         continue;
                     }
                     someParts[myKey] = preg_replace(

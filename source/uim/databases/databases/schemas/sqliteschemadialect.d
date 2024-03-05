@@ -27,16 +27,16 @@ class SqliteSchemaDialect : SchemaDialect {
             return ["type": TableISchema.TYPE_TEXT, "length": null];
         }
         preg_match("/(unsigned)?\s*([a-z]+)(?:\(([0-9,]+)\))?/i", aColumn, matches);
-        if (!$matches) {
+        if (! matches) {
             throw new DatabaseException("Unable to parse column type from `%s`".format(aColumn));
         }
         bool isUnsigned = false;
-        if ($matches[1].toLower == "unsigned") {
+        if ( matches[1].toLower == "unsigned") {
             isUnsigned = true;
         }
         auto col = matches[2].toLower;
         size_t columnLength = precision = scale = null;
-        if (isSet($matches[3])) {
+        if (isSet( matches[3])) {
             columnLength = matches[3];
             if (columnLength.has(",")) {
                 [columnLength, precision] = split(",", columnLength);
@@ -293,7 +293,7 @@ class SqliteSchemaDialect : SchemaDialect {
 
                     regex = "/CONSTRAINT\s*(["\"`\[].+?["\"`\] ])\s*UNIQUE\s*\(\s*(?:{someColumnsPattern})\s*\)/i";
                     if (preg_match( regex, aTableSql, matches)) {
-                        row["name"] = this.normalizePossiblyQuotedIdentifier($matches[1]);
+                        row["name"] = this.normalizePossiblyQuotedIdentifier( matches[1]);
                     }
                 }
             }

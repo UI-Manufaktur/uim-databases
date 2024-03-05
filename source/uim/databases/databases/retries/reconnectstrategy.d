@@ -57,7 +57,7 @@ class ReconnectStrategy : IRetryStrategy {
         auto message = exception.getMessage();
 
         foreach (cause; causes) {
-            if ($message.has(cause)) {
+            if ( message.has(cause)) {
                 return this.reconnect();
             }
         }
