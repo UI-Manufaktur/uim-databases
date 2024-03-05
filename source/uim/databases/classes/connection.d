@@ -9,7 +9,7 @@ class Connection : IConnection {
     // Contains the configuration params for this connection.
     protected IData[string] _config;
 
-    protected Driver $readDriver;
+    protected Driver  readDriver;
 
     protected Driver $writeDriver;
 
@@ -87,17 +87,17 @@ class Connection : IConnection {
         ]));
 
         $writeConfig = configData["write"] ?? [] + sharedConfig;
-        $readConfig = configData["read"] ?? [] + sharedConfig;
-        if ($readConfig == $writeConfig) {
-            $readDriver = $writeDriver = new driverClass(["_role": self.ROLE_WRITE] + $writeConfig);
+         readConfig = configData["read"] ?? [] + sharedConfig;
+        if ( readConfig == $writeConfig) {
+             readDriver = $writeDriver = new driverClass(["_role": self.ROLE_WRITE] + $writeConfig);
         } else {
-            $readDriver = new driverClass(["_role": self.ROLE_READ] + $readConfig);
+             readDriver = new driverClass(["_role": self.ROLE_READ] +  readConfig);
             $writeDriver = new driverClass(["_role": self.ROLE_WRITE] + $writeConfig);
         }
         if (!$writeDriver.enabled()) {
             throw new MissingExtensionException(["driver": get_class($writeDriver), "name": this.configName()]);
         }
-        return [self.ROLE_READ: $readDriver, self.ROLE_WRITE: $writeDriver];
+        return [self.ROLE_READ:  readDriver, self.ROLE_WRITE: $writeDriver];
     }
     
     /**
@@ -138,9 +138,9 @@ class Connection : IConnection {
      * string arole Connection role ("read' or 'write")
      */
     Driver getDriver(string arole = self.ROLE_WRITE) {
-        assert($role == self.ROLE_READ || $role == self.ROLE_WRITE);
+        assert( role == self.ROLE_READ ||  role == self.ROLE_WRITE);
 
-        return $role == self.ROLE_READ ? this.readDriver : this.writeDriver;
+        return  role == self.ROLE_READ ? this.readDriver : this.writeDriver;
     }
     
     /**
@@ -550,8 +550,8 @@ class Connection : IConnection {
             "database": "*****",
             "port": "*****",
         ];
-        $replace = array_intersect_key(secrets, _config);
-        configData = $replace + _config;
+         replace = array_intersect_key(secrets, _config);
+        configData =  replace + _config;
 
         if (isSet(configData["read"])) {
             configData["read"] = array_intersect_key(secrets, configData["read"]) + configData["read"];

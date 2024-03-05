@@ -71,9 +71,9 @@ class SelectQuery : Query, IteratorAggregate {
         if (_results.isNull || _isDirty) {
            _results = this.execute().fetchAll(IStatement.FETCH_TYPE_ASSOC);
             if (_resultDecorators) {
-                foreach (&$row; _results) {
+                foreach (& row; _results) {
                     foreach ($decorator; _resultDecorators) {
-                        $row = $decorator($row);
+                         row = $decorator( row);
                     }
                 }
             }
@@ -151,24 +151,24 @@ class SelectQuery : Query, IteratorAggregate {
      * aQuery.distinct("name", true);
      * ```
      * Params:
-     * \UIM\Database\IExpression|string[]|bool $on Enable/disable distinct class
+     * \UIM\Database\IExpression|string[]|bool  on Enable/disable distinct class
      * or list of fields to be filtered on
      * @param bool overwrite whether to reset fields with passed list or not
      */
-    void distinct(IExpression|string[]|bool $on = [], bool overwrite = false) {
-        if ($on == []) {
-            $on = true;
-        } elseif (isString($on)) {
-            $on = [$on];
+    void distinct(IExpression|string[]|bool  on = [], bool overwrite = false) {
+        if ( on == []) {
+             on = true;
+        } elseif (isString( on)) {
+             on = [ on];
         }
-        if (isArray($on)) {
+        if (isArray( on)) {
             $merge = [];
             if (isArray(_parts["distinct"])) {
                 $merge = _parts["distinct"];
             }
-            $on = overwrite ? array_values($on): array_merge($merge, $on.values);
+             on = overwrite ? array_values( on): array_merge($merge,  on.values);
         }
-       _parts["distinct"] = $on;
+       _parts["distinct"] =  on;
        _isDirty();
     }
     
@@ -656,9 +656,9 @@ class SelectQuery : Query, IteratorAggregate {
      * ### Example
      *
      * ```
-     * aQuery.decorateResults(function ($row) {
-     *  $row["order_total"] = $row["subtotal"] + ($row["subtotal"] * $row["tax"]);
-     *   return $row;
+     * aQuery.decorateResults(function ( row) {
+     *   row["order_total"] =  row["subtotal"] + ( row["subtotal"] *  row["tax"]);
+     *   return  row;
      * });
      * ```
      * Params:
@@ -761,8 +761,8 @@ class SelectQuery : Query, IteratorAggregate {
      * string arole Connection role ("read' or 'write")
      */
     auto setConnectionRole(string arole) {
-        assert($role == Connection.ROLE_READ || $role == Connection.ROLE_WRITE);
-        this.connectionRole = $role;
+        assert( role == Connection.ROLE_READ ||  role == Connection.ROLE_WRITE);
+        this.connectionRole =  role;
 
         return this;
     }

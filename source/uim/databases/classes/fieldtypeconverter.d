@@ -44,19 +44,19 @@ class FieldTypeConverter {
      * Converts each of the fields in the array that are present in the type map
      * using the corresponding Type class.
      * Params:
-     * Json $row The array with the fields to be casted
+     * Json  row The array with the fields to be casted
     */
-    Json __invoke(Json $row) {
-        if (!isArray($row)) {
-            return $row;
+    Json __invoke(Json  row) {
+        if (!isArray( row)) {
+            return  row;
         }
         foreach (myConversion; this.conversions) {
             if (myConversion["hasBatch"]) {
-                $row = myConversion["type"].manyToD($row, myConversion["fields"], this.driver);
+                 row = myConversion["type"].manyToD( row, myConversion["fields"], this.driver);
                 continue;
             }
-            myConversion["fields"].each!(field => $row[field] = myConversion["type"].ToD($row[field], this.driver));
+            myConversion["fields"].each!(field =>  row[field] = myConversion["type"].ToD( row[field], this.driver));
         }
-        return $row;
+        return  row;
     }
 }

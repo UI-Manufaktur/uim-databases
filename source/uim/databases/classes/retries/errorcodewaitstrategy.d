@@ -8,18 +8,18 @@ import uim.databases;
 class ErrorCodeWaitStrategy : IRetryStrategy {
     protected int[] errorCodes;
 
-    protected int $retryInterval;
+    protected int  retryInterval;
 
     /**
      * @param array<int> errorCodes DB-specific error codes that allow retrying
-     * @param int $retryInterval Seconds to wait before allowing next retry, 0 for no wait.
+     * @param int  retryInterval Seconds to wait before allowing next retry, 0 for no wait.
      */
     this(array<int> errorCodes, int retryWait) {
         _errorCodes = errorCodes;
-        _retryWait = $retryWait;
+        _retryWait =  retryWait;
     }
  
-    bool shouldRetry(Exception exception, int $retryCount) {
+    bool shouldRetry(Exception exception, int  retryCount) {
         if (
             cast(PDOException)exception && exception.errorInfo && in_array(exception.errorInfo[1], this.errorCodes)
         ) {

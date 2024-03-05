@@ -136,9 +136,9 @@ abstract class Driver {
             configData["flags"]
         );
 
-        $retry = new CommandRetry(new ErrorCodeWaitStrategy(RETRY_ERROR_CODES, 5), 4);
+         retry = new CommandRetry(new ErrorCodeWaitStrategy(RETRY_ERROR_CODES, 5), 4);
         try {
-            return $retry.run(action);
+            return  retry.run(action);
         } catch (PDOException  anException) {
             throw new MissingConnectionException(
                 [
@@ -149,7 +149,7 @@ abstract class Driver {
                  anException
             );
         } finally {
-            this.connectRetries = $retry.getRetries();
+            this.connectRetries =  retry.getRetries();
         }
     }
     
@@ -249,16 +249,16 @@ abstract class Driver {
         } catch (PDOException  anException) {
             exception =  anException;
         }
-        $logContext = [
+         logContext = [
             'driver": this,
             'error": exception,
             'params": params ?? statementToExecute.getBoundParams(),
         ];
         if (!exception) {
-            $logContext["numRows"] = statementToExecute.rowCount();
-            $logContext["took"] = took;
+             logContext["numRows"] = statementToExecute.rowCount();
+             logContext["took"] = took;
         }
-        this.log(statementToExecute.queryString(), $logContext);
+        this.log(statementToExecute.queryString(),  logContext);
 
         if (exception) {
             throw exception;

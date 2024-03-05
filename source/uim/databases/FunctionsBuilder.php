@@ -45,12 +45,12 @@ class FunctionsBuilder
      */
     function sum(expression, someTypes = []): AggregateExpression
     {
-        $returnType = "float";
+         returnType = "float";
         if (current(types) == "integer") {
-            $returnType = "integer";
+             returnType = "integer";
         }
 
-        return this.aggregate("SUM", this.toLiteralParam(expression), someTypes, $returnType);
+        return this.aggregate("SUM", this.toLiteralParam(expression), someTypes,  returnType);
     }
 
     /**
@@ -335,12 +335,12 @@ class FunctionsBuilder
      *     `["value": "literal"]` or `["value": "identifier"]
      * @param array types Array of types that match the names used in `params`:
      *     `["name": "type"]`
-     * @param string $return Return type of the entire expression. Defaults to float.
+     * @param string  return Return type of the entire expression. Defaults to float.
      * @return uim.databases.Expression\AggregateExpression
      */
-    function aggregate(string name, array params = [], array types = [], string $return = "float")
+    function aggregate(string name, array params = [], array types = [], string  return = "float")
     {
-        return new AggregateExpression(name, params, someTypes, $return);
+        return new AggregateExpression(name, params, someTypes,  return);
     }
 
     /**
