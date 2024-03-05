@@ -197,28 +197,28 @@ class ValuesExpression : IDBAExpression {
 
         types = null;
         typeMap = this.getTypeMap();
-        foreach ($defaults as col: $v) {
+        foreach ($defaults as col:  v) {
             types[col] = typeMap.type(col);
         }
 
-        foreach (_values as $row) {
-            $row += $defaults;
-            $rowPlaceholders = null;
+        foreach (_values as  row) {
+             row += $defaults;
+             rowPlaceholders = null;
 
             foreach (columns as column) {
-                value = $row[column];
+                value =  row[column];
 
                 if (value instanceof IDBAExpression) {
-                    $rowPlaceholders[] = "(" ~ value.sql($binder) ~ ")";
+                     rowPlaceholders[] = "(" ~ value.sql($binder) ~ ")";
                     continue;
                 }
 
                 placeholder = $binder.placeholder("c");
-                $rowPlaceholders[] = placeholder;
+                 rowPlaceholders[] = placeholder;
                 $binder.bind(placeholder, value, types[column]);
             }
 
-            placeholders[] = implode(", ", $rowPlaceholders);
+            placeholders[] = implode(", ",  rowPlaceholders);
         }
 
         query = this.getQuery();
@@ -239,14 +239,14 @@ class ValuesExpression : IDBAExpression {
             _processExpressions();
         }
 
-        foreach (_values as $v) {
-            if ($v instanceof IDBAExpression) {
-                $v.traverse(callback);
+        foreach (_values as  v) {
+            if ( v instanceof IDBAExpression) {
+                 v.traverse(callback);
             }
-            if (!is_array($v)) {
+            if (!is_array( v)) {
                 continue;
             }
-            foreach ($v as field) {
+            foreach ( v as field) {
                 if (field instanceof IDBAExpression) {
                     callback(field);
                     field.traverse(callback);
@@ -278,10 +278,10 @@ class ValuesExpression : IDBAExpression {
             return;
         }
 
-        foreach (_values as $row: values) {
+        foreach (_values as  row: values) {
             foreach (types as col: type) {
                 /** @var DDBtypes.ExpressionTypeInterface type */
-                _values[$row][col] = type.toExpression(values[col]);
+                _values[ row][col] = type.toExpression(values[col]);
             }
         }
         _castedExpressions = true;

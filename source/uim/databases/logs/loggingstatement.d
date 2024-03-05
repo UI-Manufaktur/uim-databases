@@ -80,13 +80,13 @@ class LoggingStatement : StatementDecorator
 
 
     function fetch(type = self::FETCH_TYPE_NUM) {
-        $record = super.fetch(type);
+         record = super.fetch(type);
 
         if (this.loggedQuery) {
             this.rowCount();
         }
 
-        return $record;
+        return  record;
     }
 
 
@@ -150,10 +150,10 @@ class LoggingStatement : StatementDecorator
     /**
      * Sets a logger
      *
-     * @param \Psr\logs.LoggerInterface $logger Logger object
+     * @param \Psr\logs.LoggerInterface  logger Logger object
      */
-    void setLogger(LoggerInterface $logger) {
-        _logger = $logger;
+    void setLogger(LoggerInterface  logger) {
+        _logger =  logger;
     }
 
     /**

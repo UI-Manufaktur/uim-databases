@@ -28,7 +28,7 @@ class WhenThenExpression : IDBAExpression
      *
      * @var array<string>
      */
-    protected $validClauseNames = [
+    protected  validClauseNames = [
         "when",
         "then",
     ];

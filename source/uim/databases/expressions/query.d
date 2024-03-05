@@ -361,12 +361,12 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function notInOrNull(field, values, Nullable!string type = null) {
-        $or = new static([], [], "OR");
-        $or
+         or = new static([], [], "OR");
+         or
             .notIn(field, values, type)
             .isNull(field);
 
-        return this.add($or);
+        return this.add( or);
     }
 
     /**
@@ -488,11 +488,11 @@ class QueryExpression : IDBAExpression, Countable
     /**
      * Builds equal condition or assignment with identifier wrapping.
      *
-     * @param string $leftField Left join condition field name.
-     * @param string $rightField Right join condition field name.
+     * @param string  leftField Left join condition field name.
+     * @param string  rightField Right join condition field name.
      * @return this
      */
-    function equalFields(string $leftField, string $rightField) {
+    function equalFields(string  leftField, string  rightField) {
         $wrapIdentifier = function (field) {
             if (field instanceof IDBAExpression) {
                 return field;
@@ -501,17 +501,17 @@ class QueryExpression : IDBAExpression, Countable
             return new IdentifierExpression(field);
         };
 
-        return this.eq($wrapIdentifier($leftField), $wrapIdentifier($rightField));
+        return this.eq($wrapIdentifier( leftField), $wrapIdentifier( rightField));
     }
 
 
     string sql(ValueBinder aBinder) {
-        $len = this.count();
-        if ($len == 0) {
+         len = this.count();
+        if ( len == 0) {
             return "";
         }
         conjunction = _conjunction;
-        template = $len == 1 ? '%s' : "(%s)";
+        template =  len == 1 ? '%s' : "(%s)";
         parts = null;
         foreach (_conditions as part) {
             if (part instanceof Query) {
@@ -594,7 +594,7 @@ class QueryExpression : IDBAExpression, Countable
      * @param array<int|string, string> types list of types associated on fields referenced in conditions
      */
     protected void _addConditions(array conditions, array types) {
-        $operators = ["and", "or", "xor"];
+         operators = ["and", "or", "xor"];
 
         typeMap = this.getTypeMap().setTypes(types);
 
@@ -614,7 +614,7 @@ class QueryExpression : IDBAExpression, Countable
             isOperator = isNot = false;
             if (!numericKey) {
                 normalizedKey = strtolower($k);
-                isOperator = hasAllValues(normalizedKey, $operators);
+                isOperator = hasAllValues(normalizedKey,  operators);
                 isNot = normalizedKey == "not";
             }
 
@@ -663,7 +663,7 @@ class QueryExpression : IDBAExpression, Countable
      */
     protected function _parseCondition(string field, value) {
         field = trim(field);
-        $operator = "=";
+         operator = "=";
         expression = field;
 
         spaces = substr_count(field, " ");
@@ -674,27 +674,27 @@ class QueryExpression : IDBAExpression, Countable
         if (spaces > 1) {
             parts = explode(" ", field);
             if (preg_match("/(is not|not \w+)$/i", field)) {
-                $last = array_pop(parts);
+                 last = array_pop(parts);
                 second = array_pop(parts);
-                parts[] = "{second} {$last}";
+                parts[] = "{second} { last}";
             }
-            $operator = array_pop(parts);
+             operator = array_pop(parts);
             expression = implode(" ", parts);
         } elseif (spaces == 1) {
             parts = explode(" ", field, 2);
-            [expression, $operator] = parts;
+            [expression,  operator] = parts;
         }
-        $operator = strtolower(trim($operator));
+         operator = strtolower(trim( operator));
         type = this.getTypeMap().type(expression);
 
         typeMultiple = (is_string(type) && strpos(type, "[]") != false);
-        if (hasAllValues($operator, ["in", "not in"]) || typeMultiple) {
+        if (hasAllValues( operator, ["in", "not in"]) || typeMultiple) {
             type = type ?: "string";
             if (!typeMultiple) {
                 type ~= "[]";
             }
-            $operator = $operator == "=" ? "IN" : $operator;
-            $operator = $operator == "!=" ? "NOT IN" : $operator;
+             operator =  operator == "=" ? "IN" :  operator;
+             operator =  operator == "!=" ? "NOT IN" :  operator;
             typeMultiple = true;
         }
 
@@ -702,7 +702,7 @@ class QueryExpression : IDBAExpression, Countable
             value = value instanceof IDBAExpression ? value : (array)value;
         }
 
-        if ($operator == "is" && value == null) {
+        if ( operator == "is" && value == null) {
             return new UnaryExpression(
                 "IS NULL",
                 new IdentifierExpression(expression),
@@ -710,7 +710,7 @@ class QueryExpression : IDBAExpression, Countable
             );
         }
 
-        if ($operator == "is not" && value == null) {
+        if ( operator == "is not" && value == null) {
             return new UnaryExpression(
                 "IS NOT NULL",
                 new IdentifierExpression(expression),
@@ -718,12 +718,12 @@ class QueryExpression : IDBAExpression, Countable
             );
         }
 
-        if ($operator == "is" && value != null) {
-            $operator = "=";
+        if ( operator == "is" && value != null) {
+             operator = "=";
         }
 
-        if ($operator == "is not" && value != null) {
-            $operator = "!=";
+        if ( operator == "is not" && value != null) {
+             operator = "!=";
         }
 
         if (value == null && _conjunction != ",") {
@@ -732,7 +732,7 @@ class QueryExpression : IDBAExpression, Countable
             );
         }
 
-        return new ComparisonExpression(expression, value, type, $operator);
+        return new ComparisonExpression(expression, value, type,  operator);
     }
 
     /**

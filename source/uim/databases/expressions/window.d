@@ -28,7 +28,7 @@ class WindowExpression : IDBAExpression, IWindow
     /**
      * @var DDBExpression\OrderByExpression|null
      */
-    protected $order;
+    protected  order;
 
     /**
      * @var array|null

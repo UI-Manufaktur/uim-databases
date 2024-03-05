@@ -58,13 +58,13 @@ class ComparisonExpression : IDBAExpression, FieldInterface
      * @param uim.databases.IDBAExpression|string field the field name to compare to a value
      * @param mixed value The value to be used in comparison
      * @param string|null type the type name used to cast the value
-     * @param string $operator the operator used for comparing field and value
+     * @param string  operator the operator used for comparing field and value
      */
-    this(field, value, Nullable!string type = null, string $operator = "=") {
+    this(field, value, Nullable!string type = null, string  operator = "=") {
         _type = type;
         this.setField(field);
         this.setValue(value);
-        _operator = $operator;
+        _operator =  operator;
     }
 
     /**
@@ -96,10 +96,10 @@ class ComparisonExpression : IDBAExpression, FieldInterface
     /**
      * Sets the operator to use for the comparison
      *
-     * @param string $operator The operator to be used for the comparison.
+     * @param string  operator The operator to be used for the comparison.
      */
-    void setOperator(string $operator) {
-        _operator = $operator;
+    void setOperator(string  operator) {
+        _operator =  operator;
     }
 
     /**
@@ -143,9 +143,9 @@ class ComparisonExpression : IDBAExpression, FieldInterface
             _value.traverse(callback);
         }
 
-        foreach (_valueExpressions as $v) {
-            callback($v);
-            $v.traverse(callback);
+        foreach (_valueExpressions as  v) {
+            callback( v);
+             v.traverse(callback);
         }
 
         return this;
@@ -229,8 +229,8 @@ class ComparisonExpression : IDBAExpression, FieldInterface
     protected string _flattenValue(iterable value, ValueBinder aBinder, Nullable!string type = null) {
         parts = null;
         if (is_array(value)) {
-            foreach (_valueExpressions as $k: $v) {
-                parts[$k] = $v.sql($binder);
+            foreach (_valueExpressions as $k:  v) {
+                parts[$k] =  v.sql($binder);
                 unset(value[$k]);
             }
         }
@@ -262,13 +262,13 @@ class ComparisonExpression : IDBAExpression, FieldInterface
             result = values;
         }
 
-        foreach (values as $k: $v) {
-            if ($v instanceof IDBAExpression) {
-                expressions[$k] = $v;
+        foreach (values as $k:  v) {
+            if ( v instanceof IDBAExpression) {
+                expressions[$k] =  v;
             }
 
             if (isArray) {
-                result[$k] = $v;
+                result[$k] =  v;
             }
         }
 

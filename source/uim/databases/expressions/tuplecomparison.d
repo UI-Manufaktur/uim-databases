@@ -76,13 +76,13 @@ class TupleComparison : ComparisonExpression
     string sql(ValueBinder aBinder) {
         template = "(%s) %s (%s)";
         fields = null;
-        $originalFields = this.getField();
+         originalFields = this.getField();
 
-        if (!is_array($originalFields)) {
-            $originalFields = [$originalFields];
+        if (!is_array( originalFields)) {
+             originalFields = [ originalFields];
         }
 
-        foreach ($originalFields as field) {
+        foreach ( originalFields as field) {
             fields[] = field instanceof IDBAExpression ? field.sql($binder) : field;
         }
 
@@ -121,19 +121,19 @@ class TupleComparison : ComparisonExpression
 
             if (isMultiOperation) {
                 $bound = null;
-                foreach (value as $k: $val) {
-                    /** @var string $valType */
-                    $valType = type && isset(type.isSet($k) ? type[$k] : type;
-                    $bound[] = _bindValue($val, $binder, $valType);
+                foreach (value as $k:  val) {
+                    /** @var string  valType */
+                     valType = type && isset(type.isSet($k) ? type[$k] : type;
+                    $bound[] = _bindValue( val, $binder,  valType);
                 }
 
                 values[] = sprintf("(%s)", implode(",", $bound));
                 continue;
             }
 
-            /** @var string $valType */
-            $valType = type && type[i]) ? type[i] : type;
-            values[] = _bindValue(value, $binder, $valType);
+            /** @var string  valType */
+             valType = type && type[i]) ? type[i] : type;
+            values[] = _bindValue(value, $binder,  valType);
         }
 
         return implode(", ", values);
@@ -163,13 +163,13 @@ class TupleComparison : ComparisonExpression
             return this;
         }
 
-        foreach (value as $val) {
+        foreach (value as  val) {
             if (this.isMulti()) {
-                foreach ($val as $v) {
-                    _traverseValue($v, callback);
+                foreach ( val as  v) {
+                    _traverseValue( v, callback);
                 }
             } else {
-                _traverseValue($val, callback);
+                _traverseValue( val, callback);
             }
         }
 

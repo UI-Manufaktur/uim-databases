@@ -49,28 +49,28 @@ class UnaryExpression : IDBAExpression
     /**
      * Constructor
      *
-     * @param string $operator The operator to used for the expression
+     * @param string  operator The operator to used for the expression
      * @param mixed value the value to use as the operand for the expression
      * @param int position either UnaryExpression::PREFIX or UnaryExpression::POSTFIX
      */
-    this(string $operator, value, position = self::PREFIX) {
-        _operator = $operator;
+    this(string  operator, value, position = self::PREFIX) {
+        _operator =  operator;
         _value = value;
         this.position = position;
     }
 
 
     string sql(ValueBinder aBinder) {
-        $operand = _value;
-        if ($operand instanceof IDBAExpression) {
-            $operand = $operand.sql($binder);
+         operand = _value;
+        if ( operand instanceof IDBAExpression) {
+             operand =  operand.sql($binder);
         }
 
         if (this.position == self::POSTFIX) {
-            return "(" ~ $operand ~ ") " ~ _operator;
+            return "(" ~  operand ~ ") " ~ _operator;
         }
 
-        return _operator ~ " (" ~ $operand ~ ")";
+        return _operator ~ " (" ~  operand ~ ")";
     }
 
 

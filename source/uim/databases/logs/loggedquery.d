@@ -73,13 +73,13 @@ class LoggedQuery : JsonSerializable
                     p = bin2hex(p);
                 }
 
-                $replacements = [
+                 replacements = [
                     "$": "\\$",
                     "\\": "\\\\\\\\",
                     """: """",
                 ];
 
-                p = strtr(p, $replacements);
+                p = strtr(p,  replacements);
 
                 return ""p"";
             }

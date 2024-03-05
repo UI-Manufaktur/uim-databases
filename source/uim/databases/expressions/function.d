@@ -48,11 +48,11 @@ class FunctionExpression : QueryExpression : ITypedResult
      * If associative the key would be used as argument when value is "literal"
      * @param array<string, string>|array<string|null> types Associative array of types to be associated with the
      * passed arguments
-     * @param string $returnType The return type of this expression
+     * @param string  returnType The return type of this expression
      */
-    this(string aName, array params = null, array types = null, string $returnType = "string") {
+    this(string aName, array params = null, array types = null, string  returnType = "string") {
         _name = name;
-        _returnType = $returnType;
+        _returnType =  returnType;
         super((params, types, ",");
     }
 
