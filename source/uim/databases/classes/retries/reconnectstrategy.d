@@ -52,10 +52,10 @@ class ReconnectStrategy : IRetryStrategy {
      * and returns true if it was able to successfully reconnect.
      */
     bool shouldRetry(Exception exception, int  retryCount) {
-        auto $message = exception.getMessage();
+        auto  message = exception.getMessage();
 
         foreach (cause; causes) {
-            if ($message.has(cause)) {
+            if ( message.has(cause)) {
                 return this.reconnect();
             }
         }

@@ -97,10 +97,10 @@ class IdentifierQuoter
             }
         }
 
-        $joins =  query.clause("join");
-        if ($joins) {
-            $joins = _quoteJoins($joins);
-             query.join($joins, [], true);
+         joins =  query.clause("join");
+        if ( joins) {
+             joins = _quoteJoins( joins);
+             query.join( joins, [], true);
         }
     }
 
@@ -125,12 +125,12 @@ class IdentifierQuoter
      * Quotes both the table and alias for an array of joins as stored in a Query
      * object
      *
-     * @param array $joins The joins to quote.
+     * @param array  joins The joins to quote.
      * @return array<string, array>
      */
-    protected array _quoteJoins(array $joins) {
+    protected array _quoteJoins(array  joins) {
          result = null;
-        foreach ($joins as  value) {
+        foreach ( joins as  value) {
             alias = "";
             if (!empty( value["alias"])) {
                 alias = _driver.quoteIdentifier( value["alias"]);

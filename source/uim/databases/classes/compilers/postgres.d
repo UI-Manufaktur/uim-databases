@@ -50,10 +50,10 @@ class PostgresCompiler : QueryCompiler {
                 preg_match_all(
                     "/\b" ~ trim(selectKey, "\"") ~ "\b/i",
                     p,
-                    $matches
+                     matches
                 );
 
-                if ($matches[0].isEmpty) {
+                if ( matches[0].isEmpty) {
                     continue;
                 }
                 someParts[myKey] = preg_replace(

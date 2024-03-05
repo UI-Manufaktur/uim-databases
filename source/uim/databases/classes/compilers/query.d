@@ -209,22 +209,22 @@ class QueryCompiler {
      */
     protected string _buildJoinPart(array someParts, Query compiledQuery, ValueBinder aBinder) {
         string joinPart = "";
-        foreach ($join; someParts) {
-            if (!isSet($join["table"])) {
+        foreach ( join; someParts) {
+            if (!isSet( join["table"])) {
                 throw new DatabaseException(
                     "Could not compile join clause for alias `%s`. No table was specified. " ~
                     "Use the `table` key to define a table."
-                    .format($join["alias"])
+                    .format( join["alias"])
                 );
             }
-            if (cast(IExpression)$join["table"] ) {
-                $join["table"] = "(" ~ $join["table"].sql(aBinder) ~ ")";
+            if (cast(IExpression) join["table"] ) {
+                 join["table"] = "(" ~  join["table"].sql(aBinder) ~ ")";
             }
-            joinPart ~= " %s JOIN %s %s".format($join["type"], $join["table"], $join["alias"]);
+            joinPart ~= " %s JOIN %s %s".format( join["type"],  join["table"],  join["alias"]);
 
             string condition = "";
-            if (isSet($join["conditions"]) && cast(IExpression)$join["conditions"] ) {
-                condition = $join["conditions"].sql(aBinder);
+            if (isSet( join["conditions"]) && cast(IExpression) join["conditions"] ) {
+                condition =  join["conditions"].sql(aBinder);
             }
 
             joinPart ~= condition.isEmpty ? " ON 1 = 1" : " ON {condition}";

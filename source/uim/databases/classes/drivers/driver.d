@@ -384,9 +384,9 @@ abstract class Driver {
             return aQuery;
         }
         aQuery.traverseExpressions(function (expression) use (translators, aQuery) {
-            foreach (translators as  className: $method) {
+            foreach (translators as  className:  method) {
                 if (cast8className)expression) {
-                    this.{$method}(expression, aQuery);
+                    this.{ method}(expression, aQuery);
                 }
             }
         });
@@ -684,7 +684,7 @@ abstract class Driver {
             return false;
         }
 
-        auto context["query"] = $message;
+        auto context["query"] =  message;
         auto loggedQuery = new LoggedQuery();
         loggedQuery.setContext(context);
 

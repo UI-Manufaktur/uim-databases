@@ -50,20 +50,20 @@ class IdentifierQuoter {
             return this.startQuote ~ myIdentifier.replace(".*", this.endQuote ~ ".*");
         }
         // Functions
-        if (preg_match("/^([\w-]+)\((.*)\)$/", myIdentifier, $matches)) {
-            return $matches[1] ~ "(" ~ this.quoteIdentifier($matches[2]) ~ ")";
+        if (preg_match("/^([\w-]+)\((.*)\)$/", myIdentifier,  matches)) {
+            return  matches[1] ~ "(" ~ this.quoteIdentifier( matches[2]) ~ ")";
         }
         // Alias.field AS thing
-        if (preg_match("/^([\w-]+(\.[\w\s-]+|\(.*\))*)\s+AS\s*([\w-]+)$/ui", myIdentifier, $matches)) {
-            return this.quoteIdentifier($matches[1]) ~ " AS " ~ this.quoteIdentifier($matches[3]);
+        if (preg_match("/^([\w-]+(\.[\w\s-]+|\(.*\))*)\s+AS\s*([\w-]+)$/ui", myIdentifier,  matches)) {
+            return this.quoteIdentifier( matches[1]) ~ " AS " ~ this.quoteIdentifier( matches[3]);
         }
         // string.string with spaces
-        if (preg_match("/^([\w-]+\.[\w][\w\s-]*[\w])(.*)/u", myIdentifier, $matches)) {
+        if (preg_match("/^([\w-]+\.[\w][\w\s-]*[\w])(.*)/u", myIdentifier,  matches)) {
             
-            string[] someItems = $matches[1].split(".");
+            string[] someItems =  matches[1].split(".");
             field = join(this.endQuote ~ "." ~ this.startQuote,  someItems);
 
-            return this.startQuote ~ field ~ this.endQuote ~ $matches[2];
+            return this.startQuote ~ field ~ this.endQuote ~  matches[2];
         }
         if (preg_match("/^[\w\s-]*[\w-]+/u", myIdentifier)) {
             return this.startQuote ~ myIdentifier ~ this.endQuote;
@@ -151,11 +151,11 @@ class IdentifierQuoter {
     /**
      * Quotes both the table and alias for an array of joins as stored in a Query object
      * Params:
-     * array $joins The joins to quote.
+     * array  joins The joins to quote.
      */
-    protected array[string] _quoteJoins(array $joins) {
+    protected array[string] _quoteJoins(array  joins) {
         auto result;
-        $joins.each!((value) {
+         joins.each!((value) {
             string alias = "";
             if (!empty(value["alias"])) {
                 alias = this.quoteIdentifier(value["alias"]);
@@ -177,10 +177,10 @@ class IdentifierQuoter {
     protected void _quoteSelect(SelectQuery queryToQuote) {
        _quoteParts(queryToQuote, ["select", "distinct", "from", "group"]);
 
-        auto $joins = queryToQuote.clause("join");
-        if ($joins) {
-            $joins = _quoteJoins($joins);
-            queryToQuote.join($joins, [], true);
+        auto  joins = queryToQuote.clause("join");
+        if ( joins) {
+             joins = _quoteJoins( joins);
+            queryToQuote.join( joins, [], true);
         }
     }
     
@@ -192,10 +192,10 @@ class IdentifierQuoter {
     protected void _quoteDelete(DeleteQuery queryToQuote) {
        _quoteParts(queryToQuote, ["from"]);
 
-        $joins = queryToQuote.clause("join");
-        if ($joins) {
-            $joins = _quoteJoins($joins);
-            queryToQuote.join($joins, [], true);
+         joins = queryToQuote.clause("join");
+        if ( joins) {
+             joins = _quoteJoins( joins);
+            queryToQuote.join( joins, [], true);
         }
     }
     

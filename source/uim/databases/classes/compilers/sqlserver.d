@@ -110,10 +110,10 @@ class SqlserverCompiler : QueryCompiler {
                     preg_match_all(
                         "/\b" ~ trim(keyPart.key, "[]") ~ "\b/i",
                         p,
-                        $matches
+                         matches
                     );
 
-                    if ($matches[0].isEmpty) {
+                    if ( matches[0].isEmpty) {
                         continue;
                     }
                     someParts[myKey] = preg_replace(

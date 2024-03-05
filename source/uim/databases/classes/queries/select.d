@@ -162,11 +162,11 @@ class SelectQuery : Query, IteratorAggregate {
              on = [ on];
         }
         if (isArray( on)) {
-            $merge = [];
+             merge = [];
             if (isArray(_parts["distinct"])) {
-                $merge = _parts["distinct"];
+                 merge = _parts["distinct"];
             }
-             on = overwrite ? array_values( on): array_merge($merge,  on.values);
+             on = overwrite ? array_values( on): array_merge( merge,  on.values);
         }
        _parts["distinct"] =  on;
        _isDirty();
@@ -261,7 +261,7 @@ class SelectQuery : Query, IteratorAggregate {
         if (isString(aTables) || isSet(aTables["table"])) {
             aTables = [aTables];
         }
-        $joins = [];
+         joins = [];
         anI = count(_parts["join"]);
         foreach (alias: t; aTables) {
             if (!isArray(t)) {
@@ -274,12 +274,12 @@ class SelectQuery : Query, IteratorAggregate {
                 t["conditions"] = this.newExpr().add(t["conditions"], typeNames);
             }
             alias = isString(alias) ? alias : null;
-            $joins[alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": alias];
+             joins[alias ?:  anI++] = t ~ ["type": JOIN_TYPE_INNER, "alias": alias];
         }
 
         _parts["join"] = overwrite 
-            ? $joins
-            : array_merge(_parts["join"], $joins);
+            ?  joins
+            : array_merge(_parts["join"],  joins);
 
        _isDirty();
     }
