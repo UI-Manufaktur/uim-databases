@@ -283,15 +283,15 @@ class FunctionsBuilder
      *
      * @param uim.databases.ExpressionInterface|string expression The value evaluated at offset
      * @param int offset The row offset
-     * @param mixed $default The default value if offset doesn"t exist
+     * @param mixed  default The default value if offset doesn"t exist
      * @param string type The output type of the lag expression. Defaults to float.
      * @return uim.databases.Expression\AggregateExpression
      */
-    function lag(expression, int offset, $default = null, type = null): AggregateExpression
+    function lag(expression, int offset,  default = null, type = null): AggregateExpression
     {
         params = this.toLiteralParam(expression) + [offset: "literal"];
-        if ($default != null) {
-            params[] = $default;
+        if ( default != null) {
+            params[] =  default;
         }
 
         types = [];
@@ -307,15 +307,15 @@ class FunctionsBuilder
      *
      * @param uim.databases.ExpressionInterface|string expression The value evaluated at offset
      * @param int offset The row offset
-     * @param mixed $default The default value if offset doesn"t exist
+     * @param mixed  default The default value if offset doesn"t exist
      * @param string type The output type of the lead expression. Defaults to float.
      * @return uim.databases.Expression\AggregateExpression
      */
-    function lead(expression, int offset, $default = null, type = null): AggregateExpression
+    function lead(expression, int offset,  default = null, type = null): AggregateExpression
     {
         params = this.toLiteralParam(expression) + [offset: "literal"];
-        if ($default != null) {
-            params[] = $default;
+        if ( default != null) {
+            params[] =  default;
         }
 
         types = [];

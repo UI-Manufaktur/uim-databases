@@ -11,7 +11,7 @@ class Connection : IConnection {
 
     protected Driver  readDriver;
 
-    protected Driver $writeDriver;
+    protected Driver  writeDriver;
 
     // Contains how many nested transactions have been started.
     protected int _transactionLevel = 0;
@@ -86,18 +86,18 @@ class Connection : IConnection {
             "cacheKeyPrefix",
         ]));
 
-        $writeConfig = configData["write"] ?? [] + sharedConfig;
+         writeConfig = configData["write"] ?? [] + sharedConfig;
          readConfig = configData["read"] ?? [] + sharedConfig;
-        if ( readConfig == $writeConfig) {
-             readDriver = $writeDriver = new driverClass(["_role": self.ROLE_WRITE] + $writeConfig);
+        if ( readConfig ==  writeConfig) {
+             readDriver =  writeDriver = new driverClass(["_role": self.ROLE_WRITE] +  writeConfig);
         } else {
              readDriver = new driverClass(["_role": self.ROLE_READ] +  readConfig);
-            $writeDriver = new driverClass(["_role": self.ROLE_WRITE] + $writeConfig);
+             writeDriver = new driverClass(["_role": self.ROLE_WRITE] +  writeConfig);
         }
-        if (!$writeDriver.enabled()) {
-            throw new MissingExtensionException(["driver": get_class($writeDriver), "name": this.configName()]);
+        if (! writeDriver.enabled()) {
+            throw new MissingExtensionException(["driver": get_class( writeDriver), "name": this.configName()]);
         }
-        return [self.ROLE_READ:  readDriver, self.ROLE_WRITE: $writeDriver];
+        return [self.ROLE_READ:  readDriver, self.ROLE_WRITE:  writeDriver];
     }
     
     /**

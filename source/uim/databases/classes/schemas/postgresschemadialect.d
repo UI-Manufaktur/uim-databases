@@ -193,24 +193,24 @@ class PostgresSchemaDialect : SchemaDialect {
      * Postgres includes sequence data and casting information in default values.
      * We need to remove those.
      * Params:
-     * string|int $default The default value.
+     * string|int  default The default value.
      */
-    protected string|int _defaultValue(string|int $default) {
-        if (isNumeric($default) || $default.isNull) {
-            return $default;
+    protected string|int _defaultValue(string|int  default) {
+        if (isNumeric( default) ||  default.isNull) {
+            return  default;
         }
         // Sequences
-        if ($default.startsWith("nextval")) {
+        if ( default.startsWith("nextval")) {
             return null;
         }
-        if ($default.startsWith("NULL.")) {
+        if ( default.startsWith("NULL.")) {
             return null;
         }
         // Remove quotes and postgres casts
         return preg_replace(
             "/^'(.*)'(?.:.*)$/",
             "$1",
-            $default
+             default
         );
     }
  
@@ -428,7 +428,7 @@ class PostgresSchemaDialect : SchemaDialect {
         if (isSet(someData["null"]) && someData["null"] == false) {
              result ~= " NOT NULL";
         }
-        $datetimeTypes = [
+         datetimeTypes = [
             TableISchema.TYPE_DATETIME,
             TableISchema.TYPE_DATETIME_FRACTIONAL,
             TableISchema.TYPE_TIMESTAMP,
@@ -437,16 +437,16 @@ class PostgresSchemaDialect : SchemaDialect {
         ];
         if (
             isSet(someData["default"]) &&
-            in_array(someData["type"], $datetimeTypes) &&
+            in_array(someData["type"],  datetimeTypes) &&
             someData["default"].toLower == "current_timestamp"
         ) {
              result ~= " DEFAULT CURRENT_TIMESTAMP";
         } elseif (isSet(someData["default"])) {
-            $defaultValue = someData["default"];
+             defaultValue = someData["default"];
             if (someData["type"] == "boolean") {
-                $defaultValue = (bool)$defaultValue;
+                 defaultValue = (bool) defaultValue;
             }
-             result ~= " DEFAULT " ~ _driver.schemaValue($defaultValue);
+             result ~= " DEFAULT " ~ _driver.schemaValue( defaultValue);
         } elseif (isSet(someData["null"]) && someData["null"] != false) {
              result ~= " DEFAULT NULL";
         }
@@ -539,9 +539,9 @@ class PostgresSchemaDialect : SchemaDialect {
         content = array_merge(someColumns, constraints);
         content = join(",\n", array_filter(content));
         aTableName = _driver.quoteIdentifier(tableSchema.name());
-        $dbSchema = _driver.schema();
-        if ($dbSchema != "public") {
-            aTableName = _driver.quoteIdentifier($dbSchema) ~ "." ~ aTableName;
+         dbSchema = _driver.schema();
+        if ( dbSchema != "public") {
+            aTableName = _driver.quoteIdentifier( dbSchema) ~ "." ~ aTableName;
         }
         temporary = tableSchema.isTemporary() ? " TEMPORARY " : " ";
          auto result;

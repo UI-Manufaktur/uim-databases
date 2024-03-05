@@ -148,7 +148,7 @@ class QueryCompiler {
         if (_orderedUnion && compiledQuery.clause("union")) {
             select = "(SELECT%s %s%s";
         }
-        auto $distinct = compiledQuery.clause("distinct");
+        auto  distinct = compiledQuery.clause("distinct");
         someModifiers = _buildModifierPart(compiledQuery.clause("modifier"), compiledQuery, aBinder);
 
         auto driver = compiledQuery.getConnection().getDriver(compiledQuery.getConnectionRole());
@@ -165,14 +165,14 @@ class QueryCompiler {
             normalized ~= p;
         }
 
-        if ($distinct == true) {
-            $distinct = "DISTINCT ";
+        if ( distinct == true) {
+             distinct = "DISTINCT ";
         }
-        if (isArray($distinct)) {
-            $distinct = _stringifyExpressions($distinct, aBinder);
-            $distinct = "DISTINCT ON (%s) ".format(join(", ", $distinct));
+        if (isArray( distinct)) {
+             distinct = _stringifyExpressions( distinct, aBinder);
+             distinct = "DISTINCT ON (%s) ".format(join(", ",  distinct));
         }
-        return select.format(someModifiers, $distinct, join(", ", normalized));
+        return select.format(someModifiers,  distinct, join(", ", normalized));
     }
     
     /**
@@ -360,7 +360,7 @@ class QueryCompiler {
      * Params:
      * array someExpressions list of strings and IExpression objects
      * @param \UIM\Database\ValueBinder aBinder Value binder used to generate parameter placeholder
-     * @param bool $wrap Whether to wrap each expression object with parenthesis
+     * @param bool  wrap Whether to wrap each expression object with parenthesis
      */
     protected array _stringifyExpressions(array someExpressions, ValueBinder valueBinder, bool shouldWrap = true) {
         STRINGAA results;

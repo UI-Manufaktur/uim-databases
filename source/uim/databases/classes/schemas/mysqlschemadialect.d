@@ -233,7 +233,7 @@ class MysqlSchemaDialect : SchemaDialect {
     }
  
     void convertForeignKeyDescription(TableSchema tableSchema, array  row) {
-        $data = [
+         data = [
             "type": TableSchema.CONSTRAINT_FOREIGN,
             "columns": [ row["COLUMN_NAME"]],
             "references": [ row["REFERENCED_TABLE_NAME"],  row["REFERENCED_COLUMN_NAME"]],
@@ -241,7 +241,7 @@ class MysqlSchemaDialect : SchemaDialect {
             "delete": _convertOnClause( row["DELETE_RULE"]),
         ];
         auto contraintName =  row["CONSTRAINT_NAME"];
-        tableSchema.addConstraint(contraintName, $data);
+        tableSchema.addConstraint(contraintName,  data);
     }
  
     array truncateTableSql(TableSchema tableSchema) {
@@ -420,7 +420,7 @@ class MysqlSchemaDialect : SchemaDialect {
              result ~= " NULL";
             unset(someData["default"]);
         }
-        $dateTimeTypes = [
+         dateTimeTypes = [
             TableISchema.TYPE_DATETIME,
             TableISchema.TYPE_DATETIME_FRACTIONAL,
             TableISchema.TYPE_TIMESTAMP,
@@ -429,7 +429,7 @@ class MysqlSchemaDialect : SchemaDialect {
         ];
         if (
             isSet(someData["default"]) &&
-            in_array(someData["type"], $dateTimeTypes) &&
+            in_array(someData["type"],  dateTimeTypes) &&
             strtolower(someData["default"]).has("current_timestamp")
         ) {
              result ~= " DEFAULT CURRENT_TIMESTAMP";

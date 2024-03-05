@@ -22,10 +22,10 @@ class TypeMap {
     /**
      * Creates an instance with the given defaults
      * Params:
-     * array<int|string, string> $defaults The defaults to use.
+     * array<int|string, string>  defaults The defaults to use.
      */
-    this(array $defaults = []) {
-        this.setDefaults($defaults);
+    this(array  defaults = []) {
+        this.setDefaults( defaults);
     }
     
     /**
@@ -46,11 +46,11 @@ class TypeMap {
      * This method will replace all the existing default mappings with the ones provided.
      * To add into the mappings use `addDefaults()`.
      * Params:
-     * array<int|string, string> $defaults Array where keys are field names / positions and values
+     * array<int|string, string>  defaults Array where keys are field names / positions and values
      * are the correspondent type.
      */
-    void setDefaults(array $defaults) {
-       _defaults = $defaults;
+    void setDefaults(array  defaults) {
+       _defaults =  defaults;
     }
     
     // Returns the currently configured types.

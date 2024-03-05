@@ -233,8 +233,8 @@ class FunctionsBuilder {
         string outputType = null
     ) {
         params = this.toLiteralParam(expression) ~ [anOffset: "literal"];
-        if ($default !isNull) {
-            params ~= $default;
+        if ( default !isNull) {
+            params ~=  default;
         }
         types = [];
         if (!outputType.isNull) {
@@ -258,8 +258,8 @@ class FunctionsBuilder {
         string atype = null
     ) {
         params = this.toLiteralParam(expression) ~ [anOffset: "literal"];
-        if ($default !isNull) {
-            params ~= $default;
+        if ( default !isNull) {
+            params ~=  default;
         }
         types = [];
         if (outputType !isNull) {

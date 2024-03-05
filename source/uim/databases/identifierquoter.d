@@ -21,10 +21,10 @@ class IdentifierQuoter
     /**
      * Constructor
      *
-     * @param uim.databases.Driver $driver The driver instance used to do the identifier quoting
+     * @param uim.databases.Driver  driver The driver instance used to do the identifier quoting
      */
-    this(Driver $driver) {
-        _driver = $driver;
+    this(Driver  driver) {
+        _driver =  driver;
     }
 
     /**

@@ -72,8 +72,8 @@ class SelectQuery : Query, IteratorAggregate {
            _results = this.execute().fetchAll(IStatement.FETCH_TYPE_ASSOC);
             if (_resultDecorators) {
                 foreach (& row; _results) {
-                    foreach ($decorator; _resultDecorators) {
-                         row = $decorator( row);
+                    foreach ( decorator; _resultDecorators) {
+                         row =  decorator( row);
                     }
                 }
             }
@@ -505,20 +505,20 @@ class SelectQuery : Query, IteratorAggregate {
      * You are responsible for adding windows in the order your database requires.
      * Params:
      * string aName Window name
-     * @param \UIM\Database\Expression\WindowExpression|\Closure $window Window expression
+     * @param \UIM\Database\Expression\WindowExpression|\Closure  window Window expression
      * @param bool overwrite Clear all previous query window expressions
      */
-    void window(string aName, WindowExpression|Closure $window, bool overwrite = false) {
+    void window(string aName, WindowExpression|Closure  window, bool overwrite = false) {
         if (overwrite) {
            _parts["window"] = [];
         }
-        if (cast(Closure)$window) {
-            $window = $window(new WindowExpression(), this);
-            if (!(cast(WindowExpression)$window)) {
+        if (cast(Closure) window) {
+             window =  window(new WindowExpression(), this);
+            if (!(cast(WindowExpression) window)) {
                 throw new UimException("You must return a `WindowExpression` from a Closure passed to `window()`.");
             }
         }
-       _parts["window"] ~= ["name": new IdentifierExpression(name), "window": $window];
+       _parts["window"] ~= ["name": new IdentifierExpression(name), "window":  window];
        _isDirty();
     }
     
