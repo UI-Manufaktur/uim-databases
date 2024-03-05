@@ -90,18 +90,18 @@ class FunctionExpression : QueryExpression : ITypedResult
     function add(conditions, array types = null, bool prepend = false) {
         put = prepend ? "array_unshift" : "array_push";
         typeMap = this.getTypeMap().setTypes(types);
-        foreach (conditions as $k: p) {
+        foreach (conditions as  k: p) {
             if (p == "literal") {
-                put(_conditions, $k);
+                put(_conditions,  k);
                 continue;
             }
 
             if (p == "identifier") {
-                put(_conditions, new IdentifierExpression($k));
+                put(_conditions, new IdentifierExpression( k));
                 continue;
             }
 
-            type = typeMap.type($k);
+            type = typeMap.type( k);
 
             if (type != null && !p instanceof IDBAExpression) {
                 p = _castToExpression(p, type);

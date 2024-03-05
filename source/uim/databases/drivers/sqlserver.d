@@ -133,13 +133,13 @@ class Sqlserver : Driver
             }
         }
         if (!empty(aConfig["settings"]) && is_array(aConfig["settings"])) {
-            foreach (aConfig["settings"] as $key: value) {
-                connection.exec("SET {$key} {value}");
+            foreach (aConfig["settings"] as  key: value) {
+                connection.exec("SET { key} {value}");
             }
         }
         if (!empty(aConfig["attributes"]) && is_array(aConfig["attributes"])) {
-            foreach (aConfig["attributes"] as $key: value) {
-                connection.setAttribute($key, value);
+            foreach (aConfig["attributes"] as  key: value) {
+                connection.setAttribute( key, value);
             }
         }
 
@@ -303,15 +303,15 @@ class Sqlserver : Driver
              order = new OrderByExpression();
              original
                 .clause("order")
-                .iterateParts(function ($direction,  orderBy) use (select,  order) {
-                    $key =  orderBy;
+                .iterateParts(function ( direction,  orderBy) use (select,  order) {
+                     key =  orderBy;
                     if (
                         isset(select[ orderBy]) &&
                         select[ orderBy] instanceof IDBAExpression
                     ) {
-                         order.add(new OrderClauseExpression(select[ orderBy], $direction));
+                         order.add(new OrderClauseExpression(select[ orderBy],  direction));
                     } else {
-                         order.add([$key: $direction]);
+                         order.add([ key:  direction]);
                     }
 
                     // Leave original order clause unchanged.
@@ -363,15 +363,15 @@ class Sqlserver : Driver
          original = query;
         query = clone  original;
 
-        $distinct = query.clause("distinct");
+         distinct = query.clause("distinct");
         query.distinct(false);
 
-         order = new OrderByExpression($distinct);
+         order = new OrderByExpression( distinct);
         query
-            .select(function ( q) use ($distinct,  order) {
+            .select(function ( q) use ( distinct,  order) {
                  over =  q.newExpr("ROW_NUMBER() OVER")
                     .add("(PARTITION BY")
-                    .add( q.newExpr().add($distinct).setConjunction(","))
+                    .add( q.newExpr().add( distinct).setConjunction(","))
                     .add( order)
                     .add(")")
                     .setConjunction(" ");
@@ -454,8 +454,8 @@ class Sqlserver : Driver
                 break;
             case "DATE_ADD":
                 params = null;
-                 visitor = function (p, $key) use (&params) {
-                    if ($key == 0) {
+                 visitor = function (p,  key) use (&params) {
+                    if ( key == 0) {
                         params[2] = p;
                     } else {
                         valueUnit = explode(" ", p);
@@ -465,8 +465,8 @@ class Sqlserver : Driver
 
                     return p;
                 };
-                $manipulator = function (p, $key) use (&params) {
-                    return params[$key];
+                $manipulator = function (p,  key) use (&params) {
+                    return params[ key];
                 };
 
                 expression

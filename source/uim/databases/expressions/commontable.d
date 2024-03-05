@@ -199,8 +199,8 @@ class CommonTableExpression : IDBAExpression
             this.query = clone this.query;
         }
 
-        foreach (this.fields as $key: field) {
-            this.fields[$key] = clone field;
+        foreach (this.fields as  key: field) {
+            this.fields[ key] = clone field;
         }
     }
 }

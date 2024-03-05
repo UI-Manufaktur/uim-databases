@@ -233,7 +233,7 @@ class DateTimeType : BaseType, IBatchCasting {
                 } else {
                     dateTime = _parseValue(myRequestData);
                 }
-                if ($dateTime) {
+                if ( dateTime) {
                     dateTime = dateTime.setTimezone(this.defaultTimezone);
                 }
                 return dateTime;

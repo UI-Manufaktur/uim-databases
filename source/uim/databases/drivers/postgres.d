@@ -253,8 +253,8 @@ class DPostgresDriver : DDriver {
                 expression
                     .setName("")
                     .setConjunction(" + INTERVAL")
-                    .iterateParts(function (p, $key) {
-                        if ($key == 1) {
+                    .iterateParts(function (p,  key) {
+                        if ( key == 1) {
                             p = sprintf("'%s'", p);
                         }
 

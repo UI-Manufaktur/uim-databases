@@ -26,11 +26,11 @@ class OrderClauseExpression : IDBAExpression, FieldInterface
      * Constructor
      *
      * @param uim.databases.IDBAExpression|string field The field to order on.
-     * @param string $direction The direction to sort on.
+     * @param string  direction The direction to sort on.
      */
-    this(field, $direction) {
+    this(field,  direction) {
         _field = field;
-        _direction = strtolower($direction) == "asc" ? "ASC" : "DESC";
+        _direction = strtolower( direction) == "asc" ? "ASC" : "DESC";
     }
 
 

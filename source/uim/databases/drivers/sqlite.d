@@ -272,8 +272,8 @@ class Sqlite : Driver
                 expression
                     .setName("STRFTIME")
                     .setConjunction(" ,")
-                    .iterateParts(function (p, $key) {
-                        if ($key == 0) {
+                    .iterateParts(function (p,  key) {
+                        if ( key == 0) {
                             value = rtrim(p.toLower, "s");
                             if (isset(_dateParts[value])) {
                                 p = ["value": "%" ~ _dateParts[value], "type": null];
@@ -287,8 +287,8 @@ class Sqlite : Driver
                 expression
                     .setName("DATE")
                     .setConjunction(",")
-                    .iterateParts(function (p, $key) {
-                        if ($key == 1) {
+                    .iterateParts(function (p,  key) {
+                        if ( key == 1) {
                             p = ["value": p, "type": null];
                         }
 

@@ -26,7 +26,7 @@ class AggregateExpression : FunctionExpression : IWindow
     /**
      * @var DDBExpression\WindowExpression
      */
-    protected $window;
+    protected  window;
 
     /**
      * Adds conditions to the FILTER clause. The conditions are the same format as

@@ -192,17 +192,17 @@ class ValuesExpression : IDBAExpression {
         }
 
         columns = _columnNames();
-        $defaults = array_fill_keys(columns, null);
+         defaults = array_fill_keys(columns, null);
         placeholders = null;
 
         types = null;
         typeMap = this.getTypeMap();
-        foreach ($defaults as col:  v) {
+        foreach ( defaults as col:  v) {
             types[col] = typeMap.type(col);
         }
 
         foreach (_values as  row) {
-             row += $defaults;
+             row +=  defaults;
              rowPlaceholders = null;
 
             foreach (columns as column) {

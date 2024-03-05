@@ -493,7 +493,7 @@ class QueryExpression : IDBAExpression, Countable
      * @return this
      */
     function equalFields(string  leftField, string  rightField) {
-        $wrapIdentifier = function (field) {
+         wrapIdentifier = function (field) {
             if (field instanceof IDBAExpression) {
                 return field;
             }
@@ -501,7 +501,7 @@ class QueryExpression : IDBAExpression, Countable
             return new IdentifierExpression(field);
         };
 
-        return this.eq($wrapIdentifier( leftField), $wrapIdentifier( rightField));
+        return this.eq( wrapIdentifier( leftField),  wrapIdentifier( rightField));
     }
 
 
@@ -556,11 +556,11 @@ class QueryExpression : IDBAExpression, Countable
      */
     function iterateParts(callable callback) {
         parts = null;
-        foreach (_conditions as $k: c) {
-            $key = &$k;
-            part = callback(c, $key);
+        foreach (_conditions as  k: c) {
+             key = & k;
+            part = callback(c,  key);
             if (part != null) {
-                parts[$key] = part;
+                parts[ key] = part;
             }
         }
         _conditions = parts;
@@ -598,8 +598,8 @@ class QueryExpression : IDBAExpression, Countable
 
         typeMap = this.getTypeMap().setTypes(types);
 
-        foreach (conditions as $k: c) {
-            numericKey = is_numeric($k);
+        foreach (conditions as  k: c) {
+            numericKey = is_numeric( k);
 
             if (c instanceof Closure) {
                 expr = new static([], typeMap);
@@ -613,7 +613,7 @@ class QueryExpression : IDBAExpression, Countable
             isArray = is_array(c);
             isOperator = isNot = false;
             if (!numericKey) {
-                normalizedKey = strtolower($k);
+                normalizedKey = strtolower( k);
                 isOperator = hasAllValues(normalizedKey,  operators);
                 isNot = normalizedKey == "not";
             }
@@ -633,7 +633,7 @@ class QueryExpression : IDBAExpression, Countable
             }
 
             if (numericKey && isArray || isOperator) {
-                _conditions[] = new static(c, typeMap, numericKey ? "AND" : $k);
+                _conditions[] = new static(c, typeMap, numericKey ? "AND" :  k);
                 continue;
             }
 
@@ -643,7 +643,7 @@ class QueryExpression : IDBAExpression, Countable
             }
 
             if (!numericKey) {
-                _conditions[] = _parseCondition($k, c);
+                _conditions[] = _parseCondition( k, c);
             }
         }
     }

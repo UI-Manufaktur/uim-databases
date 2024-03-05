@@ -58,14 +58,14 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      *
      * @var array<uim.databases.Expression\WhenThenExpression>
      */
-    protected $when = null;
+    protected  when = null;
 
     /**
      * Buffer that holds values and types for use with `then()`.
      *
      * @var array|null
      */
-    protected $whenBuffer = null;
+    protected  whenBuffer = null;
 
     /**
      * The else part result value.
@@ -173,13 +173,13 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * ```
      * queryExpression
      *     .case()
-     *     .when(function (uim.databases.Expression\WhenThenExpression $whenThen) {
-     *         return $whenThen
+     *     .when(function (uim.databases.Expression\WhenThenExpression  whenThen) {
+     *         return  whenThen
      *             .when(["Table.column": true])
      *             .then("Yes");
      *     })
-     *     .when(function (uim.databases.Expression\WhenThenExpression $whenThen) {
-     *         return $whenThen
+     *     .when(function (uim.databases.Expression\WhenThenExpression  whenThen) {
+     *         return  whenThen
      *             .when(["Table.column": false])
      *             .then("No");
      *     })
@@ -189,7 +189,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * ### Type handling
      *
      * The types provided via the `type` argument will be merged with the
-     * type map set for this expression. When using callables for `$when`,
+     * type map set for this expression. When using callables for ` when`,
      * the `uim.databases.Expression\WhenThenExpression`
      * instance received by the callables will inherit that type map, however
      * the types passed here will _not_ be merged in case of using callables,
@@ -199,13 +199,13 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * ```
      * queryExpression
      *     .case()
-     *     .when(function (uim.databases.Expression\WhenThenExpression $whenThen) {
-     *         return $whenThen
+     *     .when(function (uim.databases.Expression\WhenThenExpression  whenThen) {
+     *         return  whenThen
      *             .when(["unmapped_column": true], ["unmapped_column": "bool"])
      *             .then("Yes");
      *     })
-     *     .when(function (uim.databases.Expression\WhenThenExpression $whenThen) {
-     *         return $whenThen
+     *     .when(function (uim.databases.Expression\WhenThenExpression  whenThen) {
+     *         return  whenThen
      *             .when(["unmapped_column": false], ["unmapped_column": "bool"])
      *             .then("No");
      *     })
@@ -261,10 +261,10 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      *      .bind(":userData", userData, "integer")
      * ```
      *
-     * @param uim.databases.IDBAExpression|\Closure|object|array|scalar $when The `WHEN` value. When using an
+     * @param uim.databases.IDBAExpression|\Closure|object|array|scalar  when The `WHEN` value. When using an
      *  array of conditions, it must be compatible with `uim.databases.Query::where()`. Note that this argument is
      *  _not_ completely safe for use with user data, as a user supplied array would allow for raw SQL to slip in! If
-     *  you plan to use user data, either pass a single type for the `type` argument (which forces the `$when` value to
+     *  you plan to use user data, either pass a single type for the `type` argument (which forces the ` when` value to
      *  be a non-array, and then always binds the data), use a conditions array where the user data is only passed on
      *  the value side of the array entries, or custom bindings!
      * @param array<string, string>|string|null type The when value type. Either an associative array when using array style
@@ -274,26 +274,26 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      * @throws \LogicException In case the callable doesn"t return an instance of
      *  `uim.databases.Expression\WhenThenExpression`.
      */
-    function when($when, type = null) {
+    function when( when, type = null) {
         if (this.whenBuffer != null) {
             throw new LogicException("Cannot call `when()` between `when()` and `then()`.");
         }
 
-        if ($when instanceof Closure) {
-            $when = $when(new WhenThenExpression(this.getTypeMap()));
-            if (!($when instanceof WhenThenExpression)) {
+        if ( when instanceof Closure) {
+             when =  when(new WhenThenExpression(this.getTypeMap()));
+            if (!( when instanceof WhenThenExpression)) {
                 throw new LogicException(sprintf(
                     "`when()` callables must return an instance of `\%s`, `%s` given.",
                     WhenThenExpression::class,
-                    getTypeName($when)
+                    getTypeName( when)
                 ));
             }
         }
 
-        if ($when instanceof WhenThenExpression) {
-            this.when[] = $when;
+        if ( when instanceof WhenThenExpression) {
+            this.when[] =  when;
         } else {
-            this.whenBuffer = ["when": $when, "type": type];
+            this.whenBuffer = ["when":  when, "type": type];
         }
 
         return this;
@@ -360,13 +360,13 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
             throw new LogicException("Cannot call `then()` before `when()`.");
         }
 
-        $whenThen = (new WhenThenExpression(this.getTypeMap()))
+         whenThen = (new WhenThenExpression(this.getTypeMap()))
             .when(this.whenBuffer["when"], this.whenBuffer["type"])
             .then(result, type);
 
         this.whenBuffer = null;
 
-        this.when[] = $whenThen;
+        this.when[] =  whenThen;
 
         return this;
     }
@@ -427,8 +427,8 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
         }
 
         types = null;
-        foreach (this.when as $when) {
-            type = $when.getResultType();
+        foreach (this.when as  when) {
+            type =  when.getResultType();
             if (type != null) {
                 types[] = type;
             }
@@ -506,15 +506,15 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
             value = this.compileNullableValue( binder, this.value, this.valueType) ~ " ";
         }
 
-        $whenThenExpressions = null;
-        foreach (this.when as $whenThen) {
-            $whenThenExpressions[] = $whenThen.sql( binder);
+         whenThenExpressions = null;
+        foreach (this.when as  whenThen) {
+             whenThenExpressions[] =  whenThen.sql( binder);
         }
-        $whenThen = implode(" ", $whenThenExpressions);
+         whenThen = implode(" ",  whenThenExpressions);
 
         else = this.compileNullableValue( binder, this.else, this.elseType);
 
-        return "CASE {value}{$whenThen} ELSE else END";
+        return "CASE {value}{ whenThen} ELSE else END";
     }
 
 
@@ -528,9 +528,9 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
             this.value.traverse(callback);
         }
 
-        foreach (this.when as $when) {
-            callback($when);
-            $when.traverse(callback);
+        foreach (this.when as  when) {
+            callback( when);
+             when.traverse(callback);
         }
 
         if (this.else instanceof IDBAExpression) {
@@ -553,8 +553,8 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
             this.value = clone this.value;
         }
 
-        foreach (this.when as $key: $when) {
-            this.when[$key] = clone this.when[$key];
+        foreach (this.when as  key:  when) {
+            this.when[ key] = clone this.when[ key];
         }
 
         if (this.else instanceof IDBAExpression) {

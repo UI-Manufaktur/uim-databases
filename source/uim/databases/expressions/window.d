@@ -249,9 +249,9 @@ class WindowExpression : IDBAExpression, IWindow
      *
      * @param uim.databases.ValueBinder aBinder Value binder
      * @param uim.databases.IDBAExpression|string|int|null offset Frame offset
-     * @param string $direction Frame offset direction
+     * @param string  direction Frame offset direction
      */
-    protected string buildOffsetSql(ValueBinder aBinder, offset, string $direction) {
+    protected string buildOffsetSql(ValueBinder aBinder, offset, string  direction) {
         if (offset == 0) {
             return "CURRENT ROW";
         }
@@ -263,7 +263,7 @@ class WindowExpression : IDBAExpression, IWindow
         return sprintf(
             "%s %s",
             offset ?? "UNBOUNDED",
-            $direction
+             direction
         );
     }
 

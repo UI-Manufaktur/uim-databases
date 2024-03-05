@@ -29,11 +29,11 @@ class OrderByExpression : QueryExpression
 
     string sql(ValueBinder aBinder) {
          order = null;
-        foreach (_conditions as $k: $direction) {
-            if ($direction instanceof IDBAExpression) {
-                $direction = $direction.sql( binder);
+        foreach (_conditions as  k:  direction) {
+            if ( direction instanceof IDBAExpression) {
+                 direction =  direction.sql( binder);
             }
-             order[] = is_numeric($k) ? $direction : sprintf("%s %s", $k, $direction);
+             order[] = is_numeric( k) ?  direction : sprintf("%s %s",  k,  direction);
         }
 
         return sprintf("ORDER BY %s", implode(", ",  order));
@@ -49,9 +49,9 @@ class OrderByExpression : QueryExpression
      * @param array types list of types associated on fields referenced in conditions
      */
     protected void _addConditions(array conditions, array types) {
-        foreach (conditions as $key:  val) {
+        foreach (conditions as  key:  val) {
             if (
-                is_string($key) &&
+                is_string( key) &&
                 is_string( val) &&
                 !hasAllValues(strtoupper( val), ["ASC", "DESC"], true)
             ) {
@@ -60,7 +60,7 @@ class OrderByExpression : QueryExpression
                         "Passing extra expressions by associative array (`\"%s\": \"%s\"`) " ~
                         "is not allowed to avoid potential SQL injection~ " ~
                         "Use QueryExpression or numeric array instead.",
-                        $key,
+                         key,
                          val
                     )
                 );

@@ -229,9 +229,9 @@ class ComparisonExpression : IDBAExpression, FieldInterface
     protected string _flattenValue(iterable value, ValueBinder aBinder, Nullable!string type = null) {
         parts = null;
         if (is_array(value)) {
-            foreach (_valueExpressions as $k:  v) {
-                parts[$k] =  v.sql( binder);
-                unset(value[$k]);
+            foreach (_valueExpressions as  k:  v) {
+                parts[ k] =  v.sql( binder);
+                unset(value[ k]);
             }
         }
 
@@ -262,13 +262,13 @@ class ComparisonExpression : IDBAExpression, FieldInterface
             result = values;
         }
 
-        foreach (values as $k:  v) {
+        foreach (values as  k:  v) {
             if ( v instanceof IDBAExpression) {
-                expressions[$k] =  v;
+                expressions[ k] =  v;
             }
 
             if (isArray) {
-                result[$k] =  v;
+                result[ k] =  v;
             }
         }
 

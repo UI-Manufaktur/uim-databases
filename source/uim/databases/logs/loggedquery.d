@@ -87,13 +87,13 @@ class LoggedQuery : JsonSerializable
             return p;
         }, this.params);
 
-        $keys = null;
+         keys = null;
         limit = is_int(key(params)) ? 1 : -1;
-        foreach (params as $key: param) {
-            $keys[] = is_string($key) ? "/:$key\b/" : "/[?]/";
+        foreach (params as  key: param) {
+             keys[] = is_string( key) ? "/: key\b/" : "/[?]/";
         }
 
-        return preg_replace($keys, params, this.query, limit);
+        return preg_replace( keys, params, this.query, limit);
     }
 
     /**
