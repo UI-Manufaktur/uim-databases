@@ -27,9 +27,9 @@ trait ExpressionTypeCasterTrait {
         if (!cast(IExpression)converter Type) {
             return aValue;
         }
-        $multi = type !=  baseType;
+         multi = type !=  baseType;
 
-        if ($multi) {
+        if ( multi) {
             /** @var \UIM\Database\Type\IExpressionType converter */
             return array_map([converter, "toExpression"], aValue);
         }

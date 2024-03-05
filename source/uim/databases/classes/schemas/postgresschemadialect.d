@@ -75,14 +75,14 @@ class PostgresSchemaDialect : SchemaDialect {
      * returns Array of column information.
      */
     protected IData[string] _convertColumn(string columnType) {
-        preg_match("/([a-z\s]+)(?:\(([0-9,]+)\))?/i", columnType, $matches);
-        if ($matches.isEmpty) {
+        preg_match("/([a-z\s]+)(?:\(([0-9,]+)\))?/i", columnType,  matches);
+        if ( matches.isEmpty) {
             throw new DatabaseException("Unable to parse column type from `%s`".format(columnType));
         }
-        auto col = $matches[1].toLower;
+        auto col =  matches[1].toLower;
         auto  length = precision = scale = null;
-        if (isSet($matches[2])) {
-             length = (int)$matches[2];
+        if (isSet( matches[2])) {
+             length = (int) matches[2];
         }
         type = _applyTypeSpecificColumnConversion(
             col,

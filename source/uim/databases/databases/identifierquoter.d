@@ -48,11 +48,11 @@ class IdentifierQuoter {
         }
         // Functions
         if (preg_match("/^([\w-]+)\((.*)\)$/", result, matches)) {
-            return matches[1] ~ "(" ~ this.quoteIdentifier($matches[2]) ~ ")";
+            return matches[1] ~ "(" ~ this.quoteIdentifier( matches[2]) ~ ")";
         }
         // Alias.field AS thing
         if (preg_match("/^([\w-]+(\.[\w\s-]+|\(.*\))*)\s+AS\s*([\w-]+)$/ui", result, matches)) {
-            return this.quoteIdentifier($matches[1]) ~ " AS " ~ this.quoteIdentifier($matches[3]);
+            return this.quoteIdentifier( matches[1]) ~ " AS " ~ this.quoteIdentifier( matches[3]);
         }
         // string.string with spaces
         if (preg_match("/^([\w-]+\.[\w][\w\s-]*[\w])(.*)/u", result, matches)) {
@@ -173,9 +173,9 @@ class IdentifierQuoter {
        _quoteParts(queryToQuote, ["select", "distinct", "from", "group"]);
 
         auto joins = queryToQuote.clause("join");
-        if ($joins) {
-            joins = _quoteJoins($joins);
-            queryToQuote.join($joins, [], true);
+        if ( joins) {
+            joins = _quoteJoins( joins);
+            queryToQuote.join( joins, [], true);
         }
     }
     
@@ -188,9 +188,9 @@ class IdentifierQuoter {
        _quoteParts(queryToQuote, ["from"]);
 
         joins = queryToQuote.clause("join");
-        if ($joins) {
-            joins = _quoteJoins($joins);
-            queryToQuote.join($joins, [], true);
+        if ( joins) {
+            joins = _quoteJoins( joins);
+            queryToQuote.join( joins, [], true);
         }
     }
     

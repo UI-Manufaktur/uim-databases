@@ -343,11 +343,11 @@ class TableSchema : TableISchema, ISqlGenerator {
         attrs["columns"] = (array)attrs["columns"];
         foreach (attrs["columns"] as field) {
             if (isEmpty(_columns[field])) {
-                $message = 
+                 message = 
                     "Columns used in index `%s` in table `%s` must be added to the Table schema first. " ~
                     "The column `%s` was not found."
                     .format(name, _table, field);
-                throw new DatabaseException($message);
+                throw new DatabaseException( message);
             }
         }
        _indexNames[name] = attrs;
@@ -397,12 +397,12 @@ class TableSchema : TableISchema, ISqlGenerator {
         attrs["columns"] = (array)attrs["columns"];
         foreach (attrs["columns"] as field) {
             if (isEmpty(_columns[field])) {
-                $message = "Columns used in constraints must be added to the Table schema first. ' ~
+                 message = "Columns used in constraints must be added to the Table schema first. ' ~
                     "The column `%s` was not found in table `%s`.".format(
                     field,
                    _table
                 );
-                throw new DatabaseException($message);
+                throw new DatabaseException( message);
             }
         }
         if (attrs["type"] == CONSTRAINT_FOREIGN) {

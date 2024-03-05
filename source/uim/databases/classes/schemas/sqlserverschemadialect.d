@@ -202,8 +202,8 @@ class SqlserverSchemaDialect : SchemaDialect {
         }
         // remove () surrounding value (NULL) but leave () at the end of functions
         // integers might have two ((0)) wrapping value
-        if (preg_match("/^\(+(.*?(\(\))?)\)+$/",  default, $matches)) {
-             default = $matches[1];
+        if (preg_match("/^\(+(.*?(\(\))?)\)+$/",  default,  matches)) {
+             default =  matches[1];
         }
         if ( default == "NULL") {
             return null;
@@ -212,8 +212,8 @@ class SqlserverSchemaDialect : SchemaDialect {
             return (int) default;
         }
         // Remove quotes
-        if (preg_match("/^\(?N?'(.*)'\)?/",  default, $matches)) {
-            return $matches[1].replace("""", "'");
+        if (preg_match("/^\(?N?'(.*)'\)?/",  default,  matches)) {
+            return  matches[1].replace("""", "'");
         }
         return  default;
     }

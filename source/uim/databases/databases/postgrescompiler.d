@@ -59,7 +59,7 @@ class PostgresCompiler : QueryCompiler {
                 matches
             );
 
-            if ($matches[0].isEmpty) {
+            if ( matches[0].isEmpty) {
                 continue;
             }
             someParts[key] = preg_replace(

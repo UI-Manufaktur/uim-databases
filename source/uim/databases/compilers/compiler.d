@@ -226,33 +226,33 @@ class QueryCompiler {
      * @return string
      */
     protected string _buildJoinPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
-        $joins = "";
-        foreach (someParts as $join) {
-            if (!$join.isSet("table")) {
+         joins = "";
+        foreach (someParts as  join) {
+            if (! join.isSet("table")) {
                 throw new DatabaseException(
                     "Could not compile join clause for alias `%s`. No table was specified. "~
                     "Use the `table` key to define a table.".format(
-                    $join["alias"]
+                     join["alias"]
                 ));
             }
-            if ($join["table"] instanceof IDBAExpression) {
-                $join["table"] = "("~ $join["table"].sql( binder) . ")";
+            if ( join["table"] instanceof IDBAExpression) {
+                 join["table"] = "("~  join["table"].sql( binder) . ")";
             }
 
-            $joins ~= " %s JOIN %s %s".format($join["type"], $join["table"], $join["alias"]);
+             joins ~= " %s JOIN %s %s".format( join["type"],  join["table"],  join["alias"]);
 
             condition = "";
-            if (isset($join["conditions"]) && $join["conditions"] instanceof IDBAExpression) {
-                condition = $join["conditions"].sql( binder);
+            if (isset( join["conditions"]) &&  join["conditions"] instanceof IDBAExpression) {
+                condition =  join["conditions"].sql( binder);
             }
             if (condition == "") {
-                $joins ~= " ON 1 = 1";
+                 joins ~= " ON 1 = 1";
             } else {
-                $joins ~= " ON {condition}";
+                 joins ~= " ON {condition}";
             }
         }
 
-        return $joins;
+        return  joins;
     }
 
     /**

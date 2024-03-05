@@ -61,15 +61,15 @@ class MysqlSchemaDialect : SchemaDialect {
      * @throws \UIM\Database\Exception\DatabaseException When column type cannot be parsed.
      */
     protected IData[string] _convertColumn(string acolumn) {
-        preg_match("/([a-z]+)(?:\(([0-9,]+)\))?\s*([a-z]+)?/i", column, $matches);
-        if (isEmpty($matches)) {
+        preg_match("/([a-z]+)(?:\(([0-9,]+)\))?\s*([a-z]+)?/i", column,  matches);
+        if (isEmpty( matches)) {
             throw new DatabaseException("Unable to parse column type from `%s`".format(column));
         }
-        col = $matches[1].toLower;
+        col =  matches[1].toLower;
          length = precision = scale = null;
-        if (isSet($matches[2]) && $matches[2].length {
-             length = $matches[2];
-            if ($matches[2].has(",")) {
+        if (isSet( matches[2]) &&  matches[2].length {
+             length =  matches[2];
+            if ( matches[2].has(",")) {
                 [ length, precision] = split(",",  length);
             }
              length = (int) length;
@@ -95,7 +95,7 @@ class MysqlSchemaDialect : SchemaDialect {
         if ((col == "tinyint" &&  length == 1) || col == "boolean") {
             return ["type": TableISchema.TYPE_BOOLEAN, "length": null];
         }
-        unsigned = (isSet($matches[3]) && $matches[3].toLower) == "unsigned");
+        unsigned = (isSet( matches[3]) &&  matches[3].toLower) == "unsigned");
         if (col.has("bigint") || col == "bigint") {
             return ["type": TableISchema.TYPE_BIGINTEGER, "length": null, "unsigned": unsigned];
         }

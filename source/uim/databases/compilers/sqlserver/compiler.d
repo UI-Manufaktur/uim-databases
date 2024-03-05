@@ -117,10 +117,10 @@ class SqlserverCompiler : QueryCompiler
                 preg_match_all(
                     "/\b" . trim(selectKey, "[]") . "\b/i",
                     p,
-                    $matches
+                     matches
                 );
 
-                if (empty($matches[0])) {
+                if (empty( matches[0])) {
                     continue;
                 }
 

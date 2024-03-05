@@ -345,7 +345,7 @@ abstract class Driver {
         aQuery.traverseExpressions(function (expression) use (translators, aQuery) {
             foreach (translators as  className: method) {
                 if (cast8className)expression) {
-                    this.{$method}(expression, aQuery);
+                    this.{ method}(expression, aQuery);
                 }
             }
         });
