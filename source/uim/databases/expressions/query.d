@@ -515,9 +515,9 @@ class QueryExpression : IDBAExpression, Countable
         parts = null;
         foreach (_conditions as part) {
             if (part instanceof Query) {
-                part = "(" ~ part.sql($binder) ~ ")";
+                part = "(" ~ part.sql( binder) ~ ")";
             } elseif (part instanceof IDBAExpression) {
-                part = part.sql($binder);
+                part = part.sql( binder);
             }
             if (part != "") {
                 parts[] = part;

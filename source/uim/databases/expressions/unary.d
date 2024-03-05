@@ -63,7 +63,7 @@ class UnaryExpression : IDBAExpression
     string sql(ValueBinder aBinder) {
          operand = _value;
         if ( operand instanceof IDBAExpression) {
-             operand =  operand.sql($binder);
+             operand =  operand.sql( binder);
         }
 
         if (this.position == self::POSTFIX) {

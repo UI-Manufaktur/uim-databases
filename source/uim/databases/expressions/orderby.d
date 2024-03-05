@@ -31,7 +31,7 @@ class OrderByExpression : QueryExpression
          order = null;
         foreach (_conditions as $k: $direction) {
             if ($direction instanceof IDBAExpression) {
-                $direction = $direction.sql($binder);
+                $direction = $direction.sql( binder);
             }
              order[] = is_numeric($k) ? $direction : sprintf("%s %s", $k, $direction);
         }

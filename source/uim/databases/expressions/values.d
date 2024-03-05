@@ -209,13 +209,13 @@ class ValuesExpression : IDBAExpression {
                 value =  row[column];
 
                 if (value instanceof IDBAExpression) {
-                     rowPlaceholders[] = "(" ~ value.sql($binder) ~ ")";
+                     rowPlaceholders[] = "(" ~ value.sql( binder) ~ ")";
                     continue;
                 }
 
-                placeholder = $binder.placeholder("c");
+                placeholder =  binder.placeholder("c");
                  rowPlaceholders[] = placeholder;
-                $binder.bind(placeholder, value, types[column]);
+                 binder.bind(placeholder, value, types[column]);
             }
 
             placeholders[] = implode(", ",  rowPlaceholders);
@@ -223,7 +223,7 @@ class ValuesExpression : IDBAExpression {
 
         query = this.getQuery();
         if (query) {
-            return " " ~ query.sql($binder);
+            return " " ~ query.sql( binder);
         }
 
         return sprintf(" VALUES (%s)", implode("), (", placeholders));

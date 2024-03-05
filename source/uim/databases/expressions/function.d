@@ -123,12 +123,12 @@ class FunctionExpression : QueryExpression : ITypedResult
         parts = null;
         foreach (_conditions as condition) {
             if (condition instanceof Query) {
-                condition = sprintf("(%s)", condition.sql($binder));
+                condition = sprintf("(%s)", condition.sql( binder));
             } elseif (condition instanceof IDBAExpression) {
-                condition = condition.sql($binder);
+                condition = condition.sql( binder);
             } elseif (is_array(condition)) {
-                p = $binder.placeholder("param");
-                $binder.bind(p, condition["value"], condition["type"]);
+                p =  binder.placeholder("param");
+                 binder.bind(p, condition["value"], condition["type"]);
                 condition = p;
             }
             parts[] = condition;

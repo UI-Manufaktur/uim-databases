@@ -83,10 +83,10 @@ class TupleComparison : ComparisonExpression
         }
 
         foreach ( originalFields as field) {
-            fields[] = field instanceof IDBAExpression ? field.sql($binder) : field;
+            fields[] = field instanceof IDBAExpression ? field.sql( binder) : field;
         }
 
-        values = _stringifyValues($binder);
+        values = _stringifyValues( binder);
 
         field = implode(", ", fields);
 
@@ -104,12 +104,12 @@ class TupleComparison : ComparisonExpression
         parts = this.getValue();
 
         if (parts instanceof IDBAExpression) {
-            return parts.sql($binder);
+            return parts.sql( binder);
         }
 
         foreach (parts as i: value) {
             if (value instanceof IDBAExpression) {
-                values[] = value.sql($binder);
+                values[] = value.sql( binder);
                 continue;
             }
 
@@ -120,20 +120,20 @@ class TupleComparison : ComparisonExpression
             }
 
             if (isMultiOperation) {
-                $bound = null;
+                 bound = null;
                 foreach (value as $k:  val) {
                     /** @var string  valType */
                      valType = type && isset(type.isSet($k) ? type[$k] : type;
-                    $bound[] = _bindValue( val, $binder,  valType);
+                     bound[] = _bindValue( val,  binder,  valType);
                 }
 
-                values[] = sprintf("(%s)", implode(",", $bound));
+                values[] = sprintf("(%s)", implode(",",  bound));
                 continue;
             }
 
             /** @var string  valType */
              valType = type && type[i]) ? type[i] : type;
-            values[] = _bindValue(value, $binder,  valType);
+            values[] = _bindValue(value,  binder,  valType);
         }
 
         return implode(", ", values);
@@ -141,8 +141,8 @@ class TupleComparison : ComparisonExpression
 
 
     protected string _bindValue(value, ValueBinder aBinder, Nullable!string type = null) {
-        placeholder = $binder.placeholder("tuple");
-        $binder.bind(placeholder, value, type);
+        placeholder =  binder.placeholder("tuple");
+         binder.bind(placeholder, value, type);
 
         return placeholder;
     }

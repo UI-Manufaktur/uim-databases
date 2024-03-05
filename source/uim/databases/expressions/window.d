@@ -175,30 +175,30 @@ class WindowExpression : IDBAExpression, IWindow
     string sql(ValueBinder aBinder) {
         clauses = null;
         if (this.name.getIdentifier()) {
-            clauses[] = this.name.sql($binder);
+            clauses[] = this.name.sql( binder);
         }
 
         if (this.partitions) {
             expressions = null;
             foreach (this.partitions as partition) {
-                expressions[] = partition.sql($binder);
+                expressions[] = partition.sql( binder);
             }
 
             clauses[] = "PARTITION BY " ~ implode(", ", expressions);
         }
 
         if (this.order) {
-            clauses[] = this.order.sql($binder);
+            clauses[] = this.order.sql( binder);
         }
 
         if (this.frame) {
             start = this.buildOffsetSql(
-                $binder,
+                 binder,
                 this.frame["start"]["offset"],
                 this.frame["start"]["direction"]
             );
             end = this.buildOffsetSql(
-                $binder,
+                 binder,
                 this.frame["end"]["offset"],
                 this.frame["end"]["direction"]
             );
@@ -257,7 +257,7 @@ class WindowExpression : IDBAExpression, IWindow
         }
 
         if (offset instanceof IDBAExpression) {
-            offset = offset.sql($binder);
+            offset = offset.sql( binder);
         }
 
         return sprintf(

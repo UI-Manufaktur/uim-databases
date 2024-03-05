@@ -38,9 +38,9 @@ class OrderClauseExpression : IDBAExpression, FieldInterface
         /** @var DDBIDBAExpression|string field */
         field = _field;
         if (field instanceof Query) {
-            field = sprintf("(%s)", field.sql($binder));
+            field = sprintf("(%s)", field.sql( binder));
         } elseif (field instanceof IDBAExpression) {
-            field = field.sql($binder);
+            field = field.sql( binder);
         }
 
         return sprintf("%s %s", field, _direction);
