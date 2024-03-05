@@ -80,9 +80,9 @@ class PostgresSchemaDialect : SchemaDialect {
             throw new DatabaseException("Unable to parse column type from `%s`".format(columnType));
         }
         auto col = $matches[1].toLower;
-        auto $length = precision = scale = null;
+        auto  length = precision = scale = null;
         if (isSet($matches[2])) {
-            $length = (int)$matches[2];
+             length = (int)$matches[2];
         }
         type = _applyTypeSpecificColumnConversion(
             col,
@@ -119,15 +119,15 @@ class PostgresSchemaDialect : SchemaDialect {
             return ["type": TableISchema.TYPE_UUID, "length": null];
         }
         if (col == "char") {
-            return ["type": TableISchema.TYPE_CHAR, "length": $length];
+            return ["type": TableISchema.TYPE_CHAR, "length":  length];
         }
         if (col.has("character")) {
-            return ["type": TableISchema.TYPE_STRING, "length": $length];
+            return ["type": TableISchema.TYPE_STRING, "length":  length];
         }
         // money is `string' as it includes arbitrary text content
         // before the number value.
         if (col.has("money") || col == "String") {
-            return ["type": TableISchema.TYPE_STRING, "length": $length];
+            return ["type": TableISchema.TYPE_STRING, "length":  length];
         }
         if (col.has("text")) {
             return ["type": TableISchema.TYPE_TEXT, "length": null];
@@ -144,47 +144,47 @@ class PostgresSchemaDialect : SchemaDialect {
         if (col.has("json")) {
             return ["type": TableISchema.TYPE_JSON, "length": null];
         }
-        $length = isNumeric($length) ? $length : null;
+         length = isNumeric( length) ?  length : null;
 
-        return ["type": TableISchema.TYPE_STRING, "length": $length];
+        return ["type": TableISchema.TYPE_STRING, "length":  length];
     }
  
-    void convertColumnDescription(TableSchema tableSchema, array $row) {
-        field = _convertColumn($row["type"]);
+    void convertColumnDescription(TableSchema tableSchema, array  row) {
+        field = _convertColumn( row["type"]);
 
         if (field["type"] == TableISchema.TYPE_BOOLEAN) {
-            if ($row["default"] == "true") {
-                $row["default"] = 1;
+            if ( row["default"] == "true") {
+                 row["default"] = 1;
             }
-            if ($row["default"] == "false") {
-                $row["default"] = 0;
+            if ( row["default"] == "false") {
+                 row["default"] = 0;
             }
         }
-        if (!empty($row["has_serial"])) {
+        if (!empty( row["has_serial"])) {
             field["autoIncrement"] = true;
         }
         field += [
-            "default": _defaultValue($row["default"]),
-            "null": $row["null"] == "YES",
-            "collate": $row["collation_name"],
-            "comment": $row["comment"],
+            "default": _defaultValue( row["default"]),
+            "null":  row["null"] == "YES",
+            "collate":  row["collation_name"],
+            "comment":  row["comment"],
         ];
-        field["length"] = $row["char_length"] ?: field["length"];
+        field["length"] =  row["char_length"] ?: field["length"];
 
         if (field["type"] == "numeric" || field["type"] == "decimal") {
-            field["length"] = $row["column_precision"];
-            field["precision"] = $row["column_scale"] ?: null;
+            field["length"] =  row["column_precision"];
+            field["precision"] =  row["column_scale"] ?: null;
         }
         if (field["type"] == TableISchema.TYPE_TIMESTAMP_FRACTIONAL) {
-            field["precision"] = $row["datetime_precision"];
+            field["precision"] =  row["datetime_precision"];
             if (field["precision"] == 0) {
                 field["type"] = TableISchema.TYPE_TIMESTAMP;
             }
         }
         if (field["type"] == TableISchema.TYPE_TIMESTAMP_TIMEZONE) {
-            field["precision"] = $row["datetime_precision"];
+            field["precision"] =  row["datetime_precision"];
         }
-        tableSchema.addColumn($row["name"], field);
+        tableSchema.addColumn( row["name"], field);
     }
     
     /**
@@ -237,17 +237,17 @@ class PostgresSchemaDialect : SchemaDialect {
         return [mySql, [tableSchema, aTableName]];
     }
  
-    void convertIndexDescription(TableSchema tableSchema, array $row) {
+    void convertIndexDescription(TableSchema tableSchema, array  row) {
         type = TableSchema.INDEX_INDEX;
-        name = $row["relname"];
-        if ($row["indisprimary"]) {
+        name =  row["relname"];
+        if ( row["indisprimary"]) {
             name = type = TableSchema.CONSTRAINT_PRIMARY;
         }
-        if ($row["indisunique"] && type == TableSchema.INDEX_INDEX) {
+        if ( row["indisunique"] && type == TableSchema.INDEX_INDEX) {
             type = TableSchema.CONSTRAINT_UNIQUE;
         }
         if (type == TableSchema.CONSTRAINT_PRIMARY || type == TableSchema.CONSTRAINT_UNIQUE) {
-           _convertConstraint(tableSchema, name, type, $row);
+           _convertConstraint(tableSchema, name, type,  row);
 
             return;
         }
@@ -258,7 +258,7 @@ class PostgresSchemaDialect : SchemaDialect {
                 "columns": [],
             ];
         }
-         anIndex["columns"] ~= $row["attname"];
+         anIndex["columns"] ~=  row["attname"];
         tableSchema.addIndex(name,  anIndex);
     }
     
@@ -268,9 +268,9 @@ class PostgresSchemaDialect : SchemaDialect {
      * \UIM\Database\Schema\TableSchema tableSchema The table to update.
      * @param string aName The index name.
      * @param string atype The index type.
-     * @param array $row The metadata record to update with.
+     * @param array  row The metadata record to update with.
      */
-    protected void _convertConstraint(TableSchema tableSchema, string aName, string atype, array $row) {
+    protected void _convertConstraint(TableSchema tableSchema, string aName, string atype, array  row) {
         constraint = tableSchema.getConstraint(name);
         if (!constraint) {
             constraint = [
@@ -278,7 +278,7 @@ class PostgresSchemaDialect : SchemaDialect {
                 "columns": [],
             ];
         }
-        constraint["columns"] ~= $row["attname"];
+        constraint["columns"] ~=  row["attname"];
         tableSchema.addConstraint(name, constraint);
     }
  
@@ -308,15 +308,15 @@ class PostgresSchemaDialect : SchemaDialect {
         return [mySql, [tableSchema, aTableName]];
     }
  
-    void convertForeignKeyDescription(TableSchema tableSchema, array $row) {
+    void convertForeignKeyDescription(TableSchema tableSchema, array  row) {
         someData = [
             "type": TableSchema.CONSTRAINT_FOREIGN,
-            "columns": $row["column_name"],
-            "references": [$row["references_table"], $row["references_field"]],
-            "update": _convertOnClause($row["on_update"]),
-            "delete": _convertOnClause($row["on_delete"]),
+            "columns":  row["column_name"],
+            "references": [ row["references_table"],  row["references_field"]],
+            "update": _convertOnClause( row["on_update"]),
+            "delete": _convertOnClause( row["on_delete"]),
         ];
-        tableSchema.addConstraint($row["name"], someData);
+        tableSchema.addConstraint( row["name"], someData);
     }
  
     protected string _convertOnClause(string aclause) {

@@ -234,12 +234,12 @@ class TableSchema : TableISchema, ISqlGenerator {
         if (isString(attrs)) {
             attrs = ["type": attrs];
         }
-        $valid = _columnKeys;
+         valid = _columnKeys;
         if (isSet(_columnExtras[attrs["type"]])) {
-            $valid += _columnExtras[attrs["type"]];
+             valid += _columnExtras[attrs["type"]];
         }
-        attrs = array_intersect_key(attrs, $valid);
-       _columns[name] = attrs + $valid;
+        attrs = array_intersect_key(attrs,  valid);
+       _columns[name] = attrs +  valid;
        _typeMap[name] = _columns[name]["type"];
     }
  

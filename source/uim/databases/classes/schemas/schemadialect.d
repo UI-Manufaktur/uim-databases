@@ -76,12 +76,12 @@ abstract class SchemaDialect
      * string[]|string areferences The referenced columns of a foreign key constraint statement
      */
     protected string _convertConstraintColumns(string[] areferences) {
-        if (isString($references)) {
-            return _driver.quoteIdentifier($references);
+        if (isString( references)) {
+            return _driver.quoteIdentifier( references);
         }
         return join(", ", array_map(
             [_driver, "quoteIdentifier"],
-            $references
+             references
         ));
     }
     
@@ -180,35 +180,35 @@ abstract class SchemaDialect
      * Convert field description results into abstract schema fields.
      * Params:
      * \UIM\Database\Schema\TableSchema tableSchema The table object to append fields to.
-     * @param array $row The row data from `describeColumnSql`.
+     * @param array  row The row data from `describeColumnSql`.
      */
-    abstract void convertColumnDescription(TableSchema tableSchema, array $row);
+    abstract void convertColumnDescription(TableSchema tableSchema, array  row);
 
     /**
      * Convert an index description results into abstract schema indexes or constraints.
      * Params:
      * \UIM\Database\Schema\TableSchema tableSchema The table object to append
      *   an index or constraint to.
-     * @param array $row The row data from `describeIndexSql`.
+     * @param array  row The row data from `describeIndexSql`.
      */
-    abstract void convertIndexDescription(TableSchema tableSchema, array $row);
+    abstract void convertIndexDescription(TableSchema tableSchema, array  row);
 
     /**
      * Convert a foreign key description into constraints on the Table object.
      * Params:
      * \UIM\Database\Schema\TableSchema tableSchema The table object to append
      *   a constraint to.
-     * @param array $row The row data from `describeForeignKeySql`.
+     * @param array  row The row data from `describeForeignKeySql`.
      */
-    abstract void convertForeignKeyDescription(TableSchema tableSchema, array $row);
+    abstract void convertForeignKeyDescription(TableSchema tableSchema, array  row);
 
     /**
      * Convert options data into table options.
      * Params:
      * \UIM\Database\Schema\TableSchema tableSchema Table instance.
-     * @param array $row The row of data.
+     * @param array  row The row of data.
      */
-    void convertOptionsDescription(TableSchema tableSchema, array $row) {
+    void convertOptionsDescription(TableSchema tableSchema, array  row) {
     }
     
     /**

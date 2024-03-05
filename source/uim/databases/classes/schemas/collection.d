@@ -33,8 +33,8 @@ class Collection : ICollection {
         auto statement = _connection.execute(sql, params);
 
         string[] result;
-        while ($row = statement.fetch()) {
-            result ~= $row[0];
+        while ( row = statement.fetch()) {
+            result ~=  row[0];
         }
         return result;
     }
@@ -45,8 +45,8 @@ class Collection : ICollection {
         statement = _connection.execute(sql, params);
         
         string[] result;
-        while ($row = statement.fetch()) {
-            result ~= $row[0];
+        while ( row = statement.fetch()) {
+            result ~=  row[0];
         }
         return result;
     }

@@ -24,9 +24,9 @@ class SqliteStatement : Statement {
             ) {
             auto changes = _driver.prepare("SELECT CHANGES()");
             changes.execute();
-            $row = changes.fetch();
+             row = changes.fetch();
 
-            this.affectedRows = $row ? (int)$row[0] : 0;
+            this.affectedRows =  row ? (int) row[0] : 0;
         } else {
             this.affectedRows = super.rowCount();
         }

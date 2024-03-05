@@ -95,14 +95,14 @@ class Statement : IStatement {
  
     Json fetch(string|int mode = PDO.FETCH_NUM) {
         mode = this.convertMode(mode);
-        $row = this.statement.fetch(mode);
-        if ($row == false) {
+         row = this.statement.fetch(mode);
+        if ( row == false) {
             return false;
         }
         if (this.typeConverter !isNull) {
-            return (this.typeConverter)($row);
+            return (this.typeConverter)( row);
         }
-        return $row;
+        return  row;
     }
  
     array fetchAssoc() {
@@ -110,21 +110,21 @@ class Statement : IStatement {
     }
  
     Json fetchColumn(int position) {
-        $row = this.fetch(PDO.FETCH_NUM);
-        if ($row && isSet($row[position])) {
-            return $row[position];
+         row = this.fetch(PDO.FETCH_NUM);
+        if ( row && isSet( row[position])) {
+            return  row[position];
         }
         return false;
     }
  
     array fetchAll(string|int mode = PDO.FETCH_NUM) {
         mode = this.convertMode(mode);
-        $rows = this.statement.fetchAll(mode);
+         rows = this.statement.fetchAll(mode);
 
         if (this.typeConverter !isNull) {
-            return array_map(this.typeConverter, $rows);
+            return array_map(this.typeConverter,  rows);
         }
-        return $rows;
+        return  rows;
     }
     
     /**
@@ -164,10 +164,10 @@ class Statement : IStatement {
  
     string|int lastInsertId(string atable = null, string acolumn = null) {
         if (column && this.columnCount()) {
-            $row = this.fetch(FETCH_TYPE_ASSOC);
+             row = this.fetch(FETCH_TYPE_ASSOC);
 
-            if ($row && isSet($row[column])) {
-                return $row[column];
+            if ( row && isSet( row[column])) {
+                return  row[column];
             }
         }
         return _driver.lastInsertId(aTable);

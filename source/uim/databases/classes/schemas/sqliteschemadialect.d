@@ -146,31 +146,31 @@ class SqliteSchemaDialect : SchemaDialect {
         return [sql, []];
     }
  
-    void convertColumnDescription(TableSchema tableSchema, array $row) {
-        auto myField = _convertColumn($row["type"]);
+    void convertColumnDescription(TableSchema tableSchema, array  row) {
+        auto myField = _convertColumn( row["type"]);
         myField += [
-            "null": !$row["notnull"],
-            "default": _defaultValue($row["dflt_value"]),
+            "null": ! row["notnull"],
+            "default": _defaultValue( row["dflt_value"]),
         ];
         primary = tableSchema.getConstraint("primary");
 
-        if ($row["pk"] && empty(primary)) {
+        if ( row["pk"] && empty(primary)) {
             myField["null"] = false;
             myField["autoIncrement"] = true;
         }
         // SQLite does not support autoincrement on composite keys.
-        if ($row["pk"] && !empty(primary)) {
+        if ( row["pk"] && !empty(primary)) {
             existingColumn = primary["columns"][0];
             /** @psalm-suppress PossiblyNullOperand */
             tableSchema.addColumn(existingColumn, ["autoIncrement": null] + tableSchema.getColumn(existingColumn));
         }
-        tableSchema.addColumn($row["name"], myField);
-        if ($row["pk"]) {
+        tableSchema.addColumn( row["name"], myField);
+        if ( row["pk"]) {
             constraint = (array)tableSchema.getConstraint("primary") ~ [
                 "type": TableSchema.CONSTRAINT_PRIMARY,
                 "columns": [],
             ];
-            constraint["columns"] = array_merge(constraint["columns"], [$row["name"]]);
+            constraint["columns"] = array_merge(constraint["columns"], [ row["name"]]);
             tableSchema.addConstraint("primary", constraint);
         }
     }
@@ -255,22 +255,22 @@ class SqliteSchemaDialect : SchemaDialect {
      * Params:
      * \UIM\Database\Schema\TableSchema tableSchema The table object to append
      *   an index or constraint to.
-     * @param array $row The row data from `describeIndexSql`.
+     * @param array  row The row data from `describeIndexSql`.
      */
-    void convertIndexDescription(TableSchema tableSchema, array $row) {
+    void convertIndexDescription(TableSchema tableSchema, array  row) {
         // Skip auto-indexes created for non-ROWID primary keys.
-        if ($row["origin"] == "pk") {
+        if ( row["origin"] == "pk") {
             return;
         }
-        string sql = "PRAGMA index_info(%s)".format(_driver.quoteIdentifier($row["name"]));
+        string sql = "PRAGMA index_info(%s)".format(_driver.quoteIdentifier( row["name"]));
         auto statement = _driver.prepare(sql);
         statement.execute();
         string[] myColumns = statement.fetchAll("assoc")
             .map!(column => column["name"])
             .array;
 
-        if ($row["unique"]) {
-            if ($row["origin"] == "u") {
+        if ( row["unique"]) {
+            if ( row["origin"] == "u") {
                 // Try to obtain the actual constraint name for indexes that are
                 // created automatically for unique constraints.
 
@@ -291,18 +291,18 @@ class SqliteSchemaDialect : SchemaDialect {
                         )
                     );
 
-                    $regex = "/CONSTRAINT\s*(["\"`\[].+?["\"`\] ])\s*UNIQUE\s*\(\s*(?:{someColumnsPattern})\s*\)/i";
-                    if (preg_match($regex, aTableSql, $matches)) {
-                        $row["name"] = this.normalizePossiblyQuotedIdentifier($matches[1]);
+                     regex = "/CONSTRAINT\s*(["\"`\[].+?["\"`\] ])\s*UNIQUE\s*\(\s*(?:{someColumnsPattern})\s*\)/i";
+                    if (preg_match( regex, aTableSql, $matches)) {
+                         row["name"] = this.normalizePossiblyQuotedIdentifier($matches[1]);
                     }
                 }
             }
-            tableSchema.addConstraint($row["name"], [
+            tableSchema.addConstraint( row["name"], [
                 "type": TableSchema.CONSTRAINT_UNIQUE,
                 "columns": someColumns,
             ]);
         } else {
-            tableSchema.addIndex($row["name"], [
+            tableSchema.addIndex( row["name"], [
                 "type": TableSchema.INDEX_INDEX,
                 "columns": someColumns,
             ]);
@@ -320,10 +320,10 @@ class SqliteSchemaDialect : SchemaDialect {
         return [sql, []];
     }
  
-    void convertForeignKeyDescription(TableSchema tableSchema, array $row) {
+    void convertForeignKeyDescription(TableSchema tableSchema, array  row) {
         string sql = sprintf(
             `SELECT * FROM pragma_foreign_key_list(%s) WHERE id = %d ORDER BY seq`
-            .format(_driver.quoteIdentifier(tableSchema.name()), $row["id"]));
+            .format(_driver.quoteIdentifier(tableSchema.name()),  row["id"]));
 
         statement = _driver.prepare(sql);
         statement.execute();
@@ -347,7 +347,7 @@ class SqliteSchemaDialect : SchemaDialect {
         someData["update"] = _convertOnClause(foreignKey["on_update"] ?? "");
         someData["delete"] = _convertOnClause(foreignKey["on_delete"] ?? "");
 
-        string name = join("_", someData["columns"]) ~ "_" ~ $row["id"] ~ "_fk";
+        string name = join("_", someData["columns"]) ~ "_" ~  row["id"] ~ "_fk";
 
         tableSchema.addConstraint(name, someData);
     }
@@ -575,8 +575,8 @@ class SqliteSchemaDialect : SchemaDialect {
     }
  
     array createTableSql(TableSchema tableSchema, array someColumns, array constraints, array  anIndexes) {
-        auto $lines = array_merge(someColumns, constraints);
-        string content = join(",\n", array_filter($lines));
+        auto  lines = array_merge(someColumns, constraints);
+        string content = join(",\n", array_filter( lines));
         string sqlTemporary = tableSchema.isTemporary() ? " TEMPORARY ' : ' ";
         aTable = sprintf("CREATE%sTABLE \"%s\" (\n%s\n)", sqlTemporary, tableSchema.name(), content);
         

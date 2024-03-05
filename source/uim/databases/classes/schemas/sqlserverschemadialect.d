@@ -76,7 +76,7 @@ class SqlserverSchemaDialect : SchemaDialect {
      * UIM\Database\TypeFactory  can handle.
      * Params:
      * string acol The column type
-     * @param int $length the column length
+     * @param int  length the column length
      * @param int precision The column precision
      * @param int scale The column scale
      * @link https://technet.microsoft.com/en-us/library/ms187752.aspx
@@ -111,7 +111,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             return ["type": typeName, "length": null, "precision": scale];
         }
         if (loweredColumnType == "char") {
-            return ["type": TableISchema.TYPE_CHAR, "length": $length];
+            return ["type": TableISchema.TYPE_CHAR, "length":  length];
         }
         if (loweredColumnType == "tinyint") {
             return ["type": TableISchema.TYPE_TINYINTEGER, "length": precision ?: 3];
@@ -141,26 +141,26 @@ class SqlserverSchemaDialect : SchemaDialect {
         // SqlServer schema reflection returns double length for unicode
         // columns because internally it uses UTF16/UCS2
         if (loweredColumnType == "nvarchar" || loweredColumnType == "nchar" || loweredColumnType == "ntext") {
-            $length /= 2;
+             length /= 2;
         }
-        if (loweredColumnType.has("varchar") && $length < 0) {
+        if (loweredColumnType.has("varchar") &&  length < 0) {
             return ["type": TableISchema.TYPE_TEXT, "length": null];
         }
         if (loweredColumnType.has("varchar")) {
-            return ["type": TableISchema.TYPE_STRING, "length": $length ?: 255];
+            return ["type": TableISchema.TYPE_STRING, "length":  length ?: 255];
         }
         if (loweredColumnType.has("char")) {
-            return ["type": TableISchema.TYPE_CHAR, "length": $length];
+            return ["type": TableISchema.TYPE_CHAR, "length":  length];
         }
         if (loweredColumnType.has("text")) {
             return ["type": TableISchema.TYPE_TEXT, "length": null];
         }
         if (loweredColumnType == "image" || loweredColumnType.has("binary")) {
             // -1 is the value for MAX which we treat as a 'long' binary
-            if ($length == -1) {
-                $length = TableSchema.LENGTH_LONG;
+            if ( length == -1) {
+                 length = TableSchema.LENGTH_LONG;
             }
-            return ["type": TableISchema.TYPE_BINARY, "length": $length];
+            return ["type": TableISchema.TYPE_BINARY, "length":  length];
         }
         if (loweredColumnType == "uniqueidentifier") {
             return ["type": TableISchema.TYPE_UUID];
@@ -168,23 +168,23 @@ class SqlserverSchemaDialect : SchemaDialect {
         return ["type": TableISchema.TYPE_STRING, "length": null];
     }
  
-    void convertColumnDescription(TableSchema tableSchema, array $row) {
+    void convertColumnDescription(TableSchema tableSchema, array  row) {
         auto field = _convertColumn(
-            $row["type"],
-            $row["char_length"] !isNull ? (int)$row["char_length"] : null,
-            $row["precision"] !isNull ? (int)$row["precision"] : null,
-            $row["scale"] !isNull ? (int)$row["scale"] : null
+             row["type"],
+             row["char_length"] !isNull ? (int) row["char_length"] : null,
+             row["precision"] !isNull ? (int) row["precision"] : null,
+             row["scale"] !isNull ? (int) row["scale"] : null
         );
 
-        if (!empty($row["autoincrement"])) {
+        if (!empty( row["autoincrement"])) {
             field["autoIncrement"] = true;
         }
         field += [
-            "null": $row["null"] == "1",
-            "default": _defaultValue(field["type"], $row["default"]),
-            "collate": $row["collation_name"],
+            "null":  row["null"] == "1",
+            "default": _defaultValue(field["type"],  row["default"]),
+            "collate":  row["collation_name"],
         ];
-        tableSchema.addColumn($row["name"], field);
+        tableSchema.addColumn( row["name"], field);
     }
     
     /**
@@ -237,13 +237,13 @@ class SqlserverSchemaDialect : SchemaDialect {
         return [sql, [aTableName, tableSchema]];
     }
  
-    void convertIndexDescription(TableSchema tableSchema, array $row) {
+    void convertIndexDescription(TableSchema tableSchema, array  row) {
         auto type = TableSchema.INDEX_INDEX;
-        auto name = $row["index_name"];
-        if ($row["isPrimaryKey"]) {
+        auto name =  row["index_name"];
+        if ( row["isPrimaryKey"]) {
             name = type = TableSchema.CONSTRAINT_PRIMARY;
         }
-        if (($row["is_unique"] || $row["is_unique_constraint"]) && type == TableSchema.INDEX_INDEX) {
+        if (( row["is_unique"] ||  row["is_unique_constraint"]) && type == TableSchema.INDEX_INDEX) {
             type = TableSchema.CONSTRAINT_UNIQUE;
         }
 
@@ -251,7 +251,7 @@ class SqlserverSchemaDialect : SchemaDialect {
             ? tableSchema.getIndex(name)
             : tableSchema.getConstraint(name);
         
-        auto someColumns = [$row["column_name"]];
+        auto someColumns = [ row["column_name"]];
         if (!empty(existing)) {
             someColumns = array_merge(existing["columns"], someColumns);
         }
@@ -290,20 +290,20 @@ class SqlserverSchemaDialect : SchemaDialect {
         return [sql, [aTableName, tableSchema]];
     }
  
-    void convertForeignKeyDescription(TableSchema tableSchema, array $row) {
+    void convertForeignKeyDescription(TableSchema tableSchema, array  row) {
         someData = [
             "type": TableSchema.CONSTRAINT_FOREIGN,
-            "columns": [$row["column"]],
-            "references": [$row["reference_table"], $row["reference_column"]],
-            "update": _convertOnClause($row["update_type"]),
-            "delete": _convertOnClause($row["delete_type"]),
+            "columns": [ row["column"]],
+            "references": [ row["reference_table"],  row["reference_column"]],
+            "update": _convertOnClause( row["update_type"]),
+            "delete": _convertOnClause( row["delete_type"]),
         ];
-        name = $row["foreign_key_name"];
+        name =  row["foreign_key_name"];
         tableSchema.addConstraint(name, someData);
     }
  
     protected string _foreignOnClause(string aon) {
-        parent = super._foreignOnClause($on);
+        parent = super._foreignOnClause( on);
 
         return parent == "RESTRICT' ? super._foreignOnClause(TableSchema.ACTION_NO_ACTION): parent;
     }
@@ -395,8 +395,8 @@ class SqlserverSchemaDialect : SchemaDialect {
             )
         ) {
             type = " NVARCHAR";
-            $length = someData["length"] ?? TableSchema.LENGTH_TINY;
-             result ~= "%s(%d)".format(type, $length);
+             length = someData["length"] ?? TableSchema.LENGTH_TINY;
+             result ~= "%s(%d)".format(type,  length);
         }
         $hasCollate = [
             TableISchema.TYPE_TEXT,
