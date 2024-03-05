@@ -73,9 +73,9 @@ abstract class Driver : IDBADriver {
             ));
         };
 
-        $retry = new CommandRetry(new ErrorCodeWaitStrategy(static.RETRY_ERROR_CODES, 5), 4);
+         retry = new CommandRetry(new ErrorCodeWaitStrategy(static.RETRY_ERROR_CODES, 5), 4);
         try {
-            $retry.run(action);
+             retry.run(action);
         } catch (PDOException e) {
             throw new MissingConnectionException(
                 [
@@ -86,7 +86,7 @@ abstract class Driver : IDBADriver {
                 e
             );
         } finally {
-            this.connectRetries = $retry.getRetries();
+            this.connectRetries =  retry.getRetries();
         }
 
         return true;

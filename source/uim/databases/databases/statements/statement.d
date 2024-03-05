@@ -95,11 +95,11 @@ class Statement : IStatement {
     Json fetch(string|int mode = PDO.FETCH_NUM) {
         mode = this.convertMode(mode);
         row = this.statement.fetch(mode);
-        if ($row == false) {
+        if ( row == false) {
             return false;
         }
         return !this.typeConverter.isNull
-            ? (this.typeConverter)($row)
+            ? (this.typeConverter)( row)
             : row;
     }
  
@@ -109,7 +109,7 @@ class Statement : IStatement {
  
     Json fetchColumn(int position) {
         row = this.fetch(PDO.FETCH_NUM);
-        if ($row && isSet($row[position])) {
+        if ( row && isSet( row[position])) {
             return row[position];
         }
         return false;
@@ -164,7 +164,7 @@ class Statement : IStatement {
         if (column && this.columnCount()) {
             row = this.fetch(FETCH_TYPE_ASSOC);
 
-            if ($row && isSet($row[column])) {
+            if ( row && isSet( row[column])) {
                 return row[column];
             }
         }

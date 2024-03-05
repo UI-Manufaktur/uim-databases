@@ -29,7 +29,7 @@ class CaseStatementExpression : IDBAExpression, ITypedResult
      *
      * @var array<string>
      */
-    protected $validClauseNames = [
+    protected  validClauseNames = [
         "value",
         "when",
         "else",

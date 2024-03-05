@@ -49,7 +49,7 @@ template ExpressionTypeCasterTemplate {
         types.byKeyValue
             .each!((keyType) {
             auto object = TypeFactory.build(keyType.value);
-            if (cast(IExpression)$object Type) {
+            if (cast(IExpression) object Type) {
                 result[keyType.key] = object;
             }
         }

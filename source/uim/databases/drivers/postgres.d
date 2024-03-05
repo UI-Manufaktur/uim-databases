@@ -13,8 +13,9 @@ use PDO;
 /**
  * Class Postgres
  */
-class Postgres : Driver
-{
+class DPostgresDriver : DDriver {
+    mixin(DriverThis!("Postgres"));
+
     use SqlDialectTrait;
 
 

@@ -38,12 +38,12 @@ trait TupleComparisonTranslatorTrait
             return;
         }
 
-        $operator = strtoupper(expression.getOperator());
-        if (!hasAllValues($operator, ["IN", "="])) {
+         operator = strtoupper(expression.getOperator());
+        if (!hasAllValues( operator, ["IN", "="])) {
             throw new RuntimeException(
                 sprintf(
                     "Tuple comparison transform only supports the `IN` and `=` operators, `%s` given.",
-                    $operator
+                     operator
                 )
             );
         }

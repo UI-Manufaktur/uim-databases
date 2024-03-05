@@ -285,72 +285,72 @@ class Sqlserver : Driver
      * Prior to SQLServer 2012 there was no equivalent to LIMIT OFFSET, so a subquery must
      * be used.
      *
-     * @param uim.databases.Query $original The query to wrap in a subquery.
+     * @param uim.databases.Query  original The query to wrap in a subquery.
      * @param int|null limit The number of rows to fetch.
      * @param int|null offset The number of rows to offset.
      * @return uim.databases.Query Modified query object.
      */
-    protected function _pagingSubquery(Query $original, Nullable!int limit, Nullable!int offset): Query
+    protected function _pagingSubquery(Query  original, Nullable!int limit, Nullable!int offset): Query
     {
         field = "_cake_paging_._cake_page_rownum_";
 
-        if ($original.clause("order")) {
+        if ( original.clause("order")) {
             // SQL server does not support column aliases in OVER clauses.  But
             // the only practical way to specify the use of calculated columns
             // is with their alias.  So substitute the select SQL in place of
             // any column aliases for those entries in the order clause.
-            select = $original.clause("select");
-            $order = new OrderByExpression();
-            $original
+            select =  original.clause("select");
+             order = new OrderByExpression();
+             original
                 .clause("order")
-                .iterateParts(function ($direction, $orderBy) use (select, $order) {
-                    $key = $orderBy;
+                .iterateParts(function ($direction,  orderBy) use (select,  order) {
+                    $key =  orderBy;
                     if (
-                        isset(select[$orderBy]) &&
-                        select[$orderBy] instanceof IDBAExpression
+                        isset(select[ orderBy]) &&
+                        select[ orderBy] instanceof IDBAExpression
                     ) {
-                        $order.add(new OrderClauseExpression(select[$orderBy], $direction));
+                         order.add(new OrderClauseExpression(select[ orderBy], $direction));
                     } else {
-                        $order.add([$key: $direction]);
+                         order.add([$key: $direction]);
                     }
 
                     // Leave original order clause unchanged.
-                    return $orderBy;
+                    return  orderBy;
                 });
         } else {
-            $order = new OrderByExpression("(SELECT NULL)");
+             order = new OrderByExpression("(SELECT NULL)");
         }
 
-        query = clone $original;
+        query = clone  original;
         query.select([
-                "_cake_page_rownum_": new UnaryExpression("ROW_NUMBER() OVER", $order),
+                "_cake_page_rownum_": new UnaryExpression("ROW_NUMBER() OVER",  order),
             ]).limit(null)
             .offset(null)
             .order([], true);
 
-        $outer = new Query(query.getConnection());
-        $outer.select("*")
+         outer = new Query(query.getConnection());
+         outer.select("*")
             .from(["_cake_paging_": query]);
 
         if (offset) {
-            $outer.where(["field > " ~ offset]);
+             outer.where(["field > " ~ offset]);
         }
         if (limit) {
             value = (int)offset + limit;
-            $outer.where(["field <= value"]);
+             outer.where(["field <= value"]);
         }
 
         // Decorate the original query as that is what the
         // end developer will be calling execute() on originally.
-        $original.decorateResults(function ($row) {
-            if ($row.isSet("_cake_page_rownum_")) {
-                unset($row["_cake_page_rownum_"]);
+         original.decorateResults(function ( row) {
+            if ( row.isSet("_cake_page_rownum_")) {
+                unset( row["_cake_page_rownum_"]);
             }
 
-            return $row;
+            return  row;
         });
 
-        return $outer;
+        return  outer;
     }
 
 
@@ -360,46 +360,46 @@ class Sqlserver : Driver
             return query;
         }
 
-        $original = query;
-        query = clone $original;
+         original = query;
+        query = clone  original;
 
         $distinct = query.clause("distinct");
         query.distinct(false);
 
-        $order = new OrderByExpression($distinct);
+         order = new OrderByExpression($distinct);
         query
-            .select(function ($q) use ($distinct, $order) {
-                $over = $q.newExpr("ROW_NUMBER() OVER")
+            .select(function ($q) use ($distinct,  order) {
+                 over = $q.newExpr("ROW_NUMBER() OVER")
                     .add("(PARTITION BY")
                     .add($q.newExpr().add($distinct).setConjunction(","))
-                    .add($order)
+                    .add( order)
                     .add(")")
                     .setConjunction(" ");
 
                 return [
-                    "_cake_distinct_pivot_": $over,
+                    "_cake_distinct_pivot_":  over,
                 ];
             })
             .limit(null)
             .offset(null)
             .order([], true);
 
-        $outer = new Query(query.getConnection());
-        $outer.select("*")
+         outer = new Query(query.getConnection());
+         outer.select("*")
             .from(["_cake_distinct_": query])
             .where(["_cake_distinct_pivot_": 1]);
 
         // Decorate the original query as that is what the
         // end developer will be calling execute() on originally.
-        $original.decorateResults(function ($row) {
-            if ($row.isSet("_cake_distinct_pivot_")) {
-                unset($row["_cake_distinct_pivot_"]);
+         original.decorateResults(function ( row) {
+            if ( row.isSet("_cake_distinct_pivot_")) {
+                unset( row["_cake_distinct_pivot_"]);
             }
 
-            return $row;
+            return  row;
         });
 
-        return $outer;
+        return  outer;
     }
 
 
@@ -425,14 +425,14 @@ class Sqlserver : Driver
             case "DATEDIFF":
                 /** @var bool $hasDay */
                 $hasDay = false;
-                $visitor = function (value) use (&$hasDay) {
+                 visitor = function (value) use (&$hasDay) {
                     if (value == "day") {
                         $hasDay = true;
                     }
 
                     return value;
                 };
-                expression.iterateParts($visitor);
+                expression.iterateParts( visitor);
 
                 if (!$hasDay) {
                     expression.add(["day": "literal"], [], true);
@@ -454,7 +454,7 @@ class Sqlserver : Driver
                 break;
             case "DATE_ADD":
                 params = null;
-                $visitor = function (p, $key) use (&params) {
+                 visitor = function (p, $key) use (&params) {
                     if ($key == 0) {
                         params[2] = p;
                     } else {
@@ -472,7 +472,7 @@ class Sqlserver : Driver
                 expression
                     .setName("DATEADD")
                     .setConjunction(",")
-                    .iterateParts($visitor)
+                    .iterateParts( visitor)
                     .iterateParts($manipulator)
                     .add([params[2]: "literal"]);
                 break;

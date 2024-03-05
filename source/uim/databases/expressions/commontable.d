@@ -45,7 +45,7 @@ class CommonTableExpression : IDBAExpression
     /**
      * Whether the CTE is recursive.
      */
-    protected bool $recursive = false;
+    protected bool  recursive = false;
 
     /**
      * Constructor.

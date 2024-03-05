@@ -26,7 +26,7 @@ class BinaryUuidType : BaseType {
             return aValue;
         }
         length = aValue.length;
-        if ($length != 36 && length != 32) {
+        if ( length != 36 && length != 32) {
             return null;
         }
         return this.convertStringToBinaryUuid(aValue);
