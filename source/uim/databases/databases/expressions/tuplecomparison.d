@@ -72,8 +72,8 @@ class TupleComparison : ComparisonExpression {
         string[] fields;
         originalFields = this.getFieldNames();
 
-        if (!isArray($originalFields)) {
-            originalFields = [$originalFields];
+        if (!isArray( originalFields)) {
+            originalFields = [ originalFields];
         }
         originalFields.each!(field => fields ~= cast(IExpression)field  
                 ? field.sql(aBinder)
@@ -113,15 +113,15 @@ class TupleComparison : ComparisonExpression {
                 aValue.byKeyValue
                     .each!((kv) {
                         auto valType = type && isSet(type[myKey]) ? type[myKey] : type;
-                        assert($valType.isNull || isScalar($valType));
-                        bound ~= _bindValue($val, aBinder, valType);
+                        assert( valType.isNull || isScalar( valType));
+                        bound ~= _bindValue( val, aBinder, valType);
                     });
                 
                 someValues ~= "(%s)".format($bound.join(","));
                 continue;
             }
             valType = type && isSet(type[anI]) ? type[anI] : type;
-            assert($valType.isNull || isScalar($valType));
+            assert( valType.isNull || isScalar( valType));
              someValues ~= _bindValue(aValue, aBinder, valType);
         }
         return someValues.join(", ");

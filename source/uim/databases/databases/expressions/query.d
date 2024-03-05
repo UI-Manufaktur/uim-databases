@@ -314,7 +314,7 @@ class QueryExpression : UimExpression, Countable {
             .notIn(field,  someValues, type)
             .isNull(field);
 
-        return this.add($or);
+        return this.add( or);
     }
     
     /**
@@ -417,11 +417,11 @@ class QueryExpression : UimExpression, Countable {
             return new IdentifierExpression(field);
         };
 
-        return this.eq($wrapIdentifier($leftField), wrapIdentifier($rightField));
+        return this.eq($wrapIdentifier( leftField), wrapIdentifier( rightField));
     }
     string sql(ValueBinder aBinder) {
         len = this.count();
-        if ($len == 0) {
+        if ( len == 0) {
             return "";
         }
         conjunction = _conjunction;
@@ -569,7 +569,7 @@ class QueryExpression : UimExpression, Countable {
             if (preg_match("/(is not|not \w+)$/i", expression)) {
                 last = array_pop(someParts);
                 second = array_pop(someParts);
-                someParts ~= "{second} {$last}";
+                someParts ~= "{second} { last}";
             }
             operator = array_pop(someParts);
             expression = someParts.join(" ");
@@ -577,11 +577,11 @@ class QueryExpression : UimExpression, Countable {
             string[] someParts = split(" ", expression, 2);
             [expression, operator] = someParts;
         }
-        operator = trim($operator).toUpper;
+        operator = trim( operator).toUpper;
 
         type = this.getTypeMap().type(expression);
         typeMultiple = (isString(type) && type.has("[]"));
-        if (in_array($operator, ["IN", "NOT IN"]) || typeMultiple) {
+        if (in_array( operator, ["IN", "NOT IN"]) || typeMultiple) {
             type = type ?: "string";
             if (!typeMultiple) {
                 type ~= "[]";
@@ -594,24 +594,24 @@ class QueryExpression : UimExpression, Countable {
         if (typeMultiple) {
             aValue = cast(IExpression)aValue  ? aValue : (array)aValue;
         }
-        if ($operator == "IS' && aValue.isNull) {
+        if ( operator == "IS' && aValue.isNull) {
             return new UnaryExpression(
                 'isNull",
                 new IdentifierExpression(expression),
                 UnaryExpression.POSTFIX
             );
         }
-        if ($operator == "IS NOT" && aValue.isNull) {
+        if ( operator == "IS NOT" && aValue.isNull) {
             return new UnaryExpression(
                 "IS NOT NULL",
                 new IdentifierExpression(expression),
                 UnaryExpression.POSTFIX
             );
         }
-        if ($operator == "IS" && aValue !isNull) {
+        if ( operator == "IS" && aValue !isNull) {
             operator = "=";
         }
-        if ($operator == "IS NOT" && aValue !isNull) {
+        if ( operator == "IS NOT" && aValue !isNull) {
             operator = "!=";
         }
         if (aValue.isNull && _conjunction != ",") {

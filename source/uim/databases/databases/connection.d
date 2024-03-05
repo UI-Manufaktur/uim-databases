@@ -88,7 +88,7 @@ class Connection : IConnection {
 
         writeConfig = configData("write"] ?? [] + sharedConfig;
         readConfig = configData("read"] ?? [] + sharedConfig;
-        if ($readConfig == writeConfig) {
+        if ( readConfig == writeConfig) {
             readDriver = writeDriver = new driverClass(["_role": self.ROLE_WRITE] + writeConfig);
         } else {
             readDriver = new driverClass(["_role": self.ROLE_READ] + readConfig);
@@ -138,7 +138,7 @@ class Connection : IConnection {
      * string arole Connection role ("read' or 'write")
      */
     Driver getDriver(string arole = self.ROLE_WRITE) {
-        assert($role == self.ROLE_READ || role == self.ROLE_WRITE);
+        assert( role == self.ROLE_READ || role == self.ROLE_WRITE);
 
         return role == self.ROLE_READ ? this.readDriver : this.writeDriver;
     }

@@ -1210,7 +1210,7 @@ abstract class Query : IExpression, Stringable {
      * \UIM\Database\IExpression|string[]|null rawExpression A string, array or anything you want wrapped in an expression object
      */
     QueryExpression newExpr(IExpression|string[]|null rawExpression = null) {
-        return this.expr($rawExpression);
+        return this.expr( rawExpression);
     }
     
     /**
@@ -1232,8 +1232,8 @@ abstract class Query : IExpression, Stringable {
     QueryExpression expr(IExpression|string[]|null rawExpression = null) {
         expression = new QueryExpression([], this.getTypeMap());
 
-        if ($rawExpression !isNull) {
-            expression.add($rawExpression);
+        if ( rawExpression !isNull) {
+            expression.add( rawExpression);
         }
         return expression;
     }

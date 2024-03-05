@@ -79,8 +79,8 @@ The easiest way of executing queries is by using the `execute()` method, it will
 ```php
 statement = aConnection.execute("SELECT * FROM articles");
 
-while($row = statement.fetch("assoc")) {
-	echo $row["title"] ~ PHP_EOL;
+while( row = statement.fetch("assoc")) {
+	echo  row["title"] ~ PHP_EOL;
 }
 ```
 Binding values to parametrized arguments is also possible with the execute function:
@@ -265,10 +265,10 @@ Combining expressions is also possible:
 
 ```php
 aQuery.where(function (exp) {
-        $orConditions = exp.or(["author_id": 2])
+         orConditions = exp.or(["author_id": 2])
             .eq("author_id", 5);
         return exp
-            .not($orConditions)
+            .not( orConditions)
             .lte("view_count", 10);
     });
 ```
@@ -345,7 +345,7 @@ Once you’ve made your query, you’ll want to retrieve rows from it. There are
 
 ```php
 // Iterate the query
-foreach (aQuery as $row) {
+foreach (aQuery as  row) {
     // Do stuff.
 }
 

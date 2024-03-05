@@ -52,7 +52,7 @@ class FieldTypeConverter {
         }
         foreach (myConversion; this.conversions) {
             if (myConversion["hasBatch"]) {
-                row = myConversion["type"].manyToD($row, myConversion["fields"], this.driver);
+                row = myConversion["type"].manyToD( row, myConversion["fields"], this.driver);
                 continue;
             }
             myConversion["fields"].each!(field => row[field] = myConversion["type"].ToD(row[field], this.driver));

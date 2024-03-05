@@ -37,7 +37,7 @@ class UnaryExpression : UimExpression {
     
     string sql(ValueBinder aBinder) {
         operand = _value;
-        if (cast(IExpression)$operand ) {
+        if (cast(IExpression) operand ) {
             operand = operand.sql(aBinder);
         }
         if (this.position == self.POSTFIX) {

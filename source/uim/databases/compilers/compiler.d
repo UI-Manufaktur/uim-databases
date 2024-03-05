@@ -131,16 +131,16 @@ class QueryCompiler {
      * @return string
      */
     protected string _buildWithPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
-        $recursive = false;
+         recursive = false;
         expressions = [];
         foreach (someParts as cte) {
-            $recursive = $recursive || cte.isRecursive();
+             recursive =  recursive || cte.isRecursive();
             expressions[] = cte.sql($binder);
         }
 
-        $recursive = $recursive ? "RECURSIVE " : "";
+         recursive =  recursive ? "RECURSIVE " : "";
 
-        return "WITH %s%s ".format($recursive, implode(", ", expressions));
+        return "WITH %s%s ".format( recursive, implode(", ", expressions));
     }
 
     /**

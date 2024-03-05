@@ -48,9 +48,9 @@ trait ExpressionTypeCasterTrait {
         auto types = array_filter(typeNames);
         types.byKeyValue
             .each!((keyType) {
-            auto $object = TypeFactory.build(keyType.value);
-            if (cast(IExpression)$object Type) {
-                result[keyType.key] = $object;
+            auto  object = TypeFactory.build(keyType.value);
+            if (cast(IExpression) object Type) {
+                result[keyType.key] =  object;
             }
         }
         return result;

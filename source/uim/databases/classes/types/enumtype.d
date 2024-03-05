@@ -40,7 +40,7 @@ class EnumType : BaseType {
         this.enumClassName = enumClassName;
 
         try {
-            $reflectionEnum = new ReflectionEnum(enumClassName);
+             reflectionEnum = new ReflectionEnum(enumClassName);
         } catch (ReflectionException  anException) {
             throw new DatabaseException(
                 "Unable to use `%s` for type `%s`. %s."
@@ -50,7 +50,7 @@ class EnumType : BaseType {
                     anException.getMessage()
             ));
         }
-        namedType = $reflectionEnum.getBackingType();
+        namedType =  reflectionEnum.getBackingType();
         if (namedType.isNull) {
             throw new DatabaseException(
                 "Unable to use enum `%s` for type `%s`, must be a backed enum."

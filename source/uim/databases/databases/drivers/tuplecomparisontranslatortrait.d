@@ -35,10 +35,10 @@ template TupleComparisonTranslatorTemplate {
             return;
         }
         operator = strtoupper(expression.getOperator());
-        if (!in_array($operator, ["IN", "="])) {
+        if (!in_array( operator, ["IN", "="])) {
             throw new InvalidArgumentException(
                 "Tuple comparison transform only supports the `IN` and `=` operators, `%s` given."
-                    .format($operator)
+                    .format( operator)
             );
         }
         aValue = expression.getValue();
