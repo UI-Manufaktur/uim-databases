@@ -110,7 +110,7 @@ class SqlserverCompiler : QueryCompiler
             if (!selectPart instanceof FunctionExpression) {
                 continue;
             }
-            foreach ( as $k: p) {
+            foreach ( as  k: p) {
                 if (!is_string(p)) {
                     continue;
                 }
@@ -124,7 +124,7 @@ class SqlserverCompiler : QueryCompiler
                     continue;
                 }
 
-                [$k] = preg_replace(
+                [ k] = preg_replace(
                     ["/\[|\]/", "/\b" . trim(selectKey, "[]") . "\b/i"],
                     ["", selectPart.sql(aValueBinder)],
                     p

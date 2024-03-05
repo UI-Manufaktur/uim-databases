@@ -58,7 +58,7 @@ class DateTimeType : BaseType, IBatchCasting {
      *
      * @var \DateTimeZone|null
      */
-    protected DateTimeZone $dbTimezone = null;
+    protected DateTimeZone  dbTimezone = null;
 
     /**
      * User time zone.
@@ -72,12 +72,12 @@ class DateTimeType : BaseType, IBatchCasting {
      *
      * @var \DateTimeZone
      */
-    protected DateTimeZone $defaultTimezone;
+    protected DateTimeZone  defaultTimezone;
 
     /**
      * Whether database time zone is kept when converting
      */
-    protected bool $keepDatabaseTimezone = false;
+    protected bool  keepDatabaseTimezone = false;
 
     /**
  Params:
@@ -183,11 +183,11 @@ class DateTimeType : BaseType, IBatchCasting {
      * When false, datetime timezones are converted to default time zone.
      * This is default behavior.
      * Params:
-     * bool $keep If true, database time zone is kept when converting
+     * bool  keep If true, database time zone is kept when converting
      *     to DateTime instances.
      */
-    void setKeepDatabaseTimezone(bool $keep) {
-        this.keepDatabaseTimezone = $keep;
+    void setKeepDatabaseTimezone(bool  keep) {
+        this.keepDatabaseTimezone =  keep;
     }
  
     array manyToD(array  someValues, array fields, Driver driver) {
@@ -233,20 +233,20 @@ class DateTimeType : BaseType, IBatchCasting {
          className = _className;
         try {
             if (isInt(myRequestData) || (isString(myRequestData) && ctype_digit(myRequestData))) {
-                $dateTime = new  className("@" ~ myRequestData);
+                 dateTime = new  className("@" ~ myRequestData);
 
-                return $dateTime.setTimezone(this.defaultTimezone);
+                return  dateTime.setTimezone(this.defaultTimezone);
             }
             if (isString(myRequestData)) {
                 if (_useLocaleMarshal) {
-                    $dateTime = _parseLocaleValue(myRequestData);
+                     dateTime = _parseLocaleValue(myRequestData);
                 } else {
-                    $dateTime = _parseValue(myRequestData);
+                     dateTime = _parseValue(myRequestData);
                 }
-                if ($dateTime) {
-                    $dateTime = $dateTime.setTimezone(this.defaultTimezone);
+                if ( dateTime) {
+                     dateTime =  dateTime.setTimezone(this.defaultTimezone);
                 }
-                return $dateTime;
+                return  dateTime;
             }
         } catch (Exception  anException) {
             return null;
@@ -283,9 +283,9 @@ class DateTimeType : BaseType, IBatchCasting {
                 myRequestData["microsecond"]
             );
 
-        $dateTime = new  className(format, myRequestData["timezone"] ?? this.userTimezone);
+         dateTime = new  className(format, myRequestData["timezone"] ?? this.userTimezone);
 
-        return $dateTime.setTimezone(this.defaultTimezone);
+        return  dateTime.setTimezone(this.defaultTimezone);
     }
     
     /**

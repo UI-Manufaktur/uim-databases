@@ -221,8 +221,8 @@ class TableSchema : TableISchema, ISqlGenerator {
      */
     this(string atable, array someColumns = []) {
        _table = aTable;
-        foreach (someColumns as field: $definition) {
-            this.addColumn(field, $definition);
+        foreach (someColumns as field:  definition) {
+            this.addColumn(field,  definition);
         }
     }
  
@@ -311,7 +311,7 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     array defaultValues() {
-        IData[string] $defaults;
+        IData[string]  defaults;
         foreach (_columns as name: someData) {
             if (!array_key_exists("default", someData)) {
                 continue;
@@ -319,9 +319,9 @@ class TableSchema : TableISchema, ISqlGenerator {
             if (someData["default"].isNull && someData["null"] != true) {
                 continue;
             }
-            $defaults[name] = someData["default"];
+             defaults[name] = someData["default"];
         }
-        return $defaults;
+        return  defaults;
     }
  
     auto addIndex(string aName, attrs) {
@@ -499,42 +499,42 @@ class TableSchema : TableISchema, ISqlGenerator {
     }
  
     array createSql(Connection aConnection) {
-        $dialect = aConnection.getDriver().schemaDialect();
+         dialect = aConnection.getDriver().schemaDialect();
         someColumns = constraints =  anIndexes = [];
         foreach (_columns.keys as name) {
-            someColumns ~= $dialect.columnSql(this, name);
+            someColumns ~=  dialect.columnSql(this, name);
         }
         foreach (_constraints.keys as name) {
-            constraints ~= $dialect.constraintSql(this, name);
+            constraints ~=  dialect.constraintSql(this, name);
         }
         foreach (_indexNames.keys as name) {
-             anIndexes ~= $dialect.indexSql(this, name);
+             anIndexes ~=  dialect.indexSql(this, name);
         }
-        return $dialect.createTableSql(this, someColumns, constraints,  anIndexes);
+        return  dialect.createTableSql(this, someColumns, constraints,  anIndexes);
     }
  
     array dropSql(Connection aConnection) {
-        $dialect = aConnection.getDriver().schemaDialect();
+         dialect = aConnection.getDriver().schemaDialect();
 
-        return $dialect.dropTableSql(this);
+        return  dialect.dropTableSql(this);
     }
  
     array truncateSql(Connection aConnection) {
-        $dialect = aConnection.getDriver().schemaDialect();
+         dialect = aConnection.getDriver().schemaDialect();
 
-        return $dialect.truncateTableSql(this);
+        return  dialect.truncateTableSql(this);
     }
  
     array addConstraintSql(Connection aConnection) {
-        $dialect = aConnection.getDriver().schemaDialect();
+         dialect = aConnection.getDriver().schemaDialect();
 
-        return $dialect.addConstraintSql(this);
+        return  dialect.addConstraintSql(this);
     }
  
     array dropConstraintSql(Connection aConnection) {
-        $dialect = aConnection.getDriver().schemaDialect();
+         dialect = aConnection.getDriver().schemaDialect();
 
-        return $dialect.dropConstraintSql(this);
+        return  dialect.dropConstraintSql(this);
     }
     
     /**

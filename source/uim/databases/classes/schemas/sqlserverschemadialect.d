@@ -194,28 +194,28 @@ class SqlserverSchemaDialect : SchemaDialect {
      * N"" wrappers and collation text and converts NULL strings.
      * Params:
      * string atype The schema type
-     * @param string|null $default The default value.
+     * @param string|null  default The default value.
      */
     protected string|int _defaultValue(string atype, string adefault) {
-        if ($default.isNull) {
+        if ( default.isNull) {
             return null;
         }
         // remove () surrounding value (NULL) but leave () at the end of functions
         // integers might have two ((0)) wrapping value
-        if (preg_match("/^\(+(.*?(\(\))?)\)+$/", $default, $matches)) {
-            $default = $matches[1];
+        if (preg_match("/^\(+(.*?(\(\))?)\)+$/",  default, $matches)) {
+             default = $matches[1];
         }
-        if ($default == "NULL") {
+        if ( default == "NULL") {
             return null;
         }
         if (type == TableISchema.TYPE_BOOLEAN) {
-            return (int)$default;
+            return (int) default;
         }
         // Remove quotes
-        if (preg_match("/^\(?N?'(.*)'\)?/", $default, $matches)) {
+        if (preg_match("/^\(?N?'(.*)'\)?/",  default, $matches)) {
             return $matches[1].replace("""", "'");
         }
-        return $default;
+        return  default;
     }
     array describeIndexSql(string atableName, IData[string] configData) {
         auto mySql = "SELECT
@@ -428,13 +428,13 @@ class SqlserverSchemaDialect : SchemaDialect {
         if (isSet(someData["null"]) && someData["null"] == false) {
              result ~= " NOT NULL";
         }
-        $dateTimeTypes = [
+         dateTimeTypes = [
             TableISchema.TYPE_DATETIME,
             TableISchema.TYPE_DATETIME_FRACTIONAL,
             TableISchema.TYPE_TIMESTAMP,
             TableISchema.TYPE_TIMESTAMP_FRACTIONAL,
         ];
-        $dateTimeDefaults = [
+         dateTimeDefaults = [
             "current_timestamp",
             "getdate()",
             "getutcdate()",
@@ -444,15 +444,15 @@ class SqlserverSchemaDialect : SchemaDialect {
         ];
         if (
             isSet(someData["default"]) &&
-            in_array(someData["type"], $dateTimeTypes, true) &&
-            in_array(someData["default"].toLower, $dateTimeDefaults, true)
+            in_array(someData["type"],  dateTimeTypes, true) &&
+            in_array(someData["default"].toLower,  dateTimeDefaults, true)
         ) {
              result ~= " DEFAULT " ~ strtoupper(someData["default"]);
         } elseif (isSet(someData["default"])) {
-            $default = isBool(someData["default"])
+             default = isBool(someData["default"])
                 ? (int)someData["default"]
                 : _driver.schemaValue(someData["default"]);
-             result ~= " DEFAULT " ~ $default;
+             result ~= " DEFAULT " ~  default;
         } elseif (isSet(someData["null"]) && someData["null"] != false) {
              result ~= " DEFAULT NULL";
         }

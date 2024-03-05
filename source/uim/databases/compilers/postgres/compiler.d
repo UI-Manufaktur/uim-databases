@@ -41,7 +41,7 @@ class PostgresCompiler : QueryCompiler {
             if (!selectPart instanceof FunctionExpression) {
                 continue;
             }
-            foreach (parts as $k: p) {
+            foreach (parts as  k: p) {
                 if (!is_string(p)) {
                     continue;
                 }
@@ -55,7 +55,7 @@ class PostgresCompiler : QueryCompiler {
                     continue;
                 }
 
-                parts[$k] = preg_replace(
+                parts[ k] = preg_replace(
                     ["/"/", "/\b"~ trim(selectKey, "\"") . "\b/i"],
                     ["", selectPart.sql( binder)],
                     p

@@ -97,7 +97,7 @@ class SqliteSchemaDialect : SchemaDialect {
         if (in_array(col, ["blob", "clob", "binary", "varbinary"])) {
             return ["type": TableISchema.TYPE_BINARY, "length": columnLength];
         }
-        $datetimeTypes = [
+         datetimeTypes = [
             "date",
             "time",
             "timestamp",
@@ -106,7 +106,7 @@ class SqliteSchemaDialect : SchemaDialect {
             "datetime",
             "datetimefractional",
         ];
-        if (in_array(col, $datetimeTypes)) {
+        if (in_array(col,  datetimeTypes)) {
             return ["type": col, "length": null];
         }
         return ["type": TableISchema.TYPE_TEXT, "length": null];
@@ -181,17 +181,17 @@ class SqliteSchemaDialect : SchemaDialect {
      * Sqlite includes quotes and bared NULLs in default values.
      * We need to remove those.
      * Params:
-     * string|int $default The default value.
+     * string|int  default The default value.
      */
-    protected string|int _defaultValue(string|int $default) {
-        if ($default == "NULL" || $default.isNull) {
+    protected string|int _defaultValue(string|int  default) {
+        if ( default == "NULL" ||  default.isNull) {
             return null;
         }
         // Remove quotes
-        if (isString($default) && preg_match("/^'(.*)'$/", $default, $matches)) {
+        if (isString( default) && preg_match("/^'(.*)'$/",  default, $matches)) {
             return $matches[1].replace("\"\"", "'");
         }
-        return $default;
+        return  default;
     }
  
     array describeIndexSql(string atableName, IData[string] configData) {

@@ -159,35 +159,35 @@ class QueryCompiler {
         if (_orderedUnion && myQuery.clause("union")) {
             select = "(SELECT%s %s%s";
         }
-        $distinct = myQuery.clause("distinct");
+         distinct = myQuery.clause("distinct");
         myModifiers = _buildModifierPart(myQuery.clause("modifier"), myQuery,  binder);
 
         myDriver = myQuery.getConnection().getDriver();
          quoteIdentifiers = myDriver.isAutoQuotingEnabled() || _quotedSelectAliases;
         normalized = [];
         someParts = _stringifyExpressions(someParts,  binder);
-        foreach (someParts as $k: p) {
-            if (!is_numeric($k)) {
+        foreach (someParts as  k: p) {
+            if (!is_numeric( k)) {
                 p = p . " AS ";
                 if ( quoteIdentifiers) {
-                    p ~= myDriver.quoteIdentifier($k);
+                    p ~= myDriver.quoteIdentifier( k);
                 } else {
-                    p ~= $k;
+                    p ~=  k;
                 }
             }
             normalized[] = p;
         }
 
-        if ($distinct == true) {
-            $distinct = "DISTINCT ";
+        if ( distinct == true) {
+             distinct = "DISTINCT ";
         }
 
-        if (is_array($distinct)) {
-            $distinct = _stringifyExpressions($distinct,  binder);
-            $distinct = "DISTINCT ON (%s) ".format(implode(", ", $distinct));
+        if (is_array( distinct)) {
+             distinct = _stringifyExpressions( distinct,  binder);
+             distinct = "DISTINCT ON (%s) ".format(implode(", ",  distinct));
         }
 
-        return select, myModifiers, $distinct.format(implode(", ", normalized));
+        return select, myModifiers,  distinct.format(implode(", ", normalized));
     }
 
     /**
@@ -204,9 +204,9 @@ class QueryCompiler {
         select = " FROM %s";
         normalized = [];
         someParts = _stringifyExpressions(someParts,  binder);
-        foreach (someParts as $k: p) {
-            if (!is_numeric($k)) {
-                p = p . " "~ $k;
+        foreach (someParts as  k: p) {
+            if (!is_numeric( k)) {
+                p = p . " "~  k;
             }
             normalized[] = p;
         }
@@ -264,12 +264,12 @@ class QueryCompiler {
      * @return string
      */
     protected string _buildWindowPart(array someParts, Query myQuery, ValueBinder aValueBinder) {
-        $windows = [];
-        foreach (someParts as $window) {
-            $windows[] = $window["name"].sql( binder) . " AS ("~ $window["window"].sql( binder) . ")";
+         windows = [];
+        foreach (someParts as  window) {
+             windows[] =  window["name"].sql( binder) . " AS ("~  window["window"].sql( binder) . ")";
         }
 
-        return " WINDOW "~ implode(", ", $windows);
+        return " WINDOW "~ implode(", ",  windows);
     }
 
     /**
@@ -391,7 +391,7 @@ class QueryCompiler {
      *
      * @param array expressions list of strings and IDBAExpression objects
      * @param uim.databases\ValueBinder aValueBinder Value binder used to generate parameter placeholder
-     * @param $wrap Whether to wrap each expression object with parenthesis
+     * @param  wrap Whether to wrap each expression object with parenthesis
      * @return array
      */
     protected array _stringifyExpressions(IDBAExpression[] someExpressions, ValueBinder aBinder, bool shouldWrap = true) {

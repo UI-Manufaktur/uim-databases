@@ -113,9 +113,9 @@ abstract class SchemaDialect
      * definition to an abstract type definition.
      * Params:
      * string acolumnType The column type.
-     * @param array $definition The column definition.
+     * @param array  definition The column definition.
      */
-    protected array _applyTypeSpecificColumnConversion(string acolumnType, array $definition) {
+    protected array _applyTypeSpecificColumnConversion(string acolumnType, array  definition) {
         if (!TypeFactory.getMap(columnType)) {
             return null;
         }
@@ -123,7 +123,7 @@ abstract class SchemaDialect
         if (!(cast(IColumnSchemaAware)type)) {
             return null;
         }
-        return type.convertColumnDefinition($definition, _driver);
+        return type.convertColumnDefinition( definition, _driver);
     }
     
     // Generate the SQL to drop a table.
