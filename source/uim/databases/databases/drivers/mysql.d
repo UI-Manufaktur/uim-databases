@@ -1,10 +1,10 @@
-module uim.cake.databases.Driver;
+module uim.databases.drivers.mysql;
 
-import uim.cake;
+import uim.databases;
 
 @safe:
 
-class Mysql : Driver {
+class DMysqlDriver : DDriver {
     void connect() {
         if (this.pdo.isSet) {
             return;
