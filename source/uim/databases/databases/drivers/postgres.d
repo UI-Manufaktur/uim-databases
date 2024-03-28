@@ -1,10 +1,10 @@
-module uim.cake.databases.Driver;
+module uim.databases.drivers.postgres;
 
-import uim.cake;
+import uim.database;
 
 @safe:
 
-class Postgres : Driver {
+class DPostgresDriver : DDriver {
     // String used to end a database identifier quoting to make it safe
 
     void connect() {
