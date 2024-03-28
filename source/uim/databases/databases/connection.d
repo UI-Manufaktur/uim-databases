@@ -5,7 +5,7 @@ import uim.databases;
 @safe:
 
 // Represents a connection with a database server.
-class Connection : IConnection {
+class DConnection : IConnection {
     // Contains the configuration params for this connection.
     protected IData[string] _config;
 
