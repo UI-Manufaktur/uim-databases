@@ -1,10 +1,10 @@
-module uim.cake.databases.Driver;
+module uim.databases.driver.sqlite;
 
-import uim.cake;
+import uim.databases;
 
 @safe:
 
-class Sqlite : Driver {
+class DSqliteDriver : Driver {
     mixin(DriverThis!("Sqlite"));
     
   	override bool initialize(IData[string] initData = null) {
